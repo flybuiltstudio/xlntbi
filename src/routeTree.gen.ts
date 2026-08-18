@@ -19,6 +19,7 @@ import { Route as KonyvelesRouteImport } from './routes/konyveles'
 import { Route as KonyveloirodaAuditRouteImport } from './routes/konyveloiroda-audit'
 import { Route as KonyvvizsgalatRouteImport } from './routes/konyvvizsgalat'
 import { Route as OktatasRouteImport } from './routes/oktatas'
+import { Route as RolamRouteImport } from './routes/rolam'
 import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
 import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
@@ -76,6 +77,11 @@ const OktatasRoute = OktatasRouteImport.update({
   path: '/oktatas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RolamRoute = RolamRouteImport.update({
+  id: '/rolam',
+  path: '/rolam',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SzolgaltatasaimRoute = SzolgaltatasaimRouteImport.update({
   id: '/szolgaltatasaim',
   path: '/szolgaltatasaim',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/oktatas': typeof OktatasRoute
+  '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/oktatas': typeof OktatasRoute
+  '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/oktatas': typeof OktatasRoute
+  '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/oktatas'
+    | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/kalkulatorok/berteszt'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/oktatas'
+    | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/kalkulatorok/berteszt'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/oktatas'
+    | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/kalkulatorok/berteszt'
@@ -220,6 +232,7 @@ export interface RootRouteChildren {
   KonyveloirodaAuditRoute: typeof KonyveloirodaAuditRoute
   KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
   OktatasRoute: typeof OktatasRoute
+  RolamRoute: typeof RolamRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
   TermekeimRoute: typeof TermekeimRoute
   KalkulatorokBertesztRoute: typeof KalkulatorokBertesztRoute
@@ -299,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OktatasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rolam': {
+      id: '/rolam'
+      path: '/rolam'
+      fullPath: '/rolam'
+      preLoaderRoute: typeof RolamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/szolgaltatasaim': {
       id: '/szolgaltatasaim'
       path: '/szolgaltatasaim'
@@ -348,6 +368,7 @@ const rootRouteChildren: RootRouteChildren = {
   KonyveloirodaAuditRoute: KonyveloirodaAuditRoute,
   KonyvvizsgalatRoute: KonyvvizsgalatRoute,
   OktatasRoute: OktatasRoute,
+  RolamRoute: RolamRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
   TermekeimRoute: TermekeimRoute,
   KalkulatorokBertesztRoute: KalkulatorokBertesztRoute,
