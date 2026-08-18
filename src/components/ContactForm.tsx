@@ -116,17 +116,17 @@ export function ContactForm({
             className={inputClass}
           />
         </label>
-        <label className="block text-sm font-medium text-foreground sm:col-span-2">
-          Cégnév
-          <input name="company" maxLength={160} className={inputClass} />
-        </label>
+        {showCompany ? (
+          <label className="block text-sm font-medium text-foreground sm:col-span-2">
+            Cégnév
+            <input name="company" maxLength={160} className={inputClass} />
+          </label>
+        ) : null}
       </div>
 
       {serviceOptions?.length ? (
         <fieldset className="mt-6">
-          <legend className="text-sm font-medium text-foreground">
-            Milyen szolgáltatás érdekel?
-          </legend>
+          <legend className="text-sm font-medium text-foreground">{serviceLabel}</legend>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {serviceOptions.map((option) => (
               <label
@@ -166,20 +166,29 @@ export function ContactForm({
       ) : null}
 
       {contactTimeOptions?.length ? (
-        <label className="mt-6 block text-sm font-medium text-foreground">
-          Mikor kereshetem?
-          <select name="contactTime" defaultValue="" className={inputClass}>
-            <option value="">Kérlek, válassz</option>
+        <fieldset className="mt-6">
+          <legend className="text-sm font-medium text-foreground">Mikor kereshetem?</legend>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {contactTimeOptions.map((option) => (
-              <option key={option} value={option}>
+              <label
+                key={option}
+                className="flex items-start gap-2.5 text-sm text-muted-foreground"
+              >
+                <input
+                  type="radio"
+                  name="contactTime"
+                  value={option}
+                  className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+                />
                 {option}
-              </option>
+              </label>
             ))}
-          </select>
-        </label>
+          </div>
+        </fieldset>
       ) : null}
 
       <label className="mt-6 block text-sm font-medium text-foreground">
+
         {messageLabel} *
         <textarea
           name="message"
