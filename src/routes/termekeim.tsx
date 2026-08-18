@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import termekekImg from "@/assets/termekek.jpg";
+import { formatPrice, products } from "@/lib/products";
+
 
 const TITLE = "Termékeim könyvelőirodáknak és könyvelőknek | EXCELlent";
 const DESC =
