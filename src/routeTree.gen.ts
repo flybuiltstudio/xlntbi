@@ -10,33 +10,155 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdotanacsadasRouteImport } from './routes/adotanacsadas'
+import { Route as CegauditRouteImport } from './routes/cegaudit'
+import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
+import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
+import { Route as KontrollingRouteImport } from './routes/kontrolling'
+import { Route as KonyvelesRouteImport } from './routes/konyveles'
+import { Route as KonyveloirodaAuditRouteImport } from './routes/konyveloiroda-audit'
+import { Route as KonyvvizsgalatRouteImport } from './routes/konyvvizsgalat'
+import { Route as OktatasRouteImport } from './routes/oktatas'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdotanacsadasRoute = AdotanacsadasRouteImport.update({
+  id: '/adotanacsadas',
+  path: '/adotanacsadas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CegauditRoute = CegauditRouteImport.update({
+  id: '/cegaudit',
+  path: '/cegaudit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DigitalisIdomegtakaritasiAuditRoute =
+  DigitalisIdomegtakaritasiAuditRouteImport.update({
+    id: '/digitalis-idomegtakaritasi-audit',
+    path: '/digitalis-idomegtakaritasi-audit',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FintechEsBiRoute = FintechEsBiRouteImport.update({
+  id: '/fintech-es-bi',
+  path: '/fintech-es-bi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontrollingRoute = KontrollingRouteImport.update({
+  id: '/kontrolling',
+  path: '/kontrolling',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KonyvelesRoute = KonyvelesRouteImport.update({
+  id: '/konyveles',
+  path: '/konyveles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KonyveloirodaAuditRoute = KonyveloirodaAuditRouteImport.update({
+  id: '/konyveloiroda-audit',
+  path: '/konyveloiroda-audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KonyvvizsgalatRoute = KonyvvizsgalatRouteImport.update({
+  id: '/konyvvizsgalat',
+  path: '/konyvvizsgalat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OktatasRoute = OktatasRouteImport.update({
+  id: '/oktatas',
+  path: '/oktatas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/adotanacsadas': typeof AdotanacsadasRoute
+  '/cegaudit': typeof CegauditRoute
+  '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
+  '/fintech-es-bi': typeof FintechEsBiRoute
+  '/kontrolling': typeof KontrollingRoute
+  '/konyveles': typeof KonyvelesRoute
+  '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
+  '/konyvvizsgalat': typeof KonyvvizsgalatRoute
+  '/oktatas': typeof OktatasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/adotanacsadas': typeof AdotanacsadasRoute
+  '/cegaudit': typeof CegauditRoute
+  '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
+  '/fintech-es-bi': typeof FintechEsBiRoute
+  '/kontrolling': typeof KontrollingRoute
+  '/konyveles': typeof KonyvelesRoute
+  '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
+  '/konyvvizsgalat': typeof KonyvvizsgalatRoute
+  '/oktatas': typeof OktatasRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/adotanacsadas': typeof AdotanacsadasRoute
+  '/cegaudit': typeof CegauditRoute
+  '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
+  '/fintech-es-bi': typeof FintechEsBiRoute
+  '/kontrolling': typeof KontrollingRoute
+  '/konyveles': typeof KonyvelesRoute
+  '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
+  '/konyvvizsgalat': typeof KonyvvizsgalatRoute
+  '/oktatas': typeof OktatasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/adotanacsadas'
+    | '/cegaudit'
+    | '/digitalis-idomegtakaritasi-audit'
+    | '/fintech-es-bi'
+    | '/kontrolling'
+    | '/konyveles'
+    | '/konyveloiroda-audit'
+    | '/konyvvizsgalat'
+    | '/oktatas'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/adotanacsadas'
+    | '/cegaudit'
+    | '/digitalis-idomegtakaritasi-audit'
+    | '/fintech-es-bi'
+    | '/kontrolling'
+    | '/konyveles'
+    | '/konyveloiroda-audit'
+    | '/konyvvizsgalat'
+    | '/oktatas'
+  id:
+    | '__root__'
+    | '/'
+    | '/adotanacsadas'
+    | '/cegaudit'
+    | '/digitalis-idomegtakaritasi-audit'
+    | '/fintech-es-bi'
+    | '/kontrolling'
+    | '/konyveles'
+    | '/konyveloiroda-audit'
+    | '/konyvvizsgalat'
+    | '/oktatas'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdotanacsadasRoute: typeof AdotanacsadasRoute
+  CegauditRoute: typeof CegauditRoute
+  DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
+  FintechEsBiRoute: typeof FintechEsBiRoute
+  KontrollingRoute: typeof KontrollingRoute
+  KonyvelesRoute: typeof KonyvelesRoute
+  KonyveloirodaAuditRoute: typeof KonyveloirodaAuditRoute
+  KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
+  OktatasRoute: typeof OktatasRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +170,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/adotanacsadas': {
+      id: '/adotanacsadas'
+      path: '/adotanacsadas'
+      fullPath: '/adotanacsadas'
+      preLoaderRoute: typeof AdotanacsadasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cegaudit': {
+      id: '/cegaudit'
+      path: '/cegaudit'
+      fullPath: '/cegaudit'
+      preLoaderRoute: typeof CegauditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/digitalis-idomegtakaritasi-audit': {
+      id: '/digitalis-idomegtakaritasi-audit'
+      path: '/digitalis-idomegtakaritasi-audit'
+      fullPath: '/digitalis-idomegtakaritasi-audit'
+      preLoaderRoute: typeof DigitalisIdomegtakaritasiAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fintech-es-bi': {
+      id: '/fintech-es-bi'
+      path: '/fintech-es-bi'
+      fullPath: '/fintech-es-bi'
+      preLoaderRoute: typeof FintechEsBiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kontrolling': {
+      id: '/kontrolling'
+      path: '/kontrolling'
+      fullPath: '/kontrolling'
+      preLoaderRoute: typeof KontrollingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konyveles': {
+      id: '/konyveles'
+      path: '/konyveles'
+      fullPath: '/konyveles'
+      preLoaderRoute: typeof KonyvelesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konyveloiroda-audit': {
+      id: '/konyveloiroda-audit'
+      path: '/konyveloiroda-audit'
+      fullPath: '/konyveloiroda-audit'
+      preLoaderRoute: typeof KonyveloirodaAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konyvvizsgalat': {
+      id: '/konyvvizsgalat'
+      path: '/konyvvizsgalat'
+      fullPath: '/konyvvizsgalat'
+      preLoaderRoute: typeof KonyvvizsgalatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oktatas': {
+      id: '/oktatas'
+      path: '/oktatas'
+      fullPath: '/oktatas'
+      preLoaderRoute: typeof OktatasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdotanacsadasRoute: AdotanacsadasRoute,
+  CegauditRoute: CegauditRoute,
+  DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
+  FintechEsBiRoute: FintechEsBiRoute,
+  KontrollingRoute: KontrollingRoute,
+  KonyvelesRoute: KonyvelesRoute,
+  KonyveloirodaAuditRoute: KonyveloirodaAuditRoute,
+  KonyvvizsgalatRoute: KonyvvizsgalatRoute,
+  OktatasRoute: OktatasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
