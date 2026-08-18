@@ -20,6 +20,7 @@ import { Route as KonyveloirodaAuditRouteImport } from './routes/konyveloiroda-a
 import { Route as KonyvvizsgalatRouteImport } from './routes/konyvvizsgalat'
 import { Route as OktatasRouteImport } from './routes/oktatas'
 import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
+import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -77,6 +78,11 @@ const SzolgaltatasaimRoute = SzolgaltatasaimRouteImport.update({
   path: '/szolgaltatasaim',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KalkulatorokIndexRoute = KalkulatorokIndexRouteImport.update({
+  id: '/kalkulatorok/',
+  path: '/kalkulatorok/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/oktatas': typeof OktatasRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
+  '/kalkulatorok/': typeof KalkulatorokIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/oktatas': typeof OktatasRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
+  '/kalkulatorok': typeof KalkulatorokIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/oktatas': typeof OktatasRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
+  '/kalkulatorok/': typeof KalkulatorokIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/konyvvizsgalat'
     | '/oktatas'
     | '/szolgaltatasaim'
+    | '/kalkulatorok/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/konyvvizsgalat'
     | '/oktatas'
     | '/szolgaltatasaim'
+    | '/kalkulatorok'
   id:
     | '__root__'
     | '/'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/konyvvizsgalat'
     | '/oktatas'
     | '/szolgaltatasaim'
+    | '/kalkulatorok/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -172,6 +184,7 @@ export interface RootRouteChildren {
   KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
   OktatasRoute: typeof OktatasRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
+  KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SzolgaltatasaimRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kalkulatorok/': {
+      id: '/kalkulatorok/'
+      path: '/kalkulatorok'
+      fullPath: '/kalkulatorok/'
+      preLoaderRoute: typeof KalkulatorokIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -268,6 +288,7 @@ const rootRouteChildren: RootRouteChildren = {
   KonyvvizsgalatRoute: KonyvvizsgalatRoute,
   OktatasRoute: OktatasRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
+  KalkulatorokIndexRoute: KalkulatorokIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
