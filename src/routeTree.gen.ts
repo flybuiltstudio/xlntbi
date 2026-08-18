@@ -14,6 +14,7 @@ import { Route as AdotanacsadasRouteImport } from './routes/adotanacsadas'
 import { Route as CegauditRouteImport } from './routes/cegaudit'
 import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
 import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
+import { Route as KapcsolatRouteImport } from './routes/kapcsolat'
 import { Route as KontrollingRouteImport } from './routes/kontrolling'
 import { Route as KonyvelesRouteImport } from './routes/konyveles'
 import { Route as KonyveloirodaAuditRouteImport } from './routes/konyveloiroda-audit'
@@ -50,6 +51,11 @@ const DigitalisIdomegtakaritasiAuditRoute =
 const FintechEsBiRoute = FintechEsBiRouteImport.update({
   id: '/fintech-es-bi',
   path: '/fintech-es-bi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KapcsolatRoute = KapcsolatRouteImport.update({
+  id: '/kapcsolat',
+  path: '/kapcsolat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KontrollingRoute = KontrollingRouteImport.update({
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/cegaudit': typeof CegauditRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
+  '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
   '/konyveles': typeof KonyvelesRoute
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/cegaudit': typeof CegauditRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
+  '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
   '/konyveles': typeof KonyvelesRoute
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/cegaudit': typeof CegauditRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
+  '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
   '/konyveles': typeof KonyvelesRoute
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/cegaudit'
     | '/digitalis-idomegtakaritasi-audit'
     | '/fintech-es-bi'
+    | '/kapcsolat'
     | '/kontrolling'
     | '/konyveles'
     | '/konyveloiroda-audit'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/cegaudit'
     | '/digitalis-idomegtakaritasi-audit'
     | '/fintech-es-bi'
+    | '/kapcsolat'
     | '/kontrolling'
     | '/konyveles'
     | '/konyveloiroda-audit'
@@ -208,6 +219,7 @@ export interface FileRouteTypes {
     | '/cegaudit'
     | '/digitalis-idomegtakaritasi-audit'
     | '/fintech-es-bi'
+    | '/kapcsolat'
     | '/kontrolling'
     | '/konyveles'
     | '/konyveloiroda-audit'
@@ -227,6 +239,7 @@ export interface RootRouteChildren {
   CegauditRoute: typeof CegauditRoute
   DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
   FintechEsBiRoute: typeof FintechEsBiRoute
+  KapcsolatRoute: typeof KapcsolatRoute
   KontrollingRoute: typeof KontrollingRoute
   KonyvelesRoute: typeof KonyvelesRoute
   KonyveloirodaAuditRoute: typeof KonyveloirodaAuditRoute
@@ -275,6 +288,13 @@ declare module '@tanstack/react-router' {
       path: '/fintech-es-bi'
       fullPath: '/fintech-es-bi'
       preLoaderRoute: typeof FintechEsBiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kapcsolat': {
+      id: '/kapcsolat'
+      path: '/kapcsolat'
+      fullPath: '/kapcsolat'
+      preLoaderRoute: typeof KapcsolatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/kontrolling': {
@@ -363,6 +383,7 @@ const rootRouteChildren: RootRouteChildren = {
   CegauditRoute: CegauditRoute,
   DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
   FintechEsBiRoute: FintechEsBiRoute,
+  KapcsolatRoute: KapcsolatRoute,
   KontrollingRoute: KontrollingRoute,
   KonyvelesRoute: KonyvelesRoute,
   KonyveloirodaAuditRoute: KonyveloirodaAuditRoute,
