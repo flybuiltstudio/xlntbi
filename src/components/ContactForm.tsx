@@ -5,11 +5,14 @@ import { submitContactForm } from "@/lib/contact.functions";
 type Props = {
   formType: "kapcsolat" | "konzultacio";
   serviceOptions?: string[];
+  serviceLabel?: string;
+  showCompany?: boolean;
   contactMethodOptions?: string[];
   contactTimeOptions?: string[];
   messageLabel?: string;
   submitLabel?: string;
 };
+
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/40";
