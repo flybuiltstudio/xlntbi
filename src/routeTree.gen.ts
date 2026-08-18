@@ -20,6 +20,7 @@ import { Route as KonyveloirodaAuditRouteImport } from './routes/konyveloiroda-a
 import { Route as KonyvvizsgalatRouteImport } from './routes/konyvvizsgalat'
 import { Route as OktatasRouteImport } from './routes/oktatas'
 import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
+import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
 import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
@@ -80,6 +81,11 @@ const SzolgaltatasaimRoute = SzolgaltatasaimRouteImport.update({
   path: '/szolgaltatasaim',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermekeimRoute = TermekeimRouteImport.update({
+  id: '/termekeim',
+  path: '/termekeim',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KalkulatorokIndexRoute = KalkulatorokIndexRouteImport.update({
   id: '/kalkulatorok/',
   path: '/kalkulatorok/',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/oktatas': typeof OktatasRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
+  '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/oktatas': typeof OktatasRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
+  '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/oktatas': typeof OktatasRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
+  '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/konyvvizsgalat'
     | '/oktatas'
     | '/szolgaltatasaim'
+    | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
     | '/kalkulatorok/'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/konyvvizsgalat'
     | '/oktatas'
     | '/szolgaltatasaim'
+    | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
     | '/kalkulatorok'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/konyvvizsgalat'
     | '/oktatas'
     | '/szolgaltatasaim'
+    | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
     | '/kalkulatorok/'
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
   OktatasRoute: typeof OktatasRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
+  TermekeimRoute: typeof TermekeimRoute
   KalkulatorokBertesztRoute: typeof KalkulatorokBertesztRoute
   KalkulatorokJovedelemadoRoute: typeof KalkulatorokJovedelemadoRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
@@ -293,6 +306,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SzolgaltatasaimRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/termekeim': {
+      id: '/termekeim'
+      path: '/termekeim'
+      fullPath: '/termekeim'
+      preLoaderRoute: typeof TermekeimRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kalkulatorok/': {
       id: '/kalkulatorok/'
       path: '/kalkulatorok'
@@ -329,6 +349,7 @@ const rootRouteChildren: RootRouteChildren = {
   KonyvvizsgalatRoute: KonyvvizsgalatRoute,
   OktatasRoute: OktatasRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
+  TermekeimRoute: TermekeimRoute,
   KalkulatorokBertesztRoute: KalkulatorokBertesztRoute,
   KalkulatorokJovedelemadoRoute: KalkulatorokJovedelemadoRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
