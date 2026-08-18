@@ -68,6 +68,93 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          address_line: string
+          billing_name: string
+          city: string
+          company_name: string | null
+          country: string
+          created_at: string
+          currency: string
+          email: string
+          id: string
+          ip_address: string | null
+          note: string | null
+          order_number: string
+          payment_provider: string | null
+          payment_reference: string | null
+          payment_status: string
+          phone: string
+          postal_code: string
+          product_name: string
+          product_slug: string
+          quantity: number
+          status: string
+          tax_number: string | null
+          total_price: number
+          unit_price: number
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          address_line: string
+          billing_name: string
+          city: string
+          company_name?: string | null
+          country: string
+          created_at?: string
+          currency?: string
+          email: string
+          id?: string
+          ip_address?: string | null
+          note?: string | null
+          order_number: string
+          payment_provider?: string | null
+          payment_reference?: string | null
+          payment_status?: string
+          phone: string
+          postal_code: string
+          product_name: string
+          product_slug: string
+          quantity?: number
+          status?: string
+          tax_number?: string | null
+          total_price: number
+          unit_price: number
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          address_line?: string
+          billing_name?: string
+          city?: string
+          company_name?: string | null
+          country?: string
+          created_at?: string
+          currency?: string
+          email?: string
+          id?: string
+          ip_address?: string | null
+          note?: string | null
+          order_number?: string
+          payment_provider?: string | null
+          payment_reference?: string | null
+          payment_status?: string
+          phone?: string
+          postal_code?: string
+          product_name?: string
+          product_slug?: string
+          quantity?: number
+          status?: string
+          tax_number?: string | null
+          total_price?: number
+          unit_price?: number
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
