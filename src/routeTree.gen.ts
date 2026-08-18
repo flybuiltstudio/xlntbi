@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdatvedelmiTajekoztatoRouteImport } from './routes/adatvedelmi-tajekoztato'
 import { Route as AdotanacsadasRouteImport } from './routes/adotanacsadas'
+import { Route as AszfRouteImport } from './routes/aszf'
 import { Route as CegauditRouteImport } from './routes/cegaudit'
 import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
 import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
@@ -42,6 +43,11 @@ const AdatvedelmiTajekoztatoRoute = AdatvedelmiTajekoztatoRouteImport.update({
 const AdotanacsadasRoute = AdotanacsadasRouteImport.update({
   id: '/adotanacsadas',
   path: '/adotanacsadas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AszfRoute = AszfRouteImport.update({
+  id: '/aszf',
+  path: '/aszf',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CegauditRoute = CegauditRouteImport.update({
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
+  '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
+  '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
@@ -174,6 +182,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
+  '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/'
     | '/adatvedelmi-tajekoztato'
     | '/adotanacsadas'
+    | '/aszf'
     | '/cegaudit'
     | '/digitalis-idomegtakaritasi-audit'
     | '/fintech-es-bi'
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/'
     | '/adatvedelmi-tajekoztato'
     | '/adotanacsadas'
+    | '/aszf'
     | '/cegaudit'
     | '/digitalis-idomegtakaritasi-audit'
     | '/fintech-es-bi'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/'
     | '/adatvedelmi-tajekoztato'
     | '/adotanacsadas'
+    | '/aszf'
     | '/cegaudit'
     | '/digitalis-idomegtakaritasi-audit'
     | '/fintech-es-bi'
@@ -261,6 +273,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdatvedelmiTajekoztatoRoute: typeof AdatvedelmiTajekoztatoRoute
   AdotanacsadasRoute: typeof AdotanacsadasRoute
+  AszfRoute: typeof AszfRoute
   CegauditRoute: typeof CegauditRoute
   DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
   FintechEsBiRoute: typeof FintechEsBiRoute
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/adotanacsadas'
       fullPath: '/adotanacsadas'
       preLoaderRoute: typeof AdotanacsadasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aszf': {
+      id: '/aszf'
+      path: '/aszf'
+      fullPath: '/aszf'
+      preLoaderRoute: typeof AszfRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cegaudit': {
@@ -421,6 +441,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdatvedelmiTajekoztatoRoute: AdatvedelmiTajekoztatoRoute,
   AdotanacsadasRoute: AdotanacsadasRoute,
+  AszfRoute: AszfRoute,
   CegauditRoute: CegauditRoute,
   DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
   FintechEsBiRoute: FintechEsBiRoute,
