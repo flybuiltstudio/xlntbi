@@ -75,7 +75,8 @@ function TermekeimPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section id="megrendelheto-termekek" className="mx-auto max-w-6xl px-4 py-16">
+
         <h2 className="text-2xl font-bold text-foreground">Megrendelhető termékek</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {products.map((product) => (
