@@ -51,7 +51,10 @@ export function SiteFooter() {
           <ul className="mt-4 space-y-2 text-sm">
             {[
               { to: "/termekeim", label: "Termékeim" },
+              { to: "/termek/nav-online-szamla-letolto", label: "NAV Online Számla letöltő" },
+              { to: "/termek/nav-penztargep-letolto", label: "NAV Pénztárgép letöltő" },
               { to: "/kalkulatorok", label: "Kalkulátorok" },
+
               { to: "/oktatas", label: "Oktatás" },
               { to: "/rolam", label: "Rólam" },
               { to: "/szolgaltatasaim", label: "Szolgáltatásaim" },
