@@ -14,8 +14,11 @@ import { Route as AdatvedelmiTajekoztatoRouteImport } from './routes/adatvedelmi
 import { Route as AdotanacsadasRouteImport } from './routes/adotanacsadas'
 import { Route as AszfRouteImport } from './routes/aszf'
 import { Route as CegauditRouteImport } from './routes/cegaudit'
+import { Route as CookieTajekoztatoRouteImport } from './routes/cookie-tajekoztato'
 import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
+import { Route as ElallasASzerzodestolRouteImport } from './routes/elallas-a-szerzodestol'
 import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
+import { Route as ImpresszumRouteImport } from './routes/impresszum'
 import { Route as KapcsolatRouteImport } from './routes/kapcsolat'
 import { Route as KontrollingRouteImport } from './routes/kontrolling'
 import { Route as KonyvelesRouteImport } from './routes/konyveles'
@@ -57,15 +60,30 @@ const CegauditRoute = CegauditRouteImport.update({
   path: '/cegaudit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CookieTajekoztatoRoute = CookieTajekoztatoRouteImport.update({
+  id: '/cookie-tajekoztato',
+  path: '/cookie-tajekoztato',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DigitalisIdomegtakaritasiAuditRoute =
   DigitalisIdomegtakaritasiAuditRouteImport.update({
     id: '/digitalis-idomegtakaritasi-audit',
     path: '/digitalis-idomegtakaritasi-audit',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ElallasASzerzodestolRoute = ElallasASzerzodestolRouteImport.update({
+  id: '/elallas-a-szerzodestol',
+  path: '/elallas-a-szerzodestol',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FintechEsBiRoute = FintechEsBiRouteImport.update({
   id: '/fintech-es-bi',
   path: '/fintech-es-bi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpresszumRoute = ImpresszumRouteImport.update({
+  id: '/impresszum',
+  path: '/impresszum',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KapcsolatRoute = KapcsolatRouteImport.update({
@@ -151,8 +169,11 @@ export interface FileRoutesByFullPath {
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
+  '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
+  '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
+  '/impresszum': typeof ImpresszumRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
   '/konyveles': typeof KonyvelesRoute
@@ -175,8 +196,11 @@ export interface FileRoutesByTo {
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
+  '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
+  '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
+  '/impresszum': typeof ImpresszumRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
   '/konyveles': typeof KonyvelesRoute
@@ -200,8 +224,11 @@ export interface FileRoutesById {
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
+  '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
+  '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
+  '/impresszum': typeof ImpresszumRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
   '/konyveles': typeof KonyvelesRoute
@@ -226,8 +253,11 @@ export interface FileRouteTypes {
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
+    | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
+    | '/elallas-a-szerzodestol'
     | '/fintech-es-bi'
+    | '/impresszum'
     | '/kapcsolat'
     | '/kontrolling'
     | '/konyveles'
@@ -250,8 +280,11 @@ export interface FileRouteTypes {
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
+    | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
+    | '/elallas-a-szerzodestol'
     | '/fintech-es-bi'
+    | '/impresszum'
     | '/kapcsolat'
     | '/kontrolling'
     | '/konyveles'
@@ -274,8 +307,11 @@ export interface FileRouteTypes {
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
+    | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
+    | '/elallas-a-szerzodestol'
     | '/fintech-es-bi'
+    | '/impresszum'
     | '/kapcsolat'
     | '/kontrolling'
     | '/konyveles'
@@ -299,8 +335,11 @@ export interface RootRouteChildren {
   AdotanacsadasRoute: typeof AdotanacsadasRoute
   AszfRoute: typeof AszfRoute
   CegauditRoute: typeof CegauditRoute
+  CookieTajekoztatoRoute: typeof CookieTajekoztatoRoute
   DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
+  ElallasASzerzodestolRoute: typeof ElallasASzerzodestolRoute
   FintechEsBiRoute: typeof FintechEsBiRoute
+  ImpresszumRoute: typeof ImpresszumRoute
   KapcsolatRoute: typeof KapcsolatRoute
   KontrollingRoute: typeof KontrollingRoute
   KonyvelesRoute: typeof KonyvelesRoute
@@ -355,6 +394,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CegauditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cookie-tajekoztato': {
+      id: '/cookie-tajekoztato'
+      path: '/cookie-tajekoztato'
+      fullPath: '/cookie-tajekoztato'
+      preLoaderRoute: typeof CookieTajekoztatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/digitalis-idomegtakaritasi-audit': {
       id: '/digitalis-idomegtakaritasi-audit'
       path: '/digitalis-idomegtakaritasi-audit'
@@ -362,11 +408,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DigitalisIdomegtakaritasiAuditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/elallas-a-szerzodestol': {
+      id: '/elallas-a-szerzodestol'
+      path: '/elallas-a-szerzodestol'
+      fullPath: '/elallas-a-szerzodestol'
+      preLoaderRoute: typeof ElallasASzerzodestolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fintech-es-bi': {
       id: '/fintech-es-bi'
       path: '/fintech-es-bi'
       fullPath: '/fintech-es-bi'
       preLoaderRoute: typeof FintechEsBiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/impresszum': {
+      id: '/impresszum'
+      path: '/impresszum'
+      fullPath: '/impresszum'
+      preLoaderRoute: typeof ImpresszumRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/kapcsolat': {
@@ -483,8 +543,11 @@ const rootRouteChildren: RootRouteChildren = {
   AdotanacsadasRoute: AdotanacsadasRoute,
   AszfRoute: AszfRoute,
   CegauditRoute: CegauditRoute,
+  CookieTajekoztatoRoute: CookieTajekoztatoRoute,
   DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
+  ElallasASzerzodestolRoute: ElallasASzerzodestolRoute,
   FintechEsBiRoute: FintechEsBiRoute,
+  ImpresszumRoute: ImpresszumRoute,
   KapcsolatRoute: KapcsolatRoute,
   KontrollingRoute: KontrollingRoute,
   KonyvelesRoute: KonyvelesRoute,
