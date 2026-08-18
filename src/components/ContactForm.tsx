@@ -20,11 +20,14 @@ const inputClass =
 export function ContactForm({
   formType,
   serviceOptions,
+  serviceLabel = "Milyen szolgáltatás érdekel?",
+  showCompany = false,
   contactMethodOptions,
   contactTimeOptions,
   messageLabel = "Miben segíthetek?",
   submitLabel = "Küldés",
 }: Props) {
+
   const submit = useServerFn(submitContactForm);
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
