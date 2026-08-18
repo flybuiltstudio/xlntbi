@@ -1,8 +1,11 @@
 import szamlaImg from "@/assets/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
 import penztargepImg from "@/assets/close-up-busy-businesswoman.jpg";
 
+export type ProductSlug = "nav-online-szamla-letolto" | "nav-penztargep-letolto";
+
 export type Product = {
-  slug: string;
+  slug: ProductSlug;
+
   name: string;
   price: number;
   currency: "HUF";
