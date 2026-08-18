@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdatvedelmiTajekoztatoRouteImport } from './routes/adatvedelmi-tajekoztato'
 import { Route as AdotanacsadasRouteImport } from './routes/adotanacsadas'
 import { Route as CegauditRouteImport } from './routes/cegaudit'
 import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
@@ -31,6 +32,11 @@ import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulato
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdatvedelmiTajekoztatoRoute = AdatvedelmiTajekoztatoRouteImport.update({
+  id: '/adatvedelmi-tajekoztato',
+  path: '/adatvedelmi-tajekoztato',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdotanacsadasRoute = AdotanacsadasRouteImport.update({
@@ -123,6 +129,7 @@ const KalkulatorokJovedelemadoRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/cegaudit': typeof CegauditRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/cegaudit': typeof CegauditRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
@@ -164,6 +172,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/cegaudit': typeof CegauditRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
@@ -186,6 +195,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/adatvedelmi-tajekoztato'
     | '/adotanacsadas'
     | '/cegaudit'
     | '/digitalis-idomegtakaritasi-audit'
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/adatvedelmi-tajekoztato'
     | '/adotanacsadas'
     | '/cegaudit'
     | '/digitalis-idomegtakaritasi-audit'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/adatvedelmi-tajekoztato'
     | '/adotanacsadas'
     | '/cegaudit'
     | '/digitalis-idomegtakaritasi-audit'
@@ -247,6 +259,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdatvedelmiTajekoztatoRoute: typeof AdatvedelmiTajekoztatoRoute
   AdotanacsadasRoute: typeof AdotanacsadasRoute
   CegauditRoute: typeof CegauditRoute
   DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
@@ -273,6 +286,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/adatvedelmi-tajekoztato': {
+      id: '/adatvedelmi-tajekoztato'
+      path: '/adatvedelmi-tajekoztato'
+      fullPath: '/adatvedelmi-tajekoztato'
+      preLoaderRoute: typeof AdatvedelmiTajekoztatoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/adotanacsadas': {
@@ -399,6 +419,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdatvedelmiTajekoztatoRoute: AdatvedelmiTajekoztatoRoute,
   AdotanacsadasRoute: AdotanacsadasRoute,
   CegauditRoute: CegauditRoute,
   DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
