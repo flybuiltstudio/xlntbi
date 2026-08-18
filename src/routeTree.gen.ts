@@ -29,6 +29,7 @@ import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
 import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
+import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -132,6 +133,11 @@ const KalkulatorokJovedelemadoRoute =
     path: '/kalkulatorok/jovedelemado',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TermekSlugRoute = TermekSlugRouteImport.update({
+  id: '/termek/$slug',
+  path: '/termek/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
 }
 export interface FileRoutesByTo {
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
 }
 export interface FileRoutesById {
@@ -198,6 +206,7 @@ export interface FileRoutesById {
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
 }
 export interface FileRouteTypes {
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
+    | '/termek/$slug'
     | '/kalkulatorok/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -244,6 +254,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
+    | '/termek/$slug'
     | '/kalkulatorok'
   id:
     | '__root__'
@@ -266,6 +277,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
+    | '/termek/$slug'
     | '/kalkulatorok/'
   fileRoutesById: FileRoutesById
 }
@@ -289,6 +301,7 @@ export interface RootRouteChildren {
   TermekeimRoute: typeof TermekeimRoute
   KalkulatorokBertesztRoute: typeof KalkulatorokBertesztRoute
   KalkulatorokJovedelemadoRoute: typeof KalkulatorokJovedelemadoRoute
+  TermekSlugRoute: typeof TermekSlugRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
 }
 
@@ -434,6 +447,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KalkulatorokJovedelemadoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/termek/$slug': {
+      id: '/termek/$slug'
+      path: '/termek/$slug'
+      fullPath: '/termek/$slug'
+      preLoaderRoute: typeof TermekSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -457,6 +477,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermekeimRoute: TermekeimRoute,
   KalkulatorokBertesztRoute: KalkulatorokBertesztRoute,
   KalkulatorokJovedelemadoRoute: KalkulatorokJovedelemadoRoute,
+  TermekSlugRoute: TermekSlugRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
 }
 export const routeTree = rootRouteImport
