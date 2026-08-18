@@ -10,33 +10,286 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdatvedelmiTajekoztatoRouteImport } from './routes/adatvedelmi-tajekoztato'
+import { Route as AdotanacsadasRouteImport } from './routes/adotanacsadas'
+import { Route as AszfRouteImport } from './routes/aszf'
+import { Route as CegauditRouteImport } from './routes/cegaudit'
+import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
+import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
+import { Route as KapcsolatRouteImport } from './routes/kapcsolat'
+import { Route as KontrollingRouteImport } from './routes/kontrolling'
+import { Route as KonyvelesRouteImport } from './routes/konyveles'
+import { Route as KonyveloirodaAuditRouteImport } from './routes/konyveloiroda-audit'
+import { Route as KonyvvizsgalatRouteImport } from './routes/konyvvizsgalat'
+import { Route as KonzultacioRouteImport } from './routes/konzultacio'
+import { Route as OktatasRouteImport } from './routes/oktatas'
+import { Route as RolamRouteImport } from './routes/rolam'
+import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
+import { Route as TermekeimRouteImport } from './routes/termekeim'
+import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
+import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
+import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdatvedelmiTajekoztatoRoute = AdatvedelmiTajekoztatoRouteImport.update({
+  id: '/adatvedelmi-tajekoztato',
+  path: '/adatvedelmi-tajekoztato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdotanacsadasRoute = AdotanacsadasRouteImport.update({
+  id: '/adotanacsadas',
+  path: '/adotanacsadas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AszfRoute = AszfRouteImport.update({
+  id: '/aszf',
+  path: '/aszf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CegauditRoute = CegauditRouteImport.update({
+  id: '/cegaudit',
+  path: '/cegaudit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DigitalisIdomegtakaritasiAuditRoute =
+  DigitalisIdomegtakaritasiAuditRouteImport.update({
+    id: '/digitalis-idomegtakaritasi-audit',
+    path: '/digitalis-idomegtakaritasi-audit',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const FintechEsBiRoute = FintechEsBiRouteImport.update({
+  id: '/fintech-es-bi',
+  path: '/fintech-es-bi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KapcsolatRoute = KapcsolatRouteImport.update({
+  id: '/kapcsolat',
+  path: '/kapcsolat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontrollingRoute = KontrollingRouteImport.update({
+  id: '/kontrolling',
+  path: '/kontrolling',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KonyvelesRoute = KonyvelesRouteImport.update({
+  id: '/konyveles',
+  path: '/konyveles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KonyveloirodaAuditRoute = KonyveloirodaAuditRouteImport.update({
+  id: '/konyveloiroda-audit',
+  path: '/konyveloiroda-audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KonyvvizsgalatRoute = KonyvvizsgalatRouteImport.update({
+  id: '/konyvvizsgalat',
+  path: '/konyvvizsgalat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KonzultacioRoute = KonzultacioRouteImport.update({
+  id: '/konzultacio',
+  path: '/konzultacio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OktatasRoute = OktatasRouteImport.update({
+  id: '/oktatas',
+  path: '/oktatas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RolamRoute = RolamRouteImport.update({
+  id: '/rolam',
+  path: '/rolam',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SzolgaltatasaimRoute = SzolgaltatasaimRouteImport.update({
+  id: '/szolgaltatasaim',
+  path: '/szolgaltatasaim',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermekeimRoute = TermekeimRouteImport.update({
+  id: '/termekeim',
+  path: '/termekeim',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KalkulatorokIndexRoute = KalkulatorokIndexRouteImport.update({
+  id: '/kalkulatorok/',
+  path: '/kalkulatorok/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KalkulatorokBertesztRoute = KalkulatorokBertesztRouteImport.update({
+  id: '/kalkulatorok/berteszt',
+  path: '/kalkulatorok/berteszt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KalkulatorokJovedelemadoRoute =
+  KalkulatorokJovedelemadoRouteImport.update({
+    id: '/kalkulatorok/jovedelemado',
+    path: '/kalkulatorok/jovedelemado',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
+  '/adotanacsadas': typeof AdotanacsadasRoute
+  '/aszf': typeof AszfRoute
+  '/cegaudit': typeof CegauditRoute
+  '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
+  '/fintech-es-bi': typeof FintechEsBiRoute
+  '/kapcsolat': typeof KapcsolatRoute
+  '/kontrolling': typeof KontrollingRoute
+  '/konyveles': typeof KonyvelesRoute
+  '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
+  '/konyvvizsgalat': typeof KonyvvizsgalatRoute
+  '/konzultacio': typeof KonzultacioRoute
+  '/oktatas': typeof OktatasRoute
+  '/rolam': typeof RolamRoute
+  '/szolgaltatasaim': typeof SzolgaltatasaimRoute
+  '/termekeim': typeof TermekeimRoute
+  '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
+  '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/kalkulatorok/': typeof KalkulatorokIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
+  '/adotanacsadas': typeof AdotanacsadasRoute
+  '/aszf': typeof AszfRoute
+  '/cegaudit': typeof CegauditRoute
+  '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
+  '/fintech-es-bi': typeof FintechEsBiRoute
+  '/kapcsolat': typeof KapcsolatRoute
+  '/kontrolling': typeof KontrollingRoute
+  '/konyveles': typeof KonyvelesRoute
+  '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
+  '/konyvvizsgalat': typeof KonyvvizsgalatRoute
+  '/konzultacio': typeof KonzultacioRoute
+  '/oktatas': typeof OktatasRoute
+  '/rolam': typeof RolamRoute
+  '/szolgaltatasaim': typeof SzolgaltatasaimRoute
+  '/termekeim': typeof TermekeimRoute
+  '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
+  '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/kalkulatorok': typeof KalkulatorokIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
+  '/adotanacsadas': typeof AdotanacsadasRoute
+  '/aszf': typeof AszfRoute
+  '/cegaudit': typeof CegauditRoute
+  '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
+  '/fintech-es-bi': typeof FintechEsBiRoute
+  '/kapcsolat': typeof KapcsolatRoute
+  '/kontrolling': typeof KontrollingRoute
+  '/konyveles': typeof KonyvelesRoute
+  '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
+  '/konyvvizsgalat': typeof KonyvvizsgalatRoute
+  '/konzultacio': typeof KonzultacioRoute
+  '/oktatas': typeof OktatasRoute
+  '/rolam': typeof RolamRoute
+  '/szolgaltatasaim': typeof SzolgaltatasaimRoute
+  '/termekeim': typeof TermekeimRoute
+  '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
+  '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/kalkulatorok/': typeof KalkulatorokIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/adatvedelmi-tajekoztato'
+    | '/adotanacsadas'
+    | '/aszf'
+    | '/cegaudit'
+    | '/digitalis-idomegtakaritasi-audit'
+    | '/fintech-es-bi'
+    | '/kapcsolat'
+    | '/kontrolling'
+    | '/konyveles'
+    | '/konyveloiroda-audit'
+    | '/konyvvizsgalat'
+    | '/konzultacio'
+    | '/oktatas'
+    | '/rolam'
+    | '/szolgaltatasaim'
+    | '/termekeim'
+    | '/kalkulatorok/berteszt'
+    | '/kalkulatorok/jovedelemado'
+    | '/kalkulatorok/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/adatvedelmi-tajekoztato'
+    | '/adotanacsadas'
+    | '/aszf'
+    | '/cegaudit'
+    | '/digitalis-idomegtakaritasi-audit'
+    | '/fintech-es-bi'
+    | '/kapcsolat'
+    | '/kontrolling'
+    | '/konyveles'
+    | '/konyveloiroda-audit'
+    | '/konyvvizsgalat'
+    | '/konzultacio'
+    | '/oktatas'
+    | '/rolam'
+    | '/szolgaltatasaim'
+    | '/termekeim'
+    | '/kalkulatorok/berteszt'
+    | '/kalkulatorok/jovedelemado'
+    | '/kalkulatorok'
+  id:
+    | '__root__'
+    | '/'
+    | '/adatvedelmi-tajekoztato'
+    | '/adotanacsadas'
+    | '/aszf'
+    | '/cegaudit'
+    | '/digitalis-idomegtakaritasi-audit'
+    | '/fintech-es-bi'
+    | '/kapcsolat'
+    | '/kontrolling'
+    | '/konyveles'
+    | '/konyveloiroda-audit'
+    | '/konyvvizsgalat'
+    | '/konzultacio'
+    | '/oktatas'
+    | '/rolam'
+    | '/szolgaltatasaim'
+    | '/termekeim'
+    | '/kalkulatorok/berteszt'
+    | '/kalkulatorok/jovedelemado'
+    | '/kalkulatorok/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdatvedelmiTajekoztatoRoute: typeof AdatvedelmiTajekoztatoRoute
+  AdotanacsadasRoute: typeof AdotanacsadasRoute
+  AszfRoute: typeof AszfRoute
+  CegauditRoute: typeof CegauditRoute
+  DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
+  FintechEsBiRoute: typeof FintechEsBiRoute
+  KapcsolatRoute: typeof KapcsolatRoute
+  KontrollingRoute: typeof KontrollingRoute
+  KonyvelesRoute: typeof KonyvelesRoute
+  KonyveloirodaAuditRoute: typeof KonyveloirodaAuditRoute
+  KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
+  KonzultacioRoute: typeof KonzultacioRoute
+  OktatasRoute: typeof OktatasRoute
+  RolamRoute: typeof RolamRoute
+  SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
+  TermekeimRoute: typeof TermekeimRoute
+  KalkulatorokBertesztRoute: typeof KalkulatorokBertesztRoute
+  KalkulatorokJovedelemadoRoute: typeof KalkulatorokJovedelemadoRoute
+  KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +301,163 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/adatvedelmi-tajekoztato': {
+      id: '/adatvedelmi-tajekoztato'
+      path: '/adatvedelmi-tajekoztato'
+      fullPath: '/adatvedelmi-tajekoztato'
+      preLoaderRoute: typeof AdatvedelmiTajekoztatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/adotanacsadas': {
+      id: '/adotanacsadas'
+      path: '/adotanacsadas'
+      fullPath: '/adotanacsadas'
+      preLoaderRoute: typeof AdotanacsadasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aszf': {
+      id: '/aszf'
+      path: '/aszf'
+      fullPath: '/aszf'
+      preLoaderRoute: typeof AszfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cegaudit': {
+      id: '/cegaudit'
+      path: '/cegaudit'
+      fullPath: '/cegaudit'
+      preLoaderRoute: typeof CegauditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/digitalis-idomegtakaritasi-audit': {
+      id: '/digitalis-idomegtakaritasi-audit'
+      path: '/digitalis-idomegtakaritasi-audit'
+      fullPath: '/digitalis-idomegtakaritasi-audit'
+      preLoaderRoute: typeof DigitalisIdomegtakaritasiAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fintech-es-bi': {
+      id: '/fintech-es-bi'
+      path: '/fintech-es-bi'
+      fullPath: '/fintech-es-bi'
+      preLoaderRoute: typeof FintechEsBiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kapcsolat': {
+      id: '/kapcsolat'
+      path: '/kapcsolat'
+      fullPath: '/kapcsolat'
+      preLoaderRoute: typeof KapcsolatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kontrolling': {
+      id: '/kontrolling'
+      path: '/kontrolling'
+      fullPath: '/kontrolling'
+      preLoaderRoute: typeof KontrollingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konyveles': {
+      id: '/konyveles'
+      path: '/konyveles'
+      fullPath: '/konyveles'
+      preLoaderRoute: typeof KonyvelesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konyveloiroda-audit': {
+      id: '/konyveloiroda-audit'
+      path: '/konyveloiroda-audit'
+      fullPath: '/konyveloiroda-audit'
+      preLoaderRoute: typeof KonyveloirodaAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konyvvizsgalat': {
+      id: '/konyvvizsgalat'
+      path: '/konyvvizsgalat'
+      fullPath: '/konyvvizsgalat'
+      preLoaderRoute: typeof KonyvvizsgalatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konzultacio': {
+      id: '/konzultacio'
+      path: '/konzultacio'
+      fullPath: '/konzultacio'
+      preLoaderRoute: typeof KonzultacioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oktatas': {
+      id: '/oktatas'
+      path: '/oktatas'
+      fullPath: '/oktatas'
+      preLoaderRoute: typeof OktatasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rolam': {
+      id: '/rolam'
+      path: '/rolam'
+      fullPath: '/rolam'
+      preLoaderRoute: typeof RolamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/szolgaltatasaim': {
+      id: '/szolgaltatasaim'
+      path: '/szolgaltatasaim'
+      fullPath: '/szolgaltatasaim'
+      preLoaderRoute: typeof SzolgaltatasaimRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termekeim': {
+      id: '/termekeim'
+      path: '/termekeim'
+      fullPath: '/termekeim'
+      preLoaderRoute: typeof TermekeimRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kalkulatorok/': {
+      id: '/kalkulatorok/'
+      path: '/kalkulatorok'
+      fullPath: '/kalkulatorok/'
+      preLoaderRoute: typeof KalkulatorokIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kalkulatorok/berteszt': {
+      id: '/kalkulatorok/berteszt'
+      path: '/kalkulatorok/berteszt'
+      fullPath: '/kalkulatorok/berteszt'
+      preLoaderRoute: typeof KalkulatorokBertesztRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kalkulatorok/jovedelemado': {
+      id: '/kalkulatorok/jovedelemado'
+      path: '/kalkulatorok/jovedelemado'
+      fullPath: '/kalkulatorok/jovedelemado'
+      preLoaderRoute: typeof KalkulatorokJovedelemadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdatvedelmiTajekoztatoRoute: AdatvedelmiTajekoztatoRoute,
+  AdotanacsadasRoute: AdotanacsadasRoute,
+  AszfRoute: AszfRoute,
+  CegauditRoute: CegauditRoute,
+  DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
+  FintechEsBiRoute: FintechEsBiRoute,
+  KapcsolatRoute: KapcsolatRoute,
+  KontrollingRoute: KontrollingRoute,
+  KonyvelesRoute: KonyvelesRoute,
+  KonyveloirodaAuditRoute: KonyveloirodaAuditRoute,
+  KonyvvizsgalatRoute: KonyvvizsgalatRoute,
+  KonzultacioRoute: KonzultacioRoute,
+  OktatasRoute: OktatasRoute,
+  RolamRoute: RolamRoute,
+  SzolgaltatasaimRoute: SzolgaltatasaimRoute,
+  TermekeimRoute: TermekeimRoute,
+  KalkulatorokBertesztRoute: KalkulatorokBertesztRoute,
+  KalkulatorokJovedelemadoRoute: KalkulatorokJovedelemadoRoute,
+  KalkulatorokIndexRoute: KalkulatorokIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
