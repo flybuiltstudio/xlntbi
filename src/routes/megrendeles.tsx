@@ -1,0 +1,300 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useState } from "react";
+import { z } from "zod";
+
+import { formatPrice, products } from "@/lib/products";
+import { submitOrder } from "@/lib/order.functions";
+
+const TITLE = "Megrendelés | EXCELlent digitális termékek";
+const DESC =
+  "Add le a megrendelésedet az EXCELlent digitális termékeire. Számlázási adatok megadása, visszaigazoló e-maillel.";
+
+const searchSchema = z.object({
+  termek: z.enum(["nav-online-szamla-letolto", "nav-penztargep-letolto"]).optional(),
+});
+
+export const Route = createFileRoute("/megrendeles")({
+  validateSearch: searchSchema,
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "robots", content: "noindex, follow" },
+    ],
+  }),
+  component: OrderPage,
+});
+
+const inputClass =
+  "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/40";
+
+function OrderPage() {
+  const { termek } = Route.useSearch();
+  const submit = useServerFn(submitOrder);
+
+  const [slug, setSlug] = useState(termek ?? products[0]!.slug);
+  const [quantity, setQuantity] = useState(1);
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [orderNumber, setOrderNumber] = useState("");
+
+  const product = products.find((p) => p.slug === slug) ?? products[0]!;
+  const total = product.price * quantity;
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const fd = new FormData(form);
+    setStatus("sending");
+    setErrorMessage("");
+
+    try {
+      const result = await submit({
+        data: {
+          productSlug: slug as "nav-online-szamla-letolto" | "nav-penztargep-letolto",
+          quantity,
+          billingName: String(fd.get("billingName") ?? ""),
+          companyName: String(fd.get("companyName") ?? ""),
+          taxNumber: String(fd.get("taxNumber") ?? ""),
+          country: String(fd.get("country") ?? ""),
+          postalCode: String(fd.get("postalCode") ?? ""),
+          city: String(fd.get("city") ?? ""),
+          addressLine: String(fd.get("addressLine") ?? ""),
+          email: String(fd.get("email") ?? ""),
+          phone: String(fd.get("phone") ?? ""),
+          note: String(fd.get("note") ?? ""),
+          acceptTerms: true,
+          acceptPrivacy: true,
+          acceptWithdrawal: true,
+          website: String(fd.get("website") ?? ""),
+        },
+      });
+
+      if (result.ok) {
+        setOrderNumber(result.orderNumber);
+        setStatus("done");
+        form.reset();
+      } else {
+        setStatus("error");
+        setErrorMessage(result.error);
+      }
+    } catch {
+      setStatus("error");
+      setErrorMessage(
+        "A megrendelés beküldése nem sikerült. Kérlek, ellenőrizd az adatokat, vagy írj a info@xlntbi.hu címre.",
+      );
+    }
+  }
+
+  if (status === "done") {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-20">
+        <h1 className="text-3xl font-bold text-foreground">Köszönöm a megrendelésedet!</h1>
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+          A rendelésed száma: <strong className="text-foreground">{orderNumber}</strong>. A
+          visszaigazolást elküldtem a megadott e-mail címre. A számlát és a letöltési tudnivalókat
+          hamarosan megkapod.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            to="/termekeim"
+            className="inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+          >
+            Vissza a termékekhez
+          </Link>
+          <Link
+            to="/kapcsolat"
+            className="inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+          >
+            Kapcsolat
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-14">
+      <h1 className="text-3xl font-bold text-foreground md:text-4xl">Megrendelés</h1>
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
+        Digitális termékről van szó, ezért csak számlázási adatokra van szükség – szállítási címre
+        nincs. A megrendelés leadása után visszaigazoló e-mailt kapsz, és elküldöm a számlát, majd a
+        letöltés részleteit. Bankkártyás fizetés hamarosan.
+      </p>
+
+      <form onSubmit={onSubmit} className="mt-8 rounded-xl border border-border bg-card p-6 md:p-8">
+        <fieldset>
+          <legend className="text-sm font-semibold text-foreground">Termék</legend>
+          <div className="mt-3 space-y-2">
+            {products.map((p) => (
+              <label
+                key={p.slug}
+                className="flex items-start gap-3 rounded-md border border-border p-3 text-sm text-foreground"
+              >
+                <input
+                  type="radio"
+                  name="productSlug"
+                  value={p.slug}
+                  checked={slug === p.slug}
+                  onChange={() => setSlug(p.slug)}
+                  className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+                />
+                <span>
+                  {p.name}
+                  <span className="block text-xs text-muted-foreground">
+                    {formatPrice(p.price)} / db
+                  </span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+          <label className="block text-sm font-medium text-foreground">
+            Darabszám *
+            <input
+              type="number"
+              min={1}
+              max={20}
+              value={quantity}
+              onChange={(e) => setQuantity(Math.max(1, Math.min(20, Number(e.target.value) || 1)))}
+              className={inputClass}
+            />
+          </label>
+          <div className="flex items-end">
+            <p className="text-sm text-muted-foreground">
+              Fizetendő:{" "}
+              <strong className="text-lg text-foreground">{formatPrice(total)}</strong>
+            </p>
+          </div>
+        </div>
+
+        <h2 className="mt-8 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          Számlázási adatok
+        </h2>
+        <div className="mt-4 grid gap-5 sm:grid-cols-2">
+          <label className="block text-sm font-medium text-foreground">
+            Számlázási név *
+            <input name="billingName" required minLength={2} maxLength={160} className={inputClass} />
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            Cégnév
+            <input name="companyName" maxLength={160} className={inputClass} />
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            Adószám
+            <input name="taxNumber" maxLength={40} className={inputClass} />
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            Ország *
+            <input
+              name="country"
+              required
+              defaultValue="Magyarország"
+              maxLength={80}
+              className={inputClass}
+            />
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            Postai irányítószám *
+            <input name="postalCode" required minLength={2} maxLength={20} className={inputClass} />
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            Település *
+            <input name="city" required minLength={2} maxLength={80} className={inputClass} />
+          </label>
+          <label className="block text-sm font-medium text-foreground sm:col-span-2">
+            Utca, házszám *
+            <input name="addressLine" required minLength={3} maxLength={200} className={inputClass} />
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            E-mail *
+            <input name="email" type="email" required maxLength={160} className={inputClass} />
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            Telefonszám *
+            <input name="phone" type="tel" required minLength={6} maxLength={30} className={inputClass} />
+          </label>
+        </div>
+
+        <label className="mt-6 block text-sm font-medium text-foreground">
+          Megjegyzés
+          <textarea name="note" maxLength={2000} rows={4} className={inputClass} />
+        </label>
+
+        {/* Honeypot – rejtett spamcsapda, ne töltsd ki */}
+        <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+          <label>
+            Website
+            <input name="website" tabIndex={-1} autoComplete="off" />
+          </label>
+        </div>
+
+        <div className="mt-8 space-y-3 text-sm text-muted-foreground">
+          <label className="flex items-start gap-2.5">
+            <input
+              type="checkbox"
+              required
+              className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+            />
+            <span>
+              Elfogadom az{" "}
+              <a href="/aszf" className="underline hover:text-foreground">
+                Általános Szerződési Feltételeket
+              </a>
+              . *
+            </span>
+          </label>
+          <label className="flex items-start gap-2.5">
+            <input
+              type="checkbox"
+              required
+              className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+            />
+            <span>
+              Megismertem az{" "}
+              <a href="/adatvedelmi-tajekoztato" className="underline hover:text-foreground">
+                Adatvédelmi tájékoztatót
+              </a>
+              . *
+            </span>
+          </label>
+          <label className="flex items-start gap-2.5">
+            <input
+              type="checkbox"
+              required
+              className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+            />
+            <span>
+              Tudomásul veszem, hogy digitális tartalom esetén a teljesítés megkezdése után az{" "}
+              <a href="/elallas-a-szerzodestol" className="underline hover:text-foreground">
+                elállási jogom
+              </a>{" "}
+              megszűnik. *
+            </span>
+          </label>
+        </div>
+
+        {status === "error" ? (
+          <p className="mt-6 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {errorMessage}
+          </p>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={status === "sending"}
+          className="mt-8 inline-flex items-center justify-center rounded-md bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:opacity-60"
+        >
+          {status === "sending" ? "Küldés folyamatban…" : "Megrendelés elküldése"}
+        </button>
+      </form>
+    </div>
+  );
+}
