@@ -3,6 +3,8 @@ import { Check } from "lucide-react";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import termekekImg from "@/assets/termekek.jpg";
 import { formatPrice, products } from "@/lib/products";
+import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
+
 
 
 const TITLE = "Termékeim könyvelőirodáknak és könyvelőknek | EXCELlent";
