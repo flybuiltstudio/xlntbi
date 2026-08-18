@@ -18,6 +18,8 @@ import { Route as CookieTajekoztatoRouteImport } from './routes/cookie-tajekozta
 import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
 import { Route as ElallasASzerzodestolRouteImport } from './routes/elallas-a-szerzodestol'
 import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
+import { Route as FizetesEsTeljesitesRouteImport } from './routes/fizetes-es-teljesites'
+import { Route as FogyasztovedelemRouteImport } from './routes/fogyasztovedelem'
 import { Route as ImpresszumRouteImport } from './routes/impresszum'
 import { Route as KapcsolatRouteImport } from './routes/kapcsolat'
 import { Route as KontrollingRouteImport } from './routes/kontrolling'
@@ -79,6 +81,16 @@ const ElallasASzerzodestolRoute = ElallasASzerzodestolRouteImport.update({
 const FintechEsBiRoute = FintechEsBiRouteImport.update({
   id: '/fintech-es-bi',
   path: '/fintech-es-bi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FizetesEsTeljesitesRoute = FizetesEsTeljesitesRouteImport.update({
+  id: '/fizetes-es-teljesites',
+  path: '/fizetes-es-teljesites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FogyasztovedelemRoute = FogyasztovedelemRouteImport.update({
+  id: '/fogyasztovedelem',
+  path: '/fogyasztovedelem',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ImpresszumRoute = ImpresszumRouteImport.update({
@@ -173,6 +185,8 @@ export interface FileRoutesByFullPath {
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
+  '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
+  '/fogyasztovedelem': typeof FogyasztovedelemRoute
   '/impresszum': typeof ImpresszumRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
@@ -200,6 +214,8 @@ export interface FileRoutesByTo {
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
+  '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
+  '/fogyasztovedelem': typeof FogyasztovedelemRoute
   '/impresszum': typeof ImpresszumRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
@@ -228,6 +244,8 @@ export interface FileRoutesById {
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
+  '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
+  '/fogyasztovedelem': typeof FogyasztovedelemRoute
   '/impresszum': typeof ImpresszumRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
@@ -257,6 +275,8 @@ export interface FileRouteTypes {
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
     | '/fintech-es-bi'
+    | '/fizetes-es-teljesites'
+    | '/fogyasztovedelem'
     | '/impresszum'
     | '/kapcsolat'
     | '/kontrolling'
@@ -284,6 +304,8 @@ export interface FileRouteTypes {
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
     | '/fintech-es-bi'
+    | '/fizetes-es-teljesites'
+    | '/fogyasztovedelem'
     | '/impresszum'
     | '/kapcsolat'
     | '/kontrolling'
@@ -311,6 +333,8 @@ export interface FileRouteTypes {
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
     | '/fintech-es-bi'
+    | '/fizetes-es-teljesites'
+    | '/fogyasztovedelem'
     | '/impresszum'
     | '/kapcsolat'
     | '/kontrolling'
@@ -339,6 +363,8 @@ export interface RootRouteChildren {
   DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
   ElallasASzerzodestolRoute: typeof ElallasASzerzodestolRoute
   FintechEsBiRoute: typeof FintechEsBiRoute
+  FizetesEsTeljesitesRoute: typeof FizetesEsTeljesitesRoute
+  FogyasztovedelemRoute: typeof FogyasztovedelemRoute
   ImpresszumRoute: typeof ImpresszumRoute
   KapcsolatRoute: typeof KapcsolatRoute
   KontrollingRoute: typeof KontrollingRoute
@@ -420,6 +446,20 @@ declare module '@tanstack/react-router' {
       path: '/fintech-es-bi'
       fullPath: '/fintech-es-bi'
       preLoaderRoute: typeof FintechEsBiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fizetes-es-teljesites': {
+      id: '/fizetes-es-teljesites'
+      path: '/fizetes-es-teljesites'
+      fullPath: '/fizetes-es-teljesites'
+      preLoaderRoute: typeof FizetesEsTeljesitesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fogyasztovedelem': {
+      id: '/fogyasztovedelem'
+      path: '/fogyasztovedelem'
+      fullPath: '/fogyasztovedelem'
+      preLoaderRoute: typeof FogyasztovedelemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/impresszum': {
@@ -547,6 +587,8 @@ const rootRouteChildren: RootRouteChildren = {
   DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
   ElallasASzerzodestolRoute: ElallasASzerzodestolRoute,
   FintechEsBiRoute: FintechEsBiRoute,
+  FizetesEsTeljesitesRoute: FizetesEsTeljesitesRoute,
+  FogyasztovedelemRoute: FogyasztovedelemRoute,
   ImpresszumRoute: ImpresszumRoute,
   KapcsolatRoute: KapcsolatRoute,
   KontrollingRoute: KontrollingRoute,

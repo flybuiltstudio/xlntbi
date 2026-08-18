@@ -66,6 +66,52 @@ function TermekeimPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
+        <h2 className="text-2xl font-bold text-foreground">Megrendelhető termékek</h2>
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
+          {products.map((product) => (
+            <article
+              key={product.slug}
+              className="flex flex-col overflow-hidden rounded-xl border border-border bg-card"
+            >
+              <img
+                src={product.image}
+                alt={`${product.name} – illusztráció`}
+                loading="lazy"
+                className="h-48 w-full object-cover"
+              />
+              <div className="flex flex-1 flex-col p-6">
+                <h3 className="text-lg font-semibold text-foreground">{product.name}</h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+                  {product.intro[0]}
+                </p>
+                <p className="mt-4 text-xl font-bold text-foreground">
+                  {formatPrice(product.price)}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  <Link
+                    to="/termek/$slug"
+                    params={{ slug: product.slug }}
+                    className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                  >
+                    Részletek
+                  </Link>
+                  <Link
+                    to="/megrendeles"
+                    search={{ termek: product.slug }}
+                    className="inline-flex items-center rounded-md border border-input px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+                  >
+                    Megrendelem
+                  </Link>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+
+
+      <section className="mx-auto max-w-6xl px-4 py-16">
         <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
             <h2 className="text-2xl font-bold text-foreground">Mit találsz itt?</h2>
