@@ -52,18 +52,24 @@ function TermekeimPage() {
               hogy valós szakmai problémára adnak gyors, használható megoldást.
             </p>
             <Link
-              to="/kapcsolat"
+              to="/termekeim"
+              hash="megrendelheto-termekek"
               className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
             >
               Termékek megtekintése
             </Link>
           </div>
-          <img
-            src={kalkulatorImg}
-            alt="Online kalkulátor és digitális eszközök"
-            loading="lazy"
+          <video
+            src={heroVideo.url}
+            poster={kalkulatorImg}
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label="Digitális termékek – hangulatvideó"
             className="w-full rounded-xl border border-border object-cover shadow-sm"
           />
+
         </div>
       </section>
 
