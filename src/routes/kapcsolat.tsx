@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 
 const TITLE = "Kapcsolat – EXCELlent Accounting & Consulting";
 const DESC =
-  "Vedd fel velem a kapcsolatot: könyvelés, adótanácsadás, kontrolling, Fintech és BI kérdésekben. Telefon: 06 20 962 2176.";
+  "Vedd fel velem a kapcsolatot: könyvelés, adótanácsadás, kontrolling, Fintech és BI kérdésekben. Telefon: 20/962-2176.";
 
 export const Route = createFileRoute("/kapcsolat")({
   head: () => ({
