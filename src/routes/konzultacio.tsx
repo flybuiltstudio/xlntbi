@@ -37,6 +37,8 @@ const CONTACT_METHODS = ["E-mailben", "Telefonon", "Mindegy"];
 const CONTACT_TIMES = [
   "Hétköznap délelőtt (8:00–12:00)",
   "Hétköznap délután (12:00–17:00)",
+  "Este 17:00 után",
+  "Hétvégén",
   "Bármikor",
   "Inkább e-mailben keressenek",
 ];
