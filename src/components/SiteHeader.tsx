@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import logo from "@/assets/xlnt-logo.png";
+import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 
 const services = [
   { to: "/konyveles", label: "Könyvelés" },
@@ -36,20 +36,14 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between gap-4 px-4">
-        <Link to="/" className="flex items-center gap-3" aria-label="EXCELlent – főoldal">
+        <Link to="/" className="flex items-center" aria-label="EXCELlent Business Intelligence – főoldal">
           <img
-            src={logo}
-            alt="EXCELlent Accounting & Consulting logó"
-            className="h-12 w-12 object-contain"
-            width={48}
-            height={48}
+            src={logoAsset.url}
+            alt="EXCELlent Business Intelligence logó"
+            className="h-16 w-auto object-contain"
+            width={240}
+            height={160}
           />
-          <span className="hidden flex-col leading-tight sm:flex">
-            <span className="text-base font-bold text-foreground">EXCELlent</span>
-            <span className="text-[0.7rem] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-              Accounting &amp; Consulting
-            </span>
-          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Főmenü">
