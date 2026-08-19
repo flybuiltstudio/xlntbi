@@ -6,7 +6,7 @@ import { z } from "zod";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
 import { isCardPaymentAvailable } from "@/lib/stripe";
-import { formatPrice, products } from "@/lib/products";
+import { formatPrice, getProduct, getTier, products } from "@/lib/products";
 import { submitOrder } from "@/lib/order.functions";
 
 const TITLE = "Megrendelés | EXCELlent digitális termékek";
@@ -14,7 +14,8 @@ const DESC =
   "Add le a megrendelésedet az EXCELlent digitális termékeire. Számlázási adatok megadása, visszaigazoló e-maillel.";
 
 const searchSchema = z.object({
-  termek: z.enum(["nav-online-szamla-letolto", "nav-penztargep-letolto"]).optional(),
+  termek: z.string().optional(),
+  csomag: z.string().optional(),
 });
 
 export const Route = createFileRoute("/megrendeles")({
@@ -37,10 +38,16 @@ const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/40";
 
 function OrderPage() {
-  const { termek } = Route.useSearch();
+  const { termek, csomag } = Route.useSearch();
   const submit = useServerFn(submitOrder);
 
-  const [slug, setSlug] = useState(termek ?? products[0]!.slug);
+  const orderable = products.filter((p) => p.status === "available");
+  const initialSlug =
+    termek && getProduct(termek)?.status === "available" ? termek : orderable[0]!.slug;
+  const [slug, setSlug] = useState(initialSlug);
+  const [tierId, setTierId] = useState(
+    () => getTier(getProduct(initialSlug)!, csomag).id,
+  );
   const [quantity, setQuantity] = useState(1);
   const cardAvailable = isCardPaymentAvailable();
   const [paymentMethod, setPaymentMethod] = useState<"card" | "transfer">(
@@ -53,8 +60,14 @@ function OrderPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
 
-  const product = products.find((p) => p.slug === slug) ?? products[0]!;
-  const total = product.price * quantity;
+  const product = getProduct(slug) ?? orderable[0]!;
+  const tier = getTier(product, tierId);
+  const total = tier.price * quantity;
+
+  function selectProduct(nextSlug: string) {
+    setSlug(nextSlug);
+    setTierId(getTier(getProduct(nextSlug)!).id);
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -66,7 +79,8 @@ function OrderPage() {
     try {
       const result = await submit({
         data: {
-          productSlug: slug as "nav-online-szamla-letolto" | "nav-penztargep-letolto",
+          productSlug: slug,
+          tierId: tier.id,
           quantity,
           billingName: String(fd.get("billingName") ?? ""),
           companyName: String(fd.get("companyName") ?? ""),
@@ -118,7 +132,7 @@ function OrderPage() {
           visszaigazolást és a számlát a sikeres fizetés után küldöm e-mailben.
         </p>
         <StripeOrderCheckout
-          priceId={product.priceId}
+          priceId={tier.priceId}
           quantity={quantity}
           orderNumber={orderNumber}
           customerEmail={customerEmail}
@@ -166,27 +180,43 @@ function OrderPage() {
       </p>
 
       <form onSubmit={onSubmit} className="mt-8 rounded-xl border border-border bg-card p-6 md:p-8">
-        <fieldset>
-          <legend className="text-sm font-semibold text-foreground">Termék</legend>
+        <label className="block text-sm font-semibold text-foreground">
+          Termék *
+          <select
+            name="productSlug"
+            value={slug}
+            onChange={(e) => selectProduct(e.target.value)}
+            className={inputClass}
+          >
+            {orderable.map((p) => (
+              <option key={p.slug} value={p.slug}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <fieldset className="mt-6">
+          <legend className="text-sm font-semibold text-foreground">Licenc csomag</legend>
           <div className="mt-3 space-y-2">
-            {products.map((p) => (
+            {product.tiers.map((t) => (
               <label
-                key={p.slug}
+                key={t.id}
                 className="flex items-start gap-3 rounded-md border border-border p-3 text-sm text-foreground"
               >
                 <input
                   type="radio"
-                  name="productSlug"
-                  value={p.slug}
-                  checked={slug === p.slug}
-                  onChange={() => setSlug(p.slug)}
+                  name="tierId"
+                  value={t.id}
+                  checked={tier.id === t.id}
+                  onChange={() => setTierId(t.id)}
                   className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
                 />
                 <span>
-                  {p.name}
-                  <span className="block text-xs text-muted-foreground">
-                    {formatPrice(p.price)} / db
-                  </span>
+                  {t.label} – {formatPrice(t.price)}
+                  {t.note ? (
+                    <span className="block text-xs text-muted-foreground">{t.note}</span>
+                  ) : null}
                 </span>
               </label>
             ))}

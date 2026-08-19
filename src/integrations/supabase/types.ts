@@ -68,6 +68,62 @@ export type Database = {
         }
         Relationships: []
       }
+      order_downloads: {
+        Row: {
+          created_at: string
+          download_count: number
+          email: string
+          expires_at: string
+          file_name: string
+          id: string
+          last_downloaded_at: string | null
+          max_downloads: number
+          order_id: string
+          order_number: string
+          product_slug: string
+          storage_path: string
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          download_count?: number
+          email: string
+          expires_at: string
+          file_name: string
+          id?: string
+          last_downloaded_at?: string | null
+          max_downloads?: number
+          order_id: string
+          order_number: string
+          product_slug: string
+          storage_path: string
+          token: string
+        }
+        Update: {
+          created_at?: string
+          download_count?: number
+          email?: string
+          expires_at?: string
+          file_name?: string
+          id?: string
+          last_downloaded_at?: string | null
+          max_downloads?: number
+          order_id?: string
+          order_number?: string
+          product_slug?: string
+          storage_path?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_downloads_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           address_line: string
@@ -92,6 +148,8 @@ export type Database = {
           quantity: number
           status: string
           tax_number: string | null
+          tier_id: string | null
+          tier_label: string | null
           total_price: number
           unit_price: number
           updated_at: string
@@ -120,6 +178,8 @@ export type Database = {
           quantity?: number
           status?: string
           tax_number?: string | null
+          tier_id?: string | null
+          tier_label?: string | null
           total_price: number
           unit_price: number
           updated_at?: string
@@ -148,10 +208,33 @@ export type Database = {
           quantity?: number
           status?: string
           tax_number?: string | null
+          tier_id?: string | null
+          tier_label?: string | null
           total_price?: number
           unit_price?: number
           updated_at?: string
           user_agent?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
         }
         Relationships: []
       }
@@ -160,10 +243,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -290,6 +379,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdatvedelmiTajekoztatoRouteImport } from './routes/adatvedelmi-tajekoztato'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdotanacsadasRouteImport } from './routes/adotanacsadas'
 import { Route as AszfRouteImport } from './routes/aszf'
 import { Route as CegauditRouteImport } from './routes/cegaudit'
@@ -27,6 +28,7 @@ import { Route as KonyvelesRouteImport } from './routes/konyveles'
 import { Route as KonyveloirodaAuditRouteImport } from './routes/konyveloiroda-audit'
 import { Route as KonyvvizsgalatRouteImport } from './routes/konyvvizsgalat'
 import { Route as KonzultacioRouteImport } from './routes/konzultacio'
+import { Route as LetoltesHibaRouteImport } from './routes/letoltes-hiba'
 import { Route as MegrendelesRouteImport } from './routes/megrendeles'
 import { Route as OktatasRouteImport } from './routes/oktatas'
 import { Route as RolamRouteImport } from './routes/rolam'
@@ -37,6 +39,7 @@ import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.
 import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
 import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles_.koszonjuk'
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
+import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
@@ -48,6 +51,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdatvedelmiTajekoztatoRoute = AdatvedelmiTajekoztatoRouteImport.update({
   id: '/adatvedelmi-tajekoztato',
   path: '/adatvedelmi-tajekoztato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdotanacsadasRoute = AdotanacsadasRouteImport.update({
@@ -131,6 +139,11 @@ const KonzultacioRoute = KonzultacioRouteImport.update({
   path: '/konzultacio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LetoltesHibaRoute = LetoltesHibaRouteImport.update({
+  id: '/letoltes-hiba',
+  path: '/letoltes-hiba',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MegrendelesRoute = MegrendelesRouteImport.update({
   id: '/megrendeles',
   path: '/megrendeles',
@@ -182,6 +195,11 @@ const TermekSlugRoute = TermekSlugRouteImport.update({
   path: '/termek/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLetoltesTokenRoute = ApiPublicLetoltesTokenRouteImport.update({
+  id: '/api/public/letoltes/$token',
+  path: '/api/public/letoltes/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -198,6 +216,7 @@ const LovableEmailTransactionalPreviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
+  '/admin': typeof AdminRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
@@ -214,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
+  '/letoltes-hiba': typeof LetoltesHibaRoute
   '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
@@ -224,12 +244,14 @@ export interface FileRoutesByFullPath {
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
+  '/admin': typeof AdminRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
@@ -246,6 +268,7 @@ export interface FileRoutesByTo {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
+  '/letoltes-hiba': typeof LetoltesHibaRoute
   '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
@@ -256,6 +279,7 @@ export interface FileRoutesByTo {
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
+  '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -263,6 +287,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
+  '/admin': typeof AdminRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
@@ -279,6 +304,7 @@ export interface FileRoutesById {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
+  '/letoltes-hiba': typeof LetoltesHibaRoute
   '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
@@ -289,6 +315,7 @@ export interface FileRoutesById {
   '/megrendeles_/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -297,6 +324,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/adatvedelmi-tajekoztato'
+    | '/admin'
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
@@ -313,6 +341,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/konzultacio'
+    | '/letoltes-hiba'
     | '/megrendeles'
     | '/oktatas'
     | '/rolam'
@@ -323,12 +352,14 @@ export interface FileRouteTypes {
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
+    | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/adatvedelmi-tajekoztato'
+    | '/admin'
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
@@ -345,6 +376,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/konzultacio'
+    | '/letoltes-hiba'
     | '/megrendeles'
     | '/oktatas'
     | '/rolam'
@@ -355,12 +387,14 @@ export interface FileRouteTypes {
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok'
+    | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   id:
     | '__root__'
     | '/'
     | '/adatvedelmi-tajekoztato'
+    | '/admin'
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
@@ -377,6 +411,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/konzultacio'
+    | '/letoltes-hiba'
     | '/megrendeles'
     | '/oktatas'
     | '/rolam'
@@ -387,6 +422,7 @@ export interface FileRouteTypes {
     | '/megrendeles_/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
+    | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
@@ -394,6 +430,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdatvedelmiTajekoztatoRoute: typeof AdatvedelmiTajekoztatoRoute
+  AdminRoute: typeof AdminRoute
   AdotanacsadasRoute: typeof AdotanacsadasRoute
   AszfRoute: typeof AszfRoute
   CegauditRoute: typeof CegauditRoute
@@ -410,6 +447,7 @@ export interface RootRouteChildren {
   KonyveloirodaAuditRoute: typeof KonyveloirodaAuditRoute
   KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
   KonzultacioRoute: typeof KonzultacioRoute
+  LetoltesHibaRoute: typeof LetoltesHibaRoute
   MegrendelesRoute: typeof MegrendelesRoute
   OktatasRoute: typeof OktatasRoute
   RolamRoute: typeof RolamRoute
@@ -420,6 +458,7 @@ export interface RootRouteChildren {
   MegrendelesKoszonjukRoute: typeof MegrendelesKoszonjukRoute
   TermekSlugRoute: typeof TermekSlugRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
+  ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
@@ -438,6 +477,13 @@ declare module '@tanstack/react-router' {
       path: '/adatvedelmi-tajekoztato'
       fullPath: '/adatvedelmi-tajekoztato'
       preLoaderRoute: typeof AdatvedelmiTajekoztatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/adotanacsadas': {
@@ -552,6 +598,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KonzultacioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/letoltes-hiba': {
+      id: '/letoltes-hiba'
+      path: '/letoltes-hiba'
+      fullPath: '/letoltes-hiba'
+      preLoaderRoute: typeof LetoltesHibaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/megrendeles': {
       id: '/megrendeles'
       path: '/megrendeles'
@@ -622,6 +675,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/letoltes/$token': {
+      id: '/api/public/letoltes/$token'
+      path: '/api/public/letoltes/$token'
+      fullPath: '/api/public/letoltes/$token'
+      preLoaderRoute: typeof ApiPublicLetoltesTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -642,6 +702,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdatvedelmiTajekoztatoRoute: AdatvedelmiTajekoztatoRoute,
+  AdminRoute: AdminRoute,
   AdotanacsadasRoute: AdotanacsadasRoute,
   AszfRoute: AszfRoute,
   CegauditRoute: CegauditRoute,
@@ -658,6 +719,7 @@ const rootRouteChildren: RootRouteChildren = {
   KonyveloirodaAuditRoute: KonyveloirodaAuditRoute,
   KonyvvizsgalatRoute: KonyvvizsgalatRoute,
   KonzultacioRoute: KonzultacioRoute,
+  LetoltesHibaRoute: LetoltesHibaRoute,
   MegrendelesRoute: MegrendelesRoute,
   OktatasRoute: OktatasRoute,
   RolamRoute: RolamRoute,
@@ -668,6 +730,7 @@ const rootRouteChildren: RootRouteChildren = {
   MegrendelesKoszonjukRoute: MegrendelesKoszonjukRoute,
   TermekSlugRoute: TermekSlugRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
+  ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
