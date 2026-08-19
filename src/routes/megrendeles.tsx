@@ -316,6 +316,48 @@ function OrderPage() {
           </label>
         </div>
 
+        <fieldset className="mt-8">
+          <legend className="text-sm font-semibold text-foreground">Fizetési mód</legend>
+          <div className="mt-3 space-y-2">
+            {cardAvailable ? (
+              <label className="flex items-start gap-3 rounded-md border border-border p-3 text-sm text-foreground">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="card"
+                  checked={paymentMethod === "card"}
+                  onChange={() => setPaymentMethod("card")}
+                  className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+                />
+                <span>
+                  Bankkártyás fizetés
+                  <span className="block text-xs text-muted-foreground">
+                    Azonnali, biztonságos fizetés a Stripe felületén. A visszaigazolás a sikeres
+                    fizetés után érkezik.
+                  </span>
+                </span>
+              </label>
+            ) : null}
+            <label className="flex items-start gap-3 rounded-md border border-border p-3 text-sm text-foreground">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="transfer"
+                checked={paymentMethod === "transfer"}
+                onChange={() => setPaymentMethod("transfer")}
+                className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+              />
+              <span>
+                Banki átutalás
+                <span className="block text-xs text-muted-foreground">
+                  A számlát a fizetési adatokkal e-mailben küldöm, a letöltés a teljesítés után
+                  érhető el.
+                </span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
         {status === "error" ? (
           <p className="mt-6 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
             {errorMessage}
@@ -327,7 +369,11 @@ function OrderPage() {
           disabled={status === "sending"}
           className="mt-8 inline-flex items-center justify-center rounded-md bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:opacity-60"
         >
-          {status === "sending" ? "Küldés folyamatban…" : "Megrendelés elküldése"}
+          {status === "sending"
+            ? "Küldés folyamatban…"
+            : paymentMethod === "card"
+              ? "Tovább a fizetéshez"
+              : "Megrendelés elküldése"}
         </button>
       </form>
     </div>
