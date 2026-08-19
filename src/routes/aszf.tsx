@@ -31,7 +31,7 @@ const sections: LegalSection[] = [
     heading: "2. Az eladó adatai",
     list: [
       "Eladó: Sarinay Dávid",
-      "E-mail: dsarinay@gmail.com",
+      "E-mail: info@xlntbi.hu",
       "Telefon: +36 20 962 2176",
       "Honlap: xlntbi.hu",
     ],
