@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import termekekImg from "@/assets/termekek.jpg";
-import { formatPrice, products } from "@/lib/products";
+import { priceFrom, formatPrice, products } from "@/lib/products";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
 
 
@@ -96,8 +96,15 @@ function TermekeimPage() {
                   {product.intro[0]}
                 </p>
                 <p className="mt-4 text-xl font-bold text-foreground">
-                  {formatPrice(product.price)}
+                  {product.tiers.length > 1
+                    ? `${formatPrice(priceFrom(product))}-tól`
+                    : formatPrice(product.price)}
                 </p>
+                {product.status === "coming_soon" ? (
+                  <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Hamarosan
+                  </p>
+                ) : null}
                 <div className="mt-5 flex flex-wrap gap-3">
                   <Link
                     to="/termek/$slug"
@@ -106,13 +113,15 @@ function TermekeimPage() {
                   >
                     Részletek
                   </Link>
-                  <Link
-                    to="/megrendeles"
-                    search={{ termek: product.slug }}
-                    className="inline-flex items-center rounded-md border border-input px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
-                  >
-                    Megrendelem
-                  </Link>
+                  {product.status === "available" ? (
+                    <Link
+                      to="/megrendeles"
+                      search={{ termek: product.slug }}
+                      className="inline-flex items-center rounded-md border border-input px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+                    >
+                      Megrendelem
+                    </Link>
+                  ) : null}
                 </div>
               </div>
             </article>
