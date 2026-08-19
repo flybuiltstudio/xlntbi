@@ -116,7 +116,6 @@ export const products: Product[] = [
       "Időszak szerinti szűrés gyorsgombokkal, vagy egyetlen kattintással az „Összes elérhető” teljes tartomány letöltése.",
       "Profi Excel-formázás: valós dátum + időpont, ezres elválasztós összegek, középszürke rögzített fejléc, automatikus oszlopszélesség.",
     ],
-  },
     tiers: [
       {
         id: "orokos",
@@ -130,6 +129,7 @@ export const products: Product[] = [
       fileName: "nav_online_penztargep_letolto.exe",
       storagePath: "nav-penztargep-letolto/nav_online_penztargep_letolto.exe",
     },
+  },
   {
     slug: "afa-2665-xml-generalo",
     name: "2665 ÁFA-bevallás ÁNYK XML-generáló",
