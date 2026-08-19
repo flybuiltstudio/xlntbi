@@ -4,7 +4,7 @@
  */
 export const COMPANY = {
   legalName: "Sarinay Dávid egyéni vállalkozó",
-  brand: "EXCELlent Accounting & Consulting",
+  brand: "EXCELlent Business Intelligence",
   address: "1076 Budapest, Péterfy Sándor utca 9. 8/26.",
   registrationNumber: "57905657",
   taxNumber: "59861010-1-42",
