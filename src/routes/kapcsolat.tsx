@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 
 const TITLE = "Kapcsolat – EXCELlent Accounting & Consulting";
 const DESC =
-  "Vedd fel velem a kapcsolatot: könyvelés, adótanácsadás, kontrolling, Fintech és BI kérdésekben. Telefon: 06 20 962 2176.";
+  "Vedd fel velem a kapcsolatot: könyvelés, adótanácsadás, kontrolling, Fintech és BI kérdésekben. Telefon: 20/962-2176.";
 
 export const Route = createFileRoute("/kapcsolat")({
   head: () => ({
@@ -47,7 +47,7 @@ function KapcsolatPage() {
             <li className="flex items-start gap-3">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
               <a href="tel:+36209622176" className="hover:text-foreground">
-                06 20 962 2176
+                20/962-2176
               </a>
             </li>
             <li className="flex items-start gap-3">
@@ -55,10 +55,6 @@ function KapcsolatPage() {
               <a href="mailto:info@xlntbi.hu" className="hover:text-foreground">
                 info@xlntbi.hu
               </a>
-            </li>
-            <li className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-              Magyarország
             </li>
           </ul>
         </div>

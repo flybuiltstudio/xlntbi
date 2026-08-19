@@ -28,7 +28,7 @@ export const Route = createFileRoute("/impresszum")({
           list: [
             "Név: Sarinay Dávid – EXCELlent Accounting & Consulting",
             "E-mail: info@xlntbi.hu",
-            "Telefon: 06 20 962 2176",
+            "Telefon: 20/962-2176",
             "Weboldal: xlntbi.hu",
           ],
           afterList: [
