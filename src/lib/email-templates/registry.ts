@@ -1,5 +1,11 @@
 import type { ComponentType } from 'react'
 
+import { template as belsoRendelesErtesito } from './belso-rendeles-ertesito'
+import { template as belsoUrlapErtesito } from './belso-urlap-ertesito'
+import { template as kapcsolatVisszaigazolas } from './kapcsolat-visszaigazolas'
+import { template as konzultacioVisszaigazolas } from './konzultacio-visszaigazolas'
+import { template as megrendelesVisszaigazolas } from './megrendeles-visszaigazolas'
+
 export interface TemplateEntry {
   component: ComponentType<any>
   subject: string | ((data: Record<string, any>) => string)
@@ -12,12 +18,11 @@ export interface TemplateEntry {
 /**
  * Template registry — maps template names to their React Email components.
  * Import and register new templates here after creating them in this directory.
- *
- * Example:
- *   import { template as welcomeTemplate } from './welcome'
- *   // then add to TEMPLATES: 'welcome': welcomeTemplate
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
-  // Add templates here as they are created, e.g.:
-  // 'welcome': welcomeTemplate,
+  'kapcsolat-visszaigazolas': kapcsolatVisszaigazolas,
+  'konzultacio-visszaigazolas': konzultacioVisszaigazolas,
+  'belso-urlap-ertesito': belsoUrlapErtesito,
+  'megrendeles-visszaigazolas': megrendelesVisszaigazolas,
+  'belso-rendeles-ertesito': belsoRendelesErtesito,
 }
