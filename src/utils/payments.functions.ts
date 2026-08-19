@@ -44,6 +44,8 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
         ui_mode: "embedded_page",
         return_url: data.returnUrl,
         customer_email: data.customerEmail,
+        // Allows the 100% test promotion code (XLNTTESZT100) to be entered.
+        allow_promotion_codes: true,
         locale: "hu",
         // Sell in HUF only — no currency-conversion offer at checkout.
         adaptive_pricing: { enabled: false },
