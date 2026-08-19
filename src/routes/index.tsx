@@ -101,10 +101,10 @@ function Index() {
         <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/75 to-brand-dark/40" />
         <div className="relative mx-auto max-w-6xl px-4 py-12 md:py-16">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-foreground/80">
-            EXCELlent Accounting &amp; Consulting
+            EXCELLENT BUSINESS INTELLIGENCE
           </p>
           <h1 className="mt-4 max-w-3xl text-4xl font-bold leading-tight text-primary-foreground md:text-5xl">
-            Excellent Business Intelligence
+            Automated future
           </h1>
           <div className="mt-9 flex flex-wrap gap-3">
             <Link
