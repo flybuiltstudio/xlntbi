@@ -2,6 +2,20 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import heroImg from "@/assets/bcg-1.jpg";
 import aboutImg from "@/assets/En-modern-konyveloirodaban.jpg";
+import icHatekonysag from "@/assets/icons/hatekonysag.png.asset.json";
+import icInnovacio from "@/assets/icons/innovacio.png.asset.json";
+import icKomplexitas from "@/assets/icons/komplexitas.png.asset.json";
+import icPontossag from "@/assets/icons/pontossag.png.asset.json";
+import icKonyveles from "@/assets/icons/konyveles.png.asset.json";
+import icAdo from "@/assets/icons/ado.png.asset.json";
+import icAudit from "@/assets/icons/audit.png.asset.json";
+import icBi from "@/assets/icons/bi.png.asset.json";
+import icKontrolling from "@/assets/icons/kontrolling.png.asset.json";
+import icTermekek from "@/assets/icons/termekek.png.asset.json";
+import icKalkulator from "@/assets/icons/kalkulator.png.asset.json";
+import icOktatas from "@/assets/icons/oktatas.png.asset.json";
+import icAi from "@/assets/icons/ai.png.asset.json";
+import aiIllustration from "@/assets/icons/ai-illustration.jpg.asset.json";
 
 const TITLE = "EXCELlent Accounting & Consulting – könyvelés, kontrolling, Fintech és BI";
 const DESC =
@@ -24,32 +38,56 @@ export const Route = createFileRoute("/")({
 const pillars = [
   {
     title: "Hatékonyság",
+    icon: icHatekonysag.url,
     text: "Modern digitalizációs és automatizációs megoldások könyvelési és kontrolling szakértelemmel, akár komplex makrókkal is.",
   },
   {
     title: "Innováció",
+    icon: icInnovacio.url,
     text: "Olyan vállalkozásoknak, könyvelőknek és cégeknek segítek, akik gyorsabb, átláthatóbb és megbízhatóbb működést akarnak modern digitalizációs és automatizációs megoldásokkal, Excel, Power BI, AI és más korszerű technológiák használatával.",
   },
   {
     title: "Komplexitás",
+    icon: icKomplexitas.url,
     text: "Könyvelés, adótanácsadás, könyvvizsgálat, BI, kontrolling, kalkulátorok és saját fejlesztésű digitális megoldások egy helyen.",
   },
   {
     title: "Pontosság",
+    icon: icPontossag.url,
     text: "Ha fontos neked a szakmai pontosság, a digitális működés és a valóban használható megoldás, jó helyen jársz.",
   },
 ];
 
 const offerings = [
-  { title: "Könyvelési szolgáltatások", to: "/konyveles" as const },
-  { title: "Adózási és ügyviteli tanácsadás", to: "/adotanacsadas" as const },
-  { title: "Könyvvizsgálati és audit megoldások", to: "/konyvvizsgalat" as const },
-  { title: "Fintech és BI tanácsadás", to: "/fintech-es-bi" as const },
-  { title: "Kontrollingot modern riport- és automatizációs eszközökkel", to: "/kontrolling" as const },
-  { title: "Könyvelőknek készült saját termékek", to: "/termekeim" as const },
-  { title: "Kalkulátorok", to: "/kalkulatorok" as const },
-  { title: "Szakmai oktatás", to: "/oktatas" as const },
+  { title: "Könyvelési szolgáltatások", to: "/konyveles" as const, icon: icKonyveles.url },
+  { title: "Adózási és ügyviteli tanácsadás", to: "/adotanacsadas" as const, icon: icAdo.url },
+  { title: "Könyvvizsgálati és audit megoldások", to: "/konyvvizsgalat" as const, icon: icAudit.url },
+  { title: "Fintech és BI tanácsadás", to: "/fintech-es-bi" as const, icon: icBi.url },
+  {
+    title: "Kontrollingot modern riport- és automatizációs eszközökkel",
+    to: "/kontrolling" as const,
+    icon: icKontrolling.url,
+  },
+  { title: "Könyvelőknek készült saját termékek", to: "/termekeim" as const, icon: icTermekek.url },
+  { title: "Kalkulátorok", to: "/kalkulatorok" as const, icon: icKalkulator.url },
+  { title: "Szakmai oktatás", to: "/oktatas" as const, icon: icOktatas.url },
 ];
+
+const aiPoints = [
+  {
+    title: "Gyorsabb fejlesztés",
+    text: "A saját eszközeim és letöltőim fejlesztésénél AI-alapú fejlesztői eszközöket is használok, így rövidebb idő alatt készülnek el az új verziók.",
+  },
+  {
+    title: "Folyamatos frissítés",
+    text: "A jogszabályi és NAV-oldali változásokat így hamarabb tudom átvezetni a termékeken, és a meglévő felhasználók is megkapják a frissebb verziót.",
+  },
+  {
+    title: "Szakmai kontroll marad",
+    text: "Az AI eszköz, nem döntéshozó: minden számítást és riportot könyvelői és kontrolling szemmel ellenőrzök, mielőtt kiadásra kerül.",
+  },
+];
+
 
 function Index() {
   return (
