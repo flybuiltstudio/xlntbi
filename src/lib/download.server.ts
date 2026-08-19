@@ -107,7 +107,7 @@ export async function issueDownload(order: OrderRow): Promise<void> {
     {
       template: "letoltes-elerheto",
       to: order.email,
-      key: `${order.order_number}-download`,
+      key: `${order.order_number}-${token.slice(0, 10)}`,
       data: {
         name: order.billing_name,
         orderNumber: order.order_number,
