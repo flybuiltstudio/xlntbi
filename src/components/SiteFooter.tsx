@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Mail, Phone } from "lucide-react";
-import logoWhite from "@/assets/xlnt-logo-white.png";
+import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 import heroImg from "@/assets/bcg-1.jpg";
 
 export function SiteFooter() {
@@ -13,59 +13,25 @@ export function SiteFooter() {
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/90 to-brand-dark/80" />
-      <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
+      <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-3">
         <div>
           <img
-            src={logoWhite}
+            src={logoAsset.url}
             alt="EXCELlent Business Intelligence logó"
-            className="h-20 w-20 object-contain"
+            className="h-24 w-auto object-contain brightness-0 invert"
             loading="lazy"
-            width={80}
-            height={80}
           />
           <p className="mt-4 text-sm opacity-90">EXCELlent Business Intelligence</p>
           <p className="mt-1 text-sm opacity-90">Sarinay Dávid</p>
         </div>
-
-        <nav aria-label="Szolgáltatások a láblécben">
-          <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">
-            Szolgáltatások
-          </h2>
-          <ul className="mt-4 space-y-2 text-sm">
-            {[
-              { to: "/konyveles", label: "Könyvelés" },
-              { to: "/adotanacsadas", label: "Adótanácsadás" },
-              { to: "/fintech-es-bi", label: "Fintech és BI" },
-              { to: "/kontrolling", label: "Kontrolling" },
-              { to: "/cegaudit", label: "Cégaudit" },
-              { to: "/konyvvizsgalat", label: "Könyvvizsgálat" },
-              { to: "/konyveloiroda-audit", label: "Könyvelőiroda audit" },
-              {
-                to: "/digitalis-idomegtakaritasi-audit",
-                label: "Digitális időmegtakarítási audit",
-              },
-            ].map((l) => (
-              <li key={l.to}>
-                <Link to={l.to} className="opacity-90 transition-opacity hover:opacity-100">
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
 
         <nav aria-label="Oldalak a láblécben">
           <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">Oldalak</h2>
           <ul className="mt-4 space-y-2 text-sm">
             {[
               { to: "/termekeim", label: "Termékeim" },
-              { to: "/termek/nav-online-szamla-letolto", label: "NAV Online Számla letöltő" },
-              { to: "/termek/nav-penztargep-letolto", label: "NAV Pénztárgép letöltő" },
-              { to: "/kalkulatorok", label: "Kalkulátorok" },
-
-              { to: "/oktatas", label: "Oktatás" },
-              { to: "/rolam", label: "Rólam" },
               { to: "/szolgaltatasaim", label: "Szolgáltatásaim" },
+              { to: "/rolam", label: "Rólam" },
               { to: "/konzultacio", label: "Konzultáció" },
               { to: "/kapcsolat", label: "Kapcsolat" },
             ].map((l) => (
@@ -105,7 +71,6 @@ export function SiteFooter() {
               </a>
             </li>
           </ul>
-
 
           <h2 className="mt-6 text-sm font-semibold uppercase tracking-wider opacity-80">
             Jogi információk
