@@ -76,6 +76,7 @@ export function ContactForm({
           services: fd.getAll("services").map(String),
           contactMethod: String(fd.get("contactMethod") ?? ""),
           contactTime: contactTimes,
+          privacyConsent: fd.get("privacyConsent") === "on",
           website: String(fd.get("website") ?? ""),
         },
       });
@@ -234,14 +235,27 @@ export function ContactForm({
         </label>
       </div>
 
-      <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
-        Az űrlap elküldésével elfogadod, hogy a megadott adatokat a megkeresés megválaszolása
-        céljából kezelem. Részletek az{" "}
-        <a href="/adatvedelmi-tajekoztato" className="underline hover:text-foreground">
-          Adatvédelmi tájékoztatóban
-        </a>
-        .
-      </p>
+      <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-md border border-border bg-background p-3.5 text-xs leading-relaxed text-muted-foreground">
+        <input
+          type="checkbox"
+          name="privacyConsent"
+          required
+          className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-primary)]"
+        />
+        <span>
+          Hozzájárulok, hogy a megadott adataimat a megkeresésem megválaszolása céljából kezeljék, és
+          megismertem az{" "}
+          <a
+            href="/adatvedelmi-tajekoztato"
+            target="_blank"
+            rel="noreferrer"
+            className="underline hover:text-foreground"
+          >
+            Adatvédelmi tájékoztatót
+          </a>
+          . *
+        </span>
+      </label>
 
       {status === "error" ? (
         <p className="mt-4 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">

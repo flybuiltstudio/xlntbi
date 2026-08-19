@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LegalPage } from "@/components/LegalPage";
+import { AUTHORITIES, COMPANY, HOSTING } from "@/lib/company";
 
 const TITLE = "Impresszum | EXCELlent Accounting & Consulting";
 const DESC =
-  "A xlntbi.hu weboldal üzemeltetőjének adatai, elérhetőségek és a szolgáltatással kapcsolatos tájékoztatás.";
+  "A xlntbi.hu weboldal üzemeltetőjének adatai: név, székhely, adószám, nyilvántartási szám, elérhetőségek és tárhelyszolgáltató.";
 
 export const Route = createFileRoute("/impresszum")({
   head: () => ({
@@ -20,32 +21,46 @@ export const Route = createFileRoute("/impresszum")({
     <LegalPage
       title="Impresszum"
       intro={[
-        "Az alábbiakban a xlntbi.hu weboldal üzemeltetőjének adatait és elérhetőségeit találod.",
+        "Az alábbiakban a xlntbi.hu weboldal üzemeltetőjének adatait és elérhetőségeit találod, az elektronikus kereskedelmi szolgáltatásokról szóló 2001. évi CVIII. törvény (Ekertv.) 4. §-a alapján.",
       ]}
       sections={[
         {
-          heading: "A szolgáltató",
+          heading: "A szolgáltató adatai",
           list: [
-            "Név: Sarinay Dávid – EXCELlent Accounting & Consulting",
-            "E-mail: info@xlntbi.hu",
-            "Telefon: 20/962-2176",
-            "Weboldal: xlntbi.hu",
+            `Név: ${COMPANY.legalName}`,
+            `Márkanév: ${COMPANY.brand}`,
+            `Székhely és levelezési cím: ${COMPANY.address}`,
+            `Nyilvántartási szám: ${COMPANY.registrationNumber}`,
+            `Adószám: ${COMPANY.taxNumber}`,
+            `Statisztikai (KSH) számjel: ${COMPANY.statisticalNumber}`,
+            `Adózási státusz: ${COMPANY.vatStatus}`,
+            `E-mail: ${COMPANY.email}`,
+            `Telefon: ${COMPANY.phone}`,
+            `Weboldal: ${COMPANY.website}`,
           ],
           afterList: [
-            "A cégjegyzékszám / nyilvántartási szám, az adószám és a székhely pontos adatai kitöltésre várnak – ezeket a szolgáltató adja meg. Kérjük, addig az e-mailes elérhetőséget használd.",
+            "A nyilvántartásba vételt az egyéni vállalkozók nyilvántartása tartalmazza. A szolgáltató nem tagja szakmai önszabályozó testületnek, magatartási kódexnek nem vetette alá magát.",
           ],
         },
         {
           heading: "Tárhelyszolgáltató",
           list: [
-            "A weboldal a Lovable (Lovable Labs Incorporated) infrastruktúráján fut.",
-            "Kapcsolat tárhely ügyben: support@lovable.dev",
+            `Név: ${HOSTING.name}`,
+            `Kapcsolat tárhely ügyben: ${HOSTING.contact}`,
+          ],
+        },
+        {
+          heading: "Felügyeleti szervek",
+          list: [
+            AUTHORITIES.nav,
+            AUTHORITIES.fogyasztovedelem,
+            AUTHORITIES.naih,
           ],
         },
         {
           heading: "Panaszkezelés",
           paragraphs: [
-            "A szolgáltatással kapcsolatos kérdésekkel, panaszokkal az info@xlntbi.hu címen vagy a fenti telefonszámon lehet fordulni hozzánk. A fogyasztói jogorvoslati lehetőségekről a Fogyasztóvédelmi tájékoztatás oldalon olvashatsz.",
+            `A szolgáltatással kapcsolatos kérdésekkel, panaszokkal a ${COMPANY.email} címen vagy a ${COMPANY.phone} telefonszámon lehet fordulni hozzám. A panaszt megvizsgálom, és a jogszabályi határidőn belül írásban válaszolok. A fogyasztói jogorvoslati lehetőségekről a Fogyasztóvédelmi tájékoztatás oldalon olvashatsz.`,
           ],
         },
       ]}
