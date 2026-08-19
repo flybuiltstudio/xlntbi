@@ -2,9 +2,12 @@
 
 A régi „EXCELlent Accounting & Consulting" / „Perfect Solutions. Automated Future." név még több helyen szerepel. Mindenhol az új márkanévre cserélem.
 
-## Amit cserélek
+Rövidett változat is elfogadott az oldaon XLNTBI   
+  
+Amit cserélek
 
 **Látható szövegek**
+
 - Lábléc: logó alt-szöveg, a logó alatti szlogen és a copyright sor („© 2026 Sarinay Dávid EV – EXCELlent Business Intelligence").
 - Főoldal és gyökér-layout SEO címe és leírása.
 - Impresszum, Kapcsolat, Konzultáció oldalcímek.
@@ -12,6 +15,7 @@ A régi „EXCELlent Accounting & Consulting" / „Perfect Solutions. Automated 
 - E-mail sablonok fejléc-alcíme („Perfect Solutions, Automated FUTURE.").
 
 **Változatlan marad**
+
 - A rövid „| EXCELlent" végződés az aloldalak title-jeiben (kb. 25 oldal) — ez rövid, jól olvasható a keresőben, és nem a régi márkanév. Ha szeretnéd, ezeket is átírom hosszabb formára, de a hosszú név minden title-ben túllépné a 60 karakteres ajánlást.
 - Az URL-ek, a logó és a favicon.
 
