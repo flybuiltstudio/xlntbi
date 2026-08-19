@@ -1,6 +1,77 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { formatPrice, getProduct, products } from "@/lib/products";
+import icKulfoldi from "@/assets/icons/kulfoldi.png.asset.json";
+import icIroda from "@/assets/icons/iroda.png.asset.json";
+import icEgyeni from "@/assets/icons/egyeni.png.asset.json";
+import icCsapat from "@/assets/icons/csapat.png.asset.json";
+import icAi from "@/assets/icons/ai.png.asset.json";
+
+const steps = [
+  {
+    title: "1. Megrendelés",
+    text: "Kitöltöd a megrendelőlapot a számlázási adatokkal. Nincs szükség szállítási címre, ez digitális termék.",
+  },
+  {
+    title: "2. Visszaigazolás és számla",
+    text: "E-mailben azonnal visszaigazolást kapsz, ezt követően megkapod a számlát és a fizetési adatokat.",
+  },
+  {
+    title: "3. Letöltés és beállítás",
+    text: "A programot letöltheted, és megkapod a használathoz szükséges leírást a NAV-hozzáférés beállításához.",
+  },
+  {
+    title: "4. Frissítések",
+    text: "Ha a NAV-oldali vagy jogszabályi feltételek változnak, jelzem, és elérhetővé teszem a frissebb verziót.",
+  },
+];
+
+const audience = [
+  {
+    title: "Könyvelőirodák",
+    icon: icIroda.url,
+    text: "Ahol sok ügyfél adatait kell rendszeresen letölteni és egységes formában feldolgozni.",
+  },
+  {
+    title: "Egyéni könyvelők",
+    icon: icEgyeni.url,
+    text: "Akik a kézi másolgatás helyett néhány kattintással szeretnének rendezett Excel-fájlt kapni.",
+  },
+  {
+    title: "Vállalati pénzügyi csapatok",
+    icon: icCsapat.url,
+    text: "Ahol az adatokat kontrollingra, ellenőrzésre vagy riportokhoz is fel kell használni.",
+  },
+  {
+    title: "Külföldi rendszert használók",
+    icon: icKulfoldi.url,
+    text: "SAP, NAVISION, Business Central vagy Oracle mellett is jól használható, importálható kimenettel.",
+  },
+];
+
+const faq = [
+  {
+    q: "Hogyan kapom meg a terméket?",
+    a: "A megrendelés leadása után e-mailben visszaigazolást kapsz, majd a számlázás rendezését követően e-mailben megkapod a letöltési lehetőséget és a használati leírást.",
+  },
+  {
+    q: "Lehet bankkártyával fizetni?",
+    a: "Jelenleg a megrendelést követően kiállított számla alapján, banki átutalással történik a fizetés. A bankkártyás fizetés bevezetése folyamatban van.",
+  },
+  {
+    q: "Kell hozzá speciális szoftver?",
+    a: "A program Windows környezetben futó asztali segédprogram. Az eredmény Excelben nyitható meg és dolgozható tovább.",
+  },
+  {
+    q: "Kapok frissítéseket?",
+    a: "Igen. A fejlesztésnél AI-alapú eszközöket is használok, ezért a szükséges módosításokat rövidebb idő alatt tudom átvezetni, és a frissebb verziót elérhetővé teszem.",
+  },
+  {
+    q: "Számlát kapok róla?",
+    a: "Igen, a megadott számlázási adatok alapján szabályos számlát állítok ki. A díj bruttó ár.",
+  },
+];
+
 
 export const Route = createFileRoute("/termek/$slug")({
   loader: ({ params }) => {
@@ -43,9 +114,25 @@ function ProductPage() {
     },
   };
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
+
 
       <section className="bg-brand-dark py-12 md:py-16">
         <div className="mx-auto max-w-6xl px-4">
@@ -136,6 +223,89 @@ function ProductPage() {
           </aside>
         </div>
       </section>
+
+      <section className="border-t border-border bg-secondary/60">
+        <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+          <h2 className="text-2xl font-bold text-foreground md:text-3xl">Hogyan működik?</h2>
+          <ol className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {steps.map((step) => (
+              <li key={step.title} className="rounded-xl border border-border bg-card p-5">
+                <h3 className="text-base font-semibold text-card-foreground">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+        <h2 className="text-2xl font-bold text-foreground md:text-3xl">Kinek készült?</h2>
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {audience.map((item) => (
+            <div key={item.title} className="rounded-xl border border-border bg-card p-5">
+              <img
+                src={item.icon}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                width={512}
+                height={512}
+                className="h-11 w-11"
+              />
+              <h3 className="mt-4 text-base font-semibold text-card-foreground">{item.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-brand-dark">
+        <div className="mx-auto max-w-6xl px-4 py-12 md:py-14">
+          <div className="flex items-start gap-5">
+            <img
+              src={icAi.url}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              width={512}
+              height={512}
+              className="h-12 w-12 shrink-0 brightness-0 invert"
+            />
+            <div>
+              <h2 className="text-xl font-semibold text-primary-foreground md:text-2xl">
+                Folyamatosan fejlesztett szoftver
+              </h2>
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-primary-foreground/85">
+                A fejlesztéshez AI-eszközöket is használok, így az új funkciók és a szükséges
+                módosítások rövidebb idő alatt készülnek el. A számítási logikát és a kimenetet
+                minden esetben könyvelői és kontrolling szemmel ellenőrzöm.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-4 py-14 md:py-16">
+        <h2 className="text-2xl font-bold text-foreground md:text-3xl">
+          Gyakran ismételt kérdések
+        </h2>
+        <dl className="mt-8 divide-y divide-border border-y border-border">
+          {faq.map((item) => (
+            <div key={item.q} className="py-5">
+              <dt className="text-base font-semibold text-foreground">{item.q}</dt>
+              <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+        <Link
+          to="/megrendeles"
+          search={{ termek: product.slug }}
+          className="mt-10 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+        >
+          Megrendelem
+        </Link>
+      </section>
     </div>
+
   );
 }
