@@ -37,6 +37,7 @@ import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.
 import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
 import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles.koszonjuk'
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
+import { Route as ApiPublicDevCouponSetupRouteImport } from './routes/api/public/dev-coupon-setup'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
@@ -182,6 +183,11 @@ const TermekSlugRoute = TermekSlugRouteImport.update({
   path: '/termek/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicDevCouponSetupRoute = ApiPublicDevCouponSetupRouteImport.update({
+  id: '/api/public/dev-coupon-setup',
+  path: '/api/public/dev-coupon-setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -224,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/dev-coupon-setup': typeof ApiPublicDevCouponSetupRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -256,6 +263,7 @@ export interface FileRoutesByTo {
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
+  '/api/public/dev-coupon-setup': typeof ApiPublicDevCouponSetupRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/dev-coupon-setup': typeof ApiPublicDevCouponSetupRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -323,6 +332,7 @@ export interface FileRouteTypes {
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
+    | '/api/public/dev-coupon-setup'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok'
+    | '/api/public/dev-coupon-setup'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   id:
@@ -387,6 +398,7 @@ export interface FileRouteTypes {
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
+    | '/api/public/dev-coupon-setup'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
@@ -419,6 +431,7 @@ export interface RootRouteChildren {
   KalkulatorokJovedelemadoRoute: typeof KalkulatorokJovedelemadoRoute
   TermekSlugRoute: typeof TermekSlugRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
+  ApiPublicDevCouponSetupRoute: typeof ApiPublicDevCouponSetupRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
@@ -621,6 +634,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/dev-coupon-setup': {
+      id: '/api/public/dev-coupon-setup'
+      path: '/api/public/dev-coupon-setup'
+      fullPath: '/api/public/dev-coupon-setup'
+      preLoaderRoute: typeof ApiPublicDevCouponSetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -678,6 +698,7 @@ const rootRouteChildren: RootRouteChildren = {
   KalkulatorokJovedelemadoRoute: KalkulatorokJovedelemadoRoute,
   TermekSlugRoute: TermekSlugRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
+  ApiPublicDevCouponSetupRoute: ApiPublicDevCouponSetupRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
