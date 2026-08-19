@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { company } from "@/lib/company";
+import { COMPANY } from "@/lib/company";
 
 const searchSchema = z.object({
   ok: z.enum(["not_found", "expired", "limit", "error"]).optional(),
@@ -60,14 +60,14 @@ function DownloadErrorPage() {
       <div className="mt-8 rounded-xl border border-border bg-card p-6 text-sm text-muted-foreground">
         <p>
           E-mail:{" "}
-          <a href={`mailto:${company.email}`} className="font-semibold text-foreground underline">
-            {company.email}
+          <a href={`mailto:${COMPANY.email}`} className="font-semibold text-foreground underline">
+            {COMPANY.email}
           </a>
         </p>
         <p className="mt-2">
           Telefon:{" "}
-          <a href={`tel:${company.phoneHref}`} className="font-semibold text-foreground underline">
-            {company.phone}
+          <a href={`tel:${COMPANY.phoneIntl.replace(/ /g, "")}`} className="font-semibold text-foreground underline">
+            {COMPANY.phone}
           </a>
         </p>
       </div>
