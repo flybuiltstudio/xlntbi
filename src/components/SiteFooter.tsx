@@ -130,7 +130,7 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="border-t border-primary-foreground/20">
+      <div className="relative border-t border-primary-foreground/20">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs opacity-80 md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} Sarinay Dávid – EXCELlent Accounting &amp; Consulting</p>
           <p>Ez a weboldal AI segítségével készült.</p>
