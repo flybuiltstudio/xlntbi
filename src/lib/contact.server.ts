@@ -13,7 +13,7 @@ type Submission = {
   message: string;
   services: string[];
   contactMethod: string;
-  contactTime: string;
+  contactTime: string[];
   website: string;
 };
 
