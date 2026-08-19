@@ -1,6 +1,77 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { formatPrice, getProduct, products } from "@/lib/products";
+import icKulfoldi from "@/assets/icons/kulfoldi.png.asset.json";
+import icIroda from "@/assets/icons/iroda.png.asset.json";
+import icEgyeni from "@/assets/icons/egyeni.png.asset.json";
+import icCsapat from "@/assets/icons/csapat.png.asset.json";
+import icAi from "@/assets/icons/ai.png.asset.json";
+
+const steps = [
+  {
+    title: "1. Megrendelés",
+    text: "Kitöltöd a megrendelőlapot a számlázási adatokkal. Nincs szükség szállítási címre, ez digitális termék.",
+  },
+  {
+    title: "2. Visszaigazolás és számla",
+    text: "E-mailben azonnal visszaigazolást kapsz, ezt követően megkapod a számlát és a fizetési adatokat.",
+  },
+  {
+    title: "3. Letöltés és beállítás",
+    text: "A programot letöltheted, és megkapod a használathoz szükséges leírást a NAV-hozzáférés beállításához.",
+  },
+  {
+    title: "4. Frissítések",
+    text: "Ha a NAV-oldali vagy jogszabályi feltételek változnak, jelzem, és elérhetővé teszem a frissebb verziót.",
+  },
+];
+
+const audience = [
+  {
+    title: "Könyvelőirodák",
+    icon: icIroda.url,
+    text: "Ahol sok ügyfél adatait kell rendszeresen letölteni és egységes formában feldolgozni.",
+  },
+  {
+    title: "Egyéni könyvelők",
+    icon: icEgyeni.url,
+    text: "Akik a kézi másolgatás helyett néhány kattintással szeretnének rendezett Excel-fájlt kapni.",
+  },
+  {
+    title: "Vállalati pénzügyi csapatok",
+    icon: icCsapat.url,
+    text: "Ahol az adatokat kontrollingra, ellenőrzésre vagy riportokhoz is fel kell használni.",
+  },
+  {
+    title: "Külföldi rendszert használók",
+    icon: icKulfoldi.url,
+    text: "SAP, NAVISION, Business Central vagy Oracle mellett is jól használható, importálható kimenettel.",
+  },
+];
+
+const faq = [
+  {
+    q: "Hogyan kapom meg a terméket?",
+    a: "A megrendelés leadása után e-mailben visszaigazolást kapsz, majd a számlázás rendezését követően e-mailben megkapod a letöltési lehetőséget és a használati leírást.",
+  },
+  {
+    q: "Lehet bankkártyával fizetni?",
+    a: "Jelenleg a megrendelést követően kiállított számla alapján, banki átutalással történik a fizetés. A bankkártyás fizetés bevezetése folyamatban van.",
+  },
+  {
+    q: "Kell hozzá speciális szoftver?",
+    a: "A program Windows környezetben futó asztali segédprogram. Az eredmény Excelben nyitható meg és dolgozható tovább.",
+  },
+  {
+    q: "Kapok frissítéseket?",
+    a: "Igen. A fejlesztésnél AI-alapú eszközöket is használok, ezért a szükséges módosításokat rövidebb idő alatt tudom átvezetni, és a frissebb verziót elérhetővé teszem.",
+  },
+  {
+    q: "Számlát kapok róla?",
+    a: "Igen, a megadott számlázási adatok alapján szabályos számlát állítok ki. A díj bruttó ár.",
+  },
+];
+
 
 export const Route = createFileRoute("/termek/$slug")({
   loader: ({ params }) => {
