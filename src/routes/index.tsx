@@ -233,9 +233,21 @@ function Index() {
                   to={o.to}
                   className="flex h-full flex-col justify-between gap-6 rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary"
                 >
-                  <h3 className="text-base font-semibold leading-snug text-card-foreground">
-                    {o.title}
-                  </h3>
+                  <div>
+                    <img
+                      src={o.icon}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      width={512}
+                      height={512}
+                      className="h-10 w-10"
+                    />
+                    <h3 className="mt-4 text-base font-semibold leading-snug text-card-foreground">
+                      {o.title}
+                    </h3>
+                  </div>
+
                   <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
                     Tovább
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
