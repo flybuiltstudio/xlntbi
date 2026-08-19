@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Check } from "lucide-react";
-import { formatPrice, getProduct, products } from "@/lib/products";
+import { priceFrom, formatPrice, getProduct, products } from "@/lib/products";
 import icKulfoldi from "@/assets/icons/kulfoldi.png.asset.json";
 import icIroda from "@/assets/icons/iroda.png.asset.json";
 import icEgyeni from "@/assets/icons/egyeni.png.asset.json";
@@ -179,17 +179,56 @@ function ProductPage() {
               loading="lazy"
               className="w-full rounded-xl border border-border object-cover shadow-sm"
             />
-            <p className="mt-6 text-3xl font-bold text-foreground">{formatPrice(product.price)}</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Az ár bruttó ár. Digitális termék, letöltéssel teljesítjük.
+            <p className="mt-6 text-3xl font-bold text-foreground">
+              {product.tiers.length > 1 ? `${formatPrice(priceFrom(product))}-tól` : formatPrice(product.price)}
             </p>
-            <Link
-              to="/megrendeles"
-              search={{ termek: product.slug }}
-              className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-            >
-              Megrendelem
-            </Link>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Az ár bruttó ár (alanyi adómentes). Digitális termék, letöltéssel teljesítjük.
+            </p>
+
+            {product.tiers.length > 1 ? (
+              <div className="mt-6 rounded-xl border border-border p-5">
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                  Licenc csomagok
+                </h2>
+                <ul className="mt-3 space-y-3 text-sm">
+                  {product.tiers.map((tier) => (
+                    <li key={tier.id} className="border-b border-border pb-3 last:border-0 last:pb-0">
+                      <p className="font-semibold text-foreground">{tier.label}</p>
+                      <p className="text-xs text-muted-foreground">{formatPrice(tier.price)}</p>
+                      {tier.note ? (
+                        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                          {tier.note}
+                        </p>
+                      ) : null}
+                      {product.status === "available" ? (
+                        <Link
+                          to="/megrendeles"
+                          search={{ termek: product.slug, csomag: tier.id }}
+                          className="mt-2 inline-flex text-xs font-semibold text-primary underline hover:no-underline"
+                        >
+                          Ezt választom
+                        </Link>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {product.status === "available" ? (
+              <Link
+                to="/megrendeles"
+                search={{ termek: product.slug }}
+                className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              >
+                Megrendelem
+              </Link>
+            ) : (
+              <p className="mt-6 rounded-md border border-border bg-secondary/60 px-4 py-3 text-sm font-semibold text-foreground">
+                Hamarosan elérhető – írj, és jelzem, amikor megvásárolható.
+              </p>
+            )}
             <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
               A megrendelés leadása után e-mailben visszaigazolást kapsz, és felvesszük veled a
               kapcsolatot a számlázás és a letöltés részleteivel. Bankkártyás fizetés hamarosan.
