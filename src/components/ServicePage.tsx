@@ -171,14 +171,18 @@ export function ServicePage({
             ) : null}
             {closing.items ? (
               <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {closing.items.map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-lg border border-border bg-card p-4 text-sm font-medium text-card-foreground"
-                  >
-                    {item}
-                  </li>
-                ))}
+                {closing.items.map((item) => {
+                  const Icon = iconFor(item);
+                  return (
+                    <li
+                      key={item}
+                      className="flex items-start gap-3 rounded-lg border border-border bg-card p-4 text-sm font-medium text-card-foreground"
+                    >
+                      <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+                      {item}
+                    </li>
+                  );
+                })}
               </ul>
             ) : null}
             {closing.ctaLabel && closing.ctaTo ? (
