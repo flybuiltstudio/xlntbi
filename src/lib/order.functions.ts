@@ -2,7 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 const orderSchema = z.object({
-  productSlug: z.enum(["nav-online-szamla-letolto", "nav-penztargep-letolto"]),
+  productSlug: z.string().trim().min(2).max(80),
+  tierId: z.string().trim().min(1).max(80),
   quantity: z.coerce.number().int().min(1).max(20),
   billingName: z.string().trim().min(2).max(160),
   companyName: z.string().trim().max(160).optional().default(""),

@@ -1,10 +1,11 @@
 import { getRequestHeader } from "@tanstack/react-start/server";
 
 import { sendEmails } from "./notify.server";
-import { formatPrice, getProduct } from "./products";
+import { formatPrice, getProduct, getTier } from "./products";
 
 type Order = {
   productSlug: string;
+  tierId: string;
   quantity: number;
   billingName: string;
   companyName: string;
@@ -73,15 +74,22 @@ export async function handleOrder(data: Order) {
     };
   }
 
+  if (product.status !== "available") {
+    return { ok: false as const, error: "Ez a termék még nem megrendelhető." };
+  }
+
+  const tier = getTier(product, data.tierId);
   const number = orderNumber();
-  const total = product.price * data.quantity;
+  const total = tier.price * data.quantity;
 
   const { error } = await supabaseAdmin.from("orders").insert({
     order_number: number,
     product_slug: product.slug,
     product_name: product.name,
     quantity: data.quantity,
-    unit_price: product.price,
+    unit_price: tier.price,
+    tier_id: tier.id,
+    tier_label: tier.label,
     total_price: total,
     currency: product.currency,
     billing_name: data.billingName,
@@ -113,7 +121,8 @@ export async function handleOrder(data: Order) {
   const rows: Array<[string, string]> = [
     ["Rendelésszám", number],
     ["Termék", `${product.name} (${data.quantity} db)`],
-    ["Egységár", formatPrice(product.price)],
+    ["Licenc csomag", tier.label],
+    ["Egységár", formatPrice(tier.price)],
     ["Fizetendő", formatPrice(total)],
     ["Számlázási név", data.billingName],
   ];
@@ -130,7 +139,7 @@ export async function handleOrder(data: Order) {
     data.paymentMethod === "card" ? "Bankkártya (Stripe)" : "Banki átutalás",
   ]);
 
-  const productLabel = `${product.name} (${data.quantity} db)`;
+  const productLabel = `${product.name} – ${tier.label} (${data.quantity} db)`;
   const emailsSent = await sendEmails([
     {
       template: "belso-rendeles-ertesito",
