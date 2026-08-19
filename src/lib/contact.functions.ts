@@ -16,7 +16,7 @@ const submissionSchema = z.object({
   message: z.string().trim().min(5).max(4000),
   services: z.array(z.string().trim().max(80)).max(12).default([]),
   contactMethod: z.string().trim().max(80).optional().default(""),
-  contactTime: z.string().trim().max(80).optional().default(""),
+  contactTime: z.array(z.string().trim().max(80)).max(12).default([]),
   // Honeypot – must stay empty for humans.
   website: z.string().max(0).optional().default(""),
 });
