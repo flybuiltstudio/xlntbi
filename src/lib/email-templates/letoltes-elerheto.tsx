@@ -25,7 +25,7 @@ const box = {
 }
 
 const button = {
-  backgroundColor: BRAND.primary,
+  backgroundColor: BRAND.green,
   borderRadius: '8px',
   color: '#ffffff',
   display: 'inline-block',
