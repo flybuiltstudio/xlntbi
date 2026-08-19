@@ -223,6 +223,89 @@ function ProductPage() {
           </aside>
         </div>
       </section>
+
+      <section className="border-t border-border bg-secondary/60">
+        <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+          <h2 className="text-2xl font-bold text-foreground md:text-3xl">Hogyan működik?</h2>
+          <ol className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {steps.map((step) => (
+              <li key={step.title} className="rounded-xl border border-border bg-card p-5">
+                <h3 className="text-base font-semibold text-card-foreground">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+        <h2 className="text-2xl font-bold text-foreground md:text-3xl">Kinek készült?</h2>
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {audience.map((item) => (
+            <div key={item.title} className="rounded-xl border border-border bg-card p-5">
+              <img
+                src={item.icon}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                width={512}
+                height={512}
+                className="h-11 w-11"
+              />
+              <h3 className="mt-4 text-base font-semibold text-card-foreground">{item.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-brand-dark">
+        <div className="mx-auto max-w-6xl px-4 py-12 md:py-14">
+          <div className="flex items-start gap-5">
+            <img
+              src={icAi.url}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              width={512}
+              height={512}
+              className="h-12 w-12 shrink-0 brightness-0 invert"
+            />
+            <div>
+              <h2 className="text-xl font-semibold text-primary-foreground md:text-2xl">
+                Folyamatosan fejlesztett szoftver
+              </h2>
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-primary-foreground/85">
+                A fejlesztéshez AI-eszközöket is használok, így az új funkciók és a szükséges
+                módosítások rövidebb idő alatt készülnek el. A számítási logikát és a kimenetet
+                minden esetben könyvelői és kontrolling szemmel ellenőrzöm.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-4 py-14 md:py-16">
+        <h2 className="text-2xl font-bold text-foreground md:text-3xl">
+          Gyakran ismételt kérdések
+        </h2>
+        <dl className="mt-8 divide-y divide-border border-y border-border">
+          {faq.map((item) => (
+            <div key={item.q} className="py-5">
+              <dt className="text-base font-semibold text-foreground">{item.q}</dt>
+              <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+        <Link
+          to="/megrendeles"
+          search={{ termek: product.slug }}
+          className="mt-10 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+        >
+          Megrendelem
+        </Link>
+      </section>
     </div>
+
   );
 }
