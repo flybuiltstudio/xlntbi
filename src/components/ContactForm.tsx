@@ -199,9 +199,11 @@ export function ContactForm({
                 className="flex items-start gap-2.5 text-sm text-muted-foreground"
               >
                 <input
-                  type="radio"
+                  type="checkbox"
                   name="contactTime"
                   value={option}
+                  checked={contactTimes.includes(option)}
+                  onChange={(e) => toggleContactTime(option, e.target.checked)}
                   className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
                 />
                 {option}
