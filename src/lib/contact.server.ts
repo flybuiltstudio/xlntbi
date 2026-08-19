@@ -66,7 +66,7 @@ export async function handleSubmission(data: Submission) {
     message: data.message,
     services: data.services,
     contact_method: data.contactMethod || null,
-    contact_time: data.contactTime || null,
+    contact_time: data.contactTime.join(", ") || null,
     ip_address: ip,
     user_agent: getRequestHeader("user-agent") ?? null,
   }).select("id").single();
