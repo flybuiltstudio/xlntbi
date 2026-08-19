@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LegalPage, type LegalSection } from "@/components/LegalPage";
+import { AUTHORITIES, COMPANY, PROCESSORS } from "@/lib/company";
 
 const TITLE = "Adatvédelmi tájékoztató | EXCELlent";
 const DESC =
-  "Adatvédelmi tájékoztató a weboldal, a kapcsolatfelvétel, a kalkulátorok és a digitális termékek adatkezeléséről, a GDPR követelményei szerint.";
+  "GDPR szerinti adatvédelmi tájékoztató: milyen adatokat kezelünk a kapcsolatfelvétel, a konzultáció, a megrendelés és a bankkártyás fizetés során, milyen jogalapon és mennyi ideig.";
 
 export const Route = createFileRoute("/adatvedelmi-tajekoztato")({
   head: () => ({
@@ -23,113 +24,124 @@ const sections: LegalSection[] = [
   {
     heading: "1. Az adatkezelő adatai",
     list: [
-      "Adatkezelő: Sarinay Dávid",
-      "E-mail: info@xlntbi.hu",
-      "Telefon: +36 20 962 2176",
-      "Honlap: xlntbi.hu",
+      `Adatkezelő: ${COMPANY.legalName} (${COMPANY.brand})`,
+      `Székhely: ${COMPANY.address}`,
+      `Nyilvántartási szám: ${COMPANY.registrationNumber}`,
+      `Adószám: ${COMPANY.taxNumber}`,
+      `E-mail: ${COMPANY.email}`,
+      `Telefon: ${COMPANY.phone}`,
+      `Weboldal: ${COMPANY.website}`,
+    ],
+    afterList: [
+      "Az adatkezelő adatvédelmi tisztviselő kijelölésére nem kötelezett, ilyet nem alkalmaz. Adatvédelmi kérdésekkel a fenti e-mail címen lehet hozzá fordulni.",
     ],
   },
   {
-    heading: "2. A tájékoztató célja",
+    heading: "2. A tájékoztató célja és hatálya",
     paragraphs: [
-      "Jelen tájékoztató bemutatja, hogy a weboldal, kapcsolódó digitális szolgáltatások és automatizált megoldások során milyen személyes adatokat kezelünk, milyen célból, milyen jogalapon, mennyi ideig, valamint milyen jogok illetik meg az érintetteket.",
-      "A tájékoztató a GDPR követelményeinek megfelelő alapstruktúrában készült, és a weboldal működéséhez, kapcsolatfelvételhez, ajánlatkéréshez, hírlevél-feliratkozáshoz, kalkulátorok használatához, digitális termékértékesítéshez és automatizált megoldásokhoz igazodik.",
+      "Jelen tájékoztató az Európai Parlament és a Tanács (EU) 2016/679 rendelete (általános adatvédelmi rendelet, GDPR) 13. cikke, valamint az információs önrendelkezési jogról és az információszabadságról szóló 2011. évi CXII. törvény (Infotv.) alapján készült.",
+      "Bemutatja, hogy a xlntbi.hu weboldal, a hozzá kapcsolódó űrlapok, a digitális termékek megrendelése és az online fizetés során milyen személyes adatokat kezelünk, milyen célból, milyen jogalapon, mennyi ideig, kik ismerhetik meg azokat, és milyen jogok illetik meg az érintetteket.",
     ],
   },
   {
     heading: "3. Az adatkezelés alapelvei",
     paragraphs: [
-      "A személyes adatokat jogszerűen, tisztességesen és átlátható módon kezeljük. Csak olyan adatokat kérünk, amelyek a szolgáltatás nyújtásához, a kapcsolatfelvételhez, a szerződés teljesítéséhez vagy jogszabályi kötelezettség teljesítéséhez szükségesek.",
-      "Az adatokat kizárólag a szükséges ideig őrizzük meg, és megfelelő technikai, valamint szervezési intézkedésekkel gondoskodunk azok biztonságáról.",
+      "A személyes adatokat jogszerűen, tisztességesen és átlátható módon kezeljük, kizárólag a megjelölt célokhoz szükséges mértékben (adattakarékosság).",
+      "Az adatokat csak a szükséges ideig őrizzük meg, és megfelelő technikai, valamint szervezési intézkedésekkel gondoskodunk azok biztonságáról (titkosított kapcsolat, jogosultsághoz kötött adatbázis-hozzáférés, visszaélés elleni szűrés).",
     ],
   },
   {
-    heading: "4. A kezelt személyes adatok köre",
-    paragraphs: [
-      "A weboldal és a kapcsolódó szolgáltatások használata során az alábbi személyes adatok kezelése fordulhat elő:",
-    ],
+    heading: "4. Kapcsolatfelvételi és konzultációkérő űrlap",
     list: [
-      "Név",
-      "E-mail cím",
-      "Telefonszám",
-      "Számlázási adatok",
-      "Kapcsolati és ügyféladatok",
-      "Technikai adatok (IP-cím, böngészőinformációk, naplóadatok)",
-      "A kapcsolatfelvétel vagy megrendelés során megadott egyéb információk",
+      "Kezelt adatok: vezetéknév, keresztnév, e-mail cím, telefonszám, cégnév, a választott szolgáltatás, a preferált kapcsolatfelvételi mód és időpont, üzenet szövege.",
+      "Technikai adatok a visszaélések (automatizált spam) szűréséhez: IP-cím és böngészőazonosító (user agent).",
+      "Cél: a megkeresés megválaszolása, ajánlatadás, a szerződés előkészítése, valamint az űrlap visszaélésmentes működésének biztosítása.",
+      "Jogalap: az érintett hozzájárulása (GDPR 6. cikk (1) a)), a spamszűréshez kapcsolódó technikai adatok esetében az adatkezelő jogos érdeke (GDPR 6. cikk (1) f)).",
+      "Megőrzési idő: a megkeresés lezárását követő 2 év, illetve szerződéskötés esetén a szerződéshez kapcsolódó megőrzési idő. A technikai naplóadatokat 90 napig tároljuk.",
+      "Adattárolás: a beküldést a weboldal biztonságos adatbázisában rögzítjük, és a beküldésről e-mailben is értesítést küldünk.",
     ],
+  },
+  {
+    heading: "5. Digitális termék megrendelése",
+    list: [
+      "Kezelt adatok: név, e-mail cím, telefonszám, számlázási név és cím, adószám (ha megadják), a megrendelt termék és darabszám, a rendelésszám, a választott fizetési mód, a fizetés állapota.",
+      "Az oldalon kizárólag digitális termékek érhetők el, ezért szállítási címet nem kérünk és nem kezelünk.",
+      "Cél: a megrendelés teljesítése, a számla kiállítása, a visszaigazoló és teljesítési e-mailek megküldése.",
+      "Jogalap: szerződés teljesítése (GDPR 6. cikk (1) b)), a számlázási adatok tekintetében jogi kötelezettség teljesítése (GDPR 6. cikk (1) c)).",
+      "Megőrzési idő: a számviteli bizonylatokat a számvitelről szóló 2000. évi C. törvény 169. §-a alapján 8 évig őrizzük meg. A megrendelési adatokat a szavatossági és elszámolási igények elévülésének idejéig kezeljük.",
+    ],
+  },
+  {
+    heading: "6. Bankkártyás online fizetés",
+    paragraphs: [
+      "A bankkártyás fizetést a Stripe Payments Europe, Ltd. bonyolítja le. A kártyaszámot, a lejárati dátumot és a biztonsági kódot kizárólag a Stripe kezeli, ezekhez az adatkezelő nem kap hozzáférést, és azokat nem tárolja.",
+      "Az adatkezelőhöz a fizetésről csak a tranzakció azonosítója, összege, állapota és a fizető e-mail címe jut el, a megrendelés teljesítése és a számlázás céljából. Jogalap: szerződés teljesítése (GDPR 6. cikk (1) b)).",
+      "A Stripe saját adatkezelési tájékoztatója a stripe.com oldalon érhető el.",
+    ],
+  },
+  {
+    heading: "7. Kalkulátorok",
+    paragraphs: [
+      "A weboldalon elérhető kalkulátorok (bérteszt, jövedelemadó) számításai a böngésződben futnak. A beírt értékeket nem továbbítjuk szerverre, és nem tároljuk.",
+    ],
+  },
+  {
+    heading: "8. Sütik (cookie-k)",
+    paragraphs: [
+      "A weboldal a működéshez szükséges sütiket használ, ideértve a bankkártyás fizetés biztonságos lebonyolításához a Stripe által elhelyezett sütiket is. Analitikai és marketing sütiket jelenleg nem alkalmazunk. Részletek a Cookie-tájékoztató oldalon.",
+    ],
+  },
+  {
+    heading: "9. Adatfeldolgozók és címzettek",
+    paragraphs: [
+      "Az adatkezelés során az alábbi adatfeldolgozók, illetve önálló adatkezelők működnek közre:",
+    ],
+    list: [...PROCESSORS],
     afterList: [
-      "A kapcsolatfelvételi és konzultációkérő űrlapon megadott adatokat (név, e-mail cím, telefonszám, cégnév, üzenet, a választott szolgáltatás, valamint a preferált kapcsolatfelvételi mód és időpont) a megkeresés megválaszolása és a szerződés előkészítése céljából kezeljük. A beküldést a weboldal biztonságos adatbázisában is rögzítjük, a visszakereshetőség érdekében, és a visszaélések (automatizált spam) szűréséhez az IP-címet és a böngésző azonosítóját is eltároljuk.",
+      "Harmadik országba (jellemzően az Amerikai Egyesült Államokba) történő adattovábbítás esetén a továbbítás jogalapja az Európai Bizottság megfelelőségi határozata (EU–USA adatvédelmi keret), illetve az Európai Bizottság által elfogadott általános szerződési feltételek (SCC). Az adatokat hatóság részére csak jogszabályi kötelezettség alapján adjuk ki.",
     ],
   },
   {
-    heading: "5. Az adatkezelés céljai",
-    paragraphs: ["Az adatkezelés célja különösen:"],
-    list: [
-      "Kapcsolatfelvétel és kapcsolattartás",
-      "Ajánlatadás és szerződés előkészítése",
-      "Szerződés teljesítése",
-      "Számlázási és könyvelési kötelezettségek teljesítése",
-      "Ügyfélszolgálati kommunikáció",
-      "Hírlevél küldése, amennyiben ehhez külön hozzájárulás történt",
-      "Kalkulátorok és digitális eszközök működésének biztosítása",
-      "A weboldal működésének, biztonságának és fejlesztésének támogatása",
-    ],
-  },
-  {
-    heading: "6. Az adatkezelés jogalapjai",
-    paragraphs: ["Az adatkezelés jogalapja az alábbiak valamelyike lehet:"],
-    list: [
-      "Az érintett hozzájárulása",
-      "Szerződés teljesítése",
-      "Jogi kötelezettség teljesítése",
-      "Az adatkezelő jogos érdeke",
-      "Jogszabályban meghatározott kötelezettség",
-    ],
-  },
-  {
-    heading: "7. Az adatok megőrzési ideje",
+    heading: "10. Automatizált döntéshozatal, profilalkotás, AI-eszközök",
     paragraphs: [
-      "A személyes adatokat kizárólag az adatkezelés céljának megvalósulásához szükséges ideig őrizzük meg. A számlázási és számviteli adatokat a hatályos jogszabályokban előírt ideig tároljuk. A kapcsolatfelvételi és ajánlatkérési adatokat a kapcsolat lezárását követő ésszerű ideig őrizzük meg, kivéve, ha jogszabály vagy jogos érdek ennél hosszabb megőrzést tesz szükségessé.",
+      "Az adatkezelés során automatizált döntéshozatal és profilalkotás nem történik.",
+      "A szolgáltató a szoftverei és belső folyamatai fejlesztéséhez AI-eszközöket használ, azonban a weboldalon beküldött személyes adatokat AI-modell tanítására nem használjuk fel, és azokat AI-szolgáltatónak nem továbbítjuk.",
     ],
   },
   {
-    heading: "8. Adatfeldolgozók és címzettek",
+    heading: "11. Adatbiztonság",
     paragraphs: [
-      "Az adatkezelés során adatfeldolgozóként vagy önálló adatkezelőként közreműködhetnek többek között:",
+      "Az adatok titkosított (HTTPS) kapcsolaton keresztül kerülnek továbbításra. Az adatbázisban a beküldések jogosultsághoz kötött (row level security) védelem mellett tárolódnak, azokhoz csak az adatkezelő és a szükséges mértékben az adatfeldolgozók férhetnek hozzá.",
     ],
-    list: [
-      "Tárhelyszolgáltató",
-      "E-mail szolgáltató",
-      "Számlázási rendszer",
-      "Könyvelési rendszer",
-      "Hírlevélküldő rendszer",
-      "Analitikai és technikai szolgáltatók",
-    ],
-    afterList: ["E szolgáltatók saját adatkezelési szabályzatuk szerint végzik tevékenységüket."],
   },
   {
-    heading: "9. Az érintettek jogai",
+    heading: "12. Az érintettek jogai",
     paragraphs: ["Az érintettet az alábbi jogok illetik meg:"],
     list: [
-      "Tájékoztatás kérése az adatkezelésről",
-      "Hozzáférés a kezelt személyes adatokhoz",
-      "Az adatok helyesbítésének kérése",
-      "Az adatok törlésének kérése, amennyiben annak jogszabályi feltételei fennállnak",
-      "Az adatkezelés korlátozásának kérése",
-      "Tiltakozás a jogos érdeken alapuló adatkezelés ellen",
-      "Adathordozhatósághoz való jog, amennyiben annak feltételei fennállnak",
+      "Tájékoztatáshoz és hozzáféréshez való jog (GDPR 15. cikk)",
+      "Helyesbítéshez való jog (GDPR 16. cikk)",
+      "Törléshez való jog, az „elfeledtetéshez való jog” (GDPR 17. cikk), a jogszabályi megőrzési kötelezettség keretei között",
+      "Az adatkezelés korlátozásához való jog (GDPR 18. cikk)",
+      "Adathordozhatósághoz való jog (GDPR 20. cikk)",
+      "Tiltakozás joga a jogos érdeken alapuló adatkezelés ellen (GDPR 21. cikk)",
+      "A hozzájárulás bármikori visszavonásának joga, amely a visszavonás előtti adatkezelés jogszerűségét nem érinti (GDPR 7. cikk (3))",
+    ],
+    afterList: [
+      `A kérelmeket a ${COMPANY.email} címen lehet benyújtani. A kérelemre indokolatlan késedelem nélkül, legkésőbb 1 hónapon belül válaszolunk; ez a határidő indokolt esetben további 2 hónappal meghosszabbítható, amiről tájékoztatást adunk.`,
     ],
   },
   {
-    heading: "10. Jogorvoslat",
+    heading: "13. Jogorvoslat",
     paragraphs: [
-      "Amennyiben az érintett úgy véli, hogy személyes adatainak kezelése során jogsérelem érte, panaszt nyújthat be a Nemzeti Adatvédelmi és Információszabadság Hatósághoz (NAIH), valamint jogosult bírósághoz fordulni.",
+      `Ha az érintett úgy véli, hogy személyes adatainak kezelése során jogsérelem érte, panaszt nyújthat be a felügyeleti hatósághoz: ${AUTHORITIES.naih}.`,
+      "Az érintett a lakóhelye vagy tartózkodási helye szerinti törvényszékhez is fordulhat, a GDPR 79. cikke és az Infotv. alapján.",
     ],
   },
   {
-    heading: "11. Kapcsolat",
+    heading: "14. A tájékoztató módosítása",
     paragraphs: [
-      "Adatkezeléssel kapcsolatos kérdés, kérelem vagy panasz esetén az alábbi e-mail címen lehet kapcsolatba lépni: info@xlntbi.hu",
+      "Az adatkezelő fenntartja a jogot a tájékoztató módosítására. A mindenkor hatályos változat a weboldalon érhető el.",
+      "Hatályos: 2026. augusztus 19-től.",
     ],
   },
 ];
