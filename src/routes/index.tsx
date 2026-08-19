@@ -148,12 +148,77 @@ function Index() {
         <div className="mt-14 grid gap-6 sm:grid-cols-2">
           {pillars.map((p) => (
             <div key={p.title} className="rounded-xl border border-border bg-card p-6">
-              <h3 className="text-lg font-semibold text-card-foreground">{p.title}</h3>
+              <img
+                src={p.icon}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                width={512}
+                height={512}
+                className="h-12 w-12"
+              />
+              <h3 className="mt-4 text-lg font-semibold text-card-foreground">{p.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.text}</p>
             </div>
           ))}
         </div>
       </section>
+
+      <section className="border-t border-border bg-brand-dark">
+        <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
+          <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr]">
+            <div>
+              <img
+                src={icAi.url}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                width={512}
+                height={512}
+                className="h-14 w-14 brightness-0 invert"
+              />
+              <h2 className="mt-5 text-2xl font-bold text-primary-foreground md:text-3xl">
+                AI-val gyorsított fejlesztés, könyvelői kontrollal
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-primary-foreground/85">
+                A szoftvereim és folyamataim fejlesztéséhez AI-eszközöket is használok. Ez azt
+                jelenti, hogy gyorsabban jelennek meg az új verziók, és a változásokat hamarabb
+                tudom átvezetni – a szakmai ellenőrzés viszont mindig emberi kézben marad.
+              </p>
+              <Link
+                to="/termekeim"
+                className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary-foreground px-6 py-3 text-sm font-semibold text-brand-dark transition-opacity hover:opacity-90"
+              >
+                Termékek megtekintése
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+            <img
+              src={aiIllustration.url}
+              alt="Absztrakt ábra az AI-alapú fejlesztési folyamatról"
+              loading="lazy"
+              width={1536}
+              height={1024}
+              className="w-full rounded-xl border border-primary-foreground/15 object-cover"
+            />
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {aiPoints.map((point) => (
+              <div
+                key={point.title}
+                className="rounded-xl border border-primary-foreground/15 bg-primary-foreground/5 p-6"
+              >
+                <h3 className="text-base font-semibold text-primary-foreground">{point.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-primary-foreground/80">
+                  {point.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       <section className="border-t border-border bg-secondary/60">
         <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
