@@ -17,7 +17,7 @@ import icOktatas from "@/assets/icons/oktatas.png.asset.json";
 import icAi from "@/assets/icons/ai.png.asset.json";
 import aiIllustration from "@/assets/icons/ai-illustration.jpg.asset.json";
 
-const TITLE = "EXCELlent Accounting & Consulting – könyvelés, kontrolling, Fintech és BI";
+const TITLE = "EXCELlent Business Intelligence – könyvelés, kontrolling, BI";
 const DESC =
   "Modern digitalizációs és automatizációs megoldások könyvelési és kontrolling szakértelemmel: könyvelés, adótanácsadás, könyvvizsgálat, BI, kalkulátorok és saját fejlesztésű digitális termékek.";
 

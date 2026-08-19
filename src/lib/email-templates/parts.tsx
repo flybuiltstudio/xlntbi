@@ -8,7 +8,7 @@ export type Row = [string, string]
 export const Header = ({ subtitle }: { subtitle?: string }) => (
   <Section style={bar}>
     <Text style={barTitle}>{BRAND.siteName}</Text>
-    <Text style={barSub}>{subtitle ?? 'Perfect Solutions, Automated FUTURE.'}</Text>
+    <Text style={barSub}>{subtitle ?? 'EXCELlent Business Intelligence'}</Text>
   </Section>
 )
 

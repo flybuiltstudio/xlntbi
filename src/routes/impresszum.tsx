@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LegalPage } from "@/components/LegalPage";
 import { AUTHORITIES, COMPANY, HOSTING } from "@/lib/company";
 
-const TITLE = "Impresszum | EXCELlent Accounting & Consulting";
+const TITLE = "Impresszum | EXCELlent Business Intelligence";
 const DESC =
   "A xlntbi.hu weboldal üzemeltetőjének adatai: név, székhely, adószám, nyilvántartási szám, elérhetőségek és tárhelyszolgáltató.";
 

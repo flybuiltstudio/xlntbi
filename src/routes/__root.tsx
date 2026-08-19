@@ -82,9 +82,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-const SITE_TITLE = "EXCELlent Accounting & Consulting – Könyvelés, adótanácsadás, automatizálás";
+const SITE_TITLE = "EXCELlent Business Intelligence – könyvelés és BI";
 const SITE_DESC =
-  "Sarinay Dávid – könyvelés, adótanácsadás, kontrolling, fintech és BI megoldások, digitális termékek könyvelőknek. Perfect Solutions. Automated Future.";
+  "Sarinay Dávid – könyvelés, adótanácsadás, kontrolling, fintech és BI megoldások, digitális termékek könyvelőknek.";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: SITE_TITLE },
       { name: "description", content: SITE_DESC },
-      { name: "author", content: "Sarinay Dávid – EXCELlent Accounting & Consulting" },
+      { name: "author", content: "Sarinay Dávid – EXCELlent Business Intelligence" },
       { property: "og:title", content: SITE_TITLE },
       { property: "og:description", content: SITE_DESC },
       { property: "og:type", content: "website" },
