@@ -44,7 +44,9 @@ export async function markOrderPaid(options: {
     return;
   }
 
-  const productLabel = `${order.product_name} (${order.quantity} db)`;
+  const productLabel = order.tier_label
+    ? `${order.product_name} – ${order.tier_label} (${order.quantity} db)`
+    : `${order.product_name} (${order.quantity} db)`;
   const rows: Array<[string, string]> = [
     ["Rendelésszám", order.order_number],
     ["Termék", productLabel],
@@ -63,6 +65,18 @@ export async function markOrderPaid(options: {
     ["Telefon", order.phone],
     ["Fizetés", "Bankkártya (Stripe) – teljesítve"],
   );
+
+  const { issueDownload } = await import("./download.server");
+  await issueDownload({
+    id: order.id as string,
+    order_number: order.order_number as string,
+    product_slug: order.product_slug as string,
+    product_name: order.product_name as string,
+    tier_label: (order.tier_label as string | null) ?? null,
+    quantity: order.quantity as number,
+    billing_name: order.billing_name as string,
+    email: order.email as string,
+  });
 
   await sendEmails([
     {

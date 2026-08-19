@@ -113,7 +113,7 @@ export async function issueDownload(order: OrderRow): Promise<void> {
         orderNumber: order.order_number,
         productName: productLabel,
         fileName: product.download.fileName,
-        downloadUrl: `${siteOrigin()}/letoltes/${token}`,
+        downloadUrl: `${siteOrigin()}/api/public/letoltes/${token}`,
         expiresAt: formatDate(expiresAt),
         maxDownloads: MAX_DOWNLOADS,
         rows: [
