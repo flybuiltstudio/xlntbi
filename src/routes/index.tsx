@@ -6,14 +6,6 @@ import icHatekonysag from "@/assets/icons/hatekonysag.png.asset.json";
 import icInnovacio from "@/assets/icons/innovacio.png.asset.json";
 import icKomplexitas from "@/assets/icons/komplexitas.png.asset.json";
 import icPontossag from "@/assets/icons/pontossag.png.asset.json";
-import icKonyveles from "@/assets/icons/konyveles.png.asset.json";
-import icAdo from "@/assets/icons/ado.png.asset.json";
-import icAudit from "@/assets/icons/audit.png.asset.json";
-import icBi from "@/assets/icons/bi.png.asset.json";
-import icKontrolling from "@/assets/icons/kontrolling.png.asset.json";
-import icTermekek from "@/assets/icons/termekek.png.asset.json";
-import icKalkulator from "@/assets/icons/kalkulator.png.asset.json";
-import icOktatas from "@/assets/icons/oktatas.png.asset.json";
 import icAi from "@/assets/icons/ai.png.asset.json";
 import aiIllustration from "@/assets/icons/ai-illustration.jpg.asset.json";
 
@@ -56,21 +48,6 @@ const pillars = [
     icon: icPontossag.url,
     text: "Ha fontos neked a szakmai pontosság, a digitális működés és a valóban használható megoldás, jó helyen jársz.",
   },
-];
-
-const offerings = [
-  { title: "Könyvelési szolgáltatások", to: "/konyveles" as const, icon: icKonyveles.url },
-  { title: "Adózási és ügyviteli tanácsadás", to: "/adotanacsadas" as const, icon: icAdo.url },
-  { title: "Könyvvizsgálati és audit megoldások", to: "/konyvvizsgalat" as const, icon: icAudit.url },
-  { title: "Fintech és BI tanácsadás", to: "/fintech-es-bi" as const, icon: icBi.url },
-  {
-    title: "Kontrollingot modern riport- és automatizációs eszközökkel",
-    to: "/kontrolling" as const,
-    icon: icKontrolling.url,
-  },
-  { title: "Könyvelőknek készült saját termékek", to: "/termekeim" as const, icon: icTermekek.url },
-  { title: "Kalkulátorok", to: "/kalkulatorok" as const, icon: icKalkulator.url },
-  { title: "Szakmai oktatás", to: "/oktatas" as const, icon: icOktatas.url },
 ];
 
 const aiPoints = [
@@ -220,50 +197,6 @@ function Index() {
       </section>
 
 
-      <section className="border-t border-border bg-secondary/60">
-        <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
-          <h2 className="text-2xl font-bold text-foreground md:text-3xl">Mit találsz itt?</h2>
-          <p className="mt-4 max-w-2xl text-base text-muted-foreground">
-            Komplex pénzügyi és üzleti támogatás modern technológiákkal.
-          </p>
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {offerings.map((o) => (
-              <li key={o.to}>
-                <Link
-                  to={o.to}
-                  className="flex h-full flex-col justify-between gap-6 rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary"
-                >
-                  <div>
-                    <img
-                      src={o.icon}
-                      alt=""
-                      aria-hidden="true"
-                      loading="lazy"
-                      width={512}
-                      height={512}
-                      className="h-10 w-10"
-                    />
-                    <h3 className="mt-4 text-base font-semibold leading-snug text-card-foreground">
-                      {o.title}
-                    </h3>
-                  </div>
-
-                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                    Tovább
-                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <Link
-            to="/kapcsolat"
-            className="mt-10 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-          >
-            Kapcsolat
-          </Link>
-        </div>
-      </section>
     </div>
   );
 }
