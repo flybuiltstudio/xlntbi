@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdatvedelmiTajekoztatoRouteImport } from './routes/adatvedelmi-tajekoztato'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdotanacsadasRouteImport } from './routes/adotanacsadas'
 import { Route as AszfRouteImport } from './routes/aszf'
 import { Route as CegauditRouteImport } from './routes/cegaudit'
@@ -50,6 +51,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdatvedelmiTajekoztatoRoute = AdatvedelmiTajekoztatoRouteImport.update({
   id: '/adatvedelmi-tajekoztato',
   path: '/adatvedelmi-tajekoztato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdotanacsadasRoute = AdotanacsadasRouteImport.update({
@@ -210,6 +216,7 @@ const LovableEmailTransactionalPreviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
+  '/admin': typeof AdminRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
@@ -244,6 +251,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
+  '/admin': typeof AdminRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
@@ -279,6 +287,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
+  '/admin': typeof AdminRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
@@ -315,6 +324,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/adatvedelmi-tajekoztato'
+    | '/admin'
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
@@ -349,6 +359,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/adatvedelmi-tajekoztato'
+    | '/admin'
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
@@ -383,6 +394,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/adatvedelmi-tajekoztato'
+    | '/admin'
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
@@ -418,6 +430,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdatvedelmiTajekoztatoRoute: typeof AdatvedelmiTajekoztatoRoute
+  AdminRoute: typeof AdminRoute
   AdotanacsadasRoute: typeof AdotanacsadasRoute
   AszfRoute: typeof AszfRoute
   CegauditRoute: typeof CegauditRoute
@@ -464,6 +477,13 @@ declare module '@tanstack/react-router' {
       path: '/adatvedelmi-tajekoztato'
       fullPath: '/adatvedelmi-tajekoztato'
       preLoaderRoute: typeof AdatvedelmiTajekoztatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/adotanacsadas': {
@@ -682,6 +702,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdatvedelmiTajekoztatoRoute: AdatvedelmiTajekoztatoRoute,
+  AdminRoute: AdminRoute,
   AdotanacsadasRoute: AdotanacsadasRoute,
   AszfRoute: AszfRoute,
   CegauditRoute: CegauditRoute,
