@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Mail, Phone } from "lucide-react";
+import { Facebook, Mail, Phone } from "lucide-react";
 import logoWhite from "@/assets/xlnt-logo-white.png";
 
 export function SiteFooter() {
@@ -85,7 +85,19 @@ export function SiteFooter() {
                 info@xlntbi.hu
               </a>
             </li>
+            <li className="flex items-center gap-2">
+              <Facebook className="h-4 w-4" aria-hidden="true" />
+              <a
+                href="https://www.facebook.com/xllentac"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opacity-90 hover:opacity-100"
+              >
+                Facebook
+              </a>
+            </li>
           </ul>
+
 
           <h2 className="mt-6 text-sm font-semibold uppercase tracking-wider opacity-80">
             Jogi információk
