@@ -1,5 +1,8 @@
 import { getRequestHeader } from "@tanstack/react-start/server";
 
+import { sendEmails } from "./notify.server";
+
+
 type Submission = {
   formType: "kapcsolat" | "konzultacio";
   lastName: string;
@@ -15,17 +18,8 @@ type Submission = {
 };
 
 const OWNER_EMAIL = "xllentac@gmail.com";
-const FROM_EMAIL = "EXCELlent <onboarding@resend.dev>";
 const RATE_LIMIT_WINDOW_MINUTES = 10;
 const RATE_LIMIT_MAX = 3;
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
 
 function clientIp() {
   const header =
@@ -36,31 +30,6 @@ function clientIp() {
   return header.split(",")[0]?.trim() || "unknown";
 }
 
-async function sendEmail(payload: { to: string; subject: string; html: string }) {
-  const apiKey = process.env["RESEND_API_KEY"];
-  if (!apiKey) {
-    console.warn("RESEND_API_KEY missing – email not sent:", payload.subject);
-    return false;
-  }
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: FROM_EMAIL,
-      to: [payload.to],
-      subject: payload.subject,
-      html: payload.html,
-    }),
-  });
-  if (!response.ok) {
-    console.error(`Resend error [${response.status}]: ${await response.text()}`);
-    return false;
-  }
-  return true;
-}
 
 export async function handleSubmission(data: Submission) {
   // Honeypot: silently accept but drop.
@@ -87,7 +56,7 @@ export async function handleSubmission(data: Submission) {
     };
   }
 
-  const { error } = await supabaseAdmin.from("contact_submissions").insert({
+  const { data: inserted, error } = await supabaseAdmin.from("contact_submissions").insert({
     form_type: data.formType,
     last_name: data.lastName,
     first_name: data.firstName,
@@ -100,17 +69,19 @@ export async function handleSubmission(data: Submission) {
     contact_time: data.contactTime || null,
     ip_address: ip,
     user_agent: getRequestHeader("user-agent") ?? null,
-  });
+  }).select("id").single();
 
   if (error) {
     console.error("Submission insert failed:", error.message);
     return { ok: false as const, error: "A beküldés mentése nem sikerült. Kérlek, próbáld újra." };
   }
 
+  const submissionId = inserted?.id ?? crypto.randomUUID();
   const isConsult = data.formType === "konzultacio";
-  const label = isConsult ? "Konzultációkérés" : "Kapcsolatfelvétel";
+  const label = isConsult ? "konzultációkérés" : "kapcsolatfelvétel";
+  const fullName = `${data.lastName} ${data.firstName}`.trim();
   const rows: Array<[string, string]> = [
-    ["Név", `${data.lastName} ${data.firstName}`],
+    ["Név", fullName],
     ["E-mail", data.email],
     ["Telefon", data.phone],
   ];
@@ -120,41 +91,24 @@ export async function handleSubmission(data: Submission) {
   if (data.contactTime) rows.push(["Mikor kereshetem", data.contactTime]);
   rows.push(["Üzenet", data.message]);
 
-  const ownerHtml = `
-    <h2>${label} – xlntbi.hu</h2>
-    <table cellpadding="6" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px">
-      ${rows
-        .map(
-          ([k, v]) =>
-            `<tr><td style="border:1px solid #dfe7e3;background:#f4f8f6"><b>${escapeHtml(k)}</b></td><td style="border:1px solid #dfe7e3">${escapeHtml(v).replace(/\n/g, "<br>")}</td></tr>`,
-        )
-        .join("")}
-    </table>`;
-
-  const userHtml = `
-    <div style="font-family:Arial,sans-serif;font-size:15px;color:#16231d">
-      <p>Kedves ${escapeHtml(data.lastName)} ${escapeHtml(data.firstName)}!</p>
-      <p>Köszönöm a megkeresésedet. A ${isConsult ? "konzultációkérésedet" : "üzenetedet"} megkaptam,
-      és rövid időn belül felveszem veled a kapcsolatot a részletek egyeztetéséhez.</p>
-      <p><b>A beküldött üzenet:</b><br>${escapeHtml(data.message).replace(/\n/g, "<br>")}</p>
-      <p>Üdvözlettel,<br>Sarinay Dávid<br>EXCELlent Accounting &amp; Consulting<br>
-      06 20 962 2176 · info@xlntbi.hu</p>
-    </div>`;
-
-  const [ownerSent, userSent] = await Promise.all([
-    sendEmail({
+  const userRows = rows.filter(([key]) => key !== "Üzenet");
+  const emailsSent = await sendEmails([
+    {
+      template: "belso-urlap-ertesito",
       to: OWNER_EMAIL,
-      subject: `${label}: ${data.lastName} ${data.firstName}`,
-      html: ownerHtml,
-    }),
-    sendEmail({
+      key: `belso-urlap-${submissionId}`,
+      data: { label, senderName: fullName, senderEmail: data.email, rows },
+      replyTo: data.email,
+    },
+    {
+      template: isConsult ? "konzultacio-visszaigazolas" : "kapcsolat-visszaigazolas",
       to: data.email,
-      subject: isConsult
-        ? "Megkaptam a konzultációkérésedet – EXCELlent"
-        : "Megkaptam az üzenetedet – EXCELlent",
-      html: userHtml,
-    }),
+      key: `visszaigazolas-${submissionId}`,
+      data: { name: fullName, message: data.message, rows: userRows },
+      replyTo: OWNER_EMAIL,
+    },
   ]);
 
-  return { ok: true as const, emailsSent: ownerSent && userSent };
+  return { ok: true as const, emailsSent };
 }
+
