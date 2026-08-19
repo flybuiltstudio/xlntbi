@@ -1,11 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Mail, Phone } from "lucide-react";
 import logoWhite from "@/assets/xlnt-logo-white.png";
+import heroImg from "@/assets/bcg-1.jpg";
 
 export function SiteFooter() {
   return (
-    <footer className="bg-brand-dark text-primary-foreground">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
+    <footer className="relative isolate overflow-hidden bg-brand-dark text-primary-foreground">
+      <img
+        src={heroImg}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/90 to-brand-dark/80" />
+      <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
         <div>
           <img
             src={logoWhite}
@@ -122,7 +130,7 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="border-t border-primary-foreground/20">
+      <div className="relative border-t border-primary-foreground/20">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs opacity-80 md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} Sarinay Dávid – EXCELlent Accounting &amp; Consulting</p>
           <p>Ez a weboldal AI segítségével készült.</p>
