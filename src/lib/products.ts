@@ -5,6 +5,8 @@ export type ProductSlug = "nav-online-szamla-letolto" | "nav-penztargep-letolto"
 
 export type Product = {
   slug: ProductSlug;
+  /** Stripe price lookup key (human-readable, stable across test and live). */
+  priceId: string;
 
   name: string;
   price: number;
@@ -20,6 +22,7 @@ export type Product = {
 export const products: Product[] = [
   {
     slug: "nav-online-szamla-letolto",
+    priceId: "nav_online_szamla_letolto_onetime",
     name: "NAV Online Számla letöltő",
     price: 19900,
     currency: "HUF",
@@ -43,6 +46,7 @@ export const products: Product[] = [
   },
   {
     slug: "nav-penztargep-letolto",
+    priceId: "nav_penztargep_letolto_onetime",
     name: "NAV Pénztárgép letöltő",
     price: 19900,
     currency: "HUF",
