@@ -18,7 +18,7 @@ export function SiteFooter() {
           <img
             src={logoAsset.url}
             alt="EXCELlent Business Intelligence logó"
-            className="h-16 w-auto object-contain"
+            className="h-24 w-auto object-contain"
             loading="lazy"
           />
           <p className="mt-4 text-sm opacity-90">EXCELlent Business Intelligence</p>
