@@ -24,7 +24,7 @@ const sections: LegalSection[] = [
     heading: "1. Az adatkezelő adatai",
     list: [
       "Adatkezelő: Sarinay Dávid",
-      "E-mail: dsarinay@gmail.com",
+      "E-mail: info@xlntbi.hu",
       "Telefon: +36 20 962 2176",
       "Honlap: xlntbi.hu",
     ],
@@ -129,7 +129,7 @@ const sections: LegalSection[] = [
   {
     heading: "11. Kapcsolat",
     paragraphs: [
-      "Adatkezeléssel kapcsolatos kérdés, kérelem vagy panasz esetén az alábbi e-mail címen lehet kapcsolatba lépni: dsarinay@gmail.com",
+      "Adatkezeléssel kapcsolatos kérdés, kérelem vagy panasz esetén az alábbi e-mail címen lehet kapcsolatba lépni: info@xlntbi.hu",
     ],
   },
 ];
