@@ -1,5 +1,8 @@
 import { getRequestHeader } from "@tanstack/react-start/server";
 
+import { sendEmails } from "./notify.server";
+
+
 type Submission = {
   formType: "kapcsolat" | "konzultacio";
   lastName: string;
@@ -53,7 +56,7 @@ export async function handleSubmission(data: Submission) {
     };
   }
 
-  const { error } = await supabaseAdmin.from("contact_submissions").insert({
+  const { data: inserted, error } = await supabaseAdmin.from("contact_submissions").insert({
     form_type: data.formType,
     last_name: data.lastName,
     first_name: data.firstName,
