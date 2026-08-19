@@ -17,6 +17,7 @@ type Order = {
   phone: string;
   note: string;
   website: string;
+  paymentMethod: "card" | "transfer";
 };
 
 const OWNER_EMAIL = "xllentac@gmail.com";
@@ -96,7 +97,7 @@ export async function handleOrder(data: Order) {
     note: data.note || null,
     status: "new",
     payment_status: "unpaid",
-    payment_provider: null,
+    payment_provider: data.paymentMethod === "card" ? "stripe" : null,
     ip_address: ip,
     user_agent: getRequestHeader("user-agent") ?? null,
   });
@@ -124,6 +125,10 @@ export async function handleOrder(data: Order) {
     ["Telefon", data.phone],
   );
   if (data.note) rows.push(["Megjegyzés", data.note]);
+  rows.push([
+    "Fizetési mód",
+    data.paymentMethod === "card" ? "Bankkártya (Stripe)" : "Banki átutalás",
+  ]);
 
   const productLabel = `${product.name} (${data.quantity} db)`;
   const emailsSent = await sendEmails([
@@ -155,7 +160,11 @@ export async function handleOrder(data: Order) {
       },
       replyTo: OWNER_EMAIL,
     },
-  ]);
+  ].filter((job) =>
+    // Card orders get their customer confirmation from the paid webhook, so the
+    // buyer never receives a bank-transfer instruction for a card payment.
+    data.paymentMethod === "card" ? job.template !== "megrendeles-visszaigazolas" : true,
+  ));
 
   return {
     ok: true as const,

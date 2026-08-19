@@ -35,7 +35,9 @@ import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
 import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
+import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles.koszonjuk'
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
+import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -170,11 +172,22 @@ const KalkulatorokJovedelemadoRoute =
     path: '/kalkulatorok/jovedelemado',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MegrendelesKoszonjukRoute = MegrendelesKoszonjukRouteImport.update({
+  id: '/koszonjuk',
+  path: '/koszonjuk',
+  getParentRoute: () => MegrendelesRoute,
+} as any)
 const TermekSlugRoute = TermekSlugRouteImport.update({
   id: '/termek/$slug',
   path: '/termek/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPaymentsWebhookRoute =
+  ApiPublicPaymentsWebhookRouteImport.update({
+    id: '/api/public/payments/webhook',
+    path: '/api/public/payments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -201,15 +214,17 @@ export interface FileRoutesByFullPath {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
-  '/megrendeles': typeof MegrendelesRoute
+  '/megrendeles': typeof MegrendelesRouteWithChildren
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
@@ -231,15 +246,17 @@ export interface FileRoutesByTo {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
-  '/megrendeles': typeof MegrendelesRoute
+  '/megrendeles': typeof MegrendelesRouteWithChildren
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
@@ -262,15 +279,17 @@ export interface FileRoutesById {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
-  '/megrendeles': typeof MegrendelesRoute
+  '/megrendeles': typeof MegrendelesRouteWithChildren
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
@@ -301,8 +320,10 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
+    | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
+    | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -331,8 +352,10 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
+    | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok'
+    | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   id:
     | '__root__'
@@ -361,8 +384,10 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
+    | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
+    | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
@@ -385,7 +410,7 @@ export interface RootRouteChildren {
   KonyveloirodaAuditRoute: typeof KonyveloirodaAuditRoute
   KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
   KonzultacioRoute: typeof KonzultacioRoute
-  MegrendelesRoute: typeof MegrendelesRoute
+  MegrendelesRoute: typeof MegrendelesRouteWithChildren
   OktatasRoute: typeof OktatasRoute
   RolamRoute: typeof RolamRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
@@ -394,6 +419,7 @@ export interface RootRouteChildren {
   KalkulatorokJovedelemadoRoute: typeof KalkulatorokJovedelemadoRoute
   TermekSlugRoute: typeof TermekSlugRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
+  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -581,11 +607,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KalkulatorokJovedelemadoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/megrendeles/koszonjuk': {
+      id: '/megrendeles/koszonjuk'
+      path: '/koszonjuk'
+      fullPath: '/megrendeles/koszonjuk'
+      preLoaderRoute: typeof MegrendelesKoszonjukRouteImport
+      parentRoute: typeof MegrendelesRoute
+    }
     '/termek/$slug': {
       id: '/termek/$slug'
       path: '/termek/$slug'
       fullPath: '/termek/$slug'
       preLoaderRoute: typeof TermekSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/payments/webhook': {
+      id: '/api/public/payments/webhook'
+      path: '/api/public/payments/webhook'
+      fullPath: '/api/public/payments/webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/transactional/preview': {
@@ -597,6 +637,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface MegrendelesRouteChildren {
+  MegrendelesKoszonjukRoute: typeof MegrendelesKoszonjukRoute
+}
+
+const MegrendelesRouteChildren: MegrendelesRouteChildren = {
+  MegrendelesKoszonjukRoute: MegrendelesKoszonjukRoute,
+}
+
+const MegrendelesRouteWithChildren = MegrendelesRoute._addFileChildren(
+  MegrendelesRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -617,7 +669,7 @@ const rootRouteChildren: RootRouteChildren = {
   KonyveloirodaAuditRoute: KonyveloirodaAuditRoute,
   KonyvvizsgalatRoute: KonyvvizsgalatRoute,
   KonzultacioRoute: KonzultacioRoute,
-  MegrendelesRoute: MegrendelesRoute,
+  MegrendelesRoute: MegrendelesRouteWithChildren,
   OktatasRoute: OktatasRoute,
   RolamRoute: RolamRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
@@ -626,6 +678,7 @@ const rootRouteChildren: RootRouteChildren = {
   KalkulatorokJovedelemadoRoute: KalkulatorokJovedelemadoRoute,
   TermekSlugRoute: TermekSlugRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
+  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport

@@ -19,6 +19,7 @@ const orderSchema = z.object({
     .max(30)
     .regex(/^[0-9()#&+*\-=.\s]+$/, "Csak számok és telefonszám-karakterek adhatók meg."),
   note: z.string().trim().max(2000).optional().default(""),
+  paymentMethod: z.enum(["card", "transfer"]),
   acceptTerms: z.literal(true),
   acceptPrivacy: z.literal(true),
   acceptWithdrawal: z.literal(true),

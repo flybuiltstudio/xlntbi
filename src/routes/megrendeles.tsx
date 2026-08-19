@@ -3,6 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { z } from "zod";
 
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
+import { isCardPaymentAvailable } from "@/lib/stripe";
 import { formatPrice, products } from "@/lib/products";
 import { submitOrder } from "@/lib/order.functions";
 
@@ -39,7 +42,14 @@ function OrderPage() {
 
   const [slug, setSlug] = useState(termek ?? products[0]!.slug);
   const [quantity, setQuantity] = useState(1);
-  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const cardAvailable = isCardPaymentAvailable();
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "transfer">(
+    cardAvailable ? "card" : "transfer",
+  );
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "done" | "paying" | "error"
+  >("idle");
+  const [customerEmail, setCustomerEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
 
@@ -68,6 +78,7 @@ function OrderPage() {
           email: String(fd.get("email") ?? ""),
           phone: String(fd.get("phone") ?? ""),
           note: String(fd.get("note") ?? ""),
+          paymentMethod,
           acceptTerms: true,
           acceptPrivacy: true,
           acceptWithdrawal: true,
@@ -77,8 +88,13 @@ function OrderPage() {
 
       if (result.ok) {
         setOrderNumber(result.orderNumber);
-        setStatus("done");
-        form.reset();
+        if (paymentMethod === "card") {
+          setCustomerEmail(String(fd.get("email") ?? ""));
+          setStatus("paying");
+        } else {
+          setStatus("done");
+          form.reset();
+        }
       } else {
         setStatus("error");
         setErrorMessage(result.error);
@@ -89,6 +105,26 @@ function OrderPage() {
         "A megrendelés beküldése nem sikerült. Kérlek, ellenőrizd az adatokat, vagy írj a info@xlntbi.hu címre.",
       );
     }
+  }
+
+  if (status === "paying") {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-14">
+        <PaymentTestModeBanner />
+        <h1 className="mt-4 text-3xl font-bold text-foreground">Bankkártyás fizetés</h1>
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+          A rendelésed rögzítettem (<strong className="text-foreground">{orderNumber}</strong>).
+          A fizetés befejezéséhez töltsd ki az alábbi biztonságos fizetési űrlapot. A
+          visszaigazolást és a számlát a sikeres fizetés után küldöm e-mailben.
+        </p>
+        <StripeOrderCheckout
+          priceId={product.priceId}
+          quantity={quantity}
+          orderNumber={orderNumber}
+          customerEmail={customerEmail}
+        />
+      </div>
+    );
   }
 
   if (status === "done") {
@@ -120,11 +156,13 @@ function OrderPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-14">
-      <h1 className="text-3xl font-bold text-foreground md:text-4xl">Megrendelés</h1>
+      <PaymentTestModeBanner />
+      <h1 className="mt-4 text-3xl font-bold text-foreground md:text-4xl">Megrendelés</h1>
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
         Digitális termékről van szó, ezért csak számlázási adatokra van szükség – szállítási címre
         nincs. A megrendelés leadása után visszaigazoló e-mailt kapsz, és elküldöm a számlát, majd a
-        letöltés részleteit. Bankkártyás fizetés hamarosan.
+        letöltés részleteit. Fizethetsz bankkártyával azonnal, vagy választhatsz banki
+        átutalást.
       </p>
 
       <form onSubmit={onSubmit} className="mt-8 rounded-xl border border-border bg-card p-6 md:p-8">
@@ -281,6 +319,48 @@ function OrderPage() {
           </label>
         </div>
 
+        <fieldset className="mt-8">
+          <legend className="text-sm font-semibold text-foreground">Fizetési mód</legend>
+          <div className="mt-3 space-y-2">
+            {cardAvailable ? (
+              <label className="flex items-start gap-3 rounded-md border border-border p-3 text-sm text-foreground">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="card"
+                  checked={paymentMethod === "card"}
+                  onChange={() => setPaymentMethod("card")}
+                  className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+                />
+                <span>
+                  Bankkártyás fizetés
+                  <span className="block text-xs text-muted-foreground">
+                    Azonnali, biztonságos fizetés a Stripe felületén. A visszaigazolás a sikeres
+                    fizetés után érkezik.
+                  </span>
+                </span>
+              </label>
+            ) : null}
+            <label className="flex items-start gap-3 rounded-md border border-border p-3 text-sm text-foreground">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="transfer"
+                checked={paymentMethod === "transfer"}
+                onChange={() => setPaymentMethod("transfer")}
+                className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
+              />
+              <span>
+                Banki átutalás
+                <span className="block text-xs text-muted-foreground">
+                  A számlát a fizetési adatokkal e-mailben küldöm, a letöltés a teljesítés után
+                  érhető el.
+                </span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
         {status === "error" ? (
           <p className="mt-6 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
             {errorMessage}
@@ -292,7 +372,11 @@ function OrderPage() {
           disabled={status === "sending"}
           className="mt-8 inline-flex items-center justify-center rounded-md bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:opacity-60"
         >
-          {status === "sending" ? "Küldés folyamatban…" : "Megrendelés elküldése"}
+          {status === "sending"
+            ? "Küldés folyamatban…"
+            : paymentMethod === "card"
+              ? "Tovább a fizetéshez"
+              : "Megrendelés elküldése"}
         </button>
       </form>
     </div>
