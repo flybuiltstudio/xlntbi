@@ -104,7 +104,7 @@ function ProductPage() {
     "@type": "Product",
     name: product.name,
     description: product.intro[0],
-    brand: { "@type": "Brand", name: "EXCELlent Accounting & Consulting" },
+    brand: { "@type": "Brand", name: "EXCELlent Business Intelligence" },
     offers: {
       "@type": "Offer",
       price: product.price,

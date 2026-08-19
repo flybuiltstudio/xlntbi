@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "@/components/ContactForm";
 
-const TITLE = "Konzultáció kérése – EXCELlent Accounting & Consulting";
+const TITLE = "Konzultáció kérése – EXCELlent Business Intelligence";
 const DESC =
   "Kérj konzultációt könyvelés, adótanácsadás, kontrolling, cégaudit vagy Fintech és BI témában. Töltsd ki az űrlapot, és felveszem veled a kapcsolatot.";
 

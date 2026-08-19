@@ -17,13 +17,13 @@ export function SiteFooter() {
         <div>
           <img
             src={logoWhite}
-            alt="EXCELlent Accounting & Consulting logó"
+            alt="EXCELlent Business Intelligence logó"
             className="h-20 w-20 object-contain"
             loading="lazy"
             width={80}
             height={80}
           />
-          <p className="mt-4 text-sm opacity-90">Perfect Solutions. Automated Future.</p>
+          <p className="mt-4 text-sm opacity-90">EXCELlent Business Intelligence</p>
           <p className="mt-1 text-sm opacity-90">Sarinay Dávid</p>
         </div>
 
@@ -132,7 +132,7 @@ export function SiteFooter() {
 
       <div className="relative border-t border-primary-foreground/20">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs opacity-80 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} Sarinay Dávid – EXCELlent Accounting &amp; Consulting</p>
+          <p>© {new Date().getFullYear()} Sarinay Dávid EV – EXCELlent Business Intelligence</p>
           <p>Ez a weboldal AI segítségével készült.</p>
         </div>
       </div>

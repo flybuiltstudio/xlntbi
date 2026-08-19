@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Mail, Phone } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 
-const TITLE = "Kapcsolat – EXCELlent Accounting & Consulting";
+const TITLE = "Kapcsolat – EXCELlent Business Intelligence";
 const DESC =
   "Vedd fel velem a kapcsolatot: könyvelés, adótanácsadás, kontrolling, Fintech és BI kérdésekben. Telefon: 20/962-2176.";
 
