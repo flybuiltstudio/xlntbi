@@ -37,6 +37,7 @@ import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.
 import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
 import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles_.koszonjuk'
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
+import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
@@ -182,6 +183,11 @@ const TermekSlugRoute = TermekSlugRouteImport.update({
   path: '/termek/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLetoltesTokenRoute = ApiPublicLetoltesTokenRouteImport.update({
+  id: '/api/public/letoltes/$token',
+  path: '/api/public/letoltes/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -224,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -256,6 +263,7 @@ export interface FileRoutesByTo {
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
+  '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/megrendeles_/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
@@ -323,6 +332,7 @@ export interface FileRouteTypes {
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
+    | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok'
+    | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   id:
@@ -387,6 +398,7 @@ export interface FileRouteTypes {
     | '/megrendeles_/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
+    | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
@@ -420,6 +432,7 @@ export interface RootRouteChildren {
   MegrendelesKoszonjukRoute: typeof MegrendelesKoszonjukRoute
   TermekSlugRoute: typeof TermekSlugRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
+  ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
@@ -622,6 +635,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/letoltes/$token': {
+      id: '/api/public/letoltes/$token'
+      path: '/api/public/letoltes/$token'
+      fullPath: '/api/public/letoltes/$token'
+      preLoaderRoute: typeof ApiPublicLetoltesTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -668,6 +688,7 @@ const rootRouteChildren: RootRouteChildren = {
   MegrendelesKoszonjukRoute: MegrendelesKoszonjukRoute,
   TermekSlugRoute: TermekSlugRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
+  ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
