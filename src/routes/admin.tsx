@@ -34,16 +34,16 @@ const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30";
 
 function AdminPage() {
-  const [session, setSession] = useState<{ email?: string } | null>(null);
+  const [session, setSession] = useState<{ email: string | null } | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session ? { email: data.session.user.email ?? undefined } : null);
+      setSession(data.session ? { email: data.session.user.email ?? null } : null);
       setReady(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-      setSession(s ? { email: s.user.email ?? undefined } : null);
+      setSession(s ? { email: s.user.email ?? null } : null);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -111,7 +111,7 @@ function LoginPanel() {
   );
 }
 
-function OrdersPanel({ email }: { email?: string }) {
+function OrdersPanel({ email }: { email: string | null }) {
   const load = useServerFn(adminListOrders);
   const approve = useServerFn(adminApproveTransfer);
   const resend = useServerFn(adminResendDownload);
