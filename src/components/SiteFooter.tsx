@@ -110,7 +110,7 @@ export function SiteFooter() {
           <h2 className="mt-6 text-sm font-semibold uppercase tracking-wider opacity-80">
             Jogi információk
           </h2>
-          <ul className="mt-4 space-y-2 text-sm">
+          <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-1">
             {[
               { to: "/impresszum", label: "Impresszum" },
               { to: "/adatvedelmi-tajekoztato", label: "Adatvédelmi tájékoztató" },
