@@ -134,15 +134,18 @@ export function ServicePage({
       <section className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-2xl font-bold text-foreground">{listTitle}</h2>
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {listItems.map((item) => (
-            <li
-              key={item}
-              className="flex items-start gap-3 rounded-lg border border-border bg-card p-4 text-sm font-medium text-card-foreground"
-            >
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-              {item}
-            </li>
-          ))}
+          {listItems.map((item) => {
+            const Icon = iconFor(item);
+            return (
+              <li
+                key={item}
+                className="flex items-start gap-3 rounded-lg border border-border bg-card p-4 text-sm font-medium text-card-foreground"
+              >
+                <Icon className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+                {item}
+              </li>
+            );
+          })}
         </ul>
         <Link
           to="/kapcsolat"
