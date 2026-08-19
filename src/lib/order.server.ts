@@ -158,52 +158,43 @@ export async function handleOrder(data: Order) {
   );
   if (data.note) rows.push(["Megjegyzés", data.note]);
 
-  const ownerHtml = `
-    <h2>Új megrendelés – xlntbi.hu</h2>
-    <table cellpadding="6" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px">
-      ${rows
-        .map(
-          ([k, v]) =>
-            `<tr><td style="border:1px solid #dfe7e3;background:#f4f8f6"><b>${escapeHtml(k)}</b></td><td style="border:1px solid #dfe7e3">${escapeHtml(v).replace(/\n/g, "<br>")}</td></tr>`,
-        )
-        .join("")}
-    </table>`;
-
-  const userHtml = `
-    <div style="font-family:Arial,sans-serif;font-size:15px;color:#16231d">
-      <p>Kedves ${escapeHtml(data.billingName)}!</p>
-      <p>Köszönöm a megrendelésedet. Az alábbi adatokkal rögzítettem:</p>
-      <table cellpadding="6" style="border-collapse:collapse;font-size:14px">
-        ${rows
-          .map(
-            ([k, v]) =>
-              `<tr><td style="border:1px solid #dfe7e3;background:#f4f8f6"><b>${escapeHtml(k)}</b></td><td style="border:1px solid #dfe7e3">${escapeHtml(v).replace(/\n/g, "<br>")}</td></tr>`,
-          )
-          .join("")}
-      </table>
-      <p>A számlát és a termék letöltési tudnivalóit hamarosan elküldöm erre az e-mail címre.
-      Ha bármi kérdésed van, válaszolj erre a levélre.</p>
-      <p>Üdvözlettel,<br>Sarinay Dávid<br>EXCELlent Accounting &amp; Consulting<br>
-      06 20 962 2176 · info@xlntbi.hu</p>
-    </div>`;
-
-  const [ownerSent, userSent] = await Promise.all([
-    sendEmail({
+  const productLabel = `${product.name} (${data.quantity} db)`;
+  const emailsSent = await sendEmails([
+    {
+      template: "belso-rendeles-ertesito",
       to: OWNER_EMAIL,
-      subject: `Új megrendelés (${number}): ${product.name}`,
-      html: ownerHtml,
-    }),
-    sendEmail({
+      key: number,
+      data: {
+        orderNumber: number,
+        productName: productLabel,
+        total: formatPrice(total),
+        customerEmail: data.email,
+        paymentStatus: "unpaid",
+        rows,
+      },
+      replyTo: data.email,
+    },
+    {
+      template: "megrendeles-visszaigazolas",
       to: data.email,
-      subject: `Megrendelés visszaigazolása – ${number}`,
-      html: userHtml,
-    }),
+      key: number,
+      data: {
+        name: data.billingName,
+        orderNumber: number,
+        productName: productLabel,
+        total: formatPrice(total),
+        paymentStatus: "unpaid",
+        rows: rows.filter(([key]) => key !== "Rendelésszám"),
+      },
+      replyTo: OWNER_EMAIL,
+    },
   ]);
 
   return {
     ok: true as const,
     orderNumber: number,
     total,
-    emailsSent: ownerSent && userSent,
+    emailsSent,
   };
 }
+
