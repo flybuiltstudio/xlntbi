@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LegalPage } from "@/components/LegalPage";
+import { COMPANY } from "@/lib/company";
 
 const TITLE = "Fizetési és teljesítési feltételek | EXCELlent";
 const DESC =
@@ -34,14 +35,19 @@ export const Route = createFileRoute("/fizetes-es-teljesites")({
         },
         {
           heading: "Fizetési módok",
-          paragraphs: [
-            "Jelenleg banki átutalással lehet fizetni, a megküldött számla alapján. Bankkártyás online fizetés bevezetése folyamatban van; amint elérhető, a megrendelés folyamata bővül a kártyás fizetés lehetőségével, és ez a tájékoztató is frissül.",
+          list: [
+            "Banki átutalás: a megküldött számla, illetve fizetési tudnivalók alapján. A teljesítés az összeg beérkezése után indul.",
+            "Bankkártyás online fizetés: a fizetést a Stripe Payments Europe, Ltd. biztonságos felülete bonyolítja le. A kártyaadatokat kizárólag a Stripe kezeli, azok a szolgáltatóhoz nem jutnak el.",
+          ],
+          afterList: [
+            "Sikertelen vagy megszakadt kártyás fizetés esetén a megrendelés fizetésre váró állapotban marad, a fizetés újraindítható, vagy átutalásra lehet váltani.",
           ],
         },
         {
           heading: "Árak és számla",
           paragraphs: [
-            "A weboldalon feltüntetett árak bruttó, forintban értendő árak. A megrendelésről elektronikus számla készül, amelyet a megadott e-mail címre küldünk.",
+            `A weboldalon feltüntetett árak forintban értendők. A szolgáltató ${COMPANY.vatStatus} adózói körbe tartozik, ezért az árak áfát nem tartalmaznak, a számlán áfa nem kerül felszámításra.`,
+            "A megrendelésről elektronikus számla készül a Billingo rendszerén keresztül, amelyet a megadott e-mail címre küldünk.",
           ],
         },
         {

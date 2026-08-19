@@ -32,7 +32,8 @@ export const Route = createFileRoute("/cookie-tajekoztato")({
         {
           heading: "Milyen sütiket használ ez az oldal?",
           list: [
-            "Működéshez szükséges sütik: az oldal és az űrlapok biztonságos működését szolgálják (például a beküldések védelme visszaélés ellen). Ezek használata a működéshez elengedhetetlen.",
+            "Működéshez szükséges sütik: az oldal és az űrlapok biztonságos működését szolgálják (például a beküldések védelme visszaélés ellen). Ezek használata a működéshez elengedhetetlen, ezért az elektronikus hírközlési szabályok szerint hozzájárulás nélkül is elhelyezhetők.",
+            "Fizetéshez kapcsolódó sütik: bankkártyás fizetés indításakor a Stripe Payments Europe, Ltd. helyez el sütiket a tranzakció biztonságos lebonyolítása és a csalásmegelőzés céljából. Ezek szintén a szolgáltatás nyújtásához szükségesek.",
             "Statisztikai és marketing sütik: jelenleg nem futnak ilyen sütik ezen az oldalon. Ha később analitikai vagy hirdetési mérőkód kerül az oldalra, az csak a hozzájárulásod után töltődik be, és ez a tájékoztató is frissül.",
           ],
         },
