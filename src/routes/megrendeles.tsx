@@ -3,6 +3,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { z } from "zod";
 
+import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
+import { isCardPaymentAvailable } from "@/lib/stripe";
 import { formatPrice, products } from "@/lib/products";
 import { submitOrder } from "@/lib/order.functions";
 
@@ -39,7 +41,14 @@ function OrderPage() {
 
   const [slug, setSlug] = useState(termek ?? products[0]!.slug);
   const [quantity, setQuantity] = useState(1);
-  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const cardAvailable = isCardPaymentAvailable();
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "transfer">(
+    cardAvailable ? "card" : "transfer",
+  );
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "done" | "paying" | "error"
+  >("idle");
+  const [customerEmail, setCustomerEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
 
@@ -68,6 +77,7 @@ function OrderPage() {
           email: String(fd.get("email") ?? ""),
           phone: String(fd.get("phone") ?? ""),
           note: String(fd.get("note") ?? ""),
+          paymentMethod,
           acceptTerms: true,
           acceptPrivacy: true,
           acceptWithdrawal: true,
@@ -77,8 +87,13 @@ function OrderPage() {
 
       if (result.ok) {
         setOrderNumber(result.orderNumber);
-        setStatus("done");
-        form.reset();
+        if (paymentMethod === "card") {
+          setCustomerEmail(String(fd.get("email") ?? ""));
+          setStatus("paying");
+        } else {
+          setStatus("done");
+          form.reset();
+        }
       } else {
         setStatus("error");
         setErrorMessage(result.error);
@@ -89,6 +104,25 @@ function OrderPage() {
         "A megrendelés beküldése nem sikerült. Kérlek, ellenőrizd az adatokat, vagy írj a info@xlntbi.hu címre.",
       );
     }
+  }
+
+  if (status === "paying") {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-14">
+        <h1 className="text-3xl font-bold text-foreground">Bankkártyás fizetés</h1>
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+          A rendelésed rögzítettem (<strong className="text-foreground">{orderNumber}</strong>).
+          A fizetés befejezéséhez töltsd ki az alábbi biztonságos fizetési űrlapot. A
+          visszaigazolást és a számlát a sikeres fizetés után küldöm e-mailben.
+        </p>
+        <StripeOrderCheckout
+          priceId={product.priceId}
+          quantity={quantity}
+          orderNumber={orderNumber}
+          customerEmail={customerEmail}
+        />
+      </div>
+    );
   }
 
   if (status === "done") {
@@ -124,7 +158,8 @@ function OrderPage() {
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
         Digitális termékről van szó, ezért csak számlázási adatokra van szükség – szállítási címre
         nincs. A megrendelés leadása után visszaigazoló e-mailt kapsz, és elküldöm a számlát, majd a
-        letöltés részleteit. Bankkártyás fizetés hamarosan.
+        letöltés részleteit. Fizethetsz bankkártyával azonnal, vagy választhatsz banki
+        átutalást.
       </p>
 
       <form onSubmit={onSubmit} className="mt-8 rounded-xl border border-border bg-card p-6 md:p-8">
