@@ -1,6 +1,74 @@
 import { Link } from "@tanstack/react-router";
-import { Check } from "lucide-react";
+import {
+  BarChart3,
+  Bot,
+  Brain,
+  Building2,
+  CalendarClock,
+  ChartPie,
+  CircleDollarSign,
+  ClipboardCheck,
+  Cog,
+  Database,
+  FileSpreadsheet,
+  FileText,
+  GraduationCap,
+  Landmark,
+  Laptop,
+  Link2,
+  MessageSquare,
+  Percent,
+  ScrollText,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  User,
+  Users,
+  Workflow,
+  Zap,
+  Check,
+  type LucideIcon,
+} from "lucide-react";
 import type { ReactNode } from "react";
+
+const ICON_RULES: Array<[RegExp, LucideIcon]> = [
+  [/riport|dashboard|beszámoló/i, BarChart3],
+  [/power bi|adatösszekapcsol|adatbevitel|adatb/i, Database],
+  [/excel|képlet|táblá/i, FileSpreadsheet],
+  [/makró|automatiz|automatizál/i, Cog],
+  [/\bai\b|mesterséges/i, Sparkles],
+  [/gyorsít|hibaforrás|felesleges manuális/i, Zap],
+  [/könyvvizsgálat|átvilágítás|due diligence|audit/i, ClipboardCheck],
+  [/kontroll|minőségbiztosítás/i, ShieldCheck],
+  [/kockázat/i, Search],
+  [/nav|bevallás|adózás|adó/i, Landmark],
+  [/áfa|százalék/i, Percent],
+  [/profit|elemzés|döntés/i, TrendingUp],
+  [/projekt|folyamat|munkafolyamat/i, Workflow],
+  [/zárás|határidő/i, CalendarClock],
+  [/kifizetés|juttatás|pénzügy|díj|költség/i, CircleDollarSign],
+  [/oktatás|vizsga|felkészít|tanul|gyakorlat/i, GraduationCap],
+  [/kommunikáció|egyeztetés/i, MessageSquare],
+  [/csapat|feladatkiosztás|könyvelőirod/i, Users],
+  [/cég|vállalkoz/i, Building2],
+  [/magánszemély|egyéni/i, User],
+  [/szakember|ügyfél/i, Users],
+  [/digitál|online|papírmentes|szoftver/i, Laptop],
+  [/könyvelés|ügyvitel|ügyintézés/i, ScrollText],
+  [/modell|logika/i, ChartPie],
+  [/összekapcsol|integrá/i, Link2],
+  [/robot|bot/i, Bot],
+  [/szemlélet|tudás/i, Brain],
+  [/dokumentum|irat|szerződés/i, FileText],
+];
+
+function iconFor(label: string): LucideIcon {
+  for (const [pattern, Icon] of ICON_RULES) {
+    if (pattern.test(label)) return Icon;
+  }
+  return Check;
+}
 
 export type ServicePageProps = {
   title: string;
