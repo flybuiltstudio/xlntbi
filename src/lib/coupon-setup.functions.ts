@@ -25,7 +25,7 @@ export const ensureTestCoupon = createServerFn({ method: "POST" })
         name: "XLNT teszt 100%",
       });
       const promo = await stripe.promotionCodes.create({
-        coupon: coupon.id,
+        promotion: { type: "coupon", coupon: coupon.id },
         code: "XLNTTESZT100",
       });
 
