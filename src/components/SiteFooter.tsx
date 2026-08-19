@@ -76,7 +76,7 @@ export function SiteFooter() {
             <li className="flex items-center gap-2">
               <Phone className="h-4 w-4" aria-hidden="true" />
               <a href="tel:+36209622176" className="opacity-90 hover:opacity-100">
-                06 20 962 2176
+                20/962-2176
               </a>
             </li>
             <li className="flex items-center gap-2">
