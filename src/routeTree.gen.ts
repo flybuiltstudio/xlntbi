@@ -35,7 +35,7 @@ import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
 import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
-import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles.koszonjuk'
+import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles_.koszonjuk'
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -173,9 +173,9 @@ const KalkulatorokJovedelemadoRoute =
     getParentRoute: () => rootRouteImport,
   } as any)
 const MegrendelesKoszonjukRoute = MegrendelesKoszonjukRouteImport.update({
-  id: '/koszonjuk',
-  path: '/koszonjuk',
-  getParentRoute: () => MegrendelesRoute,
+  id: '/megrendeles_/koszonjuk',
+  path: '/megrendeles/koszonjuk',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const TermekSlugRoute = TermekSlugRouteImport.update({
   id: '/termek/$slug',
@@ -214,7 +214,7 @@ export interface FileRoutesByFullPath {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
-  '/megrendeles': typeof MegrendelesRouteWithChildren
+  '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
@@ -246,7 +246,7 @@ export interface FileRoutesByTo {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
-  '/megrendeles': typeof MegrendelesRouteWithChildren
+  '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
@@ -279,14 +279,14 @@ export interface FileRoutesById {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
-  '/megrendeles': typeof MegrendelesRouteWithChildren
+  '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
-  '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
+  '/megrendeles_/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -384,7 +384,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/jovedelemado'
-    | '/megrendeles/koszonjuk'
+    | '/megrendeles_/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
     | '/api/public/payments/webhook'
@@ -410,13 +410,14 @@ export interface RootRouteChildren {
   KonyveloirodaAuditRoute: typeof KonyveloirodaAuditRoute
   KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
   KonzultacioRoute: typeof KonzultacioRoute
-  MegrendelesRoute: typeof MegrendelesRouteWithChildren
+  MegrendelesRoute: typeof MegrendelesRoute
   OktatasRoute: typeof OktatasRoute
   RolamRoute: typeof RolamRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
   TermekeimRoute: typeof TermekeimRoute
   KalkulatorokBertesztRoute: typeof KalkulatorokBertesztRoute
   KalkulatorokJovedelemadoRoute: typeof KalkulatorokJovedelemadoRoute
+  MegrendelesKoszonjukRoute: typeof MegrendelesKoszonjukRoute
   TermekSlugRoute: typeof TermekSlugRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -607,12 +608,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KalkulatorokJovedelemadoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/megrendeles/koszonjuk': {
-      id: '/megrendeles/koszonjuk'
-      path: '/koszonjuk'
+    '/megrendeles_/koszonjuk': {
+      id: '/megrendeles_/koszonjuk'
+      path: '/megrendeles/koszonjuk'
       fullPath: '/megrendeles/koszonjuk'
       preLoaderRoute: typeof MegrendelesKoszonjukRouteImport
-      parentRoute: typeof MegrendelesRoute
+      parentRoute: typeof rootRouteImport
     }
     '/termek/$slug': {
       id: '/termek/$slug'
@@ -638,18 +639,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface MegrendelesRouteChildren {
-  MegrendelesKoszonjukRoute: typeof MegrendelesKoszonjukRoute
-}
-
-const MegrendelesRouteChildren: MegrendelesRouteChildren = {
-  MegrendelesKoszonjukRoute: MegrendelesKoszonjukRoute,
-}
-
-const MegrendelesRouteWithChildren = MegrendelesRoute._addFileChildren(
-  MegrendelesRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdatvedelmiTajekoztatoRoute: AdatvedelmiTajekoztatoRoute,
@@ -669,13 +658,14 @@ const rootRouteChildren: RootRouteChildren = {
   KonyveloirodaAuditRoute: KonyveloirodaAuditRoute,
   KonyvvizsgalatRoute: KonyvvizsgalatRoute,
   KonzultacioRoute: KonzultacioRoute,
-  MegrendelesRoute: MegrendelesRouteWithChildren,
+  MegrendelesRoute: MegrendelesRoute,
   OktatasRoute: OktatasRoute,
   RolamRoute: RolamRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
   TermekeimRoute: TermekeimRoute,
   KalkulatorokBertesztRoute: KalkulatorokBertesztRoute,
   KalkulatorokJovedelemadoRoute: KalkulatorokJovedelemadoRoute,
+  MegrendelesKoszonjukRoute: MegrendelesKoszonjukRoute,
   TermekSlugRoute: TermekSlugRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,

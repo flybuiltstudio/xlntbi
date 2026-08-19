@@ -4,7 +4,7 @@ import { z } from "zod";
 const TITLE = "Sikeres fizetés | EXCELlent";
 const DESC = "A bankkártyás fizetés megtörtént, a megrendelés visszaigazolása e-mailben érkezik.";
 
-export const Route = createFileRoute("/megrendeles/koszonjuk")({
+export const Route = createFileRoute("/megrendeles_/koszonjuk")({
   validateSearch: z.object({
     rendeles: z.string().max(40).optional(),
     session_id: z.string().max(200).optional(),
