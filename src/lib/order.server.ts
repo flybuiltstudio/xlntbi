@@ -1,5 +1,6 @@
 import { getRequestHeader } from "@tanstack/react-start/server";
 
+import { sendEmails } from "./notify.server";
 import { formatPrice, getProduct } from "./products";
 
 type Order = {
@@ -19,17 +20,8 @@ type Order = {
 };
 
 const OWNER_EMAIL = "xllentac@gmail.com";
-const FROM_EMAIL = "EXCELlent <onboarding@resend.dev>";
 const RATE_LIMIT_WINDOW_MINUTES = 10;
 const RATE_LIMIT_MAX = 5;
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
 
 function clientIp() {
   const header =
@@ -49,31 +41,6 @@ function orderNumber() {
   return `XLNT-${stamp}-${random}`;
 }
 
-async function sendEmail(payload: { to: string; subject: string; html: string }) {
-  const apiKey = process.env["RESEND_API_KEY"];
-  if (!apiKey) {
-    console.warn("RESEND_API_KEY missing – email not sent:", payload.subject);
-    return false;
-  }
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: FROM_EMAIL,
-      to: [payload.to],
-      subject: payload.subject,
-      html: payload.html,
-    }),
-  });
-  if (!response.ok) {
-    console.error(`Resend error [${response.status}]: ${await response.text()}`);
-    return false;
-  }
-  return true;
-}
 
 export async function handleOrder(data: Order) {
   // Honeypot: silently accept but drop.
