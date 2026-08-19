@@ -13,6 +13,8 @@ type Props = {
   submitLabel?: string;
 };
 
+const ALL_MARKER = "Bármikor";
+
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/40";
@@ -31,6 +33,28 @@ export function ContactForm({
   const submit = useServerFn(submitContactForm);
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [contactTimes, setContactTimes] = useState<string[]>([]);
+
+  function toggleContactTime(option: string, checked: boolean) {
+    setContactTimes((prev) => {
+      if (option === ALL_MARKER && checked) {
+        return [...(contactTimeOptions ?? [])];
+      }
+      if (option === ALL_MARKER && !checked) {
+        return [];
+      }
+      // toggling any other option: if every remaining option (excluding ALL_MARKER) is selected, mark "Bármikor" too; otherwise unmark it
+      const withoutAll = (contactTimeOptions ?? []).filter((o) => o !== ALL_MARKER);
+      const next = checked
+        ? Array.from(new Set([...prev, option]))
+        : prev.filter((o) => o !== option);
+      const allOthersChecked = withoutAll.every((o) => next.includes(o));
+      if (allOthersChecked) {
+        return Array.from(new Set([...next, ALL_MARKER]));
+      }
+      return next.filter((o) => o !== ALL_MARKER);
+    });
+  }
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -51,7 +75,7 @@ export function ContactForm({
           message: String(fd.get("message") ?? ""),
           services: fd.getAll("services").map(String),
           contactMethod: String(fd.get("contactMethod") ?? ""),
-          contactTime: String(fd.get("contactTime") ?? ""),
+          contactTime: contactTimes,
           website: String(fd.get("website") ?? ""),
         },
       });
@@ -175,9 +199,11 @@ export function ContactForm({
                 className="flex items-start gap-2.5 text-sm text-muted-foreground"
               >
                 <input
-                  type="radio"
+                  type="checkbox"
                   name="contactTime"
                   value={option}
+                  checked={contactTimes.includes(option)}
+                  onChange={(e) => toggleContactTime(option, e.target.checked)}
                   className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
                 />
                 {option}

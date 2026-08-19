@@ -13,7 +13,7 @@ type Submission = {
   message: string;
   services: string[];
   contactMethod: string;
-  contactTime: string;
+  contactTime: string[];
   website: string;
 };
 
@@ -66,7 +66,7 @@ export async function handleSubmission(data: Submission) {
     message: data.message,
     services: data.services,
     contact_method: data.contactMethod || null,
-    contact_time: data.contactTime || null,
+    contact_time: data.contactTime.join(", ") || null,
     ip_address: ip,
     user_agent: getRequestHeader("user-agent") ?? null,
   }).select("id").single();
@@ -88,7 +88,7 @@ export async function handleSubmission(data: Submission) {
   if (data.company) rows.push(["Cégnév", data.company]);
   if (data.services.length) rows.push(["Szolgáltatás", data.services.join(", ")]);
   if (data.contactMethod) rows.push(["Hogyan kereshetem", data.contactMethod]);
-  if (data.contactTime) rows.push(["Mikor kereshetem", data.contactTime]);
+  if (data.contactTime.length) rows.push(["Mikor kereshetem", data.contactTime.join(", ")]);
   rows.push(["Üzenet", data.message]);
 
   const userRows = rows.filter(([key]) => key !== "Üzenet");
