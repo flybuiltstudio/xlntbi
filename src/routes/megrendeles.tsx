@@ -157,7 +157,7 @@ function OrderPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-14">
       <PaymentTestModeBanner />
-      <h1 className="mt-4 className="text-3xl font-bold text-foreground md:text-4xl">Megrendelés</h1>
+      <h1 className="mt-4 text-3xl font-bold text-foreground md:text-4xl">Megrendelés</h1>
       <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
         Digitális termékről van szó, ezért csak számlázási adatokra van szükség – szállítási címre
         nincs. A megrendelés leadása után visszaigazoló e-mailt kapsz, és elküldöm a számlát, majd a
