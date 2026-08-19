@@ -27,6 +27,7 @@ import { Route as KonyvelesRouteImport } from './routes/konyveles'
 import { Route as KonyveloirodaAuditRouteImport } from './routes/konyveloiroda-audit'
 import { Route as KonyvvizsgalatRouteImport } from './routes/konyvvizsgalat'
 import { Route as KonzultacioRouteImport } from './routes/konzultacio'
+import { Route as LetoltesHibaRouteImport } from './routes/letoltes-hiba'
 import { Route as MegrendelesRouteImport } from './routes/megrendeles'
 import { Route as OktatasRouteImport } from './routes/oktatas'
 import { Route as RolamRouteImport } from './routes/rolam'
@@ -132,6 +133,11 @@ const KonzultacioRoute = KonzultacioRouteImport.update({
   path: '/konzultacio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LetoltesHibaRoute = LetoltesHibaRouteImport.update({
+  id: '/letoltes-hiba',
+  path: '/letoltes-hiba',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MegrendelesRoute = MegrendelesRouteImport.update({
   id: '/megrendeles',
   path: '/megrendeles',
@@ -220,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
+  '/letoltes-hiba': typeof LetoltesHibaRoute
   '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
@@ -253,6 +260,7 @@ export interface FileRoutesByTo {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
+  '/letoltes-hiba': typeof LetoltesHibaRoute
   '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
@@ -287,6 +295,7 @@ export interface FileRoutesById {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
+  '/letoltes-hiba': typeof LetoltesHibaRoute
   '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
@@ -322,6 +331,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/konzultacio'
+    | '/letoltes-hiba'
     | '/megrendeles'
     | '/oktatas'
     | '/rolam'
@@ -355,6 +365,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/konzultacio'
+    | '/letoltes-hiba'
     | '/megrendeles'
     | '/oktatas'
     | '/rolam'
@@ -388,6 +399,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/konzultacio'
+    | '/letoltes-hiba'
     | '/megrendeles'
     | '/oktatas'
     | '/rolam'
@@ -422,6 +434,7 @@ export interface RootRouteChildren {
   KonyveloirodaAuditRoute: typeof KonyveloirodaAuditRoute
   KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
   KonzultacioRoute: typeof KonzultacioRoute
+  LetoltesHibaRoute: typeof LetoltesHibaRoute
   MegrendelesRoute: typeof MegrendelesRoute
   OktatasRoute: typeof OktatasRoute
   RolamRoute: typeof RolamRoute
@@ -565,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KonzultacioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/letoltes-hiba': {
+      id: '/letoltes-hiba'
+      path: '/letoltes-hiba'
+      fullPath: '/letoltes-hiba'
+      preLoaderRoute: typeof LetoltesHibaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/megrendeles': {
       id: '/megrendeles'
       path: '/megrendeles'
@@ -678,6 +698,7 @@ const rootRouteChildren: RootRouteChildren = {
   KonyveloirodaAuditRoute: KonyveloirodaAuditRoute,
   KonyvvizsgalatRoute: KonyvvizsgalatRoute,
   KonzultacioRoute: KonzultacioRoute,
+  LetoltesHibaRoute: LetoltesHibaRoute,
   MegrendelesRoute: MegrendelesRoute,
   OktatasRoute: OktatasRoute,
   RolamRoute: RolamRoute,
