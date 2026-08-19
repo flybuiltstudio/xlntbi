@@ -88,7 +88,7 @@ export async function handleSubmission(data: Submission) {
   if (data.company) rows.push(["Cégnév", data.company]);
   if (data.services.length) rows.push(["Szolgáltatás", data.services.join(", ")]);
   if (data.contactMethod) rows.push(["Hogyan kereshetem", data.contactMethod]);
-  if (data.contactTime) rows.push(["Mikor kereshetem", data.contactTime]);
+  if (data.contactTime.length) rows.push(["Mikor kereshetem", data.contactTime.join(", ")]);
   rows.push(["Üzenet", data.message]);
 
   const userRows = rows.filter(([key]) => key !== "Üzenet");
