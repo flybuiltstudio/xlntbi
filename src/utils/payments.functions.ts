@@ -44,6 +44,9 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
         ui_mode: "embedded_page",
         return_url: data.returnUrl,
         customer_email: data.customerEmail,
+        locale: "hu",
+        // Sell in HUF only — no currency-conversion offer at checkout.
+        adaptive_pricing: { enabled: false },
         automatic_tax: { enabled: true },
         payment_intent_data: { description: product.name },
         metadata: {
