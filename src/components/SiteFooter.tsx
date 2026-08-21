@@ -3,6 +3,28 @@ import { Facebook, Mail, Phone } from "lucide-react";
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 import heroImg from "@/assets/bcg-1.jpg";
 
+const pages = [
+  { to: "/", label: "Főoldal" },
+  { to: "/termekeim", label: "Termékeim" },
+  { to: "/kalkulatorok", label: "Kalkulátorok" },
+  { to: "/szolgaltatasaim", label: "Szolgáltatásaim" },
+  { to: "/oktatas", label: "Oktatás" },
+  { to: "/rolam", label: "Rólam" },
+  { to: "/kapcsolat", label: "Kapcsolat" },
+  { to: "/konzultacio", label: "Konzultáció" },
+] as const;
+
+const services = [
+  { to: "/konyveles", label: "Könyvelés" },
+  { to: "/adotanacsadas", label: "Adótanácsadás" },
+  { to: "/fintech-es-bi", label: "Fintech és BI" },
+  { to: "/kontrolling", label: "Kontrolling" },
+  { to: "/cegaudit", label: "Cégaudit" },
+  { to: "/konyvvizsgalat", label: "Könyvvizsgálat" },
+  { to: "/konyveloiroda-audit", label: "Könyvelőiroda audit" },
+  { to: "/digitalis-idomegtakaritasi-audit", label: "Digitális időmegtakarítási audit" },
+] as const;
+
 export function SiteFooter() {
   return (
     <footer className="relative isolate overflow-hidden bg-brand-dark text-primary-foreground">
@@ -13,7 +35,7 @@ export function SiteFooter() {
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/90 to-brand-dark/80" />
-      <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-3">
+      <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
         <div>
           <img
             src={logoAsset.url}
@@ -28,13 +50,20 @@ export function SiteFooter() {
         <nav aria-label="Oldalak a láblécben">
           <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">Oldalak</h2>
           <ul className="mt-4 space-y-2 text-sm">
-            {[
-              { to: "/termekeim", label: "Termékeim" },
-              { to: "/szolgaltatasaim", label: "Szolgáltatásaim" },
-              { to: "/rolam", label: "Rólam" },
-              { to: "/konzultacio", label: "Konzultáció" },
-              { to: "/kapcsolat", label: "Kapcsolat" },
-            ].map((l) => (
+            {pages.map((l) => (
+              <li key={l.to}>
+                <Link to={l.to} className="opacity-90 transition-opacity hover:opacity-100">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav aria-label="Szolgáltatások a láblécben">
+          <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">Szolgáltatásaim</h2>
+          <ul className="mt-4 space-y-2 text-sm">
+            {services.map((l) => (
               <li key={l.to}>
                 <Link to={l.to} className="opacity-90 transition-opacity hover:opacity-100">
                   {l.label}
