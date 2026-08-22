@@ -17,6 +17,9 @@
   <url><loc>https://xlntbi.hu/kalkulatorok</loc><priority>0.8</priority></url>
   <url><loc>https://xlntbi.hu/kalkulatorok/berteszt</loc><priority>0.7</priority></url>
   <url><loc>https://xlntbi.hu/kalkulatorok/jovedelemado</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/kalkulatorok/szamla-datumok</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/kalkulatorok/invoice-dates</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/kalkulatorok/atalanyado</loc><priority>0.7</priority></url>
   <url><loc>https://xlntbi.hu/rolam</loc><priority>0.7</priority></url>
   <url><loc>https://xlntbi.hu/konzultacio</loc><priority>0.8</priority></url>
   <url><loc>https://xlntbi.hu/kapcsolat</loc><priority>0.8</priority></url>

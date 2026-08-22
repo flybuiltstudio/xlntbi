@@ -21,6 +21,9 @@ const calculators = [
   { to: "/kalkulatorok", label: "Összes kalkulátor" },
   { to: "/kalkulatorok/berteszt", label: "Bérteszt" },
   { to: "/kalkulatorok/jovedelemado", label: "Jövedelemadó" },
+  { to: "/kalkulatorok/szamla-datumok", label: "Számla dátumok" },
+  { to: "/kalkulatorok/invoice-dates", label: "Invoice Dates (EN)" },
+  { to: "/kalkulatorok/atalanyado", label: "Átalányadó" },
 ] as const;
 
 const mainLinks = [

@@ -35,8 +35,11 @@ import { Route as RolamRouteImport } from './routes/rolam'
 import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
 import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
+import { Route as KalkulatorokAtalanyadoRouteImport } from './routes/kalkulatorok.atalanyado'
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
+import { Route as KalkulatorokInvoiceDatesRouteImport } from './routes/kalkulatorok.invoice-dates'
 import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
+import { Route as KalkulatorokSzamlaDatumokRouteImport } from './routes/kalkulatorok.szamla-datumok'
 import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles_.koszonjuk'
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
@@ -174,15 +177,32 @@ const KalkulatorokIndexRoute = KalkulatorokIndexRouteImport.update({
   path: '/kalkulatorok/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KalkulatorokAtalanyadoRoute = KalkulatorokAtalanyadoRouteImport.update({
+  id: '/kalkulatorok/atalanyado',
+  path: '/kalkulatorok/atalanyado',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KalkulatorokBertesztRoute = KalkulatorokBertesztRouteImport.update({
   id: '/kalkulatorok/berteszt',
   path: '/kalkulatorok/berteszt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KalkulatorokInvoiceDatesRoute =
+  KalkulatorokInvoiceDatesRouteImport.update({
+    id: '/kalkulatorok/invoice-dates',
+    path: '/kalkulatorok/invoice-dates',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const KalkulatorokJovedelemadoRoute =
   KalkulatorokJovedelemadoRouteImport.update({
     id: '/kalkulatorok/jovedelemado',
     path: '/kalkulatorok/jovedelemado',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const KalkulatorokSzamlaDatumokRoute =
+  KalkulatorokSzamlaDatumokRouteImport.update({
+    id: '/kalkulatorok/szamla-datumok',
+    path: '/kalkulatorok/szamla-datumok',
     getParentRoute: () => rootRouteImport,
   } as any)
 const MegrendelesKoszonjukRoute = MegrendelesKoszonjukRouteImport.update({
@@ -239,8 +259,11 @@ export interface FileRoutesByFullPath {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
+  '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
@@ -274,8 +297,11 @@ export interface FileRoutesByTo {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
+  '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
@@ -310,8 +336,11 @@ export interface FileRoutesById {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
+  '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles_/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
@@ -347,8 +376,11 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
+    | '/kalkulatorok/invoice-dates'
     | '/kalkulatorok/jovedelemado'
+    | '/kalkulatorok/szamla-datumok'
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
@@ -382,8 +414,11 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
+    | '/kalkulatorok/invoice-dates'
     | '/kalkulatorok/jovedelemado'
+    | '/kalkulatorok/szamla-datumok'
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok'
@@ -417,8 +452,11 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
+    | '/kalkulatorok/invoice-dates'
     | '/kalkulatorok/jovedelemado'
+    | '/kalkulatorok/szamla-datumok'
     | '/megrendeles_/koszonjuk'
     | '/termek/$slug'
     | '/kalkulatorok/'
@@ -453,8 +491,11 @@ export interface RootRouteChildren {
   RolamRoute: typeof RolamRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
   TermekeimRoute: typeof TermekeimRoute
+  KalkulatorokAtalanyadoRoute: typeof KalkulatorokAtalanyadoRoute
   KalkulatorokBertesztRoute: typeof KalkulatorokBertesztRoute
+  KalkulatorokInvoiceDatesRoute: typeof KalkulatorokInvoiceDatesRoute
   KalkulatorokJovedelemadoRoute: typeof KalkulatorokJovedelemadoRoute
+  KalkulatorokSzamlaDatumokRoute: typeof KalkulatorokSzamlaDatumokRoute
   MegrendelesKoszonjukRoute: typeof MegrendelesKoszonjukRoute
   TermekSlugRoute: typeof TermekSlugRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
@@ -647,6 +688,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KalkulatorokIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kalkulatorok/atalanyado': {
+      id: '/kalkulatorok/atalanyado'
+      path: '/kalkulatorok/atalanyado'
+      fullPath: '/kalkulatorok/atalanyado'
+      preLoaderRoute: typeof KalkulatorokAtalanyadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kalkulatorok/berteszt': {
       id: '/kalkulatorok/berteszt'
       path: '/kalkulatorok/berteszt'
@@ -654,11 +702,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KalkulatorokBertesztRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kalkulatorok/invoice-dates': {
+      id: '/kalkulatorok/invoice-dates'
+      path: '/kalkulatorok/invoice-dates'
+      fullPath: '/kalkulatorok/invoice-dates'
+      preLoaderRoute: typeof KalkulatorokInvoiceDatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kalkulatorok/jovedelemado': {
       id: '/kalkulatorok/jovedelemado'
       path: '/kalkulatorok/jovedelemado'
       fullPath: '/kalkulatorok/jovedelemado'
       preLoaderRoute: typeof KalkulatorokJovedelemadoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kalkulatorok/szamla-datumok': {
+      id: '/kalkulatorok/szamla-datumok'
+      path: '/kalkulatorok/szamla-datumok'
+      fullPath: '/kalkulatorok/szamla-datumok'
+      preLoaderRoute: typeof KalkulatorokSzamlaDatumokRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/megrendeles_/koszonjuk': {
@@ -725,8 +787,11 @@ const rootRouteChildren: RootRouteChildren = {
   RolamRoute: RolamRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
   TermekeimRoute: TermekeimRoute,
+  KalkulatorokAtalanyadoRoute: KalkulatorokAtalanyadoRoute,
   KalkulatorokBertesztRoute: KalkulatorokBertesztRoute,
+  KalkulatorokInvoiceDatesRoute: KalkulatorokInvoiceDatesRoute,
   KalkulatorokJovedelemadoRoute: KalkulatorokJovedelemadoRoute,
+  KalkulatorokSzamlaDatumokRoute: KalkulatorokSzamlaDatumokRoute,
   MegrendelesKoszonjukRoute: MegrendelesKoszonjukRoute,
   TermekSlugRoute: TermekSlugRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
