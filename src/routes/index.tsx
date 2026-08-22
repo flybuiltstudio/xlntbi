@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import heroImg from "@/assets/bcg-1.jpg";
+import heroImg from "@/assets/bcg-savok.jpg";
 import aboutImg from "@/assets/En-modern-konyveloirodaban.jpg";
 import icHatekonysag from "@/assets/icons/hatekonysag.png.asset.json";
 import icInnovacio from "@/assets/icons/innovacio.png.asset.json";
@@ -80,10 +80,16 @@ function Index() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-foreground/80">
             EXCELLENT BUSINESS INTELLIGENCE
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-bold leading-tight text-primary-foreground md:text-5xl">
-            Automated future
+          <h1 className="mt-4 max-w-4xl font-serif text-[clamp(1.6rem,4.2vw,3.1rem)] font-bold leading-tight text-primary-foreground lg:whitespace-nowrap">
+            Perfect Solutions. Automated FUTURE.
           </h1>
           <div className="mt-9 flex flex-wrap gap-3">
+            <Link
+              to="/szolgaltatasaim"
+              className="inline-flex items-center rounded-md bg-primary-foreground px-6 py-3 text-sm font-semibold text-brand-dark transition-opacity hover:opacity-90"
+            >
+              Szolgáltatásaim
+            </Link>
             <Link
               to="/termekeim"
               className="inline-flex items-center rounded-md bg-primary-foreground px-6 py-3 text-sm font-semibold text-brand-dark transition-opacity hover:opacity-90"
