@@ -14,7 +14,7 @@ type Props = {
 };
 
 const ALL_MARKER = "Bármikor";
-
+const EMAIL_MARKER = "E-mailben keressenek";
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/40";
@@ -35,21 +35,28 @@ export function ContactForm({
   const [errorMessage, setErrorMessage] = useState("");
   const [contactTimes, setContactTimes] = useState<string[]>([]);
 
+  // The four time-only options: everything except "Bármikor" and the e-mail option.
+  const timeOnly = (contactTimeOptions ?? []).filter(
+    (o) => o !== ALL_MARKER && o !== EMAIL_MARKER,
+  );
+
   function toggleContactTime(option: string, checked: boolean) {
     setContactTimes((prev) => {
+      const emailSelected = prev.includes(EMAIL_MARKER);
       if (option === ALL_MARKER && checked) {
-        return [...(contactTimeOptions ?? [])];
+        // Checking "Bármikor" checks the four time options; e-mail stays as-is.
+        return Array.from(new Set([...timeOnly, ...(emailSelected ? [EMAIL_MARKER] : [])]));
       }
       if (option === ALL_MARKER && !checked) {
-        return [];
+        // Unchecking "Bármikor" clears only the four time options; e-mail stays as-is.
+        return emailSelected ? [EMAIL_MARKER] : [];
       }
-      // toggling any other option: if every remaining option (excluding ALL_MARKER) is selected, mark "Bármikor" too; otherwise unmark it
-      const withoutAll = (contactTimeOptions ?? []).filter((o) => o !== ALL_MARKER);
+      // Toggling a time option: if all four are selected, mark "Bármikor"; otherwise unmark it.
       const next = checked
         ? Array.from(new Set([...prev, option]))
         : prev.filter((o) => o !== option);
-      const allOthersChecked = withoutAll.every((o) => next.includes(o));
-      if (allOthersChecked) {
+      const allTimeChecked = timeOnly.every((o) => next.includes(o));
+      if (allTimeChecked) {
         return Array.from(new Set([...next, ALL_MARKER]));
       }
       return next.filter((o) => o !== ALL_MARKER);
