@@ -11,6 +11,7 @@ type Props = {
   contactTimeOptions?: string[];
   messageLabel?: string;
   submitLabel?: string;
+  defaultMessage?: string;
 };
 
 const ALL_MARKER = "Bármikor";
@@ -27,6 +28,7 @@ export function ContactForm({
   contactTimeOptions,
   messageLabel = "Miben segíthetek?",
   submitLabel = "Küldés",
+  defaultMessage = "",
 }: Props) {
 
   const submit = useServerFn(submitContactForm);
@@ -257,6 +259,7 @@ export function ContactForm({
           minLength={5}
           maxLength={4000}
           rows={6}
+          defaultValue={defaultMessage}
           className={inputClass}
         />
       </label>

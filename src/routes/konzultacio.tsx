@@ -60,6 +60,11 @@ function KonzultacioPage() {
           contactMethodOptions={CONTACT_METHODS}
           contactTimeOptions={CONTACT_TIMES}
           messageLabel="Üzenet"
+          defaultMessage={`Kedves Dávid!
+
+A fenti témában szeretnék konzultálni Önnel!
+
+Köszönöm!`}
           submitLabel="Konzultáció kérése"
         />
       </div>
