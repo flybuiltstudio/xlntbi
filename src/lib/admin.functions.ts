@@ -42,3 +42,37 @@ export const adminResendDownload = createServerFn({ method: "POST" })
     const { resendDownload } = await import("./admin.server");
     return resendDownload(data.orderId);
   });
+
+export const adminListUsers = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { listUsers } = await import("./admin.server");
+    return { users: await listUsers() };
+  });
+
+export const adminCreateUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        email: z.string().trim().email().max(200),
+        password: z.string().min(8).max(200),
+        role: z.enum(["admin", "user"]),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { createUser } = await import("./admin.server");
+    return createUser(data.email, data.password, data.role);
+  });
+
+export const adminDeleteUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ userId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { deleteUser } = await import("./admin.server");
+    return deleteUser(data.userId, context.userId);
+  });

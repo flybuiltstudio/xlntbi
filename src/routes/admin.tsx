@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 
 import {
   adminApproveTransfer,
+  adminCreateUser,
+  adminDeleteUser,
   adminListOrders,
+  adminListUsers,
   adminResendDownload,
 } from "@/lib/admin.functions";
 import { formatPrice } from "@/lib/products";
@@ -29,21 +32,26 @@ export const Route = createFileRoute("/admin")({
 });
 
 type Order = Awaited<ReturnType<typeof adminListOrders>>["orders"][number];
+type AdminUserRow = Awaited<ReturnType<typeof adminListUsers>>["users"][number];
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30";
 
 function AdminPage() {
-  const [session, setSession] = useState<{ email: string | null } | null>(null);
+  const [session, setSession] = useState<{ id: string; email: string | null } | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session ? { email: data.session.user.email ?? null } : null);
+      setSession(
+        data.session ?
+          { id: data.session.user.id, email: data.session.user.email ?? null }
+        : null,
+      );
       setReady(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-      setSession(s ? { email: s.user.email ?? null } : null);
+      setSession(s ? { id: s.user.id, email: s.user.email ?? null } : null);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -58,7 +66,10 @@ function AdminPage() {
       {!ready ? (
         <p className="mt-10 text-sm text-muted-foreground">Betöltés…</p>
       ) : session ? (
-        <OrdersPanel email={session.email} />
+        <>
+          <OrdersPanel email={session.email} />
+          <UsersPanel currentUserId={session.id} />
+        </>
       ) : (
         <LoginPanel />
       )}
@@ -317,5 +328,173 @@ function OrdersPanel({ email }: { email: string | null }) {
         </div>
       )}
     </div>
+  );
+}
+
+function UsersPanel({ currentUserId }: { currentUserId: string }) {
+  const load = useServerFn(adminListUsers);
+  const createUser = useServerFn(adminCreateUser);
+  const deleteUser = useServerFn(adminDeleteUser);
+
+  const [users, setUsers] = useState<AdminUserRow[] | null>(null);
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
+  const [creating, setCreating] = useState(false);
+
+  async function refresh() {
+    setError("");
+    try {
+      const result = await load();
+      setUsers(result.users);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "A felhasználók betöltése nem sikerült.");
+      setUsers([]);
+    }
+  }
+
+  useEffect(() => {
+    void refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function onCreate(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const email = String(data.get("new-email") ?? "");
+    const password = String(data.get("new-password") ?? "");
+    const role = String(data.get("new-role") ?? "user") === "admin" ? "admin" : "user";
+    setCreating(true);
+    setMessage("");
+    setError("");
+    try {
+      const result = await createUser({ data: { email, password, role } });
+      if (result.ok) {
+        setMessage(`${email}: felhasználó létrehozva (${role === "admin" ? "admin" : "felhasználó"}).`);
+        form.reset();
+        await refresh();
+      } else {
+        setError(result.error ?? "Hiba történt.");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setCreating(false);
+  }
+
+  async function onDelete(user: AdminUserRow) {
+    if (!window.confirm(`Biztosan törlöd ezt a felhasználót? ${user.email}`)) return;
+    setBusy(user.id);
+    setMessage("");
+    setError("");
+    try {
+      const result = await deleteUser({ data: { userId: user.id } });
+      if (result.ok) {
+        setMessage(`${user.email}: törölve.`);
+        await refresh();
+      } else {
+        setError(result.error ?? "Hiba történt.");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
+  return (
+    <section className="mt-16">
+      <h2 className="text-2xl font-bold text-foreground">Felhasználók</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Admin felhasználók kezelése: új létrehozása vagy meglévő törlése.
+      </p>
+
+      {message ? (
+        <p className="mt-4 rounded-md border border-border bg-muted px-4 py-3 text-sm text-foreground">
+          {message}
+        </p>
+      ) : null}
+      {error ? (
+        <p className="mt-4 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </p>
+      ) : null}
+
+      <form
+        onSubmit={onCreate}
+        className="mt-6 rounded-xl border border-border bg-card p-6"
+      >
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          Új felhasználó
+        </h3>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <label className="block text-sm font-medium text-foreground">
+            E-mail
+            <input name="new-email" type="email" required className={inputClass} />
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            Jelszó (min. 8 karakter)
+            <input name="new-password" type="password" required minLength={8} className={inputClass} />
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            Szerepkör
+            <select name="new-role" className={inputClass} defaultValue="admin">
+              <option value="admin">Admin</option>
+              <option value="user">Felhasználó</option>
+            </select>
+          </label>
+        </div>
+        <button
+          type="submit"
+          disabled={creating}
+          className="mt-5 inline-flex items-center rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-brand-dark disabled:opacity-60"
+        >
+          {creating ? "Létrehozás…" : "Felhasználó létrehozása"}
+        </button>
+      </form>
+
+      {users === null ? (
+        <p className="mt-8 text-sm text-muted-foreground">Betöltés…</p>
+      ) : users.length === 0 ? (
+        <p className="mt-8 text-sm text-muted-foreground">Nincs felhasználó.</p>
+      ) : (
+        <div className="mt-6 space-y-3">
+          {users.map((user) => (
+            <article
+              key={user.id}
+              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card px-5 py-4 text-sm text-foreground"
+            >
+              <div>
+                <p className="font-semibold">
+                  {user.email}
+                  {user.id === currentUserId ? (
+                    <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                      ez te vagy
+                    </span>
+                  ) : null}
+                </p>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  {user.roles.length > 0 ?
+                    user.roles.map((r) => (r === "admin" ? "Admin" : "Felhasználó")).join(", ")
+                  : "Nincs szerepkör"}{" "}
+                  · Létrehozva: {new Date(user.createdAt).toLocaleDateString("hu-HU")}
+                  {user.lastSignInAt ?
+                    ` · Utolsó belépés: ${new Date(user.lastSignInAt).toLocaleString("hu-HU")}`
+                  : ""}
+                </p>
+              </div>
+              <button
+                type="button"
+                disabled={busy === user.id || user.id === currentUserId}
+                onClick={() => void onDelete(user)}
+                className="rounded-md border border-destructive/40 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-40"
+              >
+                {busy === user.id ? "Törlés…" : "Törlés"}
+              </button>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
