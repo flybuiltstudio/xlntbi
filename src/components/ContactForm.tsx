@@ -32,7 +32,11 @@ export function ContactForm({
   const submit = useServerFn(submitContactForm);
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [contactMethod, setContactMethod] = useState("");
   const [contactTimes, setContactTimes] = useState<string[]>([]);
+
+  // E-mail contact doesn't need a time window — disable the whole "Mikor kereshetem?" block.
+  const emailOnly = contactMethod === "E-mailben";
 
   // Time-only options: everything except "Bármikor".
   const timeOnly = (contactTimeOptions ?? []).filter((o) => o !== ALL_MARKER);
@@ -184,6 +188,14 @@ export function ContactForm({
                   type="radio"
                   name="contactMethod"
                   value={option}
+                  checked={contactMethod === option}
+                  onChange={(e) => {
+                    setContactMethod(e.target.value);
+                    // Selecting e-mail contact clears any chosen time window.
+                    if (e.target.value === "E-mailben") {
+                      setContactTimes([]);
+                    }
+                  }}
                   className="h-4 w-4 accent-[var(--color-primary)]"
                 />
                 {option}
@@ -198,13 +210,16 @@ export function ContactForm({
           <div className="flex items-center gap-4">
             <legend className="text-sm font-medium text-foreground">Mikor kereshetem?</legend>
             {contactTimeOptions.includes(ALL_MARKER) ? (
-              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+              <label
+                className={`flex items-center gap-2 text-sm text-muted-foreground ${emailOnly ? "cursor-not-allowed opacity-50" : ""}`}
+              >
                 <input
                   type="checkbox"
                   name="contactTime"
                   value={ALL_MARKER}
                   checked={contactTimes.includes(ALL_MARKER)}
                   onChange={(e) => toggleContactTime(ALL_MARKER, e.target.checked)}
+                  disabled={emailOnly}
                   className="h-4 w-4 accent-[var(--color-primary)]"
                 />
                 {ALL_MARKER}
@@ -215,7 +230,7 @@ export function ContactForm({
             {timeOnly.map((option) => (
               <label
                 key={option}
-                className="flex items-start gap-2.5 text-sm text-muted-foreground"
+                className={`flex items-start gap-2.5 text-sm text-muted-foreground ${emailOnly ? "cursor-not-allowed opacity-50" : ""}`}
               >
                 <input
                   type="checkbox"
@@ -223,6 +238,7 @@ export function ContactForm({
                   value={option}
                   checked={contactTimes.includes(option)}
                   onChange={(e) => toggleContactTime(option, e.target.checked)}
+                  disabled={emailOnly}
                   className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
                 />
                 {option}
