@@ -33,7 +33,7 @@ const items = [
   {
     to: "/kalkulatorok/jovedelemado",
     label: "Jövedelemadó",
-    image: kalkulatorImg,
+    image: jovedelemadoImg,
     alt: "Jövedelemadó kalkulátor",
   },
   {
