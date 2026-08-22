@@ -210,13 +210,16 @@ export function ContactForm({
           <div className="flex items-center gap-4">
             <legend className="text-sm font-medium text-foreground">Mikor kereshetem?</legend>
             {contactTimeOptions.includes(ALL_MARKER) ? (
-              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+              <label
+                className={`flex items-center gap-2 text-sm text-muted-foreground ${emailOnly ? "cursor-not-allowed opacity-50" : ""}`}
+              >
                 <input
                   type="checkbox"
                   name="contactTime"
                   value={ALL_MARKER}
                   checked={contactTimes.includes(ALL_MARKER)}
                   onChange={(e) => toggleContactTime(ALL_MARKER, e.target.checked)}
+                  disabled={emailOnly}
                   className="h-4 w-4 accent-[var(--color-primary)]"
                 />
                 {ALL_MARKER}
