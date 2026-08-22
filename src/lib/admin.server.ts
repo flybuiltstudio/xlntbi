@@ -51,6 +51,98 @@ export async function assertAdmin(userId: string, email: string | undefined): Pr
   return true;
 }
 
+export type AdminUser = {
+  id: string;
+  email: string;
+  createdAt: string;
+  lastSignInAt: string | null;
+  roles: string[];
+};
+
+export async function listUsers(): Promise<AdminUser[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const { data: authData, error } = await supabaseAdmin.auth.admin.listUsers({
+    page: 1,
+    perPage: 200,
+  });
+  if (error) {
+    console.error("Admin user list failed:", error.message);
+    return [];
+  }
+
+  const { data: roleRows } = await supabaseAdmin
+    .from("user_roles")
+    .select("user_id, role");
+
+  const rolesByUser = new Map<string, string[]>();
+  for (const row of roleRows ?? []) {
+    const list = rolesByUser.get(row.user_id) ?? [];
+    list.push(row.role);
+    rolesByUser.set(row.user_id, list);
+  }
+
+  return (authData?.users ?? [])
+    .map((u) => ({
+      id: u.id,
+      email: u.email ?? "",
+      createdAt: u.created_at,
+      lastSignInAt: u.last_sign_in_at ?? null,
+      roles: rolesByUser.get(u.id) ?? [],
+    }))
+    .sort((a, b) => a.email.localeCompare(b.email));
+}
+
+export async function createUser(
+  email: string,
+  password: string,
+  role: "admin" | "user",
+): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const { data, error } = await supabaseAdmin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+  });
+  if (error || !data.user) {
+    console.error("User creation failed:", error?.message);
+    return {
+      ok: false,
+      error:
+        error?.message?.toLowerCase().includes("already") ?
+          "Ezzel az e-mail címmel már létezik felhasználó."
+        : "A felhasználó létrehozása nem sikerült.",
+    };
+  }
+
+  const { error: roleError } = await supabaseAdmin
+    .from("user_roles")
+    .insert({ user_id: data.user.id, role });
+  if (roleError) {
+    console.error("Role grant failed:", roleError.message);
+    return { ok: false, error: "A felhasználó létrejött, de a szerepkör beállítása nem sikerült." };
+  }
+
+  return { ok: true };
+}
+
+export async function deleteUser(
+  userId: string,
+  requesterId: string,
+): Promise<{ ok: boolean; error?: string }> {
+  if (userId === requesterId) {
+    return { ok: false, error: "Saját magadat nem törölheted." };
+  }
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin.auth.admin.deleteUser(userId);
+  if (error) {
+    console.error("User deletion failed:", error.message);
+    return { ok: false, error: "A felhasználó törlése nem sikerült." };
+  }
+  return { ok: true };
+}
+
 export async function listOrders(): Promise<AdminOrder[]> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin
