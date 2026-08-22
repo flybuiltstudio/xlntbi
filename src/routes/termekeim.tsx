@@ -25,12 +25,12 @@ export const Route = createFileRoute("/termekeim")({
 });
 
 const features = [
-  "Átalányadó kalkulátorokat",
+  "Könyvelési segédeszközöket",
   "Beszámolókészítő digitális megoldásokat, akár komplex makrókkal is",
   "Adókalkulációs segédprogramokat",
   "Iparűzési adóhoz kapcsolódó eszközöket",
-  "Google Sheets és Excel verziókat",
-  "Letölthető, azonnal használható termékeket",
+  "Utaláshoz kapcsolódó segédeszközöket",
+  "Riportkészítési segédeszközöket",
 ];
 
 function TermekeimPage() {
