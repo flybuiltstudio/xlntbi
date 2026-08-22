@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, Phone } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
+import kapcsolatBusiness from "@/assets/kapcsolat-business.jpg";
 
 const TITLE = "Kapcsolat – EXCELlent Business Intelligence";
 const DESC =
