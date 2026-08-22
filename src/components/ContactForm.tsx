@@ -14,7 +14,6 @@ type Props = {
 };
 
 const ALL_MARKER = "Bármikor";
-const EMAIL_MARKER = "E-mailben keressenek";
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/40";
