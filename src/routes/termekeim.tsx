@@ -37,11 +37,11 @@ function TermekeimPage() {
   return (
     <div>
       <section className="border-b border-border bg-secondary/60">
-        <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-4 py-6 md:py-8">
           <h1 className="whitespace-nowrap text-3xl font-bold leading-tight text-foreground md:text-4xl">
             Termékeim könyvelőirodáknak és könyvelőknek
           </h1>
-          <div className="mt-6 grid items-center gap-10 md:grid-cols-2">
+          <div className="mt-6 grid items-start gap-10 md:grid-cols-2">
             <div>
               <p className="text-base leading-relaxed text-muted-foreground">
                 Ezen az oldalon saját fejlesztésű, gyakorlatban is használható termékeimet találod.
