@@ -42,6 +42,7 @@ const ICON_RULES: Array<[RegExp, LucideIcon]> = [
   [/könyvvizsgálat|átvilágítás|due diligence|audit/i, ClipboardCheck],
   [/kontroll|minőségbiztosítás/i, ShieldCheck],
   [/kockázat/i, Search],
+  [/haladó/i, Brain],
   [/nav|bevallás|adózás|adó/i, Landmark],
   [/áfa|százalék/i, Percent],
   [/profit|elemzés|döntés/i, TrendingUp],
