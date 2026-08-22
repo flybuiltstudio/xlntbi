@@ -76,7 +76,7 @@ function Index() {
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/75 to-brand-dark/40" />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 md:py-16">
+        <div className="relative mx-auto max-w-6xl px-4 py-6 md:py-8">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-foreground/80">
             EXCELLENT BUSINESS INTELLIGENCE
           </p>
