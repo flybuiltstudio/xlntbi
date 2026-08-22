@@ -82,15 +82,21 @@ export const Route = createFileRoute("/termek/$slug")({
   head: ({ loaderData }) => {
     const product = loaderData?.product;
     if (!product) return {};
+    const pageUrl = `https://xlntbi.lovable.app/termek/${product.slug}`;
+    const imageUrl = `https://xlntbi.lovable.app${product.image}`;
     return {
       meta: [
         { title: product.metaTitle },
         { name: "description", content: product.metaDescription },
         { property: "og:title", content: product.metaTitle },
         { property: "og:description", content: product.metaDescription },
-        { property: "og:type", content: "website" },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: pageUrl },
+        { property: "og:image", content: imageUrl },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: imageUrl },
       ],
+      links: [{ rel: "canonical", href: pageUrl }],
     };
   },
   component: ProductPage,
@@ -104,13 +110,14 @@ function ProductPage() {
     "@type": "Product",
     name: product.name,
     description: product.intro[0],
+    image: `https://xlntbi.lovable.app${product.image}`,
     brand: { "@type": "Brand", name: "EXCELlent Business Intelligence" },
     offers: {
       "@type": "Offer",
       price: product.price,
       priceCurrency: product.currency,
       availability: "https://schema.org/InStock",
-      url: `https://xlntbi.hu/termek/${product.slug}`,
+      url: `https://xlntbi.lovable.app/termek/${product.slug}`,
     },
   };
 
