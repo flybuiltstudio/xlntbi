@@ -25,18 +25,6 @@ export const Route = createFileRoute("/kalkulatorok/")({
 
 const items = [
   {
-    to: "/kalkulatorok/berteszt",
-    label: "Bérteszt",
-    image: bertesztImg,
-    alt: "Bérteszt kalkulátor",
-  },
-  {
-    to: "/kalkulatorok/jovedelemado",
-    label: "Jövedelemadó",
-    image: jovedelemadoImg,
-    alt: "Jövedelemadó kalkulátor",
-  },
-  {
     to: "/kalkulatorok/szamla-datumok",
     label: "Számla dátumok",
     image: szamlaDatumokImg,
@@ -47,6 +35,18 @@ const items = [
     label: "Invoice Dates (EN)",
     image: invoiceDatesImg,
     alt: "Invoice Dates calculator",
+  },
+  {
+    to: "/kalkulatorok/berteszt",
+    label: "Bérteszt",
+    image: bertesztImg,
+    alt: "Bérteszt kalkulátor",
+  },
+  {
+    to: "/kalkulatorok/jovedelemado",
+    label: "Jövedelemadó",
+    image: jovedelemadoImg,
+    alt: "Jövedelemadó kalkulátor",
   },
   {
     to: "/kalkulatorok/atalanyado",
