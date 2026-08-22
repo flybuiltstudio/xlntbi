@@ -66,6 +66,11 @@ function KapcsolatPage() {
               formType="kapcsolat"
               serviceOptions={SERVICES}
               messageLabel="Üzenet"
+              defaultMessage={`Kedves Dávid!
+
+A fenti témában mikor tudunk beszélni?
+
+Köszönöm!`}
               submitLabel="Üzenet elküldése"
             />
           </div>
