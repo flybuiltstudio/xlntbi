@@ -637,6 +637,10 @@ export const products: Product[] = [
         priceId: "kamatlekerdezo_potlekszamito_korlatlan",
       },
     ],
+    download: {
+      fileName: "Kamatlekerdezo_2020-2030.xlsm",
+      storagePath: "kamatlekerdezo-potlekszamito/Kamatlekerdezo_2020-2030.xlsm",
+    },
   },
   {
     slug: "utnyilvantartas-kikuldetesi-rendelveny",
