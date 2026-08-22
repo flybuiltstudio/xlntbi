@@ -81,6 +81,7 @@ export function ContactForm({
           email: String(fd.get("email") ?? ""),
           phone: String(fd.get("phone") ?? ""),
           company: String(fd.get("company") ?? ""),
+          taxNumber: String(fd.get("taxNumber") ?? ""),
           message: String(fd.get("message") ?? ""),
           services: fd.getAll("services").map(String),
           contactMethod: String(fd.get("contactMethod") ?? ""),
