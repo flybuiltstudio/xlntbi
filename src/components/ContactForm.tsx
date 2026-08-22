@@ -44,8 +44,8 @@ export function ContactForm({
     setContactTimes((prev) => {
       const emailSelected = prev.includes(EMAIL_MARKER);
       if (option === ALL_MARKER && checked) {
-        // Checking "Bármikor" checks the four time options; e-mail stays as-is.
-        return Array.from(new Set([...timeOnly, ...(emailSelected ? [EMAIL_MARKER] : [])]));
+        // Checking "Bármikor" checks the four time options (and itself); e-mail stays as-is.
+        return Array.from(new Set([...timeOnly, ALL_MARKER, ...(emailSelected ? [EMAIL_MARKER] : [])]));
       }
       if (option === ALL_MARKER && !checked) {
         // Unchecking "Bármikor" clears only the four time options; e-mail stays as-is.
