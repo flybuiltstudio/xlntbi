@@ -230,7 +230,7 @@ export function ContactForm({
             {timeOnly.map((option) => (
               <label
                 key={option}
-                className="flex items-start gap-2.5 text-sm text-muted-foreground"
+                className={`flex items-start gap-2.5 text-sm text-muted-foreground ${emailOnly ? "cursor-not-allowed opacity-50" : ""}`}
               >
                 <input
                   type="checkbox"
@@ -238,6 +238,7 @@ export function ContactForm({
                   value={option}
                   checked={contactTimes.includes(option)}
                   onChange={(e) => toggleContactTime(option, e.target.checked)}
+                  disabled={emailOnly}
                   className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
                 />
                 {option}
