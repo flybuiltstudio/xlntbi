@@ -58,6 +58,16 @@ function KapcsolatPage() {
               </a>
             </li>
           </ul>
+          <figure className="mt-2 overflow-hidden rounded-2xl border border-border/60 shadow-lg">
+            <img
+              src={kapcsolatBusiness}
+              alt="Üzleti kapcsolatfelvételt szimbolizáló elegáns, modern képi ábrázolás"
+              width={1200}
+              height={912}
+              loading="lazy"
+              className="h-auto w-full object-cover"
+            />
+          </figure>
         </div>
 
         <div>
