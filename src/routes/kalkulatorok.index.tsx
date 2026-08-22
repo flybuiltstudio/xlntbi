@@ -1,10 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import bertesztImg from "@/assets/berteszt.jpg";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
+import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
+import invoiceDatesImg from "@/assets/kalkulator-invoice-dates.jpg";
+import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
 
 const TITLE = "Kalkulátorok – bérteszt és adózási forma kalkulátor | EXCELlent";
 const DESC =
-  "Ingyenes online kalkulátorok: 2026-os bérteszt (bérszámfejtés) és adózási forma összehasonlító jövedelemadó kalkulátor.";
+  "Ingyenes online kalkulátorok: 2026-os bérteszt (bérszámfejtés), adózási forma összehasonlító jövedelemadó kalkulátor, számla dátumok és átalányadó kalkulátor.";
 
 export const Route = createFileRoute("/kalkulatorok/")({
   head: () => ({
@@ -32,6 +35,24 @@ const items = [
     label: "Jövedelemadó",
     image: kalkulatorImg,
     alt: "Jövedelemadó kalkulátor",
+  },
+  {
+    to: "/kalkulatorok/szamla-datumok",
+    label: "Számla dátumok",
+    image: szamlaDatumokImg,
+    alt: "Számla dátumok kalkulátor",
+  },
+  {
+    to: "/kalkulatorok/invoice-dates",
+    label: "Invoice Dates (EN)",
+    image: invoiceDatesImg,
+    alt: "Invoice Dates calculator",
+  },
+  {
+    to: "/kalkulatorok/atalanyado",
+    label: "Átalányadó",
+    image: atalanyadoImg,
+    alt: "Átalányadó kalkulátor",
   },
 ] as const;
 
