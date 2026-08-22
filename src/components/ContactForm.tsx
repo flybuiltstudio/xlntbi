@@ -195,9 +195,24 @@ export function ContactForm({
 
       {contactTimeOptions?.length ? (
         <fieldset className="mt-6">
-          <legend className="text-sm font-medium text-foreground">Mikor kereshetem?</legend>
+          <div className="flex items-center gap-4">
+            <legend className="text-sm font-medium text-foreground">Mikor kereshetem?</legend>
+            {contactTimeOptions.includes(ALL_MARKER) ? (
+              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                <input
+                  type="checkbox"
+                  name="contactTime"
+                  value={ALL_MARKER}
+                  checked={contactTimes.includes(ALL_MARKER)}
+                  onChange={(e) => toggleContactTime(ALL_MARKER, e.target.checked)}
+                  className="h-4 w-4 accent-[var(--color-primary)]"
+                />
+                {ALL_MARKER}
+              </label>
+            ) : null}
+          </div>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            {contactTimeOptions.map((option) => (
+            {timeOnly.map((option) => (
               <label
                 key={option}
                 className="flex items-start gap-2.5 text-sm text-muted-foreground"
