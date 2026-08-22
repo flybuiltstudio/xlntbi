@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Mail, Phone } from "lucide-react";
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
-import heroImg from "@/assets/bcg-1.jpg";
+import heroImg from "@/assets/bcg-savok.jpg";
 
 const pages = [
   { to: "/", label: "Főoldal" },
-  { to: "/termekeim", label: "Termékeim" },
-  { to: "/kalkulatorok", label: "Kalkulátorok" },
   { to: "/szolgaltatasaim", label: "Szolgáltatásaim" },
+  { to: "/kalkulatorok", label: "Kalkulátorok" },
+  { to: "/termekeim", label: "Termékeim" },
   { to: "/oktatas", label: "Oktatás" },
   { to: "/rolam", label: "Rólam" },
   { to: "/kapcsolat", label: "Kapcsolat" },
@@ -37,12 +37,14 @@ export function SiteFooter() {
       <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/90 to-brand-dark/80" />
       <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
         <div>
-          <img
-            src={logoAsset.url}
-            alt="EXCELlent Business Intelligence logó"
-            className="h-24 w-auto object-contain brightness-0 invert"
-            loading="lazy"
-          />
+          <div className="inline-block rounded-xl bg-white p-3">
+            <img
+              src={logoAsset.url}
+              alt="EXCELlent Business Intelligence logó"
+              className="h-20 w-auto object-contain"
+              loading="lazy"
+            />
+          </div>
           <p className="mt-4 text-sm opacity-90">EXCELlent Business Intelligence</p>
           <p className="mt-1 text-sm opacity-90">Sarinay Dávid</p>
         </div>

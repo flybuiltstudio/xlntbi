@@ -55,13 +55,26 @@ export function SiteHeader() {
             Főoldal
           </Link>
 
-          <Link
-            to="/termekeim"
-            className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-            activeProps={{ className: "bg-accent" }}
-          >
-            Termékeim
-          </Link>
+          <div className="group relative">
+            <Link
+              to="/szolgaltatasaim"
+              className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            >
+              Szolgáltatásaim
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <div className="invisible absolute left-0 top-full w-72 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+              {services.map((s) => (
+                <Link
+                  key={s.to}
+                  to={s.to}
+                  className="block rounded-md px-3 py-2 text-sm text-popover-foreground transition-colors hover:bg-accent"
+                >
+                  {s.label}
+                </Link>
+              ))}
+            </div>
+          </div>
 
           <div className="group relative">
             <Link
@@ -84,26 +97,13 @@ export function SiteHeader() {
             </div>
           </div>
 
-          <div className="group relative">
-            <Link
-              to="/szolgaltatasaim"
-              className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-            >
-              Szolgáltatásaim
-              <ChevronDown className="h-4 w-4" aria-hidden="true" />
-            </Link>
-            <div className="invisible absolute left-0 top-full w-72 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
-              {services.map((s) => (
-                <Link
-                  key={s.to}
-                  to={s.to}
-                  className="block rounded-md px-3 py-2 text-sm text-popover-foreground transition-colors hover:bg-accent"
-                >
-                  {s.label}
-                </Link>
-              ))}
-            </div>
-          </div>
+          <Link
+            to="/termekeim"
+            className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            activeProps={{ className: "bg-accent" }}
+          >
+            Termékeim
+          </Link>
 
           {mainLinks.map((l) => (
             <Link
@@ -152,10 +152,10 @@ export function SiteHeader() {
             <ul className="space-y-1">
               {[
                 { to: "/", label: "Főoldal" },
-                { to: "/termekeim", label: "Termékeim" },
-                ...calculators,
                 { to: "/szolgaltatasaim", label: "Szolgáltatásaim" },
                 ...services,
+                ...calculators,
+                { to: "/termekeim", label: "Termékeim" },
                 ...mainLinks,
                 { to: "/konzultacio", label: "Konzultáció" },
               ].map((l) => (
