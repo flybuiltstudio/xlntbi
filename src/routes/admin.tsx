@@ -32,21 +32,26 @@ export const Route = createFileRoute("/admin")({
 });
 
 type Order = Awaited<ReturnType<typeof adminListOrders>>["orders"][number];
+type AdminUserRow = Awaited<ReturnType<typeof adminListUsers>>["users"][number];
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30";
 
 function AdminPage() {
-  const [session, setSession] = useState<{ email: string | null } | null>(null);
+  const [session, setSession] = useState<{ id: string; email: string | null } | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session ? { email: data.session.user.email ?? null } : null);
+      setSession(
+        data.session ?
+          { id: data.session.user.id, email: data.session.user.email ?? null }
+        : null,
+      );
       setReady(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-      setSession(s ? { email: s.user.email ?? null } : null);
+      setSession(s ? { id: s.user.id, email: s.user.email ?? null } : null);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -61,7 +66,10 @@ function AdminPage() {
       {!ready ? (
         <p className="mt-10 text-sm text-muted-foreground">Betöltés…</p>
       ) : session ? (
-        <OrdersPanel email={session.email} />
+        <>
+          <OrdersPanel email={session.email} />
+          <UsersPanel currentUserId={session.id} />
+        </>
       ) : (
         <LoginPanel />
       )}
