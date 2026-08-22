@@ -10,6 +10,7 @@ import modernImg from "@/assets/En-modern-konyveloirodaban.jpg";
 import closeupImg from "@/assets/close-up-busy-businesswoman.jpg";
 import termekekImg from "@/assets/termekek.jpg";
 import calcImg from "@/assets/online-kalkulator.jpg";
+import utalasiImg from "@/assets/utalasi-csomag-keszito.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -416,7 +417,7 @@ export const products: Product[] = [
     priceId: "utalasi_csomag_keszito_egygepes_licenc",
     price: 19900,
     currency: "HUF",
-    image: modernImg,
+    image: utalasiImg,
     metaTitle: "Utalási Csomag Készítő Excelhez | EXCELlent",
     metaDescription: "A havi utalásait Excelből, egyetlen gombnyomással – gépelés és elütés nélkül. Ár: 19 900 Ft-tól.",
     intro: [
