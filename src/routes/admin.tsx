@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 
 import {
   adminApproveTransfer,
+  adminCreateUser,
+  adminDeleteUser,
   adminListOrders,
+  adminListUsers,
   adminResendDownload,
 } from "@/lib/admin.functions";
 import { formatPrice } from "@/lib/products";
