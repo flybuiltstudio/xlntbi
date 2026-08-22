@@ -417,7 +417,7 @@ export const products: Product[] = [
     priceId: "utalasi_csomag_keszito_egygepes_licenc",
     price: 19900,
     currency: "HUF",
-    image: modernImg,
+    image: utalasiImg,
     metaTitle: "Utalási Csomag Készítő Excelhez | EXCELlent",
     metaDescription: "A havi utalásait Excelből, egyetlen gombnyomással – gépelés és elütés nélkül. Ár: 19 900 Ft-tól.",
     intro: [
