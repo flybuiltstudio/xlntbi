@@ -37,11 +37,11 @@ export function SiteFooter() {
       <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/90 to-brand-dark/80" />
       <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
         <div>
-          <div className="inline-block rounded-2xl bg-white p-5">
+          <div className="inline-block rounded-2xl bg-white p-4">
             <img
               src={logoAsset.url}
               alt="EXCELlent Business Intelligence logó"
-              className="h-32 w-auto object-contain"
+              className="h-44 w-auto object-contain"
               loading="lazy"
             />
           </div>
