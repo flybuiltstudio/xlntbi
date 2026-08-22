@@ -153,11 +153,16 @@ export function ContactForm({
         </label>
         {showCompany ? (
           <>
-            <label className="block text-sm font-medium text-foreground sm:col-span-2">
+            <label className="block text-sm font-medium text-foreground">
               Cégnév
-              <input name="company" maxLength={160} className={inputClass} />
+              <input
+                name="company"
+                maxLength={160}
+                placeholder="Nem kötelező"
+                className={inputClass}
+              />
             </label>
-            <label className="block text-sm font-medium text-foreground sm:col-span-2">
+            <label className="block text-sm font-medium text-foreground">
               Adószám
               <input
                 name="taxNumber"
