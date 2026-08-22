@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, Phone } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
+import kapcsolatBusiness from "@/assets/kapcsolat-business.jpg";
 
 const TITLE = "Kapcsolat – EXCELlent Business Intelligence";
 const DESC =
@@ -57,6 +58,16 @@ function KapcsolatPage() {
               </a>
             </li>
           </ul>
+          <figure className="mt-2 overflow-hidden rounded-2xl border border-border/60 shadow-lg">
+            <img
+              src={kapcsolatBusiness}
+              alt="Üzleti kapcsolatfelvételt szimbolizáló elegáns, modern képi ábrázolás"
+              width={1200}
+              height={912}
+              loading="lazy"
+              className="h-auto w-full object-cover"
+            />
+          </figure>
         </div>
 
         <div>
