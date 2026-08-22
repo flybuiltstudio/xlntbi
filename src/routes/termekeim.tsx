@@ -53,6 +53,27 @@ function TermekeimPage() {
               online kalkulátor vagy digitális segédprogram, akár komplex makrókkal is. Közös bennük,
               hogy valós szakmai problémára adnak gyors, használható megoldást.
             </p>
+
+            <div className="mt-8">
+              <h2 className="text-xl font-bold text-foreground">Mit találsz itt?</h2>
+              <ul className="mt-4 space-y-3">
+                {features.map((f) => (
+                  <li key={f} className="flex items-start gap-3 text-sm font-medium text-foreground">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mt-8">
+              <h2 className="text-xl font-bold text-foreground">Miért jók ezek?</h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Mert időt spórolnak, csökkentik a hibákat, és gyorsabban juttatnak el a végső
+                eredményhez.
+              </p>
+            </div>
+
             <Link
               to="/termekeim"
               hash="megrendelheto-termekek"
