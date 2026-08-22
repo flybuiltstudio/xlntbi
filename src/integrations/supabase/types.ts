@@ -29,6 +29,7 @@ export type Database = {
           message: string
           phone: string
           services: string[]
+          tax_number: string | null
           updated_at: string
           user_agent: string | null
         }
@@ -46,6 +47,7 @@ export type Database = {
           message: string
           phone: string
           services?: string[]
+          tax_number?: string | null
           updated_at?: string
           user_agent?: string | null
         }
@@ -63,6 +65,7 @@ export type Database = {
           message?: string
           phone?: string
           services?: string[]
+          tax_number?: string | null
           updated_at?: string
           user_agent?: string | null
         }

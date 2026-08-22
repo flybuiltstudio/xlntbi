@@ -13,6 +13,7 @@ const submissionSchema = z.object({
     .max(30)
     .regex(/^[0-9()#&+*\-=.\s]+$/, "Csak számok és telefonszám-karakterek adhatók meg."),
   company: z.string().trim().max(160).optional().default(""),
+  taxNumber: z.string().trim().max(32).optional().default(""),
   message: z.string().trim().min(5).max(4000),
   services: z.array(z.string().trim().max(80)).max(12).default([]),
   contactMethod: z.string().trim().max(80).optional().default(""),

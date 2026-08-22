@@ -81,6 +81,7 @@ export function ContactForm({
           email: String(fd.get("email") ?? ""),
           phone: String(fd.get("phone") ?? ""),
           company: String(fd.get("company") ?? ""),
+          taxNumber: String(fd.get("taxNumber") ?? ""),
           message: String(fd.get("message") ?? ""),
           services: fd.getAll("services").map(String),
           contactMethod: String(fd.get("contactMethod") ?? ""),
@@ -151,10 +152,22 @@ export function ContactForm({
           />
         </label>
         {showCompany ? (
-          <label className="block text-sm font-medium text-foreground sm:col-span-2">
-            Cégnév
-            <input name="company" maxLength={160} className={inputClass} />
-          </label>
+          <>
+            <label className="block text-sm font-medium text-foreground sm:col-span-2">
+              Cégnév
+              <input name="company" maxLength={160} className={inputClass} />
+            </label>
+            <label className="block text-sm font-medium text-foreground sm:col-span-2">
+              Adószám
+              <input
+                name="taxNumber"
+                maxLength={32}
+                inputMode="numeric"
+                placeholder="Nem kötelező"
+                className={inputClass}
+              />
+            </label>
+          </>
         ) : null}
       </div>
 
