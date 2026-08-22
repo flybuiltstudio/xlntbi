@@ -66,14 +66,6 @@ function TermekeimPage() {
                 </ul>
               </div>
 
-              <div className="mt-8">
-                <h2 className="text-xl font-bold text-foreground">Miért jók ezek?</h2>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Mert időt spórolnak, csökkentik a hibákat, és gyorsabban juttatnak el a végső
-                  eredményhez.
-                </p>
-              </div>
-
               <Link
                 to="/termekeim"
                 hash="megrendelheto-termekek"
@@ -92,6 +84,14 @@ function TermekeimPage() {
               aria-label="Digitális termékek – hangulatvideó"
               className="w-full rounded-xl border border-border object-cover shadow-sm"
             />
+          </div>
+
+          <div className="mt-8">
+            <h2 className="text-xl font-bold text-foreground">Miért jók ezek?</h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Mert időt spórolnak, csökkentik a hibákat, és gyorsabban juttatnak el a végső
+              eredményhez.
+            </p>
           </div>
         </div>
       </section>
