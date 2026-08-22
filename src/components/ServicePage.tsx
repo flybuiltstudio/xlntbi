@@ -48,7 +48,7 @@ const ICON_RULES: Array<[RegExp, LucideIcon]> = [
   [/projekt|folyamat|munkafolyamat/i, Workflow],
   [/zárás|határidő/i, CalendarClock],
   [/kifizetés|juttatás|pénzügy|díj|költség/i, CircleDollarSign],
-  [/oktatás|vizsga|felkészít|tanul|gyakorlat/i, GraduationCap],
+  [/oktatás|vizsga|felkészít|tanul|gyakorlat|hallgató|egyetem|főiskola/i, GraduationCap],
   [/kommunikáció|egyeztetés/i, MessageSquare],
   [/csapat|feladatkiosztás|könyvelőirod/i, Users],
   [/cég|vállalkoz/i, Building2],
