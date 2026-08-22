@@ -40,7 +40,6 @@ const CONTACT_TIMES = [
   "Este 17:00 után",
   "Hétvégén",
   "Bármikor",
-  "E-mailben keressenek",
 ];
 
 function KonzultacioPage() {
