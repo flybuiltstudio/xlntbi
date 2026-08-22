@@ -80,9 +80,12 @@ function Index() {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-foreground/80">
             EXCELLENT BUSINESS INTELLIGENCE
           </p>
-          <h1 className="mt-4 max-w-4xl font-serif text-[clamp(1.6rem,4.2vw,3.1rem)] font-bold leading-tight text-primary-foreground lg:whitespace-nowrap">
-            Perfect Solutions. Automated FUTURE.
+          <h1 className="mt-4 max-w-4xl text-[clamp(1.6rem,4.2vw,3.1rem)] font-bold leading-tight text-primary-foreground">
+            Könyvelés, adótanácsadás és BI automatizáció
           </h1>
+          <p className="mt-3 font-serif text-xl italic text-primary-foreground/85 md:text-2xl">
+            Perfect Solutions. Automated FUTURE.
+          </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Link
               to="/szolgaltatasaim"
