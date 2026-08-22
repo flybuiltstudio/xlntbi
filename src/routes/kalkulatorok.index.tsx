@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import bertesztImg from "@/assets/berteszt.jpg";
-import kalkulatorImg from "@/assets/online-kalkulator.jpg";
+import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
 import invoiceDatesImg from "@/assets/kalkulator-invoice-dates.jpg";
 import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
@@ -33,7 +33,7 @@ const items = [
   {
     to: "/kalkulatorok/jovedelemado",
     label: "Jövedelemadó",
-    image: kalkulatorImg,
+    image: jovedelemadoImg,
     alt: "Jövedelemadó kalkulátor",
   },
   {
