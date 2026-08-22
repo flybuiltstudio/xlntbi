@@ -10,6 +10,7 @@ import modernImg from "@/assets/En-modern-konyveloirodaban.jpg";
 import closeupImg from "@/assets/close-up-busy-businesswoman.jpg";
 import termekekImg from "@/assets/termekek.jpg";
 import calcImg from "@/assets/online-kalkulator.jpg";
+import utalasiImg from "@/assets/utalasi-csomag-keszito.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
