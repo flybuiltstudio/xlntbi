@@ -14,7 +14,6 @@ type Props = {
 };
 
 const ALL_MARKER = "Bármikor";
-const EMAIL_MARKER = "E-mailben keressenek";
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/40";
@@ -35,23 +34,20 @@ export function ContactForm({
   const [errorMessage, setErrorMessage] = useState("");
   const [contactTimes, setContactTimes] = useState<string[]>([]);
 
-  // The four time-only options: everything except "Bármikor" and the e-mail option.
-  const timeOnly = (contactTimeOptions ?? []).filter(
-    (o) => o !== ALL_MARKER && o !== EMAIL_MARKER,
-  );
+  // Time-only options: everything except "Bármikor".
+  const timeOnly = (contactTimeOptions ?? []).filter((o) => o !== ALL_MARKER);
 
   function toggleContactTime(option: string, checked: boolean) {
     setContactTimes((prev) => {
-      const emailSelected = prev.includes(EMAIL_MARKER);
       if (option === ALL_MARKER && checked) {
-        // Checking "Bármikor" checks the four time options (and itself); e-mail stays as-is.
-        return Array.from(new Set([...timeOnly, ALL_MARKER, ...(emailSelected ? [EMAIL_MARKER] : [])]));
+        // Checking "Bármikor" checks all time options (and itself).
+        return Array.from(new Set([...timeOnly, ALL_MARKER]));
       }
       if (option === ALL_MARKER && !checked) {
-        // Unchecking "Bármikor" clears only the four time options; e-mail stays as-is.
-        return emailSelected ? [EMAIL_MARKER] : [];
+        // Unchecking "Bármikor" clears all time options.
+        return [];
       }
-      // Toggling a time option: if all four are selected, mark "Bármikor"; otherwise unmark it.
+      // Toggling a time option: if all are selected, mark "Bármikor"; otherwise unmark it.
       const next = checked
         ? Array.from(new Set([...prev, option]))
         : prev.filter((o) => o !== option);
@@ -199,9 +195,24 @@ export function ContactForm({
 
       {contactTimeOptions?.length ? (
         <fieldset className="mt-6">
-          <legend className="text-sm font-medium text-foreground">Mikor kereshetem?</legend>
+          <div className="flex items-center gap-4">
+            <legend className="text-sm font-medium text-foreground">Mikor kereshetem?</legend>
+            {contactTimeOptions.includes(ALL_MARKER) ? (
+              <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                <input
+                  type="checkbox"
+                  name="contactTime"
+                  value={ALL_MARKER}
+                  checked={contactTimes.includes(ALL_MARKER)}
+                  onChange={(e) => toggleContactTime(ALL_MARKER, e.target.checked)}
+                  className="h-4 w-4 accent-[var(--color-primary)]"
+                />
+                {ALL_MARKER}
+              </label>
+            ) : null}
+          </div>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            {contactTimeOptions.map((option) => (
+            {timeOnly.map((option) => (
               <label
                 key={option}
                 className="flex items-start gap-2.5 text-sm text-muted-foreground"
