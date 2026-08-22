@@ -55,7 +55,7 @@ const ICON_RULES: Array<[RegExp, LucideIcon]> = [
   [/magánszemély|egyéni/i, User],
   [/szakember|ügyfél/i, Users],
   [/digitál|online|papírmentes|szoftver/i, Laptop],
-  [/könyvelés|ügyvitel|ügyintézés/i, ScrollText],
+  [/könyvelés|ügyvitel|ügyintézés|könyvelő|mérlegképes/i, ScrollText],
   [/modell|logika/i, ChartPie],
   [/összekapcsol|integrá/i, Link2],
   [/robot|bot/i, Bot],
