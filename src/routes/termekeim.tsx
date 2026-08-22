@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
-import termekekImg from "@/assets/termekek.jpg";
 import { priceFrom, formatPrice, products } from "@/lib/products";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
 
@@ -147,52 +146,6 @@ function TermekeimPage() {
               </div>
             </article>
           ))}
-        </div>
-      </section>
-
-
-
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="grid items-center gap-10 md:grid-cols-2">
-          <div>
-            <h2 className="text-2xl font-bold text-foreground">Mit találsz itt?</h2>
-            <ul className="mt-8 space-y-3">
-              {features.map((f) => (
-                <li key={f} className="flex items-start gap-3 text-sm font-medium text-foreground">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <Link
-              to="/kapcsolat"
-              className="mt-8 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
-            >
-              Termékek megtekintése
-            </Link>
-          </div>
-          <img
-            src={termekekImg}
-            alt="Digitális termékek könyvelőknek"
-            loading="lazy"
-            className="w-full rounded-xl border border-border object-cover shadow-sm"
-          />
-        </div>
-      </section>
-
-      <section className="border-t border-border bg-secondary/60">
-        <div className="mx-auto max-w-6xl px-4 py-16">
-          <h2 className="text-2xl font-bold text-foreground">Miért jók ezek?</h2>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-            Mert időt spórolnak, csökkentik a hibákat, és gyorsabban juttatnak el a végső
-            eredményhez.
-          </p>
-          <Link
-            to="/kapcsolat"
-            className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-          >
-            Kapcsolat
-          </Link>
         </div>
       </section>
     </div>
