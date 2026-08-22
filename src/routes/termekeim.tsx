@@ -74,24 +74,25 @@ function TermekeimPage() {
                 Termékek megtekintése
               </Link>
             </div>
-            <video
-              src={heroVideo.url}
-              poster={kalkulatorImg}
-              autoPlay
-              muted
-              loop
-              playsInline
-              aria-label="Digitális termékek – hangulatvideó"
-              className="w-full rounded-xl border border-border object-cover shadow-sm"
-            />
-          </div>
-
-          <div className="mt-8">
-            <h2 className="text-xl font-bold text-foreground">Miért jók ezek?</h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Mert időt spórolnak, csökkentik a hibákat, és gyorsabban juttatnak el a végső
-              eredményhez.
-            </p>
+            <div>
+              <video
+                src={heroVideo.url}
+                poster={kalkulatorImg}
+                autoPlay
+                muted
+                loop
+                playsInline
+                aria-label="Digitális termékek – hangulatvideó"
+                className="w-full rounded-xl border border-border object-cover shadow-sm"
+              />
+              <div className="mt-8">
+                <h2 className="text-xl font-bold text-foreground">Miért jók ezek?</h2>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  Mert időt spórolnak, csökkentik a hibákat, és gyorsabban juttatnak el a végső
+                  eredményhez.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
