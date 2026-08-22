@@ -188,6 +188,14 @@ export function ContactForm({
                   type="radio"
                   name="contactMethod"
                   value={option}
+                  checked={contactMethod === option}
+                  onChange={(e) => {
+                    setContactMethod(e.target.value);
+                    // Selecting e-mail contact clears any chosen time window.
+                    if (e.target.value === "E-mailben") {
+                      setContactTimes([]);
+                    }
+                  }}
                   className="h-4 w-4 accent-[var(--color-primary)]"
                 />
                 {option}
