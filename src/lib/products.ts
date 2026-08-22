@@ -594,7 +594,7 @@ export const products: Product[] = [
     slug: "kamatlekerdezo-potlekszamito",
     name: "XLNT Kamatlekérdező és Pótlékszámító",
     tagline: "Késedelmi pótlék, önellenőrzési pótlék és kamatszámítás naponkénti kamattáblával",
-    status: "coming_soon",
+    status: "available",
     priceId: "kamatlekerdezo_potlekszamito_egy_adoszam",
     price: 7900,
     currency: "HUF",
@@ -637,6 +637,10 @@ export const products: Product[] = [
         priceId: "kamatlekerdezo_potlekszamito_korlatlan",
       },
     ],
+    download: {
+      fileName: "Kamatlekerdezo_2020-2030.xlsm",
+      storagePath: "kamatlekerdezo-potlekszamito/Kamatlekerdezo_2020-2030.xlsm",
+    },
   },
   {
     slug: "utnyilvantartas-kikuldetesi-rendelveny",
