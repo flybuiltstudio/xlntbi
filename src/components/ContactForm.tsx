@@ -32,7 +32,11 @@ export function ContactForm({
   const submit = useServerFn(submitContactForm);
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [contactMethod, setContactMethod] = useState("");
   const [contactTimes, setContactTimes] = useState<string[]>([]);
+
+  // E-mail contact doesn't need a time window — disable the whole "Mikor kereshetem?" block.
+  const emailOnly = contactMethod === "E-mailben";
 
   // Time-only options: everything except "Bármikor".
   const timeOnly = (contactTimeOptions ?? []).filter((o) => o !== ALL_MARKER);
