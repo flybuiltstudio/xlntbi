@@ -52,7 +52,6 @@ const ICON_RULES: Array<[RegExp, LucideIcon]> = [
   [/kommunikáció|egyeztetés/i, MessageSquare],
   [/csapat|feladatkiosztás|könyvelőirod/i, Users],
   [/cég|vállalkoz/i, Building2],
-  
   [/magánszemély|egyéni|pályakezdő|kezdő/i, User],
   [/haladó/i, Brain],
   [/szakember|ügyfél/i, Users],
