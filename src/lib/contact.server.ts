@@ -10,6 +10,7 @@ type Submission = {
   email: string;
   phone: string;
   company: string;
+  taxNumber: string;
   message: string;
   services: string[];
   contactMethod: string;
@@ -63,6 +64,7 @@ export async function handleSubmission(data: Submission) {
     email: data.email,
     phone: data.phone,
     company: data.company || null,
+    tax_number: data.taxNumber || null,
     message: data.message,
     services: data.services,
     contact_method: data.contactMethod || null,
@@ -86,6 +88,7 @@ export async function handleSubmission(data: Submission) {
     ["Telefon", data.phone],
   ];
   if (data.company) rows.push(["Cégnév", data.company]);
+  if (data.taxNumber) rows.push(["Adószám", data.taxNumber]);
   if (data.services.length) rows.push(["Szolgáltatás", data.services.join(", ")]);
   if (data.contactMethod) rows.push(["Hogyan kereshetem", data.contactMethod]);
   if (data.contactTime.length) rows.push(["Mikor kereshetem", data.contactTime.join(", ")]);
