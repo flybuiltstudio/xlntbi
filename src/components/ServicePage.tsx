@@ -109,19 +109,22 @@ export function ServicePage({
   return (
     <div>
       <PageHero>
+        <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
+          {title}
+        </h1>
+      </PageHero>
+
+      <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
         <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
-            <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
-              {title}
-            </h1>
             {intro.map((p) => (
-              <p key={p} className="mt-5 text-base leading-relaxed text-primary-foreground/80">
+              <p key={p} className="mt-5 text-base leading-relaxed text-muted-foreground first:mt-0">
                 {p}
               </p>
             ))}
             <Link
               to={ctaTo}
-              className="mt-8 inline-flex items-center rounded-md bg-primary-foreground px-6 py-3 text-sm font-semibold text-brand-dark transition-opacity hover:opacity-90"
+              className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
             >
               {ctaLabel}
             </Link>
@@ -130,12 +133,12 @@ export function ServicePage({
             src={image}
             alt={imageAlt}
             loading="lazy"
-            className="w-full rounded-xl border border-primary-foreground/15 object-cover shadow-sm"
+            className="w-full rounded-xl border border-border object-cover shadow-sm"
           />
         </div>
-      </PageHero>
+      </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section className="mx-auto max-w-6xl px-4 pb-16">
         <h2 className="text-2xl font-bold text-foreground">{listTitle}</h2>
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {listItems.map((item) => {

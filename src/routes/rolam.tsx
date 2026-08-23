@@ -39,22 +39,25 @@ function RolamPage() {
   return (
     <div>
       <PageHero>
+        <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
+          Sarinay Dávid vagyok,
+        </h1>
+      </PageHero>
+
+      <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
         <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
-            <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
-              Sarinay Dávid vagyok,
-            </h1>
-            <p className="mt-5 text-base leading-relaxed text-primary-foreground/80">
+            <p className="text-base leading-relaxed text-muted-foreground">
               pénzügyi, számviteli, adó- és kontroller szakember. A munkám középpontjában a szakmai
               kiválóság, az automatizálás és a valóban használható megoldások állnak.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-primary-foreground/80">
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
               Több mint 20 év szakmai tapasztalattal dolgozom, ebből több mint 10 év vezetői és
               könyvelőiroda-vezetői múlttal. Pályafutásom során dolgoztam könyvvizsgálatban,
               operatív könyvelésben, nagyvállalati pénzügyben, könyvelőirodai vezetésben, FinTech és
               automatizációs tanácsadásban, valamint kontrolling és ERP területen is.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-primary-foreground/80">
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
               Az egyik legerősebb szakmai sajátosságom, hogy a klasszikus pénzügyi és adózási tudást
               modern technológiákkal kapcsolom össze. Kiemelt területeim az Excel, a VBA, a komplex
               makrók, a Power BI, az adatmodellezés, a riportautomatizálás, az AI-alapú
@@ -65,10 +68,10 @@ function RolamPage() {
             src={portraitImg}
             alt="Sarinay Dávid modern könyvelőirodában"
             loading="lazy"
-            className="w-full rounded-xl border border-primary-foreground/15 object-cover shadow-sm"
+            className="w-full rounded-xl border border-border object-cover shadow-sm"
           />
         </div>
-      </PageHero>
+      </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-2xl font-bold text-foreground">Mi a célom?</h2>
