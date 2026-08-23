@@ -23,7 +23,7 @@ const items = [
   { to: "/konyveles", label: "Könyvelési szolgáltatások" },
   { to: "/adotanacsadas", label: "Adózási és ügyviteli tanácsadás" },
   { to: "/fintech-es-bi", label: "Fintech és BI tanácsadás" },
-  { to: "/kontrolling", label: "Kontrollingot modern riport- és automatizációs eszközökkel" },
+  { to: "/kontrolling", label: "Kontrolling modern riport- és automatizációs eszközökkel" },
   { to: "/cegaudit", label: "Cégaudit" },
   { to: "/konyvvizsgalat", label: "Könyvvizsgálat" },
   { to: "/konyveloiroda-audit", label: "Könyvelőiroda audit" },
