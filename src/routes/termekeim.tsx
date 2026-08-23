@@ -4,6 +4,7 @@ import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import { aamText } from "@/lib/aam";
 import { priceFrom, formatPrice, products } from "@/lib/products";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
+import { PageHero } from "@/components/PageHero";
 
 
 
