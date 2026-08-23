@@ -108,20 +108,20 @@ export function ServicePage({
 }: ServicePageProps) {
   return (
     <div>
-      <section className="border-b border-border bg-secondary/60">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-20">
+      <PageHero>
+        <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
-            <h1 className="text-3xl font-bold leading-tight text-foreground md:text-4xl">
+            <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
               {title}
             </h1>
             {intro.map((p) => (
-              <p key={p} className="mt-5 text-base leading-relaxed text-muted-foreground">
+              <p key={p} className="mt-5 text-base leading-relaxed text-primary-foreground/80">
                 {p}
               </p>
             ))}
             <Link
               to={ctaTo}
-              className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              className="mt-8 inline-flex items-center rounded-md bg-primary-foreground px-6 py-3 text-sm font-semibold text-brand-dark transition-opacity hover:opacity-90"
             >
               {ctaLabel}
             </Link>
@@ -130,10 +130,10 @@ export function ServicePage({
             src={image}
             alt={imageAlt}
             loading="lazy"
-            className="w-full rounded-xl border border-border object-cover shadow-sm"
+            className="w-full rounded-xl border border-primary-foreground/15 object-cover shadow-sm"
           />
         </div>
-      </section>
+      </PageHero>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-2xl font-bold text-foreground">{listTitle}</h2>
