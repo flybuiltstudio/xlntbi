@@ -69,7 +69,7 @@ const aiPoints = [
 function Index() {
   return (
     <div>
-      <section className="relative isolate overflow-hidden">
+      <section className="relative isolate overflow-hidden bg-brand-dark">
         <img
           src={heroImg}
           alt="Modern pénzügyi és könyvelési munkakörnyezet"
@@ -81,7 +81,7 @@ function Index() {
             EXCELLENT BUSINESS INTELLIGENCE
           </p>
           <h1 className="mt-4 text-[clamp(1.5rem,3.6vw,2.6rem)] font-bold leading-tight text-primary-foreground">
-            <span className="whitespace-nowrap">Könyvelés, adótanácsadás & BI automatizáció</span>
+            <span className="sm:whitespace-nowrap">Könyvelés, adótanácsadás & BI automatizáció</span>
           </h1>
           <p className="mt-3 font-serif text-xl italic text-primary-foreground/85 md:text-2xl">
             Perfect Solutions. Automated FUTURE.
