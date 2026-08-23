@@ -44,6 +44,8 @@ export type Product = {
   intro: string[];
   features: string[];
   why?: string;
+  /** A konszolidálási lépéssor; ha meg van adva, a termékoldalon saját szekcióban jelenik meg. */
+  steps?: { title: string; text: string }[];
   tiers: ProductTier[];
   download?: ProductDownload;
 };
