@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Check } from "lucide-react";
+import { AAM_PRICE_NOTE, aamText } from "@/lib/aam";
 import { priceFrom, formatPrice, getProduct, products } from "@/lib/products";
 import icKulfoldi from "@/assets/icons/kulfoldi.png.asset.json";
 import icIroda from "@/assets/icons/iroda.png.asset.json";
@@ -68,7 +69,7 @@ const faq = [
   },
   {
     q: "Számlát kapok róla?",
-    a: "Igen, a megadott számlázási adatok alapján szabályos számlát állítok ki. A díj bruttó ár.",
+    a: `Igen, a megadott számlázási adatok alapján szabályos számlát állítok ki. ${AAM_PRICE_NOTE}`,
   },
 ];
 
@@ -152,7 +153,7 @@ function ProductPage() {
           <div>
             {product.intro.map((paragraph) => (
               <p key={paragraph} className="mb-4 text-base leading-relaxed text-muted-foreground">
-                {paragraph}
+                {aamText(paragraph)}
               </p>
             ))}
 
@@ -164,7 +165,7 @@ function ProductPage() {
                   className="flex items-start gap-3 rounded-md border-l-4 border-primary bg-secondary/60 p-4 text-sm leading-relaxed text-foreground"
                 >
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-                  {feature}
+                  {aamText(feature)}
                 </li>
               ))}
             </ul>
@@ -173,7 +174,7 @@ function ProductPage() {
               <div className="mt-10 rounded-xl bg-brand-dark p-6 md:p-8">
                 <h2 className="text-xl font-semibold text-primary-foreground">Miért jó</h2>
                 <p className="mt-3 text-sm leading-relaxed text-primary-foreground/90">
-                  {product.why}
+                  {aamText(product.why)}
                 </p>
               </div>
             ) : null}
@@ -190,7 +191,7 @@ function ProductPage() {
               {product.tiers.length > 1 ? `${formatPrice(priceFrom(product))}-tól` : formatPrice(product.price)}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Az ár bruttó ár (alanyi adómentes). Digitális termék, letöltéssel teljesítjük.
+              {AAM_PRICE_NOTE} Digitális termék, letöltéssel teljesítjük.
             </p>
 
             {product.tiers.length > 1 ? (
@@ -201,11 +202,11 @@ function ProductPage() {
                 <ul className="mt-3 space-y-3 text-sm">
                   {product.tiers.map((tier) => (
                     <li key={tier.id} className="border-b border-border pb-3 last:border-0 last:pb-0">
-                      <p className="font-semibold text-foreground">{tier.label}</p>
+                      <p className="font-semibold text-foreground">{aamText(tier.label)}</p>
                       <p className="text-xs text-muted-foreground">{formatPrice(tier.price)}</p>
                       {tier.note ? (
                         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                          {tier.note}
+                          {aamText(tier.note)}
                         </p>
                       ) : null}
                       {product.status === "available" ? (
@@ -278,7 +279,9 @@ function ProductPage() {
               {product.steps.map((step) => (
                 <li key={step.title} className="rounded-xl border border-border bg-card p-5">
                   <h3 className="text-base font-semibold text-card-foreground">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.text}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {aamText(step.text)}
+                  </p>
                 </li>
               ))}
             </ol>
