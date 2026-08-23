@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { PageHero } from "@/components/PageHero";
 import bertesztImg from "@/assets/berteszt.jpg";
 import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";

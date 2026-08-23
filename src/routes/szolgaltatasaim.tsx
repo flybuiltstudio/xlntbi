@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { PageHero } from "@/components/PageHero";
 
 const TITLE = "Szolgáltatásaim – könyvelés, adózás, audit, BI | EXCELlent";
 const DESC =

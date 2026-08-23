@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "@/components/ContactForm";
+import { PageHero } from "@/components/PageHero";
 
 const TITLE = "Konzultáció kérése – EXCELlent Business Intelligence";
 const DESC =
