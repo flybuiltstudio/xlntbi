@@ -38,14 +38,15 @@ function KapcsolatPage() {
     <>
       <PageHero>
         <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Kapcsolat</h1>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/80">
-          Írj bátran, ha kérdésed van a szolgáltatásaimmal kapcsolatban.
-          <br />
-          Töltsd ki az űrlapot, és rövid időn belül válaszolok.
-        </p>
       </PageHero>
 
       <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+
+      <p className="max-w-2xl text-base leading-relaxed text-muted-foreground">
+        Írj bátran, ha kérdésed van a szolgáltatásaimmal kapcsolatban.
+        <br />
+        Töltsd ki az űrlapot, és rövid időn belül válaszolok.
+      </p>
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.4fr]">
         <div className="space-y-6">

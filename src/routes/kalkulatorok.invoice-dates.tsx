@@ -26,14 +26,14 @@ function InvoiceDatesPage() {
     <>
       <PageHero>
         <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Invoice Dates Calculator</h1>
-        <p className="mt-4 max-w-3xl text-base text-primary-foreground/80">
+      </PageHero>
+      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+        <p className="max-w-3xl text-base text-muted-foreground">
           Invoice dates under the Hungarian VAT Act (§58, §60, §80, §163): date of supply, payment
           deadline and FX date, with live NBH (MNB) exchange rates for EUR, GBP and USD. For
           information only.
         </p>
-      </PageHero>
-      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
-        <div className="mt-2">
+        <div className="mt-8">
           <EmbeddedCalculator html={html} script={script} />
         </div>
       </div>
