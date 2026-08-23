@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 
+import { AAM_MODE } from "@/lib/aam";
 import {
   type StripeEnv,
   createStripeClient,
@@ -49,7 +50,9 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
         locale: "hu",
         // Sell in HUF only — no currency-conversion offer at checkout.
         adaptive_pricing: { enabled: false },
-        automatic_tax: { enabled: true },
+        // AAM (alanyi adómentes) seller: never add tax on top of the listed
+        // price — the amount shown on the site is the final amount.
+        automatic_tax: { enabled: !AAM_MODE },
         payment_intent_data: { description: product.name },
         metadata: {
           orderNumber: data.orderNumber,
