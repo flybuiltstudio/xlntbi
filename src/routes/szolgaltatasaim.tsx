@@ -55,7 +55,8 @@ function SzolgaltatasaimPage() {
             </span>
           </Link>
         ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

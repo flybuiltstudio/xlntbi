@@ -83,7 +83,8 @@ function KalkulatorokPage() {
             <h2 className="p-6 text-xl font-semibold text-card-foreground">{item.label}</h2>
           </Link>
         ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

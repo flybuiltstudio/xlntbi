@@ -72,7 +72,8 @@ A fenti témában szeretnék konzultálni Önnel!
 Köszönöm!`}
           submitLabel="Konzultáció kérése"
         />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
