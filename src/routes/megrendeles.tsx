@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
+import { AAM_PRICE_NOTE_SHORT, aamText } from "@/lib/aam";
 import { isCardPaymentAvailable } from "@/lib/stripe";
 import { formatPrice, getProduct, getTier, products } from "@/lib/products";
 import { submitOrder } from "@/lib/order.functions";
@@ -213,9 +214,9 @@ function OrderPage() {
                   className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]"
                 />
                 <span>
-                  {t.label} – {formatPrice(t.price)}
+                  {aamText(t.label)} – {formatPrice(t.price)}
                   {t.note ? (
-                    <span className="block text-xs text-muted-foreground">{t.note}</span>
+                    <span className="block text-xs text-muted-foreground">{aamText(t.note)}</span>
                   ) : null}
                 </span>
               </label>
@@ -239,6 +240,7 @@ function OrderPage() {
             <p className="text-sm text-muted-foreground">
               Fizetendő:{" "}
               <strong className="text-lg text-foreground">{formatPrice(total)}</strong>
+              <span className="block text-xs text-muted-foreground">{AAM_PRICE_NOTE_SHORT}</span>
             </p>
           </div>
         </div>

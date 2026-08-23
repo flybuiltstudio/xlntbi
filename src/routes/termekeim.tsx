@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
+import { aamText } from "@/lib/aam";
 import { priceFrom, formatPrice, products } from "@/lib/products";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
 
@@ -115,7 +116,7 @@ function TermekeimPage() {
               <div className="flex flex-1 flex-col p-6">
                 <h3 className="text-lg font-semibold text-foreground">{product.name}</h3>
                 <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-                  {product.intro[0]}
+                  {aamText(product.intro[0] ?? "")}
                 </p>
                 <p className="mt-4 text-xl font-bold text-foreground">
                   {product.tiers.length > 1
