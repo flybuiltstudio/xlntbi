@@ -126,6 +126,7 @@ function StatsPanel() {
       const date = new Date(row.createdAt);
       if (date.getFullYear() !== activeYear) continue;
       const bucket = months[date.getMonth()];
+      if (!bucket) continue;
       bucket.orders += 1;
       bucket.qty += row.quantity;
       bucket.revenue += row.totalPrice;

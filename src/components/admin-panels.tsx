@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import {
   adminApproveTransfer,
@@ -14,6 +14,14 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type Order = Awaited<ReturnType<typeof adminListOrders>>["orders"][number];
 export type AdminUserRow = Awaited<ReturnType<typeof adminListUsers>>["users"][number];
+
+export type AdminSession = { email: string | null; userId: string };
+
+export const AdminSessionContext = createContext<AdminSession>({ email: null, userId: "" });
+
+export function useAdminSession(): AdminSession {
+  return useContext(AdminSessionContext);
+}
 
 export const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3.5 py-2.5 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30";

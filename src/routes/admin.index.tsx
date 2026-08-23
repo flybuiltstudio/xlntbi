@@ -1,7 +1,7 @@
-import { createFileRoute, useOutletContext } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import { PageHero } from "@/components/PageHero";
-import { OrdersPanel, UsersPanel } from "@/components/admin-panels";
+import { OrdersPanel, UsersPanel, useAdminSession } from "@/components/admin-panels";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
@@ -21,10 +21,8 @@ export const Route = createFileRoute("/admin/")({
   component: AdminIndexPage,
 });
 
-type AdminContext = { email: string | null; userId: string };
-
 function AdminIndexPage() {
-  const { email, userId } = useOutletContext<AdminContext>();
+  const { email, userId } = useAdminSession();
   return (
     <>
       <PageHero>

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/PageHero";
-import { LoginPanel } from "@/components/admin-panels";
+import { AdminSessionContext, LoginPanel } from "@/components/admin-panels";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -96,7 +96,9 @@ function AdminLayout() {
           </Link>
         </div>
       </nav>
-      <Outlet context={{ email: session.email, userId: session.id }} />
+      <AdminSessionContext.Provider value={{ email: session.email, userId: session.id }}>
+        <Outlet />
+      </AdminSessionContext.Provider>
     </>
   );
 }
