@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { EmbeddedCalculator } from "@/components/EmbeddedCalculator";
+import { PageHero } from "@/components/PageHero";
 import { html, script } from "@/lib/calculators/atalanyado";
 
 const TITLE = "Átalányadó kalkulátor 2026 – egyéni vállalkozók | EXCELlent";
@@ -22,15 +23,19 @@ export const Route = createFileRoute("/kalkulatorok/atalanyado")({
 
 function AtalanyadoPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14">
-      <h1 className="text-3xl font-bold text-foreground md:text-4xl">Átalányadó</h1>
-      <p className="mt-4 max-w-3xl text-base text-muted-foreground">
-        Átalányadózó egyéni vállalkozók kalkulátora a 2026-os szabályok szerint: költséghányad
-        szerinti adóköteles jövedelem, SZJA, TB, szocho és HIPA. A kalkuláció tájékoztató jellegű.
-      </p>
-      <div className="mt-10">
-        <EmbeddedCalculator html={html} script={script} />
+    <>
+      <PageHero>
+        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Átalányadó</h1>
+        <p className="mt-4 max-w-3xl text-base text-primary-foreground/80">
+          Átalányadózó egyéni vállalkozók kalkulátora a 2026-os szabályok szerint: költséghányad
+          szerinti adóköteles jövedelem, SZJA, TB, szocho és HIPA. A kalkuláció tájékoztató jellegű.
+        </p>
+      </PageHero>
+      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+        <div className="mt-2">
+          <EmbeddedCalculator html={html} script={script} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
