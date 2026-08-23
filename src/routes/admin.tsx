@@ -12,6 +12,7 @@ import {
 } from "@/lib/admin.functions";
 import { formatPrice } from "@/lib/products";
 import { supabase } from "@/integrations/supabase/client";
+import { PageHero } from "@/components/PageHero";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
