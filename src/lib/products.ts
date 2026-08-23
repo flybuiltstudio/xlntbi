@@ -11,6 +11,7 @@ import closeupImg from "@/assets/close-up-busy-businesswoman.jpg";
 import termekekImg from "@/assets/termekek.jpg";
 import calcImg from "@/assets/online-kalkulator.jpg";
 import utalasiImg from "@/assets/utalasi-csomag-keszito.jpg";
+import ifrsImg from "@/assets/ifrs-konszolidalo.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -779,8 +780,7 @@ export const products: Product[] = [
     priceId: "ifrs_konszolidalo_egy_cegcsoport",
     price: 149900,
     currency: "HUF",
-    image: modernImg,
-    metaTitle: "XLNT IFRS Konszolidáló | EXCELlent",
+    image: ifrsImg,
     metaDescription: "Konszolidált IFRS pénzügyi kimutatások Excelben – IFRS 18 részösszegekkel, goodwill- és devizaszámítással, magyarul és angolul. Ár: 149 900 Ft-tól.",
     intro: [
       "Összevont (konszolidált) IFRS pénzügyi kimutatások Excelben – az IFRS 18 kötelező részösszegeivel, magyarul és angolul. IFRS 10 · IFRS 3 · IAS 28 · IAS 21 · IAS 36 · IAS 7 · IFRS 18.",
@@ -797,7 +797,7 @@ export const products: Product[] = [
       "IAS 1 – Saját tőke változása: tőkeelemenkénti levezetés nyitótól záróig, a nem ellenőrző részesedésekkel – IFRS szerint kötelező kimutatás.",
       "Ellenőrzés – Nyolc egyezőségi próba: mérlegfőösszeg, napló T=K, tőkekimutatás, cash flow, eredménymegbontás, goodwill-egyeztetés – egy helyen, a kezdőlapon is.",
     ],
-    why: "Egyszeri megvásárlás, időbeli korlát nélkül; a jogszabálykövető (standardkövető) frissítés külön, opcionálisan 49 900 Ft / év. A program a bevitt adatokból számol. A séma az IAS 1.54 minimumára és az IFRS 18 kategóriáira épül – mivel az IFRS-ben nincs kötelező formátum, ez szabadon szerkeszthető keret. Makrós Excel-munkafüzet: Windows + asztali Excel 2010 vagy újabb szükséges, engedélyezett makrókkal.",
+    why: "Egyszeri megvásárlás, időbeli korlát nélkül. A program a bevitt adatokból számol. A séma az IAS 1.54 minimumára és az IFRS 18 kategóriáira épül – mivel az IFRS-ben nincs kötelező formátum, ez szabadon szerkeszthető keret. Makrós Excel-munkafüzet: Windows + asztali Excel 2010 vagy újabb szükséges, engedélyezett makrókkal.",
     steps: [
       { title: "1. Alapbeállítások", text: "Anyavállalat adatai, beszámolási időszak, pénznem, adókulcs, nyelv, bemutatási mód." },
       { title: "2. Konszolidációs kör (IFRS 10)", text: "Társaságok, ellenőrzés, tulajdoni hányad, NCI értékelése (IFRS 3.19), pénznem és árfolyamok." },
