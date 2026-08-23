@@ -35,6 +35,7 @@ const SERVICES = [
 
 function KapcsolatPage() {
   return (
+    <>
       <PageHero>
         <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Kapcsolat</h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/80">
