@@ -178,6 +178,41 @@ export async function listOrders(): Promise<AdminOrder[]> {
   }));
 }
 
+export type OrderStatRow = {
+  productName: string;
+  tierLabel: string | null;
+  quantity: number;
+  totalPrice: number;
+  paymentStatus: string;
+  createdAt: string;
+};
+
+/** Minimal order rows for the admin statistics page (aggregated client-side). */
+export async function orderStats(): Promise<{ rows: OrderStatRow[] }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin
+    .from("orders")
+    .select("product_name, tier_label, quantity, total_price, payment_status, created_at")
+    .order("created_at", { ascending: true })
+    .limit(5000);
+
+  if (error) {
+    console.error("Admin order stats failed:", error.message);
+    return { rows: [] };
+  }
+
+  return {
+    rows: (data ?? []).map((o: any) => ({
+      productName: o.product_name,
+      tierLabel: o.tier_label ?? null,
+      quantity: o.quantity,
+      totalPrice: o.total_price,
+      paymentStatus: o.payment_status,
+      createdAt: o.created_at,
+    })),
+  };
+}
+
 /** Marks a bank-transfer order as paid and emails the download link. */
 export async function approveTransfer(
   orderId: string,
