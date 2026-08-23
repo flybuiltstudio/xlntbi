@@ -270,6 +270,22 @@ function ProductPage() {
         </div>
       </section>
 
+      {product.steps && product.steps.length > 0 ? (
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+            <h2 className="text-2xl font-bold text-foreground md:text-3xl">A konszolidálás lépései</h2>
+            <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {product.steps.map((step) => (
+                <li key={step.title} className="rounded-xl border border-border bg-card p-5">
+                  <h3 className="text-base font-semibold text-card-foreground">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.text}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      ) : null}
+
       <section className="border-t border-border bg-secondary/60">
         <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
           <h2 className="text-2xl font-bold text-foreground md:text-3xl">Hogyan működik?</h2>
