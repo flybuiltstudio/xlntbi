@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { PageHero } from "@/components/PageHero";
 import {
   BarChart3,
   Bot,
