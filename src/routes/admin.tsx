@@ -94,6 +94,13 @@ function AdminLayout() {
           >
             Statisztika
           </Link>
+          <Link
+            to="/admin/fizetes-teszt"
+            className={tabBase}
+            activeProps={{ className: `${tabBase} ${tabActive}` }}
+          >
+            Fizetés teszt
+          </Link>
         </div>
       </nav>
       <AdminSessionContext.Provider value={{ email: session.email, userId: session.id }}>
