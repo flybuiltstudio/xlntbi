@@ -111,7 +111,7 @@ function Index() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-8 md:py-10">
-        <div className="grid items-center gap-10 md:grid-cols-2">
+        <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             <h2 className="text-2xl font-bold leading-snug text-foreground md:text-3xl">
               Rend a folyamataidban,
