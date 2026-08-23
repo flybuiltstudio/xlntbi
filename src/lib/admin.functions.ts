@@ -18,6 +18,14 @@ export const adminListOrders = createServerFn({ method: "GET" })
     return { orders: await listOrders() };
   });
 
+export const adminOrderStats = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { orderStats } = await import("./admin.server");
+    return orderStats();
+  });
+
 export const adminApproveTransfer = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>

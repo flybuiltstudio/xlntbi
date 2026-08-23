@@ -34,6 +34,8 @@ import { Route as OktatasRouteImport } from './routes/oktatas'
 import { Route as RolamRouteImport } from './routes/rolam'
 import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
 import { Route as TermekeimRouteImport } from './routes/termekeim'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokAtalanyadoRouteImport } from './routes/kalkulatorok.atalanyado'
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
@@ -172,6 +174,16 @@ const TermekeimRoute = TermekeimRouteImport.update({
   path: '/termekeim',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStatisztikaRoute = AdminStatisztikaRouteImport.update({
+  id: '/statisztika',
+  path: '/statisztika',
+  getParentRoute: () => AdminRoute,
+} as any)
 const KalkulatorokIndexRoute = KalkulatorokIndexRouteImport.update({
   id: '/kalkulatorok/',
   path: '/kalkulatorok/',
@@ -236,7 +248,7 @@ const LovableEmailTransactionalPreviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
@@ -259,6 +271,7 @@ export interface FileRoutesByFullPath {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -266,6 +279,7 @@ export interface FileRoutesByFullPath {
   '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -274,7 +288,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
-  '/admin': typeof AdminRoute
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
@@ -297,6 +310,7 @@ export interface FileRoutesByTo {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -304,6 +318,7 @@ export interface FileRoutesByTo {
   '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -313,7 +328,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/adatvedelmi-tajekoztato': typeof AdatvedelmiTajekoztatoRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/adotanacsadas': typeof AdotanacsadasRoute
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
@@ -336,6 +351,7 @@ export interface FileRoutesById {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -343,6 +359,7 @@ export interface FileRoutesById {
   '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles_/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -376,6 +393,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -383,6 +401,7 @@ export interface FileRouteTypes {
     | '/kalkulatorok/szamla-datumok'
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
+    | '/admin/'
     | '/kalkulatorok/'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
@@ -391,7 +410,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/adatvedelmi-tajekoztato'
-    | '/admin'
     | '/adotanacsadas'
     | '/aszf'
     | '/cegaudit'
@@ -414,6 +432,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -421,6 +440,7 @@ export interface FileRouteTypes {
     | '/kalkulatorok/szamla-datumok'
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
+    | '/admin'
     | '/kalkulatorok'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
@@ -452,6 +472,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -459,6 +480,7 @@ export interface FileRouteTypes {
     | '/kalkulatorok/szamla-datumok'
     | '/megrendeles_/koszonjuk'
     | '/termek/$slug'
+    | '/admin/'
     | '/kalkulatorok/'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
@@ -468,7 +490,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdatvedelmiTajekoztatoRoute: typeof AdatvedelmiTajekoztatoRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AdotanacsadasRoute: typeof AdotanacsadasRoute
   AszfRoute: typeof AszfRoute
   CegauditRoute: typeof CegauditRoute
@@ -681,6 +703,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekeimRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/statisztika': {
+      id: '/admin/statisztika'
+      path: '/statisztika'
+      fullPath: '/admin/statisztika'
+      preLoaderRoute: typeof AdminStatisztikaRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/kalkulatorok/': {
       id: '/kalkulatorok/'
       path: '/kalkulatorok'
@@ -761,10 +797,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminStatisztikaRoute: typeof AdminStatisztikaRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminStatisztikaRoute: AdminStatisztikaRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdatvedelmiTajekoztatoRoute: AdatvedelmiTajekoztatoRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AdotanacsadasRoute: AdotanacsadasRoute,
   AszfRoute: AszfRoute,
   CegauditRoute: CegauditRoute,
