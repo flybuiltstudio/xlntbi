@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { PageHero } from "@/components/PageHero";
 import bertesztImg from "@/assets/berteszt.jpg";
 import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
@@ -58,9 +59,15 @@ const items = [
 
 function KalkulatorokPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16">
-      <h1 className="text-3xl font-bold text-foreground md:text-4xl">Elérhető kalkulátorok</h1>
-      <div className="mt-10 grid gap-6 sm:grid-cols-2">
+    <>
+      <PageHero>
+        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">
+          Elérhető kalkulátorok
+        </h1>
+      </PageHero>
+
+      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+        <div className="mt-2 grid gap-6 sm:grid-cols-2">
         {items.map((item) => (
           <Link
             key={item.to}
@@ -76,7 +83,8 @@ function KalkulatorokPage() {
             <h2 className="p-6 text-xl font-semibold text-card-foreground">{item.label}</h2>
           </Link>
         ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

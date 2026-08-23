@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { PageHero } from "@/components/PageHero";
 
 const TITLE = "Szolgáltatásaim – könyvelés, adózás, audit, BI | EXCELlent";
 const DESC =
@@ -32,9 +33,15 @@ const items = [
 
 function SzolgaltatasaimPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16">
-      <h1 className="text-3xl font-bold text-foreground md:text-4xl">Szolgáltatásaim</h1>
-      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <>
+      <PageHero>
+        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">
+          Szolgáltatásaim
+        </h1>
+      </PageHero>
+
+      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+        <div className="mt-2 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <Link
             key={item.to}
@@ -48,7 +55,8 @@ function SzolgaltatasaimPage() {
             </span>
           </Link>
         ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

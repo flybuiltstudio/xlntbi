@@ -4,6 +4,7 @@ import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import { aamText } from "@/lib/aam";
 import { priceFrom, formatPrice, products } from "@/lib/products";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
+import { PageHero } from "@/components/PageHero";
 
 
 
@@ -37,62 +38,63 @@ const features = [
 function TermekeimPage() {
   return (
     <div>
-      <section className="border-b border-border bg-secondary/60">
-        <div className="mx-auto max-w-6xl px-4 py-6 md:py-8">
-          <h1 className="whitespace-nowrap text-3xl font-bold leading-tight text-foreground md:text-4xl">
-            Termékeim könyvelőirodáknak és könyvelőknek
-          </h1>
-          <div className="mt-6 grid items-start gap-10 md:grid-cols-2">
-            <div>
-              <p className="text-base leading-relaxed text-muted-foreground">
-                Ezen az oldalon saját fejlesztésű, gyakorlatban is használható termékeimet találod.
-                Ezek könyvelőknek, könyvelőirodáknak, adózási szakembereknek és pénzügyi csapatoknak
-                készültek.
-              </p>
-              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                A termékek egy része modern digitalizációs és automatizációs megoldás, más részük
-                online kalkulátor vagy digitális segédprogram, akár komplex makrókkal is. Közös bennük,
-                hogy valós szakmai problémára adnak gyors, használható megoldást.
-              </p>
+      <PageHero>
+        <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
+          Termékeim könyvelőirodáknak és könyvelőknek
+        </h1>
+      </PageHero>
 
-              <div className="mt-8">
-                <h2 className="text-xl font-bold text-foreground">Mit találsz itt?</h2>
-                <ul className="mt-4 space-y-3">
-                  {features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm font-medium text-foreground">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+      <section className="mx-auto max-w-6xl px-4 py-10 md:py-12">
+        <div className="grid items-start gap-10 md:grid-cols-2">
+          <div>
+            <p className="text-base leading-relaxed text-muted-foreground">
+              Ezen az oldalon saját fejlesztésű, gyakorlatban is használható termékeimet találod.
+              Ezek könyvelőknek, könyvelőirodáknak, adózási szakembereknek és pénzügyi csapatoknak
+              készültek.
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              A termékek egy része modern digitalizációs és automatizációs megoldás, más részük
+              online kalkulátor vagy digitális segédprogram, akár komplex makrókkal is. Közös bennük,
+              hogy valós szakmai problémára adnak gyors, használható megoldást.
+            </p>
 
-              <Link
-                to="/termekeim"
-                hash="megrendelheto-termekek"
-                className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-              >
-                Termékek megtekintése
-              </Link>
+            <div className="mt-8">
+              <h2 className="text-xl font-bold text-foreground">Mit találsz itt?</h2>
+              <ul className="mt-4 space-y-3">
+                {features.map((f) => (
+                  <li key={f} className="flex items-start gap-3 text-sm font-medium text-foreground">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div>
-              <video
-                src={heroVideo.url}
-                poster={kalkulatorImg}
-                autoPlay
-                muted
-                loop
-                playsInline
-                aria-label="Digitális termékek – hangulatvideó"
-                className="w-full rounded-xl border border-border object-cover shadow-sm"
-              />
-              <div className="mt-8">
-                <h2 className="text-xl font-bold text-foreground">Miért jók ezek?</h2>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  Mert időt spórolnak, csökkentik a hibákat, és gyorsabban juttatnak el a végső
-                  eredményhez.
-                </p>
-              </div>
+
+            <Link
+              to="/termekeim"
+              hash="megrendelheto-termekek"
+              className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+            >
+              Termékek megtekintése
+            </Link>
+          </div>
+          <div>
+            <video
+              src={heroVideo.url}
+              poster={kalkulatorImg}
+              autoPlay
+              muted
+              loop
+              playsInline
+              aria-label="Digitális termékek – hangulatvideó"
+              className="w-full rounded-xl border border-border object-cover shadow-sm"
+            />
+            <div className="mt-8">
+              <h2 className="text-xl font-bold text-foreground">Miért jók ezek?</h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Mert időt spórolnak, csökkentik a hibákat, és gyorsabban juttatnak el a végső
+                eredményhez.
+              </p>
             </div>
           </div>
         </div>

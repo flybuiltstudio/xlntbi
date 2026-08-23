@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Mail, Phone } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import kapcsolatBusiness from "@/assets/kapcsolat-business.jpg";
+import { PageHero } from "@/components/PageHero";
 
 const TITLE = "Kapcsolat – EXCELlent Business Intelligence";
 const DESC =
@@ -34,13 +35,17 @@ const SERVICES = [
 
 function KapcsolatPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14 md:py-20">
-      <h1 className="text-3xl font-bold text-foreground md:text-4xl">Kapcsolat</h1>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-        Írj bátran, ha kérdésed van a szolgáltatásaimmal kapcsolatban.
-        <br />
-        Töltsd ki az űrlapot, és rövid időn belül válaszolok.
-      </p>
+    <>
+      <PageHero>
+        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Kapcsolat</h1>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-primary-foreground/80">
+          Írj bátran, ha kérdésed van a szolgáltatásaimmal kapcsolatban.
+          <br />
+          Töltsd ki az űrlapot, és rövid időn belül válaszolok.
+        </p>
+      </PageHero>
+
+      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.4fr]">
         <div className="space-y-6">
@@ -88,6 +93,7 @@ Köszönöm!`}
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

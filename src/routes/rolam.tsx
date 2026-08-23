@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, FileText } from "lucide-react";
 import portraitImg from "@/assets/En-modern-konyveloirodaban.jpg";
+import { PageHero } from "@/components/PageHero";
 
 const TITLE = "Rólam – Sarinay Dávid, pénzügyi és kontroller szakember | EXCELlent";
 const DESC =
@@ -37,23 +38,23 @@ const certificates = [
 function RolamPage() {
   return (
     <div>
-      <section className="border-b border-border bg-secondary/60">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-20">
+      <PageHero>
+        <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
-            <h1 className="text-3xl font-bold leading-tight text-foreground md:text-4xl">
+            <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
               Sarinay Dávid vagyok,
             </h1>
-            <p className="mt-5 text-base leading-relaxed text-muted-foreground">
+            <p className="mt-5 text-base leading-relaxed text-primary-foreground/80">
               pénzügyi, számviteli, adó- és kontroller szakember. A munkám középpontjában a szakmai
               kiválóság, az automatizálás és a valóban használható megoldások állnak.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            <p className="mt-4 text-base leading-relaxed text-primary-foreground/80">
               Több mint 20 év szakmai tapasztalattal dolgozom, ebből több mint 10 év vezetői és
               könyvelőiroda-vezetői múlttal. Pályafutásom során dolgoztam könyvvizsgálatban,
               operatív könyvelésben, nagyvállalati pénzügyben, könyvelőirodai vezetésben, FinTech és
               automatizációs tanácsadásban, valamint kontrolling és ERP területen is.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            <p className="mt-4 text-base leading-relaxed text-primary-foreground/80">
               Az egyik legerősebb szakmai sajátosságom, hogy a klasszikus pénzügyi és adózási tudást
               modern technológiákkal kapcsolom össze. Kiemelt területeim az Excel, a VBA, a komplex
               makrók, a Power BI, az adatmodellezés, a riportautomatizálás, az AI-alapú
@@ -64,10 +65,10 @@ function RolamPage() {
             src={portraitImg}
             alt="Sarinay Dávid modern könyvelőirodában"
             loading="lazy"
-            className="w-full rounded-xl border border-border object-cover shadow-sm"
+            className="w-full rounded-xl border border-primary-foreground/15 object-cover shadow-sm"
           />
         </div>
-      </section>
+      </PageHero>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-2xl font-bold text-foreground">Mi a célom?</h2>

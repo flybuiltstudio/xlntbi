@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "@/components/ContactForm";
+import { PageHero } from "@/components/PageHero";
 
 const TITLE = "Konzultáció kérése – EXCELlent Business Intelligence";
 const DESC =
@@ -44,15 +45,18 @@ const CONTACT_TIMES = [
 
 function KonzultacioPage() {
   return (
-    <div className="mx-auto max-w-4xl px-4 py-14 md:py-20">
-      <h1 className="text-3xl font-bold text-foreground md:text-4xl">Konzultáció</h1>
-      <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-        Töltsd ki az alábbi űrlapot, és jelezd, milyen témában szeretnél konzultálni.
-        <br />
-        Megírom, hogyan tudunk a leggyorsabban előrelépni, és egyeztetjük az időpontot.
-      </p>
+    <>
+      <PageHero>
+        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Konzultáció</h1>
+        <p className="mt-4 text-base leading-relaxed text-primary-foreground/80">
+          Töltsd ki az alábbi űrlapot, és jelezd, milyen témában szeretnél konzultálni.
+          <br />
+          Megírom, hogyan tudunk a leggyorsabban előrelépni, és egyeztetjük az időpontot.
+        </p>
+      </PageHero>
 
-      <div className="mt-10">
+      <div className="mx-auto max-w-4xl px-4 py-14 md:py-16">
+        <div className="mt-2">
         <ContactForm
           formType="konzultacio"
           serviceOptions={SERVICES}
@@ -68,7 +72,8 @@ A fenti témában szeretnék konzultálni Önnel!
 Köszönöm!`}
           submitLabel="Konzultáció kérése"
         />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
