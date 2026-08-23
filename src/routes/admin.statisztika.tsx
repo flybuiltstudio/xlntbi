@@ -239,7 +239,9 @@ function StatsPanel() {
                       {m.qty > 0 ? m.qty : ""}
                     </span>
                     <div
-                      className="flex h-44 w-full max-w-12 flex-col justify-end overflow-hidden rounded-t-md bg-muted/50"
+                      className={`flex h-44 w-full max-w-12 flex-col justify-end overflow-hidden rounded-t-md ${
+                        m.qty > 0 ? "bg-muted/50" : "border-b-2 border-border/60"
+                      }`}
                       title={`${MONTHS[m.month]}: ${m.qty} db, ${formatPrice(m.revenue)}`}
                     >
                       {monthly.labels.map((label, li) => {
