@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, FileText } from "lucide-react";
 import portraitImg from "@/assets/En-modern-konyveloirodaban.jpg";
+import { PageHero } from "@/components/PageHero";
 
 const TITLE = "Rólam – Sarinay Dávid, pénzügyi és kontroller szakember | EXCELlent";
 const DESC =
