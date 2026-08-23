@@ -1,10 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
+import {
+  Download,
+  FileCode2,
+  FileDown,
+  FileSpreadsheet,
+  FileText,
+  Loader2,
+} from "lucide-react";
 
 import { adminOrderStats } from "@/lib/admin.functions";
 import { formatPrice } from "@/lib/products";
 import { PageHero } from "@/components/PageHero";
+import {
+  MONTHS,
+  MONTHS_SHORT,
+  PALETTE,
+  exportStatsCsv,
+  exportStatsXlsx,
+  exportStatsXml,
+  exportYearPdf,
+  productLabel,
+} from "@/lib/stats-export";
 
 export const Route = createFileRoute("/admin/statisztika")({
   head: () => ({
@@ -25,25 +43,6 @@ export const Route = createFileRoute("/admin/statisztika")({
 });
 
 type StatRow = Awaited<ReturnType<typeof adminOrderStats>>["rows"][number];
-
-const MONTHS = [
-  "január", "február", "március", "április", "május", "június",
-  "július", "augusztus", "szeptember", "október", "november", "december",
-];
-const MONTHS_SHORT = [
-  "jan.", "febr.", "márc.", "ápr.", "máj.", "jún.",
-  "júl.", "aug.", "szept.", "okt.", "nov.", "dec.",
-];
-
-// Categorical chart palette in brand-green tones.
-const PALETTE = [
-  "#14532d", "#1d6a3f", "#2c8653", "#3fa46b", "#5bbd87", "#83d1a6",
-  "#0f766e", "#14b8a6", "#65a30d", "#a3c94f", "#b45309", "#6d28d9",
-];
-
-function productLabel(row: Pick<StatRow, "productName" | "tierLabel">) {
-  return row.tierLabel ? `${row.productName} – ${row.tierLabel}` : row.productName;
-}
 
 function AdminStatsPage() {
   return (
@@ -69,6 +68,7 @@ function StatsPanel() {
   const [rows, setRows] = useState<StatRow[] | null>(null);
   const [error, setError] = useState("");
   const [year, setYear] = useState<number | null>(null);
+  const [exporting, setExporting] = useState<string | null>(null);
 
   useEffect(() => {
     load()
@@ -149,6 +149,22 @@ function StatsPanel() {
 
   const maxMonthQty = Math.max(1, ...monthly.months.map((m) => m.qty));
 
+  const runExport = async (kind: string, fn: () => Promise<void> | void) => {
+    if (!rows || exporting) return;
+    setError("");
+    setExporting(kind);
+    try {
+      await fn();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Az exportálás nem sikerült.");
+    } finally {
+      setExporting(null);
+    }
+  };
+
+  const exportBtn =
+    "inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3.5 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50";
+
   return (
     <div className="mt-8">
       {error ? (
@@ -163,6 +179,62 @@ function StatsPanel() {
         <p className="text-sm text-muted-foreground">Még nincs megrendelés, nincs mit összesíteni.</p>
       ) : (
         <>
+          {/* Exportálás */}
+          <div className="mb-10 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-4 py-3">
+            <span className="mr-1 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
+              <Download className="h-4 w-4 text-primary" />
+              Exportálás:
+            </span>
+            <button
+              type="button"
+              className={exportBtn}
+              disabled={exporting !== null}
+              onClick={() => runExport("xlsx", () => exportStatsXlsx(rows))}
+            >
+              {exporting === "xlsx" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <FileSpreadsheet className="h-4 w-4" />
+              )}
+              Excel (.xlsx)
+            </button>
+            <button
+              type="button"
+              className={exportBtn}
+              disabled={exporting !== null}
+              onClick={() => runExport("csv", () => exportStatsCsv(rows))}
+            >
+              <FileText className="h-4 w-4" />
+              CSV
+            </button>
+            <button
+              type="button"
+              className={exportBtn}
+              disabled={exporting !== null}
+              onClick={() => runExport("xml", () => exportStatsXml(rows))}
+            >
+              <FileCode2 className="h-4 w-4" />
+              XML
+            </button>
+            <button
+              type="button"
+              className={exportBtn}
+              disabled={exporting !== null}
+              onClick={() => runExport("pdf", () => exportYearPdf(rows, activeYear))}
+            >
+              {exporting === "pdf" ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <FileDown className="h-4 w-4" />
+              )}
+              PDF – {activeYear}
+            </button>
+            <span className="w-full text-xs text-muted-foreground">
+              A PDF a kiválasztott év ({activeYear}) táblázatait és a grafikont tartalmazza,
+              egyetlen oldalon.
+            </span>
+          </div>
+
           {/* Termék-összesítő táblázat, csökkenő sorrendben */}
           <section>
             <h2 className="text-xl font-bold text-foreground">Megrendelt termékek – összesítve</h2>
