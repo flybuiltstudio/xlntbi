@@ -81,8 +81,7 @@ function Index() {
             EXCELLENT BUSINESS INTELLIGENCE
           </p>
           <h1 className="mt-4 max-w-4xl text-[clamp(1.6rem,4.2vw,3.1rem)] font-bold leading-tight text-primary-foreground">
-            Könyvelés, adótanácsadás &{"\u00a0"}<br />
-            BI automatizáció
+            Könyvelés, adótanácsadás & BI automatizáció
           </h1>
           <p className="mt-3 font-serif text-xl italic text-primary-foreground/85 md:text-2xl">
             Perfect Solutions. Automated FUTURE.
