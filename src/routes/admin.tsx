@@ -58,23 +58,29 @@ function AdminPage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14">
-      <h1 className="text-3xl font-bold text-foreground">Megrendelések</h1>
-      <p className="mt-3 text-sm text-muted-foreground">
-        Belső felület: átutalásos megrendelések jóváhagyása és a letöltési linkek kiküldése.
-      </p>
+    <>
+      <PageHero>
+        <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
+          Megrendelések
+        </h1>
+      </PageHero>
+      <div className="mx-auto max-w-6xl px-4 py-14">
+        <p className="text-sm text-muted-foreground">
+          Belső felület: átutalásos megrendelések jóváhagyása és a letöltési linkek kiküldése.
+        </p>
 
-      {!ready ? (
-        <p className="mt-10 text-sm text-muted-foreground">Betöltés…</p>
-      ) : session ? (
-        <>
-          <OrdersPanel email={session.email} />
-          <UsersPanel currentUserId={session.id} />
-        </>
-      ) : (
-        <LoginPanel />
-      )}
-    </div>
+        {!ready ? (
+          <p className="mt-10 text-sm text-muted-foreground">Betöltés…</p>
+        ) : session ? (
+          <>
+            <OrdersPanel email={session.email} />
+            <UsersPanel currentUserId={session.id} />
+          </>
+        ) : (
+          <LoginPanel />
+        )}
+      </div>
+    </>
   );
 }
 
