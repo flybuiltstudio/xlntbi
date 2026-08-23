@@ -193,6 +193,7 @@ export async function orderStats(): Promise<{ rows: OrderStatRow[] }> {
   const { data, error } = await supabaseAdmin
     .from("orders")
     .select("product_name, tier_label, quantity, total_price, payment_status, created_at")
+    .neq("payment_provider", "test")
     .order("created_at", { ascending: true })
     .limit(5000);
 
@@ -294,5 +295,155 @@ export async function resendDownload(orderId: string): Promise<{ ok: boolean; er
     email: order.email as string,
   });
 
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------------------
+// Admin payment test mode
+// ---------------------------------------------------------------------------
+
+export type TestOrderInput = {
+  productSlug: string;
+  tierId: string;
+  quantity: number;
+  billingName: string;
+  companyName: string;
+  taxNumber: string;
+  country: string;
+  postalCode: string;
+  city: string;
+  addressLine: string;
+  email: string;
+  phone: string;
+};
+
+function testOrderNumber() {
+  const now = new Date();
+  const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(
+    now.getDate(),
+  ).padStart(2, "0")}`;
+  const random = Math.floor(Math.random() * 9000 + 1000);
+  return `TESZT-${stamp}-${random}`;
+}
+
+/**
+ * Records a test order from the admin payment-test page. Marked with
+ * payment_provider "test" so statistics ignore it; no e-mails are sent on
+ * creation. A subsequent sandbox Stripe payment flips it to paid via the
+ * regular webhook, which exercises the full delivery flow end to end.
+ */
+export async function createTestOrder(data: TestOrderInput): Promise<
+  | {
+      ok: true;
+      orderNumber: string;
+      total: number;
+      priceId: string;
+      quantity: number;
+      customerEmail: string;
+    }
+  | { ok: false; error: string }
+> {
+  const { getProduct, getTier } = await import("./products");
+  const product = getProduct(data.productSlug);
+  if (!product || product.status !== "available") {
+    return { ok: false, error: "A kiválasztott termék nem rendelhető." };
+  }
+  const tier = getTier(product, data.tierId);
+  const number = testOrderNumber();
+  const total = tier.price * data.quantity;
+
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin.from("orders").insert({
+    order_number: number,
+    product_slug: product.slug,
+    product_name: product.name,
+    quantity: data.quantity,
+    unit_price: tier.price,
+    tier_id: tier.id,
+    tier_label: tier.label,
+    total_price: total,
+    currency: product.currency,
+    billing_name: data.billingName,
+    company_name: data.companyName || null,
+    tax_number: data.taxNumber || null,
+    country: data.country,
+    postal_code: data.postalCode,
+    city: data.city,
+    address_line: data.addressLine,
+    email: data.email,
+    phone: data.phone,
+    note: "[TESZT] Admin felületről rögzített teszt megrendelés.",
+    status: "new",
+    payment_status: "unpaid",
+    payment_provider: "test",
+  });
+
+  if (error) {
+    console.error("Test order insert failed:", error.message);
+    return { ok: false, error: "A teszt megrendelés mentése nem sikerült." };
+  }
+
+  return {
+    ok: true,
+    orderNumber: number,
+    total,
+    priceId: tier.priceId,
+    quantity: data.quantity,
+    customerEmail: data.email,
+  };
+}
+
+export type TestOrderRow = {
+  id: string;
+  orderNumber: string;
+  createdAt: string;
+  productName: string;
+  tierLabel: string | null;
+  quantity: number;
+  totalPrice: number;
+  email: string;
+  paymentStatus: string;
+};
+
+export async function listTestOrders(): Promise<TestOrderRow[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin
+    .from("orders")
+    .select("id, order_number, created_at, product_name, tier_label, quantity, total_price, email, payment_status")
+    .eq("payment_provider", "test")
+    .order("created_at", { ascending: false })
+    .limit(20);
+
+  if (error) {
+    console.error("Test order list failed:", error.message);
+    return [];
+  }
+
+  return (data ?? []).map((o: any) => ({
+    id: o.id,
+    orderNumber: o.order_number,
+    createdAt: o.created_at,
+    productName: o.product_name,
+    tierLabel: o.tier_label ?? null,
+    quantity: o.quantity,
+    totalPrice: o.total_price,
+    email: o.email,
+    paymentStatus: o.payment_status,
+  }));
+}
+
+/** Deletes a test order (only rows marked payment_provider = "test"). */
+export async function deleteTestOrder(orderId: string): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin
+    .from("orders")
+    .delete()
+    .eq("id", orderId)
+    .eq("payment_provider", "test");
+
+  if (error) {
+    console.error("Test order deletion failed:", error.message);
+    return { ok: false, error: "A teszt megrendelés törlése nem sikerült." };
+  }
   return { ok: true };
 }

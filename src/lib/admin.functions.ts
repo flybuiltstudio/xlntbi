@@ -84,3 +84,44 @@ export const adminDeleteUser = createServerFn({ method: "POST" })
     const { deleteUser } = await import("./admin.server");
     return deleteUser(data.userId, context.userId);
   });
+
+const testOrderSchema = z.object({
+  productSlug: z.string().trim().min(2).max(80),
+  tierId: z.string().trim().min(1).max(80),
+  quantity: z.coerce.number().int().min(1).max(20),
+  billingName: z.string().trim().min(2).max(160),
+  companyName: z.string().trim().max(160).optional().default(""),
+  taxNumber: z.string().trim().max(40).optional().default(""),
+  country: z.string().trim().min(2).max(80),
+  postalCode: z.string().trim().min(2).max(20),
+  city: z.string().trim().min(2).max(80),
+  addressLine: z.string().trim().min(3).max(200),
+  email: z.string().trim().email().max(160),
+  phone: z.string().trim().min(6).max(30),
+});
+
+export const adminCreateTestOrder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => testOrderSchema.parse(data))
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { createTestOrder } = await import("./admin.server");
+    return createTestOrder(data);
+  });
+
+export const adminListTestOrders = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { listTestOrders } = await import("./admin.server");
+    return { orders: await listTestOrders() };
+  });
+
+export const adminDeleteTestOrder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ orderId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { deleteTestOrder } = await import("./admin.server");
+    return deleteTestOrder(data.orderId);
+  });
