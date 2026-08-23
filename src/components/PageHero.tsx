@@ -9,7 +9,7 @@ export function PageHero({
   className?: string;
 }) {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section className="relative isolate overflow-hidden bg-brand-dark">
       <img
         src={heroImg}
         alt=""
