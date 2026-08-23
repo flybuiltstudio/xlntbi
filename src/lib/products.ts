@@ -781,6 +781,7 @@ export const products: Product[] = [
     price: 149900,
     currency: "HUF",
     image: ifrsImg,
+    metaTitle: "XLNT IFRS Konszolidáló | EXCELlent",
     metaDescription: "Konszolidált IFRS pénzügyi kimutatások Excelben – IFRS 18 részösszegekkel, goodwill- és devizaszámítással, magyarul és angolul. Ár: 149 900 Ft-tól.",
     intro: [
       "Összevont (konszolidált) IFRS pénzügyi kimutatások Excelben – az IFRS 18 kötelező részösszegeivel, magyarul és angolul. IFRS 10 · IFRS 3 · IAS 28 · IAS 21 · IAS 36 · IAS 7 · IFRS 18.",
