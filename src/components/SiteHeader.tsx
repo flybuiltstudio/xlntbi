@@ -130,7 +130,7 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center justify-center rounded-md p-2 text-foreground lg:hidden"
+          className="ml-auto inline-flex items-center justify-center rounded-md p-2 text-foreground min-[900px]:hidden"
           aria-label={open ? "Menü bezárása" : "Menü megnyitása"}
           aria-expanded={open}
         >
@@ -139,7 +139,7 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg lg:hidden">
+        <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg min-[900px]:hidden">
           <nav className="mx-auto max-w-6xl px-4 py-4" aria-label="Mobil menü">
             <div className="flex items-center justify-between pb-2">
               <span className="text-sm font-semibold text-muted-foreground">Menü</span>
