@@ -1003,6 +1003,18 @@ export function InvoiceLogsPanel() {
                   <td className="max-w-[280px] px-4 py-3 text-xs text-muted-foreground">
                     {log.errorMessage ?? "—"}
                   </td>
+                  <td className="whitespace-nowrap px-4 py-3">
+                    {log.status === "error" && log.orderId ? (
+                      <button
+                        type="button"
+                        disabled={retryBusy === log.id}
+                        onClick={() => void onRetryLog(log)}
+                        className="rounded-md border border-primary/40 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10 disabled:opacity-40"
+                      >
+                        {retryBusy === log.id ? "Újrapróbálás…" : "Újrapróbálás"}
+                      </button>
+                    ) : null}
+                  </td>
                 </tr>
               ))}
             </tbody>
