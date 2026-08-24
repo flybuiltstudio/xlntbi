@@ -1428,6 +1428,7 @@ export function CalculatorVersionPanel() {
           <select
             className={`${selectClass} mt-1.5 w-full max-w-md`}
             value={calcKey}
+            disabled={busy}
             onChange={(e) => {
               setCalcKey(e.target.value);
               setMessage("");
@@ -1437,6 +1438,7 @@ export function CalculatorVersionPanel() {
             {CALCULATORS.map((c) => (
               <option key={c.key} value={c.key}>
                 {c.label}
+                {overrideKeys.has(c.key) ? " — feltöltött verzió" : " — eredeti verzió"}
               </option>
             ))}
           </select>
