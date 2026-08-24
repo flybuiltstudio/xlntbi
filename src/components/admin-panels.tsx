@@ -1081,12 +1081,37 @@ function uploadWithProgress(
       if (xhr.status >= 200 && xhr.status < 300) {
         onProgress(100);
         resolve();
-      } else {
-        reject(new Error("A feltöltés nem sikerült. Próbáld újra."));
+        return;
       }
+      let detail = "";
+      try {
+        const parsed = JSON.parse(xhr.responseText) as {
+          message?: string;
+          error?: string;
+        };
+        detail = parsed.message ?? parsed.error ?? "";
+      } catch {
+        detail = (xhr.responseText ?? "").slice(0, 200);
+      }
+      reject(
+        new Error(
+          `A tárhely elutasította a feltöltést (HTTP ${xhr.status}).` +
+            (detail ? ` Részlet: ${detail}` : " Próbáld újra."),
+        ),
+      );
     };
-    xhr.onerror = () => reject(new Error("A feltöltés nem sikerült. Próbáld újra."));
-    xhr.ontimeout = () => reject(new Error("A feltöltés időtúllépés miatt megszakadt."));
+    xhr.onerror = () =>
+      reject(
+        new Error(
+          "Hálózati hiba történt a feltöltés közben — ellenőrizd az internetkapcsolatot, majd próbáld újra.",
+        ),
+      );
+    xhr.ontimeout = () =>
+      reject(
+        new Error(
+          "A feltöltés időtúllépés miatt megszakadt — próbáld újra, vagy válassz kisebb fájlt.",
+        ),
+      );
     const body = new FormData();
     body.append("cacheControl", "3600");
     body.append("", file);
