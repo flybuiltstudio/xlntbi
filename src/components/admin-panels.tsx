@@ -1144,6 +1144,19 @@ function UploadProgressBar({ percent, label }: { percent: number; label: string 
   );
 }
 
+/** Feltöltési hiba doboza: cím + részletes magyarázat a progress bár alatt. */
+function UploadErrorBox({ detail }: { detail: string }) {
+  return (
+    <div
+      className="max-w-2xl rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+      role="alert"
+    >
+      <p className="font-semibold">A feltöltés nem sikerült</p>
+      <p className="mt-1">{detail}</p>
+    </div>
+  );
+}
+
 const selectClass =
   "rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground";
 const fileInputClass =
