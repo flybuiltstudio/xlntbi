@@ -157,12 +157,14 @@ export function OrdersPanel({ email }: { email: string | null }) {
       (orders ?? []).filter((order) => {
         if (payFilter === "paid" && order.paymentStatus !== "paid") return false;
         if (payFilter === "unpaid" && order.paymentStatus === "paid") return false;
+        if (invoiceFilter === "invoiced" && !order.billingoInvoiceNumber) return false;
+        if (invoiceFilter === "not-invoiced" && order.billingoInvoiceNumber) return false;
         const date = new Date(order.createdAt);
         if (activeYear !== null && date.getFullYear() !== activeYear) return false;
         if (activeMonth !== "all" && date.getMonth() !== activeMonth) return false;
         return true;
       }),
-    [orders, payFilter, activeYear, activeMonth],
+    [orders, payFilter, invoiceFilter, activeYear, activeMonth],
   );
 
   const selectYear = (y: number | "all") => {
