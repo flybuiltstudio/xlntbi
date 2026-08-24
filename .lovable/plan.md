@@ -5,16 +5,16 @@
 Új admin aloldal (`/admin/friss-verzio`, a menüben 2. helyen, „Megrendelések" után), két szekcióval:
 
 1. **Termék új verziója** — legördülőből kiválasztott termékhez .xlsm/.exe fájl feltöltése, amely felülírja a tárolt verziót. A kiválasztott termék határozza meg a célt, nem a feltöltött fájl neve.
-2. **Kalkulátor frissítése** — legördülőből kiválasztott kalkulátor felülírása egy új .html fájllal.
+2. **Kalkulátor frissítése** — legördülőből kiválasztott kalkulátor felülírása egy új .html fájllal. Itt is **a kiválasztott kalkulátor határozza meg a célt**, a feltöltött fájl neve nem számít.
 
 Mindkét szekció csak `admin` szerepkörrel érhető el (a `user` szerepkör továbbra is csak a Statisztikát látja — a meglévő átirányítás ezt automatikusan kezeli).
 
 ## 1. szekció: Termékfájl csere
 
 - A legördülő a `src/lib/products.ts` `products` tömbjéből épül fel (csak `available` státuszú, `download` útvonallal rendelkező termékek). Mivel a Termékek oldal is innen dolgozik, minden oda felvett új termék automatikusan megjelenik a listában.
-- A kiválasztott termék alatt látszik a jelenlegi fájl neve és az utolsó módosítás dátuma (a tároló metaadataiból).
-- Fájlválasztó: `.xlsm` és `.exe` kiterjesztés, méretkorlattal (max 50 MB), a kiterjesztésnek egyeznie kell a meglévő fájléval (.xlsm helyére nem megy .exe).
-- Feltöltéskor a fájl a `termekfajlok` privát tárolóban a termék **meglévő `storagePath` útvonalára** töltődik felülírással (`upsert`). Így:
+- A kiválasztott termék alatt látszik a jelenlegi fájl neve, mérete és az utolsó módosítás dátuma (a tároló metaadataiból).
+- Fájlválasztó: `.xlsm` és `.exe` kiterjesztés, **méretkorlát: 300 MB** (a jelenlegi legnagyobb termékfájl ~174 MB + 50 MB, felfelé kerekítve). A kiterjesztésnek egyeznie kell a meglévő fájléval (.xlsm helyére nem megy .exe).
+- **Feltöltés közvetlenül a tárolóba, aláírt feltöltési URL-lel:** a szerverfüggvény csak ellenőrzi az admin jogot és a fájltípust, majd a termék meglévő `storagePath` útvonalára ad egyszeri feltöltési URL-t; a böngésző a fájlt egyenesen a `termekfajlok` privát tárolóba tölti, felülírással. Így a nagy (100 MB feletti) fájlok sem akadnak el a szerver kérés-méretkorlátján. A felülírás azonos útvonalon történik, tehát:
   - a korábbi vásárlók letöltő linkjei tovább működnek, és már az új verziót szolgálják ki,
   - a fájlnév és az e-mailekben szereplő név nem változik,
   - nem kell adatbázis-módosítás.
