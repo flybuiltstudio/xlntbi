@@ -177,6 +177,8 @@ export async function listOrders(): Promise<AdminOrder[]> {
     paymentStatus: o.payment_status,
     paymentProvider: o.payment_provider ?? null,
     paymentReference: o.payment_reference ?? null,
+    billingoInvoiceId: o.billingo_invoice_id ?? null,
+    billingoInvoiceNumber: o.billingo_invoice_number ?? null,
   }));
 }
 
