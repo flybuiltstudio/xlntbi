@@ -256,7 +256,7 @@ export async function issueInvoiceForOrder(
       .eq("id", order.id);
 
     if (options.sendToBuyer) {
-      await sendInvoiceToBuyer(id, order.email).catch((e) =>
+      await sendInvoiceToBuyer(id).catch((e) =>
         console.error("Billingo send invoice email failed:", e.message),
       );
     }
