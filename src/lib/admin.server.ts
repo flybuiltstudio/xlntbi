@@ -275,6 +275,10 @@ export async function approveTransfer(
     email: order.email as string,
   });
 
+  // Auto-invoice via Billingo for the now-paid bank-transfer order.
+  const { issueInvoiceForOrder } = await import("./billingo.server");
+  await issueInvoiceForOrder(order as any, { sendToBuyer: true });
+
   return { ok: true };
 }
 
