@@ -139,6 +139,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid">("all");
+  const [invoiceFilter, setInvoiceFilter] = useState<"all" | "invoiced" | "not-invoiced">("all");
   const [yearSel, setYearSel] = useState<number | "all">("all");
   const [monthSel, setMonthSel] = useState<number | "all">("all");
 
@@ -156,12 +157,14 @@ export function OrdersPanel({ email }: { email: string | null }) {
       (orders ?? []).filter((order) => {
         if (payFilter === "paid" && order.paymentStatus !== "paid") return false;
         if (payFilter === "unpaid" && order.paymentStatus === "paid") return false;
+        if (invoiceFilter === "invoiced" && !order.billingoInvoiceNumber) return false;
+        if (invoiceFilter === "not-invoiced" && order.billingoInvoiceNumber) return false;
         const date = new Date(order.createdAt);
         if (activeYear !== null && date.getFullYear() !== activeYear) return false;
         if (activeMonth !== "all" && date.getMonth() !== activeMonth) return false;
         return true;
       }),
-    [orders, payFilter, activeYear, activeMonth],
+    [orders, payFilter, invoiceFilter, activeYear, activeMonth],
   );
 
   const selectYear = (y: number | "all") => {
@@ -286,6 +289,27 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 type="button"
                 className={filterChip(payFilter === opt.id)}
                 onClick={() => setPayFilter(opt.id)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Számlázva
+            </span>
+            {(
+              [
+                { id: "all", label: "Összes" },
+                { id: "invoiced", label: "Számlázva" },
+                { id: "not-invoiced", label: "Még nincs" },
+              ] as const
+            ).map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                className={filterChip(invoiceFilter === opt.id)}
+                onClick={() => setInvoiceFilter(opt.id)}
               >
                 {opt.label}
               </button>
