@@ -3,12 +3,30 @@ import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+function claimsEmail(context: { claims: Record<string, any> }): string | undefined {
+  return typeof context.claims["email"] === "string" ? context.claims["email"] : undefined;
+}
+
 async function gate(context: { userId: string; claims: Record<string, any> }) {
   const { assertAdmin } = await import("./admin.server");
-  const email = typeof context.claims["email"] === "string" ? context.claims["email"] : undefined;
-  const ok = await assertAdmin(context.userId, email);
+  const ok = await assertAdmin(context.userId, claimsEmail(context));
   if (!ok) throw new Error("Nincs jogosultságod ehhez a felülethez.");
 }
+
+/** Statistics gate: both `admin` and `user` roles may read stats. */
+async function gateStats(context: { userId: string; claims: Record<string, any> }) {
+  const { getMyRole } = await import("./admin.server");
+  const role = await getMyRole(context.userId, claimsEmail(context));
+  if (!role) throw new Error("Nincs jogosultságod ehhez a felülethez.");
+  return role;
+}
+
+export const adminMyRole = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { getMyRole } = await import("./admin.server");
+    return { role: await getMyRole(context.userId, claimsEmail(context as any)) };
+  });
 
 export const adminListOrders = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -26,9 +44,10 @@ export const adminOrderStats = createServerFn({ method: "GET" })
       .parse(data ?? {}),
   )
   .handler(async ({ context, data }) => {
-    await gate(context as any);
+    const role = await gateStats(context as any);
     const { orderStats } = await import("./admin.server");
-    return orderStats(data.includeTests);
+    // Only admins may include TESZT- orders; plain users always get the clean stats.
+    return orderStats(role === "admin" ? data.includeTests : false);
   });
 
 export const adminApproveTransfer = createServerFn({ method: "POST" })

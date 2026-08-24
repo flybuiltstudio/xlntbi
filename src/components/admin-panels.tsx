@@ -25,9 +25,10 @@ export function filterChip(active: boolean) {
 export type Order = Awaited<ReturnType<typeof adminListOrders>>["orders"][number];
 export type AdminUserRow = Awaited<ReturnType<typeof adminListUsers>>["users"][number];
 
-export type AdminSession = { email: string | null; userId: string };
+export type AdminRole = "admin" | "user";
+export type AdminSession = { email: string | null; userId: string; role: AdminRole | null };
 
-export const AdminSessionContext = createContext<AdminSession>({ email: null, userId: "" });
+export const AdminSessionContext = createContext<AdminSession>({ email: null, userId: "", role: null });
 
 export function useAdminSession(): AdminSession {
   return useContext(AdminSessionContext);
@@ -572,8 +573,8 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
         </p>
         <p className="mt-2">
           <strong>Felhasználó:</strong> be tud jelentkezni, de az admin
-          funkciókat nem éri el – a szerepkör a későbbi bővítésekhez van
-          fenntartva.
+          felületen kizárólag a Statisztika oldalt éri el – a megrendeléseket,
+          a fizetés-tesztet és a felhasználókezelést nem.
         </p>
       </div>
 

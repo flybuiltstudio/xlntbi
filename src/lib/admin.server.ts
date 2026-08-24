@@ -53,6 +53,29 @@ export async function assertAdmin(userId: string, email: string | undefined): Pr
   return true;
 }
 
+export type AdminRole = "admin" | "user";
+
+/**
+ * Returns the signed-in user's admin-area role. `admin` gets full access,
+ * `user` may only read the statistics page, `null` means no access at all.
+ */
+export async function getMyRole(
+  userId: string,
+  email: string | undefined,
+): Promise<AdminRole | null> {
+  if (await assertAdmin(userId, email)) return "admin";
+
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("user_roles")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("role", "user")
+    .maybeSingle();
+
+  return data ? "user" : null;
+}
+
 export type AdminUser = {
   id: string;
   email: string;

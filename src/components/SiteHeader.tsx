@@ -37,21 +37,21 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
-        <Link to="/" className="flex items-center" aria-label="EXCELlent Business Intelligence – főoldal">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-5 px-4 lg:gap-7">
+        <Link to="/" className="flex shrink-0 items-center" aria-label="EXCELlent Business Intelligence – főoldal">
           <img
             src={logoAsset.url}
             alt="EXCELlent Business Intelligence logó"
-            className="h-12 w-auto object-contain"
+            className="h-10 w-auto object-contain lg:h-12"
             width={240}
             height={160}
           />
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Főmenü">
+        <nav className="hidden items-center gap-0.5 min-[900px]:flex lg:gap-1" aria-label="Főmenü">
           <Link
             to="/"
-            className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             activeProps={{ className: "bg-accent" }}
             activeOptions={{ exact: true }}
           >
@@ -61,7 +61,7 @@ export function SiteHeader() {
           <div className="group relative">
             <Link
               to="/szolgaltatasaim"
-              className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+              className="flex items-center gap-1 rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             >
               Szolgáltatásaim
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
@@ -82,7 +82,7 @@ export function SiteHeader() {
           <div className="group relative">
             <Link
               to="/kalkulatorok"
-              className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+              className="flex items-center gap-1 rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             >
               Kalkulátorok
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
@@ -102,7 +102,7 @@ export function SiteHeader() {
 
           <Link
             to="/termekeim"
-            className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             activeProps={{ className: "bg-accent" }}
           >
             Termékeim
@@ -112,7 +112,7 @@ export function SiteHeader() {
             <Link
               key={l.to}
               to={l.to}
-              className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+              className="rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
               activeProps={{ className: "bg-accent" }}
             >
               {l.label}
@@ -121,7 +121,7 @@ export function SiteHeader() {
 
           <Link
             to="/konzultacio"
-            className="ml-2 inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+            className="ml-1 inline-flex items-center whitespace-nowrap rounded-md bg-primary px-3 py-2 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-brand-dark lg:ml-2 lg:px-4 lg:text-sm"
           >
             Konzultációt kérek
           </Link>
@@ -130,7 +130,7 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center justify-center rounded-md p-2 text-foreground lg:hidden"
+          className="ml-auto inline-flex items-center justify-center rounded-md p-2 text-foreground min-[900px]:hidden"
           aria-label={open ? "Menü bezárása" : "Menü megnyitása"}
           aria-expanded={open}
         >
@@ -139,7 +139,7 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg lg:hidden">
+        <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg min-[900px]:hidden">
           <nav className="mx-auto max-w-6xl px-4 py-4" aria-label="Mobil menü">
             <div className="flex items-center justify-between pb-2">
               <span className="text-sm font-semibold text-muted-foreground">Menü</span>
