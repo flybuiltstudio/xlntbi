@@ -94,8 +94,11 @@ export const productCategories: ProductCategory[] = [
 
 export const productCategoryKeys = productCategories.map((c) => c.key);
 
-export function getCategory(key?: string | null): ProductCategory | undefined {
-  return productCategories.find((c) => c.key === key);
+export function getCategory(
+  key?: string | null,
+  list: ProductCategory[] = productCategories,
+): ProductCategory | undefined {
+  return list.find((c) => c.key === key);
 }
 
 /** Products of a category, in the category's own order. */
@@ -103,4 +106,34 @@ export function categoryProducts(category: ProductCategory): Product[] {
   return category.slugs
     .map((slug) => products.find((p) => p.slug === slug))
     .filter((p): p is Product => Boolean(p));
+}
+
+/** Admin-managed override of a product's category and position. */
+export type ProductPlacement = { slug: string; category: string; sortOrder: number };
+
+/**
+ * Returns the categories with the admin-managed placements applied.
+ * Products without an override keep their bundled category and position.
+ */
+export function applyPlacements(placements: ProductPlacement[]): ProductCategory[] {
+  const overrides = new Map(placements.map((p) => [p.slug, p]));
+  const buckets = new Map<string, { slug: string; order: number; idx: number }[]>();
+  for (const category of productCategories) buckets.set(category.key, []);
+
+  productCategories.forEach((category) => {
+    category.slugs.forEach((slug, idx) => {
+      const override = overrides.get(slug);
+      const target =
+        override && buckets.has(override.category) ? override.category : category.key;
+      buckets.get(target)!.push({ slug, order: override?.sortOrder ?? idx, idx });
+    });
+  });
+
+  return productCategories.map((category) => ({
+    ...category,
+    slugs: buckets
+      .get(category.key)!
+      .sort((a, b) => a.order - b.order || a.idx - b.idx)
+      .map((entry) => entry.slug),
+  }));
 }
