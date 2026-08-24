@@ -1230,6 +1230,46 @@ export const products: Product[] = [
       storagePath: "univerzalis-bank-konverter/bankkivonat.exe",
     },
   },
+  {
+    slug: "wifi-jelszo-nezo",
+    name: "XLNT WiFi Jelszó Néző",
+    tagline: "Elfelejtett Wi‑Fi jelszavak – a saját gépén, egy kattintással",
+    status: "available",
+    priceId: "wifi_jelszo_nezo_egyszeri_licenc",
+    price: 2900,
+    currency: "HUF",
+    image: wifiJelszoImg,
+    metaTitle: "XLNT WiFi Jelszó Néző | EXCELlent",
+    metaDescription:
+      "Az ezen a gépen elmentett Wi-Fi jelszavak egy listában, másolással és CSV-exporttal. Windowsra, egyszeri licenc: 2 900 Ft.",
+    intro: [
+      "Új telefon, új laptop, vendég az irodában – és a Wi-Fi jelszó rég feledésbe merült. A XLNT WiFi Jelszó Néző összegyűjti és áttekinthető listában megmutatja mindazokat a Wi-Fi jelszavakat, amelyeket ez a számítógép korábban elmentett. Nincs regisztráció, nincs bonyolult telepítés: elindítja, és látja.",
+      "Könyvelőirodáknak, rendszergazdáknak, informatikusoknak, ügyfélszolgálatoknak – és mindenkinek, aki több gépet kezel, vagy egyszerűen csak gyorsan szeretné visszakeresni egy korábban beállított hálózat jelszavát, anélkül hogy a routert kellene előkeresnie.",
+    ],
+    features: [
+      "Minden mentett hálózat egy helyen: az összes eltárolt Wi-Fi és a hozzá tartozó jelszó azonnal, egy listában.",
+      "Másolás egy kattintással: a „Másol” gombbal a jelszó rögtön a vágólapra kerül.",
+      "Összes másolása / CSV-export: az egész lista beilleszthető Excelbe, vagy elmenthető CSV-be (magyar Excellel közvetlenül nyitható, UTF-8 + pontosvessző).",
+      "Magyar Windowson is megbízható: a kiolvasás nyelvfüggetlen módszerrel dolgozik, nem a rendszernyelvtől függő szövegből.",
+      "Okos felismerés: a nyílt és a vállalati (802.1X) hálózatokat külön, félreértés nélkül jelöli.",
+      "Tiszta, modern felület: sötét, jól olvasható kezelőfelület – reklámok és kéretlen kiegészítők nélkül.",
+      "Hordozható: egyetlen futtatható program, telepítés nélkül is elindul.",
+    ],
+    why: "Windows rendszerre készült. Csak az ezen a gépen korábban elmentett, saját hálózatokat mutatja – pontosan azt, amit a Windows Beállítások is elérhetővé tesz, csak egy helyre gyűjtve. A jelszavak megjelenítéséhez rendszergazdai jogosultság kell; a program indításkor felkéri erre.",
+    tiers: [
+      {
+        id: "egyszeri_licenc",
+        label: "Egyszeri licenc – 1 eszköz",
+        price: 2900,
+        note: "Egyszeri licencdíj, egy eszközre.",
+        priceId: "wifi_jelszo_nezo_egyszeri_licenc",
+      },
+    ],
+    download: {
+      fileName: "XLNT_WiFi_Jelszo.exe",
+      storagePath: "wifi-jelszo-nezo/XLNT_WiFi_Jelszo.exe",
+    },
+  },
 ];
 
 export const productSlugs = products.map((p) => p.slug);
