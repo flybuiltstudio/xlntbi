@@ -741,3 +741,205 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
     </section>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Billingo invoice logs
+// ---------------------------------------------------------------------------
+
+export type InvoiceLog = Awaited<ReturnType<typeof adminListInvoiceLogs>>["logs"][number];
+
+const SOURCE_LABELS: Record<string, string> = {
+  webhook: "Stripe webhook",
+  admin_approval: "Átutalás jóváhagyás",
+  admin_retry: "Kézi újrapróbálás",
+};
+
+export function InvoiceLogsPanel() {
+  const load = useServerFn(adminListInvoiceLogs);
+
+  const [logs, setLogs] = useState<InvoiceLog[] | null>(null);
+  const [error, setError] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "success" | "error">("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
+
+  async function refresh() {
+    setError("");
+    try {
+      const result = await load();
+      setLogs(result.logs);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "A napló betöltése nem sikerült.");
+      setLogs([]);
+    }
+  }
+
+  useEffect(() => {
+    void refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const sources = useMemo(() => {
+    const set = new Set<string>();
+    for (const log of logs ?? []) set.add(log.source);
+    return [...set];
+  }, [logs]);
+
+  const filteredLogs = useMemo(
+    () =>
+      (logs ?? []).filter((log) => {
+        if (statusFilter !== "all" && log.status !== statusFilter) return false;
+        if (sourceFilter !== "all" && log.source !== sourceFilter) return false;
+        return true;
+      }),
+    [logs, statusFilter, sourceFilter],
+  );
+
+  const errorCount = (logs ?? []).filter((log) => log.status === "error").length;
+
+  return (
+    <section className="mt-8">
+      <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+        <span>
+          {logs ? `${logs.length} naplóbejegyzés` : "Betöltés…"}
+          {logs && errorCount > 0 ? (
+            <>
+              {" · "}
+              <strong className="text-destructive">{errorCount} hibás</strong>
+            </>
+          ) : null}
+        </span>
+        <button
+          type="button"
+          onClick={() => void refresh()}
+          className="rounded-md border border-input px-3 py-1.5 font-medium text-foreground hover:bg-accent"
+        >
+          Frissítés
+        </button>
+      </div>
+
+      {error ? (
+        <p className="mt-6 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </p>
+      ) : null}
+
+      {logs !== null && logs.length > 0 ? (
+        <div className="mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Állapot
+            </span>
+            {(
+              [
+                { id: "all", label: "Összes" },
+                { id: "success", label: "Sikeres" },
+                { id: "error", label: "Hibás" },
+              ] as const
+            ).map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                className={filterChip(statusFilter === opt.id)}
+                onClick={() => setStatusFilter(opt.id)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Forrás
+            </span>
+            <button
+              type="button"
+              className={filterChip(sourceFilter === "all")}
+              onClick={() => setSourceFilter("all")}
+            >
+              Összes
+            </button>
+            {sources.map((source) => (
+              <button
+                key={source}
+                type="button"
+                className={filterChip(sourceFilter === source)}
+                onClick={() => setSourceFilter(source)}
+              >
+                {SOURCE_LABELS[source] ?? source}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {filteredLogs.length} / {logs.length} bejegyzés látszik
+          </p>
+        </div>
+      ) : null}
+
+      {logs === null ? (
+        <p className="mt-8 text-sm text-muted-foreground">Betöltés…</p>
+      ) : logs.length === 0 ? (
+        <p className="mt-8 text-sm text-muted-foreground">
+          Még nincs naplóbejegyzés. A napló a következő számlázási
+          próbálkozástól indul.
+        </p>
+      ) : filteredLogs.length === 0 ? (
+        <p className="mt-8 text-sm text-muted-foreground">
+          A kiválasztott szűréshez nem tartozik bejegyzés.
+        </p>
+      ) : (
+        <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-card">
+          <table className="w-full min-w-[760px] text-left text-sm text-foreground">
+            <thead>
+              <tr className="border-b border-border text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3">Időpont</th>
+                <th className="px-4 py-3">Rendelés</th>
+                <th className="px-4 py-3">Forrás</th>
+                <th className="px-4 py-3">Állapot</th>
+                <th className="px-4 py-3">Számlaszám</th>
+                <th className="px-4 py-3">Hibakód</th>
+                <th className="px-4 py-3">Hibaüzenet</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredLogs.map((log) => (
+                <tr
+                  key={log.id}
+                  className="border-b border-border/60 align-top last:border-b-0"
+                >
+                  <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">
+                    {new Date(log.createdAt).toLocaleString("hu-HU")}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-xs font-medium">
+                    {log.orderNumber || "—"}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">
+                    {SOURCE_LABELS[log.source] ?? log.source}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                        log.status === "success"
+                          ? "bg-primary/10 text-primary"
+                          : "bg-destructive/10 text-destructive"
+                      }`}
+                    >
+                      {log.status === "success" ? "Sikeres" : "Hibás"}
+                    </span>
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-xs">
+                    {log.invoiceNumber ?? "—"}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-xs">
+                    {log.errorCode ?? "—"}
+                  </td>
+                  <td className="max-w-[280px] px-4 py-3 text-xs text-muted-foreground">
+                    {log.errorMessage ?? "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+  );
+}
