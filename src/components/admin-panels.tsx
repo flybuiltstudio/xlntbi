@@ -416,6 +416,16 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     <dd className="inline">{order.paymentReference}</dd>
                   </div>
                 ) : null}
+                {order.paymentStatus === "paid" ? (
+                  <div>
+                    <dt className="inline font-semibold">Billingo számla: </dt>
+                    <dd className="inline">
+                      {order.billingoInvoiceNumber
+                        ? order.billingoInvoiceNumber
+                        : "még nincs"}
+                    </dd>
+                  </div>
+                ) : null}
                 {order.note ? (
                   <div className="sm:col-span-2">
                     <dt className="inline font-semibold">Megjegyzés: </dt>
