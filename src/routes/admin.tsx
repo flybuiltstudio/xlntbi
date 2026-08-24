@@ -78,7 +78,7 @@ function AdminLayout() {
         aria-label="Admin szekciók"
         className="sticky top-16 z-30 border-b border-border bg-background/95 backdrop-blur"
       >
-        <div className="mx-auto flex max-w-6xl flex-wrap gap-1 px-4 py-2">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-1 px-4 py-2">
           <Link
             to="/admin"
             activeOptions={{ exact: true }}
@@ -108,6 +108,13 @@ function AdminLayout() {
           >
             Felhasználók
           </Link>
+          <button
+            type="button"
+            onClick={() => void supabase.auth.signOut()}
+            className={`${tabBase} ml-auto border border-input`}
+          >
+            Kilépés
+          </button>
         </div>
       </nav>
       <AdminSessionContext.Provider value={{ email: session.email, userId: session.id }}>

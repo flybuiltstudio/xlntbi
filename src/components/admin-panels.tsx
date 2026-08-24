@@ -38,14 +38,27 @@ export const inputClass =
 export function LoginPanel() {
   const [status, setStatus] = useState<"idle" | "sending">("idle");
   const [error, setError] = useState("");
+  const [mode, setMode] = useState<"login" | "reset">("login");
+  const [resetSent, setResetSent] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("sending");
     setError("");
     const form = new FormData(event.currentTarget);
+    const email = String(form.get("email") ?? "");
+    if (mode === "reset") {
+      // Always show the same confirmation so the endpoint can't be used to
+      // probe which addresses have an account.
+      await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/admin/jelszo`,
+      });
+      setStatus("idle");
+      setResetSent(true);
+      return;
+    }
     const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: String(form.get("email") ?? ""),
+      email,
       password: String(form.get("password") ?? ""),
     });
     setStatus("idle");
@@ -58,24 +71,57 @@ export function LoginPanel() {
       className="mt-10 max-w-md rounded-xl border border-border bg-card p-6"
     >
       <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-        Bejelentkezés
+        {mode === "login" ? "Bejelentkezés" : "Elfelejtett jelszó"}
       </h2>
+      {mode === "reset" ? (
+        resetSent ? (
+          <p className="mt-4 rounded-md border border-border bg-muted px-4 py-3 text-sm text-foreground">
+            Ha ez az e-mail cím szerepel a rendszerben, elküldtük rá a
+            jelszó-visszaállító levelet. Nyisd meg a benne lévő linket, és adj
+            meg új jelszót.
+          </p>
+        ) : (
+          <p className="mt-4 text-sm text-muted-foreground">
+            Add meg az admin e-mail címedet – arra küldünk egy linket, amivel
+            új jelszót állíthatsz be.
+          </p>
+        )
+      ) : null}
       <label className="mt-4 block text-sm font-medium text-foreground">
         E-mail
         <input name="email" type="email" required className={inputClass} />
       </label>
-      <label className="mt-4 block text-sm font-medium text-foreground">
-        Jelszó
-        <input name="password" type="password" required className={inputClass} />
-      </label>
+      {mode === "login" ? (
+        <label className="mt-4 block text-sm font-medium text-foreground">
+          Jelszó
+          <input name="password" type="password" required className={inputClass} />
+        </label>
+      ) : null}
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
-      <button
-        type="submit"
-        disabled={status === "sending"}
-        className="mt-6 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-brand-dark disabled:opacity-60"
-      >
-        {status === "sending" ? "Belépés…" : "Belépés"}
-      </button>
+      <div className="mt-6 flex flex-wrap items-center gap-4">
+        {mode === "reset" && resetSent ? null : (
+          <button
+            type="submit"
+            disabled={status === "sending"}
+            className="inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-brand-dark disabled:opacity-60"
+          >
+            {status === "sending"
+              ? mode === "login" ? "Belépés…" : "Küldés…"
+              : mode === "login" ? "Belépés" : "Visszaállító e-mail küldése"}
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={() => {
+            setMode(mode === "login" ? "reset" : "login");
+            setResetSent(false);
+            setError("");
+          }}
+          className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+        >
+          {mode === "login" ? "Elfelejtetted a jelszavad?" : "Vissza a belépéshez"}
+        </button>
+      </div>
     </form>
   );
 }
@@ -186,13 +232,6 @@ export function OrdersPanel({ email }: { email: string | null }) {
           className="rounded-md border border-input px-3 py-1.5 font-medium text-foreground hover:bg-accent"
         >
           Frissítés
-        </button>
-        <button
-          type="button"
-          onClick={() => void supabase.auth.signOut()}
-          className="rounded-md border border-input px-3 py-1.5 font-medium text-foreground hover:bg-accent"
-        >
-          Kilépés
         </button>
       </div>
 
@@ -475,6 +514,18 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
       <p className="text-sm text-muted-foreground">
         Admin felhasználók kezelése: új létrehozása vagy meglévő törlése.
       </p>
+      <div className="mt-4 rounded-xl border border-border bg-muted/50 px-5 py-4 text-sm text-foreground">
+        <p>
+          <strong>Admin:</strong> teljes hozzáférés az admin felülethez –
+          megrendelések jóváhagyása, statisztikák és exportok, fizetés-teszt,
+          felhasználók kezelése.
+        </p>
+        <p className="mt-2">
+          <strong>Felhasználó:</strong> be tud jelentkezni, de az admin
+          funkciókat nem éri el – a szerepkör a későbbi bővítésekhez van
+          fenntartva.
+        </p>
+      </div>
 
       {message ? (
         <p className="mt-4 rounded-md border border-border bg-muted px-4 py-3 text-sm text-foreground">

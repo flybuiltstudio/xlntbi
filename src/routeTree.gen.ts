@@ -37,6 +37,7 @@ import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminFelhasznalokRouteImport } from './routes/admin.felhasznalok'
 import { Route as AdminFizetesTesztRouteImport } from './routes/admin.fizetes-teszt'
+import { Route as AdminJelszoRouteImport } from './routes/admin.jelszo'
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokAtalanyadoRouteImport } from './routes/kalkulatorok.atalanyado'
@@ -48,6 +49,8 @@ import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles_.
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -191,6 +194,11 @@ const AdminFizetesTesztRoute = AdminFizetesTesztRouteImport.update({
   path: '/fizetes-teszt',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminJelszoRoute = AdminJelszoRouteImport.update({
+  id: '/jelszo',
+  path: '/jelszo',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminStatisztikaRoute = AdminStatisztikaRouteImport.update({
   id: '/statisztika',
   path: '/statisztika',
@@ -250,6 +258,16 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -285,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/termekeim': typeof TermekeimRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
+  '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -297,6 +316,8 @@ export interface FileRoutesByFullPath {
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
@@ -326,6 +347,7 @@ export interface FileRoutesByTo {
   '/termekeim': typeof TermekeimRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
+  '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -338,6 +360,8 @@ export interface FileRoutesByTo {
   '/kalkulatorok': typeof KalkulatorokIndexRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
@@ -369,6 +393,7 @@ export interface FileRoutesById {
   '/termekeim': typeof TermekeimRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
+  '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -381,6 +406,8 @@ export interface FileRoutesById {
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
@@ -413,6 +440,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
+    | '/admin/jelszo'
     | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
@@ -425,6 +453,8 @@ export interface FileRouteTypes {
     | '/kalkulatorok/'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -454,6 +484,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
+    | '/admin/jelszo'
     | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
@@ -466,6 +497,8 @@ export interface FileRouteTypes {
     | '/kalkulatorok'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
   id:
     | '__root__'
@@ -496,6 +529,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
+    | '/admin/jelszo'
     | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
@@ -508,6 +542,8 @@ export interface FileRouteTypes {
     | '/kalkulatorok/'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
@@ -547,6 +583,8 @@ export interface RootRouteChildren {
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
   ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -748,6 +786,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFizetesTesztRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/jelszo': {
+      id: '/admin/jelszo'
+      path: '/jelszo'
+      fullPath: '/admin/jelszo'
+      preLoaderRoute: typeof AdminJelszoRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/statisztika': {
       id: '/admin/statisztika'
       path: '/statisztika'
@@ -825,6 +870,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -838,6 +897,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminFelhasznalokRoute: typeof AdminFelhasznalokRoute
   AdminFizetesTesztRoute: typeof AdminFizetesTesztRoute
+  AdminJelszoRoute: typeof AdminJelszoRoute
   AdminStatisztikaRoute: typeof AdminStatisztikaRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -845,6 +905,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminFelhasznalokRoute: AdminFelhasznalokRoute,
   AdminFizetesTesztRoute: AdminFizetesTesztRoute,
+  AdminJelszoRoute: AdminJelszoRoute,
   AdminStatisztikaRoute: AdminStatisztikaRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -887,6 +948,8 @@ const rootRouteChildren: RootRouteChildren = {
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
   ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
