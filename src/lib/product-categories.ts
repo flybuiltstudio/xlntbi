@@ -63,6 +63,7 @@ export const productCategories: ProductCategory[] = [
       "telefonszamla-konyvelo",
       "utnyilvantartas-kikuldetesi-rendelveny",
       "kamatlekerdezo-potlekszamito",
+      "rlb-nyito-vegyes-konyvelo",
     ],
   },
   {
