@@ -634,3 +634,151 @@ export async function invoiceDownloadUrl(
     invoiceNumber: order.billingo_invoice_number ?? "",
   };
 }
+
+// ---------------------------------------------------------------------------
+// "Friss verzió feltöltés" — termékfájl csere és kalkulátor-felülírások
+// ---------------------------------------------------------------------------
+
+const PRODUCT_FILES_BUCKET = "termekfajlok";
+const PRODUCT_UPLOAD_MAX_BYTES = 300 * 1024 * 1024; // 300 MB
+const CALCULATOR_UPLOAD_MAX_BYTES = 5 * 1024 * 1024; // 5 MB
+
+export type ProductFileInfo = {
+  slug: string;
+  fileName: string;
+  size: number | null;
+  updatedAt: string | null;
+};
+
+/** Reads the current storage metadata of every downloadable product file. */
+export async function listProductFiles(): Promise<ProductFileInfo[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { products } = await import("@/lib/products");
+  const result: ProductFileInfo[] = [];
+  for (const product of products) {
+    const download = product.available ? product.download : undefined;
+    if (!download) continue;
+    const slash = download.storagePath.lastIndexOf("/");
+    const folder = download.storagePath.slice(0, slash);
+    const fileName = download.storagePath.slice(slash + 1);
+    const { data } = await supabaseAdmin.storage
+      .from(PRODUCT_FILES_BUCKET)
+      .list(folder, { search: fileName, limit: 5 });
+    const entry = (data ?? []).find((item) => item.name === fileName);
+    const meta = entry?.metadata as { size?: unknown } | null | undefined;
+    result.push({
+      slug: product.slug,
+      fileName,
+      size: meta && typeof meta.size === "number" ? meta.size : null,
+      updatedAt: entry?.updated_at ?? entry?.created_at ?? null,
+    });
+  }
+  return result;
+}
+
+/**
+ * Mints a one-time signed upload URL pointing at the product's EXISTING
+ * storage path. The browser overwrites the file in place, so every previously
+ * issued download link keeps working — now serving the new version.
+ * The selected product (not the uploaded file's name) determines the target.
+ */
+export async function createProductUploadUrl(input: {
+  slug: string;
+  fileName: string;
+  fileSize: number;
+}): Promise<{ ok: true; path: string; token: string } | { ok: false; error: string }> {
+  const { products } = await import("@/lib/products");
+  const product = products.find((p) => p.slug === input.slug);
+  const download = product?.available ? product.download : undefined;
+  if (!product || !download) {
+    return { ok: false, error: "A kiválasztott termék nem frissíthető." };
+  }
+  const targetExt = download.storagePath.split(".").pop()?.toLowerCase() ?? "";
+  const uploadExt = input.fileName.split(".").pop()?.toLowerCase() ?? "";
+  if (!["xlsm", "exe"].includes(uploadExt)) {
+    return { ok: false, error: "Csak .xlsm vagy .exe fájl tölthető fel." };
+  }
+  if (uploadExt !== targetExt) {
+    return {
+      ok: false,
+      error: `A fájl kiterjesztésének egyeznie kell a jelenlegi fájléval (.${targetExt}).`,
+    };
+  }
+  if (input.fileSize <= 0 || input.fileSize > PRODUCT_UPLOAD_MAX_BYTES) {
+    return { ok: false, error: "A fájl mérete legfeljebb 300 MB lehet." };
+  }
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.storage
+    .from(PRODUCT_FILES_BUCKET)
+    .createSignedUploadUrl(download.storagePath, { upsert: true });
+  if (error || !data) {
+    return { ok: false, error: "Nem sikerült feltöltési hozzáférést készíteni. Próbáld újra." };
+  }
+  return { ok: true, path: data.path, token: data.token };
+}
+
+// --- Kalkulátor-felülírások -------------------------------------------------
+
+export type CalculatorOverrideInfo = {
+  key: string;
+  fileName: string;
+  updatedAt: string;
+};
+
+export async function listCalculatorOverrides(): Promise<CalculatorOverrideInfo[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("calculator_overrides")
+    .select("key, file_name, updated_at")
+    .order("key", { ascending: true });
+  return (data ?? []).map((row) => ({
+    key: row.key,
+    fileName: row.file_name,
+    updatedAt: row.updated_at,
+  }));
+}
+
+/**
+ * Stores an uploaded standalone calculator HTML as the override for the
+ * SELECTED calculator. The upload's file name is irrelevant — the key is.
+ */
+export async function uploadCalculatorVersion(input: {
+  key: string;
+  fileName: string;
+  content: string;
+  updatedBy: string;
+}): Promise<{ ok: true } | { ok: false; error: string }> {
+  const { isCalculatorKey } = await import("@/lib/calculators/registry");
+  if (!isCalculatorKey(input.key)) return { ok: false, error: "Ismeretlen kalkulátor." };
+  if (!input.fileName.toLowerCase().endsWith(".html")) {
+    return { ok: false, error: "Csak .html fájl tölthető fel." };
+  }
+  const byteLength = new TextEncoder().encode(input.content).length;
+  if (byteLength === 0 || byteLength > CALCULATOR_UPLOAD_MAX_BYTES) {
+    return { ok: false, error: "A fájl mérete legfeljebb 5 MB lehet." };
+  }
+  const { splitCalculatorHtml } = await import("@/lib/calculators/split");
+  const { html, script } = splitCalculatorHtml(input.content);
+  if (!html) return { ok: false, error: "A fájl nem tartalmaz megjeleníthető tartalmat." };
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin.from("calculator_overrides").upsert(
+    {
+      key: input.key,
+      html,
+      script,
+      file_name: input.fileName,
+      updated_by: input.updatedBy,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "key" },
+  );
+  if (error) return { ok: false, error: "A mentés nem sikerült. Próbáld újra." };
+  return { ok: true };
+}
+
+/** Removes a calculator override, restoring the bundled version. */
+export async function deleteCalculatorOverride(key: string): Promise<{ ok: boolean }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin.from("calculator_overrides").delete().eq("key", key);
+  return { ok: !error };
+}
