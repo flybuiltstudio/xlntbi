@@ -12,13 +12,17 @@ import {
   adminListInvoiceLogs,
   adminListOrders,
   adminListProductFiles,
+  adminListProductPlacements,
   adminListUsers,
+  adminResetProductPlacements,
   adminResendDownload,
+  adminSaveProductPlacements,
   adminRetryInvoice,
   adminUpdateUserRole,
   adminUploadCalculatorVersion,
 } from "@/lib/admin.functions";
 import { formatPrice, products } from "@/lib/products";
+import { applyPlacements, productCategories } from "@/lib/product-categories";
 import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
@@ -1539,6 +1543,212 @@ export function CalculatorVersionPanel() {
           </p>
         )}
       </div>
+    </section>
+  );
+}
+
+/** Termékek sorrendje és kategóriája — kézi rendezés kategóriánként. */
+export function ProductOrderPanel() {
+  const loadPlacements = useServerFn(adminListProductPlacements);
+  const savePlacements = useServerFn(adminSaveProductPlacements);
+  const resetPlacements = useServerFn(adminResetProductPlacements);
+
+  const [groups, setGroups] = useState<Record<string, string[]> | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  async function refresh() {
+    try {
+      const result = await loadPlacements();
+      const effective = applyPlacements(result.placements);
+      const next: Record<string, string[]> = {};
+      for (const category of effective) next[category.key] = [...category.slugs];
+      setGroups(next);
+    } catch {
+      const next: Record<string, string[]> = {};
+      for (const category of productCategories) next[category.key] = [...category.slugs];
+      setGroups(next);
+    }
+    setDirty(false);
+  }
+
+  useEffect(() => {
+    void refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function productName(slug: string) {
+    return products.find((p) => p.slug === slug)?.name ?? slug;
+  }
+
+  /** Moves a product one step up or down inside its own category. */
+  function move(categoryKey: string, index: number, delta: number) {
+    setGroups((prev) => {
+      if (!prev) return prev;
+      const list = [...(prev[categoryKey] ?? [])];
+      const target = index + delta;
+      if (target < 0 || target >= list.length) return prev;
+      const [item] = list.splice(index, 1);
+      list.splice(target, 0, item!);
+      setDirty(true);
+      setMessage("");
+      return { ...prev, [categoryKey]: list };
+    });
+  }
+
+  /** Moves a product to the end of another category. */
+  function changeCategory(slug: string, from: string, to: string) {
+    if (from === to) return;
+    setGroups((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev };
+      next[from] = (prev[from] ?? []).filter((s) => s !== slug);
+      next[to] = [...(prev[to] ?? []), slug];
+      setDirty(true);
+      setMessage("");
+      return next;
+    });
+  }
+
+  async function onSave() {
+    if (!groups || busy) return;
+    setBusy(true);
+    setError("");
+    setMessage("");
+    try {
+      const items = productCategories.flatMap((category) =>
+        (groups[category.key] ?? []).map((slug, index) => ({
+          slug,
+          category: category.key,
+          sortOrder: index,
+        })),
+      );
+      const result = await savePlacements({ data: { items } });
+      if (!result.ok) throw new Error(result.error);
+      setMessage("A sorrend és a kategóriák elmentve. A Termékeim oldal már ezt mutatja.");
+      setDirty(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(false);
+  }
+
+  async function onReset() {
+    if (busy) return;
+    setBusy(true);
+    setError("");
+    setMessage("");
+    try {
+      await resetPlacements();
+      await refresh();
+      setMessage("Visszaállt az eredeti kategória-beosztás és sorrend.");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(false);
+  }
+
+  return (
+    <section className="mt-12 rounded-xl border border-border bg-card p-6">
+      <h2 className="text-xl font-bold text-foreground">Termékek sorrendje és kategóriája</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        A nyilakkal rendezhetsz a kategórián belül, a legördülővel pedig áthelyezheted a
+        terméket másik kategóriába (a lista végére kerül). A módosítás mentés után látszik a
+        Termékeim oldalon.
+      </p>
+
+      <div className="mt-5 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          disabled={busy || !dirty}
+          onClick={() => void onSave()}
+          className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-40"
+        >
+          {busy ? "Mentés…" : "Sorrend mentése"}
+        </button>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={() => void onReset()}
+          className="rounded-md border border-input px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-accent disabled:opacity-40"
+        >
+          Eredeti sorrend visszaállítása
+        </button>
+        {dirty ? (
+          <span className="text-xs font-semibold text-muted-foreground">Nem mentett módosítás</span>
+        ) : null}
+      </div>
+
+      {message ? <p className="mt-4 text-sm font-semibold text-primary">{message}</p> : null}
+      {error ? <p className="mt-4 text-sm font-semibold text-destructive">{error}</p> : null}
+
+      {groups === null ? (
+        <p className="mt-6 text-xs text-muted-foreground">Betöltés…</p>
+      ) : (
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          {productCategories.map((category) => {
+            const list = groups[category.key] ?? [];
+            return (
+              <div key={category.key} className="rounded-lg border border-border p-4">
+                <h3 className="text-sm font-bold text-foreground">
+                  {category.title}{" "}
+                  <span className="font-normal text-muted-foreground">({list.length})</span>
+                </h3>
+                {list.length === 0 ? (
+                  <p className="mt-3 text-xs text-muted-foreground">Nincs ide sorolt termék.</p>
+                ) : (
+                  <ol className="mt-3 space-y-2">
+                    {list.map((slug, index) => (
+                      <li
+                        key={slug}
+                        className="flex flex-wrap items-center gap-2 rounded-md border border-border/70 bg-background px-2 py-1.5"
+                      >
+                        <span className="w-5 text-xs text-muted-foreground">{index + 1}.</span>
+                        <span className="flex-1 text-xs font-semibold text-foreground">
+                          {productName(slug)}
+                        </span>
+                        <button
+                          type="button"
+                          aria-label="Feljebb"
+                          disabled={index === 0 || busy}
+                          onClick={() => move(category.key, index, -1)}
+                          className="rounded border border-input px-2 py-0.5 text-xs disabled:opacity-30"
+                        >
+                          ↑
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Lejjebb"
+                          disabled={index === list.length - 1 || busy}
+                          onClick={() => move(category.key, index, 1)}
+                          className="rounded border border-input px-2 py-0.5 text-xs disabled:opacity-30"
+                        >
+                          ↓
+                        </button>
+                        <select
+                          aria-label="Kategória"
+                          value={category.key}
+                          disabled={busy}
+                          onChange={(e) => changeCategory(slug, category.key, e.target.value)}
+                          className="rounded-md border border-input bg-background px-2 py-1 text-xs text-foreground"
+                        >
+                          {productCategories.map((c) => (
+                            <option key={c.key} value={c.key}>
+                              {c.title}
+                            </option>
+                          ))}
+                        </select>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }
