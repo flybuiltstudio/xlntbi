@@ -296,6 +296,27 @@ export function OrdersPanel({ email }: { email: string | null }) {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Számlázva
+            </span>
+            {(
+              [
+                { id: "all", label: "Összes" },
+                { id: "invoiced", label: "Számlázva" },
+                { id: "not-invoiced", label: "Még nincs" },
+              ] as const
+            ).map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                className={filterChip(invoiceFilter === opt.id)}
+                onClick={() => setInvoiceFilter(opt.id)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Év
             </span>
             <button
