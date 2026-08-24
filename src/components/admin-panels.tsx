@@ -222,6 +222,25 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
+  async function onRetryInvoice(order: Order) {
+    setBusy(order.id);
+    setMessage("");
+    try {
+      const result = await retryInvoice({ data: { orderId: order.id } });
+      setMessage(
+        result.ok
+          ? `${order.orderNumber}: Billingo számla kiállítva${
+              result.invoiceNumber ? ` (${result.invoiceNumber})` : ""
+            }.`
+          : (result.error ?? "Hiba történt."),
+      );
+      await refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
   return (
     <div className="mt-8">
       <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
