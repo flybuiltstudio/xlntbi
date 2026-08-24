@@ -14,6 +14,7 @@ import utalasiImg from "@/assets/utalasi-csomag-keszito.jpg";
 import ifrsImg from "@/assets/ifrs-konszolidalo.jpg";
 import pdfExcelImg from "@/assets/pdf-excel-konverter.jpg";
 import nyitoVegyesImg from "@/assets/nyito-vegyes-konyvelo.jpg";
+import wifiJelszoImg from "@/assets/wifi-jelszo-nezo.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
