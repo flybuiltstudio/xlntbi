@@ -1362,6 +1362,11 @@ export function CalculatorVersionPanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const overrideKeys = useMemo(
+    () => new Set((overrides ?? []).map((o) => o.key)),
+    [overrides],
+  );
+
   /** Reads the chosen HTML file and stores it as the calculator's override. */
   async function onUpload() {
     if (!file || busy) return;
