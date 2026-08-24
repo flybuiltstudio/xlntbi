@@ -1255,17 +1255,22 @@ export function ProductVersionPanel() {
           <select
             className={`${selectClass} mt-1.5 w-full max-w-md`}
             value={slug}
+            disabled={busy}
             onChange={(e) => {
               setSlug(e.target.value);
               setMessage("");
               setError("");
             }}
           >
-            {downloadable.map((p) => (
-              <option key={p.slug} value={p.slug}>
-                {p.name}
-              </option>
-            ))}
+            {downloadable.map((p) => {
+              const m = files?.[p.slug];
+              return (
+                <option key={p.slug} value={p.slug}>
+                  {p.name}
+                  {m ? ` — ${m.fileName}` : ""}
+                </option>
+              );
+            })}
           </select>
         </label>
 
