@@ -61,6 +61,33 @@ export type Database = {
           },
         ]
       }
+      calculator_overrides: {
+        Row: {
+          file_name: string
+          html: string
+          key: string
+          script: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          file_name?: string
+          html: string
+          key: string
+          script?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          file_name?: string
+          html?: string
+          key?: string
+          script?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           company: string | null
