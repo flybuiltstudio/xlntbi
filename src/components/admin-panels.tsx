@@ -1166,6 +1166,7 @@ export function ProductVersionPanel() {
   async function onUpload() {
     if (!selected || !file || busy) return;
     setBusy(true);
+    setProgress(0);
     setError("");
     setMessage("");
     try {
@@ -1173,12 +1174,7 @@ export function ProductVersionPanel() {
         data: { slug: selected.slug, fileName: file.name, fileSize: file.size },
       });
       if (!ticket.ok) throw new Error(ticket.error);
-      const { error: uploadError } = await supabase.storage
-        .from(PRODUCT_FILES_BUCKET)
-        .uploadToSignedUrl(ticket.path, ticket.token, file);
-      if (uploadError) {
-        throw new Error("A feltöltés nem sikerült. Próbáld újra.");
-      }
+      await uploadWithProgress(ticket.path, ticket.token, file, setProgress);
       setMessage(
         `${selected.name}: új verzió feltöltve (${file.name}, ${formatFileSize(file.size)}). ` +
           "A korábbi vásárlók letöltő linkjei mostantól az új verziót szolgálják ki.",
@@ -1189,6 +1185,7 @@ export function ProductVersionPanel() {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Hiba történt.");
     }
+    setProgress(null);
     setBusy(false);
   }
 
