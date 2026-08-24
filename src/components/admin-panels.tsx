@@ -1050,6 +1050,75 @@ function formatFileSize(bytes: number | null): string {
   return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
+/**
+ * Feltöltés aláírt URL-re XMLHttpRequesttel — a Supabase kliens fetch-et
+ * használ, ami nem jelzi a haladást; az XHR upload eseményei igen.
+ */
+function uploadWithProgress(
+  path: string,
+  token: string,
+  file: File,
+  onProgress: (percent: number) => void,
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const baseUrl = import.meta.env["VITE_SUPABASE_URL"] as string;
+    const url =
+      `${baseUrl}/storage/v1/object/upload/sign/${PRODUCT_FILES_BUCKET}/${path}` +
+      `?token=${encodeURIComponent(token)}`;
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", url);
+    xhr.setRequestHeader("x-upsert", "true");
+    xhr.setRequestHeader(
+      "apikey",
+      import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string,
+    );
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && event.total > 0) {
+        onProgress(Math.min(99, Math.round((event.loaded / event.total) * 100)));
+      }
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress(100);
+        resolve();
+      } else {
+        reject(new Error("A feltöltés nem sikerült. Próbáld újra."));
+      }
+    };
+    xhr.onerror = () => reject(new Error("A feltöltés nem sikerült. Próbáld újra."));
+    xhr.ontimeout = () => reject(new Error("A feltöltés időtúllépés miatt megszakadt."));
+    const body = new FormData();
+    body.append("cacheControl", "3600");
+    body.append("", file);
+    xhr.send(body);
+  });
+}
+
+/** Feltöltés-haladásjelző sáv százalékkal. */
+function UploadProgressBar({ percent, label }: { percent: number; label: string }) {
+  return (
+    <div className="max-w-md">
+      <div className="flex items-center justify-between text-sm">
+        <span className="font-medium text-foreground">{label}</span>
+        <span className="tabular-nums text-muted-foreground">{percent}%</span>
+      </div>
+      <div
+        className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-muted"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+        aria-label={label}
+      >
+        <div
+          className="h-full rounded-full bg-primary transition-[width] duration-200"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
 const selectClass =
   "rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground";
 const fileInputClass =
@@ -1069,6 +1138,7 @@ export function ProductVersionPanel() {
   const [file, setFile] = useState<File | null>(null);
   const [inputKey, setInputKey] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState<number | null>(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -1096,6 +1166,7 @@ export function ProductVersionPanel() {
   async function onUpload() {
     if (!selected || !file || busy) return;
     setBusy(true);
+    setProgress(0);
     setError("");
     setMessage("");
     try {
@@ -1103,12 +1174,7 @@ export function ProductVersionPanel() {
         data: { slug: selected.slug, fileName: file.name, fileSize: file.size },
       });
       if (!ticket.ok) throw new Error(ticket.error);
-      const { error: uploadError } = await supabase.storage
-        .from(PRODUCT_FILES_BUCKET)
-        .uploadToSignedUrl(ticket.path, ticket.token, file);
-      if (uploadError) {
-        throw new Error("A feltöltés nem sikerült. Próbáld újra.");
-      }
+      await uploadWithProgress(ticket.path, ticket.token, file, setProgress);
       setMessage(
         `${selected.name}: új verzió feltöltve (${file.name}, ${formatFileSize(file.size)}). ` +
           "A korábbi vásárlók letöltő linkjei mostantól az új verziót szolgálják ki.",
@@ -1119,6 +1185,7 @@ export function ProductVersionPanel() {
     } catch (e) {
       setError(e instanceof Error ? e.message : "Hiba történt.");
     }
+    setProgress(null);
     setBusy(false);
   }
 
@@ -1186,6 +1253,17 @@ export function ProductVersionPanel() {
             {busy ? "Feltöltés…" : "Új verzió feltöltése"}
           </button>
         </div>
+
+        {progress !== null ? (
+          <UploadProgressBar
+            percent={progress}
+            label={
+              progress < 100
+                ? `Feltöltés folyamatban — ${file?.name ?? ""} (${formatFileSize(file?.size ?? null)})`
+                : "Feltöltés kész, feldolgozás…"
+            }
+          />
+        ) : null}
 
         {error ? (
           <p className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
@@ -1325,6 +1403,22 @@ export function CalculatorVersionPanel() {
             {busy ? "Feltöltés…" : "Kalkulátor frissítése"}
           </button>
         </div>
+
+        {busy ? (
+          <div className="max-w-md">
+            <p className="text-sm font-medium text-foreground">
+              Feltöltés folyamatban — {file?.name ?? ""} (
+              {formatFileSize(file?.size ?? null)})
+            </p>
+            <div
+              className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-muted"
+              role="progressbar"
+              aria-label="Feltöltés folyamatban"
+            >
+              <div className="h-full w-1/3 animate-pulse rounded-full bg-primary" />
+            </div>
+          </div>
+        ) : null}
 
         {error ? (
           <p className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
