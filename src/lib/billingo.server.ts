@@ -207,12 +207,11 @@ async function createInvoice(
   return { id, number };
 }
 
-/** Sends the invoice to the buyer's email via Billingo. */
-async function sendInvoiceToBuyer(invoiceId: number, email: string): Promise<void> {
-  if (!email) return;
+/** Sends the invoice to the buyer via Billingo (uses the partner's registered email). */
+async function sendInvoiceToBuyer(invoiceId: number): Promise<void> {
   await billingo(`/documents/${invoiceId}/send`, {
     method: "POST",
-    body: JSON.stringify({ emails: [email] }),
+    body: JSON.stringify({ send_options: { send_email: true } }),
   });
 }
 
