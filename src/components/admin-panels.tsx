@@ -885,6 +885,12 @@ export function InvoiceLogsPanel() {
         </p>
       ) : null}
 
+      {message ? (
+        <p className="mt-6 rounded-md border border-border bg-card px-4 py-3 text-sm text-foreground">
+          {message}
+        </p>
+      ) : null}
+
       {logs !== null && logs.length > 0 ? (
         <div className="mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
           <div className="flex flex-wrap items-center gap-2">
@@ -949,7 +955,7 @@ export function InvoiceLogsPanel() {
         </p>
       ) : (
         <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-card">
-          <table className="w-full min-w-[760px] text-left text-sm text-foreground">
+          <table className="w-full min-w-[880px] text-left text-sm text-foreground">
             <thead>
               <tr className="border-b border-border text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 <th className="px-4 py-3">Időpont</th>
@@ -959,6 +965,7 @@ export function InvoiceLogsPanel() {
                 <th className="px-4 py-3">Számlaszám</th>
                 <th className="px-4 py-3">Hibakód</th>
                 <th className="px-4 py-3">Hibaüzenet</th>
+                <th className="px-4 py-3">Művelet</th>
               </tr>
             </thead>
             <tbody>
