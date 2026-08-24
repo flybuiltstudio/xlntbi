@@ -13,6 +13,7 @@ import calcImg from "@/assets/online-kalkulator.jpg";
 import utalasiImg from "@/assets/utalasi-csomag-keszito.jpg";
 import ifrsImg from "@/assets/ifrs-konszolidalo.jpg";
 import pdfExcelImg from "@/assets/pdf-excel-konverter.jpg";
+import nyitoVegyesImg from "@/assets/nyito-vegyes-konyvelo.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -1092,6 +1093,52 @@ export const products: Product[] = [
     download: {
       fileName: "RLB_Szamla_Import.xlsm",
       storagePath: "rlb-kulfoldi-szamla-import/RLB_Szamla_Import.xlsm",
+    },
+  },
+  {
+    slug: "rlb-nyito-vegyes-konyvelo",
+    name: "Nyitó és Vegyes Könyvelő – RLB kiadás",
+    tagline: "Töltse fel a főkönyvi adatokat – a program az RLB vegyes importfájlját készen adja",
+    status: "available",
+    priceId: "rlb_nyito_vegyes_konyvelo_alap_licenc",
+    price: 19900,
+    currency: "HUF",
+    image: nyitoVegyesImg,
+    metaTitle: "Nyitó és Vegyes Könyvelő – RLB kiadás | EXCELlent",
+    metaDescription:
+      "Nyitó egyenlegek, havi vegyes és bérkönyvelés Excelben, RLB többsoros vegyes importfájllal. Ár: 19 900 Ft-tól.",
+    intro: [
+      "A hónap végi vegyes könyvelés és a nyitás a legidőigényesebb, legtöbb kézi munkát követelő feladatok közé tartozik. Ez az eszköz Excelben, ismerős felületen oldja meg mindezt: Ön beilleszti vagy rögzíti a tételeket, a program pedig előállítja az RLB által beolvasható importfájlt – gépelés, átszámozgatás és tükörsor-párosítás nélkül.",
+    ],
+    features: [
+      "Nyitás: nyitó egyenlegek könyvelése ellenszámlával (491), egyetlen lapon.",
+      "Vegyes és bér: havi vegyes tételek és teljes bérkönyvelés, 12 hónap készen előkészítve.",
+      "RLB export: az RLB hivatalos többsoros vegyes (CSV, XF/XT) importfájljának automatikus előállítása.",
+      "Deviza: MNB-árfolyam lekérdezés és devizás tételek kezelése.",
+      "Segédeszközök: teljesítési időpont kalkulátor, munkanap-számítás, számlatükör, kölcsön-nyilvántartás.",
+      "Kommunikáció: teljesítés-igazoló e-mail (magyar és angol) kiküldése.",
+      "Beolvasás: PDF-beolvasó a bizonylatok gyorsabb rögzítéséhez.",
+    ],
+    why: "Az RLB kiadás az RLB hivatalos többsoros vegyes import-struktúrája alapján készül; első használatkor egy próba-import ajánlott a visszaigazoláshoz. A program a betöltött adatokból dolgozik; az áfamentes vegyes és nyitó tételeket kezeli. Áfás vagy devizás vegyes tételhez egy rövid egyeztetés után illesztjük a formátumot. Excel (Windows) és engedélyezett makrók szükségesek.",
+    tiers: [
+      {
+        id: "alap_licenc",
+        label: "Alap licenc – 1 adószám",
+        price: 19900,
+        note: "Egy céget könyvelő vállalkozásnak, saját könyveléshez. Éves licenc.",
+        priceId: "rlb_nyito_vegyes_konyvelo_alap_licenc",
+      },
+      {
+        id: "iroda_licenc",
+        label: "Iroda licenc – korlátlan adószám",
+        price: 49900,
+        note: "Könyvelőirodának, tetszőleges számú ügyfél könyveléséhez. Éves licenc.",
+        priceId: "rlb_nyito_vegyes_konyvelo_iroda_licenc",
+      },
+    ],
+    download: {
+      fileName: "RLB_Nyito_Vegyes_Konyvelo.xlsm",
+      storagePath: "rlb-nyito-vegyes-konyvelo/RLB_Nyito_Vegyes_Konyvelo.xlsm",
     },
   },
   {
