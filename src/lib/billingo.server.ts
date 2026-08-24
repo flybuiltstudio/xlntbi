@@ -43,21 +43,42 @@ function apiKey(): string {
   return key;
 }
 
+class BillingoError extends Error {
+  code: string;
+  constructor(message: string, code: string) {
+    super(message);
+    this.code = code;
+  }
+}
+
 async function billingo(path: string, init: RequestInit = {}): Promise<any> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...init,
-    headers: {
-      "X-API-KEY": apiKey(),
-      "Content-Type": "application/json",
-      ...(init.headers ?? {}),
-    },
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      ...init,
+      headers: {
+        "X-API-KEY": apiKey(),
+        "Content-Type": "application/json",
+        ...(init.headers ?? {}),
+      },
+    });
+  } catch (e: any) {
+    throw new BillingoError(
+      `Billingo ${path}: hálózati hiba (${e?.message ?? "ismeretlen"})`,
+      "NETWORK",
+    );
+  }
   const text = await res.text();
-  const body = text ? JSON.parse(text) : null;
+  let body: any = null;
+  try {
+    body = text ? JSON.parse(text) : null;
+  } catch {
+    body = null;
+  }
   if (!res.ok) {
     const msg =
       body?.error?.message ?? body?.message ?? `Billingo HTTP ${res.status}`;
-    throw new Error(`Billingo ${path}: ${msg}`);
+    throw new BillingoError(`Billingo ${path}: ${msg}`, `HTTP_${res.status}`);
   }
   return body;
 }
