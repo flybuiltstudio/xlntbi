@@ -33,7 +33,17 @@ export const Route = createFileRoute("/kalkulatorok/invoice-dates")({
 function InvoiceDatesPage() {
   const { data: override } = useSuspenseQuery(overrideQueryOptions);
   return (
-...
+    <>
+      <PageHero>
+        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Invoice Dates Calculator</h1>
+      </PageHero>
+      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+        <p className="max-w-3xl text-base text-muted-foreground">
+          Invoice dates under the Hungarian VAT Act (§58, §60, §80, §163): date of supply, payment
+          deadline and FX date, with live NBH (MNB) exchange rates for EUR, GBP and USD. For
+          information only.
+        </p>
+        <div className="mt-8">
           <EmbeddedCalculator
             key={override ? override.updatedAt : "beepitett"}
             html={override?.html ?? html}

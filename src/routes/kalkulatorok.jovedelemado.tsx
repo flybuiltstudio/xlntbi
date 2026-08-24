@@ -33,7 +33,16 @@ export const Route = createFileRoute("/kalkulatorok/jovedelemado")({
 function JovedelemadoPage() {
   const { data: override } = useSuspenseQuery(overrideQueryOptions);
   return (
-...
+    <>
+      <PageHero>
+        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Jövedelemadó</h1>
+      </PageHero>
+      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+        <p className="max-w-3xl text-base text-muted-foreground">
+          Adózási forma összehasonlító kalkulátor a 2026-ban hatályos szabályok alapján. A kalkuláció
+          tájékoztató jellegű.
+        </p>
+        <div className="mt-8">
           <EmbeddedCalculator
             key={override ? override.updatedAt : "beepitett"}
             html={override?.html ?? html}
