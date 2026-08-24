@@ -11,6 +11,7 @@ import {
   Loader2,
   Package,
   ShoppingCart,
+  Users,
 } from "lucide-react";
 
 import { adminOrderStats } from "@/lib/admin.functions";
@@ -23,8 +24,16 @@ import {
   exportStatsCsv,
   exportStatsXlsx,
   exportStatsXml,
+  exportTableCsv,
+  exportTablePdf,
+  exportTableXlsx,
+  exportTableXml,
   exportYearPdf,
+  formatDateHu,
+  paymentLabel,
   productLabel,
+  slugify,
+  type ListTable,
 } from "@/lib/stats-export";
 
 export const Route = createFileRoute("/admin/statisztika")({
@@ -641,8 +650,363 @@ function StatsPanel() {
               </section>
             </>
           )}
+
+          {/* Megrendelői és terméklista – a kezdetektől, szűrőktől függetlenül */}
+          <CustomerProductLists rows={rows} />
         </>
       )}
     </div>
+  );
+}
+
+const listExportBtn =
+  "inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50";
+
+const listSelectCls =
+  "h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground";
+
+function sumListQty(list: StatRow[]) {
+  return list.reduce((a, r) => a + r.quantity, 0);
+}
+function sumListRevenue(list: StatRow[]) {
+  return list.reduce((a, r) => a + r.totalPrice, 0);
+}
+
+/** Megrendelőnkénti és termékenkénti, a kezdetektől számított listák 4 formátumú exporttal. */
+function CustomerProductLists({ rows }: { rows: StatRow[] }) {
+  const [customerSel, setCustomerSel] = useState("");
+  const [productSel, setProductSel] = useState("");
+  const [exporting, setExporting] = useState<string | null>(null);
+  const [error, setError] = useState("");
+
+  const customers = useMemo(() => {
+    const map = new Map<string, { email: string; name: string }>();
+    for (const r of rows) {
+      const key = (r.email ?? "").trim().toLowerCase();
+      if (!key) continue;
+      // A sorok dátum szerint növekvők – a felülírás a legfrissebb nevet tartja meg.
+      map.set(key, { email: r.email ?? "", name: r.billingName || r.email || "" });
+    }
+    return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, "hu"));
+  }, [rows]);
+
+  const productLabels = useMemo(
+    () => [...new Set(rows.map((r) => productLabel(r)))].sort((a, b) => a.localeCompare(b, "hu")),
+    [rows],
+  );
+
+  const activeCustomer = customers.find((c) => c.email === customerSel) ?? customers[0];
+  const activeProduct = productLabels.includes(productSel) ? productSel : productLabels[0];
+
+  const customerRows = useMemo(() => {
+    if (!activeCustomer) return [];
+    const key = activeCustomer.email.trim().toLowerCase();
+    return rows.filter((r) => (r.email ?? "").trim().toLowerCase() === key);
+  }, [rows, activeCustomer]);
+
+  const productRows = useMemo(
+    () => (activeProduct ? rows.filter((r) => productLabel(r) === activeProduct) : []),
+    [rows, activeProduct],
+  );
+
+  const customerTable: ListTable | null = activeCustomer
+    ? {
+        title: `Megrendelői lista – ${activeCustomer.name}`,
+        subtitle: activeCustomer.email,
+        head: ["Dátum", "Rendelésszám", "Termék", "Mennyiség (db)", "Összeg (Ft)", "Fizetés"],
+        body: customerRows.map((r) => [
+          formatDateHu(r.createdAt),
+          r.orderNumber ?? "",
+          productLabel(r),
+          r.quantity,
+          r.totalPrice,
+          paymentLabel(r.paymentStatus),
+        ]),
+        foot: [
+          "Összesen",
+          "",
+          `${customerRows.length} megrendelés`,
+          sumListQty(customerRows),
+          sumListRevenue(customerRows),
+          "",
+        ],
+        rightCols: [3, 4],
+      }
+    : null;
+
+  const productTable: ListTable | null = activeProduct
+    ? {
+        title: `Termék megrendelői – ${activeProduct}`,
+        head: [
+          "Dátum",
+          "Rendelésszám",
+          "Megrendelő",
+          "E-mail",
+          "Mennyiség (db)",
+          "Összeg (Ft)",
+          "Fizetés",
+        ],
+        body: productRows.map((r) => [
+          formatDateHu(r.createdAt),
+          r.orderNumber ?? "",
+          r.billingName ?? "",
+          r.email ?? "",
+          r.quantity,
+          r.totalPrice,
+          paymentLabel(r.paymentStatus),
+        ]),
+        foot: [
+          "Összesen",
+          "",
+          "",
+          `${productRows.length} megrendelés`,
+          sumListQty(productRows),
+          sumListRevenue(productRows),
+          "",
+        ],
+        rightCols: [4, 5],
+      }
+    : null;
+
+  const runListExport = async (kind: string, base: string, table: ListTable | null) => {
+    if (!table || exporting) return;
+    setError("");
+    setExporting(kind);
+    try {
+      if (kind.endsWith("csv")) exportTableCsv(`${base}.csv`, table);
+      else if (kind.endsWith("xml")) exportTableXml(`${base}.xml`, table);
+      else if (kind.endsWith("xlsx")) await exportTableXlsx(`${base}.xlsx`, table.title, table);
+      else await exportTablePdf(`${base}.pdf`, table);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Az exportálás nem sikerült.");
+    } finally {
+      setExporting(null);
+    }
+  };
+
+  const exportButtons = (prefix: string, base: string, table: ListTable | null) => (
+    <div className="mt-4 flex flex-wrap items-center gap-2">
+      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground">
+        <Download className="h-3.5 w-3.5 text-primary" />
+        Exportálás:
+      </span>
+      <button
+        type="button"
+        className={listExportBtn}
+        disabled={!table || exporting !== null}
+        onClick={() => runListExport(`${prefix}-xlsx`, base, table)}
+      >
+        {exporting === `${prefix}-xlsx` ? (
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        ) : (
+          <FileSpreadsheet className="h-3.5 w-3.5" />
+        )}
+        Excel
+      </button>
+      <button
+        type="button"
+        className={listExportBtn}
+        disabled={!table || exporting !== null}
+        onClick={() => runListExport(`${prefix}-csv`, base, table)}
+      >
+        <FileText className="h-3.5 w-3.5" />
+        CSV
+      </button>
+      <button
+        type="button"
+        className={listExportBtn}
+        disabled={!table || exporting !== null}
+        onClick={() => runListExport(`${prefix}-xml`, base, table)}
+      >
+        <FileCode2 className="h-3.5 w-3.5" />
+        XML
+      </button>
+      <button
+        type="button"
+        className={listExportBtn}
+        disabled={!table || exporting !== null}
+        onClick={() => runListExport(`${prefix}-pdf`, base, table)}
+      >
+        {exporting === `${prefix}-pdf` ? (
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        ) : (
+          <FileDown className="h-3.5 w-3.5" />
+        )}
+        PDF
+      </button>
+    </div>
+  );
+
+  return (
+    <section className="mt-14">
+      <h2 className="text-xl font-bold text-foreground">Megrendelői és terméklista</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Ezek a listák mindig a kezdetektől számított, teljes megrendelési előzményt mutatják – a
+        fenti szűrők ezekre nem vonatkoznak.
+      </p>
+
+      {error ? (
+        <p className="mt-4 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </p>
+      ) : null}
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        {/* Megrendelőnként */}
+        <div className="rounded-xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Users className="h-4 w-4 text-primary" />
+            Megrendelőnként – mit rendelt?
+          </div>
+          <select
+            className={`${listSelectCls} mt-3`}
+            value={activeCustomer?.email ?? ""}
+            onChange={(e) => setCustomerSel(e.target.value)}
+          >
+            {customers.map((c) => (
+              <option key={c.email} value={c.email}>
+                {c.name} ({c.email})
+              </option>
+            ))}
+          </select>
+
+          {activeCustomer && customerTable ? (
+            <>
+              <div className="mt-4 max-h-80 overflow-auto rounded-lg border border-border">
+                <table className="w-full min-w-[480px] text-xs">
+                  <thead className="sticky top-0 bg-card">
+                    <tr className="border-b border-border text-left uppercase tracking-wider text-muted-foreground">
+                      <th className="px-3 py-2 font-semibold">Dátum</th>
+                      <th className="px-3 py-2 font-semibold">Rendelésszám</th>
+                      <th className="px-3 py-2 font-semibold">Termék</th>
+                      <th className="px-3 py-2 text-right font-semibold">Menny.</th>
+                      <th className="px-3 py-2 text-right font-semibold">Összeg</th>
+                      <th className="px-3 py-2 font-semibold">Fizetés</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {customerRows.map((r) => (
+                      <tr
+                        key={r.orderNumber}
+                        className="border-b border-border/60 last:border-0"
+                      >
+                        <td className="px-3 py-2 text-muted-foreground">
+                          {formatDateHu(r.createdAt)}
+                        </td>
+                        <td className="px-3 py-2 text-muted-foreground">{r.orderNumber}</td>
+                        <td className="px-3 py-2 font-medium text-foreground">
+                          {productLabel(r)}
+                        </td>
+                        <td className="px-3 py-2 text-right">{r.quantity} db</td>
+                        <td className="px-3 py-2 text-right">{formatPrice(r.totalPrice)}</td>
+                        <td className="px-3 py-2 text-muted-foreground">
+                          {paymentLabel(r.paymentStatus)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr className="border-t border-border bg-muted/50 font-semibold text-foreground">
+                      <td className="px-3 py-2">Összesen</td>
+                      <td className="px-3 py-2" colSpan={2}>
+                        {customerRows.length} megrendelés
+                      </td>
+                      <td className="px-3 py-2 text-right">{sumListQty(customerRows)} db</td>
+                      <td className="px-3 py-2 text-right">
+                        {formatPrice(sumListRevenue(customerRows))}
+                      </td>
+                      <td className="px-3 py-2" />
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              {exportButtons(
+                "cust",
+                `xlntbi-megrendelo-${slugify(activeCustomer.name)}`,
+                customerTable,
+              )}
+            </>
+          ) : (
+            <p className="mt-4 text-sm text-muted-foreground">Nincs megrendelő.</p>
+          )}
+        </div>
+
+        {/* Termékenként */}
+        <div className="rounded-xl border border-border bg-card p-5">
+          <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Package className="h-4 w-4 text-primary" />
+            Termékenként – kik rendelték?
+          </div>
+          <select
+            className={`${listSelectCls} mt-3`}
+            value={activeProduct ?? ""}
+            onChange={(e) => setProductSel(e.target.value)}
+          >
+            {productLabels.map((label) => (
+              <option key={label} value={label}>
+                {label}
+              </option>
+            ))}
+          </select>
+
+          {activeProduct && productTable ? (
+            <>
+              <div className="mt-4 max-h-80 overflow-auto rounded-lg border border-border">
+                <table className="w-full min-w-[520px] text-xs">
+                  <thead className="sticky top-0 bg-card">
+                    <tr className="border-b border-border text-left uppercase tracking-wider text-muted-foreground">
+                      <th className="px-3 py-2 font-semibold">Dátum</th>
+                      <th className="px-3 py-2 font-semibold">Rendelésszám</th>
+                      <th className="px-3 py-2 font-semibold">Megrendelő</th>
+                      <th className="px-3 py-2 text-right font-semibold">Menny.</th>
+                      <th className="px-3 py-2 text-right font-semibold">Összeg</th>
+                      <th className="px-3 py-2 font-semibold">Fizetés</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {productRows.map((r) => (
+                      <tr
+                        key={`${r.orderNumber}-${r.email}`}
+                        className="border-b border-border/60 last:border-0"
+                      >
+                        <td className="px-3 py-2 text-muted-foreground">
+                          {formatDateHu(r.createdAt)}
+                        </td>
+                        <td className="px-3 py-2 text-muted-foreground">{r.orderNumber}</td>
+                        <td className="px-3 py-2 font-medium text-foreground">
+                          {r.billingName}
+                          <span className="block text-muted-foreground">{r.email}</span>
+                        </td>
+                        <td className="px-3 py-2 text-right">{r.quantity} db</td>
+                        <td className="px-3 py-2 text-right">{formatPrice(r.totalPrice)}</td>
+                        <td className="px-3 py-2 text-muted-foreground">
+                          {paymentLabel(r.paymentStatus)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr className="border-t border-border bg-muted/50 font-semibold text-foreground">
+                      <td className="px-3 py-2">Összesen</td>
+                      <td className="px-3 py-2" colSpan={2}>
+                        {productRows.length} megrendelés
+                      </td>
+                      <td className="px-3 py-2 text-right">{sumListQty(productRows)} db</td>
+                      <td className="px-3 py-2 text-right">
+                        {formatPrice(sumListRevenue(productRows))}
+                      </td>
+                      <td className="px-3 py-2" />
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              {exportButtons("prod", `xlntbi-termek-${slugify(activeProduct)}`, productTable)}
+            </>
+          ) : (
+            <p className="mt-4 text-sm text-muted-foreground">Nincs termék.</p>
+          )}
+        </div>
+      </div>
+    </section>
   );
 }
