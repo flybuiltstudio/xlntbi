@@ -84,6 +84,23 @@ export const adminRetryInvoice = createServerFn({ method: "POST" })
     return retryInvoice(data.orderId);
   });
 
+export const adminListInvoiceLogs = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { listInvoiceLogs } = await import("./admin.server");
+    return { logs: await listInvoiceLogs() };
+  });
+
+export const adminInvoiceUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ orderId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { invoiceDownloadUrl } = await import("./admin.server");
+    return invoiceDownloadUrl(data.orderId);
+  });
+
 export const adminListUsers = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
