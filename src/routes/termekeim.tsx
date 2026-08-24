@@ -4,10 +4,11 @@ import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import { aamText } from "@/lib/aam";
 import { priceFrom, formatPrice } from "@/lib/products";
 import {
-  productCategories,
+  applyPlacements,
   categoryProducts,
   getCategory,
 } from "@/lib/product-categories";
+import { getProductPlacements } from "@/lib/product-placements.functions";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
 import { PageHero } from "@/components/PageHero";
 
@@ -35,6 +36,7 @@ export const Route = createFileRoute("/termekeim")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  loader: () => getProductPlacements(),
   component: TermekeimPage,
 });
 
@@ -50,7 +52,9 @@ const features = [
 
 function TermekeimPage() {
   const { kategoria: openKey } = Route.useSearch();
-  const open = getCategory(openKey);
+  const { placements } = Route.useLoaderData();
+  const categories = applyPlacements(placements);
+  const open = getCategory(openKey, categories);
   return (
 
     <div>
@@ -123,7 +127,7 @@ function TermekeimPage() {
         </p>
 
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-          {productCategories.map((category) => {
+          {categories.map((category) => {
             const isOpen = category.key === openKey;
             const count = categoryProducts(category).length;
             return (

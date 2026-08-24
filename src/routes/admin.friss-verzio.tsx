@@ -43,6 +43,7 @@ function AdminNewVersionPage() {
         </p>
         <ProductVersionPanel />
         <CalculatorVersionPanel />
+        <ProductOrderPanel />
       </div>
     </>
   );
