@@ -122,7 +122,7 @@ async function findOrCreatePartner(order: OrderRow): Promise<number> {
     const match = partners.find((p) =>
       (p.emails ?? []).some((e: string) => e.toLowerCase() === order.email.toLowerCase()),
     );
-    if (match?.id) return match.id;
+    if (match && typeof match.id === "number") return match.id;
   }
 
   const partner = {
