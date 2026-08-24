@@ -1254,6 +1254,17 @@ export function ProductVersionPanel() {
           </button>
         </div>
 
+        {progress !== null ? (
+          <UploadProgressBar
+            percent={progress}
+            label={
+              progress < 100
+                ? `Feltöltés folyamatban — ${file?.name ?? ""} (${formatFileSize(file?.size ?? null)})`
+                : "Feltöltés kész, feldolgozás…"
+            }
+          />
+        ) : null}
+
         {error ? (
           <p className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
             {error}
