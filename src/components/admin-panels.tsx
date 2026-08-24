@@ -1050,6 +1050,75 @@ function formatFileSize(bytes: number | null): string {
   return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
+/**
+ * Feltöltés aláírt URL-re XMLHttpRequesttel — a Supabase kliens fetch-et
+ * használ, ami nem jelzi a haladást; az XHR upload eseményei igen.
+ */
+function uploadWithProgress(
+  path: string,
+  token: string,
+  file: File,
+  onProgress: (percent: number) => void,
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const baseUrl = import.meta.env["VITE_SUPABASE_URL"] as string;
+    const url =
+      `${baseUrl}/storage/v1/object/upload/sign/${PRODUCT_FILES_BUCKET}/${path}` +
+      `?token=${encodeURIComponent(token)}`;
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", url);
+    xhr.setRequestHeader("x-upsert", "true");
+    xhr.setRequestHeader(
+      "apikey",
+      import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] as string,
+    );
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && event.total > 0) {
+        onProgress(Math.min(99, Math.round((event.loaded / event.total) * 100)));
+      }
+    };
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        onProgress(100);
+        resolve();
+      } else {
+        reject(new Error("A feltöltés nem sikerült. Próbáld újra."));
+      }
+    };
+    xhr.onerror = () => reject(new Error("A feltöltés nem sikerült. Próbáld újra."));
+    xhr.ontimeout = () => reject(new Error("A feltöltés időtúllépés miatt megszakadt."));
+    const body = new FormData();
+    body.append("cacheControl", "3600");
+    body.append("", file);
+    xhr.send(body);
+  });
+}
+
+/** Feltöltés-haladásjelző sáv százalékkal. */
+function UploadProgressBar({ percent, label }: { percent: number; label: string }) {
+  return (
+    <div className="max-w-md">
+      <div className="flex items-center justify-between text-sm">
+        <span className="font-medium text-foreground">{label}</span>
+        <span className="tabular-nums text-muted-foreground">{percent}%</span>
+      </div>
+      <div
+        className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-muted"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+        aria-label={label}
+      >
+        <div
+          className="h-full rounded-full bg-primary transition-[width] duration-200"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
 const selectClass =
   "rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground";
 const fileInputClass =
