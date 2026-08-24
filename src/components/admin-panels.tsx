@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import {
   adminApproveTransfer,
@@ -10,7 +10,16 @@ import {
   adminResendDownload,
 } from "@/lib/admin.functions";
 import { formatPrice } from "@/lib/products";
+import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
+
+export function filterChip(active: boolean) {
+  return `rounded-md px-3.5 py-1.5 text-sm font-semibold transition-colors ${
+    active
+      ? "bg-primary text-primary-foreground"
+      : "border border-input text-muted-foreground hover:bg-accent hover:text-foreground"
+  }`;
+}
 
 export type Order = Awaited<ReturnType<typeof adminListOrders>>["orders"][number];
 export type AdminUserRow = Awaited<ReturnType<typeof adminListUsers>>["users"][number];
@@ -80,6 +89,36 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid">("all");
+  const [yearSel, setYearSel] = useState<number | "all">("all");
+  const [monthSel, setMonthSel] = useState<number | "all">("all");
+
+  const years = useMemo(() => {
+    const set = new Set<number>();
+    for (const order of orders ?? []) set.add(new Date(order.createdAt).getFullYear());
+    return [...set].sort((a, b) => b - a);
+  }, [orders]);
+
+  const activeYear = yearSel === "all" ? null : yearSel;
+  const activeMonth = activeYear === null ? "all" : monthSel;
+
+  const filteredOrders = useMemo(
+    () =>
+      (orders ?? []).filter((order) => {
+        if (payFilter === "paid" && order.paymentStatus !== "paid") return false;
+        if (payFilter === "unpaid" && order.paymentStatus === "paid") return false;
+        const date = new Date(order.createdAt);
+        if (activeYear !== null && date.getFullYear() !== activeYear) return false;
+        if (activeMonth !== "all" && date.getMonth() !== activeMonth) return false;
+        return true;
+      }),
+    [orders, payFilter, activeYear, activeMonth],
+  );
+
+  const selectYear = (y: number | "all") => {
+    setYearSel(y);
+    if (y === "all") setMonthSel("all");
+  };
 
   async function refresh() {
     setError("");
@@ -168,13 +207,93 @@ export function OrdersPanel({ email }: { email: string | null }) {
         </p>
       ) : null}
 
+      {orders !== null && orders.length > 0 ? (
+        <div className="mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Fizetés
+            </span>
+            {(
+              [
+                { id: "all", label: "Összes" },
+                { id: "paid", label: "Rendezett" },
+                { id: "unpaid", label: "Fizetésre vár" },
+              ] as const
+            ).map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                className={filterChip(payFilter === opt.id)}
+                onClick={() => setPayFilter(opt.id)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Év
+            </span>
+            <button
+              type="button"
+              className={filterChip(yearSel === "all")}
+              onClick={() => selectYear("all")}
+            >
+              Összes év
+            </button>
+            {years.map((y) => (
+              <button
+                key={y}
+                type="button"
+                className={filterChip(yearSel === y)}
+                onClick={() => selectYear(y)}
+              >
+                {y}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Hónap
+            </span>
+            <button
+              type="button"
+              disabled={activeYear === null}
+              className={filterChip(activeMonth === "all") + " disabled:cursor-not-allowed disabled:opacity-50"}
+              onClick={() => setMonthSel("all")}
+            >
+              Összes
+            </button>
+            {MONTHS_SHORT.map((label, i) => (
+              <button
+                key={label}
+                type="button"
+                disabled={activeYear === null}
+                className={filterChip(activeMonth === i) + " disabled:cursor-not-allowed disabled:opacity-50"}
+                onClick={() => setMonthSel(i)}
+                title={MONTHS[i]}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {filteredOrders.length} / {orders.length} megrendelés látszik
+          </p>
+        </div>
+      ) : null}
+
       {orders === null ? (
         <p className="mt-8 text-sm text-muted-foreground">Betöltés…</p>
       ) : orders.length === 0 ? (
         <p className="mt-8 text-sm text-muted-foreground">Még nincs megrendelés.</p>
+      ) : filteredOrders.length === 0 ? (
+        <p className="mt-8 text-sm text-muted-foreground">
+          A kiválasztott szűréshez nem tartozik megrendelés.
+        </p>
       ) : (
         <div className="mt-8 space-y-4">
-          {orders.map((order) => (
+          {filteredOrders.map((order) => (
             <article
               key={order.id}
               className="rounded-xl border border-border bg-card p-5 text-sm text-foreground"
@@ -352,9 +471,8 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
   }
 
   return (
-    <section className="mt-16">
-      <h2 className="text-2xl font-bold text-foreground">Felhasználók</h2>
-      <p className="mt-2 text-sm text-muted-foreground">
+    <section className="mt-8">
+      <p className="text-sm text-muted-foreground">
         Admin felhasználók kezelése: új létrehozása vagy meglévő törlése.
       </p>
 
