@@ -2,7 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import { aamText } from "@/lib/aam";
-import { priceFrom, formatPrice, products } from "@/lib/products";
+import { priceFrom, formatPrice } from "@/lib/products";
+import {
+  productCategories,
+  categoryProducts,
+  getCategory,
+} from "@/lib/product-categories";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
 import { PageHero } from "@/components/PageHero";
 
@@ -13,6 +18,12 @@ const DESC =
   "Saját fejlesztésű digitális termékek: átalányadó kalkulátorok, beszámolókészítő megoldások, Excel és Google Sheets eszközök.";
 
 export const Route = createFileRoute("/termekeim")({
+  validateSearch: (search: Record<string, unknown>): { kategoria?: string } => ({
+    kategoria:
+      typeof search.kategoria === "string" && getCategory(search.kategoria)
+        ? search.kategoria
+        : undefined,
+  }),
   head: () => ({
     meta: [
       { title: TITLE },
@@ -25,6 +36,7 @@ export const Route = createFileRoute("/termekeim")({
   }),
   component: TermekeimPage,
 });
+
 
 const features = [
   "Könyvelési segédeszközöket",
