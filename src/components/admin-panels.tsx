@@ -1404,6 +1404,22 @@ export function CalculatorVersionPanel() {
           </button>
         </div>
 
+        {busy ? (
+          <div className="max-w-md">
+            <p className="text-sm font-medium text-foreground">
+              Feltöltés folyamatban — {file?.name ?? ""} (
+              {formatFileSize(file?.size ?? null)})
+            </p>
+            <div
+              className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-muted"
+              role="progressbar"
+              aria-label="Feltöltés folyamatban"
+            >
+              <div className="h-full w-1/3 animate-pulse rounded-full bg-primary" />
+            </div>
+          </div>
+        ) : null}
+
         {error ? (
           <p className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
             {error}
