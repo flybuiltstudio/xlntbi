@@ -5,6 +5,8 @@ import {
   adminApproveTransfer,
   adminCreateUser,
   adminDeleteUser,
+  adminInvoiceUrl,
+  adminListInvoiceLogs,
   adminListOrders,
   adminListUsers,
   adminResendDownload,
@@ -133,6 +135,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const approve = useServerFn(adminApproveTransfer);
   const resend = useServerFn(adminResendDownload);
   const retryInvoice = useServerFn(adminRetryInvoice);
+  const invoiceUrl = useServerFn(adminInvoiceUrl);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
@@ -239,6 +242,31 @@ export function OrdersPanel({ email }: { email: string | null }) {
           : (result.error ?? "Hiba történt."),
       );
       await refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
+  /** Opens or downloads the Billingo invoice PDF via its public URL. */
+  async function onInvoicePdf(order: Order, mode: "open" | "download") {
+    setBusy(order.id);
+    setMessage("");
+    try {
+      const result = await invoiceUrl({ data: { orderId: order.id } });
+      if (!result.ok) {
+        setMessage(result.error ?? "A számla nem érhető el.");
+      } else if (mode === "open") {
+        window.open(result.url, "_blank", "noopener");
+      } else {
+        const link = document.createElement("a");
+        link.href = result.url;
+        link.download = `${result.invoiceNumber || order.orderNumber}.pdf`;
+        link.rel = "noopener";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Hiba történt.");
     }
@@ -497,6 +525,28 @@ export function OrdersPanel({ email }: { email: string | null }) {
                         ? "Számlázva ✓"
                         : "Számlázás"}
                   </button>
+                ) : null}
+                {order.billingoInvoiceId ? (
+                  <>
+                    <button
+                      type="button"
+                      disabled={busy === order.id}
+                      onClick={() => void onInvoicePdf(order, "open")}
+                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                      title={`Számla megnyitása új lapon (${order.billingoInvoiceNumber})`}
+                    >
+                      Számla megnyitása
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busy === order.id}
+                      onClick={() => void onInvoicePdf(order, "download")}
+                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                      title={`Számla PDF letöltése (${order.billingoInvoiceNumber})`}
+                    >
+                      Számla letöltése
+                    </button>
+                  </>
                 ) : null}
                 <a
                   href={`mailto:${order.email}?subject=${encodeURIComponent(order.orderNumber)}`}
