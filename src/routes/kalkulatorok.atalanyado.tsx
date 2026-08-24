@@ -16,6 +16,7 @@ const DESC =
   "Átalányadózó egyéni vállalkozó kalkulátor: költséghányad szerinti adóköteles jövedelem, SZJA, TB, szocho és HIPA számítás a 2026-os szabályok szerint. Tájékoztató jellegű kalkulátor.";
 
 export const Route = createFileRoute("/kalkulatorok/atalanyado")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(overrideQueryOptions),
   head: () => ({
     meta: [
       { title: TITLE },

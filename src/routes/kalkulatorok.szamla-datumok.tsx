@@ -16,6 +16,7 @@ const DESC =
   "Számlázási dátumok kalkulátora az ÁFA tv. szerint: teljesítési időpont, fizetési határidő és árfolyam-dátum élő MNB-árfolyammal (EUR/GBP/USD). Tájékoztató jellegű kalkulátor.";
 
 export const Route = createFileRoute("/kalkulatorok/szamla-datumok")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(overrideQueryOptions),
   head: () => ({
     meta: [
       { title: TITLE },

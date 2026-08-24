@@ -16,6 +16,7 @@ const DESC =
   "Invoice dates calculator under the Hungarian VAT Act: date of supply, payment deadline and FX date with live NBH (MNB) exchange rates for EUR/GBP/USD. For information only.";
 
 export const Route = createFileRoute("/kalkulatorok/invoice-dates")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(overrideQueryOptions),
   head: () => ({
     meta: [
       { title: TITLE },

@@ -16,6 +16,7 @@ const DESC =
   "Adózási forma összehasonlító kalkulátor a 2026-ban hatályos szabályok szerint. Tájékoztató jellegű kalkuláció.";
 
 export const Route = createFileRoute("/kalkulatorok/jovedelemado")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(overrideQueryOptions),
   head: () => ({
     meta: [
       { title: TITLE },
