@@ -207,13 +207,93 @@ export function OrdersPanel({ email }: { email: string | null }) {
         </p>
       ) : null}
 
+      {orders !== null && orders.length > 0 ? (
+        <div className="mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Fizetés
+            </span>
+            {(
+              [
+                { id: "all", label: "Összes" },
+                { id: "paid", label: "Rendezett" },
+                { id: "unpaid", label: "Fizetésre vár" },
+              ] as const
+            ).map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                className={filterChip(payFilter === opt.id)}
+                onClick={() => setPayFilter(opt.id)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Év
+            </span>
+            <button
+              type="button"
+              className={filterChip(yearSel === "all")}
+              onClick={() => selectYear("all")}
+            >
+              Összes év
+            </button>
+            {years.map((y) => (
+              <button
+                key={y}
+                type="button"
+                className={filterChip(yearSel === y)}
+                onClick={() => selectYear(y)}
+              >
+                {y}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Hónap
+            </span>
+            <button
+              type="button"
+              disabled={activeYear === null}
+              className={filterChip(activeMonth === "all") + " disabled:cursor-not-allowed disabled:opacity-50"}
+              onClick={() => setMonthSel("all")}
+            >
+              Összes
+            </button>
+            {MONTHS_SHORT.map((label, i) => (
+              <button
+                key={label}
+                type="button"
+                disabled={activeYear === null}
+                className={filterChip(activeMonth === i) + " disabled:cursor-not-allowed disabled:opacity-50"}
+                onClick={() => setMonthSel(i)}
+                title={MONTHS[i]}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {filteredOrders.length} / {orders.length} megrendelés látszik
+          </p>
+        </div>
+      ) : null}
+
       {orders === null ? (
         <p className="mt-8 text-sm text-muted-foreground">Betöltés…</p>
       ) : orders.length === 0 ? (
         <p className="mt-8 text-sm text-muted-foreground">Még nincs megrendelés.</p>
+      ) : filteredOrders.length === 0 ? (
+        <p className="mt-8 text-sm text-muted-foreground">
+          A kiválasztott szűréshez nem tartozik megrendelés.
+        </p>
       ) : (
         <div className="mt-8 space-y-4">
-          {orders.map((order) => (
+          {filteredOrders.map((order) => (
             <article
               key={order.id}
               className="rounded-xl border border-border bg-card p-5 text-sm text-foreground"

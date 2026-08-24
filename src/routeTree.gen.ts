@@ -35,6 +35,7 @@ import { Route as RolamRouteImport } from './routes/rolam'
 import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
 import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminFelhasznalokRouteImport } from './routes/admin.felhasznalok'
 import { Route as AdminFizetesTesztRouteImport } from './routes/admin.fizetes-teszt'
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
@@ -180,6 +181,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFelhasznalokRoute = AdminFelhasznalokRouteImport.update({
+  id: '/felhasznalok',
+  path: '/felhasznalok',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFizetesTesztRoute = AdminFizetesTesztRouteImport.update({
   id: '/fizetes-teszt',
   path: '/fizetes-teszt',
@@ -277,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
@@ -317,6 +324,7 @@ export interface FileRoutesByTo {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
@@ -359,6 +367,7 @@ export interface FileRoutesById {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
@@ -402,6 +411,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
@@ -442,6 +452,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
@@ -483,6 +494,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
@@ -722,6 +734,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/felhasznalok': {
+      id: '/admin/felhasznalok'
+      path: '/felhasznalok'
+      fullPath: '/admin/felhasznalok'
+      preLoaderRoute: typeof AdminFelhasznalokRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/fizetes-teszt': {
       id: '/admin/fizetes-teszt'
       path: '/fizetes-teszt'
@@ -817,12 +836,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminFelhasznalokRoute: typeof AdminFelhasznalokRoute
   AdminFizetesTesztRoute: typeof AdminFizetesTesztRoute
   AdminStatisztikaRoute: typeof AdminStatisztikaRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminFelhasznalokRoute: AdminFelhasznalokRoute,
   AdminFizetesTesztRoute: AdminFizetesTesztRoute,
   AdminStatisztikaRoute: AdminStatisztikaRoute,
   AdminIndexRoute: AdminIndexRoute,
