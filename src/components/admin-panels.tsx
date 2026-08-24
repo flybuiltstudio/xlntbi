@@ -454,6 +454,25 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     {busy === order.id ? "Küldés…" : "Letöltési link újraküldése"}
                   </button>
                 )}
+                {order.paymentStatus === "paid" ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id || !!order.billingoInvoiceNumber}
+                    onClick={() => void onRetryInvoice(order)}
+                    className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                    title={
+                      order.billingoInvoiceNumber
+                        ? "Már ki van állítva számla"
+                        : "Billingo számla kiállítása / újrakísérlet"
+                    }
+                  >
+                    {busy === order.id
+                      ? "Feldolgozás…"
+                      : order.billingoInvoiceNumber
+                        ? "Számlázva ✓"
+                        : "Számlázás"}
+                  </button>
+                ) : null}
                 <a
                   href={`mailto:${order.email}?subject=${encodeURIComponent(order.orderNumber)}`}
                   className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
