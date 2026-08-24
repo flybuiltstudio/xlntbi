@@ -87,6 +87,7 @@ export const productCategories: ProductCategory[] = [
       "cegkivonat-excel-konverter",
       "pdf-excel-konverter",
       "nav-torzsszam-partnerellenorzo",
+      "wifi-jelszo-nezo",
     ],
   },
 ];
