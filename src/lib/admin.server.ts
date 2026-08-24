@@ -19,6 +19,8 @@ export type AdminOrder = {
   paymentStatus: string;
   paymentProvider: string | null;
   paymentReference: string | null;
+  billingoInvoiceId: number | null;
+  billingoInvoiceNumber: string | null;
 };
 
 /**
