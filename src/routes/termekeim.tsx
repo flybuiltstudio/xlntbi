@@ -18,12 +18,13 @@ const DESC =
   "Saját fejlesztésű digitális termékek: átalányadó kalkulátorok, beszámolókészítő megoldások, Excel és Google Sheets eszközök.";
 
 export const Route = createFileRoute("/termekeim")({
-  validateSearch: (search: Record<string, unknown>): { kategoria?: string } => ({
-    kategoria:
-      typeof search.kategoria === "string" && getCategory(search.kategoria)
-        ? search.kategoria
-        : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { kategoria?: string | undefined } => {
+    const raw = search["kategoria"];
+    return {
+      kategoria: typeof raw === "string" && getCategory(raw) ? raw : undefined,
+    };
+  },
+
   head: () => ({
     meta: [
       { title: TITLE },
