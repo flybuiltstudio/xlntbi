@@ -1198,7 +1198,6 @@ export function ProductVersionPanel() {
 
   const selected = downloadable.find((p) => p.slug === slug);
   const meta = files?.[slug] ?? null;
-  const targetExt = meta?.fileName.split(".").pop() ?? "";
 
   /** Uploads the chosen file straight to storage over the existing object. */
   async function onUpload() {
