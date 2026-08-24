@@ -1211,10 +1211,13 @@ export function ProductVersionPanel() {
       );
       return;
     }
-    if (targetExt && !file.name.toLowerCase().endsWith(`.${targetExt.toLowerCase()}`)) {
+    const allowedExt = [".xlsm", ".exe", ".zip", ".pdf"];
+    const lowerName = file.name.toLowerCase();
+    const matched = allowedExt.find((ext) => lowerName.endsWith(ext));
+    if (!matched) {
       setError(
-        `A fájl típusa nem megfelelő: .${targetExt} fájlt vártunk ehhez a termékhez, ` +
-          `de a kiválasztott fájl: ${file.name}.`,
+        `A fájl típusa nem megfelelő: ${file.name}. ` +
+          `Elfogadott formátumok: .xlsm, .exe, .zip, .pdf.`,
       );
       return;
     }
