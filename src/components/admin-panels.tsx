@@ -131,6 +131,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const load = useServerFn(adminListOrders);
   const approve = useServerFn(adminApproveTransfer);
   const resend = useServerFn(adminResendDownload);
+  const retryInvoice = useServerFn(adminRetryInvoice);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
