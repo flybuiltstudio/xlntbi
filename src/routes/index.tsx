@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import heroImg from "@/assets/bcg-savok.jpg";
+import { HeroPlanks } from "@/components/HeroPlanks";
 import aboutImg from "@/assets/En-modern-konyveloirodaban.jpg";
 import icHatekonysag from "@/assets/icons/hatekonysag.png.asset.json";
 import icInnovacio from "@/assets/icons/innovacio.png.asset.json";
@@ -70,11 +70,7 @@ function Index() {
   return (
     <div>
       <section className="relative isolate overflow-hidden bg-brand-dark">
-        <img
-          src={heroImg}
-          alt="Modern pénzügyi és könyvelési munkakörnyezet"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        <HeroPlanks />
         <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/90 via-brand-dark/75 to-brand-dark/40" />
         <div className="relative mx-auto max-w-6xl px-4 py-6 md:py-8">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary-foreground/80">
