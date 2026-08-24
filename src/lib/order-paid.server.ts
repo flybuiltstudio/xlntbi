@@ -109,4 +109,7 @@ export async function markOrderPaid(options: {
       replyTo: order.email,
     },
   ]);
+
+  // Auto-invoice via Billingo (only for paid orders; idempotent, never blocks fulfilment).
+  await issueInvoiceForOrder(order as any, { sendToBuyer: true });
 }
