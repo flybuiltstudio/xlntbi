@@ -42,8 +42,9 @@ A kalkulátorok jelenleg a kódba épített modulok (`src/lib/calculators/*.ts`,
 - **Új/módosított fájlok:**
   - `src/routes/admin.friss-verzio.tsx` — új aloldal (PageHero, noindex, két szekció)
   - `src/components/admin-panels.tsx` — `ProductVersionPanel` és `CalculatorVersionPanel` komponensek
-  - `src/lib/admin.functions.ts` — `adminUploadProductVersion`, `adminListProductFiles`, `adminUploadCalculatorVersion`, `adminListCalculatorOverrides`, `adminDeleteCalculatorOverride` (FormData-alapú feltöltés, admin-gate)
-  - `src/lib/admin.server.ts` — tároló-felülírás (`upsert: true`), override upsert/törlés/listázás
+  - `src/lib/admin.functions.ts` — `adminCreateProductUploadUrl` (aláírt feltöltési URL, admin-gate, típus-/méretellenőrzés), `adminListProductFiles`, `adminUploadCalculatorVersion` (FormData, max ~5 MB html), `adminListCalculatorOverrides`, `adminDeleteCalculatorOverride`
+  - `src/lib/admin.server.ts` — aláírt feltöltési URL készítés (`createSignedUploadUrl`, `upsert`), tároló-metaadat listázás, override upsert/törlés/listázás
+  - A böngészőoldali feltöltés a `supabase.storage.uploadToSignedUrl()` hívással megy közvetlenül a tárolóba (a szerver nem érinti a fájltartalmat).
   - `src/lib/calculator.functions.ts` (új) — nyilvános `getCalculatorOverride` lekérdezés
   - `src/lib/calculators/registry.ts` (új) — kalkulátor kulcs + megjelenítési név lista
   - `src/lib/calculators/split.ts` (új) — `<script>`-kinyerő segéd (szerveroldali)
