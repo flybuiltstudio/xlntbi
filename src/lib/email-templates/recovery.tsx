@@ -11,6 +11,8 @@ import {
   Text,
 } from '@react-email/components'
 
+import { BRAND, bar, barSub, barTitle, button, container, h1, main, paragraph, small } from './theme'
+
 interface RecoveryEmailProps {
   siteName: string
   confirmationUrl: string
@@ -20,22 +22,32 @@ export const RecoveryEmail = ({
   siteName,
   confirmationUrl,
 }: RecoveryEmailProps) => (
-  <Html lang="en" dir="ltr">
+  <Html lang="hu" dir="ltr">
     <Head />
-    <Preview>Reset your password for {siteName}</Preview>
+    <Preview>Új jelszó beállítása – {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={h1}>Reset your password</Heading>
-        <Text style={text}>
-          We received a request to reset your password for {siteName}. Click
-          the button below to choose a new password.
+        <div style={bar}>
+          <p style={barTitle}>{siteName}</p>
+          <p style={barSub}>Jelszó-visszaállítás</p>
+        </div>
+        <Heading style={h1}>Új jelszó beállítása</Heading>
+        <Text style={paragraph}>
+          Jelszó-visszaállítást kértek ehhez a fiókhoz. Az alábbi gombbal
+          adhatsz meg új jelszót:
         </Text>
         <Button style={button} href={confirmationUrl}>
-          Reset Password
+          Új jelszó megadása
         </Button>
-        <Text style={footer}>
-          If you didn't request a password reset, you can safely ignore this
-          email. Your password will not be changed.
+        <Text style={{ ...paragraph, marginTop: '24px' }}>
+          A link biztonsági okokból csak korlátozott ideig érvényes.
+        </Text>
+        <Text style={small}>
+          Ha nem te kérted a visszaállítást, nyugodtan hagyd figyelmen kívül
+          ezt a levelet – a jelszavad nem változik meg.
+        </Text>
+        <Text style={small}>
+          {BRAND.siteName} · {BRAND.siteUrl} · {BRAND.email}
         </Text>
       </Container>
     </Body>
@@ -43,27 +55,3 @@ export const RecoveryEmail = ({
 )
 
 export default RecoveryEmail
-
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
-}
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
