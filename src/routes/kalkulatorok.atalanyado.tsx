@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { EmbeddedCalculator } from "@/components/EmbeddedCalculator";
 import { PageHero } from "@/components/PageHero";
 import { html, script } from "@/lib/calculators/atalanyado";
+import { getCalculatorOverride } from "@/lib/calculator.functions";
+
+const overrideQueryOptions = queryOptions({
+  queryKey: ["calculator-override", "atalanyado"],
+  queryFn: () => getCalculatorOverride({ data: { key: "atalanyado" } }),
+  staleTime: 60_000,
+});
 
 const TITLE = "Átalányadó kalkulátor 2026 – egyéni vállalkozók | EXCELlent";
 const DESC =

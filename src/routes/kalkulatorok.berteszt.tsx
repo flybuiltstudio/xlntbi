@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { EmbeddedCalculator } from "@/components/EmbeddedCalculator";
 import { PageHero } from "@/components/PageHero";
 import { html, script } from "@/lib/calculators/berteszt";
+import { getCalculatorOverride } from "@/lib/calculator.functions";
+
+const overrideQueryOptions = queryOptions({
+  queryKey: ["calculator-override", "berteszt"],
+  queryFn: () => getCalculatorOverride({ data: { key: "berteszt" } }),
+  staleTime: 60_000,
+});
 
 const TITLE = "Bérteszt 2026 – bérszámfejtés kalkulátor | EXCELlent";
 const DESC =

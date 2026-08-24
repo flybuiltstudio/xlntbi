@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { EmbeddedCalculator } from "@/components/EmbeddedCalculator";
 import { PageHero } from "@/components/PageHero";
 import { html, script } from "@/lib/calculators/jovedelemado";
+import { getCalculatorOverride } from "@/lib/calculator.functions";
+
+const overrideQueryOptions = queryOptions({
+  queryKey: ["calculator-override", "jovedelemado"],
+  queryFn: () => getCalculatorOverride({ data: { key: "jovedelemado" } }),
+  staleTime: 60_000,
+});
 
 const TITLE = "Jövedelemadó kalkulátor – adózási formák összehasonlítása | EXCELlent";
 const DESC =

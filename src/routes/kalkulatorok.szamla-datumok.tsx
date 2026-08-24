@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { EmbeddedCalculator } from "@/components/EmbeddedCalculator";
 import { PageHero } from "@/components/PageHero";
 import { html, script } from "@/lib/calculators/szamla-datumok";
+import { getCalculatorOverride } from "@/lib/calculator.functions";
+
+const overrideQueryOptions = queryOptions({
+  queryKey: ["calculator-override", "szamla-datumok"],
+  queryFn: () => getCalculatorOverride({ data: { key: "szamla-datumok" } }),
+  staleTime: 60_000,
+});
 
 const TITLE = "Számla dátumok kalkulátor – teljesítés, határidő, árfolyam | EXCELlent";
 const DESC =

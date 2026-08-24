@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { EmbeddedCalculator } from "@/components/EmbeddedCalculator";
 import { PageHero } from "@/components/PageHero";
 import { html, script } from "@/lib/calculators/invoice-dates-en";
+import { getCalculatorOverride } from "@/lib/calculator.functions";
+
+const overrideQueryOptions = queryOptions({
+  queryKey: ["calculator-override", "invoice-dates"],
+  queryFn: () => getCalculatorOverride({ data: { key: "invoice-dates" } }),
+  staleTime: 60_000,
+});
 
 const TITLE = "Invoice Dates Calculator – Hungarian VAT dates with live MNB rates | EXCELlent";
 const DESC =
