@@ -12,6 +12,7 @@ import termekekImg from "@/assets/termekek.jpg";
 import calcImg from "@/assets/online-kalkulator.jpg";
 import utalasiImg from "@/assets/utalasi-csomag-keszito.jpg";
 import ifrsImg from "@/assets/ifrs-konszolidalo.jpg";
+import pdfExcelImg from "@/assets/pdf-excel-konverter.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -940,7 +941,7 @@ export const products: Product[] = [
     priceId: "pdf_excel_konverter_orokos_licenc",
     price: 12900,
     currency: "HUF",
-    image: biImg,
+    image: pdfExcelImg,
     metaTitle: "PDF → Excel konverter | EXCELlent",
     metaDescription: "Bármilyen PDF tartalma – szöveg, táblázat, kép – egy kattintással Excelbe, az eredeti elrendezést megőrizve. Ár: 12 900 Ft-tól.",
     intro: [
