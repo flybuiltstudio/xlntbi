@@ -37,12 +37,12 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-5 px-4 lg:gap-7">
+      <div className="mx-auto flex h-20 max-w-6xl items-center gap-5 px-4 lg:gap-7">
         <Link to="/" className="flex shrink-0 items-center" aria-label="EXCELlent Business Intelligence – főoldal">
           <img
             src={logoAsset.url}
             alt="EXCELlent Business Intelligence logó"
-            className="h-10 w-auto object-contain lg:h-12"
+            className="h-14 w-auto object-contain lg:h-20"
             width={240}
             height={160}
           />
