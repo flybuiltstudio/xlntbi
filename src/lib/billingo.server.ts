@@ -105,9 +105,8 @@ async function resolveBlockId(fulfilmentYear: number): Promise<number> {
     b.name.includes(String(fulfilmentYear)),
   );
   if (byYear) return byYear.id;
-  if (invoiceBlocks.length) {
-    return invoiceBlocks[invoiceBlocks.length - 1].id;
-  }
+  const last = invoiceBlocks[invoiceBlocks.length - 1];
+  if (last) return last.id;
   throw new Error("Nem található számlatömb (document block) a Billingóban.");
 }
 
