@@ -1198,7 +1198,6 @@ export function ProductVersionPanel() {
 
   const selected = downloadable.find((p) => p.slug === slug);
   const meta = files?.[slug] ?? null;
-  const targetExt = meta?.fileName.split(".").pop() ?? "";
 
   /** Uploads the chosen file straight to storage over the existing object. */
   async function onUpload() {
@@ -1211,10 +1210,13 @@ export function ProductVersionPanel() {
       );
       return;
     }
-    if (targetExt && !file.name.toLowerCase().endsWith(`.${targetExt.toLowerCase()}`)) {
+    const allowedExt = [".xlsm", ".exe", ".zip", ".pdf"];
+    const lowerName = file.name.toLowerCase();
+    const matched = allowedExt.find((ext) => lowerName.endsWith(ext));
+    if (!matched) {
       setError(
-        `A fájl típusa nem megfelelő: .${targetExt} fájlt vártunk ehhez a termékhez, ` +
-          `de a kiválasztott fájl: ${file.name}.`,
+        `A fájl típusa nem megfelelő: ${file.name}. ` +
+          `Elfogadott formátumok: .xlsm, .exe, .zip, .pdf.`,
       );
       return;
     }
@@ -1289,11 +1291,11 @@ export function ProductVersionPanel() {
         ) : null}
 
         <label className="text-sm font-medium text-foreground">
-          Új verzió fájlja (.{targetExt || "xlsm/.exe"}, legfeljebb 300 MB)
+          Új verzió fájlja (.xlsm, .exe, .zip, .pdf, legfeljebb 300 MB)
           <input
             key={inputKey}
             type="file"
-            accept=".xlsm,.exe"
+            accept=".xlsm,.exe,.zip,.pdf"
             disabled={busy}
             className={`${fileInputClass} mt-1.5 disabled:opacity-50`}
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
