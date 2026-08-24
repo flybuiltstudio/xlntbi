@@ -115,7 +115,7 @@ export function ServicePage({
       </PageHero>
 
       <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
-        <div className="grid items-center gap-10 md:grid-cols-2">
+        <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             {intro.map((p) => (
               <p key={p} className="mt-5 text-base leading-relaxed text-muted-foreground first:mt-0">
