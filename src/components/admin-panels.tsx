@@ -1370,7 +1370,14 @@ export function CalculatorVersionPanel() {
     setMessage("");
     try {
       if (file.size > MAX_CALCULATOR_HTML_BYTES) {
-        throw new Error("A fájl mérete legfeljebb 5 MB lehet.");
+        throw new Error(
+          `A fájl túl nagy: ${formatFileSize(file.size)}. A megengedett maximum 5 MB.`,
+        );
+      }
+      if (!file.name.toLowerCase().endsWith(".html")) {
+        throw new Error(
+          `A fájl típusa nem megfelelő: .html fájlt vártunk, de a kiválasztott fájl: ${file.name}.`,
+        );
       }
       const content = await file.text();
       const result = await upload({
