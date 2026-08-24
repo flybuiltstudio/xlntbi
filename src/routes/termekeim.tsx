@@ -2,7 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import { aamText } from "@/lib/aam";
-import { priceFrom, formatPrice, products } from "@/lib/products";
+import { priceFrom, formatPrice } from "@/lib/products";
+import {
+  productCategories,
+  categoryProducts,
+  getCategory,
+} from "@/lib/product-categories";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
 import { PageHero } from "@/components/PageHero";
 
@@ -13,6 +18,13 @@ const DESC =
   "Saját fejlesztésű digitális termékek: átalányadó kalkulátorok, beszámolókészítő megoldások, Excel és Google Sheets eszközök.";
 
 export const Route = createFileRoute("/termekeim")({
+  validateSearch: (search: Record<string, unknown>): { kategoria?: string | undefined } => {
+    const raw = search["kategoria"];
+    return {
+      kategoria: typeof raw === "string" && getCategory(raw) ? raw : undefined,
+    };
+  },
+
   head: () => ({
     meta: [
       { title: TITLE },
@@ -26,6 +38,7 @@ export const Route = createFileRoute("/termekeim")({
   component: TermekeimPage,
 });
 
+
 const features = [
   "Könyvelési segédeszközöket",
   "Beszámolókészítő digitális megoldásokat, akár komplex makrókkal is",
@@ -36,7 +49,10 @@ const features = [
 ];
 
 function TermekeimPage() {
+  const { kategoria: openKey } = Route.useSearch();
+  const open = getCategory(openKey);
   return (
+
     <div>
       <PageHero>
         <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
@@ -101,58 +117,103 @@ function TermekeimPage() {
       </section>
 
       <section id="megrendelheto-termekek" className="mx-auto max-w-6xl px-4 py-16">
-
         <h2 className="text-2xl font-bold text-foreground">Megrendelhető termékek</h2>
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {products.map((product) => (
-            <article
-              key={product.slug}
-              className="flex flex-col overflow-hidden rounded-xl border border-border bg-card"
-            >
-              <img
-                src={product.image}
-                alt={`${product.name} – illusztráció`}
-                loading="lazy"
-                className="h-48 w-full object-cover"
-              />
-              <div className="flex flex-1 flex-col p-6">
-                <h3 className="text-lg font-semibold text-foreground">{product.name}</h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-                  {aamText(product.intro[0] ?? "")}
-                </p>
-                <p className="mt-4 text-xl font-bold text-foreground">
-                  {product.tiers.length > 1
-                    ? `${formatPrice(priceFrom(product))}-tól`
-                    : formatPrice(product.price)}
-                </p>
-                {product.status === "coming_soon" ? (
-                  <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Hamarosan
-                  </p>
-                ) : null}
-                <div className="mt-5 flex flex-wrap gap-3">
-                  <Link
-                    to="/termek/$slug"
-                    params={{ slug: product.slug }}
-                    className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-                  >
-                    Részletek
-                  </Link>
-                  {product.status === "available" ? (
-                    <Link
-                      to="/megrendeles"
-                      search={{ termek: product.slug }}
-                      className="inline-flex items-center rounded-md border border-input px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
-                    >
-                      Megrendelem
-                    </Link>
-                  ) : null}
-                </div>
-              </div>
-            </article>
-          ))}
+        <p className="mt-2 text-sm text-muted-foreground">
+          Válassz kategóriát, és megnyílnak az oda tartozó termékek.
+        </p>
+
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
+          {productCategories.map((category) => {
+            const isOpen = category.key === openKey;
+            const count = categoryProducts(category).length;
+            return (
+              <Link
+                key={category.key}
+                to="/termekeim"
+                search={isOpen ? {} : { kategoria: category.key }}
+                hash="megrendelheto-termekek"
+                aria-current={isOpen ? "true" : undefined}
+                className={`group flex flex-col overflow-hidden rounded-lg border bg-card transition-colors ${
+                  isOpen
+                    ? "border-primary ring-2 ring-primary"
+                    : "border-border hover:border-primary"
+                }`}
+              >
+                <img
+                  src={category.image}
+                  alt={`${category.title} – kategória`}
+                  loading="lazy"
+                  width={512}
+                  height={512}
+                  className="aspect-square w-full object-cover"
+                />
+                <span className="px-2 py-2 text-center text-xs font-semibold leading-tight text-foreground">
+                  {category.title}
+                  <span className="block text-[11px] font-normal text-muted-foreground">
+                    {count} termék
+                  </span>
+                </span>
+              </Link>
+            );
+          })}
         </div>
+
+        {open ? (
+          <div className="mt-10">
+            <h3 className="text-xl font-bold text-foreground">{open.title}</h3>
+            <div className="mt-6 grid gap-6 md:grid-cols-2">
+              {categoryProducts(open).map((product) => (
+                <article
+                  key={product.slug}
+                  className="flex flex-col overflow-hidden rounded-xl border border-border bg-card"
+                >
+                  <img
+                    src={product.image}
+                    alt={`${product.name} – illusztráció`}
+                    loading="lazy"
+                    className="h-48 w-full object-cover"
+                  />
+                  <div className="flex flex-1 flex-col p-6">
+                    <h4 className="text-lg font-semibold text-foreground">{product.name}</h4>
+                    <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+                      {aamText(product.intro[0] ?? "")}
+                    </p>
+                    <p className="mt-4 text-xl font-bold text-foreground">
+                      {product.tiers.length > 1
+                        ? `${formatPrice(priceFrom(product))}-tól`
+                        : formatPrice(product.price)}
+                    </p>
+                    {product.status === "coming_soon" ? (
+                      <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Hamarosan
+                      </p>
+                    ) : null}
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <Link
+                        to="/termek/$slug"
+                        params={{ slug: product.slug }}
+                        className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                      >
+                        Részletek
+                      </Link>
+                      {product.status === "available" ? (
+                        <Link
+                          to="/megrendeles"
+                          search={{ termek: product.slug }}
+                          className="inline-flex items-center rounded-md border border-input px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+                        >
+                          Megrendelem
+                        </Link>
+                      ) : null}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </section>
     </div>
   );
 }
+
