@@ -1101,7 +1101,7 @@ export const products: Product[] = [
     metaTitle: "Univerzális bankkivonat-konverter | EXCELlent",
     metaDescription: "Automatikus bankkivonat-konverter könyvelőknek és vállalkozásoknak. Ár: 19 900 Ft-tól.",
     intro: [
-      "A könyvelőirodák és vállalkozások egyik legnagyobb időrabló feladata a havi bankkivonatok kézi rögzítése vagy félig manuális másolgatása. A csatolt szoftverkód (bankkivonat.py) egy rendkívül értékes, azonnal piacra dobható megoldás erre a problémára. Az alábbiakban bemutatjuk, hogyan érdemes ezt a terméket pozicionálni a webshopban, hogy vásárlásra ösztönözze a látogatókat anélkül, hogy tolakodónak vagy agresszívnek tűnne.",
+      "A könyvelőirodák és vállalkozások egyik legnagyobb időrabló feladata a havi bankkivonatok kézi rögzítése vagy félig manuális másolgatása.",
     ],
     features: [
       "Univerzális és intelligens felismerés: A szoftver automatikusan felismeri a forrást – legyen az K&H, CIB, Erste, MBH, Wise vagy Payoneer, PDF, CSV, esetleg Excel formátum. Nem kell a felhasználónak kézzel beállítania semmit.",
