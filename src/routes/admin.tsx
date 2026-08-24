@@ -142,14 +142,23 @@ function AdminLayout() {
       >
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-1 px-4 py-2">
           {role === "admin" ? (
-            <Link
-              to="/admin"
-              activeOptions={{ exact: true }}
-              className={tabBase}
-              activeProps={{ className: `${tabBase} ${tabActive}` }}
-            >
-              Megrendelések
-            </Link>
+            <>
+              <Link
+                to="/admin"
+                activeOptions={{ exact: true }}
+                className={tabBase}
+                activeProps={{ className: `${tabBase} ${tabActive}` }}
+              >
+                Megrendelések
+              </Link>
+              <Link
+                to="/admin/friss-verzio"
+                className={tabBase}
+                activeProps={{ className: `${tabBase} ${tabActive}` }}
+              >
+                Friss verzió
+              </Link>
+            </>
           ) : null}
           <Link
             to="/admin/statisztika"
