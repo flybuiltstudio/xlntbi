@@ -190,17 +190,24 @@ export type OrderStatRow = {
   email: string;
 };
 
-/** Minimal order rows for the admin statistics page (aggregated client-side). */
-export async function orderStats(): Promise<{ rows: OrderStatRow[] }> {
+/**
+ * Minimal order rows for the admin statistics page (aggregated client-side).
+ * Test orders (TESZT- prefix / payment_provider "test") are excluded unless
+ * includeTests is true — the stats page exposes that as an admin-only toggle.
+ */
+export async function orderStats(includeTests = false): Promise<{ rows: OrderStatRow[] }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { data, error } = await supabaseAdmin
+  let query = supabaseAdmin
     .from("orders")
     .select(
       "product_name, tier_label, quantity, total_price, payment_status, created_at, order_number, billing_name, email",
     )
-    .neq("payment_provider", "test")
     .order("created_at", { ascending: true })
     .limit(5000);
+  if (!includeTests) {
+    query = query.neq("payment_provider", "test").not("order_number", "like", "TESZT-%");
+  }
+  const { data, error } = await query;
 
   if (error) {
     console.error("Admin order stats failed:", error.message);

@@ -20,10 +20,15 @@ export const adminListOrders = createServerFn({ method: "GET" })
 
 export const adminOrderStats = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .inputValidator((data: unknown) =>
+    z
+      .object({ includeTests: z.boolean().optional().default(false) })
+      .parse(data ?? {}),
+  )
+  .handler(async ({ context, data }) => {
     await gate(context as any);
     const { orderStats } = await import("./admin.server");
-    return orderStats();
+    return orderStats(data.includeTests);
   });
 
 export const adminApproveTransfer = createServerFn({ method: "POST" })
