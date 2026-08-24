@@ -514,6 +514,18 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
       <p className="text-sm text-muted-foreground">
         Admin felhasználók kezelése: új létrehozása vagy meglévő törlése.
       </p>
+      <div className="mt-4 rounded-xl border border-border bg-muted/50 px-5 py-4 text-sm text-foreground">
+        <p>
+          <strong>Admin:</strong> teljes hozzáférés az admin felülethez –
+          megrendelések jóváhagyása, statisztikák és exportok, fizetés-teszt,
+          felhasználók kezelése.
+        </p>
+        <p className="mt-2">
+          <strong>Felhasználó:</strong> be tud jelentkezni, de az admin
+          funkciókat nem éri el – a szerepkör a későbbi bővítésekhez van
+          fenntartva.
+        </p>
+      </div>
 
       {message ? (
         <p className="mt-4 rounded-md border border-border bg-muted px-4 py-3 text-sm text-foreground">
