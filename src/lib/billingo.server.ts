@@ -43,21 +43,42 @@ function apiKey(): string {
   return key;
 }
 
+class BillingoError extends Error {
+  code: string;
+  constructor(message: string, code: string) {
+    super(message);
+    this.code = code;
+  }
+}
+
 async function billingo(path: string, init: RequestInit = {}): Promise<any> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...init,
-    headers: {
-      "X-API-KEY": apiKey(),
-      "Content-Type": "application/json",
-      ...(init.headers ?? {}),
-    },
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      ...init,
+      headers: {
+        "X-API-KEY": apiKey(),
+        "Content-Type": "application/json",
+        ...(init.headers ?? {}),
+      },
+    });
+  } catch (e: any) {
+    throw new BillingoError(
+      `Billingo ${path}: hálózati hiba (${e?.message ?? "ismeretlen"})`,
+      "NETWORK",
+    );
+  }
   const text = await res.text();
-  const body = text ? JSON.parse(text) : null;
+  let body: any = null;
+  try {
+    body = text ? JSON.parse(text) : null;
+  } catch {
+    body = null;
+  }
   if (!res.ok) {
     const msg =
       body?.error?.message ?? body?.message ?? `Billingo HTTP ${res.status}`;
-    throw new Error(`Billingo ${path}: ${msg}`);
+    throw new BillingoError(`Billingo ${path}: ${msg}`, `HTTP_${res.status}`);
   }
   return body;
 }
@@ -219,15 +240,55 @@ export type IssueInvoiceResult =
   | { ok: true; invoiceId: number; invoiceNumber: string }
   | { ok: false; error: string };
 
+export type InvoiceAttemptSource = "webhook" | "admin_approval" | "admin_retry";
+
+/**
+ * Writes one row to billingo_invoice_logs for every invoicing attempt
+ * (success or failure). Logging itself must never break fulfilment.
+ */
+async function logInvoiceAttempt(entry: {
+  orderId: string;
+  orderNumber: string;
+  source: InvoiceAttemptSource;
+  status: "success" | "error";
+  invoiceId?: number | null;
+  invoiceNumber?: string | null;
+  errorCode?: string | null;
+  errorMessage?: string | null;
+}): Promise<void> {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await (supabaseAdmin as any)
+      .from("billingo_invoice_logs")
+      .insert({
+        order_id: entry.orderId,
+        order_number: entry.orderNumber,
+        source: entry.source,
+        status: entry.status,
+        billingo_invoice_id: entry.invoiceId ?? null,
+        invoice_number: entry.invoiceNumber ?? null,
+        error_code: entry.errorCode ?? null,
+        error_message: entry.errorMessage ?? null,
+      });
+    if (error) console.error("Invoice log insert failed:", error.message);
+  } catch (e: any) {
+    console.error("Invoice log insert failed:", e?.message ?? e);
+  }
+}
+
 /**
  * Issues a Billingo invoice for a paid order. Idempotent: skips if the order
  * already has a Billingo invoice id. Never throws — failures are logged and
  * returned so payment fulfilment (download link + emails) is never blocked.
+ * Every real attempt is written to billingo_invoice_logs.
  */
 export async function issueInvoiceForOrder(
   order: OrderRow,
-  options: { sendToBuyer: boolean } = { sendToBuyer: true },
+  options: { sendToBuyer?: boolean; source?: InvoiceAttemptSource } = {},
 ): Promise<IssueInvoiceResult> {
+  const sendToBuyer = options.sendToBuyer ?? true;
+  const source: InvoiceAttemptSource = options.source ?? "webhook";
+
   // Idempotency: already invoiced.
   if (order.billingo_invoice_id) {
     return {
@@ -255,7 +316,7 @@ export async function issueInvoiceForOrder(
       })
       .eq("id", order.id);
 
-    if (options.sendToBuyer) {
+    if (sendToBuyer) {
       await sendInvoiceToBuyer(id).catch((e) =>
         console.error("Billingo send invoice email failed:", e.message),
       );
@@ -264,12 +325,49 @@ export async function issueInvoiceForOrder(
     console.log(
       `Billingo számla létrejött: ${number} (id ${id}) — rendelés ${order.order_number}`,
     );
+    void logInvoiceAttempt({
+      orderId: order.id,
+      orderNumber: order.order_number,
+      source,
+      status: "success",
+      invoiceId: id,
+      invoiceNumber: number,
+    });
     return { ok: true, invoiceId: id, invoiceNumber: number };
   } catch (e: any) {
+    const message = e?.message ?? "Ismeretlen hiba";
+    const code = e instanceof BillingoError ? e.code : "UNKNOWN";
     console.error(
       `Billingo számlázás sikertelen (${order.order_number}):`,
-      e?.message ?? e,
+      message,
     );
+    await logInvoiceAttempt({
+      orderId: order.id,
+      orderNumber: order.order_number,
+      source,
+      status: "error",
+      errorCode: code,
+      errorMessage: message,
+    });
+    return { ok: false, error: message };
+  }
+}
+
+/**
+ * Returns the Billingo public download URL for an already-issued invoice,
+ * so the admin can open or download the PDF.
+ */
+export async function getInvoicePublicUrl(
+  invoiceId: number,
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  try {
+    const data = await billingo(`/documents/${invoiceId}/public-url`);
+    const url = data?.public_url;
+    if (!url || typeof url !== "string") {
+      return { ok: false, error: "A Billingo nem adott vissza letölthető linket." };
+    }
+    return { ok: true, url };
+  } catch (e: any) {
     return { ok: false, error: e?.message ?? "Ismeretlen hiba" };
   }
 }

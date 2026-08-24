@@ -39,6 +39,7 @@ import { Route as AdminFelhasznalokRouteImport } from './routes/admin.felhasznal
 import { Route as AdminFizetesTesztRouteImport } from './routes/admin.fizetes-teszt'
 import { Route as AdminJelszoRouteImport } from './routes/admin.jelszo'
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
+import { Route as AdminSzamlazasRouteImport } from './routes/admin.szamlazas'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokAtalanyadoRouteImport } from './routes/kalkulatorok.atalanyado'
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
@@ -204,6 +205,11 @@ const AdminStatisztikaRoute = AdminStatisztikaRouteImport.update({
   path: '/statisztika',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSzamlazasRoute = AdminSzamlazasRouteImport.update({
+  id: '/szamlazas',
+  path: '/szamlazas',
+  getParentRoute: () => AdminRoute,
+} as any)
 const KalkulatorokIndexRoute = KalkulatorokIndexRouteImport.update({
   id: '/kalkulatorok/',
   path: '/kalkulatorok/',
@@ -305,6 +311,7 @@ export interface FileRoutesByFullPath {
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
+  '/admin/szamlazas': typeof AdminSzamlazasRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -349,6 +356,7 @@ export interface FileRoutesByTo {
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
+  '/admin/szamlazas': typeof AdminSzamlazasRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -395,6 +403,7 @@ export interface FileRoutesById {
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
+  '/admin/szamlazas': typeof AdminSzamlazasRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -442,6 +451,7 @@ export interface FileRouteTypes {
     | '/admin/fizetes-teszt'
     | '/admin/jelszo'
     | '/admin/statisztika'
+    | '/admin/szamlazas'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -486,6 +496,7 @@ export interface FileRouteTypes {
     | '/admin/fizetes-teszt'
     | '/admin/jelszo'
     | '/admin/statisztika'
+    | '/admin/szamlazas'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -531,6 +542,7 @@ export interface FileRouteTypes {
     | '/admin/fizetes-teszt'
     | '/admin/jelszo'
     | '/admin/statisztika'
+    | '/admin/szamlazas'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -800,6 +812,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStatisztikaRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/szamlazas': {
+      id: '/admin/szamlazas'
+      path: '/szamlazas'
+      fullPath: '/admin/szamlazas'
+      preLoaderRoute: typeof AdminSzamlazasRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/kalkulatorok/': {
       id: '/kalkulatorok/'
       path: '/kalkulatorok'
@@ -899,6 +918,7 @@ interface AdminRouteChildren {
   AdminFizetesTesztRoute: typeof AdminFizetesTesztRoute
   AdminJelszoRoute: typeof AdminJelszoRoute
   AdminStatisztikaRoute: typeof AdminStatisztikaRoute
+  AdminSzamlazasRoute: typeof AdminSzamlazasRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -907,6 +927,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFizetesTesztRoute: AdminFizetesTesztRoute,
   AdminJelszoRoute: AdminJelszoRoute,
   AdminStatisztikaRoute: AdminStatisztikaRoute,
+  AdminSzamlazasRoute: AdminSzamlazasRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 

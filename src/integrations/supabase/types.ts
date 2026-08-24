@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      billingo_invoice_logs: {
+        Row: {
+          billingo_invoice_id: number | null
+          created_at: string
+          error_code: string | null
+          error_message: string | null
+          id: string
+          invoice_number: string | null
+          order_id: string | null
+          order_number: string
+          source: string
+          status: string
+        }
+        Insert: {
+          billingo_invoice_id?: number | null
+          created_at?: string
+          error_code?: string | null
+          error_message?: string | null
+          id?: string
+          invoice_number?: string | null
+          order_id?: string | null
+          order_number?: string
+          source?: string
+          status?: string
+        }
+        Update: {
+          billingo_invoice_id?: number | null
+          created_at?: string
+          error_code?: string | null
+          error_message?: string | null
+          id?: string
+          invoice_number?: string | null
+          order_id?: string | null
+          order_number?: string
+          source?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billingo_invoice_logs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_submissions: {
         Row: {
           company: string | null
