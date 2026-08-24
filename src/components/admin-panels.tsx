@@ -794,11 +794,14 @@ const SOURCE_LABELS: Record<string, string> = {
 
 export function InvoiceLogsPanel() {
   const load = useServerFn(adminListInvoiceLogs);
+  const retry = useServerFn(adminRetryInvoice);
 
   const [logs, setLogs] = useState<InvoiceLog[] | null>(null);
   const [error, setError] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "success" | "error">("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [retryBusy, setRetryBusy] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
 
   async function refresh() {
     setError("");
