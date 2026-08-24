@@ -1455,7 +1455,8 @@ export function CalculatorVersionPanel() {
             key={inputKey}
             type="file"
             accept=".html,text/html"
-            className={`${fileInputClass} mt-1.5`}
+            disabled={busy}
+            className={`${fileInputClass} mt-1.5 disabled:opacity-50`}
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           />
         </label>
