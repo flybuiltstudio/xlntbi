@@ -146,7 +146,45 @@ export async function createUser(
     .insert({ user_id: data.user.id, role });
   if (roleError) {
     console.error("Role grant failed:", roleError.message);
-    return { ok: false, error: "A felhasználó létrejött, de a szerepkör beállítása nem sikerült." };
+    // Roll back: never leave an account behind without a role.
+    const { error: rollbackError } = await supabaseAdmin.auth.admin.deleteUser(data.user.id);
+    if (rollbackError) {
+      console.error("User rollback failed:", rollbackError.message);
+    }
+    return {
+      ok: false,
+      error: "A felhasználó létrehozása nem sikerült (a szerepkör beállítása hibázott, a fiókot visszavontuk).",
+    };
+  }
+
+  return { ok: true };
+}
+
+export async function updateUserRole(
+  userId: string,
+  role: "admin" | "user",
+  requesterId: string,
+): Promise<{ ok: boolean; error?: string }> {
+  if (userId === requesterId) {
+    return { ok: false, error: "A saját szerepkörödet nem módosíthatod." };
+  }
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const { error: deleteError } = await supabaseAdmin
+    .from("user_roles")
+    .delete()
+    .eq("user_id", userId);
+  if (deleteError) {
+    console.error("Role delete failed:", deleteError.message);
+    return { ok: false, error: "A szerepkör módosítása nem sikerült." };
+  }
+
+  const { error: insertError } = await supabaseAdmin
+    .from("user_roles")
+    .insert({ user_id: userId, role });
+  if (insertError) {
+    console.error("Role insert failed:", insertError.message);
+    return { ok: false, error: "A szerepkör módosítása nem sikerült." };
   }
 
   return { ok: true };
