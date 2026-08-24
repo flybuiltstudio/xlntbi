@@ -470,3 +470,29 @@ export async function deleteTestOrder(orderId: string): Promise<{ ok: boolean; e
   }
   return { ok: true };
 }
+
+/**
+ * Manually (re)issues a Billingo invoice for a paid order. Only allowed for
+ * orders that are actually paid. If the order already has a Billingo invoice
+ * id, it is left untouched (idempotent). Returns the invoice number on success.
+ */
+export async function retryInvoice(
+  orderId: string,
+): Promise<{ ok: boolean; invoiceNumber?: string; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("*")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (!order) return { ok: false, error: "A megrendelés nem található." };
+  if (order.payment_status !== "paid") {
+    return { ok: false, error: "Csak rendezett megrendeléshez állítható ki számla." };
+  }
+
+  const { issueInvoiceForOrder } = await import("./billingo.server");
+  const result = await issueInvoiceForOrder(order as any, { sendToBuyer: true });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, invoiceNumber: result.invoiceNumber };
+}
