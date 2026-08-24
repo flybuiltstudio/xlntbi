@@ -1,7 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
+import { HeaderIntro } from "@/components/HeaderIntro";
 
 const services = [
   { to: "/konyveles", label: "Könyvelés" },
@@ -34,10 +35,12 @@ const mainLinks = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
-      <div className="mx-auto flex h-20 max-w-6xl items-center gap-5 px-4 lg:gap-7">
+      {pathname === "/" ? <HeaderIntro /> : null}
+      <div className="relative z-10 mx-auto flex h-20 max-w-6xl items-center gap-5 px-4 lg:gap-7">
         <Link to="/" className="flex shrink-0 items-center" aria-label="EXCELlent Business Intelligence – főoldal">
           <img
             src={logoAsset.url}
@@ -139,7 +142,7 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg min-[900px]:hidden">
+        <div className="absolute inset-x-0 top-full z-10 max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg min-[900px]:hidden">
           <nav className="mx-auto max-w-6xl px-4 py-4" aria-label="Mobil menü">
             <div className="flex items-center justify-between pb-2">
               <span className="text-sm font-semibold text-muted-foreground">Menü</span>
