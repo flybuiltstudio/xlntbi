@@ -1517,7 +1517,7 @@ export function CalculatorVersionPanel() {
                     <td className="px-4 py-3">
                       <button
                         type="button"
-                        disabled={restoreBusy === row.key}
+                        disabled={restoreBusy !== null || busy}
                         onClick={() => void onRestore(row.key)}
                         className="rounded-md border border-destructive/40 px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-40"
                       >
