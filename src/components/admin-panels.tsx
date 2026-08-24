@@ -3,17 +3,23 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import {
   adminApproveTransfer,
+  adminCreateProductUploadUrl,
   adminCreateUser,
+  adminDeleteCalculatorOverride,
   adminDeleteUser,
   adminInvoiceUrl,
+  adminListCalculatorOverrides,
   adminListInvoiceLogs,
   adminListOrders,
+  adminListProductFiles,
   adminListUsers,
   adminResendDownload,
   adminRetryInvoice,
   adminUpdateUserRole,
+  adminUploadCalculatorVersion,
 } from "@/lib/admin.functions";
-import { formatPrice } from "@/lib/products";
+import { formatPrice, products } from "@/lib/products";
+import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
 
