@@ -37,6 +37,7 @@ import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminFelhasznalokRouteImport } from './routes/admin.felhasznalok'
 import { Route as AdminFizetesTesztRouteImport } from './routes/admin.fizetes-teszt'
+import { Route as AdminJelszoRouteImport } from './routes/admin.jelszo'
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokAtalanyadoRouteImport } from './routes/kalkulatorok.atalanyado'
@@ -191,6 +192,11 @@ const AdminFizetesTesztRoute = AdminFizetesTesztRouteImport.update({
   path: '/fizetes-teszt',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminJelszoRoute = AdminJelszoRouteImport.update({
+  id: '/jelszo',
+  path: '/jelszo',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminStatisztikaRoute = AdminStatisztikaRouteImport.update({
   id: '/statisztika',
   path: '/statisztika',
@@ -285,6 +291,7 @@ export interface FileRoutesByFullPath {
   '/termekeim': typeof TermekeimRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
+  '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -326,6 +333,7 @@ export interface FileRoutesByTo {
   '/termekeim': typeof TermekeimRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
+  '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -369,6 +377,7 @@ export interface FileRoutesById {
   '/termekeim': typeof TermekeimRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
+  '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -413,6 +422,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
+    | '/admin/jelszo'
     | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
@@ -454,6 +464,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
+    | '/admin/jelszo'
     | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
@@ -496,6 +507,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
+    | '/admin/jelszo'
     | '/admin/statisztika'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
@@ -748,6 +760,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFizetesTesztRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/jelszo': {
+      id: '/admin/jelszo'
+      path: '/jelszo'
+      fullPath: '/admin/jelszo'
+      preLoaderRoute: typeof AdminJelszoRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/statisztika': {
       id: '/admin/statisztika'
       path: '/statisztika'
@@ -838,6 +857,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminFelhasznalokRoute: typeof AdminFelhasznalokRoute
   AdminFizetesTesztRoute: typeof AdminFizetesTesztRoute
+  AdminJelszoRoute: typeof AdminJelszoRoute
   AdminStatisztikaRoute: typeof AdminStatisztikaRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -845,6 +865,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminFelhasznalokRoute: AdminFelhasznalokRoute,
   AdminFizetesTesztRoute: AdminFizetesTesztRoute,
+  AdminJelszoRoute: AdminJelszoRoute,
   AdminStatisztikaRoute: AdminStatisztikaRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
