@@ -31,18 +31,14 @@ export const Route = createFileRoute("/kalkulatorok/berteszt")({
 });
 
 function BertesztPage() {
+  const { data: override } = useSuspenseQuery(overrideQueryOptions);
   return (
-    <>
-      <PageHero>
-        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Bérteszt</h1>
-      </PageHero>
-      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
-        <p className="max-w-3xl text-base text-muted-foreground">
-          Havi bérszámfejtő kalkulátor a 2026-os szabályok szerint, 30 jogviszonytípusra, a fő
-          adóalap- és szocho-kedvezményekkel. A kalkuláció tájékoztató jellegű.
-        </p>
-        <div className="mt-8">
-          <EmbeddedCalculator html={html} script={script} />
+...
+          <EmbeddedCalculator
+            key={override ? override.updatedAt : "beepitett"}
+            html={override?.html ?? html}
+            script={override?.script ?? script}
+          />
         </div>
       </div>
     </>
