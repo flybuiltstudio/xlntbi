@@ -695,8 +695,8 @@ export async function createProductUploadUrl(input: {
   }
   const targetExt = download.storagePath.split(".").pop()?.toLowerCase() ?? "";
   const uploadExt = input.fileName.split(".").pop()?.toLowerCase() ?? "";
-  if (!["xlsm", "exe"].includes(uploadExt)) {
-    return { ok: false, error: "Csak .xlsm vagy .exe fájl tölthető fel." };
+  if (!["xlsm", "exe", "zip", "pdf"].includes(uploadExt)) {
+    return { ok: false, error: "Csak .xlsm, .exe, .zip vagy .pdf fájl tölthető fel." };
   }
   if (uploadExt !== targetExt) {
     return {
@@ -780,5 +780,59 @@ export async function uploadCalculatorVersion(input: {
 export async function deleteCalculatorOverride(key: string): Promise<{ ok: boolean }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { error } = await supabaseAdmin.from("calculator_overrides").delete().eq("key", key);
+  return { ok: !error };
+}
+
+// ---------------------------------------------------------------------------
+// Product placements — manual category + ordering overrides
+// ---------------------------------------------------------------------------
+
+export type ProductPlacementRow = { slug: string; category: string; sortOrder: number };
+
+export async function listProductPlacements(): Promise<ProductPlacementRow[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("product_placements")
+    .select("slug, category, sort_order");
+  return (data ?? []).map((row) => ({
+    slug: row.slug,
+    category: row.category,
+    sortOrder: row.sort_order,
+  }));
+}
+
+/** Overwrites the full placement list (category + position for every product). */
+export async function saveProductPlacements(
+  items: { slug: string; category: string; sortOrder: number }[],
+  updatedBy: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const { products } = await import("@/lib/products");
+  const { productCategoryKeys } = await import("@/lib/product-categories");
+  const validSlugs = new Set(products.map((p) => p.slug));
+  const validCategories = new Set(productCategoryKeys);
+
+  const rows = items
+    .filter((item) => validSlugs.has(item.slug) && validCategories.has(item.category))
+    .map((item) => ({
+      slug: item.slug,
+      category: item.category,
+      sort_order: item.sortOrder,
+      updated_by: updatedBy,
+      updated_at: new Date().toISOString(),
+    }));
+  if (!rows.length) return { ok: false, error: "Nincs mentendő adat." };
+
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin
+    .from("product_placements")
+    .upsert(rows, { onConflict: "slug" });
+  if (error) return { ok: false, error: "A mentés nem sikerült. Próbáld újra." };
+  return { ok: true };
+}
+
+/** Clears every override, restoring the bundled categories and order. */
+export async function resetProductPlacements(): Promise<{ ok: boolean }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin.from("product_placements").delete().neq("slug", "");
   return { ok: !error };
 }

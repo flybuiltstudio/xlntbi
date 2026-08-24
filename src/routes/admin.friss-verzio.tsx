@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PageHero } from "@/components/PageHero";
-import { CalculatorVersionPanel, ProductVersionPanel } from "@/components/admin-panels";
+import {
+  CalculatorVersionPanel,
+  ProductOrderPanel,
+  ProductVersionPanel,
+} from "@/components/admin-panels";
 
 export const Route = createFileRoute("/admin/friss-verzio")({
   head: () => ({
@@ -39,6 +43,7 @@ function AdminNewVersionPage() {
         </p>
         <ProductVersionPanel />
         <CalculatorVersionPanel />
+        <ProductOrderPanel />
       </div>
     </>
   );
