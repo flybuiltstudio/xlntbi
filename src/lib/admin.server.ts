@@ -656,7 +656,7 @@ export async function listProductFiles(): Promise<ProductFileInfo[]> {
   const { products } = await import("@/lib/products");
   const result: ProductFileInfo[] = [];
   for (const product of products) {
-    const download = product.available ? product.download : undefined;
+    const download = product.status === "available" ? product.download : undefined;
     if (!download) continue;
     const slash = download.storagePath.lastIndexOf("/");
     const folder = download.storagePath.slice(0, slash);
@@ -689,7 +689,7 @@ export async function createProductUploadUrl(input: {
 }): Promise<{ ok: true; path: string; token: string } | { ok: false; error: string }> {
   const { products } = await import("@/lib/products");
   const product = products.find((p) => p.slug === input.slug);
-  const download = product?.available ? product.download : undefined;
+  const download = product?.status === "available" ? product.download : undefined;
   if (!product || !download) {
     return { ok: false, error: "A kiválasztott termék nem frissíthető." };
   }
