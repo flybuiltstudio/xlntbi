@@ -424,7 +424,7 @@ export const products: Product[] = [
     price: 19900,
     currency: "HUF",
     image: utalasiImg,
-    metaTitle: "Utalási Csomag Készítő Excelhez | EXCELlent",
+    metaTitle: "Banki Utalási Csomag Készítő Excelben | EXCELlent",
     metaDescription: "A havi utalásait Excelből, egyetlen gombnyomással – gépelés és elütés nélkül. Ár: 19 900 Ft-tól.",
     intro: [
       "Ha havonta több partnernek utal, ismeri az egyhangú munkát: minden tételt egyesével begépelni a netbankba, számlaszámot és összeget figyelve. Ez az Excel-eszköz ezt veszi le a válláról. Ön egy áttekinthető táblázatba viszi a tételeket, a program pedig kész banki importfájlt készít belőle – amit már csak be kell töltenie a netbankba, ellenőriznie és aláírnia.",
