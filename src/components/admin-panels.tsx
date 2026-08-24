@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import {
   adminApproveTransfer,
@@ -10,7 +10,16 @@ import {
   adminResendDownload,
 } from "@/lib/admin.functions";
 import { formatPrice } from "@/lib/products";
+import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
+
+export function filterChip(active: boolean) {
+  return `rounded-md px-3.5 py-1.5 text-sm font-semibold transition-colors ${
+    active
+      ? "bg-primary text-primary-foreground"
+      : "border border-input text-muted-foreground hover:bg-accent hover:text-foreground"
+  }`;
+}
 
 export type Order = Awaited<ReturnType<typeof adminListOrders>>["orders"][number];
 export type AdminUserRow = Awaited<ReturnType<typeof adminListUsers>>["users"][number];
