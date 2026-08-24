@@ -11,6 +11,7 @@ import {
   adminListUsers,
   adminResendDownload,
   adminRetryInvoice,
+  adminUpdateUserRole,
 } from "@/lib/admin.functions";
 import { formatPrice } from "@/lib/products";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
@@ -567,10 +568,12 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
   const load = useServerFn(adminListUsers);
   const createUser = useServerFn(adminCreateUser);
   const deleteUser = useServerFn(adminDeleteUser);
+  const updateRole = useServerFn(adminUpdateUserRole);
 
   const [users, setUsers] = useState<AdminUserRow[] | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
+  const [roleBusy, setRoleBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [creating, setCreating] = useState(false);
 
@@ -634,10 +637,30 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
     setBusy(null);
   }
 
+  async function onChangeRole(user: AdminUserRow, role: "admin" | "user") {
+    const label = role === "admin" ? "Admin" : "Felhasználó";
+    if (!window.confirm(`Biztosan megváltoztatod a szerepkörét? ${user.email} → ${label}`)) return;
+    setRoleBusy(user.id);
+    setMessage("");
+    setError("");
+    try {
+      const result = await updateRole({ data: { userId: user.id, role } });
+      if (result.ok) {
+        setMessage(`${user.email}: szerepkör módosítva (${label}). A változás a következő belépésnél lép életbe.`);
+        await refresh();
+      } else {
+        setError(result.error ?? "Hiba történt.");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setRoleBusy(null);
+  }
+
   return (
     <section className="mt-8">
       <p className="text-sm text-muted-foreground">
-        Admin felhasználók kezelése: új létrehozása vagy meglévő törlése.
+        Admin felhasználók kezelése: új létrehozása, szerepkör módosítása vagy meglévő törlése.
       </p>
       <div className="mt-4 rounded-xl border border-border bg-muted/50 px-5 py-4 text-sm text-foreground">
         <p>
@@ -726,14 +749,29 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
                   : ""}
                 </p>
               </div>
-              <button
-                type="button"
-                disabled={busy === user.id || user.id === currentUserId}
-                onClick={() => void onDelete(user)}
-                className="rounded-md border border-destructive/40 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-40"
-              >
-                {busy === user.id ? "Törlés…" : "Törlés"}
-              </button>
+              <div className="flex items-center gap-2">
+                <select
+                  aria-label={`Szerepkör: ${user.email}`}
+                  value={user.roles[0] ?? "user"}
+                  disabled={roleBusy === user.id || user.id === currentUserId}
+                  onChange={(e) => {
+                    const role = e.target.value === "admin" ? "admin" : "user";
+                    if (role !== (user.roles[0] ?? "user")) void onChangeRole(user, role);
+                  }}
+                  className="rounded-md border border-input bg-background px-3 py-2 text-xs font-semibold text-foreground outline-none focus:border-ring disabled:opacity-40"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="user">Felhasználó</option>
+                </select>
+                <button
+                  type="button"
+                  disabled={busy === user.id || user.id === currentUserId}
+                  onClick={() => void onDelete(user)}
+                  className="rounded-md border border-destructive/40 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-40"
+                >
+                  {busy === user.id ? "Törlés…" : "Törlés"}
+                </button>
+              </div>
             </article>
           ))}
         </div>

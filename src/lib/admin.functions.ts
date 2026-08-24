@@ -135,6 +135,22 @@ export const adminDeleteUser = createServerFn({ method: "POST" })
     return deleteUser(data.userId, context.userId);
   });
 
+export const adminUpdateUserRole = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        userId: z.string().uuid(),
+        role: z.enum(["admin", "user"]),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { updateUserRole } = await import("./admin.server");
+    return updateUserRole(data.userId, data.role, context.userId);
+  });
+
 const testOrderSchema = z.object({
   productSlug: z.string().trim().min(2).max(80),
   tierId: z.string().trim().min(1).max(80),
