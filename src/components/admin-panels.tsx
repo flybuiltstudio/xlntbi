@@ -794,11 +794,14 @@ const SOURCE_LABELS: Record<string, string> = {
 
 export function InvoiceLogsPanel() {
   const load = useServerFn(adminListInvoiceLogs);
+  const retry = useServerFn(adminRetryInvoice);
 
   const [logs, setLogs] = useState<InvoiceLog[] | null>(null);
   const [error, setError] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "success" | "error">("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [retryBusy, setRetryBusy] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
 
   async function refresh() {
     setError("");
@@ -815,6 +818,27 @@ export function InvoiceLogsPanel() {
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /** Starts a new invoicing attempt for the order behind a failed log row. */
+  async function onRetryLog(log: InvoiceLog) {
+    if (!log.orderId) return;
+    setRetryBusy(log.id);
+    setMessage("");
+    try {
+      const result = await retry({ data: { orderId: log.orderId } });
+      setMessage(
+        result.ok
+          ? `${log.orderNumber}: Billingo számla kiállítva${
+              result.invoiceNumber ? ` (${result.invoiceNumber})` : ""
+            }.`
+          : `${log.orderNumber}: ${result.error ?? "Hiba történt."}`,
+      );
+      await refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setRetryBusy(null);
+  }
 
   const sources = useMemo(() => {
     const set = new Set<string>();
@@ -858,6 +882,12 @@ export function InvoiceLogsPanel() {
       {error ? (
         <p className="mt-6 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {error}
+        </p>
+      ) : null}
+
+      {message ? (
+        <p className="mt-6 rounded-md border border-border bg-card px-4 py-3 text-sm text-foreground">
+          {message}
         </p>
       ) : null}
 
@@ -925,7 +955,7 @@ export function InvoiceLogsPanel() {
         </p>
       ) : (
         <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-card">
-          <table className="w-full min-w-[760px] text-left text-sm text-foreground">
+          <table className="w-full min-w-[880px] text-left text-sm text-foreground">
             <thead>
               <tr className="border-b border-border text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 <th className="px-4 py-3">Időpont</th>
@@ -935,6 +965,7 @@ export function InvoiceLogsPanel() {
                 <th className="px-4 py-3">Számlaszám</th>
                 <th className="px-4 py-3">Hibakód</th>
                 <th className="px-4 py-3">Hibaüzenet</th>
+                <th className="px-4 py-3">Művelet</th>
               </tr>
             </thead>
             <tbody>
@@ -971,6 +1002,18 @@ export function InvoiceLogsPanel() {
                   </td>
                   <td className="max-w-[280px] px-4 py-3 text-xs text-muted-foreground">
                     {log.errorMessage ?? "—"}
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3">
+                    {log.status === "error" && log.orderId ? (
+                      <button
+                        type="button"
+                        disabled={retryBusy === log.id}
+                        onClick={() => void onRetryLog(log)}
+                        className="rounded-md border border-primary/40 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10 disabled:opacity-40"
+                      >
+                        {retryBusy === log.id ? "Újrapróbálás…" : "Újrapróbálás"}
+                      </button>
+                    ) : null}
                   </td>
                 </tr>
               ))}
