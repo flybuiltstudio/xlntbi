@@ -185,6 +185,9 @@ export type OrderStatRow = {
   totalPrice: number;
   paymentStatus: string;
   createdAt: string;
+  orderNumber: string;
+  billingName: string;
+  email: string;
 };
 
 /** Minimal order rows for the admin statistics page (aggregated client-side). */
@@ -192,7 +195,9 @@ export async function orderStats(): Promise<{ rows: OrderStatRow[] }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin
     .from("orders")
-    .select("product_name, tier_label, quantity, total_price, payment_status, created_at")
+    .select(
+      "product_name, tier_label, quantity, total_price, payment_status, created_at, order_number, billing_name, email",
+    )
     .neq("payment_provider", "test")
     .order("created_at", { ascending: true })
     .limit(5000);
@@ -210,6 +215,9 @@ export async function orderStats(): Promise<{ rows: OrderStatRow[] }> {
       totalPrice: o.total_price,
       paymentStatus: o.payment_status,
       createdAt: o.created_at,
+      orderNumber: o.order_number,
+      billingName: o.billing_name,
+      email: o.email,
     })),
   };
 }

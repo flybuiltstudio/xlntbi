@@ -6,6 +6,33 @@ export interface StatExportRow {
   quantity: number;
   totalPrice: number;
   createdAt: string;
+  orderNumber?: string;
+  billingName?: string;
+  email?: string;
+}
+
+export function formatDateHu(iso: string) {
+  return new Date(iso).toLocaleDateString("hu-HU", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+
+export function slugify(text: string) {
+  return (
+    text
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60) || "lista"
+  );
+}
+
+export function paymentLabel(status: string) {
+  return status === "paid" ? "Rendezett" : "Fizetésre vár";
 }
 
 export const MONTHS = [
@@ -466,4 +493,156 @@ export async function exportYearPdf(rows: StatExportRow[], year: number) {
   });
 
   doc.save(`xlntbi-statisztika-${year}.pdf`);
+}
+
+// ---------------- Táblázatos listák (megrendelőnként / termékenként) ----------------
+
+export interface ListTable {
+  title: string;
+  subtitle?: string;
+  head: string[];
+  body: (string | number)[][];
+  foot?: (string | number)[];
+  /** Indexek, amelyeket jobbra igazítunk (PDF-ben) */
+  rightCols?: number[];
+}
+
+export function exportTableCsv(filename: string, table: ListTable) {
+  const lines: string[] = [];
+  lines.push(table.head.map(csvCell).join(";"));
+  for (const row of table.body) lines.push(row.map(csvCell).join(";"));
+  if (table.foot) lines.push(table.foot.map(csvCell).join(";"));
+  downloadBlob(
+    new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" }),
+    filename,
+  );
+}
+
+export function exportTableXml(filename: string, table: ListTable) {
+  const lines: string[] = [];
+  lines.push('<?xml version="1.0" encoding="UTF-8"?>');
+  lines.push(
+    `<lista forras="xlntbi.hu" cim="${xmlEsc(table.title)}" generalva="${new Date().toISOString()}">`,
+  );
+  lines.push("  <oszlopok>");
+  for (const h of table.head) lines.push(`    <oszlop>${xmlEsc(h)}</oszlop>`);
+  lines.push("  </oszlopok>");
+  for (const row of table.body) {
+    lines.push("  <sor>");
+    row.forEach((cell, i) => {
+      lines.push(
+        `    <cella oszlop="${xmlEsc(table.head[i] ?? `oszlop_${i + 1}`)}">${xmlEsc(String(cell))}</cella>`,
+      );
+    });
+    lines.push("  </sor>");
+  }
+  if (table.foot) {
+    lines.push("  <osszesen>");
+    table.foot.forEach((cell, i) => {
+      lines.push(
+        `    <cella oszlop="${xmlEsc(table.head[i] ?? `oszlop_${i + 1}`)}">${xmlEsc(String(cell))}</cella>`,
+      );
+    });
+    lines.push("  </osszesen>");
+  }
+  lines.push("</lista>");
+  downloadBlob(
+    new Blob([lines.join("\n")], { type: "application/xml;charset=utf-8" }),
+    filename,
+  );
+}
+
+export async function exportTableXlsx(filename: string, sheetName: string, table: ListTable) {
+  const XLSX = await import("xlsx");
+  const wb = XLSX.utils.book_new();
+  const allRows = [
+    [table.title],
+    table.subtitle ? [table.subtitle] : [],
+    [],
+    table.head,
+    ...table.body,
+    ...(table.foot ? [table.foot] : []),
+  ] as (string | number)[][];
+  const sheet = XLSX.utils.aoa_to_sheet(allRows);
+  sheet["!cols"] = table.head.map((h, i) => {
+    let w = h.length;
+    for (const row of [...table.body, ...(table.foot ? [table.foot] : [])]) {
+      const cell = row[i];
+      const len = cell == null ? 0 : String(cell).length;
+      if (len > w) w = len;
+    }
+    return { wch: Math.max(12, Math.min(48, w + 3)) };
+  });
+  XLSX.utils.book_append_sheet(wb, sheet, sheetName.slice(0, 31) || "Lista");
+  XLSX.writeFile(wb, filename);
+}
+
+export async function exportTablePdf(filename: string, table: ListTable) {
+  const [{ jsPDF }, autoTable, fonts] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable").then((m) => m.default),
+    loadPdfFonts(),
+  ]);
+
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  doc.addFileToVFS("DejaVuSans.ttf", fonts.regular);
+  doc.addFont("DejaVuSans.ttf", "DejaVuSans", "normal");
+  doc.addFileToVFS("DejaVuSans-Bold.ttf", fonts.bold);
+  doc.addFont("DejaVuSans-Bold.ttf", "DejaVuSans", "bold");
+
+  const pageW = 210;
+  const margin = 14;
+  let y = margin + 2;
+
+  doc.setFont("DejaVuSans", "bold");
+  doc.setFontSize(15);
+  doc.setTextColor(...BRAND);
+  doc.text(table.title, margin, y);
+  y += 6;
+  doc.setFont("DejaVuSans", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(...MUTED);
+  const subtitle =
+    (table.subtitle ? `${table.subtitle} · ` : "") +
+    `EXCELlent Business Intelligence · xlntbi.hu · Készült: ${new Date().toLocaleDateString("hu-HU")}`;
+  doc.text(subtitle, margin, y);
+  y += 2.5;
+  doc.setDrawColor(...BRAND);
+  doc.setLineWidth(0.6);
+  doc.line(margin, y, pageW - margin, y);
+  y += 5;
+
+  const columnStyles: Record<number, { halign: "right" }> = {};
+  for (const i of table.rightCols ?? []) columnStyles[i] = { halign: "right" };
+
+  const fmtCell = (cell: string | number) =>
+    typeof cell === "number" ? cell.toLocaleString("hu-HU") : cell;
+
+  autoTable(doc, {
+    startY: y,
+    head: [table.head],
+    body: table.body.map((row) => row.map(fmtCell)),
+    ...(table.foot ? { foot: [table.foot.map(fmtCell)] } : {}),
+    styles: { font: "DejaVuSans", fontSize: 8, cellPadding: 1.5, textColor: INK },
+    headStyles: {
+      font: "DejaVuSans",
+      fontStyle: "bold",
+      fillColor: BRAND,
+      textColor: [255, 255, 255],
+    },
+    footStyles: {
+      font: "DejaVuSans",
+      fontStyle: "bold",
+      fillColor: [231, 240, 233],
+      textColor: BRAND,
+    },
+    alternateRowStyles: { fillColor: [247, 250, 248] },
+    columnStyles,
+    margin: { left: margin, right: margin, bottom: 12 },
+    theme: "grid",
+    tableLineColor: [220, 228, 222],
+    tableLineWidth: 0.2,
+  });
+
+  doc.save(filename);
 }
