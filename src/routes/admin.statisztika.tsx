@@ -17,6 +17,7 @@ import {
 import { adminOrderStats } from "@/lib/admin.functions";
 import { formatPrice } from "@/lib/products";
 import { PageHero } from "@/components/PageHero";
+import { useAdminSession } from "@/components/admin-panels";
 import {
   MONTHS,
   MONTHS_SHORT,
@@ -66,6 +67,7 @@ const PAY_OPTIONS: Array<{ id: PayFilter; label: string }> = [
 ];
 
 function AdminStatsPage() {
+  const { role } = useAdminSession();
   return (
     <>
       <PageHero>
@@ -77,7 +79,8 @@ function AdminStatsPage() {
         <p className="text-sm text-muted-foreground">
           Megrendelt termékek összesítve, szűrhetően fizetési állapot, év és hónap szerint. A
           teszt megrendelések (TESZT- előtag) alapból nem szerepelnek a statisztikában és az
-          exportokban – a lenti kapcsolóval jeleníthetők meg.
+          exportokban
+          {role === "admin" ? " – a lenti kapcsolóval jeleníthetők meg." : "."}
         </p>
         <StatsPanel />
       </div>
@@ -94,6 +97,7 @@ function filterChip(active: boolean) {
 }
 
 function StatsPanel() {
+  const { role } = useAdminSession();
   const load = useServerFn(adminOrderStats);
   const [rows, setRows] = useState<StatRow[] | null>(null);
   const [error, setError] = useState("");
@@ -257,16 +261,18 @@ function StatsPanel() {
         </p>
       ) : null}
 
-      {/* Teszt megrendelések mutatása – csak itt, az admin felületen kapcsolható */}
-      <label className="mb-6 flex w-fit cursor-pointer items-center gap-2.5 rounded-xl border border-dashed border-border bg-muted/40 px-4 py-2.5 text-sm font-medium text-foreground">
-        <input
-          type="checkbox"
-          checked={includeTests}
-          onChange={(e) => setIncludeTests(e.target.checked)}
-          className="h-4 w-4 accent-primary"
-        />
-        Teszt megrendelések (TESZT- előtag) mutatása a statisztikában és az exportokban
-      </label>
+      {/* Teszt megrendelések mutatása – csak admin szerepkörrel kapcsolható */}
+      {role === "admin" ? (
+        <label className="mb-6 flex w-fit cursor-pointer items-center gap-2.5 rounded-xl border border-dashed border-border bg-muted/40 px-4 py-2.5 text-sm font-medium text-foreground">
+          <input
+            type="checkbox"
+            checked={includeTests}
+            onChange={(e) => setIncludeTests(e.target.checked)}
+            className="h-4 w-4 accent-primary"
+          />
+          Teszt megrendelések (TESZT- előtag) mutatása a statisztikában és az exportokban
+        </label>
+      ) : null}
 
       {rows === null ? (
         <p className="text-sm text-muted-foreground">Betöltés…</p>
