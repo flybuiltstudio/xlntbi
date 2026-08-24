@@ -1203,10 +1203,23 @@ export function ProductVersionPanel() {
   /** Uploads the chosen file straight to storage over the existing object. */
   async function onUpload() {
     if (!selected || !file || busy) return;
-    setBusy(true);
-    setProgress(0);
     setError("");
     setMessage("");
+    if (file.size > 300 * 1024 * 1024) {
+      setError(
+        `A fájl túl nagy: ${formatFileSize(file.size)}. A megengedett maximum 300 MB.`,
+      );
+      return;
+    }
+    if (targetExt && !file.name.toLowerCase().endsWith(`.${targetExt.toLowerCase()}`)) {
+      setError(
+        `A fájl típusa nem megfelelő: .${targetExt} fájlt vártunk ehhez a termékhez, ` +
+          `de a kiválasztott fájl: ${file.name}.`,
+      );
+      return;
+    }
+    setBusy(true);
+    setProgress(0);
     try {
       const ticket = await createUploadUrl({
         data: { slug: selected.slug, fileName: file.name, fileSize: file.size },
