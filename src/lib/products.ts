@@ -941,8 +941,7 @@ export const products: Product[] = [
     priceId: "pdf_excel_konverter_orokos_licenc",
     price: 12900,
     currency: "HUF",
-    image: biImg,
-    metaTitle: "PDF → Excel konverter | EXCELlent",
+    image: pdfExcelImg,
     metaDescription: "Bármilyen PDF tartalma – szöveg, táblázat, kép – egy kattintással Excelbe, az eredeti elrendezést megőrizve. Ár: 12 900 Ft-tól.",
     intro: [
       "A legtöbb PDF→Excel konverter csak a nyers szöveget önti ki, formázás és rendszer nélkül. Ez a program másképp dolgozik: megtartja a betűméretet, a kiemeléseket, a táblázatok szerkezetét és a beágyazott képeket is – úgy, hogy az Excel fájl tényleg hasonlítson az eredeti dokumentumra.",
