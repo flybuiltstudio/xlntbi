@@ -255,3 +255,43 @@ export const adminDeleteCalculatorOverride = createServerFn({ method: "POST" })
     const { deleteCalculatorOverride } = await import("./admin.server");
     return deleteCalculatorOverride(data.key);
   });
+
+export const adminListProductPlacements = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { listProductPlacements } = await import("./admin.server");
+    return { placements: await listProductPlacements() };
+  });
+
+export const adminSaveProductPlacements = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        items: z
+          .array(
+            z.object({
+              slug: z.string().min(1).max(120),
+              category: z.string().min(1).max(60),
+              sortOrder: z.number().int().min(0).max(999),
+            }),
+          )
+          .min(1)
+          .max(500),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { saveProductPlacements } = await import("./admin.server");
+    return saveProductPlacements(data.items, context.userId);
+  });
+
+export const adminResetProductPlacements = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { resetProductPlacements } = await import("./admin.server");
+    return resetProductPlacements();
+  });
