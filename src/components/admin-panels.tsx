@@ -3,17 +3,23 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import {
   adminApproveTransfer,
+  adminCreateProductUploadUrl,
   adminCreateUser,
+  adminDeleteCalculatorOverride,
   adminDeleteUser,
   adminInvoiceUrl,
+  adminListCalculatorOverrides,
   adminListInvoiceLogs,
   adminListOrders,
+  adminListProductFiles,
   adminListUsers,
   adminResendDownload,
   adminRetryInvoice,
   adminUpdateUserRole,
+  adminUploadCalculatorVersion,
 } from "@/lib/admin.functions";
-import { formatPrice } from "@/lib/products";
+import { formatPrice, products } from "@/lib/products";
+import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -1021,6 +1027,358 @@ export function InvoiceLogsPanel() {
           </table>
         </div>
       )}
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// "Friss verzió feltöltés" — termékfájl csere + kalkulátor frissítés
+// ---------------------------------------------------------------------------
+
+type ProductFileMeta = Awaited<ReturnType<typeof adminListProductFiles>>["files"][number];
+type CalculatorOverrideRow = Awaited<
+  ReturnType<typeof adminListCalculatorOverrides>
+>["overrides"][number];
+
+const PRODUCT_FILES_BUCKET = "termekfajlok";
+const MAX_CALCULATOR_HTML_BYTES = 5 * 1024 * 1024;
+
+function formatFileSize(bytes: number | null): string {
+  if (bytes === null) return "—";
+  if (bytes >= 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}
+
+const selectClass =
+  "rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground";
+const fileInputClass =
+  "block w-full max-w-md text-sm text-muted-foreground file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary-foreground hover:file:opacity-90";
+
+/** Termék új verziója: legördülőből választott termék fájljának felülírása. */
+export function ProductVersionPanel() {
+  const loadFiles = useServerFn(adminListProductFiles);
+  const createUploadUrl = useServerFn(adminCreateProductUploadUrl);
+
+  const downloadable = useMemo(
+    () => products.filter((p) => p.status === "available" && p.download),
+    [],
+  );
+  const [slug, setSlug] = useState(downloadable[0]?.slug ?? "");
+  const [files, setFiles] = useState<Record<string, ProductFileMeta> | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [inputKey, setInputKey] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  async function refresh() {
+    try {
+      const result = await loadFiles();
+      const map: Record<string, ProductFileMeta> = {};
+      for (const item of result.files) map[item.slug] = item;
+      setFiles(map);
+    } catch {
+      setFiles({});
+    }
+  }
+
+  useEffect(() => {
+    void refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const selected = downloadable.find((p) => p.slug === slug);
+  const meta = files?.[slug] ?? null;
+  const targetExt = meta?.fileName.split(".").pop() ?? "";
+
+  /** Uploads the chosen file straight to storage over the existing object. */
+  async function onUpload() {
+    if (!selected || !file || busy) return;
+    setBusy(true);
+    setError("");
+    setMessage("");
+    try {
+      const ticket = await createUploadUrl({
+        data: { slug: selected.slug, fileName: file.name, fileSize: file.size },
+      });
+      if (!ticket.ok) throw new Error(ticket.error);
+      const { error: uploadError } = await supabase.storage
+        .from(PRODUCT_FILES_BUCKET)
+        .uploadToSignedUrl(ticket.path, ticket.token, file);
+      if (uploadError) {
+        throw new Error("A feltöltés nem sikerült. Próbáld újra.");
+      }
+      setMessage(
+        `${selected.name}: új verzió feltöltve (${file.name}, ${formatFileSize(file.size)}). ` +
+          "A korábbi vásárlók letöltő linkjei mostantól az új verziót szolgálják ki.",
+      );
+      setFile(null);
+      setInputKey((k) => k + 1);
+      await refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(false);
+  }
+
+  return (
+    <section className="mt-10 rounded-xl border border-border bg-card p-6">
+      <h2 className="text-xl font-bold text-foreground">Termék új verziója</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        A kiválasztott termék határozza meg, melyik fájl cserélődik — a feltöltött
+        fájl neve nem számít. A régi fájl felülíródik, a meglévő letöltő linkek
+        érvényesek maradnak.
+      </p>
+
+      <div className="mt-6 flex flex-col gap-4">
+        <label className="text-sm font-medium text-foreground">
+          Termék
+          <select
+            className={`${selectClass} mt-1.5 w-full max-w-md`}
+            value={slug}
+            onChange={(e) => {
+              setSlug(e.target.value);
+              setMessage("");
+              setError("");
+            }}
+          >
+            {downloadable.map((p) => (
+              <option key={p.slug} value={p.slug}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        {selected ? (
+          <div className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm">
+            <p className="font-medium text-foreground">
+              Jelenlegi fájl: <span className="font-mono">{meta?.fileName ?? "…"}</span>
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Méret: {formatFileSize(meta?.size ?? null)}
+              {meta?.updatedAt
+                ? ` · Utoljára módosítva: ${new Date(meta.updatedAt).toLocaleString("hu-HU")}`
+                : ""}
+            </p>
+          </div>
+        ) : null}
+
+        <label className="text-sm font-medium text-foreground">
+          Új verzió fájlja (.{targetExt || "xlsm/.exe"}, legfeljebb 300 MB)
+          <input
+            key={inputKey}
+            type="file"
+            accept=".xlsm,.exe"
+            className={`${fileInputClass} mt-1.5`}
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          />
+        </label>
+
+        <div>
+          <button
+            type="button"
+            disabled={!file || busy || !selected}
+            onClick={() => void onUpload()}
+            className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-40"
+          >
+            {busy ? "Feltöltés…" : "Új verzió feltöltése"}
+          </button>
+        </div>
+
+        {error ? (
+          <p className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {error}
+          </p>
+        ) : null}
+        {message ? (
+          <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
+            {message}
+          </p>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+/** Kalkulátor frissítése: feltöltött HTML felülírja a kiválasztott kalkulátort. */
+export function CalculatorVersionPanel() {
+  const loadOverrides = useServerFn(adminListCalculatorOverrides);
+  const upload = useServerFn(adminUploadCalculatorVersion);
+  const remove = useServerFn(adminDeleteCalculatorOverride);
+
+  const [calcKey, setCalcKey] = useState<string>(CALCULATORS[0].key);
+  const [overrides, setOverrides] = useState<CalculatorOverrideRow[] | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [inputKey, setInputKey] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const [restoreBusy, setRestoreBusy] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  async function refresh() {
+    try {
+      const result = await loadOverrides();
+      setOverrides(result.overrides);
+    } catch {
+      setOverrides([]);
+    }
+  }
+
+  useEffect(() => {
+    void refresh();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /** Reads the chosen HTML file and stores it as the calculator's override. */
+  async function onUpload() {
+    if (!file || busy) return;
+    setBusy(true);
+    setError("");
+    setMessage("");
+    try {
+      if (file.size > MAX_CALCULATOR_HTML_BYTES) {
+        throw new Error("A fájl mérete legfeljebb 5 MB lehet.");
+      }
+      const content = await file.text();
+      const result = await upload({
+        data: { key: calcKey, fileName: file.name, content },
+      });
+      if (!result.ok) throw new Error(result.error);
+      setMessage(
+        `${calculatorLabel(calcKey)}: frissítve a feltöltött fájllal (${file.name}). ` +
+          "A nyilvános oldal mostantól ezt a verziót mutatja.",
+      );
+      setFile(null);
+      setInputKey((k) => k + 1);
+      await refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(false);
+  }
+
+  /** Deletes the override, restoring the bundled calculator version. */
+  async function onRestore(key: string) {
+    if (restoreBusy) return;
+    setRestoreBusy(key);
+    setMessage("");
+    setError("");
+    try {
+      await remove({ data: { key } });
+      setMessage(`${calculatorLabel(key)}: az eredeti, beépített verzió állt vissza.`);
+      await refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setRestoreBusy(null);
+  }
+
+  return (
+    <section className="mt-10 rounded-xl border border-border bg-card p-6">
+      <h2 className="text-xl font-bold text-foreground">Kalkulátor frissítése</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        A kiválasztott kalkulátor határozza meg a célt — a feltöltött fájl neve nem
+        számít. A feltöltött HTML váltja le a kalkulátor nyilvános oldalát; az
+        eredeti verzió bármikor visszaállítható.
+      </p>
+
+      <div className="mt-6 flex flex-col gap-4">
+        <label className="text-sm font-medium text-foreground">
+          Kalkulátor
+          <select
+            className={`${selectClass} mt-1.5 w-full max-w-md`}
+            value={calcKey}
+            onChange={(e) => {
+              setCalcKey(e.target.value);
+              setMessage("");
+              setError("");
+            }}
+          >
+            {CALCULATORS.map((c) => (
+              <option key={c.key} value={c.key}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="text-sm font-medium text-foreground">
+          Új verzió (.html, legfeljebb 5 MB)
+          <input
+            key={inputKey}
+            type="file"
+            accept=".html,text/html"
+            className={`${fileInputClass} mt-1.5`}
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          />
+        </label>
+
+        <div>
+          <button
+            type="button"
+            disabled={!file || busy}
+            onClick={() => void onUpload()}
+            className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-40"
+          >
+            {busy ? "Feltöltés…" : "Kalkulátor frissítése"}
+          </button>
+        </div>
+
+        {error ? (
+          <p className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {error}
+          </p>
+        ) : null}
+        {message ? (
+          <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
+            {message}
+          </p>
+        ) : null}
+
+        {overrides && overrides.length > 0 ? (
+          <div className="mt-2 overflow-x-auto rounded-xl border border-border">
+            <table className="w-full min-w-[560px] text-left text-sm text-foreground">
+              <thead>
+                <tr className="border-b border-border text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <th className="px-4 py-3">Kalkulátor</th>
+                  <th className="px-4 py-3">Feltöltött fájl</th>
+                  <th className="px-4 py-3">Frissítve</th>
+                  <th className="px-4 py-3">Művelet</th>
+                </tr>
+              </thead>
+              <tbody>
+                {overrides.map((row) => (
+                  <tr key={row.key} className="border-b border-border/60 last:border-b-0">
+                    <td className="px-4 py-3 font-medium">{calculatorLabel(row.key)}</td>
+                    <td className="px-4 py-3 font-mono text-xs">{row.fileName}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">
+                      {new Date(row.updatedAt).toLocaleString("hu-HU")}
+                    </td>
+                    <td className="px-4 py-3">
+                      <button
+                        type="button"
+                        disabled={restoreBusy === row.key}
+                        onClick={() => void onRestore(row.key)}
+                        className="rounded-md border border-destructive/40 px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-40"
+                      >
+                        {restoreBusy === row.key ? "Visszaállítás…" : "Eredeti visszaállítása"}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground">
+            {overrides === null
+              ? "Betöltés…"
+              : "Jelenleg minden kalkulátor az eredeti, beépített verzióval fut."}
+          </p>
+        )}
+      </div>
     </section>
   );
 }

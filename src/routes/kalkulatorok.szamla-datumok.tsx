@@ -1,13 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { EmbeddedCalculator } from "@/components/EmbeddedCalculator";
 import { PageHero } from "@/components/PageHero";
 import { html, script } from "@/lib/calculators/szamla-datumok";
+import { getCalculatorOverride } from "@/lib/calculator.functions";
+
+const overrideQueryOptions = queryOptions({
+  queryKey: ["calculator-override", "szamla-datumok"],
+  queryFn: () => getCalculatorOverride({ data: { key: "szamla-datumok" } }),
+  staleTime: 60_000,
+});
 
 const TITLE = "Számla dátumok kalkulátor – teljesítés, határidő, árfolyam | EXCELlent";
 const DESC =
   "Számlázási dátumok kalkulátora az ÁFA tv. szerint: teljesítési időpont, fizetési határidő és árfolyam-dátum élő MNB-árfolyammal (EUR/GBP/USD). Tájékoztató jellegű kalkulátor.";
 
 export const Route = createFileRoute("/kalkulatorok/szamla-datumok")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(overrideQueryOptions),
   head: () => ({
     meta: [
       { title: TITLE },
@@ -22,6 +31,7 @@ export const Route = createFileRoute("/kalkulatorok/szamla-datumok")({
 });
 
 function SzamlaDatumokPage() {
+  const { data: override } = useSuspenseQuery(overrideQueryOptions);
   return (
     <>
       <PageHero>
@@ -34,7 +44,11 @@ function SzamlaDatumokPage() {
           tájékoztató jellegű.
         </p>
         <div className="mt-8">
-          <EmbeddedCalculator html={html} script={script} />
+          <EmbeddedCalculator
+            key={override ? override.updatedAt : "beepitett"}
+            html={override?.html ?? html}
+            script={override?.script ?? script}
+          />
         </div>
       </div>
     </>

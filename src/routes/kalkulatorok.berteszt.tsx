@@ -1,13 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { EmbeddedCalculator } from "@/components/EmbeddedCalculator";
 import { PageHero } from "@/components/PageHero";
 import { html, script } from "@/lib/calculators/berteszt";
+import { getCalculatorOverride } from "@/lib/calculator.functions";
+
+const overrideQueryOptions = queryOptions({
+  queryKey: ["calculator-override", "berteszt"],
+  queryFn: () => getCalculatorOverride({ data: { key: "berteszt" } }),
+  staleTime: 60_000,
+});
 
 const TITLE = "Bérteszt 2026 – bérszámfejtés kalkulátor | EXCELlent";
 const DESC =
   "Havi bérszámfejtés 30 jogviszonytípusra: SZJA, TB-járulék, szocho, adóalap-kedvezmények, cafeteria, EKHO. Tájékoztató jellegű kalkulátor.";
 
 export const Route = createFileRoute("/kalkulatorok/berteszt")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(overrideQueryOptions),
   head: () => ({
     meta: [
       { title: TITLE },
@@ -22,6 +31,7 @@ export const Route = createFileRoute("/kalkulatorok/berteszt")({
 });
 
 function BertesztPage() {
+  const { data: override } = useSuspenseQuery(overrideQueryOptions);
   return (
     <>
       <PageHero>
@@ -33,7 +43,11 @@ function BertesztPage() {
           adóalap- és szocho-kedvezményekkel. A kalkuláció tájékoztató jellegű.
         </p>
         <div className="mt-8">
-          <EmbeddedCalculator html={html} script={script} />
+          <EmbeddedCalculator
+            key={override ? override.updatedAt : "beepitett"}
+            html={override?.html ?? html}
+            script={override?.script ?? script}
+          />
         </div>
       </div>
     </>

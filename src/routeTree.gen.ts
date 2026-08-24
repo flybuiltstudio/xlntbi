@@ -37,6 +37,7 @@ import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminFelhasznalokRouteImport } from './routes/admin.felhasznalok'
 import { Route as AdminFizetesTesztRouteImport } from './routes/admin.fizetes-teszt'
+import { Route as AdminFrissVerzioRouteImport } from './routes/admin.friss-verzio'
 import { Route as AdminJelszoRouteImport } from './routes/admin.jelszo'
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as AdminSzamlazasRouteImport } from './routes/admin.szamlazas'
@@ -195,6 +196,11 @@ const AdminFizetesTesztRoute = AdminFizetesTesztRouteImport.update({
   path: '/fizetes-teszt',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFrissVerzioRoute = AdminFrissVerzioRouteImport.update({
+  id: '/friss-verzio',
+  path: '/friss-verzio',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminJelszoRoute = AdminJelszoRouteImport.update({
   id: '/jelszo',
   path: '/jelszo',
@@ -309,6 +315,7 @@ export interface FileRoutesByFullPath {
   '/termekeim': typeof TermekeimRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
+  '/admin/friss-verzio': typeof AdminFrissVerzioRoute
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
@@ -354,6 +361,7 @@ export interface FileRoutesByTo {
   '/termekeim': typeof TermekeimRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
+  '/admin/friss-verzio': typeof AdminFrissVerzioRoute
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
@@ -401,6 +409,7 @@ export interface FileRoutesById {
   '/termekeim': typeof TermekeimRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
+  '/admin/friss-verzio': typeof AdminFrissVerzioRoute
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
@@ -449,6 +458,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
+    | '/admin/friss-verzio'
     | '/admin/jelszo'
     | '/admin/statisztika'
     | '/admin/szamlazas'
@@ -494,6 +504,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
+    | '/admin/friss-verzio'
     | '/admin/jelszo'
     | '/admin/statisztika'
     | '/admin/szamlazas'
@@ -540,6 +551,7 @@ export interface FileRouteTypes {
     | '/termekeim'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
+    | '/admin/friss-verzio'
     | '/admin/jelszo'
     | '/admin/statisztika'
     | '/admin/szamlazas'
@@ -798,6 +810,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFizetesTesztRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/friss-verzio': {
+      id: '/admin/friss-verzio'
+      path: '/friss-verzio'
+      fullPath: '/admin/friss-verzio'
+      preLoaderRoute: typeof AdminFrissVerzioRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/jelszo': {
       id: '/admin/jelszo'
       path: '/jelszo'
@@ -916,6 +935,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminFelhasznalokRoute: typeof AdminFelhasznalokRoute
   AdminFizetesTesztRoute: typeof AdminFizetesTesztRoute
+  AdminFrissVerzioRoute: typeof AdminFrissVerzioRoute
   AdminJelszoRoute: typeof AdminJelszoRoute
   AdminStatisztikaRoute: typeof AdminStatisztikaRoute
   AdminSzamlazasRoute: typeof AdminSzamlazasRoute
@@ -925,6 +945,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminFelhasznalokRoute: AdminFelhasznalokRoute,
   AdminFizetesTesztRoute: AdminFizetesTesztRoute,
+  AdminFrissVerzioRoute: AdminFrissVerzioRoute,
   AdminJelszoRoute: AdminJelszoRoute,
   AdminStatisztikaRoute: AdminStatisztikaRoute,
   AdminSzamlazasRoute: AdminSzamlazasRoute,
