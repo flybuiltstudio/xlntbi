@@ -191,3 +191,67 @@ export const adminDeleteTestOrder = createServerFn({ method: "POST" })
     const { deleteTestOrder } = await import("./admin.server");
     return deleteTestOrder(data.orderId);
   });
+
+// ---------------------------------------------------------------------------
+// "Friss verzió feltöltés" — product file swap + calculator overrides
+// ---------------------------------------------------------------------------
+
+export const adminListProductFiles = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { listProductFiles } = await import("./admin.server");
+    return { files: await listProductFiles() };
+  });
+
+/** Returns a signed upload URL; the browser uploads straight to storage. */
+export const adminCreateProductUploadUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        slug: z.string().min(1),
+        fileName: z.string().min(1),
+        fileSize: z.number().int().nonnegative(),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { createProductUploadUrl } = await import("./admin.server");
+    return createProductUploadUrl(data);
+  });
+
+export const adminListCalculatorOverrides = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { listCalculatorOverrides } = await import("./admin.server");
+    return { overrides: await listCalculatorOverrides() };
+  });
+
+export const adminUploadCalculatorVersion = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        key: z.string().min(1),
+        fileName: z.string().min(1),
+        content: z.string().min(1),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { uploadCalculatorVersion } = await import("./admin.server");
+    return uploadCalculatorVersion({ ...data, updatedBy: context.userId });
+  });
+
+export const adminDeleteCalculatorOverride = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ key: z.string().min(1) }).parse(data))
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { deleteCalculatorOverride } = await import("./admin.server");
+    return deleteCalculatorOverride(data.key);
+  });
