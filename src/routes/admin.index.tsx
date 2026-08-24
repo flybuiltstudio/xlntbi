@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PageHero } from "@/components/PageHero";
-import { OrdersPanel, UsersPanel, useAdminSession } from "@/components/admin-panels";
+import { OrdersPanel, useAdminSession } from "@/components/admin-panels";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/admin/")({
 });
 
 function AdminIndexPage() {
-  const { email, userId } = useAdminSession();
+  const { email } = useAdminSession();
   return (
     <>
       <PageHero>
@@ -32,10 +32,10 @@ function AdminIndexPage() {
       </PageHero>
       <div className="mx-auto max-w-6xl px-4 py-14">
         <p className="text-sm text-muted-foreground">
-          Belső felület: átutalásos megrendelések jóváhagyása és a letöltési linkek kiküldése.
+          Belső felület: megrendelések szűrése fizetési állapot, év és hónap szerint, átutalások
+          jóváhagyása és a letöltési linkek kiküldése.
         </p>
         <OrdersPanel email={email} />
-        <UsersPanel currentUserId={userId} />
       </div>
     </>
   );

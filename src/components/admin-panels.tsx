@@ -89,6 +89,36 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid">("all");
+  const [yearSel, setYearSel] = useState<number | "all">("all");
+  const [monthSel, setMonthSel] = useState<number | "all">("all");
+
+  const years = useMemo(() => {
+    const set = new Set<number>();
+    for (const order of orders ?? []) set.add(new Date(order.createdAt).getFullYear());
+    return [...set].sort((a, b) => b - a);
+  }, [orders]);
+
+  const activeYear = yearSel === "all" ? null : yearSel;
+  const activeMonth = activeYear === null ? "all" : monthSel;
+
+  const filteredOrders = useMemo(
+    () =>
+      (orders ?? []).filter((order) => {
+        if (payFilter === "paid" && order.paymentStatus !== "paid") return false;
+        if (payFilter === "unpaid" && order.paymentStatus === "paid") return false;
+        const date = new Date(order.createdAt);
+        if (activeYear !== null && date.getFullYear() !== activeYear) return false;
+        if (activeMonth !== "all" && date.getMonth() !== activeMonth) return false;
+        return true;
+      }),
+    [orders, payFilter, activeYear, activeMonth],
+  );
+
+  const selectYear = (y: number | "all") => {
+    setYearSel(y);
+    if (y === "all") setMonthSel("all");
+  };
 
   async function refresh() {
     setError("");
@@ -361,9 +391,8 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
   }
 
   return (
-    <section className="mt-16">
-      <h2 className="text-2xl font-bold text-foreground">Felhasználók</h2>
-      <p className="mt-2 text-sm text-muted-foreground">
+    <section className="mt-8">
+      <p className="text-sm text-muted-foreground">
         Admin felhasználók kezelése: új létrehozása vagy meglévő törlése.
       </p>
 

@@ -76,7 +76,8 @@ function AdminStatsPage() {
       <div className="mx-auto max-w-6xl px-4 py-14">
         <p className="text-sm text-muted-foreground">
           Megrendelt termékek összesítve, szűrhetően fizetési állapot, év és hónap szerint. A
-          teszt megrendelések nem szerepelnek a statisztikában.
+          teszt megrendelések (TESZT- előtag) alapból nem szerepelnek a statisztikában és az
+          exportokban – a lenti kapcsolóval jeleníthetők meg.
         </p>
         <StatsPanel />
       </div>
@@ -96,20 +97,22 @@ function StatsPanel() {
   const load = useServerFn(adminOrderStats);
   const [rows, setRows] = useState<StatRow[] | null>(null);
   const [error, setError] = useState("");
+  const [includeTests, setIncludeTests] = useState(false);
   const [payFilter, setPayFilter] = useState<PayFilter>("all");
   const [yearSel, setYearSel] = useState<YearSel>("all");
   const [monthSel, setMonthSel] = useState<MonthSel>("all");
   const [exporting, setExporting] = useState<string | null>(null);
 
   useEffect(() => {
-    load()
+    setRows(null);
+    load({ data: { includeTests } })
       .then((result) => setRows(result.rows))
       .catch((e) => {
         setError(e instanceof Error ? e.message : "A statisztika betöltése nem sikerült.");
         setRows([]);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [includeTests]);
 
   const years = useMemo(() => {
     const set = new Set<number>();
@@ -254,10 +257,25 @@ function StatsPanel() {
         </p>
       ) : null}
 
+      {/* Teszt megrendelések mutatása – csak itt, az admin felületen kapcsolható */}
+      <label className="mb-6 flex w-fit cursor-pointer items-center gap-2.5 rounded-xl border border-dashed border-border bg-muted/40 px-4 py-2.5 text-sm font-medium text-foreground">
+        <input
+          type="checkbox"
+          checked={includeTests}
+          onChange={(e) => setIncludeTests(e.target.checked)}
+          className="h-4 w-4 accent-primary"
+        />
+        Teszt megrendelések (TESZT- előtag) mutatása a statisztikában és az exportokban
+      </label>
+
       {rows === null ? (
         <p className="text-sm text-muted-foreground">Betöltés…</p>
       ) : rows.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Még nincs megrendelés, nincs mit összesíteni.</p>
+        <p className="text-sm text-muted-foreground">
+          {includeTests
+            ? "Még nincs megrendelés, nincs mit összesíteni."
+            : "Még nincs éles megrendelés. A teszt megrendelések rejtve vannak – kapcsold be fent a mutatásukat, ha szükséges."}
+        </p>
       ) : (
         <>
           {/* Szűrők */}
