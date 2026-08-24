@@ -304,7 +304,7 @@ export async function approveTransfer(
 
   // Auto-invoice via Billingo for the now-paid bank-transfer order.
   const { issueInvoiceForOrder } = await import("./billingo.server");
-  await issueInvoiceForOrder(order as any, { sendToBuyer: true });
+  await issueInvoiceForOrder(order as any, { sendToBuyer: true, source: "admin_approval" });
 
   return { ok: true };
 }
@@ -515,7 +515,84 @@ export async function retryInvoice(
   }
 
   const { issueInvoiceForOrder } = await import("./billingo.server");
-  const result = await issueInvoiceForOrder(order as any, { sendToBuyer: true });
+  const result = await issueInvoiceForOrder(order as any, {
+    sendToBuyer: true,
+    source: "admin_retry",
+  });
   if (!result.ok) return { ok: false, error: result.error };
   return { ok: true, invoiceNumber: result.invoiceNumber };
+}
+
+// ---------------------------------------------------------------------------
+// Billingo invoice logs + PDF download
+// ---------------------------------------------------------------------------
+
+export type InvoiceLogRow = {
+  id: string;
+  orderId: string | null;
+  orderNumber: string;
+  source: string;
+  status: "success" | "error";
+  invoiceNumber: string | null;
+  errorCode: string | null;
+  errorMessage: string | null;
+  createdAt: string;
+};
+
+/** Lists Billingo invoicing attempts, newest first. */
+export async function listInvoiceLogs(): Promise<InvoiceLogRow[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await (supabaseAdmin as any)
+    .from("billingo_invoice_logs")
+    .select(
+      "id, order_id, order_number, source, status, invoice_number, error_code, error_message, created_at",
+    )
+    .order("created_at", { ascending: false })
+    .limit(300);
+
+  if (error) {
+    console.error("Invoice log list failed:", error.message);
+    return [];
+  }
+
+  return (data ?? []).map((row: any) => ({
+    id: row.id,
+    orderId: row.order_id ?? null,
+    orderNumber: row.order_number ?? "",
+    source: row.source ?? "webhook",
+    status: row.status === "error" ? "error" : "success",
+    invoiceNumber: row.invoice_number ?? null,
+    errorCode: row.error_code ?? null,
+    errorMessage: row.error_message ?? null,
+    createdAt: row.created_at,
+  }));
+}
+
+/**
+ * Resolves the Billingo public download URL for an order's invoice, so the
+ * admin can open or download the PDF straight from the orders list.
+ */
+export async function invoiceDownloadUrl(
+  orderId: string,
+): Promise<{ ok: true; url: string; invoiceNumber: string } | { ok: false; error: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("id, billingo_invoice_id, billingo_invoice_number")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (!order) return { ok: false, error: "A megrendelés nem található." };
+  if (!order.billingo_invoice_id) {
+    return { ok: false, error: "Ehhez a megrendeléshez még nincs Billingo számla." };
+  }
+
+  const { getInvoicePublicUrl } = await import("./billingo.server");
+  const result = await getInvoicePublicUrl(order.billingo_invoice_id);
+  if (!result.ok) return result;
+  return {
+    ok: true,
+    url: result.url,
+    invoiceNumber: order.billingo_invoice_number ?? "",
+  };
 }
