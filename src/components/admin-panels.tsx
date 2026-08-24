@@ -1294,7 +1294,8 @@ export function ProductVersionPanel() {
             key={inputKey}
             type="file"
             accept=".xlsm,.exe"
-            className={`${fileInputClass} mt-1.5`}
+            disabled={busy}
+            className={`${fileInputClass} mt-1.5 disabled:opacity-50`}
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           />
         </label>
