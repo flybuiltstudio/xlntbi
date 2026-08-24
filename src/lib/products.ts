@@ -605,7 +605,7 @@ export const products: Product[] = [
     image: biImg,
     metaTitle: "XLNT Monthly Report (English) | EXCELlent",
     metaDescription:
-      "English version of the XLNT monthly reporting pack for accountants: 25+ report sheets from one import, MKVK AuditXML2 export. From 49 000 Ft.",
+      "English version of the XLNT monthly reporting pack for accountants: 25+ report sheets from one import, MKVK AuditXML2 export. From 49 900 Ft.",
     intro: [
       "One import, more than 25 finished report sheets. Load the trial balance or the ledger export of your accounting software, press one button, and the workbook fills the balance sheet, the income statement (annual, simplified and monthly), the cash flow, the receivables and payables ageing, the VAT summary, the dashboard and the notes-to-the-accounts detail sheets – all in the Excel on your own machine, with no data connection and no monthly fee.",
       "With a single button it generates the Chamber of Hungarian Auditors' AuditXML2 (v1.0.23.0) data-export file from the ledger entries. The generator validates the data against the Chamber's official XSD schema (tax number, currency, dates, field lengths) and writes a UTF-8 file without a BOM – which the Chamber's own checker accepts without errors.",
@@ -635,7 +635,7 @@ export const products: Product[] = [
       {
         id: "eves_licenc",
         label: "Annual licence",
-        price: 49000,
+        price: 49900,
         note: "With annual updates and legal-compliance upkeep.",
         priceId: "monthly_report_en_eves_licenc",
       },
