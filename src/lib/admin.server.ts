@@ -19,6 +19,8 @@ export type AdminOrder = {
   paymentStatus: string;
   paymentProvider: string | null;
   paymentReference: string | null;
+  billingoInvoiceId: number | null;
+  billingoInvoiceNumber: string | null;
 };
 
 /**
@@ -175,6 +177,8 @@ export async function listOrders(): Promise<AdminOrder[]> {
     paymentStatus: o.payment_status,
     paymentProvider: o.payment_provider ?? null,
     paymentReference: o.payment_reference ?? null,
+    billingoInvoiceId: o.billingo_invoice_id ?? null,
+    billingoInvoiceNumber: o.billingo_invoice_number ?? null,
   }));
 }
 
@@ -274,6 +278,10 @@ export async function approveTransfer(
     billing_name: order.billing_name as string,
     email: order.email as string,
   });
+
+  // Auto-invoice via Billingo for the now-paid bank-transfer order.
+  const { issueInvoiceForOrder } = await import("./billingo.server");
+  await issueInvoiceForOrder(order as any, { sendToBuyer: true });
 
   return { ok: true };
 }
@@ -461,4 +469,30 @@ export async function deleteTestOrder(orderId: string): Promise<{ ok: boolean; e
     return { ok: false, error: "A teszt megrendelés törlése nem sikerült." };
   }
   return { ok: true };
+}
+
+/**
+ * Manually (re)issues a Billingo invoice for a paid order. Only allowed for
+ * orders that are actually paid. If the order already has a Billingo invoice
+ * id, it is left untouched (idempotent). Returns the invoice number on success.
+ */
+export async function retryInvoice(
+  orderId: string,
+): Promise<{ ok: boolean; invoiceNumber?: string; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("*")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (!order) return { ok: false, error: "A megrendelés nem található." };
+  if (order.payment_status !== "paid") {
+    return { ok: false, error: "Csak rendezett megrendeléshez állítható ki számla." };
+  }
+
+  const { issueInvoiceForOrder } = await import("./billingo.server");
+  const result = await issueInvoiceForOrder(order as any, { sendToBuyer: true });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, invoiceNumber: result.invoiceNumber };
 }

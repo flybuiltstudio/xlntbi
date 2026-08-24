@@ -56,6 +56,15 @@ export const adminResendDownload = createServerFn({ method: "POST" })
     return resendDownload(data.orderId);
   });
 
+export const adminRetryInvoice = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ orderId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { retryInvoice } = await import("./admin.server");
+    return retryInvoice(data.orderId);
+  });
+
 export const adminListUsers = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {

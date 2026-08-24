@@ -8,6 +8,7 @@ import {
   adminListOrders,
   adminListUsers,
   adminResendDownload,
+  adminRetryInvoice,
 } from "@/lib/admin.functions";
 import { formatPrice } from "@/lib/products";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
@@ -130,6 +131,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const load = useServerFn(adminListOrders);
   const approve = useServerFn(adminApproveTransfer);
   const resend = useServerFn(adminResendDownload);
+  const retryInvoice = useServerFn(adminRetryInvoice);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
@@ -214,6 +216,25 @@ export function OrdersPanel({ email }: { email: string | null }) {
           ? `${order.orderNumber}: új letöltési link kiküldve.`
           : (result.error ?? "Hiba történt."),
       );
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
+  async function onRetryInvoice(order: Order) {
+    setBusy(order.id);
+    setMessage("");
+    try {
+      const result = await retryInvoice({ data: { orderId: order.id } });
+      setMessage(
+        result.ok
+          ? `${order.orderNumber}: Billingo számla kiállítva${
+              result.invoiceNumber ? ` (${result.invoiceNumber})` : ""
+            }.`
+          : (result.error ?? "Hiba történt."),
+      );
+      await refresh();
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Hiba történt.");
     }
@@ -395,6 +416,16 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     <dd className="inline">{order.paymentReference}</dd>
                   </div>
                 ) : null}
+                {order.paymentStatus === "paid" ? (
+                  <div>
+                    <dt className="inline font-semibold">Billingo számla: </dt>
+                    <dd className="inline">
+                      {order.billingoInvoiceNumber
+                        ? order.billingoInvoiceNumber
+                        : "még nincs"}
+                    </dd>
+                  </div>
+                ) : null}
                 {order.note ? (
                   <div className="sm:col-span-2">
                     <dt className="inline font-semibold">Megjegyzés: </dt>
@@ -423,6 +454,25 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     {busy === order.id ? "Küldés…" : "Letöltési link újraküldése"}
                   </button>
                 )}
+                {order.paymentStatus === "paid" ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id || !!order.billingoInvoiceNumber}
+                    onClick={() => void onRetryInvoice(order)}
+                    className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                    title={
+                      order.billingoInvoiceNumber
+                        ? "Már ki van állítva számla"
+                        : "Billingo számla kiállítása / újrakísérlet"
+                    }
+                  >
+                    {busy === order.id
+                      ? "Feldolgozás…"
+                      : order.billingoInvoiceNumber
+                        ? "Számlázva ✓"
+                        : "Számlázás"}
+                  </button>
+                ) : null}
                 <a
                   href={`mailto:${order.email}?subject=${encodeURIComponent(order.orderNumber)}`}
                   className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"

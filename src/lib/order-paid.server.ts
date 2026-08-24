@@ -1,5 +1,6 @@
 import { sendEmails } from "./notify.server";
 import { formatPrice } from "./products";
+import { issueInvoiceForOrder } from "./billingo.server";
 
 const OWNER_EMAIL = "xllentac@gmail.com";
 
@@ -108,4 +109,7 @@ export async function markOrderPaid(options: {
       replyTo: order.email,
     },
   ]);
+
+  // Auto-invoice via Billingo (only for paid orders; idempotent, never blocks fulfilment).
+  await issueInvoiceForOrder(order as any, { sendToBuyer: true });
 }

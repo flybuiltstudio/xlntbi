@@ -131,6 +131,8 @@ export type Database = {
         Row: {
           address_line: string
           billing_name: string
+          billingo_invoice_id: number | null
+          billingo_invoice_number: string | null
           city: string
           company_name: string | null
           country: string
@@ -161,6 +163,8 @@ export type Database = {
         Insert: {
           address_line: string
           billing_name: string
+          billingo_invoice_id?: number | null
+          billingo_invoice_number?: string | null
           city: string
           company_name?: string | null
           country: string
@@ -191,6 +195,8 @@ export type Database = {
         Update: {
           address_line?: string
           billing_name?: string
+          billingo_invoice_id?: number | null
+          billingo_invoice_number?: string | null
           city?: string
           company_name?: string | null
           country?: string
