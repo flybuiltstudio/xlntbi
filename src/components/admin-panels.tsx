@@ -1081,12 +1081,37 @@ function uploadWithProgress(
       if (xhr.status >= 200 && xhr.status < 300) {
         onProgress(100);
         resolve();
-      } else {
-        reject(new Error("A feltöltés nem sikerült. Próbáld újra."));
+        return;
       }
+      let detail = "";
+      try {
+        const parsed = JSON.parse(xhr.responseText) as {
+          message?: string;
+          error?: string;
+        };
+        detail = parsed.message ?? parsed.error ?? "";
+      } catch {
+        detail = (xhr.responseText ?? "").slice(0, 200);
+      }
+      reject(
+        new Error(
+          `A tárhely elutasította a feltöltést (HTTP ${xhr.status}).` +
+            (detail ? ` Részlet: ${detail}` : " Próbáld újra."),
+        ),
+      );
     };
-    xhr.onerror = () => reject(new Error("A feltöltés nem sikerült. Próbáld újra."));
-    xhr.ontimeout = () => reject(new Error("A feltöltés időtúllépés miatt megszakadt."));
+    xhr.onerror = () =>
+      reject(
+        new Error(
+          "Hálózati hiba történt a feltöltés közben — ellenőrizd az internetkapcsolatot, majd próbáld újra.",
+        ),
+      );
+    xhr.ontimeout = () =>
+      reject(
+        new Error(
+          "A feltöltés időtúllépés miatt megszakadt — próbáld újra, vagy válassz kisebb fájlt.",
+        ),
+      );
     const body = new FormData();
     body.append("cacheControl", "3600");
     body.append("", file);
@@ -1115,6 +1140,19 @@ function UploadProgressBar({ percent, label }: { percent: number; label: string 
           style={{ width: `${percent}%` }}
         />
       </div>
+    </div>
+  );
+}
+
+/** Feltöltési hiba doboza: cím + részletes magyarázat a progress bár alatt. */
+function UploadErrorBox({ detail }: { detail: string }) {
+  return (
+    <div
+      className="max-w-2xl rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+      role="alert"
+    >
+      <p className="font-semibold">A feltöltés nem sikerült</p>
+      <p className="mt-1">{detail}</p>
     </div>
   );
 }
@@ -1165,10 +1203,23 @@ export function ProductVersionPanel() {
   /** Uploads the chosen file straight to storage over the existing object. */
   async function onUpload() {
     if (!selected || !file || busy) return;
-    setBusy(true);
-    setProgress(0);
     setError("");
     setMessage("");
+    if (file.size > 300 * 1024 * 1024) {
+      setError(
+        `A fájl túl nagy: ${formatFileSize(file.size)}. A megengedett maximum 300 MB.`,
+      );
+      return;
+    }
+    if (targetExt && !file.name.toLowerCase().endsWith(`.${targetExt.toLowerCase()}`)) {
+      setError(
+        `A fájl típusa nem megfelelő: .${targetExt} fájlt vártunk ehhez a termékhez, ` +
+          `de a kiválasztott fájl: ${file.name}.`,
+      );
+      return;
+    }
+    setBusy(true);
+    setProgress(0);
     try {
       const ticket = await createUploadUrl({
         data: { slug: selected.slug, fileName: file.name, fileSize: file.size },
@@ -1204,17 +1255,22 @@ export function ProductVersionPanel() {
           <select
             className={`${selectClass} mt-1.5 w-full max-w-md`}
             value={slug}
+            disabled={busy}
             onChange={(e) => {
               setSlug(e.target.value);
               setMessage("");
               setError("");
             }}
           >
-            {downloadable.map((p) => (
-              <option key={p.slug} value={p.slug}>
-                {p.name}
-              </option>
-            ))}
+            {downloadable.map((p) => {
+              const m = files?.[p.slug];
+              return (
+                <option key={p.slug} value={p.slug}>
+                  {p.name}
+                  {m ? ` — ${m.fileName}` : ""}
+                </option>
+              );
+            })}
           </select>
         </label>
 
@@ -1238,7 +1294,8 @@ export function ProductVersionPanel() {
             key={inputKey}
             type="file"
             accept=".xlsm,.exe"
-            className={`${fileInputClass} mt-1.5`}
+            disabled={busy}
+            className={`${fileInputClass} mt-1.5 disabled:opacity-50`}
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           />
         </label>
@@ -1265,11 +1322,7 @@ export function ProductVersionPanel() {
           />
         ) : null}
 
-        {error ? (
-          <p className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-            {error}
-          </p>
-        ) : null}
+        {error ? <UploadErrorBox detail={error} /> : null}
         {message ? (
           <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
             {message}
@@ -1309,6 +1362,11 @@ export function CalculatorVersionPanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const overrideKeys = useMemo(
+    () => new Set((overrides ?? []).map((o) => o.key)),
+    [overrides],
+  );
+
   /** Reads the chosen HTML file and stores it as the calculator's override. */
   async function onUpload() {
     if (!file || busy) return;
@@ -1317,7 +1375,14 @@ export function CalculatorVersionPanel() {
     setMessage("");
     try {
       if (file.size > MAX_CALCULATOR_HTML_BYTES) {
-        throw new Error("A fájl mérete legfeljebb 5 MB lehet.");
+        throw new Error(
+          `A fájl túl nagy: ${formatFileSize(file.size)}. A megengedett maximum 5 MB.`,
+        );
+      }
+      if (!file.name.toLowerCase().endsWith(".html")) {
+        throw new Error(
+          `A fájl típusa nem megfelelő: .html fájlt vártunk, de a kiválasztott fájl: ${file.name}.`,
+        );
       }
       const content = await file.text();
       const result = await upload({
@@ -1368,6 +1433,7 @@ export function CalculatorVersionPanel() {
           <select
             className={`${selectClass} mt-1.5 w-full max-w-md`}
             value={calcKey}
+            disabled={busy}
             onChange={(e) => {
               setCalcKey(e.target.value);
               setMessage("");
@@ -1377,6 +1443,7 @@ export function CalculatorVersionPanel() {
             {CALCULATORS.map((c) => (
               <option key={c.key} value={c.key}>
                 {c.label}
+                {overrideKeys.has(c.key) ? " — feltöltött verzió" : " — eredeti verzió"}
               </option>
             ))}
           </select>
@@ -1388,7 +1455,8 @@ export function CalculatorVersionPanel() {
             key={inputKey}
             type="file"
             accept=".html,text/html"
-            className={`${fileInputClass} mt-1.5`}
+            disabled={busy}
+            className={`${fileInputClass} mt-1.5 disabled:opacity-50`}
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           />
         </label>
@@ -1420,11 +1488,7 @@ export function CalculatorVersionPanel() {
           </div>
         ) : null}
 
-        {error ? (
-          <p className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-            {error}
-          </p>
-        ) : null}
+        {error ? <UploadErrorBox detail={error} /> : null}
         {message ? (
           <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
             {message}
@@ -1453,7 +1517,7 @@ export function CalculatorVersionPanel() {
                     <td className="px-4 py-3">
                       <button
                         type="button"
-                        disabled={restoreBusy === row.key}
+                        disabled={restoreBusy !== null || busy}
                         onClick={() => void onRestore(row.key)}
                         className="rounded-md border border-destructive/40 px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-40"
                       >
