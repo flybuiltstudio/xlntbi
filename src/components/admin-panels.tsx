@@ -819,6 +819,27 @@ export function InvoiceLogsPanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /** Starts a new invoicing attempt for the order behind a failed log row. */
+  async function onRetryLog(log: InvoiceLog) {
+    if (!log.orderId) return;
+    setRetryBusy(log.id);
+    setMessage("");
+    try {
+      const result = await retry({ data: { orderId: log.orderId } });
+      setMessage(
+        result.ok
+          ? `${log.orderNumber}: Billingo számla kiállítva${
+              result.invoiceNumber ? ` (${result.invoiceNumber})` : ""
+            }.`
+          : `${log.orderNumber}: ${result.error ?? "Hiba történt."}`,
+      );
+      await refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setRetryBusy(null);
+  }
+
   const sources = useMemo(() => {
     const set = new Set<string>();
     for (const log of logs ?? []) set.add(log.source);
