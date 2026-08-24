@@ -1322,11 +1322,7 @@ export function ProductVersionPanel() {
           />
         ) : null}
 
-        {error ? (
-          <p className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-            {error}
-          </p>
-        ) : null}
+        {error ? <UploadErrorBox detail={error} /> : null}
         {message ? (
           <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
             {message}
