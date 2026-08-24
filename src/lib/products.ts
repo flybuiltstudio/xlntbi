@@ -417,7 +417,7 @@ export const products: Product[] = [
   },
   {
     slug: "utalasi-csomag-keszito",
-    name: "Utalási Csomag Készítő Excelhez",
+    name: "Banki Utalási Csomag Készítő Excelben",
     tagline: "A havi utalásait Excelből, egyetlen gombnyomással – gépelés és elütés nélkül",
     status: "available",
     priceId: "utalasi_csomag_keszito_egygepes_licenc",
