@@ -2221,6 +2221,39 @@ export function ProductOrderPanel() {
         >
           Eredeti sorrend visszaállítása
         </button>
+        {undoState ? (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => void onUndo()}
+            className="rounded-md border border-primary px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/10 disabled:opacity-40"
+          >
+            ↩ Visszavonás ({undoState.label} állapot)
+          </button>
+        ) : null}
+        <button
+          type="button"
+          disabled={busy || !groups}
+          onClick={onExportCsv}
+          className="rounded-md border border-input px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-accent disabled:opacity-40"
+        >
+          CSV export
+        </button>
+        <label className="cursor-pointer rounded-md border border-input px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-accent">
+          CSV import
+          <input
+            type="file"
+            accept=".csv,text/csv"
+            className="hidden"
+            disabled={busy}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              e.target.value = "";
+              if (file) void onImportCsv(file);
+            }}
+          />
+        </label>
+
         {dirty ? (
           <span className="text-xs font-semibold text-muted-foreground">Nem mentett módosítás</span>
         ) : null}
