@@ -46,13 +46,13 @@ export function SiteFooter() {
             <img
               src={dspLogo.url}
               alt="Demján Sándor Program logó"
-              className="h-[140px] w-auto object-contain"
+              className="h-[177px] w-auto object-contain"
               loading="lazy"
             />
             <img
               src={neumannLogo.url}
               alt="Neumann János Nonprofit Kft. logó"
-              className="h-[116px] w-auto object-contain"
+              className="h-[112px] w-auto object-contain"
               loading="lazy"
             />
           </div>
