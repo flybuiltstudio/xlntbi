@@ -35,16 +35,6 @@ export const productCategories: ProductCategory[] = [
     ],
   },
   {
-    key: "adozas",
-    title: "Adózás",
-    image: adozasImg,
-    slugs: [
-      "afa-2665-xml-generalo",
-      "a60-osszesito-nyilatkozat-xml",
-      "adofolyoszamla-egyezteto",
-    ],
-  },
-  {
     key: "bank",
     title: "Bank",
     image: bankImg,
@@ -78,6 +68,16 @@ export const productCategories: ProductCategory[] = [
       "beszamolo-2025",
       "szamviteli-konszolidalo",
       "ifrs-konszolidalo",
+    ],
+  },
+  {
+    key: "adozas",
+    title: "Adózás",
+    image: adozasImg,
+    slugs: [
+      "afa-2665-xml-generalo",
+      "a60-osszesito-nyilatkozat-xml",
+      "adofolyoszamla-egyezteto",
     ],
   },
   {
