@@ -323,6 +323,21 @@ export function BillingoAuditPanel() {
               <table className="w-full min-w-[900px] text-left text-xs">
                 <thead className="text-muted-foreground">
                   <tr className="border-b border-border">
+                    <th className="py-2 pr-3 font-semibold">
+                      <input
+                        type="checkbox"
+                        aria-label="Összes látható sor kijelölése"
+                        checked={allVisibleSelected}
+                        onChange={(e) =>
+                          setSelected(
+                            e.target.checked
+                              ? visible.filter((r) => r.billingoInvoiceId).map((r) => r.orderId)
+                              : [],
+                          )
+                        }
+                        className="h-4 w-4 rounded border-input"
+                      />
+                    </th>
                     <th className="py-2 pr-3 font-semibold">Rendelés</th>
                     <th className="py-2 pr-3 font-semibold">Dátum</th>
                     <th className="py-2 pr-3 font-semibold">Stripe azonosító</th>
