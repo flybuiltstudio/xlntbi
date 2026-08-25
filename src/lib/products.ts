@@ -15,6 +15,7 @@ import ifrsImg from "@/assets/ifrs-konszolidalo.jpg";
 import pdfExcelImg from "@/assets/pdf-excel-konverter.jpg";
 import nyitoVegyesImg from "@/assets/nyito-vegyes-konyvelo.jpg";
 import wifiJelszoImg from "@/assets/wifi-jelszo-nezo.jpg";
+import auditXmlImg from "@/assets/auditxml-ellenorzo-javito.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -1363,6 +1364,45 @@ export const products: Product[] = [
     download: {
       fileName: "XLNT_WiFi_Jelszo.exe",
       storagePath: "wifi-jelszo-nezo/XLNT_WiFi_Jelszo.exe",
+    },
+  },
+  {
+    slug: "auditxml-ellenorzo-javito",
+    priceId: "auditxml_ellenorzo_javito_teljes_licenc",
+    name: "AuditXML Ellenőrző-Javító",
+    tagline:
+      "Egyszerű ellenőrző és javító eszköz MKVK AuditXML és NAV számla adatexport XML-ekhez",
+    status: "available",
+    price: 4990,
+    currency: "HUF",
+    image: auditXmlImg,
+    metaTitle: "AuditXML Ellenőrző-Javító | EXCELlent",
+    metaDescription:
+      "MKVK AuditXML és NAV számla adatexport XML-ek ellenőrzése és a gyakori hibák javítása. Windows .exe, örökös licenc: 4 990 Ft.",
+    intro: [
+      "Egy kis, önálló Windows-segédeszköz, amely gyorsan ellenőrzi az AuditXML és a NAV számla adatexport állományokat, és a leggyakoribb, gépiesen javítható hibákat – külön rákérdezés után – ki is javítja: sérült ékezetek, rossz kódolás, túl hosszú mező, vesszős tizedesjel, hibás dátumformátum. Amit nem lehet biztonságosan javítani, azt csak jelzi.",
+      "A program áttekinthető, sötét témájú felülete bal oldalon az ellenőrzést, jobb oldalon a részletes naplót mutatja.",
+    ],
+    features: [
+      "Két formátum: MKVK AuditXML (1.0.1.0 és 1.0.23.0) és NAV számla adatexport XML; a formátumot automatikusan felismeri.",
+      "Séma-ellenőrzés: a beépített XSD sémák szerint ellenőriz, internet és külön sémafájl nélkül.",
+      "Gyakori hibák javítása: ékezetek és kódolás helyreállítása, túl hosszú mező levágása, vesszős tizedesjel és hibás dátumformátum igazítása, AuditXML-nél hiányzó fejléc pótlása.",
+      "Napló és biztonság: tételes napló készül; a javított fájl külön mentődik, az eredeti érintetlen marad.",
+      "Öt lépésben dolgozik: beolvasás, karakterjavítás, séma-ellenőrzés, automatikus javítás, kész XML.",
+    ],
+    why: "Könyvelőirodáknak, könyvvizsgálóknak és vállalati pénzügyeseknek, akik rendszeresen állítanak elő vagy fogadnak MKVK AuditXML, illetve NAV számla adatexport állományokat, és biztosra akarnak menni a beküldés előtt. Gyorsabb a hibakeresés, mint kézzel, a program nem talál ki adatot, és két gombbal használható – XML-ismeret nélkül. Rendszerkövetelmény: Windows 10 / 11 (64 bit), önálló .exe, nem igényel Python-, Office- vagy internet-hozzáférést; az adatok a gépen maradnak.",
+    tiers: [
+      {
+        id: "teljes_licenc",
+        label: "Teljes licenc",
+        price: 4990,
+        note: "Egyszeri díj, korlátlan használat – nincs havi vagy éves költség.",
+        priceId: "auditxml_ellenorzo_javito_teljes_licenc",
+      },
+    ],
+    download: {
+      fileName: "AuditXML_Ellenorzo_Javito.exe",
+      storagePath: "auditxml-ellenorzo-javito/AuditXML_Ellenorzo_Javito.exe",
     },
   },
 ];
