@@ -417,6 +417,34 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
+  async function onSendLicense() {
+    const order = licenseFor;
+    if (!order) return;
+    const key = licenseKey.trim();
+    if (key.length < 8) {
+      setMessage("Add meg a licenszkódot.");
+      return;
+    }
+    setBusy(order.id);
+    setMessage("");
+    try {
+      const result = await sendLicense({ data: { orderId: order.id, licenseKey: key } });
+      setMessage(
+        result.ok
+          ? `${order.orderNumber}: licenszkód kiküldve a vevőnek (másolat: xllentac@gmail.com).`
+          : (result.error ?? "Hiba történt."),
+      );
+      if (result.ok) {
+        setLicenseFor(null);
+        setLicenseKey("");
+      }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
+
   async function onRetryInvoice(order: Order) {
     setBusy(order.id);
     setMessage("");
