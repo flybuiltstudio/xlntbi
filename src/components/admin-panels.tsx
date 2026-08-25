@@ -1896,14 +1896,31 @@ export function ProductOrderPanel() {
   const loadPlacements = useServerFn(adminListProductPlacements);
   const savePlacements = useServerFn(adminSaveProductPlacements);
   const resetPlacements = useServerFn(adminResetProductPlacements);
+  const loadCategoryOrder = useServerFn(adminListProductCategoryOrder);
+  const saveCategoryOrder = useServerFn(adminSaveProductCategoryOrder);
 
   const [groups, setGroups] = useState<Record<string, string[]> | null>(null);
+  const [order, setOrder] = useState<string[]>(productCategories.map((c) => c.key));
+  const [dragKey, setDragKey] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  const orderedCategories = sortCategories(productCategories, order);
+
   async function refresh() {
+    let keys = productCategories.map((c) => c.key);
+    try {
+      const orderResult = await loadCategoryOrder();
+      if (orderResult.categoryOrder.length) {
+        keys = sortCategories(productCategories, orderResult.categoryOrder).map((c) => c.key);
+      }
+    } catch {
+      /* keeps the bundled order */
+    }
+    setOrder(keys);
+
     try {
       const result = await loadPlacements();
       const effective = applyPlacements(result.placements);
@@ -1922,6 +1939,39 @@ export function ProductOrderPanel() {
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /** Reorders the dragged category to the drop target's position. */
+  function dropCategory(targetKey: string) {
+    const source = dragKey;
+    setDragKey(null);
+    if (!source || source === targetKey) return;
+    setOrder((prev) => {
+      const list = prev.length ? [...prev] : productCategories.map((c) => c.key);
+      const from = list.indexOf(source);
+      const to = list.indexOf(targetKey);
+      if (from < 0 || to < 0) return prev;
+      list.splice(from, 1);
+      list.splice(to, 0, source);
+      return list;
+    });
+    setDirty(true);
+    setMessage("");
+  }
+
+  /** Keyboard fallback for reordering categories. */
+  function moveCategory(key: string, delta: number) {
+    setOrder((prev) => {
+      const list = prev.length ? [...prev] : productCategories.map((c) => c.key);
+      const from = list.indexOf(key);
+      const to = from + delta;
+      if (from < 0 || to < 0 || to >= list.length) return prev;
+      list.splice(from, 1);
+      list.splice(to, 0, key);
+      setDirty(true);
+      setMessage("");
+      return list;
+    });
+  }
 
   function productName(slug: string) {
     return products.find((p) => p.slug === slug)?.name ?? slug;
