@@ -75,6 +75,26 @@ export const adminResendDownload = createServerFn({ method: "POST" })
     return resendDownload(data.orderId);
   });
 
+export const adminSendLicense = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        orderId: z.string().uuid(),
+        licenseKey: z
+          .string()
+          .trim()
+          .min(8, "A licenszkód túl rövid.")
+          .max(200, "A licenszkód túl hosszú."),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { sendLicense } = await import("./admin.server");
+    return sendLicense(data.orderId, data.licenseKey);
+  });
+
 export const adminRetryInvoice = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ orderId: z.string().uuid() }).parse(data))
