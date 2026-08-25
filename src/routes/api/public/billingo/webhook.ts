@@ -40,29 +40,34 @@ async function readPayload(request: Request): Promise<any> {
 export const Route = createFileRoute("/api/public/billingo/webhook")({
   server: {
     handlers: {
-      POST: async ({ request }) => {
-        if (!authorized(request)) {
-          return new Response("Unauthorized", { status: 401 });
-        }
-        try {
-          const payload = await readPayload(request);
-          const { handleBillingoWebhook } = await import("@/lib/billingo-webhook.server");
-          const result = await handleBillingoWebhook(payload);
-          if (!result.handled) {
-            console.log("Billingo webhook skipped:", result.reason);
-          } else {
-            console.log(
-              `Billingo webhook: ${result.orderNumber} → számla ${result.invoiceNumber ?? "-"}${
-                result.markedPaid ? " (fizetettre állítva)" : ""
-              }`,
-            );
-          }
-          return Response.json({ received: true, ...result });
-        } catch (e) {
-          console.error("Billingo webhook error:", e);
-          return new Response("Webhook error", { status: 400 });
-        }
-      },
+      // Billingo webhook — kikapcsolva (nincs webhook beállítva a Billingo fiókban).
+      // Újraaktiváláshoz cseréld vissza az alábbi POST handlerre:
+      //
+      // POST: async ({ request }) => {
+      //   if (!authorized(request)) {
+      //     return new Response("Unauthorized", { status: 401 });
+      //   }
+      //   try {
+      //     const payload = await readPayload(request);
+      //     const { handleBillingoWebhook } = await import("@/lib/billingo-webhook.server");
+      //     const result = await handleBillingoWebhook(payload);
+      //     if (!result.handled) {
+      //       console.log("Billingo webhook skipped:", result.reason);
+      //     } else {
+      //       console.log(
+      //         `Billingo webhook: ${result.orderNumber} → számla ${result.invoiceNumber ?? "-"}${
+      //           result.markedPaid ? " (fizetettre állítva)" : ""
+      //         }`,
+      //       );
+      //     }
+      //     return Response.json({ received: true, ...result });
+      //   } catch (e) {
+      //     console.error("Billingo webhook error:", e);
+      //     return new Response("Webhook error", { status: 400 });
+      //   }
+      // },
+      POST: async () =>
+        new Response("Billingo webhook disabled", { status: 410 }),
     },
   },
 });
