@@ -307,7 +307,6 @@ export type Database = {
           email: string
           id: string
           ip_address: string | null
-          license_key: string | null
           license_sent_at: string | null
           note: string | null
           order_number: string
@@ -341,7 +340,6 @@ export type Database = {
           email: string
           id?: string
           ip_address?: string | null
-          license_key?: string | null
           license_sent_at?: string | null
           note?: string | null
           order_number: string
@@ -375,7 +373,6 @@ export type Database = {
           email?: string
           id?: string
           ip_address?: string | null
-          license_key?: string | null
           license_sent_at?: string | null
           note?: string | null
           order_number?: string
