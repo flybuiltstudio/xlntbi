@@ -192,7 +192,7 @@ export function CookieConsent() {
                 <button
                   type="button"
                   onClick={() => setDetails(true)}
-                  className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-foreground underline underline-offset-4 transition-colors hover:text-primary"
+                  className="inline-flex items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-medium text-foreground underline underline-offset-4 transition-colors hover:text-primary"
                 >
                   Beállítások
                 </button>
