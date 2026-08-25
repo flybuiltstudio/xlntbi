@@ -416,7 +416,7 @@ export function BillingoAuditPanel() {
                   ))}
                   {visible.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-4 text-sm text-muted-foreground">
+                      <td colSpan={8} className="py-4 text-sm text-muted-foreground">
                         Nincs megjeleníthető sor.
                       </td>
                     </tr>
