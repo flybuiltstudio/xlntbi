@@ -240,7 +240,11 @@ export type IssueInvoiceResult =
   | { ok: true; invoiceId: number; invoiceNumber: string }
   | { ok: false; error: string };
 
-export type InvoiceAttemptSource = "webhook" | "admin_approval" | "admin_retry";
+export type InvoiceAttemptSource =
+  | "webhook"
+  | "admin_approval"
+  | "admin_retry"
+  | "billingo_webhook";
 
 /**
  * Writes one row to billingo_invoice_logs for every invoicing attempt
@@ -369,5 +373,153 @@ export async function getInvoicePublicUrl(
     return { ok: true, url };
   } catch (e: any) {
     return { ok: false, error: e?.message ?? "Ismeretlen hiba" };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Invoice snapshots (AAM VAT key, net/gross, invoice number) — read-back layer
+// ---------------------------------------------------------------------------
+
+export type InvoiceSnapshotItem = {
+  name: string;
+  quantity: number | null;
+  unit: string | null;
+  vat: string | null;
+  entitlement: string | null;
+  netUnitAmount: number | null;
+  netAmount: number | null;
+  vatAmount: number | null;
+  grossAmount: number | null;
+};
+
+export type InvoiceSnapshot = {
+  invoiceId: number;
+  invoiceNumber: string | null;
+  invoiceType: string | null;
+  currency: string | null;
+  invoiceDate: string | null;
+  fulfillmentDate: string | null;
+  paymentMethod: string | null;
+  paid: boolean | null;
+  netTotal: number | null;
+  grossTotal: number | null;
+  vatTotal: number | null;
+  vatLabels: string[];
+  items: InvoiceSnapshotItem[];
+  orderNumberHint: string | null;
+  fetchedAt: string;
+};
+
+function num(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function sum(values: Array<number | null>): number | null {
+  const present = values.filter((v): v is number => v !== null);
+  return present.length ? present.reduce((a, b) => a + b, 0) : null;
+}
+
+function dateOnly(value: unknown): string | null {
+  return typeof value === "string" && value.length >= 10 ? value.slice(0, 10) : null;
+}
+
+/** Pulls the order number out of the document settings or its comment. */
+function orderNumberHint(doc: any): string | null {
+  const fromSettings = doc?.settings?.order_number;
+  if (typeof fromSettings === "string" && fromSettings.trim()) return fromSettings.trim();
+  const comment = typeof doc?.comment === "string" ? doc.comment : "";
+  const match = comment.match(/Rendelésszám:\s*([A-Za-z0-9_\-]+)/);
+  return match?.[1] ?? null;
+}
+
+function toSnapshot(doc: any): InvoiceSnapshot {
+  const items: InvoiceSnapshotItem[] = (Array.isArray(doc?.items) ? doc.items : []).map(
+    (item: any) => ({
+      name: typeof item?.name === "string" ? item.name : "",
+      quantity: num(item?.quantity),
+      unit: typeof item?.unit === "string" ? item.unit : null,
+      vat: typeof item?.vat === "string" ? item.vat : null,
+      entitlement: typeof item?.entitlement === "string" ? item.entitlement : null,
+      netUnitAmount: num(item?.net_unit_amount),
+      netAmount: num(item?.net_amount),
+      vatAmount: num(item?.vat_amount),
+      grossAmount: num(item?.gross_amount),
+    }),
+  );
+
+  const netTotal = num(doc?.total_net) ?? sum(items.map((i) => i.netAmount));
+  const grossTotal =
+    num(doc?.total_gross) ?? num(doc?.total) ?? sum(items.map((i) => i.grossAmount));
+  const vatTotal = num(doc?.total_vat) ?? sum(items.map((i) => i.vatAmount));
+
+  return {
+    invoiceId: Number(doc?.id),
+    invoiceNumber:
+      (typeof doc?.invoice_number === "string" && doc.invoice_number) ||
+      (typeof doc?.number === "string" && doc.number) ||
+      null,
+    invoiceType: typeof doc?.type === "string" ? doc.type : null,
+    currency: typeof doc?.currency === "string" ? doc.currency : null,
+    invoiceDate: dateOnly(doc?.invoice_date) ?? dateOnly(doc?.created_at),
+    fulfillmentDate: dateOnly(doc?.fulfillment_date),
+    paymentMethod: typeof doc?.payment_method === "string" ? doc.payment_method : null,
+    paid: typeof doc?.paid === "boolean" ? doc.paid : null,
+    netTotal,
+    grossTotal,
+    vatTotal,
+    vatLabels: [...new Set(items.map((i) => i.vat).filter((v): v is string => !!v))],
+    items,
+    orderNumberHint: orderNumberHint(doc),
+    fetchedAt: new Date().toISOString(),
+  };
+}
+
+/** Fetches a Billingo document and normalises it into a snapshot. */
+export async function fetchInvoiceSnapshot(
+  invoiceId: number,
+): Promise<{ ok: true; snapshot: InvoiceSnapshot; raw: any } | { ok: false; error: string }> {
+  try {
+    const doc = await billingo(`/documents/${invoiceId}`);
+    if (!doc?.id) return { ok: false, error: "A Billingo nem adott vissza számlaadatot." };
+    return { ok: true, snapshot: toSnapshot(doc), raw: doc };
+  } catch (e: any) {
+    return { ok: false, error: e?.message ?? "Ismeretlen hiba" };
+  }
+}
+
+/** Persists the snapshot so the invoice data stays readable even later. */
+export async function saveInvoiceSnapshot(
+  orderId: string | null,
+  snapshot: InvoiceSnapshot,
+  raw: any,
+): Promise<void> {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await (supabaseAdmin as any)
+      .from("billingo_invoice_snapshots")
+      .upsert(
+        {
+          order_id: orderId,
+          billingo_invoice_id: snapshot.invoiceId,
+          invoice_number: snapshot.invoiceNumber,
+          invoice_type: snapshot.invoiceType,
+          currency: snapshot.currency,
+          invoice_date: snapshot.invoiceDate,
+          fulfillment_date: snapshot.fulfillmentDate,
+          payment_method: snapshot.paymentMethod,
+          paid: snapshot.paid,
+          net_total: snapshot.netTotal,
+          gross_total: snapshot.grossTotal,
+          vat_total: snapshot.vatTotal,
+          vat_labels: snapshot.vatLabels,
+          items: snapshot.items,
+          raw,
+          fetched_at: snapshot.fetchedAt,
+        },
+        { onConflict: "billingo_invoice_id" },
+      );
+    if (error) console.error("Invoice snapshot upsert failed:", error.message);
+  } catch (e: any) {
+    console.error("Invoice snapshot upsert failed:", e?.message ?? e);
   }
 }
