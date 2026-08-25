@@ -88,9 +88,9 @@ export function CookieConsent() {
       aria-label="Cookie-hozzájárulás"
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/98 shadow-[0_-8px_30px_rgba(0,0,0,0.18)] backdrop-blur"
     >
-      <div className="mx-auto max-w-6xl px-4 py-5">
-        <div className="flex items-start gap-3">
-          <Cookie className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+      <div className="mx-auto max-w-6xl px-4 py-3">
+        <div className="flex items-start gap-2.5">
+          <Cookie className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
           <div className="flex-1">
             <h2 className="text-base font-semibold text-foreground">
               Cookie-k és adatkezelés
