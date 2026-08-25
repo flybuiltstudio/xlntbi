@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CookieConsent } from "@/components/CookieConsent";
+import { initAnalytics } from "@/lib/analytics";
 
 
 
@@ -131,6 +132,24 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Initialise Google Analytics (only loads after statistics consent).
+    initAnalytics();
+  }, []);
+
+  useEffect(() => {
+    // Notify analytics of client-side route changes so GA4 records page_views.
+    const dispose = router.subscribe("onResolved", () => {
+      window.dispatchEvent(
+        new CustomEvent("xlntbi:route-change", {
+          detail: { path: window.location.pathname },
+        }),
+      );
+    });
+    return () => dispose();
+  }, [router]);
 
   return (
     <QueryClientProvider client={queryClient}>
