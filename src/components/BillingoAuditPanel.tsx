@@ -275,6 +275,23 @@ export function BillingoAuditPanel() {
             </label>
             <button
               type="button"
+              onClick={() => void onBulkReload()}
+              disabled={bulkBusy || selected.length === 0}
+              className="rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+            >
+              {bulkBusy
+                ? "Újratöltés folyamatban…"
+                : `Kijelöltek újratöltése (${selected.length})`}
+            </button>
+            <button
+              type="button"
+              onClick={onExportCsv}
+              className="rounded-md border border-input px-3 py-2 text-xs font-semibold text-foreground hover:bg-accent"
+            >
+              CSV export
+            </button>
+            <button
+              type="button"
               onClick={() => void refresh()}
               className="rounded-md border border-input px-3 py-2 text-xs font-semibold text-foreground hover:bg-accent"
             >
