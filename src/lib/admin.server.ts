@@ -635,6 +635,92 @@ export async function invoiceDownloadUrl(
   };
 }
 
+export type InvoiceSnapshotView = {
+  invoiceId: number;
+  invoiceNumber: string | null;
+  invoiceType: string | null;
+  currency: string | null;
+  invoiceDate: string | null;
+  fulfillmentDate: string | null;
+  paymentMethod: string | null;
+  paid: boolean | null;
+  netTotal: number | null;
+  grossTotal: number | null;
+  vatTotal: number | null;
+  vatLabels: string[];
+  items: Array<{
+    name: string;
+    quantity: number | null;
+    unit: string | null;
+    vat: string | null;
+    entitlement: string | null;
+    netUnitAmount: number | null;
+    netAmount: number | null;
+    vatAmount: number | null;
+    grossAmount: number | null;
+  }>;
+  fetchedAt: string;
+  stored: boolean;
+};
+
+function snapshotRowToView(row: any): InvoiceSnapshotView {
+  return {
+    invoiceId: row.billingo_invoice_id,
+    invoiceNumber: row.invoice_number ?? null,
+    invoiceType: row.invoice_type ?? null,
+    currency: row.currency ?? null,
+    invoiceDate: row.invoice_date ?? null,
+    fulfillmentDate: row.fulfillment_date ?? null,
+    paymentMethod: row.payment_method ?? null,
+    paid: typeof row.paid === "boolean" ? row.paid : null,
+    netTotal: row.net_total === null ? null : Number(row.net_total),
+    grossTotal: row.gross_total === null ? null : Number(row.gross_total),
+    vatTotal: row.vat_total === null ? null : Number(row.vat_total),
+    vatLabels: Array.isArray(row.vat_labels) ? row.vat_labels : [],
+    items: Array.isArray(row.items) ? row.items : [],
+    fetchedAt: row.fetched_at,
+    stored: true,
+  };
+}
+
+/**
+ * Returns the stored invoice snapshot (AAM VAT key, net/gross, invoice number)
+ * for an order. Fetches it live from Billingo when missing or when refreshed.
+ */
+export async function invoiceSnapshotForOrder(
+  orderId: string,
+  refresh = false,
+): Promise<{ ok: true; snapshot: InvoiceSnapshotView } | { ok: false; error: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("id, billingo_invoice_id")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (!order) return { ok: false, error: "A megrendelés nem található." };
+  if (!order.billingo_invoice_id) {
+    return { ok: false, error: "Ehhez a megrendeléshez még nincs Billingo számla." };
+  }
+
+  if (!refresh) {
+    const { data: stored } = await (supabaseAdmin as any)
+      .from("billingo_invoice_snapshots")
+      .select("*")
+      .eq("billingo_invoice_id", order.billingo_invoice_id)
+      .maybeSingle();
+    if (stored) return { ok: true, snapshot: snapshotRowToView(stored) };
+  }
+
+  const { fetchInvoiceSnapshot, saveInvoiceSnapshot } = await import("./billingo.server");
+  const fetched = await fetchInvoiceSnapshot(order.billingo_invoice_id);
+  if (!fetched.ok) return { ok: false, error: fetched.error };
+  await saveInvoiceSnapshot(orderId, fetched.snapshot, fetched.raw);
+  return { ok: true, snapshot: { ...fetched.snapshot, stored: false } };
+}
+
+
+
 // ---------------------------------------------------------------------------
 // "Friss verzió feltöltés" — termékfájl csere és kalkulátor-felülírások
 // ---------------------------------------------------------------------------
