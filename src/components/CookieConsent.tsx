@@ -176,7 +176,7 @@ export function CookieConsent() {
               <button
                 type="button"
                 onClick={() => decide(false, false)}
-                className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+                className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
               >
                 Csak a szükségeseket
               </button>
