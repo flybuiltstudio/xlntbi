@@ -35,17 +35,6 @@ export const productCategories: ProductCategory[] = [
     ],
   },
   {
-    key: "bank",
-    title: "Bank",
-    image: bankImg,
-    slugs: [
-      "rlb-bank-konverter",
-      "rlb-bank-konverter-pro",
-      "univerzalis-bank-konverter",
-      "utalasi-csomag-keszito",
-    ],
-  },
-  {
     key: "vegyes-konyveles",
     title: "Vegyes könyvelés",
     image: vegyesImg,
@@ -56,6 +45,17 @@ export const productCategories: ProductCategory[] = [
       "rlb-nyito-vegyes-konyvelo",
       "kulcs-nyito-vegyes-konyvelo",
       "sup-nyito-vegyes-konyvelo",
+    ],
+  },
+  {
+    key: "bank",
+    title: "Bank",
+    image: bankImg,
+    slugs: [
+      "rlb-bank-konverter",
+      "rlb-bank-konverter-pro",
+      "univerzalis-bank-konverter",
+      "utalasi-csomag-keszito",
     ],
   },
   {
