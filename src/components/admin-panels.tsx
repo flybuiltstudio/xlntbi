@@ -834,6 +834,59 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 </a>
               </div>
 
+              {licenseFor?.id === order.id ? (
+                <div className="mt-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
+                  <label
+                    htmlFor={`license-${order.id}`}
+                    className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                  >
+                    Licenszkód
+                  </label>
+                  <input
+                    id={`license-${order.id}`}
+                    type="text"
+                    autoFocus
+                    spellCheck={false}
+                    autoComplete="off"
+                    value={licenseKey}
+                    onChange={(e) => setLicenseKey(e.target.value.trim())}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        void onSendLicense();
+                      }
+                    }}
+                    placeholder="X000-0000-0000-0000-0202-6083-1000-0000-0202-6081-1689-B92F-E556-1813-8C18-79F6-C"
+                    className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-xs tracking-tight text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none"
+                  />
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    A kód egyben beilleszthető a vágólapról. A levél a vevőnek megy, másolatban
+                    az xllentac@gmail.com címre, feladó: noreply@notify.xlntbi.hu.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      disabled={busy === order.id || licenseKey.trim().length < 8}
+                      onClick={() => void onSendLicense()}
+                      className="rounded-md bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-brand-dark disabled:opacity-60"
+                    >
+                      {busy === order.id ? "Küldés…" : "Licenszkód elküldése"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLicenseFor(null);
+                        setLicenseKey("");
+                      }}
+                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
+                    >
+                      Mégsem
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+
+
               {snapshots[order.id] ? (
                 <InvoiceSnapshotBlock
                   state={snapshots[order.id]!}
