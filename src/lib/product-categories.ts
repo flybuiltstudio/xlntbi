@@ -90,6 +90,7 @@ export const productCategories: ProductCategory[] = [
       "pdf-excel-konverter",
       "nav-torzsszam-partnerellenorzo",
       "wifi-jelszo-nezo",
+      "auditxml-ellenorzo-javito",
     ],
   },
 ];
