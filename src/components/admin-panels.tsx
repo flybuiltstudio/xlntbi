@@ -2054,9 +2054,9 @@ export function ProductOrderPanel() {
     <section className="mt-12 rounded-xl border border-border bg-card p-6">
       <h2 className="text-xl font-bold text-foreground">Termékek sorrendje és kategóriája</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        A nyilakkal rendezhetsz a kategórián belül, a legördülővel pedig áthelyezheted a
-        terméket másik kategóriába (a lista végére kerül). A módosítás mentés után látszik a
-        Termékeim oldalon.
+        A kategóriákat a kártya fejlécénél megfogva, húzással sorba rendezheted — ez a sorrend
+        mentés után a Termékek oldalon is érvényes. A nyilakkal rendezhetsz a kategórián belül, a
+        legördülővel pedig áthelyezheted a terméket másik kategóriába (a lista végére kerül).
       </p>
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -2088,10 +2088,58 @@ export function ProductOrderPanel() {
         <p className="mt-6 text-xs text-muted-foreground">Betöltés…</p>
       ) : (
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          {productCategories.map((category) => {
+          {orderedCategories.map((category, catIndex) => {
             const list = groups[category.key] ?? [];
             return (
-              <div key={category.key} className="rounded-lg border border-border p-4">
+              <div
+                key={category.key}
+                onDragOver={(e) => {
+                  if (dragKey) e.preventDefault();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  dropCategory(category.key);
+                }}
+                className={`rounded-lg border p-4 ${
+                  dragKey === category.key
+                    ? "border-primary bg-primary/5"
+                    : dragKey
+                      ? "border-dashed border-primary/50"
+                      : "border-border"
+                }`}
+              >
+                <div
+                  draggable={!busy}
+                  onDragStart={() => setDragKey(category.key)}
+                  onDragEnd={() => setDragKey(null)}
+                  className="mb-2 flex cursor-grab items-center gap-2 active:cursor-grabbing"
+                  title="Húzd a kategóriát a kívánt helyre"
+                >
+                  <span aria-hidden className="text-muted-foreground">⠿</span>
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    {catIndex + 1}. kategória
+                  </span>
+                  <span className="ml-auto flex gap-1">
+                    <button
+                      type="button"
+                      aria-label="Kategória feljebb"
+                      disabled={busy || catIndex === 0}
+                      onClick={() => moveCategory(category.key, -1)}
+                      className="rounded border border-input px-2 py-0.5 text-xs disabled:opacity-30"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Kategória lejjebb"
+                      disabled={busy || catIndex === orderedCategories.length - 1}
+                      onClick={() => moveCategory(category.key, 1)}
+                      className="rounded border border-input px-2 py-0.5 text-xs disabled:opacity-30"
+                    >
+                      ↓
+                    </button>
+                  </span>
+                </div>
                 <h3 className="text-sm font-bold text-foreground">
                   {category.title}{" "}
                   <span className="font-normal text-muted-foreground">({list.length})</span>
