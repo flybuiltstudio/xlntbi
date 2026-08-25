@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Mail, Phone } from "lucide-react";
+import { openCookieSettings } from "@/components/CookieConsent";
+
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 import heroImg from "@/assets/bcg-savok.jpg";
 import dspLogo from "@/assets/dsp-logo-feher.png.asset.json";
