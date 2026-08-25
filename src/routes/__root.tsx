@@ -139,7 +139,9 @@ function RootComponent() {
           <Outlet />
         </main>
         <SiteFooter />
+        <CookieConsent />
       </div>
+
     </QueryClientProvider>
   );
 }
