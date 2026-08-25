@@ -2023,6 +2023,10 @@ export function ProductOrderPanel() {
       );
       const result = await savePlacements({ data: { items } });
       if (!result.ok) throw new Error(result.error);
+      const orderResult = await saveCategoryOrder({
+        data: { keys: orderedCategories.map((c) => c.key) },
+      });
+      if (!orderResult.ok) throw new Error(orderResult.error);
       setMessage("A sorrend és a kategóriák elmentve. A Termékeim oldal már ezt mutatja.");
       setDirty(false);
     } catch (e) {
