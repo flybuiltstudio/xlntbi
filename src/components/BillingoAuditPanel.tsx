@@ -68,6 +68,8 @@ export function BillingoAuditPanel() {
   const [busy, setBusy] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [onlyProblems, setOnlyProblems] = useState(false);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   async function refresh() {
     setLoading(true);
@@ -125,7 +127,96 @@ export function BillingoAuditPanel() {
     }
   }
 
+  async function onBulkReload() {
+    const targets = (rows ?? []).filter(
+      (r) => selected.includes(r.orderId) && r.billingoInvoiceId,
+    );
+    if (targets.length === 0) {
+      setNotice("Nincs kiválasztott rendelés Billingo számlával.");
+      return;
+    }
+    setBulkBusy(true);
+    setNotice(null);
+    let ok = 0;
+    const failed: string[] = [];
+    for (const row of targets) {
+      try {
+        const result = await invoiceSnapshot({ data: { orderId: row.orderId, refresh: true } });
+        if (result.ok) ok += 1;
+        else failed.push(`${row.orderNumber}: ${result.error}`);
+      } catch (e) {
+        failed.push(`${row.orderNumber}: ${e instanceof Error ? e.message : "hiba"}`);
+      }
+    }
+    setBulkBusy(false);
+    setNotice(
+      `${ok} rendelés számlaadata újratöltve.` +
+        (failed.length ? ` Sikertelen: ${failed.join("; ")}` : ""),
+    );
+    await refresh();
+  }
+
+  function csvCell(value: string | number | null): string {
+    const s = value === null || value === undefined ? "" : String(value);
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+
+  function onExportCsv() {
+    const problemRows = (rows ?? []).filter((r) => r.status !== "ok");
+    if (problemRows.length === 0) {
+      setNotice("Nincs exportálható eltérés vagy hiányzó rekord.");
+      return;
+    }
+    const header = [
+      "Rendelésszám",
+      "Dátum",
+      "E-mail",
+      "Fizetési szolgáltató",
+      "Stripe azonosító",
+      "Fizetési állapot",
+      "Billingo számla ID",
+      "Számlaszám",
+      "Billingo megjegyzés",
+      "Megjegyzésben lévő rendelésszám",
+      "Állapot",
+      "Számlaadat betöltve",
+    ];
+    const lines = [
+      header.map(csvCell).join(";"),
+      ...problemRows.map((r) =>
+        [
+          r.orderNumber,
+          r.createdAt,
+          r.email,
+          r.paymentProvider,
+          r.paymentReference,
+          r.paymentStatus,
+          r.billingoInvoiceId,
+          r.billingoInvoiceNumber,
+          r.invoiceComment,
+          r.commentOrderNumber,
+          STATUS_LABEL[r.status],
+          r.snapshotFetchedAt,
+        ]
+          .map(csvCell)
+          .join(";"),
+      ),
+    ];
+    const blob = new Blob(["\uFEFF" + lines.join("\r\n")], {
+      type: "text/csv;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `billingo-ellenorzes-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setNotice(`${problemRows.length} problémás rekord exportálva CSV-be.`);
+  }
+
   const visible = (rows ?? []).filter((r) => (onlyProblems ? r.status !== "ok" : true));
+  const allVisibleSelected =
+    visible.length > 0 && visible.every((r) => selected.includes(r.orderId));
   const problems = (rows ?? []).filter(
     (r) => r.status === "mismatch" || r.status === "missing_comment",
   ).length;
@@ -184,6 +275,23 @@ export function BillingoAuditPanel() {
             </label>
             <button
               type="button"
+              onClick={() => void onBulkReload()}
+              disabled={bulkBusy || selected.length === 0}
+              className="rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+            >
+              {bulkBusy
+                ? "Újratöltés folyamatban…"
+                : `Kijelöltek újratöltése (${selected.length})`}
+            </button>
+            <button
+              type="button"
+              onClick={onExportCsv}
+              className="rounded-md border border-input px-3 py-2 text-xs font-semibold text-foreground hover:bg-accent"
+            >
+              CSV export
+            </button>
+            <button
+              type="button"
               onClick={() => void refresh()}
               className="rounded-md border border-input px-3 py-2 text-xs font-semibold text-foreground hover:bg-accent"
             >
@@ -215,6 +323,21 @@ export function BillingoAuditPanel() {
               <table className="w-full min-w-[900px] text-left text-xs">
                 <thead className="text-muted-foreground">
                   <tr className="border-b border-border">
+                    <th className="py-2 pr-3 font-semibold">
+                      <input
+                        type="checkbox"
+                        aria-label="Összes látható sor kijelölése"
+                        checked={allVisibleSelected}
+                        onChange={(e) =>
+                          setSelected(
+                            e.target.checked
+                              ? visible.filter((r) => r.billingoInvoiceId).map((r) => r.orderId)
+                              : [],
+                          )
+                        }
+                        className="h-4 w-4 rounded border-input"
+                      />
+                    </th>
                     <th className="py-2 pr-3 font-semibold">Rendelés</th>
                     <th className="py-2 pr-3 font-semibold">Dátum</th>
                     <th className="py-2 pr-3 font-semibold">Stripe azonosító</th>
@@ -227,6 +350,22 @@ export function BillingoAuditPanel() {
                 <tbody>
                   {visible.map((row) => (
                     <tr key={row.orderId} className="border-b border-border/60 align-top">
+                      <td className="py-2 pr-3">
+                        <input
+                          type="checkbox"
+                          aria-label={`${row.orderNumber} kijelölése`}
+                          disabled={!row.billingoInvoiceId}
+                          checked={selected.includes(row.orderId)}
+                          onChange={(e) =>
+                            setSelected((prev) =>
+                              e.target.checked
+                                ? [...prev, row.orderId]
+                                : prev.filter((id) => id !== row.orderId),
+                            )
+                          }
+                          className="h-4 w-4 rounded border-input"
+                        />
+                      </td>
                       <td className="py-2 pr-3 font-mono text-foreground">{row.orderNumber}</td>
                       <td className="py-2 pr-3 text-muted-foreground">{hunDate(row.createdAt)}</td>
                       <td className="py-2 pr-3 break-all font-mono text-muted-foreground">
@@ -277,7 +416,7 @@ export function BillingoAuditPanel() {
                   ))}
                   {visible.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-4 text-sm text-muted-foreground">
+                      <td colSpan={8} className="py-4 text-sm text-muted-foreground">
                         Nincs megjeleníthető sor.
                       </td>
                     </tr>
