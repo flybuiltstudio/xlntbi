@@ -1143,6 +1143,54 @@ export const products: Product[] = [
     },
   },
   {
+    slug: "kulcs-nyito-vegyes-konyvelo",
+    name: "Nyitó és Vegyes Könyvelő – Kulcs-Soft kiadás",
+    tagline:
+      "Töltse fel a főkönyvi adatokat – a program a Kulcs-Könyvelés vegyes importfájlját készen adja",
+    status: "available",
+    priceId: "kulcs_nyito_vegyes_konyvelo_alap_licenc",
+    price: 19900,
+    currency: "HUF",
+    image: nyitoVegyesImg,
+    metaTitle: "Nyitó és Vegyes Könyvelő – Kulcs-Soft kiadás | EXCELlent",
+    metaDescription:
+      "Nyitó egyenlegek, havi vegyes és bérkönyvelés Excelben, Kulcs-Könyvelés vegyes importfájllal. Ár: 19 900 Ft-tól.",
+    intro: [
+      "A hónap végi vegyes könyvelés és a nyitás a legidőigényesebb, legtöbb kézi munkát követelő feladatok közé tartozik. Ez az eszköz Excelben, ismerős felületen oldja meg mindezt: Ön beilleszti vagy rögzíti a tételeket, a program pedig előállítja a Kulcs-Könyvelés által beolvasható importfájlt – gépelés, átszámozgatás és tükörsor-párosítás nélkül.",
+    ],
+    features: [
+      "Nyitás: nyitó egyenlegek könyvelése ellenszámlával (491), egyetlen lapon.",
+      "Vegyes és bér: havi vegyes tételek és teljes bérkönyvelés, 12 hónap készen előkészítve.",
+      "Kulcs-Könyvelés export: a Kulcs-Könyvelés hivatalos főkönyvi vegyes (CSV + 001) importfájljának automatikus előállítása.",
+      "Deviza: MNB-árfolyam lekérdezés és devizás tételek kezelése.",
+      "Segédeszközök: teljesítési időpont kalkulátor, munkanap-számítás, számlatükör, kölcsön-nyilvántartás.",
+      "Kommunikáció: teljesítés-igazoló e-mail (magyar és angol) kiküldése.",
+      "Beolvasás: PDF-beolvasó a bizonylatok gyorsabb rögzítéséhez.",
+    ],
+    why: "A Kulcs-Soft kiadás a Kulcs-Könyvelés főkönyvi adatimporterének hivatalos struktúrája szerint készül (két fájl: .csv fejléc és .001 tétel); első használatkor egy próba-import ajánlott a visszaigazoláshoz. A program a betöltött adatokból dolgozik; az áfamentes vegyes és nyitó tételeket kezeli. Áfás vagy devizás vegyes tételhez egy rövid egyeztetés után illesztjük a formátumot. Excel (Windows) és engedélyezett makrók szükségesek; a fájl saját, egyszeri licencű munkafüzet.",
+    tiers: [
+      {
+        id: "alap_licenc",
+        label: "Alap licenc – 1 adószám",
+        price: 19900,
+        note: "Egy céget könyvelő vállalkozásnak, saját könyveléshez. Éves licenc.",
+        priceId: "kulcs_nyito_vegyes_konyvelo_alap_licenc",
+      },
+      {
+        id: "iroda_licenc",
+        label: "Iroda licenc – korlátlan adószám",
+        price: 49900,
+        note: "Könyvelőirodának, tetszőleges számú ügyfél könyveléséhez. Éves licenc.",
+        priceId: "kulcs_nyito_vegyes_konyvelo_iroda_licenc",
+      },
+    ],
+    download: {
+      fileName: "Kulcs_Nyito_Vegyes_Konyvelo.xlsm",
+      storagePath:
+        "kulcs-nyito-vegyes-konyvelo/Kulcs_Nyito_Vegyes_Konyvelo.xlsm",
+    },
+  },
+  {
     slug: "telefonszamla-konyvelo",
     name: "XLNT Telefonszámla Könyvelő",
     tagline: "Telefonszámlából könyvelés – percek alatt, hívószámonként, hibátlan áfával",
