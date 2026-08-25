@@ -439,6 +439,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
       if (result.ok) {
         setLicenseFor(null);
         setLicenseKey("");
+        await refresh();
       }
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Hiba történt.");
