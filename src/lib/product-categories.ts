@@ -118,7 +118,10 @@ export type ProductPlacement = { slug: string; category: string; sortOrder: numb
  * Returns the categories with the admin-managed placements applied.
  * Products without an override keep their bundled category and position.
  */
-export function applyPlacements(placements: ProductPlacement[]): ProductCategory[] {
+export function applyPlacements(
+  placements: ProductPlacement[],
+  categoryOrder: string[] = [],
+): ProductCategory[] {
   const overrides = new Map(placements.map((p) => [p.slug, p]));
   const buckets = new Map<string, { slug: string; order: number; idx: number }[]>();
   for (const category of productCategories) buckets.set(category.key, []);
