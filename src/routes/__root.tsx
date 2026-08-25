@@ -132,6 +132,21 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Initialise Google Analytics (only loads after statistics consent).
+    initAnalytics();
+  }, []);
+
+  useEffect(() => {
+    // Notify analytics of client-side route changes so GA4 records page_views.
+    return router.subscribe("onBeforeLoad", () => {
+      window.dispatchEvent(
+        new CustomEvent("xlntbi:route-change", { detail: { path: location.pathname } }),
+      );
+    });
+  }, [router]);
 
   return (
     <QueryClientProvider client={queryClient}>
