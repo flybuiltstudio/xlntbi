@@ -240,7 +240,11 @@ export type IssueInvoiceResult =
   | { ok: true; invoiceId: number; invoiceNumber: string }
   | { ok: false; error: string };
 
-export type InvoiceAttemptSource = "webhook" | "admin_approval" | "admin_retry";
+export type InvoiceAttemptSource =
+  | "webhook"
+  | "admin_approval"
+  | "admin_retry"
+  | "billingo_webhook";
 
 /**
  * Writes one row to billingo_invoice_logs for every invoicing attempt
