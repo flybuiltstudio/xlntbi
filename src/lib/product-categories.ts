@@ -64,6 +64,7 @@ export const productCategories: ProductCategory[] = [
       "utnyilvantartas-kikuldetesi-rendelveny",
       "kamatlekerdezo-potlekszamito",
       "rlb-nyito-vegyes-konyvelo",
+      "kulcs-nyito-vegyes-konyvelo",
     ],
   },
   {
