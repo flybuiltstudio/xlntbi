@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { Facebook, Mail, Phone } from "lucide-react";
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 import heroImg from "@/assets/bcg-savok.jpg";
+import dspLogo from "@/assets/dsp-logo-feher.png.asset.json";
+import neumannLogo from "@/assets/neumann-logo-feher.png.asset.json";
 
 const pages = [
   { to: "/", label: "Főoldal" },
@@ -35,6 +37,29 @@ export function SiteFooter() {
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/90 to-brand-dark/80" />
+
+      <div className="relative border-b border-primary-foreground/20">
+        <div className="mx-auto max-w-6xl px-4 py-8">
+          <div className="flex flex-col items-center justify-center gap-8 sm:flex-row sm:justify-between sm:gap-4">
+            <img
+              src={dspLogo.url}
+              alt="Demján Sándor Program logó"
+              className="h-[72px] w-auto object-contain"
+              loading="lazy"
+            />
+            <img
+              src={neumannLogo.url}
+              alt="Neumann János Nonprofit Kft. logó"
+              className="h-[52px] w-auto object-contain"
+              loading="lazy"
+            />
+          </div>
+          <p className="mt-6 text-center text-sm opacity-80">
+            A weboldal a Demján Sándor Program keretében és támogatásával valósult meg.
+          </p>
+        </div>
+      </div>
+
       <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4">
         <div>
           <div className="inline-block rounded-2xl bg-white p-2.5">
