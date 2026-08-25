@@ -222,7 +222,29 @@ export async function listOrders(): Promise<AdminOrder[]> {
     return [];
   }
 
-  return (data ?? []).map((o: any) => ({
+  const rows = data ?? [];
+
+  // Latest failed Billingo attempt per order, so the orders list can offer a
+  // retry button without opening the invoicing log page.
+  const failures = new Map<string, string | null>();
+  if (rows.length > 0) {
+    const { data: logs } = await (supabaseAdmin as any)
+      .from("billingo_invoice_logs")
+      .select("order_id, status, error_message, created_at")
+      .in(
+        "order_id",
+        rows.map((o: any) => o.id),
+      )
+      .order("created_at", { ascending: true })
+      .limit(1000);
+    for (const log of (logs ?? []) as any[]) {
+      if (!log.order_id) continue;
+      if (log.status === "error") failures.set(log.order_id, log.error_message ?? null);
+      else failures.delete(log.order_id);
+    }
+  }
+
+  return rows.map((o: any) => ({
     id: o.id,
     orderNumber: o.order_number,
     createdAt: o.created_at,
@@ -243,6 +265,8 @@ export async function listOrders(): Promise<AdminOrder[]> {
     paymentReference: o.payment_reference ?? null,
     billingoInvoiceId: o.billingo_invoice_id ?? null,
     billingoInvoiceNumber: o.billingo_invoice_number ?? null,
+    invoiceFailed: !o.billingo_invoice_number && failures.has(o.id),
+    invoiceErrorMessage: failures.get(o.id) ?? null,
   }));
 }
 
