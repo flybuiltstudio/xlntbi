@@ -765,6 +765,36 @@ export function OrdersPanel({ email }: { email: string | null }) {
                         : "Számlázás"}
                   </button>
                 ) : null}
+                {order.paymentStatus === "paid" ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => {
+                      setLicenseFor(licenseFor?.id === order.id ? null : order);
+                      setLicenseKey("");
+                      setMessage("");
+                    }}
+                    className="rounded-md border border-primary/40 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 disabled:opacity-60"
+                    title="Licenszkód kiküldése a vevőnek e-mailben"
+                  >
+                    {licenseFor?.id === order.id ? "Licensz küldése – mégsem" : "Licensz küldése"}
+                  </button>
+                ) : null}
+                {order.invoiceFailed ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => void onRetryInvoice(order)}
+                    className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
+                    title={
+                      order.invoiceErrorMessage
+                        ? `Korábbi hiba: ${order.invoiceErrorMessage}`
+                        : "A korábbi számlakiállítás hibára futott"
+                    }
+                  >
+                    {busy === order.id ? "Feldolgozás…" : "Billingo számla újraküldése"}
+                  </button>
+                ) : null}
                 {order.billingoInvoiceId ? (
                   <>
                     <button
