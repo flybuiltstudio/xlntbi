@@ -127,7 +127,96 @@ export function BillingoAuditPanel() {
     }
   }
 
+  async function onBulkReload() {
+    const targets = (rows ?? []).filter(
+      (r) => selected.includes(r.orderId) && r.billingoInvoiceId,
+    );
+    if (targets.length === 0) {
+      setNotice("Nincs kiválasztott rendelés Billingo számlával.");
+      return;
+    }
+    setBulkBusy(true);
+    setNotice(null);
+    let ok = 0;
+    const failed: string[] = [];
+    for (const row of targets) {
+      try {
+        const result = await invoiceSnapshot({ data: { orderId: row.orderId, refresh: true } });
+        if (result.ok) ok += 1;
+        else failed.push(`${row.orderNumber}: ${result.error}`);
+      } catch (e) {
+        failed.push(`${row.orderNumber}: ${e instanceof Error ? e.message : "hiba"}`);
+      }
+    }
+    setBulkBusy(false);
+    setNotice(
+      `${ok} rendelés számlaadata újratöltve.` +
+        (failed.length ? ` Sikertelen: ${failed.join("; ")}` : ""),
+    );
+    await refresh();
+  }
+
+  function csvCell(value: string | number | null): string {
+    const s = value === null || value === undefined ? "" : String(value);
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+
+  function onExportCsv() {
+    const problemRows = (rows ?? []).filter((r) => r.status !== "ok");
+    if (problemRows.length === 0) {
+      setNotice("Nincs exportálható eltérés vagy hiányzó rekord.");
+      return;
+    }
+    const header = [
+      "Rendelésszám",
+      "Dátum",
+      "E-mail",
+      "Fizetési szolgáltató",
+      "Stripe azonosító",
+      "Fizetési állapot",
+      "Billingo számla ID",
+      "Számlaszám",
+      "Billingo megjegyzés",
+      "Megjegyzésben lévő rendelésszám",
+      "Állapot",
+      "Számlaadat betöltve",
+    ];
+    const lines = [
+      header.map(csvCell).join(";"),
+      ...problemRows.map((r) =>
+        [
+          r.orderNumber,
+          r.createdAt,
+          r.email,
+          r.paymentProvider,
+          r.paymentReference,
+          r.paymentStatus,
+          r.billingoInvoiceId,
+          r.billingoInvoiceNumber,
+          r.invoiceComment,
+          r.commentOrderNumber,
+          STATUS_LABEL[r.status],
+          r.snapshotFetchedAt,
+        ]
+          .map(csvCell)
+          .join(";"),
+      ),
+    ];
+    const blob = new Blob(["\uFEFF" + lines.join("\r\n")], {
+      type: "text/csv;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `billingo-ellenorzes-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setNotice(`${problemRows.length} problémás rekord exportálva CSV-be.`);
+  }
+
   const visible = (rows ?? []).filter((r) => (onlyProblems ? r.status !== "ok" : true));
+  const allVisibleSelected =
+    visible.length > 0 && visible.every((r) => selected.includes(r.orderId));
   const problems = (rows ?? []).filter(
     (r) => r.status === "mismatch" || r.status === "missing_comment",
   ).length;
