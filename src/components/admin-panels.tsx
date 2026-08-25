@@ -18,6 +18,7 @@ import {
   adminResetProductPlacements,
   adminResendDownload,
   adminSaveProductPlacements,
+  adminSendLicense,
   adminRetryInvoice,
   adminUpdateUserRole,
   adminUploadCalculatorVersion,
@@ -289,6 +290,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const retryInvoice = useServerFn(adminRetryInvoice);
   const invoiceUrl = useServerFn(adminInvoiceUrl);
   const invoiceSnapshot = useServerFn(adminInvoiceSnapshot);
+  const sendLicense = useServerFn(adminSendLicense);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
