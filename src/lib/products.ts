@@ -1191,6 +1191,53 @@ export const products: Product[] = [
     },
   },
   {
+    slug: "sup-nyito-vegyes-konyvelo",
+    name: "Nyitó és Vegyes Könyvelő – SUP kiadás",
+    tagline:
+      "Töltse fel a főkönyvi adatokat – a program a Qsoft SUP könyvelőprogram vegyes importfájlját készen adja",
+    status: "available",
+    priceId: "sup_nyito_vegyes_konyvelo_alap_licenc",
+    price: 19900,
+    currency: "HUF",
+    image: nyitoVegyesImg,
+    metaTitle: "Nyitó és Vegyes Könyvelő – SUP kiadás | EXCELlent",
+    metaDescription:
+      "Nyitó egyenlegek, havi vegyes és bérkönyvelés Excelben, Qsoft SUP vegyes importfájllal. Ár: 19 900 Ft-tól.",
+    intro: [
+      "A hónap végi vegyes könyvelés és a nyitás a legidőigényesebb, legtöbb kézi munkát követelő feladatok közé tartozik. Ez az eszköz Excelben, ismerős felületen oldja meg mindezt: Ön beilleszti vagy rögzíti a tételeket, a program pedig előállítja a Qsoft SUP által beolvasható importfájlt – gépelés, átszámozgatás és tükörsor-párosítás nélkül.",
+    ],
+    features: [
+      "Nyitás: nyitó egyenlegek könyvelése ellenszámlával (491), egyetlen lapon.",
+      "Vegyes és bér: havi vegyes tételek és teljes bérkönyvelés, 12 hónap készen előkészítve.",
+      "Qsoft SUP export: a Qsoft SUP hivatalos lap-alapú (.xls) importfájljának automatikus előállítása.",
+      "Deviza: MNB-árfolyam lekérdezés és devizás tételek kezelése.",
+      "Segédeszközök: teljesítési időpont kalkulátor, munkanap-számítás, számlatükör, kölcsön-nyilvántartás.",
+      "Kommunikáció: teljesítés-igazoló e-mail (magyar és angol) kiküldése.",
+      "Beolvasás: PDF-beolvasó a bizonylatok gyorsabb rögzítéséhez.",
+    ],
+    why: "A SUP kiadás a Qsoft SUP könyvelőprogram saját beolvasási rendjét követi (a feladott lap kerül a SUP-ba). A program a betöltött adatokból dolgozik; az áfamentes vegyes és nyitó tételeket kezeli. Áfás vagy devizás vegyes tételhez egy rövid egyeztetés után illesztjük a formátumot. Excel (Windows) és engedélyezett makrók szükségesek; a fájl saját, egyszeri licencű munkafüzet.",
+    tiers: [
+      {
+        id: "alap_licenc",
+        label: "Alap licenc – 1 adószám",
+        price: 19900,
+        note: "Egy céget könyvelő vállalkozásnak, saját könyveléshez. Éves licenc.",
+        priceId: "sup_nyito_vegyes_konyvelo_alap_licenc",
+      },
+      {
+        id: "iroda_licenc",
+        label: "Iroda licenc – korlátlan adószám",
+        price: 49900,
+        note: "Könyvelőirodának, tetszőleges számú ügyfél könyveléséhez. Éves licenc.",
+        priceId: "sup_nyito_vegyes_konyvelo_iroda_licenc",
+      },
+    ],
+    download: {
+      fileName: "SUP_Nyito_Vegyes_Konyvelo.xlsm",
+      storagePath: "sup-nyito-vegyes-konyvelo/SUP_Nyito_Vegyes_Konyvelo.xlsm",
+    },
+  },
+  {
     slug: "telefonszamla-konyvelo",
     name: "XLNT Telefonszámla Könyvelő",
     tagline: "Telefonszámlából könyvelés – percek alatt, hívószámonként, hibátlan áfával",
