@@ -8,7 +8,7 @@ import type { ProductPlacement } from "@/lib/product-categories";
  * Falls back to an empty list, in which case the bundled order applies.
  */
 export const getProductPlacements = createServerFn({ method: "GET" }).handler(
-  async (): Promise<{ placements: ProductPlacement[] }> => {
+  async (): Promise<{ placements: ProductPlacement[]; categoryOrder: string[] }> => {
     try {
       const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
       const supabase = createClient<Database>(process.env["SUPABASE_URL"]!, key, {
@@ -24,19 +24,22 @@ export const getProductPlacements = createServerFn({ method: "GET" }).handler(
           },
         },
       });
-      const { data, error } = await supabase
-        .from("product_placements")
-        .select("slug, category, sort_order");
-      if (error || !data) return { placements: [] };
-      return {
-        placements: data.map((row) => ({
-          slug: row.slug,
-          category: row.category,
-          sortOrder: row.sort_order,
-        })),
-      };
+      const [placementsResult, orderResult] = await Promise.all([
+        supabase.from("product_placements").select("slug, category, sort_order"),
+        supabase
+          .from("product_category_order")
+          .select("key, sort_order")
+          .order("sort_order", { ascending: true }),
+      ]);
+      const placements = (placementsResult.data ?? []).map((row) => ({
+        slug: row.slug,
+        category: row.category,
+        sortOrder: row.sort_order,
+      }));
+      const categoryOrder = (orderResult.data ?? []).map((row) => row.key);
+      return { placements, categoryOrder };
     } catch {
-      return { placements: [] };
+      return { placements: [], categoryOrder: [] };
     }
   },
 );

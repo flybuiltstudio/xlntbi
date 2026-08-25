@@ -334,6 +334,25 @@ export const adminResetProductPlacements = createServerFn({ method: "POST" })
     return resetProductPlacements();
   });
 
+export const adminListProductCategoryOrder = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { listProductCategoryOrder } = await import("./admin.server");
+    return { categoryOrder: await listProductCategoryOrder() };
+  });
+
+export const adminSaveProductCategoryOrder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z.object({ keys: z.array(z.string().min(1).max(60)).min(1).max(50) }).parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { saveProductCategoryOrder } = await import("./admin.server");
+    return saveProductCategoryOrder(data.keys, context.userId);
+  });
+
 export const adminBillingoWebhookState = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {

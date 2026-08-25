@@ -16,6 +16,8 @@ import {
   adminListProductPlacements,
   adminListUsers,
   adminResetProductPlacements,
+  adminListProductCategoryOrder,
+  adminSaveProductCategoryOrder,
   adminResendDownload,
   adminSaveProductPlacements,
   adminSendLicense,
@@ -24,7 +26,7 @@ import {
   adminUploadCalculatorVersion,
 } from "@/lib/admin.functions";
 import { formatPrice, products } from "@/lib/products";
-import { applyPlacements, productCategories } from "@/lib/product-categories";
+import { applyPlacements, productCategories, sortCategories } from "@/lib/product-categories";
 import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
@@ -1896,14 +1898,31 @@ export function ProductOrderPanel() {
   const loadPlacements = useServerFn(adminListProductPlacements);
   const savePlacements = useServerFn(adminSaveProductPlacements);
   const resetPlacements = useServerFn(adminResetProductPlacements);
+  const loadCategoryOrder = useServerFn(adminListProductCategoryOrder);
+  const saveCategoryOrder = useServerFn(adminSaveProductCategoryOrder);
 
   const [groups, setGroups] = useState<Record<string, string[]> | null>(null);
+  const [order, setOrder] = useState<string[]>(productCategories.map((c) => c.key));
+  const [dragKey, setDragKey] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  const orderedCategories = sortCategories(productCategories, order);
+
   async function refresh() {
+    let keys = productCategories.map((c) => c.key);
+    try {
+      const orderResult = await loadCategoryOrder();
+      if (orderResult.categoryOrder.length) {
+        keys = sortCategories(productCategories, orderResult.categoryOrder).map((c) => c.key);
+      }
+    } catch {
+      /* keeps the bundled order */
+    }
+    setOrder(keys);
+
     try {
       const result = await loadPlacements();
       const effective = applyPlacements(result.placements);
@@ -1922,6 +1941,39 @@ export function ProductOrderPanel() {
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /** Reorders the dragged category to the drop target's position. */
+  function dropCategory(targetKey: string) {
+    const source = dragKey;
+    setDragKey(null);
+    if (!source || source === targetKey) return;
+    setOrder((prev) => {
+      const list = prev.length ? [...prev] : productCategories.map((c) => c.key);
+      const from = list.indexOf(source);
+      const to = list.indexOf(targetKey);
+      if (from < 0 || to < 0) return prev;
+      list.splice(from, 1);
+      list.splice(to, 0, source);
+      return list;
+    });
+    setDirty(true);
+    setMessage("");
+  }
+
+  /** Keyboard fallback for reordering categories. */
+  function moveCategory(key: string, delta: number) {
+    setOrder((prev) => {
+      const list = prev.length ? [...prev] : productCategories.map((c) => c.key);
+      const from = list.indexOf(key);
+      const to = from + delta;
+      if (from < 0 || to < 0 || to >= list.length) return prev;
+      list.splice(from, 1);
+      list.splice(to, 0, key);
+      setDirty(true);
+      setMessage("");
+      return list;
+    });
+  }
 
   function productName(slug: string) {
     return products.find((p) => p.slug === slug)?.name ?? slug;
@@ -1971,6 +2023,10 @@ export function ProductOrderPanel() {
       );
       const result = await savePlacements({ data: { items } });
       if (!result.ok) throw new Error(result.error);
+      const orderResult = await saveCategoryOrder({
+        data: { keys: orderedCategories.map((c) => c.key) },
+      });
+      if (!orderResult.ok) throw new Error(orderResult.error);
       setMessage("A sorrend és a kategóriák elmentve. A Termékeim oldal már ezt mutatja.");
       setDirty(false);
     } catch (e) {
@@ -1998,9 +2054,9 @@ export function ProductOrderPanel() {
     <section className="mt-12 rounded-xl border border-border bg-card p-6">
       <h2 className="text-xl font-bold text-foreground">Termékek sorrendje és kategóriája</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        A nyilakkal rendezhetsz a kategórián belül, a legördülővel pedig áthelyezheted a
-        terméket másik kategóriába (a lista végére kerül). A módosítás mentés után látszik a
-        Termékeim oldalon.
+        A kategóriákat a kártya fejlécénél megfogva, húzással sorba rendezheted — ez a sorrend
+        mentés után a Termékek oldalon is érvényes. A nyilakkal rendezhetsz a kategórián belül, a
+        legördülővel pedig áthelyezheted a terméket másik kategóriába (a lista végére kerül).
       </p>
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -2032,10 +2088,58 @@ export function ProductOrderPanel() {
         <p className="mt-6 text-xs text-muted-foreground">Betöltés…</p>
       ) : (
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
-          {productCategories.map((category) => {
+          {orderedCategories.map((category, catIndex) => {
             const list = groups[category.key] ?? [];
             return (
-              <div key={category.key} className="rounded-lg border border-border p-4">
+              <div
+                key={category.key}
+                onDragOver={(e) => {
+                  if (dragKey) e.preventDefault();
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  dropCategory(category.key);
+                }}
+                className={`rounded-lg border p-4 ${
+                  dragKey === category.key
+                    ? "border-primary bg-primary/5"
+                    : dragKey
+                      ? "border-dashed border-primary/50"
+                      : "border-border"
+                }`}
+              >
+                <div
+                  draggable={!busy}
+                  onDragStart={() => setDragKey(category.key)}
+                  onDragEnd={() => setDragKey(null)}
+                  className="mb-2 flex cursor-grab items-center gap-2 active:cursor-grabbing"
+                  title="Húzd a kategóriát a kívánt helyre"
+                >
+                  <span aria-hidden className="text-muted-foreground">⠿</span>
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    {catIndex + 1}. kategória
+                  </span>
+                  <span className="ml-auto flex gap-1">
+                    <button
+                      type="button"
+                      aria-label="Kategória feljebb"
+                      disabled={busy || catIndex === 0}
+                      onClick={() => moveCategory(category.key, -1)}
+                      className="rounded border border-input px-2 py-0.5 text-xs disabled:opacity-30"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Kategória lejjebb"
+                      disabled={busy || catIndex === orderedCategories.length - 1}
+                      onClick={() => moveCategory(category.key, 1)}
+                      className="rounded border border-input px-2 py-0.5 text-xs disabled:opacity-30"
+                    >
+                      ↓
+                    </button>
+                  </span>
+                </div>
                 <h3 className="text-sm font-bold text-foreground">
                   {category.title}{" "}
                   <span className="font-normal text-muted-foreground">({list.length})</span>

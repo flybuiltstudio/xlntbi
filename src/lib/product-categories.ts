@@ -118,7 +118,10 @@ export type ProductPlacement = { slug: string; category: string; sortOrder: numb
  * Returns the categories with the admin-managed placements applied.
  * Products without an override keep their bundled category and position.
  */
-export function applyPlacements(placements: ProductPlacement[]): ProductCategory[] {
+export function applyPlacements(
+  placements: ProductPlacement[],
+  categoryOrder: string[] = [],
+): ProductCategory[] {
   const overrides = new Map(placements.map((p) => [p.slug, p]));
   const buckets = new Map<string, { slug: string; order: number; idx: number }[]>();
   for (const category of productCategories) buckets.set(category.key, []);
@@ -132,11 +135,30 @@ export function applyPlacements(placements: ProductPlacement[]): ProductCategory
     });
   });
 
-  return productCategories.map((category) => ({
+  const resolved = productCategories.map((category) => ({
     ...category,
     slugs: buckets
       .get(category.key)!
       .sort((a, b) => a.order - b.order || a.idx - b.idx)
       .map((entry) => entry.slug),
   }));
+
+  return sortCategories(resolved, categoryOrder);
+}
+
+/**
+ * Orders categories by the admin-managed key list; unknown keys keep their
+ * bundled position at the end.
+ */
+export function sortCategories(
+  list: ProductCategory[],
+  categoryOrder: string[],
+): ProductCategory[] {
+  if (!categoryOrder.length) return list;
+  const rank = new Map(categoryOrder.map((key, index) => [key, index]));
+  return [...list].sort((a, b) => {
+    const ra = rank.get(a.key) ?? Number.MAX_SAFE_INTEGER;
+    const rb = rank.get(b.key) ?? Number.MAX_SAFE_INTEGER;
+    return ra - rb || list.indexOf(a) - list.indexOf(b);
+  });
 }

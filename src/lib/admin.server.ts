@@ -1017,7 +1017,42 @@ export async function saveProductPlacements(
 export async function resetProductPlacements(): Promise<{ ok: boolean }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { error } = await supabaseAdmin.from("product_placements").delete().neq("slug", "");
+  await supabaseAdmin.from("product_category_order").delete().neq("key", "");
   return { ok: !error };
+}
+
+/** Admin-managed order of the product categories (list of category keys). */
+export async function listProductCategoryOrder(): Promise<string[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("product_category_order")
+    .select("key, sort_order")
+    .order("sort_order", { ascending: true });
+  return (data ?? []).map((row) => row.key);
+}
+
+/** Overwrites the category order with the given key list. */
+export async function saveProductCategoryOrder(
+  keys: string[],
+  updatedBy: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const { productCategoryKeys } = await import("@/lib/product-categories");
+  const valid = new Set(productCategoryKeys);
+  const unique = [...new Set(keys.filter((key) => valid.has(key)))];
+  if (!unique.length) return { ok: false, error: "Nincs mentendő adat." };
+
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin.from("product_category_order").upsert(
+    unique.map((key, index) => ({
+      key,
+      sort_order: index,
+      updated_by: updatedBy,
+      updated_at: new Date().toISOString(),
+    })),
+    { onConflict: "key" },
+  );
+  if (error) return { ok: false, error: "A mentés nem sikerült. Próbáld újra." };
+  return { ok: true };
 }
 
 // ---------------------------------------------------------------------------
