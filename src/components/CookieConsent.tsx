@@ -92,10 +92,10 @@ export function CookieConsent() {
         <div className="flex items-start gap-2.5">
           <Cookie className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
           <div className="flex-1">
-            <h2 className="text-base font-semibold text-foreground">
+            <h2 className="text-sm font-semibold text-foreground">
               Cookie-k és adatkezelés
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-1 text-xs text-muted-foreground">
               A működéshez szükséges cookie-kat mindig használjuk. Statisztikai és marketing
               célú cookie-kat csak a hozzájárulásoddal helyezünk el, és a hozzájárulás bármikor
               visszavonható. Részletek:{" "}
