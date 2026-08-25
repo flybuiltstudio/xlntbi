@@ -26,8 +26,7 @@ export type AdminOrder = {
   invoiceErrorMessage: string | null;
   /** When the license key was last e-mailed to the buyer (null = not yet). */
   licenseSentAt: string | null;
-  /** Last license key sent, for reference in the admin list. */
-  licenseKey: string | null;
+
 };
 
 /**
