@@ -295,10 +295,13 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid">("all");
+  const [methodFilter, setMethodFilter] = useState<"all" | "stripe" | "transfer">("all");
   const [snapshots, setSnapshots] = useState<Record<string, InvoiceSnapshotState>>({});
   const [invoiceFilter, setInvoiceFilter] = useState<"all" | "invoiced" | "not-invoiced">("all");
   const [yearSel, setYearSel] = useState<number | "all">("all");
   const [monthSel, setMonthSel] = useState<number | "all">("all");
+  const [licenseFor, setLicenseFor] = useState<Order | null>(null);
+  const [licenseKey, setLicenseKey] = useState("");
 
   const years = useMemo(() => {
     const set = new Set<number>();
