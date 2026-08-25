@@ -2014,25 +2014,31 @@ export function ProductOrderPanel() {
     });
   }
 
+  /** Persists an explicit order + grouping to the backend. */
+  async function persist(nextOrder: string[], nextGroups: Record<string, string[]>) {
+    const items = productCategories.flatMap((category) =>
+      (nextGroups[category.key] ?? []).map((slug, index) => ({
+        slug,
+        category: category.key,
+        sortOrder: index,
+      })),
+    );
+    const result = await savePlacements({ data: { items } });
+    if (!result.ok) throw new Error(result.error);
+    const orderResult = await saveCategoryOrder({ data: { keys: nextOrder } });
+    if (!orderResult.ok) throw new Error(orderResult.error);
+  }
+
   async function onSave() {
     if (!groups || busy) return;
     setBusy(true);
     setError("");
     setMessage("");
     try {
-      const items = productCategories.flatMap((category) =>
-        (groups[category.key] ?? []).map((slug, index) => ({
-          slug,
-          category: category.key,
-          sortOrder: index,
-        })),
+      await persist(
+        orderedCategories.map((c) => c.key),
+        groups,
       );
-      const result = await savePlacements({ data: { items } });
-      if (!result.ok) throw new Error(result.error);
-      const orderResult = await saveCategoryOrder({
-        data: { keys: orderedCategories.map((c) => c.key) },
-      });
-      if (!orderResult.ok) throw new Error(orderResult.error);
       setMessage("A sorrend és a kategóriák elmentve. A Termékeim oldal már ezt mutatja.");
       setDirty(false);
     } catch (e) {
@@ -2046,15 +2052,148 @@ export function ProductOrderPanel() {
     setBusy(true);
     setError("");
     setMessage("");
+    const snapshot = groups
+      ? {
+          order: orderedCategories.map((c) => c.key),
+          groups: { ...groups },
+          label: "visszaállítás előtti",
+        }
+      : null;
     try {
       await resetPlacements();
       await refresh();
-      setMessage("Visszaállt az eredeti kategória-beosztás és sorrend.");
+      setUndoState(snapshot);
+      setMessage(
+        "Visszaállt az eredeti kategória-beosztás és sorrend. A „Visszavonás” gombbal egy kattintással visszahozhatod az előző állapotot.",
+      );
     } catch (e) {
       setError(e instanceof Error ? e.message : "Hiba történt.");
     }
     setBusy(false);
   }
+
+  /** Restores the snapshot taken before the last reset or CSV import. */
+  async function onUndo() {
+    if (busy || !undoState) return;
+    setBusy(true);
+    setError("");
+    setMessage("");
+    try {
+      await persist(undoState.order, undoState.groups);
+      setOrder(undoState.order);
+      setGroups(undoState.groups);
+      setDirty(false);
+      setUndoState(null);
+      setMessage("Visszaállítottam az előző állapotot.");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(false);
+  }
+
+  /** Downloads the current state as an importable CSV. */
+  function onExportCsv() {
+    if (!groups) return;
+    const rows: string[] = ["tipus;kulcs;kategoria;sorrend"];
+    orderedCategories.forEach((category, index) => {
+      rows.push(`kategoria;${category.key};;${index}`);
+    });
+    for (const category of orderedCategories) {
+      (groups[category.key] ?? []).forEach((slug, index) => {
+        rows.push(`termek;${slug};${category.key};${index}`);
+      });
+    }
+    const blob = new Blob(["\uFEFF" + rows.join("\r\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "termek-sorrend.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /** Parses the CSV and applies it to the local state (save still required). */
+  async function onImportCsv(file: File) {
+    if (busy) return;
+    setError("");
+    setMessage("");
+    try {
+      const text = (await file.text()).replace(/^\uFEFF/, "");
+      const validKeys = new Set(productCategories.map((c) => c.key));
+      const validSlugs = new Set(products.map((p) => p.slug));
+      const categoryRows: { key: string; sortOrder: number }[] = [];
+      const productRows: { slug: string; category: string; sortOrder: number }[] = [];
+
+      for (const rawLine of text.split(/\r?\n/)) {
+        const line = rawLine.trim();
+        if (!line) continue;
+        const cells = line.split(/[;,\t]/).map((c) => c.trim().replace(/^"|"$/g, ""));
+        const kind = (cells[0] ?? "").toLowerCase();
+        if (kind === "tipus" || kind === "type") continue;
+        if (kind === "kategoria" || kind === "category") {
+          const key = cells[1] ?? "";
+          if (!validKeys.has(key)) continue;
+          categoryRows.push({ key, sortOrder: Number(cells[3] ?? cells[2] ?? 0) || categoryRows.length });
+        } else if (kind === "termek" || kind === "product") {
+          const slug = cells[1] ?? "";
+          const category = cells[2] ?? "";
+          if (!validSlugs.has(slug) || !validKeys.has(category)) continue;
+          productRows.push({ slug, category, sortOrder: Number(cells[3] ?? 0) || 0 });
+        }
+      }
+
+      if (!categoryRows.length && !productRows.length) {
+        throw new Error(
+          "A CSV-ben nem találtam feldolgozható sort. Formátum: tipus;kulcs;kategoria;sorrend",
+        );
+      }
+
+      const snapshot = groups
+        ? { order: orderedCategories.map((c) => c.key), groups: { ...groups }, label: "import előtti" }
+        : null;
+
+      let nextOrder = orderedCategories.map((c) => c.key);
+      if (categoryRows.length) {
+        const imported = categoryRows
+          .sort((a, b) => a.sortOrder - b.sortOrder)
+          .map((r) => r.key);
+        nextOrder = [...new Set([...imported, ...nextOrder])];
+      }
+
+      let nextGroups = groups ? { ...groups } : null;
+      if (productRows.length) {
+        const built: Record<string, string[]> = {};
+        for (const category of productCategories) built[category.key] = [];
+        const placed = new Set<string>();
+        for (const row of productRows.sort((a, b) => a.sortOrder - b.sortOrder)) {
+          if (placed.has(row.slug)) continue;
+          placed.add(row.slug);
+          built[row.category] = [...(built[row.category] ?? []), row.slug];
+        }
+        // keeps products missing from the CSV in their current category
+        if (groups) {
+          for (const [key, slugs] of Object.entries(groups)) {
+            for (const slug of slugs) {
+              if (placed.has(slug)) continue;
+              built[key] = [...(built[key] ?? []), slug];
+            }
+          }
+        }
+        nextGroups = built;
+      }
+
+      setOrder(nextOrder);
+      if (nextGroups) setGroups(nextGroups);
+      setUndoState(snapshot);
+      setDirty(true);
+      setMessage(
+        `CSV beolvasva (${categoryRows.length} kategória, ${productRows.length} termék). Mentsd el a „Sorrend mentése” gombbal.`,
+      );
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Nem sikerült beolvasni a CSV-t.");
+    }
+  }
+
 
   return (
     <section className="mt-12 rounded-xl border border-border bg-card p-6">
