@@ -350,6 +350,22 @@ export function BillingoAuditPanel() {
                 <tbody>
                   {visible.map((row) => (
                     <tr key={row.orderId} className="border-b border-border/60 align-top">
+                      <td className="py-2 pr-3">
+                        <input
+                          type="checkbox"
+                          aria-label={`${row.orderNumber} kijelölése`}
+                          disabled={!row.billingoInvoiceId}
+                          checked={selected.includes(row.orderId)}
+                          onChange={(e) =>
+                            setSelected((prev) =>
+                              e.target.checked
+                                ? [...prev, row.orderId]
+                                : prev.filter((id) => id !== row.orderId),
+                            )
+                          }
+                          className="h-4 w-4 rounded border-input"
+                        />
+                      </td>
                       <td className="py-2 pr-3 font-mono text-foreground">{row.orderNumber}</td>
                       <td className="py-2 pr-3 text-muted-foreground">{hunDate(row.createdAt)}</td>
                       <td className="py-2 pr-3 break-all font-mono text-muted-foreground">
