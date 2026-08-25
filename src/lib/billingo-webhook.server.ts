@@ -87,7 +87,7 @@ export async function handleBillingoWebhook(payload: any): Promise<BillingoWebho
   }
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const update: Record<string, unknown> = {};
+  const update: Record<string, any> = {};
   if (!order.billingo_invoice_id) update["billingo_invoice_id"] = snapshot.invoiceId;
   if (snapshot.invoiceNumber && order.billingo_invoice_number !== snapshot.invoiceNumber) {
     update["billingo_invoice_number"] = snapshot.invoiceNumber;
@@ -106,7 +106,7 @@ export async function handleBillingoWebhook(payload: any): Promise<BillingoWebho
   }
 
   if (Object.keys(update).length) {
-    const { error } = await supabaseAdmin.from("orders").update(update).eq("id", order.id);
+    const { error } = await supabaseAdmin.from("orders").update(update as never).eq("id", order.id);
     if (error) {
       console.error("Billingo webhook order update failed:", error.message);
       return { handled: false, reason: error.message, orderNumber: order.order_number as string };
