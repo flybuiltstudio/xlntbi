@@ -65,7 +65,7 @@ function removeGtag() {
     .forEach((s) => s.remove());
   // Clear the data layer so no pending events fire.
   if (window.dataLayer) window.dataLayer.length = 0;
-  window.gtag = undefined;
+  delete (window as { gtag?: (...args: GtagArgs) => void }).gtag;
 }
 
 function applyConsent(state: ConsentState | null) {
