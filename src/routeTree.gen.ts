@@ -35,6 +35,7 @@ import { Route as RolamRouteImport } from './routes/rolam'
 import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
 import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminBillingoEllenorzesRouteImport } from './routes/admin.billingo-ellenorzes'
 import { Route as AdminFelhasznalokRouteImport } from './routes/admin.felhasznalok'
 import { Route as AdminFizetesTesztRouteImport } from './routes/admin.fizetes-teszt'
 import { Route as AdminFrissVerzioRouteImport } from './routes/admin.friss-verzio'
@@ -187,6 +188,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBillingoEllenorzesRoute = AdminBillingoEllenorzesRouteImport.update({
+  id: '/billingo-ellenorzes',
+  path: '/billingo-ellenorzes',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFelhasznalokRoute = AdminFelhasznalokRouteImport.update({
   id: '/felhasznalok',
   path: '/felhasznalok',
@@ -320,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/friss-verzio': typeof AdminFrissVerzioRoute
@@ -367,6 +374,7 @@ export interface FileRoutesByTo {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/friss-verzio': typeof AdminFrissVerzioRoute
@@ -416,6 +424,7 @@ export interface FileRoutesById {
   '/rolam': typeof RolamRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
+  '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/friss-verzio': typeof AdminFrissVerzioRoute
@@ -466,6 +475,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/admin/billingo-ellenorzes'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/friss-verzio'
@@ -513,6 +523,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/admin/billingo-ellenorzes'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/friss-verzio'
@@ -561,6 +572,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/szolgaltatasaim'
     | '/termekeim'
+    | '/admin/billingo-ellenorzes'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/friss-verzio'
@@ -810,6 +822,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/billingo-ellenorzes': {
+      id: '/admin/billingo-ellenorzes'
+      path: '/billingo-ellenorzes'
+      fullPath: '/admin/billingo-ellenorzes'
+      preLoaderRoute: typeof AdminBillingoEllenorzesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/felhasznalok': {
       id: '/admin/felhasznalok'
       path: '/felhasznalok'
@@ -954,6 +973,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminBillingoEllenorzesRoute: typeof AdminBillingoEllenorzesRoute
   AdminFelhasznalokRoute: typeof AdminFelhasznalokRoute
   AdminFizetesTesztRoute: typeof AdminFizetesTesztRoute
   AdminFrissVerzioRoute: typeof AdminFrissVerzioRoute
@@ -964,6 +984,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBillingoEllenorzesRoute: AdminBillingoEllenorzesRoute,
   AdminFelhasznalokRoute: AdminFelhasznalokRoute,
   AdminFizetesTesztRoute: AdminFizetesTesztRoute,
   AdminFrissVerzioRoute: AdminFrissVerzioRoute,
