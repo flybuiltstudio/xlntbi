@@ -101,6 +101,24 @@ export const adminInvoiceUrl = createServerFn({ method: "POST" })
     return invoiceDownloadUrl(data.orderId);
   });
 
+export const adminInvoiceSnapshot = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        orderId: z.string().uuid(),
+        refresh: z.boolean().optional().default(false),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { invoiceSnapshotForOrder } = await import("./admin.server");
+    return invoiceSnapshotForOrder(data.orderId, data.refresh);
+  });
+
+
+
 export const adminListUsers = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
