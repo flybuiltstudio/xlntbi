@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Mail, Phone } from "lucide-react";
+import { openCookieSettings } from "@/components/CookieConsent";
+
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 import heroImg from "@/assets/bcg-savok.jpg";
 import dspLogo from "@/assets/dsp-logo-feher.png.asset.json";
@@ -154,7 +156,14 @@ export function SiteFooter() {
       <div className="relative border-t border-primary-foreground/20">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs opacity-80 md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} Sarinay Dávid EV – EXCELlent Business Intelligence</p>
-          <p>{"\n"}</p>
+          <button
+            type="button"
+            onClick={openCookieSettings}
+            className="text-left underline underline-offset-4 opacity-90 transition-opacity hover:opacity-100"
+          >
+            Cookie-beállítások
+          </button>
+
         </div>
       </div>
     </footer>
