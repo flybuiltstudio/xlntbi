@@ -922,3 +922,125 @@ export async function resetProductPlacements(): Promise<{ ok: boolean }> {
   const { error } = await supabaseAdmin.from("product_placements").delete().neq("slug", "");
   return { ok: !error };
 }
+
+// ---------------------------------------------------------------------------
+// Billingo webhook switch + Stripe ↔ Billingo comment audit
+// ---------------------------------------------------------------------------
+
+export type BillingoWebhookState = {
+  enabled: boolean;
+  updatedAt: string | null;
+};
+
+export async function billingoWebhookState(): Promise<BillingoWebhookState> {
+  const { getSetting, BILLINGO_WEBHOOK_KEY } = await import("./app-settings.server");
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const value = await getSetting(BILLINGO_WEBHOOK_KEY);
+  const { data } = await (supabaseAdmin as any)
+    .from("app_settings")
+    .select("updated_at")
+    .eq("key", BILLINGO_WEBHOOK_KEY)
+    .maybeSingle();
+  return { enabled: value["enabled"] === true, updatedAt: data?.updated_at ?? null };
+}
+
+export async function setBillingoWebhookEnabled(
+  enabled: boolean,
+  userId: string,
+): Promise<BillingoWebhookState> {
+  const { setSetting, BILLINGO_WEBHOOK_KEY } = await import("./app-settings.server");
+  await setSetting(BILLINGO_WEBHOOK_KEY, { enabled }, userId);
+  return billingoWebhookState();
+}
+
+export type InvoiceMatchRow = {
+  orderId: string;
+  orderNumber: string;
+  createdAt: string;
+  email: string;
+  paymentProvider: string | null;
+  /** Stripe payment/session reference stored on the order. */
+  paymentReference: string | null;
+  paymentStatus: string;
+  billingoInvoiceId: number | null;
+  billingoInvoiceNumber: string | null;
+  /** Order number parsed out of the Billingo invoice comment. */
+  invoiceComment: string | null;
+  commentOrderNumber: string | null;
+  /** "ok" | "mismatch" | "missing_comment" | "no_invoice" | "no_snapshot" */
+  status: "ok" | "mismatch" | "missing_comment" | "no_invoice" | "no_snapshot";
+  snapshotFetchedAt: string | null;
+};
+
+function commentOf(raw: any): string | null {
+  const comment = raw?.comment;
+  return typeof comment === "string" && comment.trim() ? comment.trim() : null;
+}
+
+function parseOrderNumber(comment: string | null): string | null {
+  if (!comment) return null;
+  const match = comment.match(/Rendelésszám:\s*([A-Za-z0-9_\-]+)/);
+  return match?.[1] ?? null;
+}
+
+/**
+ * Compares every order's Stripe reference and Billingo invoice comment so the
+ * admin can verify the two systems point at the same order.
+ */
+export async function billingoInvoiceAudit(): Promise<{ rows: InvoiceMatchRow[] }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: orders } = await supabaseAdmin
+    .from("orders")
+    .select(
+      "id, order_number, created_at, email, payment_provider, payment_reference, payment_status, billingo_invoice_id, billingo_invoice_number",
+    )
+    .order("created_at", { ascending: false })
+    .limit(300);
+
+  const invoiceIds = (orders ?? [])
+    .map((o: any) => o.billingo_invoice_id)
+    .filter((id: number | null): id is number => typeof id === "number");
+
+  const snapshots = new Map<number, any>();
+  if (invoiceIds.length) {
+    const { data } = await (supabaseAdmin as any)
+      .from("billingo_invoice_snapshots")
+      .select("billingo_invoice_id, invoice_number, raw, fetched_at")
+      .in("billingo_invoice_id", invoiceIds);
+    for (const row of data ?? []) snapshots.set(row.billingo_invoice_id, row);
+  }
+
+  const rows: InvoiceMatchRow[] = (orders ?? []).map((order: any) => {
+    const snapshot = order.billingo_invoice_id
+      ? snapshots.get(order.billingo_invoice_id)
+      : undefined;
+    const comment = snapshot ? commentOf(snapshot.raw) : null;
+    const commentOrderNumber = parseOrderNumber(comment);
+
+    let status: InvoiceMatchRow["status"];
+    if (!order.billingo_invoice_id) status = "no_invoice";
+    else if (!snapshot) status = "no_snapshot";
+    else if (!commentOrderNumber) status = "missing_comment";
+    else if (commentOrderNumber === order.order_number) status = "ok";
+    else status = "mismatch";
+
+    return {
+      orderId: order.id,
+      orderNumber: order.order_number,
+      createdAt: order.created_at,
+      email: order.email,
+      paymentProvider: order.payment_provider ?? null,
+      paymentReference: order.payment_reference ?? null,
+      paymentStatus: order.payment_status,
+      billingoInvoiceId: order.billingo_invoice_id ?? null,
+      billingoInvoiceNumber:
+        order.billingo_invoice_number ?? snapshot?.invoice_number ?? null,
+      invoiceComment: comment,
+      commentOrderNumber,
+      status,
+      snapshotFetchedAt: snapshot?.fetched_at ?? null,
+    };
+  });
+
+  return { rows };
+}
