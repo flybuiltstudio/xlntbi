@@ -208,7 +208,7 @@ async function createInvoice(
         unit_price_type: "gross",
         quantity: order.quantity,
         unit: "db",
-        vat: "0%",
+        vat: "AAM",
         entitlement: "AAM",
       },
     ],
