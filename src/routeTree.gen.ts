@@ -49,6 +49,7 @@ import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulato
 import { Route as KalkulatorokSzamlaDatumokRouteImport } from './routes/kalkulatorok.szamla-datumok'
 import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles_.koszonjuk'
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
+import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
@@ -259,6 +260,12 @@ const TermekSlugRoute = TermekSlugRouteImport.update({
   path: '/termek/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicBillingoWebhookRoute =
+  ApiPublicBillingoWebhookRouteImport.update({
+    id: '/api/public/billingo/webhook',
+    path: '/api/public/billingo/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicLetoltesTokenRoute = ApiPublicLetoltesTokenRouteImport.update({
   id: '/api/public/letoltes/$token',
   path: '/api/public/letoltes/$token',
@@ -328,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/termek/$slug': typeof TermekSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -374,6 +382,7 @@ export interface FileRoutesByTo {
   '/termek/$slug': typeof TermekSlugRoute
   '/admin': typeof AdminIndexRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
+  '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -422,6 +431,7 @@ export interface FileRoutesById {
   '/termek/$slug': typeof TermekSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -471,6 +481,7 @@ export interface FileRouteTypes {
     | '/termek/$slug'
     | '/admin/'
     | '/kalkulatorok/'
+    | '/api/public/billingo/webhook'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
@@ -517,6 +528,7 @@ export interface FileRouteTypes {
     | '/termek/$slug'
     | '/admin'
     | '/kalkulatorok'
+    | '/api/public/billingo/webhook'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
@@ -564,6 +576,7 @@ export interface FileRouteTypes {
     | '/termek/$slug'
     | '/admin/'
     | '/kalkulatorok/'
+    | '/api/public/billingo/webhook'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
@@ -605,6 +618,7 @@ export interface RootRouteChildren {
   MegrendelesKoszonjukRoute: typeof MegrendelesKoszonjukRoute
   TermekSlugRoute: typeof TermekSlugRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
+  ApiPublicBillingoWebhookRoute: typeof ApiPublicBillingoWebhookRoute
   ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -894,6 +908,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/billingo/webhook': {
+      id: '/api/public/billingo/webhook'
+      path: '/api/public/billingo/webhook'
+      fullPath: '/api/public/billingo/webhook'
+      preLoaderRoute: typeof ApiPublicBillingoWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/letoltes/$token': {
       id: '/api/public/letoltes/$token'
       path: '/api/public/letoltes/$token'
@@ -988,6 +1009,7 @@ const rootRouteChildren: RootRouteChildren = {
   MegrendelesKoszonjukRoute: MegrendelesKoszonjukRoute,
   TermekSlugRoute: TermekSlugRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
+  ApiPublicBillingoWebhookRoute: ApiPublicBillingoWebhookRoute,
   ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
