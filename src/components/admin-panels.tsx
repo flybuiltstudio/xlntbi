@@ -7,6 +7,7 @@ import {
   adminCreateUser,
   adminDeleteCalculatorOverride,
   adminDeleteUser,
+  adminInvoiceSnapshot,
   adminInvoiceUrl,
   adminListCalculatorOverrides,
   adminListInvoiceLogs,
@@ -147,12 +148,14 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const resend = useServerFn(adminResendDownload);
   const retryInvoice = useServerFn(adminRetryInvoice);
   const invoiceUrl = useServerFn(adminInvoiceUrl);
+  const invoiceSnapshot = useServerFn(adminInvoiceSnapshot);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid">("all");
+  const [snapshots, setSnapshots] = useState<Record<string, InvoiceSnapshotState>>({});
   const [invoiceFilter, setInvoiceFilter] = useState<"all" | "invoiced" | "not-invoiced">("all");
   const [yearSel, setYearSel] = useState<number | "all">("all");
   const [monthSel, setMonthSel] = useState<number | "all">("all");
@@ -201,6 +204,35 @@ export function OrdersPanel({ email }: { email: string | null }) {
     void refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  async function onShowInvoiceData(order: Order, refresh: boolean) {
+    if (!refresh && snapshots[order.id]) {
+      setSnapshots((prev) => {
+        const next = { ...prev };
+        delete next[order.id];
+        return next;
+      });
+      return;
+    }
+    setSnapshots((prev) => ({ ...prev, [order.id]: { loading: true } }));
+    try {
+      const result = await invoiceSnapshot({ data: { orderId: order.id, refresh } });
+      setSnapshots((prev) => ({
+        ...prev,
+        [order.id]: result.ok
+          ? { loading: false, snapshot: result.snapshot }
+          : { loading: false, error: result.error },
+      }));
+    } catch (e) {
+      setSnapshots((prev) => ({
+        ...prev,
+        [order.id]: {
+          loading: false,
+          error: e instanceof Error ? e.message : "A számlaadatok betöltése nem sikerült.",
+        },
+      }));
+    }
+  }
 
   async function onApprove(order: Order) {
     const reference = window.prompt(
