@@ -68,6 +68,8 @@ export function BillingoAuditPanel() {
   const [busy, setBusy] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [onlyProblems, setOnlyProblems] = useState(false);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [bulkBusy, setBulkBusy] = useState(false);
 
   async function refresh() {
     setLoading(true);
