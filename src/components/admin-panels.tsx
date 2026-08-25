@@ -1906,7 +1906,13 @@ export function ProductOrderPanel() {
   const [dragKey, setDragKey] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [undoState, setUndoState] = useState<{
+    order: string[];
+    groups: Record<string, string[]>;
+    label: string;
+  } | null>(null);
   const [message, setMessage] = useState("");
+
   const [error, setError] = useState("");
 
   const orderedCategories = sortCategories(productCategories, order);
