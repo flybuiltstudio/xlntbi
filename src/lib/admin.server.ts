@@ -24,6 +24,10 @@ export type AdminOrder = {
   /** Latest Billingo attempt failed and no invoice exists yet. */
   invoiceFailed: boolean;
   invoiceErrorMessage: string | null;
+  /** When the license key was last e-mailed to the buyer (null = not yet). */
+  licenseSentAt: string | null;
+  /** Last license key sent, for reference in the admin list. */
+  licenseKey: string | null;
 };
 
 /**
@@ -267,6 +271,8 @@ export async function listOrders(): Promise<AdminOrder[]> {
     billingoInvoiceNumber: o.billingo_invoice_number ?? null,
     invoiceFailed: !o.billingo_invoice_number && failures.has(o.id),
     invoiceErrorMessage: failures.get(o.id) ?? null,
+    licenseSentAt: o.license_sent_at ?? null,
+    licenseKey: o.license_key ?? null,
   }));
 }
 
@@ -420,7 +426,7 @@ const LICENSE_BCC = "xllentac@gmail.com";
 export async function sendLicense(
   orderId: string,
   licenseKey: string,
-): Promise<{ ok: boolean; error?: string }> {
+): Promise<{ ok: boolean; error?: string; sentAt?: string }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: order } = await supabaseAdmin
     .from("orders")
@@ -461,7 +467,17 @@ export async function sendLicense(
   ]);
 
   if (!ok) return { ok: false, error: "A licenszkód kiküldése nem sikerült." };
-  return { ok: true };
+
+  const sentAt = new Date().toISOString();
+  const { error: updateError } = await (supabaseAdmin as any)
+    .from("orders")
+    .update({ license_sent_at: sentAt, license_key: licenseKey })
+    .eq("id", orderId);
+  if (updateError) {
+    console.error("License send bookkeeping failed:", updateError.message);
+  }
+
+  return { ok: true, sentAt };
 }
 
 // ---------------------------------------------------------------------------

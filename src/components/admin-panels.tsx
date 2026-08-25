@@ -439,6 +439,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
       if (result.ok) {
         setLicenseFor(null);
         setLicenseKey("");
+        await refresh();
       }
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Hiba történt.");
@@ -715,6 +716,26 @@ export function OrdersPanel({ email }: { email: string | null }) {
                       {order.billingoInvoiceNumber
                         ? order.billingoInvoiceNumber
                         : "még nincs"}
+                    </dd>
+                  </div>
+                ) : null}
+                {order.paymentStatus === "paid" ? (
+                  <div className="sm:col-span-2">
+                    <dt className="inline font-semibold">Licensz: </dt>
+                    <dd className="inline">
+                      {order.licenseSentAt ? (
+                        <>
+                          <span className="font-semibold text-primary">elküldve</span> ·{" "}
+                          {new Date(order.licenseSentAt).toLocaleString("hu-HU")}
+                          {order.licenseKey ? (
+                            <span className="ml-2 break-all font-mono text-[11px] text-muted-foreground">
+                              {order.licenseKey}
+                            </span>
+                          ) : null}
+                        </>
+                      ) : (
+                        "még nem küldve"
+                      )}
                     </dd>
                   </div>
                 ) : null}
