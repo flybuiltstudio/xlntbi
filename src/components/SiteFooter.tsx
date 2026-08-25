@@ -56,7 +56,7 @@ export function SiteFooter() {
               loading="lazy"
             />
           </div>
-          <p className="mt-8 text-center text-[15px] opacity-60">
+          <p className="mt-8 text-center text-[17px] opacity-60">
             A weboldal a Demján Sándor Program keretében és támogatásával valósult meg.
           </p>
         </div>
