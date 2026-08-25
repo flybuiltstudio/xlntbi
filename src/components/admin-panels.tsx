@@ -727,12 +727,8 @@ export function OrdersPanel({ email }: { email: string | null }) {
                         <>
                           <span className="font-semibold text-primary">elküldve</span> ·{" "}
                           {new Date(order.licenseSentAt).toLocaleString("hu-HU")}
-                          {order.licenseKey ? (
-                            <span className="ml-2 break-all font-mono text-[11px] text-muted-foreground">
-                              {order.licenseKey}
-                            </span>
-                          ) : null}
                         </>
+
                       ) : (
                         "még nem küldve"
                       )}

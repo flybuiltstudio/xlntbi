@@ -26,8 +26,7 @@ export type AdminOrder = {
   invoiceErrorMessage: string | null;
   /** When the license key was last e-mailed to the buyer (null = not yet). */
   licenseSentAt: string | null;
-  /** Last license key sent, for reference in the admin list. */
-  licenseKey: string | null;
+
 };
 
 /**
@@ -272,7 +271,7 @@ export async function listOrders(): Promise<AdminOrder[]> {
     invoiceFailed: !o.billingo_invoice_number && failures.has(o.id),
     invoiceErrorMessage: failures.get(o.id) ?? null,
     licenseSentAt: o.license_sent_at ?? null,
-    licenseKey: o.license_key ?? null,
+
   }));
 }
 
@@ -471,7 +470,7 @@ export async function sendLicense(
   const sentAt = new Date().toISOString();
   const { error: updateError } = await (supabaseAdmin as any)
     .from("orders")
-    .update({ license_sent_at: sentAt, license_key: licenseKey })
+    .update({ license_sent_at: sentAt })
     .eq("id", orderId);
   if (updateError) {
     console.error("License send bookkeeping failed:", updateError.message);
