@@ -271,7 +271,7 @@ export async function listOrders(): Promise<AdminOrder[]> {
     invoiceFailed: !o.billingo_invoice_number && failures.has(o.id),
     invoiceErrorMessage: failures.get(o.id) ?? null,
     licenseSentAt: o.license_sent_at ?? null,
-    licenseKey: o.license_key ?? null,
+
   }));
 }
 
