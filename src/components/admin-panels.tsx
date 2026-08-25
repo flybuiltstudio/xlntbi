@@ -2201,8 +2201,11 @@ export function ProductOrderPanel() {
       <p className="mt-2 text-sm text-muted-foreground">
         A kategóriákat a kártya fejlécénél megfogva, húzással sorba rendezheted — ez a sorrend
         mentés után a Termékek oldalon is érvényes. A nyilakkal rendezhetsz a kategórián belül, a
-        legördülővel pedig áthelyezheted a terméket másik kategóriába (a lista végére kerül).
+        legördülővel pedig áthelyezheted a terméket másik kategóriába (a lista végére kerül). CSV-ből
+        is importálhatod a sorrendet — a formátum megegyezik a „CSV export” fájllal
+        (tipus;kulcs;kategoria;sorrend).
       </p>
+
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
         <button
