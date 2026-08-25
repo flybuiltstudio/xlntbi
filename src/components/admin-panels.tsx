@@ -16,6 +16,8 @@ import {
   adminListProductPlacements,
   adminListUsers,
   adminResetProductPlacements,
+  adminListProductCategoryOrder,
+  adminSaveProductCategoryOrder,
   adminResendDownload,
   adminSaveProductPlacements,
   adminSendLicense,
@@ -24,7 +26,7 @@ import {
   adminUploadCalculatorVersion,
 } from "@/lib/admin.functions";
 import { formatPrice, products } from "@/lib/products";
-import { applyPlacements, productCategories } from "@/lib/product-categories";
+import { applyPlacements, productCategories, sortCategories } from "@/lib/product-categories";
 import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
