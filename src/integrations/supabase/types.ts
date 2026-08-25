@@ -61,6 +61,77 @@ export type Database = {
           },
         ]
       }
+      billingo_invoice_snapshots: {
+        Row: {
+          billingo_invoice_id: number
+          created_at: string
+          currency: string | null
+          fetched_at: string
+          fulfillment_date: string | null
+          gross_total: number | null
+          id: string
+          invoice_date: string | null
+          invoice_number: string | null
+          invoice_type: string | null
+          items: Json
+          net_total: number | null
+          order_id: string | null
+          paid: boolean | null
+          payment_method: string | null
+          raw: Json | null
+          vat_labels: string[] | null
+          vat_total: number | null
+        }
+        Insert: {
+          billingo_invoice_id: number
+          created_at?: string
+          currency?: string | null
+          fetched_at?: string
+          fulfillment_date?: string | null
+          gross_total?: number | null
+          id?: string
+          invoice_date?: string | null
+          invoice_number?: string | null
+          invoice_type?: string | null
+          items?: Json
+          net_total?: number | null
+          order_id?: string | null
+          paid?: boolean | null
+          payment_method?: string | null
+          raw?: Json | null
+          vat_labels?: string[] | null
+          vat_total?: number | null
+        }
+        Update: {
+          billingo_invoice_id?: number
+          created_at?: string
+          currency?: string | null
+          fetched_at?: string
+          fulfillment_date?: string | null
+          gross_total?: number | null
+          id?: string
+          invoice_date?: string | null
+          invoice_number?: string | null
+          invoice_type?: string | null
+          items?: Json
+          net_total?: number | null
+          order_id?: string | null
+          paid?: boolean | null
+          payment_method?: string | null
+          raw?: Json | null
+          vat_labels?: string[] | null
+          vat_total?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billingo_invoice_snapshots_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       calculator_overrides: {
         Row: {
           file_name: string
