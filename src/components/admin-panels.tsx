@@ -28,6 +28,146 @@ import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
 
+type InvoiceSnapshotItemView = {
+  name: string;
+  quantity: number | null;
+  unit: string | null;
+  vat: string | null;
+  entitlement: string | null;
+  netUnitAmount: number | null;
+  netAmount: number | null;
+  vatAmount: number | null;
+  grossAmount: number | null;
+};
+
+type InvoiceSnapshotView = {
+  invoiceId: number;
+  invoiceNumber: string | null;
+  invoiceType: string | null;
+  currency: string | null;
+  invoiceDate: string | null;
+  fulfillmentDate: string | null;
+  paymentMethod: string | null;
+  paid: boolean | null;
+  netTotal: number | null;
+  grossTotal: number | null;
+  vatTotal: number | null;
+  vatLabels: string[];
+  items: InvoiceSnapshotItemView[];
+  fetchedAt: string;
+  stored: boolean;
+};
+
+type InvoiceSnapshotState = {
+  loading: boolean;
+  snapshot?: InvoiceSnapshotView;
+  error?: string;
+};
+
+const amountFormat = new Intl.NumberFormat("hu-HU", { maximumFractionDigits: 2 });
+
+function amount(value: number | null, currency: string | null): string {
+  if (value === null) return "–";
+  return `${amountFormat.format(value)} ${currency === "HUF" || !currency ? "Ft" : currency}`;
+}
+
+function InvoiceSnapshotBlock({
+  state,
+  onRefresh,
+}: {
+  state: InvoiceSnapshotState;
+  onRefresh: () => void;
+}) {
+  if (state.loading) {
+    return (
+      <p className="mt-3 rounded-md border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+        Számlaadatok betöltése…
+      </p>
+    );
+  }
+  if (state.error) {
+    return (
+      <p className="mt-3 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-xs text-destructive">
+        {state.error}
+      </p>
+    );
+  }
+  const s = state.snapshot;
+  if (!s) return null;
+
+  return (
+    <div className="mt-3 rounded-md border border-border bg-muted/30 p-3 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h4 className="text-sm font-semibold text-foreground">
+          Számla adatai — {s.invoiceNumber ?? `#${s.invoiceId}`}
+        </h4>
+        <button
+          type="button"
+          onClick={onRefresh}
+          className="rounded-md border border-input px-3 py-1 text-[11px] font-semibold text-foreground hover:bg-accent"
+        >
+          Frissítés a Billingóból
+        </button>
+      </div>
+      <dl className="mt-2 grid gap-x-6 gap-y-1 text-muted-foreground sm:grid-cols-2">
+        <div>
+          <dt className="inline font-semibold">Sorszám: </dt>
+          <dd className="inline">{s.invoiceNumber ?? "–"}</dd>
+        </div>
+        <div>
+          <dt className="inline font-semibold">ÁFA-kulcs: </dt>
+          <dd className="inline">{s.vatLabels.length ? s.vatLabels.join(", ") : "–"}</dd>
+        </div>
+        <div>
+          <dt className="inline font-semibold">Nettó: </dt>
+          <dd className="inline">{amount(s.netTotal, s.currency)}</dd>
+        </div>
+        <div>
+          <dt className="inline font-semibold">ÁFA összege: </dt>
+          <dd className="inline">{amount(s.vatTotal, s.currency)}</dd>
+        </div>
+        <div>
+          <dt className="inline font-semibold">Bruttó: </dt>
+          <dd className="inline">{amount(s.grossTotal, s.currency)}</dd>
+        </div>
+        <div>
+          <dt className="inline font-semibold">Fizetve a Billingóban: </dt>
+          <dd className="inline">{s.paid === null ? "–" : s.paid ? "igen" : "nem"}</dd>
+        </div>
+        <div>
+          <dt className="inline font-semibold">Számla kelte: </dt>
+          <dd className="inline">{s.invoiceDate ?? "–"}</dd>
+        </div>
+        <div>
+          <dt className="inline font-semibold">Teljesítés: </dt>
+          <dd className="inline">{s.fulfillmentDate ?? "–"}</dd>
+        </div>
+        <div>
+          <dt className="inline font-semibold">Fizetési mód: </dt>
+          <dd className="inline">{s.paymentMethod ?? "–"}</dd>
+        </div>
+        <div>
+          <dt className="inline font-semibold">Adatok frissítve: </dt>
+          <dd className="inline">{new Date(s.fetchedAt).toLocaleString("hu-HU")}</dd>
+        </div>
+      </dl>
+
+      {s.items.length ? (
+        <ul className="mt-3 space-y-1">
+          {s.items.map((item, index) => (
+            <li key={`${item.name}-${index}`} className="text-muted-foreground">
+              <span className="font-semibold text-foreground">{item.name}</span> ·{" "}
+              {item.quantity ?? "–"} {item.unit ?? ""} · ÁFA: {item.vat ?? "–"}
+              {item.entitlement ? ` (${item.entitlement})` : ""} · nettó{" "}
+              {amount(item.netAmount, s.currency)} · bruttó {amount(item.grossAmount, s.currency)}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
 export function filterChip(active: boolean) {
   return `rounded-md px-3.5 py-1.5 text-sm font-semibold transition-colors ${
     active
@@ -589,6 +729,15 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     >
                       Számla letöltése
                     </button>
+                    <button
+                      type="button"
+                      disabled={busy === order.id}
+                      onClick={() => void onShowInvoiceData(order, false)}
+                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                      title="A Billingo számla adatai (AAM, nettó/bruttó, sorszám)"
+                    >
+                      {snapshots[order.id] ? "Számla adatai elrejtése" : "Számla adatai"}
+                    </button>
                   </>
                 ) : null}
                 <a
@@ -598,6 +747,13 @@ export function OrdersPanel({ email }: { email: string | null }) {
                   E-mail a vevőnek
                 </a>
               </div>
+
+              {snapshots[order.id] ? (
+                <InvoiceSnapshotBlock
+                  state={snapshots[order.id]!}
+                  onRefresh={() => void onShowInvoiceData(order, true)}
+                />
+              ) : null}
             </article>
           ))}
         </div>
