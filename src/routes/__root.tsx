@@ -141,11 +141,14 @@ function RootComponent() {
 
   useEffect(() => {
     // Notify analytics of client-side route changes so GA4 records page_views.
-    return router.subscribe("onBeforeLoad", () => {
+    const dispose = router.subscribe("onResolved", () => {
       window.dispatchEvent(
-        new CustomEvent("xlntbi:route-change", { detail: { path: location.pathname } }),
+        new CustomEvent("xlntbi:route-change", {
+          detail: { path: window.location.pathname },
+        }),
       );
     });
+    return () => dispose();
   }, [router]);
 
   return (
