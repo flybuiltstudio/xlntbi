@@ -470,7 +470,7 @@ export async function sendLicense(
   const sentAt = new Date().toISOString();
   const { error: updateError } = await (supabaseAdmin as any)
     .from("orders")
-    .update({ license_sent_at: sentAt, license_key: licenseKey })
+    .update({ license_sent_at: sentAt })
     .eq("id", orderId);
   if (updateError) {
     console.error("License send bookkeeping failed:", updateError.message);
