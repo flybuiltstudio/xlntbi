@@ -116,7 +116,7 @@ export function CookieConsent() {
             </p>
 
             {details && (
-              <div className="mt-4 space-y-3 rounded-lg border border-border bg-muted/40 p-4">
+              <div className="mt-3 space-y-2 rounded-lg border border-border bg-muted/40 p-3">
                 <label className="flex items-start gap-3 text-sm">
                   <input
                     type="checkbox"
