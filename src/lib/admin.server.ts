@@ -21,6 +21,9 @@ export type AdminOrder = {
   paymentReference: string | null;
   billingoInvoiceId: number | null;
   billingoInvoiceNumber: string | null;
+  /** Latest Billingo attempt failed and no invoice exists yet. */
+  invoiceFailed: boolean;
+  invoiceErrorMessage: string | null;
 };
 
 /**
