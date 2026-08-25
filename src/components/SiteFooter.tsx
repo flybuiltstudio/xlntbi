@@ -41,22 +41,22 @@ export function SiteFooter() {
       <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/95 via-brand-dark/90 to-brand-dark/80" />
 
       <div className="relative border-b border-primary-foreground/20">
-        <div className="mx-auto max-w-6xl px-4 py-8">
+        <div className="mx-auto max-w-6xl px-4 py-10">
           <div className="flex flex-col items-center justify-center gap-8 sm:flex-row sm:justify-between sm:gap-4">
             <img
               src={dspLogo.url}
               alt="Demján Sándor Program logó"
-              className="h-[72px] w-auto object-contain"
+              className="h-[177px] w-auto object-contain"
               loading="lazy"
             />
             <img
               src={neumannLogo.url}
               alt="Neumann János Nonprofit Kft. logó"
-              className="h-[52px] w-auto object-contain"
+              className="h-[112px] w-auto object-contain"
               loading="lazy"
             />
           </div>
-          <p className="mt-6 text-center text-sm opacity-80">
+          <p className="mt-8 text-center text-[11px] opacity-60">
             A weboldal a Demján Sándor Program keretében és támogatásával valósult meg.
           </p>
         </div>

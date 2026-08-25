@@ -88,14 +88,14 @@ export function CookieConsent() {
       aria-label="Cookie-hozzájárulás"
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/98 shadow-[0_-8px_30px_rgba(0,0,0,0.18)] backdrop-blur"
     >
-      <div className="mx-auto max-w-6xl px-4 py-5">
-        <div className="flex items-start gap-3">
-          <Cookie className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
+      <div className="mx-auto max-w-6xl px-4 py-3">
+        <div className="flex items-start gap-2.5">
+          <Cookie className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
           <div className="flex-1">
-            <h2 className="text-base font-semibold text-foreground">
+            <h2 className="text-sm font-semibold text-foreground">
               Cookie-k és adatkezelés
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-1 text-xs text-muted-foreground">
               A működéshez szükséges cookie-kat mindig használjuk. Statisztikai és marketing
               célú cookie-kat csak a hozzájárulásoddal helyezünk el, és a hozzájárulás bármikor
               visszavonható. Részletek:{" "}
@@ -116,7 +116,7 @@ export function CookieConsent() {
             </p>
 
             {details && (
-              <div className="mt-4 space-y-3 rounded-lg border border-border bg-muted/40 p-4">
+              <div className="mt-3 space-y-2 rounded-lg border border-border bg-muted/40 p-3">
                 <label className="flex items-start gap-3 text-sm">
                   <input
                     type="checkbox"
@@ -165,18 +165,18 @@ export function CookieConsent() {
               </div>
             )}
 
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => decide(true, true)}
-                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                className="inline-flex items-center justify-center rounded-md bg-primary px-3.5 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 Mindet elfogadom
               </button>
               <button
                 type="button"
                 onClick={() => decide(false, false)}
-                className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+                className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
               >
                 Csak a szükségeseket
               </button>
@@ -184,7 +184,7 @@ export function CookieConsent() {
                 <button
                   type="button"
                   onClick={() => decide(statistics, marketing)}
-                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
                 >
                   Kiválasztottak mentése
                 </button>
@@ -192,7 +192,7 @@ export function CookieConsent() {
                 <button
                   type="button"
                   onClick={() => setDetails(true)}
-                  className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-foreground underline underline-offset-4 transition-colors hover:text-primary"
+                  className="inline-flex items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-medium text-foreground underline underline-offset-4 transition-colors hover:text-primary"
                 >
                   Beállítások
                 </button>
