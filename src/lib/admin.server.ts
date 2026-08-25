@@ -382,6 +382,61 @@ export async function resendDownload(orderId: string): Promise<{ ok: boolean; er
   return { ok: true };
 }
 
+/** Internal address that receives a copy of every license e-mail. */
+const LICENSE_BCC = "xllentac@gmail.com";
+
+/**
+ * Sends the license key of a paid order to the buyer, with a copy to the
+ * internal address. The managed email API has no BCC field, so the copy is a
+ * separate send of the same rendered template.
+ */
+export async function sendLicense(
+  orderId: string,
+  licenseKey: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("*")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (!order) return { ok: false, error: "A megrendelés nem található." };
+  if (order.payment_status !== "paid") {
+    return { ok: false, error: "Licenszkód csak rendezett megrendeléshez küldhető." };
+  }
+
+  const data = {
+    name: order.billing_name as string,
+    orderNumber: order.order_number as string,
+    productName: order.product_name as string,
+    tierLabel: (order.tier_label as string | null) ?? "",
+    licenseKey,
+  };
+
+  const { sendEmails } = await import("./notify.server");
+  const stamp = Date.now();
+  const ok = await sendEmails([
+    {
+      template: "licensz-kod",
+      to: order.email as string,
+      key: `${order.id}-${stamp}`,
+      data,
+      replyTo: "info@xlntbi.hu",
+    },
+    {
+      template: "licensz-kod",
+      to: LICENSE_BCC,
+      key: `${order.id}-${stamp}-copy`,
+      data,
+      replyTo: "info@xlntbi.hu",
+    },
+  ]);
+
+  if (!ok) return { ok: false, error: "A licenszkód kiküldése nem sikerült." };
+  return { ok: true };
+}
+
 // ---------------------------------------------------------------------------
 // Admin payment test mode
 // ---------------------------------------------------------------------------
