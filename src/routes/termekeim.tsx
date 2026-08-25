@@ -52,8 +52,8 @@ const features = [
 
 function TermekeimPage() {
   const { kategoria: openKey } = Route.useSearch();
-  const { placements } = Route.useLoaderData();
-  const categories = applyPlacements(placements);
+  const { placements, categoryOrder } = Route.useLoaderData();
+  const categories = applyPlacements(placements, categoryOrder);
   const open = getCategory(openKey, categories);
   return (
 
