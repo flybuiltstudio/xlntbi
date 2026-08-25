@@ -21,6 +21,9 @@ export type AdminOrder = {
   paymentReference: string | null;
   billingoInvoiceId: number | null;
   billingoInvoiceNumber: string | null;
+  /** Latest Billingo attempt failed and no invoice exists yet. */
+  invoiceFailed: boolean;
+  invoiceErrorMessage: string | null;
 };
 
 /**
@@ -219,7 +222,29 @@ export async function listOrders(): Promise<AdminOrder[]> {
     return [];
   }
 
-  return (data ?? []).map((o: any) => ({
+  const rows = data ?? [];
+
+  // Latest failed Billingo attempt per order, so the orders list can offer a
+  // retry button without opening the invoicing log page.
+  const failures = new Map<string, string | null>();
+  if (rows.length > 0) {
+    const { data: logs } = await (supabaseAdmin as any)
+      .from("billingo_invoice_logs")
+      .select("order_id, status, error_message, created_at")
+      .in(
+        "order_id",
+        rows.map((o: any) => o.id),
+      )
+      .order("created_at", { ascending: true })
+      .limit(1000);
+    for (const log of (logs ?? []) as any[]) {
+      if (!log.order_id) continue;
+      if (log.status === "error") failures.set(log.order_id, log.error_message ?? null);
+      else failures.delete(log.order_id);
+    }
+  }
+
+  return rows.map((o: any) => ({
     id: o.id,
     orderNumber: o.order_number,
     createdAt: o.created_at,
@@ -240,6 +265,8 @@ export async function listOrders(): Promise<AdminOrder[]> {
     paymentReference: o.payment_reference ?? null,
     billingoInvoiceId: o.billingo_invoice_id ?? null,
     billingoInvoiceNumber: o.billingo_invoice_number ?? null,
+    invoiceFailed: !o.billingo_invoice_number && failures.has(o.id),
+    invoiceErrorMessage: failures.get(o.id) ?? null,
   }));
 }
 
@@ -379,6 +406,61 @@ export async function resendDownload(orderId: string): Promise<{ ok: boolean; er
     email: order.email as string,
   });
 
+  return { ok: true };
+}
+
+/** Internal address that receives a copy of every license e-mail. */
+const LICENSE_BCC = "xllentac@gmail.com";
+
+/**
+ * Sends the license key of a paid order to the buyer, with a copy to the
+ * internal address. The managed email API has no BCC field, so the copy is a
+ * separate send of the same rendered template.
+ */
+export async function sendLicense(
+  orderId: string,
+  licenseKey: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("*")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (!order) return { ok: false, error: "A megrendelés nem található." };
+  if (order.payment_status !== "paid") {
+    return { ok: false, error: "Licenszkód csak rendezett megrendeléshez küldhető." };
+  }
+
+  const data = {
+    name: order.billing_name as string,
+    orderNumber: order.order_number as string,
+    productName: order.product_name as string,
+    tierLabel: (order.tier_label as string | null) ?? "",
+    licenseKey,
+  };
+
+  const { sendEmails } = await import("./notify.server");
+  const stamp = Date.now();
+  const ok = await sendEmails([
+    {
+      template: "licensz-kod",
+      to: order.email as string,
+      key: `${order.id}-${stamp}`,
+      data,
+      replyTo: "info@xlntbi.hu",
+    },
+    {
+      template: "licensz-kod",
+      to: LICENSE_BCC,
+      key: `${order.id}-${stamp}-copy`,
+      data,
+      replyTo: "info@xlntbi.hu",
+    },
+  ]);
+
+  if (!ok) return { ok: false, error: "A licenszkód kiküldése nem sikerült." };
   return { ok: true };
 }
 

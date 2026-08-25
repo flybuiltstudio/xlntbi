@@ -18,6 +18,7 @@ import {
   adminResetProductPlacements,
   adminResendDownload,
   adminSaveProductPlacements,
+  adminSendLicense,
   adminRetryInvoice,
   adminUpdateUserRole,
   adminUploadCalculatorVersion,
@@ -289,16 +290,20 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const retryInvoice = useServerFn(adminRetryInvoice);
   const invoiceUrl = useServerFn(adminInvoiceUrl);
   const invoiceSnapshot = useServerFn(adminInvoiceSnapshot);
+  const sendLicense = useServerFn(adminSendLicense);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid">("all");
+  const [methodFilter, setMethodFilter] = useState<"all" | "stripe" | "transfer">("all");
   const [snapshots, setSnapshots] = useState<Record<string, InvoiceSnapshotState>>({});
   const [invoiceFilter, setInvoiceFilter] = useState<"all" | "invoiced" | "not-invoiced">("all");
   const [yearSel, setYearSel] = useState<number | "all">("all");
   const [monthSel, setMonthSel] = useState<number | "all">("all");
+  const [licenseFor, setLicenseFor] = useState<Order | null>(null);
+  const [licenseKey, setLicenseKey] = useState("");
 
   const years = useMemo(() => {
     const set = new Set<number>();
@@ -314,6 +319,8 @@ export function OrdersPanel({ email }: { email: string | null }) {
       (orders ?? []).filter((order) => {
         if (payFilter === "paid" && order.paymentStatus !== "paid") return false;
         if (payFilter === "unpaid" && order.paymentStatus === "paid") return false;
+        if (methodFilter === "stripe" && order.paymentProvider !== "stripe") return false;
+        if (methodFilter === "transfer" && order.paymentProvider === "stripe") return false;
         if (invoiceFilter === "invoiced" && !order.billingoInvoiceNumber) return false;
         if (invoiceFilter === "not-invoiced" && order.billingoInvoiceNumber) return false;
         const date = new Date(order.createdAt);
@@ -321,7 +328,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
         if (activeMonth !== "all" && date.getMonth() !== activeMonth) return false;
         return true;
       }),
-    [orders, payFilter, invoiceFilter, activeYear, activeMonth],
+    [orders, payFilter, methodFilter, invoiceFilter, activeYear, activeMonth],
   );
 
   const selectYear = (y: number | "all") => {
@@ -412,6 +419,34 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
+  async function onSendLicense() {
+    const order = licenseFor;
+    if (!order) return;
+    const key = licenseKey.trim();
+    if (key.length < 8) {
+      setMessage("Add meg a licenszkódot.");
+      return;
+    }
+    setBusy(order.id);
+    setMessage("");
+    try {
+      const result = await sendLicense({ data: { orderId: order.id, licenseKey: key } });
+      setMessage(
+        result.ok
+          ? `${order.orderNumber}: licenszkód kiküldve a vevőnek (másolat: xllentac@gmail.com).`
+          : (result.error ?? "Hiba történt."),
+      );
+      if (result.ok) {
+        setLicenseFor(null);
+        setLicenseKey("");
+      }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
+
   async function onRetryInvoice(order: Order) {
     setBusy(order.id);
     setMessage("");
@@ -500,6 +535,27 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 type="button"
                 className={filterChip(payFilter === opt.id)}
                 onClick={() => setPayFilter(opt.id)}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Fizetési mód
+            </span>
+            {(
+              [
+                { id: "all", label: "Összes" },
+                { id: "transfer", label: "Átutalás" },
+                { id: "stripe", label: "Kártyás (Stripe)" },
+              ] as const
+            ).map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                className={filterChip(methodFilter === opt.id)}
+                onClick={() => setMethodFilter(opt.id)}
               >
                 {opt.label}
               </button>
@@ -709,6 +765,36 @@ export function OrdersPanel({ email }: { email: string | null }) {
                         : "Számlázás"}
                   </button>
                 ) : null}
+                {order.paymentStatus === "paid" ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => {
+                      setLicenseFor(licenseFor?.id === order.id ? null : order);
+                      setLicenseKey("");
+                      setMessage("");
+                    }}
+                    className="rounded-md border border-primary/40 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 disabled:opacity-60"
+                    title="Licenszkód kiküldése a vevőnek e-mailben"
+                  >
+                    {licenseFor?.id === order.id ? "Licensz küldése – mégsem" : "Licensz küldése"}
+                  </button>
+                ) : null}
+                {order.invoiceFailed ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => void onRetryInvoice(order)}
+                    className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
+                    title={
+                      order.invoiceErrorMessage
+                        ? `Korábbi hiba: ${order.invoiceErrorMessage}`
+                        : "A korábbi számlakiállítás hibára futott"
+                    }
+                  >
+                    {busy === order.id ? "Feldolgozás…" : "Billingo számla újraküldése"}
+                  </button>
+                ) : null}
                 {order.billingoInvoiceId ? (
                   <>
                     <button
@@ -747,6 +833,59 @@ export function OrdersPanel({ email }: { email: string | null }) {
                   E-mail a vevőnek
                 </a>
               </div>
+
+              {licenseFor?.id === order.id ? (
+                <div className="mt-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
+                  <label
+                    htmlFor={`license-${order.id}`}
+                    className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                  >
+                    Licenszkód
+                  </label>
+                  <input
+                    id={`license-${order.id}`}
+                    type="text"
+                    autoFocus
+                    spellCheck={false}
+                    autoComplete="off"
+                    value={licenseKey}
+                    onChange={(e) => setLicenseKey(e.target.value.trim())}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        void onSendLicense();
+                      }
+                    }}
+                    placeholder="X000-0000-0000-0000-0202-6083-1000-0000-0202-6081-1689-B92F-E556-1813-8C18-79F6-C"
+                    className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-xs tracking-tight text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none"
+                  />
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    A kód egyben beilleszthető a vágólapról. A levél a vevőnek megy, másolatban
+                    az xllentac@gmail.com címre, feladó: noreply@notify.xlntbi.hu.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      disabled={busy === order.id || licenseKey.trim().length < 8}
+                      onClick={() => void onSendLicense()}
+                      className="rounded-md bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-brand-dark disabled:opacity-60"
+                    >
+                      {busy === order.id ? "Küldés…" : "Licenszkód elküldése"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLicenseFor(null);
+                        setLicenseKey("");
+                      }}
+                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
+                    >
+                      Mégsem
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+
 
               {snapshots[order.id] ? (
                 <InvoiceSnapshotBlock
