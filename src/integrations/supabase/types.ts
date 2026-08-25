@@ -395,6 +395,27 @@ export type Database = {
         }
         Relationships: []
       }
+      product_category_order: {
+        Row: {
+          key: string
+          sort_order: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          key: string
+          sort_order?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          key?: string
+          sort_order?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       product_placements: {
         Row: {
           category: string
