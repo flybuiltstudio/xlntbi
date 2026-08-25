@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { Facebook, Mail, Phone } from "lucide-react";
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 import heroImg from "@/assets/bcg-savok.jpg";
+import dspLogo from "@/assets/dsp-logo-feher.png.asset.json";
+import neumannLogo from "@/assets/neumann-logo-feher.png.asset.json";
 
 const pages = [
   { to: "/", label: "Főoldal" },
