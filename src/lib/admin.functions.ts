@@ -313,3 +313,28 @@ export const adminResetProductPlacements = createServerFn({ method: "POST" })
     const { resetProductPlacements } = await import("./admin.server");
     return resetProductPlacements();
   });
+
+export const adminBillingoWebhookState = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { billingoWebhookState } = await import("./admin.server");
+    return billingoWebhookState();
+  });
+
+export const adminSetBillingoWebhook = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ enabled: z.boolean() }).parse(data))
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { setBillingoWebhookEnabled } = await import("./admin.server");
+    return setBillingoWebhookEnabled(data.enabled, (context as any).userId);
+  });
+
+export const adminBillingoAudit = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { billingoInvoiceAudit } = await import("./admin.server");
+    return billingoInvoiceAudit();
+  });

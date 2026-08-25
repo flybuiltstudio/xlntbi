@@ -7,6 +7,9 @@ import { createFileRoute } from "@tanstack/react-router";
  * shared secret passed either as `?secret=` or in the `x-webhook-secret`
  * header. The payload itself is never trusted: the document is re-fetched from
  * the Billingo API before anything is written.
+ *
+ * The endpoint can be switched off from the admin UI (`app_settings` →
+ * `billingo_webhook.enabled`); while off it answers 410 and processes nothing.
  */
 function authorized(request: Request): boolean {
   const expected = process.env["BILLINGO_WEBHOOK_SECRET"];
@@ -40,34 +43,33 @@ async function readPayload(request: Request): Promise<any> {
 export const Route = createFileRoute("/api/public/billingo/webhook")({
   server: {
     handlers: {
-      // Billingo webhook — kikapcsolva (nincs webhook beállítva a Billingo fiókban).
-      // Újraaktiváláshoz cseréld vissza az alábbi POST handlerre:
-      //
-      // POST: async ({ request }) => {
-      //   if (!authorized(request)) {
-      //     return new Response("Unauthorized", { status: 401 });
-      //   }
-      //   try {
-      //     const payload = await readPayload(request);
-      //     const { handleBillingoWebhook } = await import("@/lib/billingo-webhook.server");
-      //     const result = await handleBillingoWebhook(payload);
-      //     if (!result.handled) {
-      //       console.log("Billingo webhook skipped:", result.reason);
-      //     } else {
-      //       console.log(
-      //         `Billingo webhook: ${result.orderNumber} → számla ${result.invoiceNumber ?? "-"}${
-      //           result.markedPaid ? " (fizetettre állítva)" : ""
-      //         }`,
-      //       );
-      //     }
-      //     return Response.json({ received: true, ...result });
-      //   } catch (e) {
-      //     console.error("Billingo webhook error:", e);
-      //     return new Response("Webhook error", { status: 400 });
-      //   }
-      // },
-      POST: async () =>
-        new Response("Billingo webhook disabled", { status: 410 }),
+      POST: async ({ request }) => {
+        const { billingoWebhookEnabled } = await import("@/lib/app-settings.server");
+        if (!(await billingoWebhookEnabled())) {
+          return new Response("Billingo webhook disabled", { status: 410 });
+        }
+        if (!authorized(request)) {
+          return new Response("Unauthorized", { status: 401 });
+        }
+        try {
+          const payload = await readPayload(request);
+          const { handleBillingoWebhook } = await import("@/lib/billingo-webhook.server");
+          const result = await handleBillingoWebhook(payload);
+          if (!result.handled) {
+            console.log("Billingo webhook skipped:", result.reason);
+          } else {
+            console.log(
+              `Billingo webhook: ${result.orderNumber} → számla ${result.invoiceNumber ?? "-"}${
+                result.markedPaid ? " (fizetettre állítva)" : ""
+              }`,
+            );
+          }
+          return Response.json({ received: true, ...result });
+        } catch (e) {
+          console.error("Billingo webhook error:", e);
+          return new Response("Webhook error", { status: 400 });
+        }
+      },
     },
   },
 });

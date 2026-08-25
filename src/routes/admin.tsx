@@ -177,6 +177,13 @@ function AdminLayout() {
                 Számlázás
               </Link>
               <Link
+                to="/admin/billingo-ellenorzes"
+                className={tabBase}
+                activeProps={{ className: `${tabBase} ${tabActive}` }}
+              >
+                Billingo ellenőrzés
+              </Link>
+              <Link
                 to="/admin/fizetes-teszt"
                 className={tabBase}
                 activeProps={{ className: `${tabBase} ${tabActive}` }}
