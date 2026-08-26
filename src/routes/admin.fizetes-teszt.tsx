@@ -9,6 +9,7 @@ import {
   adminListTestOrders,
 } from "@/lib/admin.functions";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { FullPurchaseTestPanel } from "@/components/FullPurchaseTestPanel";
 import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
 import { PageHero } from "@/components/PageHero";
 import { formatPrice, getProduct, getTier, products } from "@/lib/products";
@@ -63,6 +64,7 @@ function PaymentTestPage() {
           fizetés után a rendszer az éles folyamathoz hasonlóan kiküldi a visszaigazolást és a
           letöltési linket a megadott e-mail címre.
         </p>
+        <FullPurchaseTestPanel />
         <TestPanel />
       </div>
     </>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { z } from "zod";
 
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { PaymentEnvironmentNotice } from "@/components/PaymentEnvironmentNotice";
 import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
 import { AAM_PRICE_NOTE_SHORT, aamText } from "@/lib/aam";
 import { isCardPaymentAvailable } from "@/lib/stripe";
@@ -132,6 +133,7 @@ function OrderPage() {
           A fizetés befejezéséhez töltsd ki az alábbi biztonságos fizetési űrlapot. A
           visszaigazolást és a számlát a sikeres fizetés után küldöm e-mailben.
         </p>
+        <PaymentEnvironmentNotice className="mt-6" />
         <StripeOrderCheckout
           priceId={tier.priceId}
           quantity={quantity}
@@ -353,6 +355,7 @@ function OrderPage() {
 
         <fieldset className="mt-8">
           <legend className="text-sm font-semibold text-foreground">Fizetési mód</legend>
+          <PaymentEnvironmentNotice className="mt-3" />
           <div className="mt-3 space-y-2">
             {cardAvailable ? (
               <label className="flex items-start gap-3 rounded-md border border-border p-3 text-sm text-foreground">

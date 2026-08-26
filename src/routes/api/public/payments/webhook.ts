@@ -16,6 +16,29 @@ async function handleWebhook(request: Request, env: StripeEnv) {
       await fulfil(event.data.object);
       break;
     }
+    case "checkout.session.expired": {
+      await unwind(event.data.object, "A fizetési munkamenet lejárt (Stripe).");
+      break;
+    }
+    case "checkout.session.async_payment_failed": {
+      await unwind(event.data.object, "A késleltetett fizetés meghiúsult (Stripe).");
+      break;
+    }
+    case "payment_intent.payment_failed": {
+      await unwindByPaymentIntent(
+        event.data.object,
+        "A bankkártyás fizetés meghiúsult (Stripe).",
+      );
+      break;
+    }
+    case "payment_intent.canceled": {
+      await unwindByPaymentIntent(event.data.object, "A fizetést lemondták (Stripe).");
+      break;
+    }
+    case "charge.refunded": {
+      await unwindByPaymentIntent(event.data.object, "A fizetés visszatérítve (Stripe).");
+      break;
+    }
     default:
       console.log("Unhandled Stripe event:", event.type);
   }
@@ -34,6 +57,63 @@ async function fulfil(session: any) {
 
   const { markOrderPaid } = await import("@/lib/order-paid.server");
   await markOrderPaid({ orderNumber, paymentReference });
+}
+
+/**
+ * Stripe payment failed / expired / cancelled / refunded: storno the Billingo
+ * invoice if one was already issued, and mark the order accordingly.
+ */
+async function unwindOrder(orderNumber: string, reason: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("*")
+    .eq("order_number", orderNumber)
+    .maybeSingle();
+  if (!order) {
+    console.error("Failed-payment order not found:", orderNumber);
+    return;
+  }
+
+  const { cancelInvoiceForOrder } = await import("@/lib/billingo.server");
+  await cancelInvoiceForOrder(order as any, { reason, source: "stripe_cancel" });
+
+  await (supabaseAdmin as any)
+    .from("orders")
+    .update({
+      payment_status: "failed",
+      status: order.status === "paid" ? "payment_failed" : order.status,
+    })
+    .eq("id", order.id);
+}
+
+async function unwind(session: any, reason: string) {
+  const orderNumber = session?.metadata?.orderNumber;
+  if (!orderNumber) return;
+  await unwindOrder(orderNumber, reason);
+}
+
+async function unwindByPaymentIntent(object: any, reason: string) {
+  const orderNumber = object?.metadata?.orderNumber;
+  if (orderNumber) {
+    await unwindOrder(orderNumber, reason);
+    return;
+  }
+  const paymentIntentId =
+    typeof object?.payment_intent === "string" ? object.payment_intent : object?.id;
+  if (!paymentIntentId) return;
+
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("order_number")
+    .eq("payment_reference", paymentIntentId)
+    .maybeSingle();
+  if (!order) {
+    console.error("Failed-payment order not found for payment intent:", paymentIntentId);
+    return;
+  }
+  await unwindOrder(order.order_number as string, reason);
 }
 
 export const Route = createFileRoute("/api/public/payments/webhook")({
