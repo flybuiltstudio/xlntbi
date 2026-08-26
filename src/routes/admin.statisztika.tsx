@@ -1332,6 +1332,7 @@ function PageViewStats() {
         year={activeYear}
         month={month}
         fileBase="termek-oldalletoltesek"
+        topN={5}
       />
 
       <PageViewBlock
@@ -1342,6 +1343,7 @@ function PageViewStats() {
         year={activeYear}
         month={month}
         fileBase="szolgaltatas-oldalletoltesek"
+        topN={3}
       />
     </section>
   );
