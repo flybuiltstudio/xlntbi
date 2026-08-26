@@ -362,6 +362,69 @@ export async function issueInvoiceForOrder(
 }
 
 /**
+ * Cancels (storno) the Billingo invoice of an order. Used automatically when a
+ * Stripe payment fails, expires or is refunded after an invoice was already
+ * issued. Idempotent: an order without an invoice id is a no-op, and the
+ * order's invoice reference is cleared so a later successful payment can
+ * invoice again. Never throws.
+ */
+export async function cancelInvoiceForOrder(
+  order: Pick<OrderRow, "id" | "order_number" | "billingo_invoice_id" | "billingo_invoice_number">,
+  options: { reason?: string; source?: InvoiceAttemptSource } = {},
+): Promise<{ ok: boolean; error?: string; skipped?: boolean }> {
+  const source: InvoiceAttemptSource = options.source ?? "stripe_cancel";
+  if (!order.billingo_invoice_id) return { ok: true, skipped: true };
+
+  try {
+    // Billingo v3: POST /documents/{id}/cancel creates the storno document.
+    const result = await billingo(`/documents/${order.billingo_invoice_id}/cancel`, {
+      method: "POST",
+    });
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await (supabaseAdmin as any)
+      .from("orders")
+      .update({
+        billingo_invoice_id: null,
+        billingo_invoice_number: null,
+        note_internal: undefined,
+      })
+      .eq("id", order.id);
+
+    void logInvoiceAttempt({
+      orderId: order.id,
+      orderNumber: order.order_number,
+      source,
+      status: "canceled",
+      invoiceId: order.billingo_invoice_id,
+      invoiceNumber: order.billingo_invoice_number ?? null,
+      errorMessage: options.reason ?? null,
+    });
+    console.log(
+      `Billingo számla sztornózva: ${order.billingo_invoice_number ?? order.billingo_invoice_id}` +
+        ` (rendelés ${order.order_number}, storno id ${result?.id ?? "?"})`,
+    );
+    return { ok: true };
+  } catch (e: any) {
+    const message = e?.message ?? "Ismeretlen hiba";
+    await logInvoiceAttempt({
+      orderId: order.id,
+      orderNumber: order.order_number,
+      source,
+      status: "cancel_error",
+      invoiceId: order.billingo_invoice_id,
+      invoiceNumber: order.billingo_invoice_number ?? null,
+      errorCode: e?.code ?? "UNKNOWN",
+      errorMessage: message,
+    });
+    console.error(`Billingo sztornó sikertelen (${order.order_number}):`, message);
+    return { ok: false, error: message };
+  }
+}
+
+
+
+/**
  * Returns the Billingo public download URL for an already-issued invoice,
  * so the admin can open or download the PDF.
  */
