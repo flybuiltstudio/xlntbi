@@ -391,6 +391,7 @@ export const adminRunPurchaseTest = createServerFn({ method: "POST" })
         tierId: z.string().trim().min(1).max(80),
         email: z.string().trim().email().max(160),
         paymentMethod: z.enum(["card", "transfer"]),
+        environment: z.enum(["sandbox", "live"]).optional().default("sandbox"),
         sendLicenseEmail: z.boolean().optional().default(false),
         cleanup: z.boolean().optional().default(true),
       })

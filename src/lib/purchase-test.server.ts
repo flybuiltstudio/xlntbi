@@ -26,6 +26,7 @@ export type PurchaseTestInput = {
   tierId: string;
   email: string;
   paymentMethod: "card" | "transfer";
+  environment: "sandbox" | "live";
   sendLicenseEmail: boolean;
   cleanup: boolean;
 };
