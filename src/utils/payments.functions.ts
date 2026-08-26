@@ -62,7 +62,11 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
         // AAM (alanyi adómentes) seller: never add tax on top of the listed
         // price — the amount shown on the site is the final amount.
         automatic_tax: { enabled: !AAM_MODE },
-        payment_intent_data: { description: product.name },
+        payment_intent_data: {
+          description: product.name,
+          // Lets failure/refund webhooks resolve the order without a lookup.
+          metadata: { orderNumber: data.orderNumber },
+        },
         metadata: {
           orderNumber: data.orderNumber,
           priceId: data.priceId,

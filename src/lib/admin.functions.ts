@@ -377,3 +377,43 @@ export const adminBillingoAudit = createServerFn({ method: "GET" })
     const { billingoInvoiceAudit } = await import("./admin.server");
     return billingoInvoiceAudit();
   });
+
+// ---------------------------------------------------------------------------
+// Full purchase self-test + live coupon guard
+// ---------------------------------------------------------------------------
+
+export const adminRunPurchaseTest = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        productSlug: z.string().trim().min(2).max(80),
+        tierId: z.string().trim().min(1).max(80),
+        email: z.string().trim().email().max(160),
+        paymentMethod: z.enum(["card", "transfer"]),
+        sendLicenseEmail: z.boolean().optional().default(false),
+        cleanup: z.boolean().optional().default(true),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { runFullPurchaseTest } = await import("./purchase-test.server");
+    return runFullPurchaseTest(data);
+  });
+
+export const adminCouponGuardState = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { couponGuardState } = await import("./coupon-guard.server");
+    return couponGuardState();
+  });
+
+export const adminSweepLiveCoupons = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { sweepLivePromotionCodes } = await import("./coupon-guard.server");
+    return sweepLivePromotionCodes();
+  });
