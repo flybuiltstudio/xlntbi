@@ -2,24 +2,55 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LegalPage } from "@/components/LegalPage";
 import { COMPANY } from "@/lib/company";
 
-const TITLE = "Fizetési és teljesítési feltételek | EXCELlent";
-const DESC =
-  "Hogyan zajlik a digitális termékek megrendelése, a fizetés és a teljesítés a xlntbi.hu oldalon.";
+
+const TITLE = "Fizetés és teljesítés | EXCELlent Business Intelligence";
+const DESCRIPTION = "Tájékoztató az elérhető fizetési módokról és a szolgáltatások, termékek teljesítésének menetéről.";
+const CANONICAL = "https://xlntbi.hu/fizetes-es-teljesites";
 
 export const Route = createFileRoute("/fizetes-es-teljesites")({
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "robots", content: "noindex, follow" },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Fizetés és teljesítés",
+                              "item": "https://xlntbi.hu/fizetes-es-teljesites"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: () => (
     <LegalPage
-      title="Fizetési és teljesítési feltételek"
+      title="Fizetés és teljesítés"
       intro={[
         "Az oldalon kínált termékek digitális termékek, ezért fizikai szállítás nincs: a teljesítés letöltéssel, illetve e-mailben megküldött hozzáféréssel történik.",
       ]}

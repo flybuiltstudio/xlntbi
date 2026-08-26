@@ -11,20 +11,62 @@ const overrideQueryOptions = queryOptions({
   staleTime: 60_000,
 });
 
-const TITLE = "Invoice Dates Calculator – Hungarian VAT dates with live MNB rates | EXCELlent";
-const DESC =
-  "Invoice dates calculator under the Hungarian VAT Act: date of supply, payment deadline and FX date with live NBH (MNB) exchange rates for EUR/GBP/USD. For information only.";
+
+const TITLE = "Invoice Date Calculator | EXCELlent Business Intelligence";
+const DESCRIPTION = "Quickly calculate the performance date and payment deadline of your invoice according to current Hungarian rules.";
+const CANONICAL = "https://xlntbi.hu/kalkulatorok/invoice-dates";
+const OG_IMAGE = "https://xlntbi.hu/og/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
 
 export const Route = createFileRoute("/kalkulatorok/invoice-dates")({
   loader: ({ context }) => context.queryClient.ensureQueryData(overrideQueryOptions),
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/kalkulatorok/szamla-datumok" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/kalkulatorok/invoice-dates" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/kalkulatorok/szamla-datumok" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Kalkulátorok",
+                              "item": "https://xlntbi.hu/kalkulatorok"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "name": "Invoice Date Calculator",
+                              "item": "https://xlntbi.hu/kalkulatorok/invoice-dates"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: InvoiceDatesPage,

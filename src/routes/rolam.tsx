@@ -3,19 +3,75 @@ import { Check, FileText } from "lucide-react";
 import portraitImg from "@/assets/En-modern-konyveloirodaban.jpg";
 import { PageHero } from "@/components/PageHero";
 
-const TITLE = "Rólam – Sarinay Dávid, pénzügyi és kontroller szakember | EXCELlent";
-const DESC =
-  "Sarinay Dávid vagyok: pénzügyi, számviteli, adó- és kontroller szakember, több mint 20 év szakmai tapasztalattal.";
+
+const TITLE = "Rólam: pénzügyi és BI szakértő | EXCELlent Business Intelligence";
+const DESCRIPTION = "Ismerd meg szakmai hátteremet: könyvelés, kontrolling, adótanácsadás és fintech BI tapasztalat vállalkozások szolgálatában.";
+const CANONICAL = "https://xlntbi.hu/rolam";
+const OG_IMAGE = "https://xlntbi.hu/og/En-modern-konyveloirodaban.jpg";
 
 export const Route = createFileRoute("/rolam")({
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "profile" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ProfessionalService",
+              "name": "EXCELlent Business Intelligence",
+              "legalName": "Sarinay Dávid",
+              "description": "Könyvelés, adótanácsadás, kontrolling, könyvvizsgálat és pénzügyi BI tanácsadás vállalkozásoknak.",
+              "url": "https://xlntbi.hu/rolam",
+              "telephone": "+36209622176",
+              "email": "info@xlntbi.hu",
+              "image": "https://xlntbi.hu/og/En-modern-konyveloirodaban.jpg",
+              "areaServed": "HU",
+              "priceRange": "$$",
+              "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "Péterfy Sándor u. 9.",
+                      "postalCode": "1076",
+                      "addressLocality": "Budapest",
+                      "addressCountry": "HU"
+              }
+      }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Rólam",
+                              "item": "https://xlntbi.hu/rolam"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: RolamPage,
@@ -40,7 +96,7 @@ function RolamPage() {
     <div>
       <PageHero>
         <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
-          Sarinay Dávid vagyok,
+          Rólam
         </h1>
       </PageHero>
 
@@ -48,7 +104,7 @@ function RolamPage() {
         <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
             <p className="text-base leading-relaxed text-muted-foreground">
-              pénzügyi, számviteli, adó- és kontroller szakember. A munkám középpontjában a szakmai
+              Sarinay Dávid vagyok, pénzügyi, számviteli, adó- és kontroller szakember. A munkám középpontjában a szakmai
               kiválóság, az automatizálás és a valóban használható megoldások állnak.
             </p>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground">

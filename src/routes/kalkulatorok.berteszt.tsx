@@ -11,20 +11,59 @@ const overrideQueryOptions = queryOptions({
   staleTime: 60_000,
 });
 
-const TITLE = "Bérteszt 2026 – bérszámfejtés kalkulátor | EXCELlent";
-const DESC =
-  "Havi bérszámfejtés 30 jogviszonytípusra: SZJA, TB-járulék, szocho, adóalap-kedvezmények, cafeteria, EKHO. Tájékoztató jellegű kalkulátor.";
+
+const TITLE = "Bérkalkulátor, béreszt vállalkozóknak | EXCELlent Business Intelligence";
+const DESCRIPTION = "Számold ki gyorsan a bruttó bérből a nettó bért, és fordítva, a 2026-os adó- és járulékszabályok szerint.";
+const CANONICAL = "https://xlntbi.hu/kalkulatorok/berteszt";
+const OG_IMAGE = "https://xlntbi.hu/og/berteszt.jpg";
 
 export const Route = createFileRoute("/kalkulatorok/berteszt")({
   loader: ({ context }) => context.queryClient.ensureQueryData(overrideQueryOptions),
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Kalkulátorok",
+                              "item": "https://xlntbi.hu/kalkulatorok"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "name": "Bérkalkulátor",
+                              "item": "https://xlntbi.hu/kalkulatorok/berteszt"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: BertesztPage,
@@ -35,7 +74,7 @@ function BertesztPage() {
   return (
     <>
       <PageHero>
-        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Bérteszt</h1>
+        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Bérkalkulátor</h1>
       </PageHero>
       <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
         <p className="max-w-3xl text-base text-muted-foreground">

@@ -2,19 +2,52 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ContactForm } from "@/components/ContactForm";
 import { PageHero } from "@/components/PageHero";
 
-const TITLE = "Konzultáció kérése – EXCELlent Business Intelligence";
-const DESC =
-  "Kérj konzultációt könyvelés, adótanácsadás, kontrolling, cégaudit vagy Fintech és BI témában. Töltsd ki az űrlapot, és felveszem veled a kapcsolatot.";
+
+const TITLE = "Ingyenes konzultáció foglalása | EXCELlent Business Intelligence";
+const DESCRIPTION = "Foglalj időpontot egy díjmentes konzultációra, és beszéljük át, hogyan segíthetek könyvelésben, kontrollingban vagy adózásban.";
+const CANONICAL = "https://xlntbi.hu/konzultacio";
+const OG_IMAGE = "https://xlntbi.hu/og/kapcsolat-business.jpg";
 
 export const Route = createFileRoute("/konzultacio")({
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Konzultáció",
+                              "item": "https://xlntbi.hu/konzultacio"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: KonzultacioPage,

@@ -76,6 +76,7 @@ function iconFor(label: string): LucideIcon {
 
 export type ServicePageProps = {
   title: string;
+  lead?: string;
   intro: string[];
   ctaLabel: string;
   ctaTo: string;
@@ -96,6 +97,7 @@ export type ServicePageProps = {
 
 export function ServicePage({
   title,
+  lead,
   intro,
   ctaLabel,
   ctaTo,
@@ -112,6 +114,11 @@ export function ServicePage({
         <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
           {title}
         </h1>
+        {lead ? (
+          <p className="mt-3 max-w-3xl text-base leading-relaxed text-primary-foreground/85">
+            {lead}
+          </p>
+        ) : null}
       </PageHero>
 
       <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">

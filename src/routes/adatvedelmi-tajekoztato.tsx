@@ -2,19 +2,50 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LegalPage, type LegalSection } from "@/components/LegalPage";
 import { AUTHORITIES, COMPANY, PROCESSORS } from "@/lib/company";
 
-const TITLE = "Adatvédelmi tájékoztató | EXCELlent";
-const DESC =
-  "GDPR szerinti adatvédelmi tájékoztató: milyen adatokat kezelünk a kapcsolatfelvétel, a konzultáció, a megrendelés és a bankkártyás fizetés során, milyen jogalapon és mennyi ideig.";
+
+const TITLE = "Adatvédelmi tájékoztató | EXCELlent Business Intelligence";
+const DESCRIPTION = "Az EXCELlent Business Intelligence adatvédelmi tájékoztatója a weboldal látogatói és ügyfelei személyes adatainak kezeléséről.";
+const CANONICAL = "https://xlntbi.hu/adatvedelmi-tajekoztato";
 
 export const Route = createFileRoute("/adatvedelmi-tajekoztato")({
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
-      { property: "og:type", content: "article" },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "robots", content: "noindex, follow" },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Adatvédelmi tájékoztató",
+                              "item": "https://xlntbi.hu/adatvedelmi-tajekoztato"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: AdatvedelmiPage,
