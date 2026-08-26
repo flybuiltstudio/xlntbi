@@ -1,4 +1,4 @@
-# Új termék: MNB ERA Jelentésgenerátor (R12 és R09)
+# Új termék: MNB ERA Jelentésgenerátor (R09 és R12)
 
 A csatolt ajánló és a két Excel-sablon alapján új termék kerül a katalógusba, a Riportok és beszámolók kategória 4. helyére.
 
