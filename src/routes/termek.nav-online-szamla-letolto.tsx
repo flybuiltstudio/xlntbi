@@ -5,7 +5,7 @@ const TITLE = "NAV Online Számla letöltő program | EXCELlent Business Intelli
 const DESCRIPTION = "Töltsd le automatikusan a NAV Online Számla rendszeréből a bejövő és kimenő számlák adatait, könyvelésre kész formátumban.";
 const H1 = "NAV Online Számla letöltő";
 const CANONICAL = "https://xlntbi.hu/termek/nav-online-szamla-letolto";
-const OG_IMAGE = "https://xlntbi.hu/og/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
+const OG_IMAGE = "https://xlntbi.hu/og/nav-online-szamla-letolto.jpg";
 
 export const Route = createFileRoute("/termek/nav-online-szamla-letolto")({
   head: () => ({
