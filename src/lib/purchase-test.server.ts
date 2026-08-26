@@ -248,3 +248,74 @@ export async function runFullPurchaseTest(
   const ok = steps.every((s) => s.status === "ok" || s.status === "skipped");
   return { ok, orderNumber, steps };
 }
+
+/**
+ * Retroactive cleanup for a test order whose cleanup was skipped at test time.
+ * Cancels the Billingo invoice (storno) and deletes the TESZT- order row.
+ */
+export async function cleanupTestOrder(
+  orderNumber: string,
+): Promise<{
+  ok: boolean;
+  invoiceStornoOk: boolean | null;
+  orderDeleted: boolean;
+  detail: string;
+}> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  if (!orderNumber.startsWith("TESZT-")) {
+    return {
+      ok: false,
+      invoiceStornoOk: null,
+      orderDeleted: false,
+      detail: "Csak TESZT- előtagú rendelés takarítható.",
+    };
+  }
+
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("*")
+    .eq("order_number", orderNumber)
+    .maybeSingle();
+
+  if (!order) {
+    return {
+      ok: false,
+      invoiceStornoOk: null,
+      orderDeleted: false,
+      detail: "A rendelés nem található — lehet, hogy már törölve lett.",
+    };
+  }
+
+  let detail = "";
+  let invoiceOk: boolean | null = null;
+  const invoiceId = (order as any).billingo_invoice_id ?? null;
+
+  if (invoiceId) {
+    const { cancelInvoiceForOrder } = await import("./billingo.server");
+    const canceled = await cancelInvoiceForOrder(order as any, {
+      reason: "Utólagos teszt takarítás (FullPurchaseTestPanel).",
+      source: "self_test",
+    });
+    invoiceOk = canceled.ok;
+    detail += canceled.ok
+      ? "A teszt számla sztornózva. "
+      : `A számla sztornózása nem sikerült: ${canceled.error ?? "ismeretlen hiba"}. `;
+  } else {
+    invoiceOk = null;
+    detail += "Nincs számla a rendeléshez. ";
+  }
+
+  const { deleteTestOrder } = await import("./admin.server");
+  const removed = await deleteTestOrder(order.id);
+  detail += removed.ok
+    ? "A teszt megrendelés törölve."
+    : `A teszt megrendelés törlése nem sikerült: ${removed.error ?? "ismeretlen hiba"}`;
+
+  return {
+    ok: (invoiceOk === null || invoiceOk) && removed.ok,
+    invoiceStornoOk: invoiceOk,
+    orderDeleted: removed.ok,
+    detail,
+  };
+}
