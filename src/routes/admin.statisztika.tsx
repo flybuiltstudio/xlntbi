@@ -687,8 +687,10 @@ function StatsPanel() {
 const listExportBtn =
   "inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50";
 
-const listSelectCls =
-  "h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground";
+const listSelectBtn =
+  "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 text-sm text-foreground transition-colors hover:bg-accent hover:text-foreground";
+
+const listCheckboxCls = "h-4 w-4 shrink-0 accent-primary";
 
 function sumListQty(list: StatRow[]) {
   return list.reduce((a, r) => a + r.quantity, 0);
@@ -697,10 +699,79 @@ function sumListRevenue(list: StatRow[]) {
   return list.reduce((a, r) => a + r.totalPrice, 0);
 }
 
+/** Több elem (vagy az összes) kiválasztását engedélyező legördülő. Üres set = összes. */
+function MultiSelect({
+  items,
+  selected,
+  onToggle,
+  onToggleAll,
+  buttonLabel,
+}: {
+  items: { key: string; label: string }[];
+  selected: Set<string>;
+  onToggle: (key: string) => void;
+  onToggleAll: () => void;
+  buttonLabel: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const isAll = selected.size === 0;
+
+  return (
+    <div ref={ref} className="relative mt-3">
+      <button
+        type="button"
+        className={listSelectBtn}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className="truncate">{buttonLabel}</span>
+        <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+      </button>
+      {open ? (
+        <div className="absolute z-30 mt-1 max-h-80 w-full overflow-auto rounded-md border border-input bg-background shadow-lg">
+          <label className="flex cursor-pointer items-center gap-2 border-b border-border px-3 py-2 text-sm font-semibold text-foreground">
+            <input
+              type="checkbox"
+              checked={isAll}
+              onChange={onToggleAll}
+              className={listCheckboxCls}
+            />
+            Összes
+          </label>
+          {items.map((item) => (
+            <label
+              key={item.key}
+              className="flex cursor-pointer items-center gap-2 px-3 py-1.5 text-sm text-foreground hover:bg-accent/50"
+            >
+              <input
+                type="checkbox"
+                checked={isAll || selected.has(item.key)}
+                onChange={() => onToggle(item.key)}
+                className={listCheckboxCls}
+              />
+              <span className="truncate">{item.label}</span>
+            </label>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 /** Megrendelőnkénti és termékenkénti, a kezdetektől számított listák 4 formátumú exporttal. */
 function CustomerProductLists({ rows }: { rows: StatRow[] }) {
-  const [customerSel, setCustomerSel] = useState("");
-  const [productSel, setProductSel] = useState("");
+  // Üres set = összes kiválasztva (alapértelmezett).
+  const [customerSel, setCustomerSel] = useState<Set<string>>(new Set());
+  const [productSel, setProductSel] = useState<Set<string>>(new Set());
   const [exporting, setExporting] = useState<string | null>(null);
   const [error, setError] = useState("");
 
@@ -720,24 +791,85 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
     [rows],
   );
 
-  const activeCustomer = customers.find((c) => c.email === customerSel) ?? customers[0];
-  const activeProduct = productLabels.includes(productSel) ? productSel : productLabels[0];
+  const isAllCustomers = customerSel.size === 0;
+  const isAllProducts = productSel.size === 0;
 
-  const customerRows = useMemo(() => {
-    if (!activeCustomer) return [];
-    const key = activeCustomer.email.trim().toLowerCase();
-    return rows.filter((r) => (r.email ?? "").trim().toLowerCase() === key);
-  }, [rows, activeCustomer]);
+  const selectedCustomerEmails = useMemo(() => {
+    if (isAllCustomers) return new Set(customers.map((c) => c.email.trim().toLowerCase()));
+    return new Set(
+      customers
+        .filter((c) => customerSel.has(c.email))
+        .map((c) => c.email.trim().toLowerCase()),
+    );
+  }, [customers, customerSel, isAllCustomers]);
 
-  const productRows = useMemo(
-    () => (activeProduct ? rows.filter((r) => productLabel(r) === activeProduct) : []),
-    [rows, activeProduct],
+  const selectedProductSet = useMemo(() => {
+    if (isAllProducts) return new Set(productLabels);
+    return new Set(productLabels.filter((l) => productSel.has(l)));
+  }, [productLabels, productSel, isAllProducts]);
+
+  const toggleCustomer = (email: string) => {
+    setCustomerSel((prev) => {
+      // Ha épp "összes" módban vagyunk, indítsuk mindenki más kijelölésével.
+      if (prev.size === 0) {
+        const next = new Set(customers.map((c) => c.email));
+        next.delete(email);
+        return next;
+      }
+      const next = new Set(prev);
+      if (next.has(email)) next.delete(email);
+      else next.add(email);
+      // Ha mind be van jelölve, térjünk vissza "összes" (üres set) módba.
+      if (next.size === customers.length) return new Set();
+      return next;
+    });
+  };
+
+  const toggleAllCustomers = () => setCustomerSel(new Set());
+
+  const toggleProduct = (label: string) => {
+    setProductSel((prev) => {
+      if (prev.size === 0) {
+        const next = new Set(productLabels);
+        next.delete(label);
+        return next;
+      }
+      const next = new Set(prev);
+      if (next.has(label)) next.delete(label);
+      else next.add(label);
+      if (next.size === productLabels.length) return new Set();
+      return next;
+    });
+  };
+
+  const toggleAllProducts = () => setProductSel(new Set());
+
+  const customerRows = useMemo(
+    () => rows.filter((r) => selectedCustomerEmails.has((r.email ?? "").trim().toLowerCase())),
+    [rows, selectedCustomerEmails],
   );
 
-  const customerTable: ListTable | null = activeCustomer
+  const productRows = useMemo(
+    () => rows.filter((r) => selectedProductSet.has(productLabel(r))),
+    [rows, selectedProductSet],
+  );
+
+  const customerTitle = isAllCustomers
+    ? "Megrendelői lista – Összes megrendelő"
+    : customerSel.size === 1
+      ? `Megrendelői lista – ${customers.find((c) => customerSel.has(c.email))?.name ?? ""}`
+      : `Megrendelői lista – ${customerSel.size} megrendelő`;
+
+  const productTitle = isAllProducts
+    ? "Termék megrendelői – Összes termék"
+    : productSel.size === 1
+      ? `Termék megrendelői – ${productSel.values().next().value ?? ""}`
+      : `Termék megrendelői – ${productSel.size} termék`;
+
+  const customerTable: ListTable | null = customerRows.length
     ? {
-        title: `Megrendelői lista – ${activeCustomer.name}`,
-        subtitle: activeCustomer.email,
+        title: customerTitle,
+        subtitle: isAllCustomers ? undefined : undefined,
         head: ["Dátum", "Rendelésszám", "Termék", "Mennyiség (db)", "Összeg (Ft)", "Fizetés"],
         body: customerRows.map((r) => [
           formatDateHu(r.createdAt),
@@ -759,9 +891,9 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
       }
     : null;
 
-  const productTable: ListTable | null = activeProduct
+  const productTable: ListTable | null = productRows.length
     ? {
-        title: `Termék megrendelői – ${activeProduct}`,
+        title: productTitle,
         head: [
           "Dátum",
           "Rendelésszám",
@@ -862,12 +994,25 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
     </div>
   );
 
+  const customerButtonLabel = isAllCustomers
+    ? "Összes megrendelő"
+    : customerSel.size === 1
+      ? customers.find((c) => customerSel.has(c.email))?.name ?? "1 megrendelő"
+      : `${customerSel.size} megrendelő kiválasztva`;
+
+  const productButtonLabel = isAllProducts
+    ? "Összes termék"
+    : productSel.size === 1
+      ? (productSel.values().next().value ?? "1 termék")
+      : `${productSel.size} termék kiválasztva`;
+
   return (
     <section className="mt-14">
       <h2 className="text-xl font-bold text-foreground">Megrendelői és terméklista</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Ezek a listák mindig a kezdetektől számított, teljes megrendelési előzményt mutatják – a
-        fenti szűrők ezekre nem vonatkoznak.
+        fenti szűrők ezekre nem vonatkoznak. Több megrendelőt vagy terméket is ki lehet választani,
+        illetve az összeset.
       </p>
 
       {error ? (
@@ -883,19 +1028,15 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
             <Users className="h-4 w-4 text-primary" />
             Megrendelőnként – mit rendelt?
           </div>
-          <select
-            className={`${listSelectCls} mt-3`}
-            value={activeCustomer?.email ?? ""}
-            onChange={(e) => setCustomerSel(e.target.value)}
-          >
-            {customers.map((c) => (
-              <option key={c.email} value={c.email}>
-                {c.name} ({c.email})
-              </option>
-            ))}
-          </select>
+          <MultiSelect
+            items={customers.map((c) => ({ key: c.email, label: `${c.name} (${c.email})` }))}
+            selected={customerSel}
+            onToggle={toggleCustomer}
+            onToggleAll={toggleAllCustomers}
+            buttonLabel={customerButtonLabel}
+          />
 
-          {activeCustomer && customerTable ? (
+          {customerTable ? (
             <>
               <div className="mt-4 max-h-80 overflow-auto rounded-lg border border-border">
                 <table className="w-full min-w-[480px] text-xs">
@@ -947,7 +1088,7 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
               </div>
               {exportButtons(
                 "cust",
-                `xlntbi-megrendelo-${slugify(activeCustomer.name)}`,
+                `xlntbi-megrendelo-${isAllCustomers ? "osszes" : slugify(customerButtonLabel)}`,
                 customerTable,
               )}
             </>
@@ -962,19 +1103,15 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
             <Package className="h-4 w-4 text-primary" />
             Termékenként – kik rendelték?
           </div>
-          <select
-            className={`${listSelectCls} mt-3`}
-            value={activeProduct ?? ""}
-            onChange={(e) => setProductSel(e.target.value)}
-          >
-            {productLabels.map((label) => (
-              <option key={label} value={label}>
-                {label}
-              </option>
-            ))}
-          </select>
+          <MultiSelect
+            items={productLabels.map((label) => ({ key: label, label }))}
+            selected={productSel}
+            onToggle={toggleProduct}
+            onToggleAll={toggleAllProducts}
+            buttonLabel={productButtonLabel}
+          />
 
-          {activeProduct && productTable ? (
+          {productTable ? (
             <>
               <div className="mt-4 max-h-80 overflow-auto rounded-lg border border-border">
                 <table className="w-full min-w-[520px] text-xs">
@@ -1025,7 +1162,11 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
                   </tfoot>
                 </table>
               </div>
-              {exportButtons("prod", `xlntbi-termek-${slugify(activeProduct)}`, productTable)}
+              {exportButtons(
+                "prod",
+                `xlntbi-termek-${isAllProducts ? "osszes" : slugify(productButtonLabel)}`,
+                productTable,
+              )}
             </>
           ) : (
             <p className="mt-4 text-sm text-muted-foreground">Nincs termék.</p>
