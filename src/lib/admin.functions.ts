@@ -438,7 +438,7 @@ export const adminPurgeTestOrders = createServerFn({ method: "POST" })
     return purgeTestOrders();
   });
 
-export const adminListTestOrders = createServerFn({ method: "POST" })
+export const adminPreviewTestOrders = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await gate(context as any);

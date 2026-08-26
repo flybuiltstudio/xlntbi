@@ -13,7 +13,7 @@ import {
   adminListInvoiceLogs,
   adminListOrders,
   adminPurgeTestOrders,
-  adminListTestOrders,
+  adminPreviewTestOrders,
   adminListProductFiles,
   adminListProductPlacements,
   adminListUsers,
@@ -297,7 +297,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const invoiceSnapshot = useServerFn(adminInvoiceSnapshot);
   const sendLicense = useServerFn(adminSendLicense);
   const purgeTests = useServerFn(adminPurgeTestOrders);
-  const listTests = useServerFn(adminListTestOrders);
+  const listTests = useServerFn(adminPreviewTestOrders);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
