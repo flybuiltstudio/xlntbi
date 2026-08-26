@@ -869,7 +869,6 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
   const customerTable: ListTable | null = customerRows.length
     ? {
         title: customerTitle,
-        subtitle: isAllCustomers ? undefined : undefined,
         head: ["Dátum", "Rendelésszám", "Termék", "Mennyiség (db)", "Összeg (Ft)", "Fizetés"],
         body: customerRows.map((r) => [
           formatDateHu(r.createdAt),
