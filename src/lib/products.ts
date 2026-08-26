@@ -21,6 +21,7 @@ import rlbBankKonverterImg from "@/assets/rlb-bank-konverter.jpg";
 import kamatlekerdezoImg from "@/assets/kamatlekerdezo-potlekszamito.jpg";
 import navOnlineSzamlaImg from "@/assets/nav-online-szamla-letolto.jpg";
 import mnbEraImg from "@/assets/mnb-era-jelentesgenerator.jpg";
+import ingatlanalapMnbImg from "@/assets/ingatlanalap-mnb-jelentes-elokeszito.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -1509,6 +1510,48 @@ export const products: Product[] = [
     download: {
       fileName: "MNB_ERA.zip",
       storagePath: "mnb-era-jelentesgenerator/MNB_ERA.zip",
+    },
+  },
+  {
+    slug: "ingatlanalap-mnb-jelentes-elokeszito",
+    priceId: "ingatlanalap_mnb_licenc",
+    name: "Ingatlanalap MNB Jelentés-előkészítő – NEÉ Számoló és ERA/STEFI Generátor",
+    tagline:
+      "Nettó eszközérték-számítás, ingatlankitettség-nyilvántartás és beküldhető MNB-jelentés egy Excel-munkafüzetben",
+    status: "available",
+    price: 39900,
+    currency: "HUF",
+    image: ingatlanalapMnbImg,
+    metaTitle: "Ingatlanalap MNB Jelentés-előkészítő (NEÉ, 50A, 51M) | XLNTBI",
+    metaDescription:
+      "NEÉ-számoló, 51M ingatlankitettség és 50A jelentéslap egy Excel-munkafüzetben, beépített ERA/STEFI generátorral. Egyetlen licenc, 39 900 Ft.",
+    intro: [
+      "Az ingatlanalapot kezelő alapkezelőknek negyedévenként számot kell adniuk az alap ingatlankitettségének változásáról (51M jelentés), valamint rendszeresen meg kell állapítaniuk és jelenteniük az alap nettó eszközértékét (50A jelentés). A két jelentés tartalmilag összefügg: az ingatlanok értékének negyedéves változása közvetlenül befolyásolja a NEÉ-t – ezt a kapcsolatot kézzel követni időigényes és hibalehetőségekkel teli.",
+      "Az Ingatlanalap MNB Jelentés-előkészítő egyetlen Excel-munkafüzetben köti össze az ingatlannyilvántartást, a NEÉ-számítást és a beküldhető jelentésfájl előállítását: az 51M táblában rögzített ingatlanadatok automatikusan gurulnak át a NEÉ-számolóba, onnan pedig a beépített generátor állítja elő az MNB felé beküldhető fájlt.",
+    ],
+    features: [
+      "NEÉ számoló: eszközök mínusz kötelezettségek, ingatlanalap-specifikus tételbontással (ingatlanfinanszírozási hitelek, ingatlantranzakciós és -hasznosítási kötelezettségek külön sorban).",
+      "Sorozatonkénti bontás: az egy jegyre jutó NEÉ automatikusan 6 tizedesjegyre, matematikai kerekítéssel számítódik, az 50A/50W kitöltési előírás szerint.",
+      "51M tábla: ingatlanonkénti nyitó-növekedés-csökkenés-záró állomány a hatályos kitöltési előírás szerinti oszlopszerkezettel; a záró állomány képlettel számítódik.",
+      "Összekötött lapok: az ingatlanok értéke automatikusan átkerül az 51M záró állományából a NEÉ-számolóba – nincs kétszeres adatbevitel.",
+      "50A jelentéslap: a sorozatadatok képlettel töltődnek a NEÉ-számolóból.",
+      "Beépített ERA/STEFI generátor: a kész adatokból egy gombnyomással beküldhető XML, sorkódos CSV vagy felügyeleti CSV (FCSV) fájl készül, a hivatalos fájlnév-konvenció szerint.",
+      "Beépített ellenőrzések: hiányzó törzsszám, érvénytelen dátum, sorkód nélküli adatsor esetén magyar nyelvű, konkrét hibaüzenet.",
+      "A termék tartalmazza az általános MNB ERA Jelentésgenerátor funkcióit is.",
+    ],
+    why: "Microsoft Excel szükséges Windows rendszeren, 32 vagy 64 bites változatban, engedélyezett makrókkal (.xlsm). Az 51M tábla 1–11. oszlopa a hatályos kitöltési előírás szerinti; a további oszlopok pontos megnevezéseit és a sorkódképzést a mindenkori szabálycsomaggal érdemes egyeztetni beküldés előtt. Az éles beküldéshez érvényes ERA-regisztráció szükséges; a beküldést és a végső ellenőrzést az MNB STEFI rendszere végzi.",
+    tiers: [
+      {
+        id: "licenc",
+        label: "Licenc / gép",
+        price: 39900,
+        priceId: "ingatlanalap_mnb_licenc",
+      },
+    ],
+    download: {
+      fileName: "Ingatlanalap_MNB_jelentesek_NEE.xlsm",
+      storagePath:
+        "ingatlanalap-mnb-jelentes-elokeszito/Ingatlanalap_MNB_jelentesek_NEE.xlsm",
     },
   },
 ];
