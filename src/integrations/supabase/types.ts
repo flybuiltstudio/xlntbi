@@ -395,6 +395,36 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          id: string
+          month: number
+          page_key: string
+          page_type: string
+          updated_at: string
+          views: number
+          year: number
+        }
+        Insert: {
+          id?: string
+          month: number
+          page_key: string
+          page_type: string
+          updated_at?: string
+          views?: number
+          year: number
+        }
+        Update: {
+          id?: string
+          month?: number
+          page_key?: string
+          page_type?: string
+          updated_at?: string
+          views?: number
+          year?: number
+        }
+        Relationships: []
+      }
       product_category_order: {
         Row: {
           key: string
@@ -472,6 +502,15 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_page_view: {
+        Args: {
+          _month: number
+          _page_key: string
+          _page_type: string
+          _year: number
+        }
+        Returns: undefined
       }
     }
     Enums: {
