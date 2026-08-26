@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { usePageView } from "@/lib/use-page-view";
 import { Check } from "lucide-react";
 import { AAM_PRICE_NOTE, aamText } from "@/lib/aam";
 import { priceFrom, formatPrice, getProduct, products } from "@/lib/products";
