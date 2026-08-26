@@ -244,17 +244,21 @@ export type InvoiceAttemptSource =
   | "webhook"
   | "admin_approval"
   | "admin_retry"
-  | "billingo_webhook";
+  | "billingo_webhook"
+  | "stripe_cancel"
+  | "self_test";
+
+export type InvoiceAttemptStatus = "success" | "error" | "canceled" | "cancel_error";
 
 /**
  * Writes one row to billingo_invoice_logs for every invoicing attempt
- * (success or failure). Logging itself must never break fulfilment.
+ * (success, failure or storno). Logging itself must never break fulfilment.
  */
 async function logInvoiceAttempt(entry: {
   orderId: string;
   orderNumber: string;
   source: InvoiceAttemptSource;
-  status: "success" | "error";
+  status: InvoiceAttemptStatus;
   invoiceId?: number | null;
   invoiceNumber?: string | null;
   errorCode?: string | null;
