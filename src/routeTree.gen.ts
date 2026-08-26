@@ -50,6 +50,35 @@ import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulato
 import { Route as KalkulatorokSzamlaDatumokRouteImport } from './routes/kalkulatorok.szamla-datumok'
 import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles_.koszonjuk'
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
+import { Route as TermekA60OsszesitoNyilatkozatXmlRouteImport } from './routes/termek.a60-osszesito-nyilatkozat-xml'
+import { Route as TermekAdofolyoszamlaEgyeztetoRouteImport } from './routes/termek.adofolyoszamla-egyezteto'
+import { Route as TermekAfa2665XmlGeneraloRouteImport } from './routes/termek.afa-2665-xml-generalo'
+import { Route as TermekAuditxmlEllenorzoJavitoRouteImport } from './routes/termek.auditxml-ellenorzo-javito'
+import { Route as TermekBerszamfejto2026RouteImport } from './routes/termek.berszamfejto-2026'
+import { Route as TermekBeszamolo2025RouteImport } from './routes/termek.beszamolo-2025'
+import { Route as TermekCegkivonatExcelKonverterRouteImport } from './routes/termek.cegkivonat-excel-konverter'
+import { Route as TermekHaviRiportRouteImport } from './routes/termek.havi-riport'
+import { Route as TermekHaviRiportEnRouteImport } from './routes/termek.havi-riport-en'
+import { Route as TermekIfrsKonszolidaloRouteImport } from './routes/termek.ifrs-konszolidalo'
+import { Route as TermekKamatlekerdezoPotlekszamitoRouteImport } from './routes/termek.kamatlekerdezo-potlekszamito'
+import { Route as TermekKulcsNyitoVegyesKonyveloRouteImport } from './routes/termek.kulcs-nyito-vegyes-konyvelo'
+import { Route as TermekNavOnlineSzamlaLetoltoRouteImport } from './routes/termek.nav-online-szamla-letolto'
+import { Route as TermekNavPenztargepLetoltoRouteImport } from './routes/termek.nav-penztargep-letolto'
+import { Route as TermekNavTorzsszamPartnerellenorzoRouteImport } from './routes/termek.nav-torzsszam-partnerellenorzo'
+import { Route as TermekPdfExcelKonverterRouteImport } from './routes/termek.pdf-excel-konverter'
+import { Route as TermekPenzszamKulfoldiSzamlaImportRouteImport } from './routes/termek.penzszam-kulfoldi-szamla-import'
+import { Route as TermekRlbBankKonverterRouteImport } from './routes/termek.rlb-bank-konverter'
+import { Route as TermekRlbBankKonverterProRouteImport } from './routes/termek.rlb-bank-konverter-pro'
+import { Route as TermekRlbKulfoldiSzamlaImportRouteImport } from './routes/termek.rlb-kulfoldi-szamla-import'
+import { Route as TermekRlbNyitoVegyesKonyveloRouteImport } from './routes/termek.rlb-nyito-vegyes-konyvelo'
+import { Route as TermekSupNyitoVegyesKonyveloRouteImport } from './routes/termek.sup-nyito-vegyes-konyvelo'
+import { Route as TermekSzamviteliKonszolidaloRouteImport } from './routes/termek.szamviteli-konszolidalo'
+import { Route as TermekTelefonszamlaKonyveloRouteImport } from './routes/termek.telefonszamla-konyvelo'
+import { Route as TermekUgyfelkapuTotpManagerRouteImport } from './routes/termek.ugyfelkapu-totp-manager'
+import { Route as TermekUniverzalisBankKonverterRouteImport } from './routes/termek.univerzalis-bank-konverter'
+import { Route as TermekUtalasiCsomagKeszitoRouteImport } from './routes/termek.utalasi-csomag-keszito'
+import { Route as TermekUtnyilvantartasKikuldetesiRendelvenyRouteImport } from './routes/termek.utnyilvantartas-kikuldetesi-rendelveny'
+import { Route as TermekWifiJelszoNezoRouteImport } from './routes/termek.wifi-jelszo-nezo'
 import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -266,6 +295,172 @@ const TermekSlugRoute = TermekSlugRouteImport.update({
   path: '/termek/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermekA60OsszesitoNyilatkozatXmlRoute =
+  TermekA60OsszesitoNyilatkozatXmlRouteImport.update({
+    id: '/termek/a60-osszesito-nyilatkozat-xml',
+    path: '/termek/a60-osszesito-nyilatkozat-xml',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekAdofolyoszamlaEgyeztetoRoute =
+  TermekAdofolyoszamlaEgyeztetoRouteImport.update({
+    id: '/termek/adofolyoszamla-egyezteto',
+    path: '/termek/adofolyoszamla-egyezteto',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekAfa2665XmlGeneraloRoute =
+  TermekAfa2665XmlGeneraloRouteImport.update({
+    id: '/termek/afa-2665-xml-generalo',
+    path: '/termek/afa-2665-xml-generalo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekAuditxmlEllenorzoJavitoRoute =
+  TermekAuditxmlEllenorzoJavitoRouteImport.update({
+    id: '/termek/auditxml-ellenorzo-javito',
+    path: '/termek/auditxml-ellenorzo-javito',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekBerszamfejto2026Route = TermekBerszamfejto2026RouteImport.update({
+  id: '/termek/berszamfejto-2026',
+  path: '/termek/berszamfejto-2026',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermekBeszamolo2025Route = TermekBeszamolo2025RouteImport.update({
+  id: '/termek/beszamolo-2025',
+  path: '/termek/beszamolo-2025',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermekCegkivonatExcelKonverterRoute =
+  TermekCegkivonatExcelKonverterRouteImport.update({
+    id: '/termek/cegkivonat-excel-konverter',
+    path: '/termek/cegkivonat-excel-konverter',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekHaviRiportRoute = TermekHaviRiportRouteImport.update({
+  id: '/termek/havi-riport',
+  path: '/termek/havi-riport',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermekHaviRiportEnRoute = TermekHaviRiportEnRouteImport.update({
+  id: '/termek/havi-riport-en',
+  path: '/termek/havi-riport-en',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermekIfrsKonszolidaloRoute = TermekIfrsKonszolidaloRouteImport.update({
+  id: '/termek/ifrs-konszolidalo',
+  path: '/termek/ifrs-konszolidalo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermekKamatlekerdezoPotlekszamitoRoute =
+  TermekKamatlekerdezoPotlekszamitoRouteImport.update({
+    id: '/termek/kamatlekerdezo-potlekszamito',
+    path: '/termek/kamatlekerdezo-potlekszamito',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekKulcsNyitoVegyesKonyveloRoute =
+  TermekKulcsNyitoVegyesKonyveloRouteImport.update({
+    id: '/termek/kulcs-nyito-vegyes-konyvelo',
+    path: '/termek/kulcs-nyito-vegyes-konyvelo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekNavOnlineSzamlaLetoltoRoute =
+  TermekNavOnlineSzamlaLetoltoRouteImport.update({
+    id: '/termek/nav-online-szamla-letolto',
+    path: '/termek/nav-online-szamla-letolto',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekNavPenztargepLetoltoRoute =
+  TermekNavPenztargepLetoltoRouteImport.update({
+    id: '/termek/nav-penztargep-letolto',
+    path: '/termek/nav-penztargep-letolto',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekNavTorzsszamPartnerellenorzoRoute =
+  TermekNavTorzsszamPartnerellenorzoRouteImport.update({
+    id: '/termek/nav-torzsszam-partnerellenorzo',
+    path: '/termek/nav-torzsszam-partnerellenorzo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekPdfExcelKonverterRoute = TermekPdfExcelKonverterRouteImport.update({
+  id: '/termek/pdf-excel-konverter',
+  path: '/termek/pdf-excel-konverter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermekPenzszamKulfoldiSzamlaImportRoute =
+  TermekPenzszamKulfoldiSzamlaImportRouteImport.update({
+    id: '/termek/penzszam-kulfoldi-szamla-import',
+    path: '/termek/penzszam-kulfoldi-szamla-import',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekRlbBankKonverterRoute = TermekRlbBankKonverterRouteImport.update({
+  id: '/termek/rlb-bank-konverter',
+  path: '/termek/rlb-bank-konverter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermekRlbBankKonverterProRoute =
+  TermekRlbBankKonverterProRouteImport.update({
+    id: '/termek/rlb-bank-konverter-pro',
+    path: '/termek/rlb-bank-konverter-pro',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekRlbKulfoldiSzamlaImportRoute =
+  TermekRlbKulfoldiSzamlaImportRouteImport.update({
+    id: '/termek/rlb-kulfoldi-szamla-import',
+    path: '/termek/rlb-kulfoldi-szamla-import',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekRlbNyitoVegyesKonyveloRoute =
+  TermekRlbNyitoVegyesKonyveloRouteImport.update({
+    id: '/termek/rlb-nyito-vegyes-konyvelo',
+    path: '/termek/rlb-nyito-vegyes-konyvelo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekSupNyitoVegyesKonyveloRoute =
+  TermekSupNyitoVegyesKonyveloRouteImport.update({
+    id: '/termek/sup-nyito-vegyes-konyvelo',
+    path: '/termek/sup-nyito-vegyes-konyvelo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekSzamviteliKonszolidaloRoute =
+  TermekSzamviteliKonszolidaloRouteImport.update({
+    id: '/termek/szamviteli-konszolidalo',
+    path: '/termek/szamviteli-konszolidalo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekTelefonszamlaKonyveloRoute =
+  TermekTelefonszamlaKonyveloRouteImport.update({
+    id: '/termek/telefonszamla-konyvelo',
+    path: '/termek/telefonszamla-konyvelo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekUgyfelkapuTotpManagerRoute =
+  TermekUgyfelkapuTotpManagerRouteImport.update({
+    id: '/termek/ugyfelkapu-totp-manager',
+    path: '/termek/ugyfelkapu-totp-manager',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekUniverzalisBankKonverterRoute =
+  TermekUniverzalisBankKonverterRouteImport.update({
+    id: '/termek/univerzalis-bank-konverter',
+    path: '/termek/univerzalis-bank-konverter',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekUtalasiCsomagKeszitoRoute =
+  TermekUtalasiCsomagKeszitoRouteImport.update({
+    id: '/termek/utalasi-csomag-keszito',
+    path: '/termek/utalasi-csomag-keszito',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekUtnyilvantartasKikuldetesiRendelvenyRoute =
+  TermekUtnyilvantartasKikuldetesiRendelvenyRouteImport.update({
+    id: '/termek/utnyilvantartas-kikuldetesi-rendelveny',
+    path: '/termek/utnyilvantartas-kikuldetesi-rendelveny',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const TermekWifiJelszoNezoRoute = TermekWifiJelszoNezoRouteImport.update({
+  id: '/termek/wifi-jelszo-nezo',
+  path: '/termek/wifi-jelszo-nezo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicBillingoWebhookRoute =
   ApiPublicBillingoWebhookRouteImport.update({
     id: '/api/public/billingo/webhook',
@@ -340,6 +535,35 @@ export interface FileRoutesByFullPath {
   '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
+  '/termek/a60-osszesito-nyilatkozat-xml': typeof TermekA60OsszesitoNyilatkozatXmlRoute
+  '/termek/adofolyoszamla-egyezteto': typeof TermekAdofolyoszamlaEgyeztetoRoute
+  '/termek/afa-2665-xml-generalo': typeof TermekAfa2665XmlGeneraloRoute
+  '/termek/auditxml-ellenorzo-javito': typeof TermekAuditxmlEllenorzoJavitoRoute
+  '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
+  '/termek/beszamolo-2025': typeof TermekBeszamolo2025Route
+  '/termek/cegkivonat-excel-konverter': typeof TermekCegkivonatExcelKonverterRoute
+  '/termek/havi-riport': typeof TermekHaviRiportRoute
+  '/termek/havi-riport-en': typeof TermekHaviRiportEnRoute
+  '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
+  '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
+  '/termek/kulcs-nyito-vegyes-konyvelo': typeof TermekKulcsNyitoVegyesKonyveloRoute
+  '/termek/nav-online-szamla-letolto': typeof TermekNavOnlineSzamlaLetoltoRoute
+  '/termek/nav-penztargep-letolto': typeof TermekNavPenztargepLetoltoRoute
+  '/termek/nav-torzsszam-partnerellenorzo': typeof TermekNavTorzsszamPartnerellenorzoRoute
+  '/termek/pdf-excel-konverter': typeof TermekPdfExcelKonverterRoute
+  '/termek/penzszam-kulfoldi-szamla-import': typeof TermekPenzszamKulfoldiSzamlaImportRoute
+  '/termek/rlb-bank-konverter': typeof TermekRlbBankKonverterRoute
+  '/termek/rlb-bank-konverter-pro': typeof TermekRlbBankKonverterProRoute
+  '/termek/rlb-kulfoldi-szamla-import': typeof TermekRlbKulfoldiSzamlaImportRoute
+  '/termek/rlb-nyito-vegyes-konyvelo': typeof TermekRlbNyitoVegyesKonyveloRoute
+  '/termek/sup-nyito-vegyes-konyvelo': typeof TermekSupNyitoVegyesKonyveloRoute
+  '/termek/szamviteli-konszolidalo': typeof TermekSzamviteliKonszolidaloRoute
+  '/termek/telefonszamla-konyvelo': typeof TermekTelefonszamlaKonyveloRoute
+  '/termek/ugyfelkapu-totp-manager': typeof TermekUgyfelkapuTotpManagerRoute
+  '/termek/univerzalis-bank-konverter': typeof TermekUniverzalisBankKonverterRoute
+  '/termek/utalasi-csomag-keszito': typeof TermekUtalasiCsomagKeszitoRoute
+  '/termek/utnyilvantartas-kikuldetesi-rendelveny': typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
+  '/termek/wifi-jelszo-nezo': typeof TermekWifiJelszoNezoRoute
   '/admin/': typeof AdminIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
@@ -388,6 +612,35 @@ export interface FileRoutesByTo {
   '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
+  '/termek/a60-osszesito-nyilatkozat-xml': typeof TermekA60OsszesitoNyilatkozatXmlRoute
+  '/termek/adofolyoszamla-egyezteto': typeof TermekAdofolyoszamlaEgyeztetoRoute
+  '/termek/afa-2665-xml-generalo': typeof TermekAfa2665XmlGeneraloRoute
+  '/termek/auditxml-ellenorzo-javito': typeof TermekAuditxmlEllenorzoJavitoRoute
+  '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
+  '/termek/beszamolo-2025': typeof TermekBeszamolo2025Route
+  '/termek/cegkivonat-excel-konverter': typeof TermekCegkivonatExcelKonverterRoute
+  '/termek/havi-riport': typeof TermekHaviRiportRoute
+  '/termek/havi-riport-en': typeof TermekHaviRiportEnRoute
+  '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
+  '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
+  '/termek/kulcs-nyito-vegyes-konyvelo': typeof TermekKulcsNyitoVegyesKonyveloRoute
+  '/termek/nav-online-szamla-letolto': typeof TermekNavOnlineSzamlaLetoltoRoute
+  '/termek/nav-penztargep-letolto': typeof TermekNavPenztargepLetoltoRoute
+  '/termek/nav-torzsszam-partnerellenorzo': typeof TermekNavTorzsszamPartnerellenorzoRoute
+  '/termek/pdf-excel-konverter': typeof TermekPdfExcelKonverterRoute
+  '/termek/penzszam-kulfoldi-szamla-import': typeof TermekPenzszamKulfoldiSzamlaImportRoute
+  '/termek/rlb-bank-konverter': typeof TermekRlbBankKonverterRoute
+  '/termek/rlb-bank-konverter-pro': typeof TermekRlbBankKonverterProRoute
+  '/termek/rlb-kulfoldi-szamla-import': typeof TermekRlbKulfoldiSzamlaImportRoute
+  '/termek/rlb-nyito-vegyes-konyvelo': typeof TermekRlbNyitoVegyesKonyveloRoute
+  '/termek/sup-nyito-vegyes-konyvelo': typeof TermekSupNyitoVegyesKonyveloRoute
+  '/termek/szamviteli-konszolidalo': typeof TermekSzamviteliKonszolidaloRoute
+  '/termek/telefonszamla-konyvelo': typeof TermekTelefonszamlaKonyveloRoute
+  '/termek/ugyfelkapu-totp-manager': typeof TermekUgyfelkapuTotpManagerRoute
+  '/termek/univerzalis-bank-konverter': typeof TermekUniverzalisBankKonverterRoute
+  '/termek/utalasi-csomag-keszito': typeof TermekUtalasiCsomagKeszitoRoute
+  '/termek/utnyilvantartas-kikuldetesi-rendelveny': typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
+  '/termek/wifi-jelszo-nezo': typeof TermekWifiJelszoNezoRoute
   '/admin': typeof AdminIndexRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
@@ -438,6 +691,35 @@ export interface FileRoutesById {
   '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles_/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
+  '/termek/a60-osszesito-nyilatkozat-xml': typeof TermekA60OsszesitoNyilatkozatXmlRoute
+  '/termek/adofolyoszamla-egyezteto': typeof TermekAdofolyoszamlaEgyeztetoRoute
+  '/termek/afa-2665-xml-generalo': typeof TermekAfa2665XmlGeneraloRoute
+  '/termek/auditxml-ellenorzo-javito': typeof TermekAuditxmlEllenorzoJavitoRoute
+  '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
+  '/termek/beszamolo-2025': typeof TermekBeszamolo2025Route
+  '/termek/cegkivonat-excel-konverter': typeof TermekCegkivonatExcelKonverterRoute
+  '/termek/havi-riport': typeof TermekHaviRiportRoute
+  '/termek/havi-riport-en': typeof TermekHaviRiportEnRoute
+  '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
+  '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
+  '/termek/kulcs-nyito-vegyes-konyvelo': typeof TermekKulcsNyitoVegyesKonyveloRoute
+  '/termek/nav-online-szamla-letolto': typeof TermekNavOnlineSzamlaLetoltoRoute
+  '/termek/nav-penztargep-letolto': typeof TermekNavPenztargepLetoltoRoute
+  '/termek/nav-torzsszam-partnerellenorzo': typeof TermekNavTorzsszamPartnerellenorzoRoute
+  '/termek/pdf-excel-konverter': typeof TermekPdfExcelKonverterRoute
+  '/termek/penzszam-kulfoldi-szamla-import': typeof TermekPenzszamKulfoldiSzamlaImportRoute
+  '/termek/rlb-bank-konverter': typeof TermekRlbBankKonverterRoute
+  '/termek/rlb-bank-konverter-pro': typeof TermekRlbBankKonverterProRoute
+  '/termek/rlb-kulfoldi-szamla-import': typeof TermekRlbKulfoldiSzamlaImportRoute
+  '/termek/rlb-nyito-vegyes-konyvelo': typeof TermekRlbNyitoVegyesKonyveloRoute
+  '/termek/sup-nyito-vegyes-konyvelo': typeof TermekSupNyitoVegyesKonyveloRoute
+  '/termek/szamviteli-konszolidalo': typeof TermekSzamviteliKonszolidaloRoute
+  '/termek/telefonszamla-konyvelo': typeof TermekTelefonszamlaKonyveloRoute
+  '/termek/ugyfelkapu-totp-manager': typeof TermekUgyfelkapuTotpManagerRoute
+  '/termek/univerzalis-bank-konverter': typeof TermekUniverzalisBankKonverterRoute
+  '/termek/utalasi-csomag-keszito': typeof TermekUtalasiCsomagKeszitoRoute
+  '/termek/utnyilvantartas-kikuldetesi-rendelveny': typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
+  '/termek/wifi-jelszo-nezo': typeof TermekWifiJelszoNezoRoute
   '/admin/': typeof AdminIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
@@ -489,6 +771,35 @@ export interface FileRouteTypes {
     | '/kalkulatorok/szamla-datumok'
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
+    | '/termek/a60-osszesito-nyilatkozat-xml'
+    | '/termek/adofolyoszamla-egyezteto'
+    | '/termek/afa-2665-xml-generalo'
+    | '/termek/auditxml-ellenorzo-javito'
+    | '/termek/berszamfejto-2026'
+    | '/termek/beszamolo-2025'
+    | '/termek/cegkivonat-excel-konverter'
+    | '/termek/havi-riport'
+    | '/termek/havi-riport-en'
+    | '/termek/ifrs-konszolidalo'
+    | '/termek/kamatlekerdezo-potlekszamito'
+    | '/termek/kulcs-nyito-vegyes-konyvelo'
+    | '/termek/nav-online-szamla-letolto'
+    | '/termek/nav-penztargep-letolto'
+    | '/termek/nav-torzsszam-partnerellenorzo'
+    | '/termek/pdf-excel-konverter'
+    | '/termek/penzszam-kulfoldi-szamla-import'
+    | '/termek/rlb-bank-konverter'
+    | '/termek/rlb-bank-konverter-pro'
+    | '/termek/rlb-kulfoldi-szamla-import'
+    | '/termek/rlb-nyito-vegyes-konyvelo'
+    | '/termek/sup-nyito-vegyes-konyvelo'
+    | '/termek/szamviteli-konszolidalo'
+    | '/termek/telefonszamla-konyvelo'
+    | '/termek/ugyfelkapu-totp-manager'
+    | '/termek/univerzalis-bank-konverter'
+    | '/termek/utalasi-csomag-keszito'
+    | '/termek/utnyilvantartas-kikuldetesi-rendelveny'
+    | '/termek/wifi-jelszo-nezo'
     | '/admin/'
     | '/kalkulatorok/'
     | '/api/public/billingo/webhook'
@@ -537,6 +848,35 @@ export interface FileRouteTypes {
     | '/kalkulatorok/szamla-datumok'
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
+    | '/termek/a60-osszesito-nyilatkozat-xml'
+    | '/termek/adofolyoszamla-egyezteto'
+    | '/termek/afa-2665-xml-generalo'
+    | '/termek/auditxml-ellenorzo-javito'
+    | '/termek/berszamfejto-2026'
+    | '/termek/beszamolo-2025'
+    | '/termek/cegkivonat-excel-konverter'
+    | '/termek/havi-riport'
+    | '/termek/havi-riport-en'
+    | '/termek/ifrs-konszolidalo'
+    | '/termek/kamatlekerdezo-potlekszamito'
+    | '/termek/kulcs-nyito-vegyes-konyvelo'
+    | '/termek/nav-online-szamla-letolto'
+    | '/termek/nav-penztargep-letolto'
+    | '/termek/nav-torzsszam-partnerellenorzo'
+    | '/termek/pdf-excel-konverter'
+    | '/termek/penzszam-kulfoldi-szamla-import'
+    | '/termek/rlb-bank-konverter'
+    | '/termek/rlb-bank-konverter-pro'
+    | '/termek/rlb-kulfoldi-szamla-import'
+    | '/termek/rlb-nyito-vegyes-konyvelo'
+    | '/termek/sup-nyito-vegyes-konyvelo'
+    | '/termek/szamviteli-konszolidalo'
+    | '/termek/telefonszamla-konyvelo'
+    | '/termek/ugyfelkapu-totp-manager'
+    | '/termek/univerzalis-bank-konverter'
+    | '/termek/utalasi-csomag-keszito'
+    | '/termek/utnyilvantartas-kikuldetesi-rendelveny'
+    | '/termek/wifi-jelszo-nezo'
     | '/admin'
     | '/kalkulatorok'
     | '/api/public/billingo/webhook'
@@ -586,6 +926,35 @@ export interface FileRouteTypes {
     | '/kalkulatorok/szamla-datumok'
     | '/megrendeles_/koszonjuk'
     | '/termek/$slug'
+    | '/termek/a60-osszesito-nyilatkozat-xml'
+    | '/termek/adofolyoszamla-egyezteto'
+    | '/termek/afa-2665-xml-generalo'
+    | '/termek/auditxml-ellenorzo-javito'
+    | '/termek/berszamfejto-2026'
+    | '/termek/beszamolo-2025'
+    | '/termek/cegkivonat-excel-konverter'
+    | '/termek/havi-riport'
+    | '/termek/havi-riport-en'
+    | '/termek/ifrs-konszolidalo'
+    | '/termek/kamatlekerdezo-potlekszamito'
+    | '/termek/kulcs-nyito-vegyes-konyvelo'
+    | '/termek/nav-online-szamla-letolto'
+    | '/termek/nav-penztargep-letolto'
+    | '/termek/nav-torzsszam-partnerellenorzo'
+    | '/termek/pdf-excel-konverter'
+    | '/termek/penzszam-kulfoldi-szamla-import'
+    | '/termek/rlb-bank-konverter'
+    | '/termek/rlb-bank-konverter-pro'
+    | '/termek/rlb-kulfoldi-szamla-import'
+    | '/termek/rlb-nyito-vegyes-konyvelo'
+    | '/termek/sup-nyito-vegyes-konyvelo'
+    | '/termek/szamviteli-konszolidalo'
+    | '/termek/telefonszamla-konyvelo'
+    | '/termek/ugyfelkapu-totp-manager'
+    | '/termek/univerzalis-bank-konverter'
+    | '/termek/utalasi-csomag-keszito'
+    | '/termek/utnyilvantartas-kikuldetesi-rendelveny'
+    | '/termek/wifi-jelszo-nezo'
     | '/admin/'
     | '/kalkulatorok/'
     | '/api/public/billingo/webhook'
@@ -629,6 +998,35 @@ export interface RootRouteChildren {
   KalkulatorokSzamlaDatumokRoute: typeof KalkulatorokSzamlaDatumokRoute
   MegrendelesKoszonjukRoute: typeof MegrendelesKoszonjukRoute
   TermekSlugRoute: typeof TermekSlugRoute
+  TermekA60OsszesitoNyilatkozatXmlRoute: typeof TermekA60OsszesitoNyilatkozatXmlRoute
+  TermekAdofolyoszamlaEgyeztetoRoute: typeof TermekAdofolyoszamlaEgyeztetoRoute
+  TermekAfa2665XmlGeneraloRoute: typeof TermekAfa2665XmlGeneraloRoute
+  TermekAuditxmlEllenorzoJavitoRoute: typeof TermekAuditxmlEllenorzoJavitoRoute
+  TermekBerszamfejto2026Route: typeof TermekBerszamfejto2026Route
+  TermekBeszamolo2025Route: typeof TermekBeszamolo2025Route
+  TermekCegkivonatExcelKonverterRoute: typeof TermekCegkivonatExcelKonverterRoute
+  TermekHaviRiportRoute: typeof TermekHaviRiportRoute
+  TermekHaviRiportEnRoute: typeof TermekHaviRiportEnRoute
+  TermekIfrsKonszolidaloRoute: typeof TermekIfrsKonszolidaloRoute
+  TermekKamatlekerdezoPotlekszamitoRoute: typeof TermekKamatlekerdezoPotlekszamitoRoute
+  TermekKulcsNyitoVegyesKonyveloRoute: typeof TermekKulcsNyitoVegyesKonyveloRoute
+  TermekNavOnlineSzamlaLetoltoRoute: typeof TermekNavOnlineSzamlaLetoltoRoute
+  TermekNavPenztargepLetoltoRoute: typeof TermekNavPenztargepLetoltoRoute
+  TermekNavTorzsszamPartnerellenorzoRoute: typeof TermekNavTorzsszamPartnerellenorzoRoute
+  TermekPdfExcelKonverterRoute: typeof TermekPdfExcelKonverterRoute
+  TermekPenzszamKulfoldiSzamlaImportRoute: typeof TermekPenzszamKulfoldiSzamlaImportRoute
+  TermekRlbBankKonverterRoute: typeof TermekRlbBankKonverterRoute
+  TermekRlbBankKonverterProRoute: typeof TermekRlbBankKonverterProRoute
+  TermekRlbKulfoldiSzamlaImportRoute: typeof TermekRlbKulfoldiSzamlaImportRoute
+  TermekRlbNyitoVegyesKonyveloRoute: typeof TermekRlbNyitoVegyesKonyveloRoute
+  TermekSupNyitoVegyesKonyveloRoute: typeof TermekSupNyitoVegyesKonyveloRoute
+  TermekSzamviteliKonszolidaloRoute: typeof TermekSzamviteliKonszolidaloRoute
+  TermekTelefonszamlaKonyveloRoute: typeof TermekTelefonszamlaKonyveloRoute
+  TermekUgyfelkapuTotpManagerRoute: typeof TermekUgyfelkapuTotpManagerRoute
+  TermekUniverzalisBankKonverterRoute: typeof TermekUniverzalisBankKonverterRoute
+  TermekUtalasiCsomagKeszitoRoute: typeof TermekUtalasiCsomagKeszitoRoute
+  TermekUtnyilvantartasKikuldetesiRendelvenyRoute: typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
+  TermekWifiJelszoNezoRoute: typeof TermekWifiJelszoNezoRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
   ApiPublicBillingoWebhookRoute: typeof ApiPublicBillingoWebhookRoute
   ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
@@ -927,6 +1325,209 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/termek/a60-osszesito-nyilatkozat-xml': {
+      id: '/termek/a60-osszesito-nyilatkozat-xml'
+      path: '/termek/a60-osszesito-nyilatkozat-xml'
+      fullPath: '/termek/a60-osszesito-nyilatkozat-xml'
+      preLoaderRoute: typeof TermekA60OsszesitoNyilatkozatXmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/adofolyoszamla-egyezteto': {
+      id: '/termek/adofolyoszamla-egyezteto'
+      path: '/termek/adofolyoszamla-egyezteto'
+      fullPath: '/termek/adofolyoszamla-egyezteto'
+      preLoaderRoute: typeof TermekAdofolyoszamlaEgyeztetoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/afa-2665-xml-generalo': {
+      id: '/termek/afa-2665-xml-generalo'
+      path: '/termek/afa-2665-xml-generalo'
+      fullPath: '/termek/afa-2665-xml-generalo'
+      preLoaderRoute: typeof TermekAfa2665XmlGeneraloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/auditxml-ellenorzo-javito': {
+      id: '/termek/auditxml-ellenorzo-javito'
+      path: '/termek/auditxml-ellenorzo-javito'
+      fullPath: '/termek/auditxml-ellenorzo-javito'
+      preLoaderRoute: typeof TermekAuditxmlEllenorzoJavitoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/berszamfejto-2026': {
+      id: '/termek/berszamfejto-2026'
+      path: '/termek/berszamfejto-2026'
+      fullPath: '/termek/berszamfejto-2026'
+      preLoaderRoute: typeof TermekBerszamfejto2026RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/beszamolo-2025': {
+      id: '/termek/beszamolo-2025'
+      path: '/termek/beszamolo-2025'
+      fullPath: '/termek/beszamolo-2025'
+      preLoaderRoute: typeof TermekBeszamolo2025RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/cegkivonat-excel-konverter': {
+      id: '/termek/cegkivonat-excel-konverter'
+      path: '/termek/cegkivonat-excel-konverter'
+      fullPath: '/termek/cegkivonat-excel-konverter'
+      preLoaderRoute: typeof TermekCegkivonatExcelKonverterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/havi-riport': {
+      id: '/termek/havi-riport'
+      path: '/termek/havi-riport'
+      fullPath: '/termek/havi-riport'
+      preLoaderRoute: typeof TermekHaviRiportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/havi-riport-en': {
+      id: '/termek/havi-riport-en'
+      path: '/termek/havi-riport-en'
+      fullPath: '/termek/havi-riport-en'
+      preLoaderRoute: typeof TermekHaviRiportEnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/ifrs-konszolidalo': {
+      id: '/termek/ifrs-konszolidalo'
+      path: '/termek/ifrs-konszolidalo'
+      fullPath: '/termek/ifrs-konszolidalo'
+      preLoaderRoute: typeof TermekIfrsKonszolidaloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/kamatlekerdezo-potlekszamito': {
+      id: '/termek/kamatlekerdezo-potlekszamito'
+      path: '/termek/kamatlekerdezo-potlekszamito'
+      fullPath: '/termek/kamatlekerdezo-potlekszamito'
+      preLoaderRoute: typeof TermekKamatlekerdezoPotlekszamitoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/kulcs-nyito-vegyes-konyvelo': {
+      id: '/termek/kulcs-nyito-vegyes-konyvelo'
+      path: '/termek/kulcs-nyito-vegyes-konyvelo'
+      fullPath: '/termek/kulcs-nyito-vegyes-konyvelo'
+      preLoaderRoute: typeof TermekKulcsNyitoVegyesKonyveloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/nav-online-szamla-letolto': {
+      id: '/termek/nav-online-szamla-letolto'
+      path: '/termek/nav-online-szamla-letolto'
+      fullPath: '/termek/nav-online-szamla-letolto'
+      preLoaderRoute: typeof TermekNavOnlineSzamlaLetoltoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/nav-penztargep-letolto': {
+      id: '/termek/nav-penztargep-letolto'
+      path: '/termek/nav-penztargep-letolto'
+      fullPath: '/termek/nav-penztargep-letolto'
+      preLoaderRoute: typeof TermekNavPenztargepLetoltoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/nav-torzsszam-partnerellenorzo': {
+      id: '/termek/nav-torzsszam-partnerellenorzo'
+      path: '/termek/nav-torzsszam-partnerellenorzo'
+      fullPath: '/termek/nav-torzsszam-partnerellenorzo'
+      preLoaderRoute: typeof TermekNavTorzsszamPartnerellenorzoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/pdf-excel-konverter': {
+      id: '/termek/pdf-excel-konverter'
+      path: '/termek/pdf-excel-konverter'
+      fullPath: '/termek/pdf-excel-konverter'
+      preLoaderRoute: typeof TermekPdfExcelKonverterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/penzszam-kulfoldi-szamla-import': {
+      id: '/termek/penzszam-kulfoldi-szamla-import'
+      path: '/termek/penzszam-kulfoldi-szamla-import'
+      fullPath: '/termek/penzszam-kulfoldi-szamla-import'
+      preLoaderRoute: typeof TermekPenzszamKulfoldiSzamlaImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/rlb-bank-konverter': {
+      id: '/termek/rlb-bank-konverter'
+      path: '/termek/rlb-bank-konverter'
+      fullPath: '/termek/rlb-bank-konverter'
+      preLoaderRoute: typeof TermekRlbBankKonverterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/rlb-bank-konverter-pro': {
+      id: '/termek/rlb-bank-konverter-pro'
+      path: '/termek/rlb-bank-konverter-pro'
+      fullPath: '/termek/rlb-bank-konverter-pro'
+      preLoaderRoute: typeof TermekRlbBankKonverterProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/rlb-kulfoldi-szamla-import': {
+      id: '/termek/rlb-kulfoldi-szamla-import'
+      path: '/termek/rlb-kulfoldi-szamla-import'
+      fullPath: '/termek/rlb-kulfoldi-szamla-import'
+      preLoaderRoute: typeof TermekRlbKulfoldiSzamlaImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/rlb-nyito-vegyes-konyvelo': {
+      id: '/termek/rlb-nyito-vegyes-konyvelo'
+      path: '/termek/rlb-nyito-vegyes-konyvelo'
+      fullPath: '/termek/rlb-nyito-vegyes-konyvelo'
+      preLoaderRoute: typeof TermekRlbNyitoVegyesKonyveloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/sup-nyito-vegyes-konyvelo': {
+      id: '/termek/sup-nyito-vegyes-konyvelo'
+      path: '/termek/sup-nyito-vegyes-konyvelo'
+      fullPath: '/termek/sup-nyito-vegyes-konyvelo'
+      preLoaderRoute: typeof TermekSupNyitoVegyesKonyveloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/szamviteli-konszolidalo': {
+      id: '/termek/szamviteli-konszolidalo'
+      path: '/termek/szamviteli-konszolidalo'
+      fullPath: '/termek/szamviteli-konszolidalo'
+      preLoaderRoute: typeof TermekSzamviteliKonszolidaloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/telefonszamla-konyvelo': {
+      id: '/termek/telefonszamla-konyvelo'
+      path: '/termek/telefonszamla-konyvelo'
+      fullPath: '/termek/telefonszamla-konyvelo'
+      preLoaderRoute: typeof TermekTelefonszamlaKonyveloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/ugyfelkapu-totp-manager': {
+      id: '/termek/ugyfelkapu-totp-manager'
+      path: '/termek/ugyfelkapu-totp-manager'
+      fullPath: '/termek/ugyfelkapu-totp-manager'
+      preLoaderRoute: typeof TermekUgyfelkapuTotpManagerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/univerzalis-bank-konverter': {
+      id: '/termek/univerzalis-bank-konverter'
+      path: '/termek/univerzalis-bank-konverter'
+      fullPath: '/termek/univerzalis-bank-konverter'
+      preLoaderRoute: typeof TermekUniverzalisBankKonverterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/utalasi-csomag-keszito': {
+      id: '/termek/utalasi-csomag-keszito'
+      path: '/termek/utalasi-csomag-keszito'
+      fullPath: '/termek/utalasi-csomag-keszito'
+      preLoaderRoute: typeof TermekUtalasiCsomagKeszitoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/utnyilvantartas-kikuldetesi-rendelveny': {
+      id: '/termek/utnyilvantartas-kikuldetesi-rendelveny'
+      path: '/termek/utnyilvantartas-kikuldetesi-rendelveny'
+      fullPath: '/termek/utnyilvantartas-kikuldetesi-rendelveny'
+      preLoaderRoute: typeof TermekUtnyilvantartasKikuldetesiRendelvenyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termek/wifi-jelszo-nezo': {
+      id: '/termek/wifi-jelszo-nezo'
+      path: '/termek/wifi-jelszo-nezo'
+      fullPath: '/termek/wifi-jelszo-nezo'
+      preLoaderRoute: typeof TermekWifiJelszoNezoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/billingo/webhook': {
       id: '/api/public/billingo/webhook'
       path: '/api/public/billingo/webhook'
@@ -1029,6 +1630,39 @@ const rootRouteChildren: RootRouteChildren = {
   KalkulatorokSzamlaDatumokRoute: KalkulatorokSzamlaDatumokRoute,
   MegrendelesKoszonjukRoute: MegrendelesKoszonjukRoute,
   TermekSlugRoute: TermekSlugRoute,
+  TermekA60OsszesitoNyilatkozatXmlRoute: TermekA60OsszesitoNyilatkozatXmlRoute,
+  TermekAdofolyoszamlaEgyeztetoRoute: TermekAdofolyoszamlaEgyeztetoRoute,
+  TermekAfa2665XmlGeneraloRoute: TermekAfa2665XmlGeneraloRoute,
+  TermekAuditxmlEllenorzoJavitoRoute: TermekAuditxmlEllenorzoJavitoRoute,
+  TermekBerszamfejto2026Route: TermekBerszamfejto2026Route,
+  TermekBeszamolo2025Route: TermekBeszamolo2025Route,
+  TermekCegkivonatExcelKonverterRoute: TermekCegkivonatExcelKonverterRoute,
+  TermekHaviRiportRoute: TermekHaviRiportRoute,
+  TermekHaviRiportEnRoute: TermekHaviRiportEnRoute,
+  TermekIfrsKonszolidaloRoute: TermekIfrsKonszolidaloRoute,
+  TermekKamatlekerdezoPotlekszamitoRoute:
+    TermekKamatlekerdezoPotlekszamitoRoute,
+  TermekKulcsNyitoVegyesKonyveloRoute: TermekKulcsNyitoVegyesKonyveloRoute,
+  TermekNavOnlineSzamlaLetoltoRoute: TermekNavOnlineSzamlaLetoltoRoute,
+  TermekNavPenztargepLetoltoRoute: TermekNavPenztargepLetoltoRoute,
+  TermekNavTorzsszamPartnerellenorzoRoute:
+    TermekNavTorzsszamPartnerellenorzoRoute,
+  TermekPdfExcelKonverterRoute: TermekPdfExcelKonverterRoute,
+  TermekPenzszamKulfoldiSzamlaImportRoute:
+    TermekPenzszamKulfoldiSzamlaImportRoute,
+  TermekRlbBankKonverterRoute: TermekRlbBankKonverterRoute,
+  TermekRlbBankKonverterProRoute: TermekRlbBankKonverterProRoute,
+  TermekRlbKulfoldiSzamlaImportRoute: TermekRlbKulfoldiSzamlaImportRoute,
+  TermekRlbNyitoVegyesKonyveloRoute: TermekRlbNyitoVegyesKonyveloRoute,
+  TermekSupNyitoVegyesKonyveloRoute: TermekSupNyitoVegyesKonyveloRoute,
+  TermekSzamviteliKonszolidaloRoute: TermekSzamviteliKonszolidaloRoute,
+  TermekTelefonszamlaKonyveloRoute: TermekTelefonszamlaKonyveloRoute,
+  TermekUgyfelkapuTotpManagerRoute: TermekUgyfelkapuTotpManagerRoute,
+  TermekUniverzalisBankKonverterRoute: TermekUniverzalisBankKonverterRoute,
+  TermekUtalasiCsomagKeszitoRoute: TermekUtalasiCsomagKeszitoRoute,
+  TermekUtnyilvantartasKikuldetesiRendelvenyRoute:
+    TermekUtnyilvantartasKikuldetesiRendelvenyRoute,
+  TermekWifiJelszoNezoRoute: TermekWifiJelszoNezoRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
   ApiPublicBillingoWebhookRoute: ApiPublicBillingoWebhookRoute,
   ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
