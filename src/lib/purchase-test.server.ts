@@ -108,18 +108,22 @@ export async function runFullPurchaseTest(
 
     try {
       const { createStripeClient } = await import("./stripe.server");
-      const liveReady = Boolean(
-        process.env["STRIPE_LIVE_API_KEY"] && process.env["PAYMENTS_LIVE_WEBHOOK_SECRET"],
-      );
-      const stripe = createStripeClient(liveReady ? "live" : "sandbox");
+      const env = input.environment;
+      if (env === "live") {
+        const liveReady = Boolean(
+          process.env["STRIPE_LIVE_API_KEY"] && process.env["PAYMENTS_LIVE_WEBHOOK_SECRET"],
+        );
+        if (!liveReady) throw new Error("Az éles Stripe kulcs vagy webhook secret hiányzik.");
+      }
+      const stripe = createStripeClient(env);
       const prices = await stripe.prices.list({ lookup_keys: [tier?.priceId ?? ""] });
       const price = prices.data[0];
       if (!price) throw new Error("A termék árazása nem található a Stripe-ban.");
       push({
         key: "stripe",
-        label: "Stripe árazás ellenőrzése",
+        label: `Stripe árazás ellenőrzése (${env === "live" ? "éles" : "teszt"})`,
         status: "ok",
-        detail: `Ár rendben (${price.id}) a ${liveReady ? "live" : "sandbox"} Stripe fiókban.`,
+        detail: `Ár rendben (${price.id}) a ${env === "live" ? "live" : "sandbox"} Stripe fiókban.`,
       });
     } catch (e: any) {
       push({
