@@ -87,6 +87,8 @@ export function FullPurchaseTestPanel() {
     setRunning(true);
     setError("");
     setResult(null);
+    setCleanupResult(null);
+    setCleanupError("");
     try {
       const product = orderable.find((p) => p.slug === slug)!;
       const res = await runTest({
@@ -105,6 +107,21 @@ export function FullPurchaseTestPanel() {
       setError("A teszt futtatása nem sikerült. Nézd meg a szerver naplót.");
     } finally {
       setRunning(false);
+    }
+  }
+
+  async function onCleanup() {
+    if (!result?.orderNumber) return;
+    setCleaning(true);
+    setCleanupError("");
+    setCleanupResult(null);
+    try {
+      const res = await cleanupTest({ data: { orderNumber: result.orderNumber } });
+      setCleanupResult(res);
+    } catch {
+      setCleanupError("A takarítás nem sikerült. Nézd meg a szerver naplót.");
+    } finally {
+      setCleaning(false);
     }
   }
 
