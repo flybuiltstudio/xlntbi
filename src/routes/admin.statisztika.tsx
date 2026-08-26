@@ -1260,6 +1260,9 @@ function PageViewStats() {
   }, [counts]);
   const [year, setYear] = useState<number>(new Date().getFullYear());
   const activeYear = years.includes(year) ? year : (years[0] ?? new Date().getFullYear());
+  const [month, setMonth] = useState<number | "all">("all");
+  const periodLabel =
+    month === "all" ? String(activeYear) : `${activeYear}. ${MONTHS[month] ?? ""}`;
 
   const productEntries = useMemo(
     () => products.map((p) => ({ key: p.slug, label: p.name })),
@@ -1300,21 +1303,44 @@ function PageViewStats() {
         ))}
       </div>
 
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-sm font-semibold text-foreground">Hónap:</span>
+        <button
+          type="button"
+          className={filterChip(month === "all")}
+          onClick={() => setMonth("all")}
+        >
+          Egész év
+        </button>
+        {MONTHS.map((label, i) => (
+          <button
+            key={label}
+            type="button"
+            className={filterChip(month === i)}
+            onClick={() => setMonth(i)}
+          >
+            {MONTHS_SHORT[i]}
+          </button>
+        ))}
+      </div>
+
       <PageViewBlock
-        title={`Termék Részletek oldalak letöltései – ${activeYear}`}
-        note="Csak a publikált (éles) oldalon mért megnyitások, havi bontásban. Minden termék szerepel, akkor is, ha nulla."
+        title={`Termék Részletek oldalak letöltései – ${periodLabel}`}
+        note="Csak a publikált (éles) oldalon mért megnyitások. Minden termék szerepel, akkor is, ha nulla."
         firstColumn="Termék"
         rows={productRows}
         year={activeYear}
+        month={month}
         fileBase="termek-oldalletoltesek"
       />
 
       <PageViewBlock
-        title={`Szolgáltatás aloldalak letöltései – ${activeYear}`}
-        note="Csak a publikált (éles) oldalon mért megnyitások, havi bontásban. Minden szolgáltatás szerepel, akkor is, ha nulla."
+        title={`Szolgáltatás aloldalak letöltései – ${periodLabel}`}
+        note="Csak a publikált (éles) oldalon mért megnyitások. Minden szolgáltatás szerepel, akkor is, ha nulla."
         firstColumn="Szolgáltatás"
         rows={serviceRows}
         year={activeYear}
+        month={month}
         fileBase="szolgaltatas-oldalletoltesek"
       />
     </section>
@@ -1327,6 +1353,7 @@ function PageViewBlock({
   firstColumn,
   rows,
   year,
+  month,
   fileBase,
 }: {
   title: string;
@@ -1334,11 +1361,12 @@ function PageViewBlock({
   firstColumn: string;
   rows: ReturnType<typeof pivotPageViews>;
   year: number;
+  month: number | "all";
   fileBase: string;
 }) {
   const [exporting, setExporting] = useState<string | null>(null);
-  const table = pageViewTable(title, firstColumn, rows, year);
-  const filename = `xlntbi-${fileBase}-${year}`;
+  const table = pageViewTable(title, firstColumn, rows, year, month);
+  const filename = `xlntbi-${fileBase}-${year}${month === "all" ? "" : `-${month + 1}`}`;
   const btn =
     "inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted disabled:opacity-60";
 
@@ -1351,7 +1379,8 @@ function PageViewBlock({
     }
   };
 
-  const totals = table.foot ?? [];
+  const monthIndexes = month === "all" ? MONTHS_SHORT.map((_, i) => i) : [month];
+  const showTotal = month === "all";
 
   return (
     <div>
@@ -1406,38 +1435,41 @@ function PageViewBlock({
       </div>
 
       <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
-        <table className="w-full min-w-[880px] text-sm">
+        <table className={`w-full text-sm ${showTotal ? "min-w-[880px]" : "min-w-[420px]"}`}>
           <thead>
             <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
               <th className="px-4 py-3 font-semibold">{firstColumn}</th>
-              {MONTHS_SHORT.map((m) => (
-                <th key={m} className="px-2 py-3 text-right font-semibold">
-                  {m}
+              {monthIndexes.map((i) => (
+                <th key={i} className="px-2 py-3 text-right font-semibold">
+                  {MONTHS_SHORT[i]}
                 </th>
               ))}
-              <th className="px-4 py-3 text-right font-semibold">Összesen</th>
+              {showTotal ? (
+                <th className="px-4 py-3 text-right font-semibold">Összesen</th>
+              ) : null}
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
               <tr key={row.key} className="border-b border-border/60 last:border-0">
                 <td className="px-4 py-3 font-medium text-foreground">{row.label}</td>
-                {row.months.map((value, i) => (
+                {monthIndexes.map((i) => (
                   <td key={i} className="px-2 py-3 text-right text-muted-foreground">
-                    {value}
+                    {row.months[i] ?? 0}
                   </td>
                 ))}
-                <td className="px-4 py-3 text-right font-semibold text-foreground">{row.total}</td>
+                {showTotal ? (
+                  <td className="px-4 py-3 text-right font-semibold text-foreground">
+                    {row.total}
+                  </td>
+                ) : null}
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr className="border-t border-border bg-muted/50 text-sm font-semibold text-foreground">
-              {totals.map((cell, i) => (
-                <td
-                  key={i}
-                  className={i === 0 ? "px-4 py-3" : "px-2 py-3 text-right"}
-                >
+              {(table.foot ?? []).map((cell, i) => (
+                <td key={i} className={i === 0 ? "px-4 py-3" : "px-2 py-3 text-right"}>
                   {cell}
                 </td>
               ))}
@@ -1445,6 +1477,128 @@ function PageViewBlock({
           </tfoot>
         </table>
       </div>
+
+      <PageViewChart rows={rows} year={year} month={month} firstColumn={firstColumn} />
+    </div>
+  );
+}
+
+/** Sávdiagram: havi (vagy egy hónapon belüli) oldalletöltések, elemenként színezve. */
+function PageViewChart({
+  rows,
+  year,
+  month,
+  firstColumn,
+}: {
+  rows: ReturnType<typeof pivotPageViews>;
+  year: number;
+  month: number | "all";
+  firstColumn: string;
+}) {
+  const active = rows.filter((row) =>
+    month === "all" ? row.total > 0 : (row.months[month] ?? 0) > 0,
+  );
+
+  if (active.length === 0) {
+    return (
+      <p className="mt-4 rounded-xl border border-dashed border-border bg-card p-5 text-sm text-muted-foreground">
+        Ehhez az időszakhoz ({month === "all" ? year : `${year}. ${MONTHS[month] ?? ""}`}) még nincs
+        mért oldalletöltés, ezért a diagram üres.
+      </p>
+    );
+  }
+
+  const colorOf = (index: number) => PALETTE[index % PALETTE.length] ?? "#14532d";
+
+  if (month === "all") {
+    const monthTotals = MONTHS_SHORT.map((_, i) =>
+      active.reduce((sum, row) => sum + (row.months[i] ?? 0), 0),
+    );
+    const max = Math.max(1, ...monthTotals);
+    return (
+      <div className="mt-6 rounded-xl border border-border bg-card p-5">
+        <p className="text-sm text-muted-foreground">
+          <strong className="text-foreground">{year}</strong> – oldalletöltések havonta (db),
+          {firstColumn.toLowerCase()}enként színezve
+        </p>
+        <div className="mt-6 flex h-60 items-end gap-1 sm:gap-2">
+          {MONTHS_SHORT.map((label, i) => (
+            <div key={label} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+              <span className="text-xs font-semibold text-foreground">{monthTotals[i]}</span>
+              <div className="flex w-full flex-col justify-end" style={{ height: "100%" }}>
+                {active.map((row, ri) => {
+                  const value = row.months[i] ?? 0;
+                  if (value <= 0) return null;
+                  return (
+                    <div
+                      key={row.key}
+                      title={`${row.label} – ${MONTHS[i]}: ${value} db`}
+                      style={{
+                        height: `${((value / (max || 1)) * 100).toFixed(2)}%`,
+                        backgroundColor: colorOf(ri),
+                      }}
+                    />
+                  );
+                })}
+              </div>
+              <span className="text-xs text-muted-foreground">{label}</span>
+            </div>
+          ))}
+        </div>
+        <PageViewLegend items={active.map((row, ri) => ({ label: row.label, color: colorOf(ri) }))} />
+      </div>
+    );
+  }
+
+  const max = Math.max(1, ...active.map((row) => row.months[month] ?? 0));
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-card p-5">
+      <p className="text-sm text-muted-foreground">
+        <strong className="text-foreground">
+          {year}. {MONTHS[month] ?? ""}
+        </strong>{" "}
+        – oldalletöltések (db)
+      </p>
+      <div className="mt-5 space-y-2">
+        {active.map((row, ri) => {
+          const value = row.months[month] ?? 0;
+          return (
+            <div key={row.key} className="flex items-center gap-3">
+              <span className="w-56 shrink-0 truncate text-sm text-foreground" title={row.label}>
+                {row.label}
+              </span>
+              <div className="h-4 flex-1 rounded bg-muted">
+                <div
+                  className="h-4 rounded"
+                  style={{
+                    width: `${((value / max) * 100).toFixed(2)}%`,
+                    backgroundColor: colorOf(ri),
+                  }}
+                />
+              </div>
+              <span className="w-12 shrink-0 text-right text-sm font-semibold text-foreground">
+                {value}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PageViewLegend({ items }: { items: { label: string; color: string }[] }) {
+  return (
+    <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
+      {items.map((item) => (
+        <span key={item.label} className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span
+            className="inline-block h-3 w-3 rounded-sm"
+            style={{ backgroundColor: item.color }}
+          />
+          {item.label}
+        </span>
+      ))}
     </div>
   );
 }
