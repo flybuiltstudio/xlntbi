@@ -26,4 +26,4 @@ User-agent: *
 Allow: /
 Disallow: /megrendeles
 
-Sitemap: https://xlntbi.lovable.app/sitemap.xml
+Sitemap: https://xlntbi.hu/sitemap.xml
