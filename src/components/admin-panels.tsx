@@ -12,6 +12,7 @@ import {
   adminListCalculatorOverrides,
   adminListInvoiceLogs,
   adminListOrders,
+  adminPurgeTestOrders,
   adminListProductFiles,
   adminListProductPlacements,
   adminListUsers,
@@ -293,6 +294,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const invoiceUrl = useServerFn(adminInvoiceUrl);
   const invoiceSnapshot = useServerFn(adminInvoiceSnapshot);
   const sendLicense = useServerFn(adminSendLicense);
+  const purgeTests = useServerFn(adminPurgeTestOrders);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
@@ -494,6 +496,32 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
+  /** Removes every test order and all data referencing it. */
+  async function onPurgeTests() {
+    if (
+      !window.confirm(
+        "Biztosan törlöd az ÖSSZES teszt megrendelést? Ez a hozzájuk tartozó letöltési linkeket, számlázási naplókat és számlaadatokat is véglegesen törli.",
+      )
+    )
+      return;
+    setBusy("purge");
+    setMessage("");
+    try {
+      const result = await purgeTests();
+      setMessage(
+        result.ok
+          ? result.deleted > 0
+            ? `${result.deleted} teszt megrendelés és minden hozzá tartozó adat törölve.`
+            : "Nem találtam teszt megrendelést."
+          : (result.error ?? "Hiba történt."),
+      );
+      await refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
   return (
     <div className="mt-8">
       <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
@@ -506,6 +534,14 @@ export function OrdersPanel({ email }: { email: string | null }) {
           className="rounded-md border border-input px-3 py-1.5 font-medium text-foreground hover:bg-accent"
         >
           Frissítés
+        </button>
+        <button
+          type="button"
+          onClick={() => void onPurgeTests()}
+          disabled={busy === "purge"}
+          className="rounded-md border border-destructive/50 px-3 py-1.5 font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50"
+        >
+          {busy === "purge" ? "Törlés…" : "Teszt megrendelések törlése"}
         </button>
       </div>
 
