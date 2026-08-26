@@ -403,6 +403,17 @@ export const adminRunPurchaseTest = createServerFn({ method: "POST" })
     return runFullPurchaseTest(data);
   });
 
+export const adminCleanupTestOrder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z.object({ orderNumber: z.string().trim().min(2).max(40) }).parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { cleanupTestOrder } = await import("./purchase-test.server");
+    return cleanupTestOrder(data.orderNumber);
+  });
+
 export const adminCouponGuardState = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {

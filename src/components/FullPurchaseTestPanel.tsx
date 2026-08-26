@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   CheckCircle2,
   CircleDashed,
+  Eraser,
   Loader2,
   PlayCircle,
   ShieldCheck,
@@ -11,6 +12,7 @@ import {
 } from "lucide-react";
 
 import {
+  adminCleanupTestOrder,
   adminCouponGuardState,
   adminRunPurchaseTest,
   adminSweepLiveCoupons,
@@ -21,6 +23,7 @@ import { getTier, products } from "@/lib/products";
 import { ALLOWED_LIVE_PROMOTION_CODES, TEST_PROMOTION_CODES } from "@/lib/coupons";
 
 type TestResult = Awaited<ReturnType<typeof adminRunPurchaseTest>>;
+type CleanupResult = Awaited<ReturnType<typeof adminCleanupTestOrder>>;
 type GuardState = Awaited<ReturnType<typeof adminCouponGuardState>>;
 
 const inputClass =
@@ -36,6 +39,7 @@ function StepIcon({ status }: { status: TestResult["steps"][number]["status"] })
 
 export function FullPurchaseTestPanel() {
   const runTest = useServerFn(adminRunPurchaseTest);
+  const cleanupTest = useServerFn(adminCleanupTestOrder);
   const guardState = useServerFn(adminCouponGuardState);
   const sweepCoupons = useServerFn(adminSweepLiveCoupons);
 
@@ -53,9 +57,20 @@ export function FullPurchaseTestPanel() {
   const [result, setResult] = useState<TestResult | null>(null);
   const [error, setError] = useState("");
 
+  const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null);
+  const [cleaning, setCleaning] = useState(false);
+  const [cleanupError, setCleanupError] = useState("");
+
   const [guard, setGuard] = useState<GuardState | null>(null);
   const [sweeping, setSweeping] = useState(false);
   const [sweepMessage, setSweepMessage] = useState("");
+
+  /** True when the latest test run skipped cleanup (checkbox unchecked). */
+  const cleanupAvailable = Boolean(
+    result?.orderNumber &&
+      String(result.orderNumber).startsWith("TESZT-") &&
+      result.steps.some((s) => s.key === "cleanup" && s.status === "skipped"),
+  );
 
   const loadGuard = useCallback(() => {
     guardState()
@@ -72,6 +87,8 @@ export function FullPurchaseTestPanel() {
     setRunning(true);
     setError("");
     setResult(null);
+    setCleanupResult(null);
+    setCleanupError("");
     try {
       const product = orderable.find((p) => p.slug === slug)!;
       const res = await runTest({
@@ -90,6 +107,21 @@ export function FullPurchaseTestPanel() {
       setError("A teszt futtatása nem sikerült. Nézd meg a szerver naplót.");
     } finally {
       setRunning(false);
+    }
+  }
+
+  async function onCleanup() {
+    if (!result?.orderNumber) return;
+    setCleaning(true);
+    setCleanupError("");
+    setCleanupResult(null);
+    try {
+      const res = await cleanupTest({ data: { orderNumber: result.orderNumber } });
+      setCleanupResult(res);
+    } catch {
+      setCleanupError("A takarítás nem sikerült. Nézd meg a szerver naplót.");
+    } finally {
+      setCleaning(false);
     }
   }
 
@@ -235,6 +267,46 @@ export function FullPurchaseTestPanel() {
                 </li>
               ))}
             </ul>
+          </div>
+        ) : null}
+
+        {cleanupAvailable ? (
+          <div className="mt-5 rounded-lg border border-border bg-secondary/40 p-4">
+            <p className="text-sm text-foreground">
+              A teszt számla és a <span className="font-mono">{result!.orderNumber}</span>{" "}
+              rendelés még megvan, mert a takarítás ki volt kapcsolva.
+            </p>
+            <button
+              type="button"
+              onClick={() => void onCleanup()}
+              disabled={cleaning}
+              className="mt-3 inline-flex items-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent disabled:opacity-60"
+            >
+              {cleaning ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Eraser className="h-4 w-4" />
+              )}
+              {cleaning ? "Takarítás folyamatban…" : "Teszt számla sztornózása + rendelés törlése most"}
+            </button>
+
+            {cleanupError ? (
+              <p className="mt-3 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                {cleanupError}
+              </p>
+            ) : null}
+
+            {cleanupResult ? (
+              <p
+                className={`mt-3 rounded-md border px-4 py-3 text-sm ${
+                  cleanupResult.ok
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-amber-500/40 bg-amber-500/10 text-amber-700"
+                }`}
+              >
+                {cleanupResult.detail}
+              </p>
+            ) : null}
           </div>
         ) : null}
       </section>
