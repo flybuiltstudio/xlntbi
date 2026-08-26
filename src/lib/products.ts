@@ -1026,7 +1026,7 @@ export const products: Product[] = [
     priceId: "rlb_bank_konverter_egyszeri_licenc",
     price: 14900,
     currency: "HUF",
-    image: modernImg,
+    image: rlbBankKonverterImg,
     metaTitle: "RLB Bank Konverter | EXCELlent",
     metaDescription: "10 banki formátumból RLB-kompatibilis CSV – automatikusan. Ár: 14 900 Ft-tól.",
     intro: [
