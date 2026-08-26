@@ -4,7 +4,7 @@ A csatolt ajánló és a két Excel-sablon alapján új termék kerül a kataló
 
 ## Termékadatok
 
-- Név: MNB ERA Jelentésgenerátor (R12 és R09)
+- Név: MNB ERA Jelentésgenerátor (R09 és R12)
 - Rövid alcím: Jegybanki adatszolgáltatások beküldhető XML/CSV fájlja Excelből, egy gombnyomással
 - Ár: egyetlen licenc, 29 900 Ft (AAM, végösszeg, ÁFA nem kerül rá). Nincs bevezető ár és nincs táblastruktúra-beállítási szolgáltatás.
 - Letölthető fájl: a két sablon egy csomagban (MNB_ERA.zip – MNB_ERA_R12.xlsm és MNB_ERA_R09.xlsm), védett tárolóba.
