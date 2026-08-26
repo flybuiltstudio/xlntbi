@@ -9,19 +9,54 @@ import icPontossag from "@/assets/icons/pontossag.png.asset.json";
 import icAi from "@/assets/icons/ai.png.asset.json";
 import aiIllustration from "@/assets/icons/ai-illustration.jpg.asset.json";
 
-const TITLE = "EXCELlent Business Intelligence – könyvelés, kontrolling, BI";
-const DESC =
-  "Modern digitalizációs és automatizációs megoldások könyvelési és kontrolling szakértelemmel: könyvelés, adótanácsadás, könyvvizsgálat, BI, kalkulátorok és saját fejlesztésű digitális termékek.";
+
+const TITLE = "Könyvelés, kontrolling és pénzügyi BI tanácsadás | EXCELlent Business Intelligence";
+const DESCRIPTION = "Könyvelés, adótanácsadás, kontrolling és fintech BI megoldások egy helyen. Digitális eszközök és szakértői tanácsadás vállalkozásoknak.";
+const CANONICAL = "https://xlntbi.hu/";
+const OG_IMAGE = "https://xlntbi.hu/og/En-modern-konyveloirodaban.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ProfessionalService",
+              "name": "EXCELlent Business Intelligence",
+              "legalName": "Sarinay Dávid",
+              "description": "Könyvelés, adótanácsadás, kontrolling, könyvvizsgálat és pénzügyi BI tanácsadás vállalkozásoknak.",
+              "url": "https://xlntbi.hu/",
+              "telephone": "+36209622176",
+              "email": "info@xlntbi.hu",
+              "image": "https://xlntbi.hu/og/En-modern-konyveloirodaban.jpg",
+              "areaServed": "HU",
+              "priceRange": "$$",
+              "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "Péterfy Sándor u. 9.",
+                      "postalCode": "1076",
+                      "addressLocality": "Budapest",
+                      "addressCountry": "HU"
+              }
+      }),
+      },
     ],
   }),
   component: Index,

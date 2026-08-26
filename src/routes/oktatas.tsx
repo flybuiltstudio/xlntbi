@@ -2,15 +2,74 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ServicePage } from "@/components/ServicePage";
 import heroImage from "@/assets/oktatas.jpg";
 
+const TITLE = "Oktatás és képzés vállalkozóknak, könyvelőknek | EXCELlent Business Intelligence";
+const DESCRIPTION = "Gyakorlati pénzügyi és könyvelési képzések vállalkozóknak és szakembereknek, hogy magabiztosan kezeld cége számait.";
+const CANONICAL = "https://xlntbi.hu/oktatas";
+const OG_IMAGE = "https://xlntbi.hu/og/oktatas.jpg";
+
 export const Route = createFileRoute("/oktatas")({
   head: () => ({
     meta: [
-      { title: "Oktatás – könyvelés, adózás, Excel, Power BI, AI | EXCELlent" },
-      { name: "description", content: "Gyakorlatias oktatás könyvelésből, adózásból, Excelből, Power BI-ból és AI-használatból, vizsgára és napi munkára is." },
-      { property: "og:title", content: "Oktatás – könyvelés, adózás, Excel, Power BI, AI | EXCELlent" },
-      { property: "og:description", content: "Gyakorlatias oktatás könyvelésből, adózásból, Excelből, Power BI-ból és AI-használatból, vizsgára és napi munkára is." },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              "name": "Oktatás és képzés",
+              "description": "Gyakorlati pénzügyi, számviteli és Excel, Power BI képzések vállalkozóknak és könyvelőknek.",
+              "serviceType": "Oktatás és képzés",
+              "url": "https://xlntbi.hu/oktatas",
+              "areaServed": "HU",
+              "provider": {
+                      "@type": "ProfessionalService",
+                      "name": "EXCELlent Business Intelligence",
+                      "url": "https://xlntbi.hu/"
+              }
+      }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Szolgáltatásaim",
+                              "item": "https://xlntbi.hu/szolgaltatasaim"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "name": "Oktatás",
+                              "item": "https://xlntbi.hu/oktatas"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: OktatasPage,

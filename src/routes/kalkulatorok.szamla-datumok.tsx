@@ -11,20 +11,62 @@ const overrideQueryOptions = queryOptions({
   staleTime: 60_000,
 });
 
-const TITLE = "Számla dátumok kalkulátor – teljesítés, határidő, árfolyam | EXCELlent";
-const DESC =
-  "Számlázási dátumok kalkulátora az ÁFA tv. szerint: teljesítési időpont, fizetési határidő és árfolyam-dátum élő MNB-árfolyammal (EUR/GBP/USD). Tájékoztató jellegű kalkulátor.";
+
+const TITLE = "Számla dátumok kalkulátor (teljesítés, fizetési határidő) | EXCELlent Business Intelligence";
+const DESCRIPTION = "Számold ki gyorsan a számla teljesítési dátumát és fizetési határidejét a hatályos szabályok alapján.";
+const CANONICAL = "https://xlntbi.hu/kalkulatorok/szamla-datumok";
+const OG_IMAGE = "https://xlntbi.hu/og/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
 
 export const Route = createFileRoute("/kalkulatorok/szamla-datumok")({
   loader: ({ context }) => context.queryClient.ensureQueryData(overrideQueryOptions),
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/kalkulatorok/szamla-datumok" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/kalkulatorok/invoice-dates" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/kalkulatorok/szamla-datumok" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Kalkulátorok",
+                              "item": "https://xlntbi.hu/kalkulatorok"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "name": "Számla dátumok kalkulátor",
+                              "item": "https://xlntbi.hu/kalkulatorok/szamla-datumok"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: SzamlaDatumokPage,

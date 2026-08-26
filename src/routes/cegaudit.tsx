@@ -2,15 +2,74 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ServicePage } from "@/components/ServicePage";
 import heroImage from "@/assets/cegaudit.jpg";
 
+const TITLE = "Cégaudit szolgáltatás | EXCELlent Business Intelligence";
+const DESCRIPTION = "Átfogó cégaudit, amely feltárja vállalkozásod pénzügyi, számviteli és folyamatbeli kockázatait, konkrét javaslatokkal.";
+const CANONICAL = "https://xlntbi.hu/cegaudit";
+const OG_IMAGE = "https://xlntbi.hu/og/cegaudit.jpg";
+
 export const Route = createFileRoute("/cegaudit")({
   head: () => ({
     meta: [
-      { title: "Cégaudit – folyamatok és kontrollok átvilágítása | EXCELlent" },
-      { name: "description", content: "Gyakorlati cégaudit: folyamatok, kontrollok, riportálás, határidők, hibaforrások és digitalizációs lehetőségek feltárása." },
-      { property: "og:title", content: "Cégaudit – folyamatok és kontrollok átvilágítása | EXCELlent" },
-      { property: "og:description", content: "Gyakorlati cégaudit: folyamatok, kontrollok, riportálás, határidők, hibaforrások és digitalizációs lehetőségek feltárása." },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              "name": "Cégaudit",
+              "description": "Átfogó cégaudit a pénzügyi, számviteli és folyamatbeli kockázatok feltárására.",
+              "serviceType": "Cégaudit",
+              "url": "https://xlntbi.hu/cegaudit",
+              "areaServed": "HU",
+              "provider": {
+                      "@type": "ProfessionalService",
+                      "name": "EXCELlent Business Intelligence",
+                      "url": "https://xlntbi.hu/"
+              }
+      }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Szolgáltatásaim",
+                              "item": "https://xlntbi.hu/szolgaltatasaim"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "name": "Cégaudit",
+                              "item": "https://xlntbi.hu/cegaudit"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: CegauditPage,

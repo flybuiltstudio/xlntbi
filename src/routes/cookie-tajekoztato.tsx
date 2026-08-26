@@ -1,19 +1,50 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LegalPage } from "@/components/LegalPage";
 
-const TITLE = "Cookie-tájékoztató | EXCELlent";
-const DESC =
-  "Milyen sütiket használ a xlntbi.hu weboldal, mire szolgálnak, és hogyan tudod őket kezelni.";
+
+const TITLE = "Cookie tájékoztató | EXCELlent Business Intelligence";
+const DESCRIPTION = "Tájékoztató a weboldalon használt sütikről (cookie-król) és azok kezeléséről.";
+const CANONICAL = "https://xlntbi.hu/cookie-tajekoztato";
 
 export const Route = createFileRoute("/cookie-tajekoztato")({
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "robots", content: "noindex, follow" },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Cookie tájékoztató",
+                              "item": "https://xlntbi.hu/cookie-tajekoztato"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: () => (

@@ -2,15 +2,74 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ServicePage } from "@/components/ServicePage";
 import heroImage from "@/assets/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
 
+const TITLE = "Digitális időmegtakarítási audit | EXCELlent Business Intelligence";
+const DESCRIPTION = "Derítsd ki, mennyi időt takaríthatsz meg cégednél a pénzügyi és könyvelési folyamatok digitalizálásával és automatizálásával.";
+const CANONICAL = "https://xlntbi.hu/digitalis-idomegtakaritasi-audit";
+const OG_IMAGE = "https://xlntbi.hu/og/termekek.jpg";
+
 export const Route = createFileRoute("/digitalis-idomegtakaritasi-audit")({
   head: () => ({
     meta: [
-      { title: "Digitális időmegtakarítási audit | EXCELlent" },
-      { name: "description", content: "Excel, makrók, Power BI és AI-eszközök átvilágítása: hol megy el az idő, és hol lehet valóban gyorsítani a folyamatokon." },
-      { property: "og:title", content: "Digitális időmegtakarítási audit | EXCELlent" },
-      { property: "og:description", content: "Excel, makrók, Power BI és AI-eszközök átvilágítása: hol megy el az idő, és hol lehet valóban gyorsítani a folyamatokon." },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              "name": "Digitális időmegtakarítási audit",
+              "description": "Pénzügyi és könyvelési folyamatok digitalizálási és automatizálási lehetőségeinek feltárása.",
+              "serviceType": "Digitális időmegtakarítási audit",
+              "url": "https://xlntbi.hu/digitalis-idomegtakaritasi-audit",
+              "areaServed": "HU",
+              "provider": {
+                      "@type": "ProfessionalService",
+                      "name": "EXCELlent Business Intelligence",
+                      "url": "https://xlntbi.hu/"
+              }
+      }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Szolgáltatásaim",
+                              "item": "https://xlntbi.hu/szolgaltatasaim"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "name": "Digitális időmegtakarítási audit",
+                              "item": "https://xlntbi.hu/digitalis-idomegtakaritasi-audit"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: DigitalisAuditPage,

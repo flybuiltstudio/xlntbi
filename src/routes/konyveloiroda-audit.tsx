@@ -2,15 +2,74 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ServicePage } from "@/components/ServicePage";
 import heroImage from "@/assets/konyveloiroda-audit.jpg";
 
+const TITLE = "Könyvelőiroda audit, minőségellenőrzés | EXCELlent Business Intelligence";
+const DESCRIPTION = "Auditáld a jelenlegi könyvelőirodád munkáját: hibák, kockázatok és fejlesztési pontok feltárása független szakértővel.";
+const CANONICAL = "https://xlntbi.hu/konyveloiroda-audit";
+const OG_IMAGE = "https://xlntbi.hu/og/konyveloiroda-audit.jpg";
+
 export const Route = createFileRoute("/konyveloiroda-audit")({
   head: () => ({
     meta: [
-      { title: "Könyvelőiroda audit – működési térkép az irodádhoz | EXCELlent" },
-      { name: "description", content: "Könyvelőiroda audit: folyamatok, minőségbiztosítás, határidőkezelés, automatizáció és ügyfélkommunikáció szakmai felülvizsgálata." },
-      { property: "og:title", content: "Könyvelőiroda audit – működési térkép az irodádhoz | EXCELlent" },
-      { property: "og:description", content: "Könyvelőiroda audit: folyamatok, minőségbiztosítás, határidőkezelés, automatizáció és ügyfélkommunikáció szakmai felülvizsgálata." },
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              "name": "Könyvelőiroda audit",
+              "description": "Könyvelőirodai folyamatok, minőségbiztosítás és határidőkezelés független szakmai felülvizsgálata.",
+              "serviceType": "Könyvelőiroda audit",
+              "url": "https://xlntbi.hu/konyveloiroda-audit",
+              "areaServed": "HU",
+              "provider": {
+                      "@type": "ProfessionalService",
+                      "name": "EXCELlent Business Intelligence",
+                      "url": "https://xlntbi.hu/"
+              }
+      }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Szolgáltatásaim",
+                              "item": "https://xlntbi.hu/szolgaltatasaim"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "name": "Könyvelőiroda audit",
+                              "item": "https://xlntbi.hu/konyveloiroda-audit"
+                      }
+              ]
+      }),
+      },
     ],
   }),
   component: KonyveloirodaAuditPage,

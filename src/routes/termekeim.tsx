@@ -14,9 +14,11 @@ import { PageHero } from "@/components/PageHero";
 
 
 
-const TITLE = "Termékeim könyvelőirodáknak és könyvelőknek | EXCELlent";
-const DESC =
-  "Saját fejlesztésű digitális termékek: átalányadó kalkulátorok, beszámolókészítő megoldások, Excel és Google Sheets eszközök.";
+
+const TITLE = "Termékeim: könyvelési és NAV segédprogramok | EXCELlent Business Intelligence";
+const DESCRIPTION = "Excel és XML alapú segédprogramok könyvelőknek és vállalkozóknak: NAV adatszolgáltatás, bérszámfejtés, bankkonverzió és más automatizált eszközök.";
+const CANONICAL = "https://xlntbi.hu/termekeim";
+const OG_IMAGE = "https://xlntbi.hu/og/termekek.jpg";
 
 export const Route = createFileRoute("/termekeim")({
   validateSearch: (search: Record<string, unknown>): { kategoria?: string | undefined } => {
@@ -29,14 +31,44 @@ export const Route = createFileRoute("/termekeim")({
   head: () => ({
     meta: [
       { title: TITLE },
-      { name: "description", content: DESC },
+      { name: "description", content: DESCRIPTION },
       { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESC },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: CANONICAL },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                      {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Főoldal",
+                              "item": "https://xlntbi.hu/"
+                      },
+                      {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Termékeim",
+                              "item": "https://xlntbi.hu/termekeim"
+                      }
+              ]
+      }),
+      },
     ],
   }),
-  loader: () => getProductPlacements(),
   component: TermekeimPage,
 });
 
