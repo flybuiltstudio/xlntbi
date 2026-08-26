@@ -20,6 +20,7 @@ import devizabankImg from "@/assets/devizabank.jpg";
 import rlbBankKonverterImg from "@/assets/rlb-bank-konverter.jpg";
 import kamatlekerdezoImg from "@/assets/kamatlekerdezo-potlekszamito.jpg";
 import navOnlineSzamlaImg from "@/assets/nav-online-szamla-letolto.jpg";
+import mnbEraImg from "@/assets/mnb-era-jelentesgenerator.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -1466,6 +1467,48 @@ export const products: Product[] = [
     download: {
       fileName: "DEVIZABANK.zip",
       storagePath: "devizabank/DEVIZABANK.zip",
+    },
+  },
+  {
+    slug: "mnb-era-jelentesgenerator",
+    priceId: "mnb_era_licenc",
+    name: "MNB ERA Jelentésgenerátor (R09 és R12)",
+    tagline:
+      "Jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből – egyetlen gombnyomással",
+    status: "available",
+    price: 29900,
+    currency: "HUF",
+    image: mnbEraImg,
+    metaTitle: "MNB ERA Jelentésgenerátor R09 és R12 | EXCELlent BI",
+    metaDescription:
+      "R09 és R12 jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből. Egyetlen licenc, 29 900 Ft AAM.",
+    intro: [
+      "Az MNB felé teljesítendő R09 és R12 jegybanki adatszolgáltatások beküldése az ERA/STEFI rendszerben szigorú formátumszabályokhoz kötött: előírt fájlnév, XML-séma vagy sorkódos CSV-szerkezet, pontos dátum- és számformátumok. A kézi összeállítás lassú és hibalehetőségekkel teli – egyetlen elrontott vessző vagy dátumkód a teljes jelentés visszautasítását okozhatja.",
+      "Az MNB ERA Jelentésgenerátor két Excel-sablon és a hozzájuk tartozó VBA-makró, amelyek a megszokott táblázatos környezetben kitöltött adatokból a hivatalos STEFI Felhasználói kézikönyv előírásai szerinti, beküldhető R09 és R12 jelentésfájlt állítják elő – helyes fájlnévvel és szerkezettel.",
+    ],
+    features: [
+      "R09 és R12 adatszolgáltatáshoz külön Excel-sablon egyetlen csomagban.",
+      "XML és sorkódos statisztikai CSV kimenet a STEFI-be beküldhető formátumban.",
+      "Automatikus, előírás szerinti fájlnév a vonatkozási idő és a törzsszám alapján.",
+      "Eredeti (E), módosító (M), nemleges teljes jelentés (N), valamint táblánkénti nemleges jelölés kezelése.",
+      "Táblánként egy munkalap, az A oszlopban sorkóddal és mellette a cellaadatokkal.",
+      "Windows-1250 kódolású CSV CRLF sorvégekkel, automatikus idézőjelezéssel, pontos dátum- és számformátumokkal.",
+      "Hiányzó törzsszám, érvénytelen dátum, sorkód nélküli adatsor és hiányzó oszlopszám esetén konkrét magyar hibaüzenet.",
+      "A generált fájl beküldés előtt a STEFI „Ellenőrzés” funkciójával validálható.",
+    ],
+    why: "Microsoft Excel szükséges Windows rendszeren, 32 vagy 64 bites változatban, engedélyezett makrókkal. A tábla- és sorkódokat az MNB aktuális szabálycsomagja határozza meg. Az éles beküldéshez érvényes ERA-regisztráció szükséges; a beküldést és a végső ellenőrzést az MNB STEFI rendszere végzi.",
+    tiers: [
+      {
+        id: "licenc",
+        label: "R09 és R12 licenc",
+        price: 29900,
+        note: "A csomag az R09 és R12 Excel-sablont egyaránt tartalmazza.",
+        priceId: "mnb_era_licenc",
+      },
+    ],
+    download: {
+      fileName: "MNB_ERA.zip",
+      storagePath: "mnb-era-jelentesgenerator/MNB_ERA.zip",
     },
   },
 ];
