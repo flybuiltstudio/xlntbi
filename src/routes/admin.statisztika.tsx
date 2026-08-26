@@ -87,9 +87,48 @@ function AdminStatsPage() {
           exportokban
           {role === "admin" ? " – a lenti kapcsolóval jeleníthetők meg." : "."}
         </p>
+        <MeasurementLegend />
         <StatsPanel />
       </div>
     </>
+  );
+}
+
+/** Rövid magyarázat arról, hogy pontosan mit számol a mérés. */
+function MeasurementLegend() {
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-muted/40 p-5">
+      <h2 className="text-base font-bold text-foreground">Mit mutatnak ezek a számok?</h2>
+      <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+        <li>
+          <strong className="text-foreground">Megrendelési adatok:</strong> a beérkezett
+          megrendelések tételei – egy megrendelés annyi darabbal számít, amennyit a vevő rendelt. A
+          TESZT- előtagú rendelések alapból ki vannak szűrve.
+        </li>
+        <li>
+          <strong className="text-foreground">Oldalletöltés:</strong> egy termék Részletek oldalának
+          vagy egy szolgáltatás-aloldalnak a megnyitása. Az oldal újratöltése (F5) és az oda
+          visszatérés új letöltésnek számít; ez nem egyedi látogatószám.
+        </li>
+        <li>
+          <strong className="text-foreground">Csak a publikált nézet számít:</strong> az
+          xlntbi.hu és a publikált cím megnyitásai kerülnek bele. A szerkesztői előnézet, a helyi
+          fejlesztés és a felismert robotok nem.
+        </li>
+        <li>
+          <strong className="text-foreground">Szolgáltatás-aloldal azonosítása:</strong> az aloldal
+          útvonala alapján (például /konyveles), tehát a Szolgáltatásaim gyűjtőoldal megnyitása nem
+          számít bele egyik aloldalnál sem.
+        </li>
+        <li>
+          <strong className="text-foreground">Miért nulla egy sor?</strong> Minden termék és
+          szolgáltatás szerepel a listában, akkor is, ha nincs adata. Nulla akkor látszik, ha az
+          adott hónapban nem nyitották meg az oldalt, vagy ha a mérés indulása előtti hónapot néz –
+          a korábbi hónapokra visszamenőleg nincs adat. Személyes adatot (IP-cím, böngésző, süti)
+          nem tárolunk, csak havi darabszámot.
+        </li>
+      </ul>
+    </div>
   );
 }
 
