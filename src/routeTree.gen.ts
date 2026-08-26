@@ -57,6 +57,7 @@ import { Route as TermekAuditxmlEllenorzoJavitoRouteImport } from './routes/term
 import { Route as TermekBerszamfejto2026RouteImport } from './routes/termek.berszamfejto-2026'
 import { Route as TermekBeszamolo2025RouteImport } from './routes/termek.beszamolo-2025'
 import { Route as TermekCegkivonatExcelKonverterRouteImport } from './routes/termek.cegkivonat-excel-konverter'
+import { Route as TermekDevizabankRouteImport } from './routes/termek.devizabank'
 import { Route as TermekHaviRiportRouteImport } from './routes/termek.havi-riport'
 import { Route as TermekHaviRiportEnRouteImport } from './routes/termek.havi-riport-en'
 import { Route as TermekIfrsKonszolidaloRouteImport } from './routes/termek.ifrs-konszolidalo'
@@ -335,6 +336,11 @@ const TermekCegkivonatExcelKonverterRoute =
     path: '/termek/cegkivonat-excel-konverter',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TermekDevizabankRoute = TermekDevizabankRouteImport.update({
+  id: '/termek/devizabank',
+  path: '/termek/devizabank',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermekHaviRiportRoute = TermekHaviRiportRouteImport.update({
   id: '/termek/havi-riport',
   path: '/termek/havi-riport',
@@ -542,6 +548,7 @@ export interface FileRoutesByFullPath {
   '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
   '/termek/beszamolo-2025': typeof TermekBeszamolo2025Route
   '/termek/cegkivonat-excel-konverter': typeof TermekCegkivonatExcelKonverterRoute
+  '/termek/devizabank': typeof TermekDevizabankRoute
   '/termek/havi-riport': typeof TermekHaviRiportRoute
   '/termek/havi-riport-en': typeof TermekHaviRiportEnRoute
   '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
@@ -619,6 +626,7 @@ export interface FileRoutesByTo {
   '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
   '/termek/beszamolo-2025': typeof TermekBeszamolo2025Route
   '/termek/cegkivonat-excel-konverter': typeof TermekCegkivonatExcelKonverterRoute
+  '/termek/devizabank': typeof TermekDevizabankRoute
   '/termek/havi-riport': typeof TermekHaviRiportRoute
   '/termek/havi-riport-en': typeof TermekHaviRiportEnRoute
   '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
@@ -698,6 +706,7 @@ export interface FileRoutesById {
   '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
   '/termek/beszamolo-2025': typeof TermekBeszamolo2025Route
   '/termek/cegkivonat-excel-konverter': typeof TermekCegkivonatExcelKonverterRoute
+  '/termek/devizabank': typeof TermekDevizabankRoute
   '/termek/havi-riport': typeof TermekHaviRiportRoute
   '/termek/havi-riport-en': typeof TermekHaviRiportEnRoute
   '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
@@ -778,6 +787,7 @@ export interface FileRouteTypes {
     | '/termek/berszamfejto-2026'
     | '/termek/beszamolo-2025'
     | '/termek/cegkivonat-excel-konverter'
+    | '/termek/devizabank'
     | '/termek/havi-riport'
     | '/termek/havi-riport-en'
     | '/termek/ifrs-konszolidalo'
@@ -855,6 +865,7 @@ export interface FileRouteTypes {
     | '/termek/berszamfejto-2026'
     | '/termek/beszamolo-2025'
     | '/termek/cegkivonat-excel-konverter'
+    | '/termek/devizabank'
     | '/termek/havi-riport'
     | '/termek/havi-riport-en'
     | '/termek/ifrs-konszolidalo'
@@ -933,6 +944,7 @@ export interface FileRouteTypes {
     | '/termek/berszamfejto-2026'
     | '/termek/beszamolo-2025'
     | '/termek/cegkivonat-excel-konverter'
+    | '/termek/devizabank'
     | '/termek/havi-riport'
     | '/termek/havi-riport-en'
     | '/termek/ifrs-konszolidalo'
@@ -1005,6 +1017,7 @@ export interface RootRouteChildren {
   TermekBerszamfejto2026Route: typeof TermekBerszamfejto2026Route
   TermekBeszamolo2025Route: typeof TermekBeszamolo2025Route
   TermekCegkivonatExcelKonverterRoute: typeof TermekCegkivonatExcelKonverterRoute
+  TermekDevizabankRoute: typeof TermekDevizabankRoute
   TermekHaviRiportRoute: typeof TermekHaviRiportRoute
   TermekHaviRiportEnRoute: typeof TermekHaviRiportEnRoute
   TermekIfrsKonszolidaloRoute: typeof TermekIfrsKonszolidaloRoute
@@ -1374,6 +1387,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekCegkivonatExcelKonverterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/termek/devizabank': {
+      id: '/termek/devizabank'
+      path: '/termek/devizabank'
+      fullPath: '/termek/devizabank'
+      preLoaderRoute: typeof TermekDevizabankRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/termek/havi-riport': {
       id: '/termek/havi-riport'
       path: '/termek/havi-riport'
@@ -1637,6 +1657,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermekBerszamfejto2026Route: TermekBerszamfejto2026Route,
   TermekBeszamolo2025Route: TermekBeszamolo2025Route,
   TermekCegkivonatExcelKonverterRoute: TermekCegkivonatExcelKonverterRoute,
+  TermekDevizabankRoute: TermekDevizabankRoute,
   TermekHaviRiportRoute: TermekHaviRiportRoute,
   TermekHaviRiportEnRoute: TermekHaviRiportEnRoute,
   TermekIfrsKonszolidaloRoute: TermekIfrsKonszolidaloRoute,
