@@ -18,6 +18,7 @@ import wifiJelszoImg from "@/assets/wifi-jelszo-nezo.jpg";
 import auditXmlImg from "@/assets/auditxml-ellenorzo-javito.jpg";
 import devizabankImg from "@/assets/devizabank.jpg";
 import rlbBankKonverterImg from "@/assets/rlb-bank-konverter.jpg";
+import kamatlekerdezoImg from "@/assets/kamatlekerdezo-potlekszamito.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -659,7 +660,7 @@ export const products: Product[] = [
     priceId: "kamatlekerdezo_potlekszamito_egy_adoszam",
     price: 7900,
     currency: "HUF",
-    image: accountImg,
+    image: kamatlekerdezoImg,
     metaTitle: "XLNT Kamatlekérdező és Pótlékszámító | EXCELlent",
     metaDescription: "Késedelmi pótlék, önellenőrzési pótlék és kamatszámítás naponkénti kamattáblával. Ár: 7 900 Ft-tól.",
     intro: [
