@@ -19,6 +19,7 @@ import auditXmlImg from "@/assets/auditxml-ellenorzo-javito.jpg";
 import devizabankImg from "@/assets/devizabank.jpg";
 import rlbBankKonverterImg from "@/assets/rlb-bank-konverter.jpg";
 import kamatlekerdezoImg from "@/assets/kamatlekerdezo-potlekszamito.jpg";
+import navOnlineSzamlaImg from "@/assets/nav-online-szamla-letolto.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
