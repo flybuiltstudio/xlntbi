@@ -78,7 +78,8 @@ export const Route = createFileRoute("/fintech-es-bi")({
 function FintechBiPage() {
   return (
     <ServicePage
-      title={"Fintech és BI tanácsadás könyvelőirodáknak, cégeknek és magánszemélyeknek"}
+      title={"Fintech és BI tanácsadás"}
+      lead={"Fintech és BI tanácsadás könyvelőirodáknak, cégeknek és magánszemélyeknek"}
       intro={["A pénzügyi adat önmagában még nem érték. Akkor válik hasznossá, ha jól össze van kötve, átlátható és döntést támogat. Ebben segít a Fintech és BI tanácsadás.", "A klasszikus számvitelt modern automatizációval, riportokkal, adatmodellezéssel, komplex makrókkal és AI-támogatott munkafolyamatokkal kapcsolom össze. A cél, hogy a pénzügyi működés gyorsabb, tisztább és jobban irányítható legyen."]}
       ctaLabel={"BI konzultációt kérek"}
       ctaTo={"/kapcsolat"}

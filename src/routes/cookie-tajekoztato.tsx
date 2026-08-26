@@ -49,7 +49,7 @@ export const Route = createFileRoute("/cookie-tajekoztato")({
   }),
   component: () => (
     <LegalPage
-      title="Cookie-tájékoztató"
+      title="Cookie tájékoztató"
       intro={[
         "Ez a tájékoztató arról szól, hogy a xlntbi.hu weboldal milyen sütiket (cookie-kat) és hasonló technológiákat használ.",
       ]}

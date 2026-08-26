@@ -96,7 +96,7 @@ function RolamPage() {
     <div>
       <PageHero>
         <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
-          Sarinay Dávid vagyok,
+          Rólam
         </h1>
       </PageHero>
 
@@ -104,7 +104,7 @@ function RolamPage() {
         <div className="grid items-center gap-10 md:grid-cols-2">
           <div>
             <p className="text-base leading-relaxed text-muted-foreground">
-              pénzügyi, számviteli, adó- és kontroller szakember. A munkám középpontjában a szakmai
+              Sarinay Dávid vagyok, pénzügyi, számviteli, adó- és kontroller szakember. A munkám középpontjában a szakmai
               kiválóság, az automatizálás és a valóban használható megoldások állnak.
             </p>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground">

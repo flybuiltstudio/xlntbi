@@ -78,7 +78,8 @@ export const Route = createFileRoute("/kontrolling")({
 function KontrollingPage() {
   return (
     <ServicePage
-      title={"Kontrolling, Excel és Power BI riportok cégeknek"}
+      title={"Kontrolling"}
+      lead={"Kontrolling, Excel és Power BI riportok cégeknek"}
       intro={["A kontrolling célja nálam az, hogy a vezetés ne utólag lássa a számokat, hanem időben kapjon használható információt. Egy jól felépített riport sokkal több, mint egy táblázat: döntéstámogató eszköz.", "Modern riport- és automatizációs megoldásokat készítek cégeknek, amelyek segítenek abban, hogy a pénzügyi és működési adatok ne elszigetelten, hanem egységes rendszerben legyenek láthatók, akár komplex makrókkal támogatva."]}
       ctaLabel={"Kontrolling konzultáció"}
       ctaTo={"/konzultacio"}

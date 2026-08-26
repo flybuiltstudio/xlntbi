@@ -49,7 +49,7 @@ export const Route = createFileRoute("/elallas-a-szerzodestol")({
   }),
   component: () => (
     <LegalPage
-      title="Elállási tájékoztató"
+      title="Elállás a szerződéstől"
       intro={[
         "Ez a tájékoztató a fogyasztónak minősülő megrendelőket illető elállási és felmondási jogról szól, a 45/2014. (II. 26.) Korm. rendelet alapján.",
       ]}

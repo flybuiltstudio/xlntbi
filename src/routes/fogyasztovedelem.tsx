@@ -50,7 +50,7 @@ export const Route = createFileRoute("/fogyasztovedelem")({
   }),
   component: () => (
     <LegalPage
-      title="Fogyasztóvédelmi tájékoztatás"
+      title="Fogyasztóvédelem"
       intro={[
         "Ha fogyasztóként rendelsz az oldalról, az alábbi jogorvoslati lehetőségek állnak rendelkezésedre.",
       ]}

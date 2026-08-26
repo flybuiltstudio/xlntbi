@@ -92,7 +92,7 @@ function TermekeimPage() {
     <div>
       <PageHero>
         <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
-          Termékeim könyvelőirodáknak és könyvelőknek
+          Termékeim
         </h1>
       </PageHero>
 

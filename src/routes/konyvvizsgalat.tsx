@@ -78,7 +78,8 @@ export const Route = createFileRoute("/konyvvizsgalat")({
 function KonyvvizsgalatPage() {
   return (
     <ServicePage
-      title={"Könyvvizsgálat, átvilágítás, audit szolgáltatások"}
+      title={"Könyvvizsgálat"}
+      lead={"Könyvvizsgálat, átvilágítás, audit szolgáltatások"}
       intro={["A könyvvizsgálat és az átvilágítás célja nem csak az ellenőrzés, hanem az is, hogy valódi képet kapj a működésedről. Egy jól megcsinált audit megmutatja, hol vannak a kockázatok, és hol lehet javítani a folyamatokon.", "Könyvvizsgálati, due diligence és audit szolgáltatásaim során a pénzügyi, számviteli és működési megbízhatóságot vizsgálom."]}
       ctaLabel={"Audit konzultációt kérek"}
       ctaTo={"/konzultacio"}

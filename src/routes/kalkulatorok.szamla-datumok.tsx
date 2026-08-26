@@ -77,7 +77,7 @@ function SzamlaDatumokPage() {
   return (
     <>
       <PageHero>
-        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Számla dátumok</h1>
+        <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Számla dátumok kalkulátor</h1>
       </PageHero>
       <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
         <p className="max-w-3xl text-base text-muted-foreground">

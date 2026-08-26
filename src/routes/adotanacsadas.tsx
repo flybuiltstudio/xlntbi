@@ -78,7 +78,8 @@ export const Route = createFileRoute("/adotanacsadas")({
 function AdotanacsadasPage() {
   return (
     <ServicePage
-      title={"Adótanácsadás és ügyviteli tanácsadás"}
+      title={"Adótanácsadás"}
+      lead={"Adótanácsadás és ügyviteli tanácsadás"}
       intro={["Az adózásban egy jó döntés sokszor évekig meghatározza a működésedet. Ezért nem sablonválaszokat adok, hanem a konkrét helyzetedre szabott szakmai megoldást keresek.", "Adótanácsadási és ügyviteli tanácsadási szolgáltatásaim célja, hogy a vállalkozásod adózási és működési kérdései tiszták, tervezhetők és kontrollálhatók legyenek."]}
       ctaLabel={"Konzultációt kérek"}
       ctaTo={"/kapcsolat"}

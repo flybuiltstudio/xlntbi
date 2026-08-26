@@ -95,7 +95,7 @@ function KalkulatorokPage() {
     <>
       <PageHero>
         <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">
-          Elérhető kalkulátorok
+          Kalkulátorok
         </h1>
       </PageHero>
 

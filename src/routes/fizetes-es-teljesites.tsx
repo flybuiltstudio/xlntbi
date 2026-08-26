@@ -50,7 +50,7 @@ export const Route = createFileRoute("/fizetes-es-teljesites")({
   }),
   component: () => (
     <LegalPage
-      title="Fizetési és teljesítési feltételek"
+      title="Fizetés és teljesítés"
       intro={[
         "Az oldalon kínált termékek digitális termékek, ezért fizikai szállítás nincs: a teljesítés letöltéssel, illetve e-mailben megküldött hozzáféréssel történik.",
       ]}
