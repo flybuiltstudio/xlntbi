@@ -105,21 +105,21 @@ export async function runFullPurchaseTest(
     const product = getProduct(input.productSlug);
     const tier = product ? getTier(product, input.tierId) : null;
 
-    let sessionInfo = "";
     try {
-      const { createStripeClient, getStripeErrorMessage } = await import("./stripe.server");
-      const environment =
-        process.env["STRIPE_LIVE_API_KEY"] && process.env["PAYMENTS_LIVE_WEBHOOK_SECRET"]
-          ? "live"
-          : "sandbox";
-      const stripe = createStripeClient("sandbox");
+      const { createStripeClient } = await import("./stripe.server");
+      const liveReady = Boolean(
+        process.env["STRIPE_LIVE_API_KEY"] && process.env["PAYMENTS_LIVE_WEBHOOK_SECRET"],
+      );
+      const stripe = createStripeClient(liveReady ? "live" : "sandbox");
       const prices = await stripe.prices.list({ lookup_keys: [tier?.priceId ?? ""] });
       const price = prices.data[0];
       if (!price) throw new Error("A termék árazása nem található a Stripe-ban.");
-      sessionInfo = `Stripe ár rendben (${price.id}); éles környezet elérhető: ${
-        environment === "live" ? "igen" : "nem"
-      }.`;
-      void getStripeErrorMessage;
+      push({
+        key: "stripe",
+        label: "Stripe árazás ellenőrzése",
+        status: "ok",
+        detail: `Ár rendben (${price.id}) a ${liveReady ? "live" : "sandbox"} Stripe fiókban.`,
+      });
     } catch (e: any) {
       push({
         key: "stripe",
@@ -127,9 +127,6 @@ export async function runFullPurchaseTest(
         status: "warn",
         detail: e?.message ?? "A Stripe ellenőrzés nem sikerült.",
       });
-    }
-    if (sessionInfo) {
-      push({ key: "stripe", label: "Stripe árazás ellenőrzése", status: "ok", detail: sessionInfo });
     }
 
     // Exercises exactly the webhook fulfilment path (markOrderPaid) without a
