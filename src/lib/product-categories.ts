@@ -67,8 +67,8 @@ export const productCategories: ProductCategory[] = [
     slugs: [
       "havi-riport",
       "havi-riport-en",
-      "beszamolo-2025",
       "mnb-era-jelentesgenerator",
+      "beszamolo-2025",
       "szamviteli-konszolidalo",
       "ifrs-konszolidalo",
     ],
