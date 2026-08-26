@@ -5,7 +5,7 @@ const TITLE = "Késedelmi kamat és pótlékszámító program | EXCELlent Busin
 const DESCRIPTION = "Számold ki gyorsan és pontosan a késedelmi kamatot és az adóhatósági pótlékot a hatályos jegybanki alapkamat alapján.";
 const H1 = "Kamatlekérdező, pótlékszámító";
 const CANONICAL = "https://xlntbi.hu/termek/kamatlekerdezo-potlekszamito";
-const OG_IMAGE = "https://xlntbi.hu/og/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
+const OG_IMAGE = "https://xlntbi.hu/og/kamatlekerdezo-potlekszamito.jpg";
 
 export const Route = createFileRoute("/termek/kamatlekerdezo-potlekszamito")({
   head: () => ({
