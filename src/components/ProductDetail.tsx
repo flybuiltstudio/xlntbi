@@ -76,6 +76,7 @@ const faq = [
 
 export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
   const product = getProduct(slug);
+  usePageView("product", slug);
   if (!product) return null;
 
   const faqJsonLd = {
