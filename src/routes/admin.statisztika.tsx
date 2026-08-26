@@ -1483,6 +1483,78 @@ function PageViewBlock({
       </div>
 
       <PageViewChart rows={rows} year={year} month={month} firstColumn={firstColumn} />
+
+      <PageViewTopN rows={rows} month={month} year={year} firstColumn={firstColumn} topN={topN} />
+    </div>
+  );
+}
+
+/** Top N rangsor a kiválasztott időszakra az oldalletöltések alapján. */
+function PageViewTopN({
+  rows,
+  month,
+  year,
+  firstColumn,
+  topN,
+}: {
+  rows: ReturnType<typeof pivotPageViews>;
+  month: number | "all";
+  year: number;
+  firstColumn: string;
+  topN: number;
+}) {
+  const periodValue = (row: ReturnType<typeof pivotPageViews>) =>
+    month === "all" ? row.total : (row.months[month] ?? 0);
+
+  const ranked = rows
+    .map((row) => ({ row, value: periodValue(row) }))
+    .filter((entry) => entry.value > 0)
+    .sort((a, b) => b.value - a.value || a.row.label.localeCompare(b.row.label, "hu"))
+    .slice(0, topN);
+
+  const periodLabel = month === "all" ? String(year) : `${year}. ${MONTHS[month] ?? ""}`;
+  const max = ranked.length > 0 ? ranked[0].value : 1;
+  const colorOf = (index: number) => PALETTE[index % PALETTE.length] ?? "#14532d";
+
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-card p-5">
+      <p className="text-sm text-muted-foreground">
+        <strong className="text-foreground">Top {topN}</strong> {firstColumn.toLowerCase()} –{" "}
+        {periodLabel} időszak oldalletöltései alapján
+      </p>
+      {ranked.length === 0 ? (
+        <p className="mt-4 text-sm text-muted-foreground">
+          Ebben az időszakban ({periodLabel}) még nincs mért oldalletöltés, ezért a rangsor üres.
+        </p>
+      ) : (
+        <ol className="mt-4 space-y-2">
+          {ranked.map((entry, i) => (
+            <li key={entry.row.key} className="flex items-center gap-3">
+              <span className="w-7 shrink-0 text-center text-sm font-bold text-foreground">
+                {i + 1}.
+              </span>
+              <span
+                className="w-56 shrink-0 truncate text-sm font-medium text-foreground"
+                title={entry.row.label}
+              >
+                {entry.row.label}
+              </span>
+              <div className="h-4 flex-1 rounded bg-muted">
+                <div
+                  className="h-4 rounded"
+                  style={{
+                    width: `${((entry.value / max) * 100).toFixed(2)}%`,
+                    backgroundColor: colorOf(i),
+                  }}
+                />
+              </div>
+              <span className="w-12 shrink-0 text-right text-sm font-semibold text-foreground">
+                {entry.value}
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 }
