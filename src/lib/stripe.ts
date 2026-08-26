@@ -32,3 +32,20 @@ export function getStripe(): Promise<Stripe | null> {
 export function getStripeEnvironment(): StripeEnv {
   return paymentsEnvironment();
 }
+
+/** Environment without throwing when card payment is unavailable. */
+export function getStripeEnvironmentSafe(): StripeEnv | null {
+  if (clientToken?.startsWith("pk_test_")) return "sandbox";
+  if (clientToken?.startsWith("pk_live_")) return "live";
+  return null;
+}
+
+/**
+ * The webhook endpoint that receives Stripe payment events for the current
+ * environment — shown in the checkout so it is always clear which chain runs.
+ */
+export function webhookEndpoint(): string {
+  const env = getStripeEnvironmentSafe() ?? "sandbox";
+  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  return `${origin}/api/public/payments/webhook?env=${env}`;
+}
