@@ -28,6 +28,8 @@ export const Route = createFileRoute("/termekeim")({
     };
   },
 
+  loader: () => getProductPlacements(),
+
   head: () => ({
     meta: [
       { title: TITLE },
