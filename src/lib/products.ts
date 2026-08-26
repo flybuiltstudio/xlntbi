@@ -17,6 +17,7 @@ import nyitoVegyesImg from "@/assets/nyito-vegyes-konyvelo.jpg";
 import wifiJelszoImg from "@/assets/wifi-jelszo-nezo.jpg";
 import auditXmlImg from "@/assets/auditxml-ellenorzo-javito.jpg";
 import devizabankImg from "@/assets/devizabank.jpg";
+import rlbBankKonverterImg from "@/assets/rlb-bank-konverter.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
