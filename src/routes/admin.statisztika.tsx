@@ -1514,7 +1514,7 @@ function PageViewTopN({
     .slice(0, topN);
 
   const periodLabel = month === "all" ? String(year) : `${year}. ${MONTHS[month] ?? ""}`;
-  const max = ranked.length > 0 ? ranked[0].value : 1;
+  const max = ranked.length > 0 ? (ranked[0]?.value ?? 1) : 1;
   const colorOf = (index: number) => PALETTE[index % PALETTE.length] ?? "#14532d";
 
   return (
