@@ -39,6 +39,7 @@ function StepIcon({ status }: { status: TestResult["steps"][number]["status"] })
 
 export function FullPurchaseTestPanel() {
   const runTest = useServerFn(adminRunPurchaseTest);
+  const cleanupTest = useServerFn(adminCleanupTestOrder);
   const guardState = useServerFn(adminCouponGuardState);
   const sweepCoupons = useServerFn(adminSweepLiveCoupons);
 
