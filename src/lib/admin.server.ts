@@ -613,18 +613,41 @@ export async function listTestOrders(): Promise<TestOrderRow[]> {
   }));
 }
 
-/** Deletes a test order (only rows marked payment_provider = "test"). */
+/**
+ * Deletes a test order. A test row is either payment_provider = "test" or an
+ * order number with the TESZT- prefix (the self-test marks the order paid
+ * through the normal fulfilment chain, which rewrites payment_provider).
+ * Reports an error when nothing was deleted so a leftover row is never
+ * reported as clean.
+ */
 export async function deleteTestOrder(orderId: string): Promise<{ ok: boolean; error?: string }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { error } = await supabaseAdmin
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("id, order_number, payment_provider")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (!order) return { ok: true };
+
+  const isTest =
+    order.payment_provider === "test" || String(order.order_number).startsWith("TESZT-");
+  if (!isTest) {
+    return { ok: false, error: "Ez nem teszt megrendelés, ezért nem törölhető." };
+  }
+
+  const { error, data: deleted } = await supabaseAdmin
     .from("orders")
     .delete()
     .eq("id", orderId)
-    .eq("payment_provider", "test");
+    .select("id");
 
   if (error) {
     console.error("Test order deletion failed:", error.message);
     return { ok: false, error: "A teszt megrendelés törlése nem sikerült." };
+  }
+  if (!deleted || deleted.length === 0) {
+    return { ok: false, error: "A teszt megrendelés nem lett törölve." };
   }
   return { ok: true };
 }
