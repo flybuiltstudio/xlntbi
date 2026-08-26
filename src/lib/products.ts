@@ -1479,7 +1479,7 @@ export const products: Product[] = [
     price: 29900,
     currency: "HUF",
     image: mnbEraImg,
-    metaTitle: "MNB ERA Jelentésgenerátor R09 és R12 | EXCELlent BI",
+    metaTitle: "MNB ERA Jelentésgenerátor R09 és R12 | XLNTBI",
     metaDescription:
       "R09 és R12 jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből. Egyetlen licenc, 29 900 Ft AAM.",
     intro: [

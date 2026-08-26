@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "MNB ERA Jelentésgenerátor R09 és R12 | EXCELlent BI";
+const TITLE = "MNB ERA Jelentésgenerátor R09 és R12 | XLNTBI";
 const DESCRIPTION =
   "R09 és R12 jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből. Egyetlen licenc, 29 900 Ft AAM.";
 const H1 = "MNB ERA Jelentésgenerátor (R09 és R12)";

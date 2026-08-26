@@ -63,6 +63,7 @@ import { Route as TermekHaviRiportEnRouteImport } from './routes/termek.havi-rip
 import { Route as TermekIfrsKonszolidaloRouteImport } from './routes/termek.ifrs-konszolidalo'
 import { Route as TermekKamatlekerdezoPotlekszamitoRouteImport } from './routes/termek.kamatlekerdezo-potlekszamito'
 import { Route as TermekKulcsNyitoVegyesKonyveloRouteImport } from './routes/termek.kulcs-nyito-vegyes-konyvelo'
+import { Route as TermekMnbEraJelentesgeneratorRouteImport } from './routes/termek.mnb-era-jelentesgenerator'
 import { Route as TermekNavOnlineSzamlaLetoltoRouteImport } from './routes/termek.nav-online-szamla-letolto'
 import { Route as TermekNavPenztargepLetoltoRouteImport } from './routes/termek.nav-penztargep-letolto'
 import { Route as TermekNavTorzsszamPartnerellenorzoRouteImport } from './routes/termek.nav-torzsszam-partnerellenorzo'
@@ -368,6 +369,12 @@ const TermekKulcsNyitoVegyesKonyveloRoute =
     path: '/termek/kulcs-nyito-vegyes-konyvelo',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TermekMnbEraJelentesgeneratorRoute =
+  TermekMnbEraJelentesgeneratorRouteImport.update({
+    id: '/termek/mnb-era-jelentesgenerator',
+    path: '/termek/mnb-era-jelentesgenerator',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TermekNavOnlineSzamlaLetoltoRoute =
   TermekNavOnlineSzamlaLetoltoRouteImport.update({
     id: '/termek/nav-online-szamla-letolto',
@@ -554,6 +561,7 @@ export interface FileRoutesByFullPath {
   '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
   '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
   '/termek/kulcs-nyito-vegyes-konyvelo': typeof TermekKulcsNyitoVegyesKonyveloRoute
+  '/termek/mnb-era-jelentesgenerator': typeof TermekMnbEraJelentesgeneratorRoute
   '/termek/nav-online-szamla-letolto': typeof TermekNavOnlineSzamlaLetoltoRoute
   '/termek/nav-penztargep-letolto': typeof TermekNavPenztargepLetoltoRoute
   '/termek/nav-torzsszam-partnerellenorzo': typeof TermekNavTorzsszamPartnerellenorzoRoute
@@ -632,6 +640,7 @@ export interface FileRoutesByTo {
   '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
   '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
   '/termek/kulcs-nyito-vegyes-konyvelo': typeof TermekKulcsNyitoVegyesKonyveloRoute
+  '/termek/mnb-era-jelentesgenerator': typeof TermekMnbEraJelentesgeneratorRoute
   '/termek/nav-online-szamla-letolto': typeof TermekNavOnlineSzamlaLetoltoRoute
   '/termek/nav-penztargep-letolto': typeof TermekNavPenztargepLetoltoRoute
   '/termek/nav-torzsszam-partnerellenorzo': typeof TermekNavTorzsszamPartnerellenorzoRoute
@@ -712,6 +721,7 @@ export interface FileRoutesById {
   '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
   '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
   '/termek/kulcs-nyito-vegyes-konyvelo': typeof TermekKulcsNyitoVegyesKonyveloRoute
+  '/termek/mnb-era-jelentesgenerator': typeof TermekMnbEraJelentesgeneratorRoute
   '/termek/nav-online-szamla-letolto': typeof TermekNavOnlineSzamlaLetoltoRoute
   '/termek/nav-penztargep-letolto': typeof TermekNavPenztargepLetoltoRoute
   '/termek/nav-torzsszam-partnerellenorzo': typeof TermekNavTorzsszamPartnerellenorzoRoute
@@ -793,6 +803,7 @@ export interface FileRouteTypes {
     | '/termek/ifrs-konszolidalo'
     | '/termek/kamatlekerdezo-potlekszamito'
     | '/termek/kulcs-nyito-vegyes-konyvelo'
+    | '/termek/mnb-era-jelentesgenerator'
     | '/termek/nav-online-szamla-letolto'
     | '/termek/nav-penztargep-letolto'
     | '/termek/nav-torzsszam-partnerellenorzo'
@@ -871,6 +882,7 @@ export interface FileRouteTypes {
     | '/termek/ifrs-konszolidalo'
     | '/termek/kamatlekerdezo-potlekszamito'
     | '/termek/kulcs-nyito-vegyes-konyvelo'
+    | '/termek/mnb-era-jelentesgenerator'
     | '/termek/nav-online-szamla-letolto'
     | '/termek/nav-penztargep-letolto'
     | '/termek/nav-torzsszam-partnerellenorzo'
@@ -950,6 +962,7 @@ export interface FileRouteTypes {
     | '/termek/ifrs-konszolidalo'
     | '/termek/kamatlekerdezo-potlekszamito'
     | '/termek/kulcs-nyito-vegyes-konyvelo'
+    | '/termek/mnb-era-jelentesgenerator'
     | '/termek/nav-online-szamla-letolto'
     | '/termek/nav-penztargep-letolto'
     | '/termek/nav-torzsszam-partnerellenorzo'
@@ -1023,6 +1036,7 @@ export interface RootRouteChildren {
   TermekIfrsKonszolidaloRoute: typeof TermekIfrsKonszolidaloRoute
   TermekKamatlekerdezoPotlekszamitoRoute: typeof TermekKamatlekerdezoPotlekszamitoRoute
   TermekKulcsNyitoVegyesKonyveloRoute: typeof TermekKulcsNyitoVegyesKonyveloRoute
+  TermekMnbEraJelentesgeneratorRoute: typeof TermekMnbEraJelentesgeneratorRoute
   TermekNavOnlineSzamlaLetoltoRoute: typeof TermekNavOnlineSzamlaLetoltoRoute
   TermekNavPenztargepLetoltoRoute: typeof TermekNavPenztargepLetoltoRoute
   TermekNavTorzsszamPartnerellenorzoRoute: typeof TermekNavTorzsszamPartnerellenorzoRoute
@@ -1429,6 +1443,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekKulcsNyitoVegyesKonyveloRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/termek/mnb-era-jelentesgenerator': {
+      id: '/termek/mnb-era-jelentesgenerator'
+      path: '/termek/mnb-era-jelentesgenerator'
+      fullPath: '/termek/mnb-era-jelentesgenerator'
+      preLoaderRoute: typeof TermekMnbEraJelentesgeneratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/termek/nav-online-szamla-letolto': {
       id: '/termek/nav-online-szamla-letolto'
       path: '/termek/nav-online-szamla-letolto'
@@ -1664,6 +1685,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermekKamatlekerdezoPotlekszamitoRoute:
     TermekKamatlekerdezoPotlekszamitoRoute,
   TermekKulcsNyitoVegyesKonyveloRoute: TermekKulcsNyitoVegyesKonyveloRoute,
+  TermekMnbEraJelentesgeneratorRoute: TermekMnbEraJelentesgeneratorRoute,
   TermekNavOnlineSzamlaLetoltoRoute: TermekNavOnlineSzamlaLetoltoRoute,
   TermekNavPenztargepLetoltoRoute: TermekNavPenztargepLetoltoRoute,
   TermekNavTorzsszamPartnerellenorzoRoute:
