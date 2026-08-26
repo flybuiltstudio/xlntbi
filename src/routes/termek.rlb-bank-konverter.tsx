@@ -5,7 +5,7 @@ const TITLE = "RLB bank konverter – alap kiadás banki kivonat importhoz | EXC
 const DESCRIPTION = "Az alap kiadás: alakítsd át és importáld a banki kivonatokat egyszerűen az RLB könyvelőprogramba, kézi adatrögzítés nélkül. Bővített funkciókért válaszd a PRO verziót.";
 const H1 = "RLB bank konverter";
 const CANONICAL = "https://xlntbi.hu/termek/rlb-bank-konverter";
-const OG_IMAGE = "https://xlntbi.hu/og/En-modern-konyveloirodaban.jpg";
+const OG_IMAGE = "https://xlntbi.hu/og/rlb-bank-konverter.jpg";
 
 export const Route = createFileRoute("/termek/rlb-bank-konverter")({
   head: () => ({

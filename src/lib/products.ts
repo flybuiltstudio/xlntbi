@@ -17,6 +17,7 @@ import nyitoVegyesImg from "@/assets/nyito-vegyes-konyvelo.jpg";
 import wifiJelszoImg from "@/assets/wifi-jelszo-nezo.jpg";
 import auditXmlImg from "@/assets/auditxml-ellenorzo-javito.jpg";
 import devizabankImg from "@/assets/devizabank.jpg";
+import rlbBankKonverterImg from "@/assets/rlb-bank-konverter.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -1025,7 +1026,7 @@ export const products: Product[] = [
     priceId: "rlb_bank_konverter_egyszeri_licenc",
     price: 14900,
     currency: "HUF",
-    image: modernImg,
+    image: rlbBankKonverterImg,
     metaTitle: "RLB Bank Konverter | EXCELlent",
     metaDescription: "10 banki formátumból RLB-kompatibilis CSV – automatikusan. Ár: 14 900 Ft-tól.",
     intro: [
