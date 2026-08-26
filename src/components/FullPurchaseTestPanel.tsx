@@ -23,6 +23,7 @@ import { getTier, products } from "@/lib/products";
 import { ALLOWED_LIVE_PROMOTION_CODES, TEST_PROMOTION_CODES } from "@/lib/coupons";
 
 type TestResult = Awaited<ReturnType<typeof adminRunPurchaseTest>>;
+type CleanupResult = Awaited<ReturnType<typeof adminCleanupTestOrder>>;
 type GuardState = Awaited<ReturnType<typeof adminCouponGuardState>>;
 
 const inputClass =
