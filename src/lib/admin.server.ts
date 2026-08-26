@@ -1199,3 +1199,62 @@ export async function billingoInvoiceAudit(): Promise<{ rows: InvoiceMatchRow[] 
 
   return { rows };
 }
+
+/**
+ * Deletes EVERY test order (payment_provider = "test" or a TESZT- prefixed
+ * order number) together with all rows that reference them: download tokens,
+ * Billingo invoice logs and invoice snapshots. This clears the test data from
+ * every admin surface (orders, statistics, Billingo audit and log pages).
+ */
+export async function purgeTestOrders(): Promise<{
+  ok: boolean;
+  deleted: number;
+  error?: string;
+}> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  const { data: rows, error: listError } = await supabaseAdmin
+    .from("orders")
+    .select("id, order_number, payment_provider");
+
+  if (listError) {
+    console.error("Test order purge listing failed:", listError.message);
+    return { ok: false, deleted: 0, error: "A teszt megrendelések betöltése nem sikerült." };
+  }
+
+  const tests = (rows ?? []).filter(
+    (o: any) => o.payment_provider === "test" || String(o.order_number).startsWith("TESZT-"),
+  );
+  if (tests.length === 0) return { ok: true, deleted: 0 };
+
+  const ids = tests.map((o: any) => o.id as string);
+  const numbers = tests.map((o: any) => String(o.order_number));
+
+  for (const table of ["order_downloads", "billingo_invoice_snapshots"] as const) {
+    const { error } = await supabaseAdmin.from(table).delete().in("order_id", ids);
+    if (error) {
+      console.error(`Test order purge failed on ${table}:`, error.message);
+      return { ok: false, deleted: 0, error: "A kapcsolódó teszt adatok törlése nem sikerült." };
+    }
+  }
+
+  const { error: logError } = await supabaseAdmin
+    .from("billingo_invoice_logs")
+    .delete()
+    .or(`order_id.in.(${ids.join(",")}),order_number.in.(${numbers.join(",")})`);
+  if (logError) {
+    console.error("Test order purge failed on billingo_invoice_logs:", logError.message);
+    return { ok: false, deleted: 0, error: "A számlázási naplók törlése nem sikerült." };
+  }
+
+  const { data: deleted, error } = await supabaseAdmin
+    .from("orders")
+    .delete()
+    .in("id", ids)
+    .select("id");
+  if (error) {
+    console.error("Test order purge failed:", error.message);
+    return { ok: false, deleted: 0, error: "A teszt megrendelések törlése nem sikerült." };
+  }
+  return { ok: true, deleted: deleted?.length ?? 0 };
+}

@@ -429,3 +429,11 @@ export const adminSweepLiveCoupons = createServerFn({ method: "POST" })
     const { sweepLivePromotionCodes } = await import("./coupon-guard.server");
     return sweepLivePromotionCodes();
   });
+
+export const adminPurgeTestOrders = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { purgeTestOrders } = await import("./admin.server");
+    return purgeTestOrders();
+  });
