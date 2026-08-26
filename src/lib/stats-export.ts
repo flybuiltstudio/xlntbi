@@ -691,21 +691,36 @@ export function pivotPageViews(
   return rows.sort((a, b) => a.label.localeCompare(b.label, "hu"));
 }
 
+/**
+ * Táblázat az oldalletöltésekhez. `month` = 0..11 esetén csak az adott hónap
+ * oszlopa jelenik meg, egyébként mind a 12 hónap.
+ */
 export function pageViewTable(
   title: string,
   firstColumn: string,
   rows: PageViewPivotRow[],
   year: number,
+  month: number | "all" = "all",
 ): ListTable {
-  const totals = Array.from({ length: 12 }, (_, i) =>
-    rows.reduce((sum, row) => sum + (row.months[i] ?? 0), 0),
-  );
+  const indexes = month === "all" ? Array.from({ length: 12 }, (_, i) => i) : [month];
+  const totals = indexes.map((i) => rows.reduce((sum, row) => sum + (row.months[i] ?? 0), 0));
+  const showTotal = month === "all";
+  const head = [firstColumn, ...indexes.map((i) => MONTHS_SHORT[i] ?? "")];
+  if (showTotal) head.push("Összesen");
+  const body = rows.map((row) => {
+    const cells: (string | number)[] = [row.label, ...indexes.map((i) => row.months[i] ?? 0)];
+    if (showTotal) cells.push(row.total);
+    return cells;
+  });
+  const foot: (string | number)[] = ["Összesen", ...totals];
+  if (showTotal) foot.push(totals.reduce((a, b) => a + b, 0));
   return {
     title,
-    subtitle: `${year} – havi bontás`,
-    head: [firstColumn, ...MONTHS_SHORT, "Összesen"],
-    body: rows.map((row) => [row.label, ...row.months, row.total]),
-    foot: ["Összesen", ...totals, totals.reduce((a, b) => a + b, 0)],
-    rightCols: Array.from({ length: 13 }, (_, i) => i + 1),
+    subtitle:
+      month === "all" ? `${year} – havi bontás` : `${year}. ${MONTHS[month] ?? ""}`,
+    head,
+    body,
+    foot,
+    rightCols: Array.from({ length: head.length - 1 }, (_, i) => i + 1),
   };
 }
