@@ -1,10 +1,10 @@
-# Új termék: MNB ERA Jelentésgenerátor (R12 és R09)
+# Új termék: MNB ERA Jelentésgenerátor (R09 és R12)
 
 A csatolt ajánló és a két Excel-sablon alapján új termék kerül a katalógusba, a Riportok és beszámolók kategória 4. helyére.
 
 ## Termékadatok
 
-- Név: MNB ERA Jelentésgenerátor (R12 és R09)
+- Név: MNB ERA Jelentésgenerátor (R09 és R12)
 - Rövid alcím: Jegybanki adatszolgáltatások beküldhető XML/CSV fájlja Excelből, egy gombnyomással
 - Ár: egyetlen licenc, 29 900 Ft (AAM, végösszeg, ÁFA nem kerül rá). Nincs bevezető ár és nincs táblastruktúra-beállítási szolgáltatás.
 - Letölthető fájl: a két sablon egy csomagban (MNB_ERA.zip – MNB_ERA_R12.xlsm és MNB_ERA_R09.xlsm), védett tárolóba.
@@ -15,7 +15,7 @@ A csatolt ajánló és a két Excel-sablon alapján új termék kerül a kataló
 Az ajánló szövegét használjuk fel, R12/R09-re élezve, kitalált tartalom nélkül:
 
 - Bevezető: az ERA/STEFI beküldés szigorú formátumszabályai, a kézi összeállítás hibalehetőségei, és hogy a sablon+makró a STEFI kézikönyv szerinti fájlt állítja elő.
-- Fő funkciók: XML és sorkódos CSV kimenet, előírás szerinti automatikus fájlnév (pl. R12ÉÉHH + törzsszám), bizonylatjelleg-kezelés (E/M/N, táblánkénti nemleges), táblánként egy munkalap sorkódos adatbevitellel, windows-1250 CSV CRLF-fel, dátumformátumok, @ sorkód-előtag, beépített magyar hibaüzenetek.
+- Fő funkciók: XML és sorkódos CSV kimenet, előírás szerinti automatikus fájlnév (pl. R09/R12 + ÉÉHH + törzsszám), bizonylatjelleg-kezelés (E/M/N, táblánkénti nemleges), táblánként egy munkalap sorkódos adatbevitellel, windows-1250 CSV CRLF-fel, dátumformátumok, @ sorkód-előtag, beépített magyar hibaüzenetek.
 - Előnyök: időmegtakarítás, kevesebb visszautasított beküldés, megszokott Excel-környezet, STEFI „Ellenőrzés” funkcióval előzetesen validálható.
 - Tudnivalók: Excel (Windows, 32/64 bit) makróengedéllyel; a tábla- és sorkódokat az MNB szabálycsomagja határozza meg; az éles beküldéshez ERA-regisztráció kell.
 
