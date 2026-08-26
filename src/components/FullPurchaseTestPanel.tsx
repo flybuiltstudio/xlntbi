@@ -57,9 +57,20 @@ export function FullPurchaseTestPanel() {
   const [result, setResult] = useState<TestResult | null>(null);
   const [error, setError] = useState("");
 
+  const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null);
+  const [cleaning, setCleaning] = useState(false);
+  const [cleanupError, setCleanupError] = useState("");
+
   const [guard, setGuard] = useState<GuardState | null>(null);
   const [sweeping, setSweeping] = useState(false);
   const [sweepMessage, setSweepMessage] = useState("");
+
+  /** True when the latest test run skipped cleanup (checkbox unchecked). */
+  const cleanupAvailable = Boolean(
+    result?.orderNumber &&
+      String(result.orderNumber).startsWith("TESZT-") &&
+      result.steps.some((s) => s.key === "cleanup" && s.status === "skipped"),
+  );
 
   const loadGuard = useCallback(() => {
     guardState()
