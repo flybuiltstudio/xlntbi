@@ -445,3 +445,12 @@ export const adminPreviewTestOrders = createServerFn({ method: "POST" })
     const { listTestOrdersPreview } = await import("./admin.server");
     return listTestOrdersPreview();
   });
+
+/** Product detail / service subpage view counters (statistics readers). */
+export const adminPageViewStats = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gateStats(context as any);
+    const { listPageViews } = await import("./page-views.server");
+    return { rows: await listPageViews() };
+  });
