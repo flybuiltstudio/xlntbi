@@ -15,8 +15,9 @@ import {
   Users,
 } from "lucide-react";
 
-import { adminOrderStats } from "@/lib/admin.functions";
-import { formatPrice } from "@/lib/products";
+import { adminOrderStats, adminPageViewStats } from "@/lib/admin.functions";
+import { formatPrice, products } from "@/lib/products";
+import { serviceItems } from "@/lib/services";
 import { PageHero } from "@/components/PageHero";
 import { useAdminSession } from "@/components/admin-panels";
 import {
@@ -35,7 +36,10 @@ import {
   paymentLabel,
   productLabel,
   slugify,
+  pageViewTable,
+  pivotPageViews,
   type ListTable,
+  type PageViewCount,
 } from "@/lib/stats-export";
 
 export const Route = createFileRoute("/admin/statisztika")({
@@ -492,6 +496,8 @@ function StatsPanel() {
                   </table>
                 </div>
               </section>
+
+              <PageViewStats />
 
               {/* Grafikon */}
               <section className="mt-14">
@@ -1173,5 +1179,233 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
         </div>
       </div>
     </section>
+  );
+}
+
+
+// ---------------- Oldalletöltési statisztikák ----------------
+
+function PageViewStats() {
+  const fetchPageViews = useServerFn(adminPageViewStats);
+  const [counts, setCounts] = useState<{ product: PageViewCount[]; service: PageViewCount[] }>({
+    product: [],
+    service: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchPageViews()
+      .then((res) => {
+        if (cancelled) return;
+        const rows = res.rows ?? [];
+        setCounts({
+          product: rows.filter((r) => r.pageType === "product"),
+          service: rows.filter((r) => r.pageType === "service"),
+        });
+      })
+      .catch((err: unknown) =>
+        setError(err instanceof Error ? err.message : "Nem sikerült betölteni az adatokat."),
+      )
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchPageViews]);
+
+  const years = useMemo(() => {
+    const set = new Set<number>([new Date().getFullYear()]);
+    for (const row of [...counts.product, ...counts.service]) set.add(row.year);
+    return [...set].sort((a, b) => b - a);
+  }, [counts]);
+  const [year, setYear] = useState<number>(new Date().getFullYear());
+  const activeYear = years.includes(year) ? year : (years[0] ?? new Date().getFullYear());
+
+  const productEntries = useMemo(
+    () => products.map((p) => ({ key: p.slug, label: p.name })),
+    [],
+  );
+  const serviceEntries = useMemo(
+    () => serviceItems.map((item) => ({ key: item.to, label: item.label })),
+    [],
+  );
+
+  const productRows = pivotPageViews(productEntries, counts.product, activeYear);
+  const serviceRows = pivotPageViews(serviceEntries, counts.service, activeYear);
+
+  if (loading) {
+    return (
+      <section className="mt-14 flex items-center gap-2 text-sm text-muted-foreground">
+        <Loader2 className="h-4 w-4 animate-spin" /> Oldalletöltési statisztika betöltése…
+      </section>
+    );
+  }
+  if (error) {
+    return <section className="mt-14 text-sm text-destructive">{error}</section>;
+  }
+
+  return (
+    <section className="mt-14 space-y-10">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-sm font-semibold text-foreground">Oldalletöltések éve:</span>
+        {years.map((y) => (
+          <button
+            key={y}
+            type="button"
+            className={filterChip(y === activeYear)}
+            onClick={() => setYear(y)}
+          >
+            {y}
+          </button>
+        ))}
+      </div>
+
+      <PageViewBlock
+        title={`Termék Részletek oldalak letöltései – ${activeYear}`}
+        note="Csak a publikált (éles) oldalon mért megnyitások, havi bontásban. Minden termék szerepel, akkor is, ha nulla."
+        firstColumn="Termék"
+        rows={productRows}
+        year={activeYear}
+        fileBase="termek-oldalletoltesek"
+      />
+
+      <PageViewBlock
+        title={`Szolgáltatás aloldalak letöltései – ${activeYear}`}
+        note="Csak a publikált (éles) oldalon mért megnyitások, havi bontásban. Minden szolgáltatás szerepel, akkor is, ha nulla."
+        firstColumn="Szolgáltatás"
+        rows={serviceRows}
+        year={activeYear}
+        fileBase="szolgaltatas-oldalletoltesek"
+      />
+    </section>
+  );
+}
+
+function PageViewBlock({
+  title,
+  note,
+  firstColumn,
+  rows,
+  year,
+  fileBase,
+}: {
+  title: string;
+  note: string;
+  firstColumn: string;
+  rows: ReturnType<typeof pivotPageViews>;
+  year: number;
+  fileBase: string;
+}) {
+  const [exporting, setExporting] = useState<string | null>(null);
+  const table = pageViewTable(title, firstColumn, rows, year);
+  const filename = `xlntbi-${fileBase}-${year}`;
+  const btn =
+    "inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted disabled:opacity-60";
+
+  const run = async (id: string, fn: () => void | Promise<void>) => {
+    setExporting(id);
+    try {
+      await fn();
+    } finally {
+      setExporting(null);
+    }
+  };
+
+  const totals = table.foot ?? [];
+
+  return (
+    <div>
+      <h2 className="text-xl font-bold text-foreground">{title}</h2>
+      <p className="mt-2 text-sm text-muted-foreground">{note}</p>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        <button
+          type="button"
+          className={btn}
+          disabled={exporting !== null}
+          onClick={() => run("xlsx", () => exportTableXlsx(`${filename}.xlsx`, String(year), table))}
+        >
+          {exporting === "xlsx" ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <FileSpreadsheet className="h-4 w-4" />
+          )}
+          Excel (.xlsx)
+        </button>
+        <button
+          type="button"
+          className={btn}
+          disabled={exporting !== null}
+          onClick={() => run("csv", () => exportTableCsv(`${filename}.csv`, table))}
+        >
+          <FileText className="h-4 w-4" />
+          CSV
+        </button>
+        <button
+          type="button"
+          className={btn}
+          disabled={exporting !== null}
+          onClick={() => run("xml", () => exportTableXml(`${filename}.xml`, table))}
+        >
+          <FileCode2 className="h-4 w-4" />
+          XML
+        </button>
+        <button
+          type="button"
+          className={btn}
+          disabled={exporting !== null}
+          onClick={() => run("pdf", () => exportTablePdf(`${filename}.pdf`, table))}
+        >
+          {exporting === "pdf" ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <FileDown className="h-4 w-4" />
+          )}
+          PDF
+        </button>
+      </div>
+
+      <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
+        <table className="w-full min-w-[880px] text-sm">
+          <thead>
+            <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
+              <th className="px-4 py-3 font-semibold">{firstColumn}</th>
+              {MONTHS_SHORT.map((m) => (
+                <th key={m} className="px-2 py-3 text-right font-semibold">
+                  {m}
+                </th>
+              ))}
+              <th className="px-4 py-3 text-right font-semibold">Összesen</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.key} className="border-b border-border/60 last:border-0">
+                <td className="px-4 py-3 font-medium text-foreground">{row.label}</td>
+                {row.months.map((value, i) => (
+                  <td key={i} className="px-2 py-3 text-right text-muted-foreground">
+                    {value}
+                  </td>
+                ))}
+                <td className="px-4 py-3 text-right font-semibold text-foreground">{row.total}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="border-t border-border bg-muted/50 text-sm font-semibold text-foreground">
+              {totals.map((cell, i) => (
+                <td
+                  key={i}
+                  className={i === 0 ? "px-4 py-3" : "px-2 py-3 text-right"}
+                >
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
   );
 }

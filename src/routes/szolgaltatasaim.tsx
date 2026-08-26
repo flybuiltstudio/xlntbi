@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
+import { serviceItems as items } from "@/lib/services";
 
 
 const TITLE = "Szolgáltatásaim: könyveléstől a BI tanácsadásig | EXCELlent Business Intelligence";
@@ -53,16 +54,6 @@ export const Route = createFileRoute("/szolgaltatasaim")({
   component: SzolgaltatasaimPage,
 });
 
-const items = [
-  { to: "/konyveles", label: "Könyvelési szolgáltatások" },
-  { to: "/adotanacsadas", label: "Adózási és ügyviteli tanácsadás" },
-  { to: "/fintech-es-bi", label: "Fintech és BI tanácsadás" },
-  { to: "/kontrolling", label: "Kontrolling modern riport- és automatizációs eszközökkel" },
-  { to: "/cegaudit", label: "Cégaudit" },
-  { to: "/konyvvizsgalat", label: "Könyvvizsgálat" },
-  { to: "/konyveloiroda-audit", label: "Könyvelőiroda audit" },
-  { to: "/digitalis-idomegtakaritasi-audit", label: "Digitális időmegtakarítási audit" },
-] as const;
 
 function SzolgaltatasaimPage() {
   return (

@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
+import { usePageView } from "@/lib/use-page-view";
 import { PageHero } from "@/components/PageHero";
 import {
   BarChart3,
@@ -108,6 +109,8 @@ export function ServicePage({
   closing,
   children,
 }: ServicePageProps) {
+  const pathname = useLocation({ select: (l) => l.pathname });
+  usePageView("service", pathname);
   return (
     <div>
       <PageHero>

@@ -646,3 +646,66 @@ export async function exportTablePdf(filename: string, table: ListTable) {
 
   doc.save(filename);
 }
+
+// ---------------- Oldalletöltési statisztika (havi pivot) ----------------
+
+export interface PageViewCount {
+  pageKey: string;
+  year: number;
+  month: number;
+  views: number;
+}
+
+export interface PageViewPivotRow {
+  key: string;
+  label: string;
+  months: number[]; // 12 elem, január..december
+  total: number;
+}
+
+/**
+ * Minden felsorolt oldalt visszaad (nullás értékkel is), magyar ABC szerint,
+ * a megadott évre havi bontásban.
+ */
+export function pivotPageViews(
+  entries: { key: string; label: string }[],
+  counts: PageViewCount[],
+  year: number,
+): PageViewPivotRow[] {
+  const rows = entries.map((entry) => ({
+    key: entry.key,
+    label: entry.label,
+    months: Array.from({ length: 12 }, () => 0),
+    total: 0,
+  }));
+  const byKey = new Map(rows.map((row) => [row.key, row]));
+  for (const count of counts) {
+    if (count.year !== year) continue;
+    const row = byKey.get(count.pageKey);
+    if (!row) continue;
+    const index = count.month - 1;
+    if (index < 0 || index > 11) continue;
+    row.months[index] = (row.months[index] ?? 0) + count.views;
+    row.total += count.views;
+  }
+  return rows.sort((a, b) => a.label.localeCompare(b.label, "hu"));
+}
+
+export function pageViewTable(
+  title: string,
+  firstColumn: string,
+  rows: PageViewPivotRow[],
+  year: number,
+): ListTable {
+  const totals = Array.from({ length: 12 }, (_, i) =>
+    rows.reduce((sum, row) => sum + (row.months[i] ?? 0), 0),
+  );
+  return {
+    title,
+    subtitle: `${year} – havi bontás`,
+    head: [firstColumn, ...MONTHS_SHORT, "Összesen"],
+    body: rows.map((row) => [row.label, ...row.months, row.total]),
+    foot: ["Összesen", ...totals, totals.reduce((a, b) => a + b, 0)],
+    rightCols: Array.from({ length: 13 }, (_, i) => i + 1),
+  };
+}
