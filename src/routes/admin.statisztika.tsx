@@ -40,6 +40,7 @@ import {
   pivotPageViews,
   type ListTable,
   type PageViewCount,
+  type PageViewPivotRow,
 } from "@/lib/stats-export";
 
 export const Route = createFileRoute("/admin/statisztika")({
