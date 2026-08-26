@@ -269,6 +269,46 @@ export function FullPurchaseTestPanel() {
             </ul>
           </div>
         ) : null}
+
+        {cleanupAvailable ? (
+          <div className="mt-5 rounded-lg border border-border bg-secondary/40 p-4">
+            <p className="text-sm text-foreground">
+              A teszt számla és a <span className="font-mono">{result!.orderNumber}</span>{" "}
+              rendelés még megvan, mert a takarítás ki volt kapcsolva.
+            </p>
+            <button
+              type="button"
+              onClick={() => void onCleanup()}
+              disabled={cleaning}
+              className="mt-3 inline-flex items-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent disabled:opacity-60"
+            >
+              {cleaning ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Eraser className="h-4 w-4" />
+              )}
+              {cleaning ? "Takarítás folyamatban…" : "Teszt számla sztornózása + rendelés törlése most"}
+            </button>
+
+            {cleanupError ? (
+              <p className="mt-3 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                {cleanupError}
+              </p>
+            ) : null}
+
+            {cleanupResult ? (
+              <p
+                className={`mt-3 rounded-md border px-4 py-3 text-sm ${
+                  cleanupResult.ok
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-amber-500/40 bg-amber-500/10 text-amber-700"
+                }`}
+              >
+                {cleanupResult.detail}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
       </section>
 
       <section className="rounded-xl border border-border bg-card p-5 sm:p-6">
