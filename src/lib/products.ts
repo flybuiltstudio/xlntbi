@@ -68,7 +68,7 @@ export const products: Product[] = [
     status: "available",
     price: 19900,
     currency: "HUF",
-    image: szamlaImg,
+    image: navOnlineSzamlaImg,
     metaTitle: "NAV Online Számla letöltő | EXCELlent",
     metaDescription:
       "Asztali segédprogram a NAV Online Számla adatok lekérdezéséhez és Excelbe exportálásához. 19 900 Ft.",
