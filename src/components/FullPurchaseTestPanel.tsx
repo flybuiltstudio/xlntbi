@@ -16,6 +16,7 @@ import {
   adminSweepLiveCoupons,
 } from "@/lib/admin.functions";
 import { PaymentEnvironmentNotice } from "@/components/PaymentEnvironmentNotice";
+import { getStripeEnvironmentSafe } from "@/lib/stripe";
 import { getTier, products } from "@/lib/products";
 import { ALLOWED_LIVE_PROMOTION_CODES, TEST_PROMOTION_CODES } from "@/lib/coupons";
 
@@ -42,6 +43,9 @@ export function FullPurchaseTestPanel() {
   const [slug, setSlug] = useState(orderable[0]!.slug);
   const [email, setEmail] = useState("xllentac@gmail.com");
   const [paymentMethod, setPaymentMethod] = useState<"card" | "transfer">("card");
+  const [environment, setEnvironment] = useState<"sandbox" | "live">(
+    getStripeEnvironmentSafe() ?? "sandbox",
+  );
   const [sendLicenseEmail, setSendLicenseEmail] = useState(true);
   const [cleanup, setCleanup] = useState(true);
 
@@ -76,6 +80,7 @@ export function FullPurchaseTestPanel() {
           tierId: getTier(product).id,
           email,
           paymentMethod,
+          environment,
           sendLicenseEmail,
           cleanup,
         },
@@ -155,6 +160,18 @@ export function FullPurchaseTestPanel() {
             >
               <option value="card">Bankkártya (Stripe teljesítési lánc)</option>
               <option value="transfer">Banki átutalás (admin jóváhagyás)</option>
+            </select>
+          </label>
+          <label className="block text-sm font-medium text-foreground">
+            Stripe környezet
+            <select
+              className={inputClass}
+              value={environment}
+              onChange={(e) => setEnvironment(e.target.value as "sandbox" | "live")}
+              disabled={paymentMethod === "transfer"}
+            >
+              <option value="sandbox">Teszt (sandbox)</option>
+              <option value="live">Éles (live)</option>
             </select>
           </label>
           <div className="space-y-2 pt-6 text-sm text-foreground">
