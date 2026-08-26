@@ -27,6 +27,7 @@ import {
   adminUpdateUserRole,
   adminUploadCalculatorVersion,
 } from "@/lib/admin.functions";
+import type { TestOrderPreviewRow } from "@/lib/admin.server";
 import { formatPrice, products } from "@/lib/products";
 import { applyPlacements, productCategories, sortCategories } from "@/lib/product-categories";
 import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
@@ -560,6 +561,72 @@ export function OrdersPanel({ email }: { email: string | null }) {
           {busy === "purge-preview" ? "Betöltés…" : "Teszt megrendelések törlése"}
         </button>
       </div>
+
+      {purgePreview && purgePreview.length > 0 ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="max-h-[85vh] w-full max-w-4xl overflow-auto rounded-xl border border-border bg-card p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-foreground">
+              Törlésre jelölt teszt megrendelések ({purgePreview.length})
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              A törlés a felsorolt rendeléseket és a hozzájuk tartozó letöltési linkeket, számlázási
+              naplókat és számlaadatokat is véglegesen eltávolítja.
+            </p>
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left text-sm">
+                <thead className="text-xs uppercase text-muted-foreground">
+                  <tr>
+                    <th className="py-2 pr-3">Rendelésszám</th>
+                    <th className="py-2 pr-3">Dátum</th>
+                    <th className="py-2 pr-3">Termék</th>
+                    <th className="py-2 pr-3">E-mail</th>
+                    <th className="py-2 pr-3">Összeg</th>
+                    <th className="py-2 pr-3">Fizetés</th>
+                    <th className="py-2 pr-3">Számla</th>
+                    <th className="py-2">Miért teszt?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {purgePreview.map((row) => (
+                    <tr key={row.orderNumber} className="border-t border-border/60">
+                      <td className="py-2 pr-3 font-medium text-foreground">{row.orderNumber}</td>
+                      <td className="py-2 pr-3">
+                        {new Date(row.createdAt).toLocaleDateString("hu-HU")}
+                      </td>
+                      <td className="py-2 pr-3">{row.productName}</td>
+                      <td className="py-2 pr-3">{row.email}</td>
+                      <td className="py-2 pr-3">{formatPrice(row.totalPrice)}</td>
+                      <td className="py-2 pr-3">
+                        {row.paymentStatus === "paid" ? "Fizetve" : "Nincs fizetve"}
+                        {row.paymentProvider ? ` · ${row.paymentProvider}` : ""}
+                      </td>
+                      <td className="py-2 pr-3">{row.invoiceNumber ?? "–"}</td>
+                      <td className="py-2 text-muted-foreground">{row.reason}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-6 flex flex-wrap justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setPurgePreview(null)}
+                className="rounded-md border border-input px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
+              >
+                Mégsem
+              </button>
+              <button
+                type="button"
+                onClick={() => void onPurgeTests()}
+                disabled={busy === "purge"}
+                className="rounded-md bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"
+              >
+                {busy === "purge" ? "Törlés…" : `Végleges törlés (${purgePreview.length})`}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {message ? (
         <p className="mt-6 rounded-md border border-border bg-muted px-4 py-3 text-sm text-foreground">
