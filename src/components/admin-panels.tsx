@@ -13,6 +13,7 @@ import {
   adminListInvoiceLogs,
   adminListOrders,
   adminPurgeTestOrders,
+  adminListTestOrders,
   adminListProductFiles,
   adminListProductPlacements,
   adminListUsers,
@@ -295,6 +296,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const invoiceSnapshot = useServerFn(adminInvoiceSnapshot);
   const sendLicense = useServerFn(adminSendLicense);
   const purgeTests = useServerFn(adminPurgeTestOrders);
+  const listTests = useServerFn(adminListTestOrders);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
@@ -308,6 +310,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [monthSel, setMonthSel] = useState<number | "all">("all");
   const [licenseFor, setLicenseFor] = useState<Order | null>(null);
   const [licenseKey, setLicenseKey] = useState("");
+  const [purgePreview, setPurgePreview] = useState<TestOrderPreviewRow[] | null>(null);
 
   const years = useMemo(() => {
     const set = new Set<number>();
@@ -496,14 +499,26 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
+  /** Dry run: shows exactly which orders the purge would remove. */
+  async function onPreviewPurge() {
+    setBusy("purge-preview");
+    setMessage("");
+    try {
+      const result = await listTests();
+      if (result.ok) {
+        setPurgePreview(result.rows);
+        if (result.rows.length === 0) setMessage("Nem találtam teszt megrendelést.");
+      } else {
+        setMessage(result.error ?? "Hiba történt.");
+      }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
   /** Removes every test order and all data referencing it. */
   async function onPurgeTests() {
-    if (
-      !window.confirm(
-        "Biztosan törlöd az ÖSSZES teszt megrendelést? Ez a hozzájuk tartozó letöltési linkeket, számlázási naplókat és számlaadatokat is véglegesen törli.",
-      )
-    )
-      return;
     setBusy("purge");
     setMessage("");
     try {
@@ -515,6 +530,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
             : "Nem találtam teszt megrendelést."
           : (result.error ?? "Hiba történt."),
       );
+      setPurgePreview(null);
       await refresh();
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Hiba történt.");
@@ -537,11 +553,11 @@ export function OrdersPanel({ email }: { email: string | null }) {
         </button>
         <button
           type="button"
-          onClick={() => void onPurgeTests()}
-          disabled={busy === "purge"}
+          onClick={() => void onPreviewPurge()}
+          disabled={busy === "purge-preview" || busy === "purge"}
           className="rounded-md border border-destructive/50 px-3 py-1.5 font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50"
         >
-          {busy === "purge" ? "Törlés…" : "Teszt megrendelések törlése"}
+          {busy === "purge-preview" ? "Betöltés…" : "Teszt megrendelések törlése"}
         </button>
       </div>
 
