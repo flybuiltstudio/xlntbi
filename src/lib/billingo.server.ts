@@ -387,7 +387,6 @@ export async function cancelInvoiceForOrder(
       .update({
         billingo_invoice_id: null,
         billingo_invoice_number: null,
-        note_internal: undefined,
       })
       .eq("id", order.id);
 
