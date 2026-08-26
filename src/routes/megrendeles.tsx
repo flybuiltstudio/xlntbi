@@ -355,6 +355,7 @@ function OrderPage() {
 
         <fieldset className="mt-8">
           <legend className="text-sm font-semibold text-foreground">Fizetési mód</legend>
+          <PaymentEnvironmentNotice className="mt-3" />
           <div className="mt-3 space-y-2">
             {cardAvailable ? (
               <label className="flex items-start gap-3 rounded-md border border-border p-3 text-sm text-foreground">
