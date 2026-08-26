@@ -1200,11 +1200,83 @@ export async function billingoInvoiceAudit(): Promise<{ rows: InvoiceMatchRow[] 
   return { rows };
 }
 
+/** Belső (teszt) e-mail címek: a plus-alias (pl. xllentac+eles4@gmail.com) is ide tartozik. */
+const INTERNAL_TEST_EMAILS = new Set([
+  "xllentac@gmail.com",
+  "info@xlntbi.hu",
+  "sarinay.david@gmail.com",
+]);
+
+function isInternalTestEmail(email: unknown): boolean {
+  const raw = String(email ?? "").trim().toLowerCase();
+  if (!raw.includes("@")) return false;
+  const [local, domain] = raw.split("@");
+  const base = `${(local ?? "").split("+")[0]}@${domain}`;
+  return INTERNAL_TEST_EMAILS.has(base) || domain === "xlntbi.hu";
+}
+
+function testOrderReason(order: any): string | null {
+  if (order.payment_provider === "test") return "Teszt fizetési mód";
+  if (String(order.order_number).startsWith("TESZT-")) return "TESZT- előtagú rendelésszám";
+  if (isInternalTestEmail(order.email)) return "Belső teszt e-mail cím";
+  return null;
+}
+
+export type TestOrderPreviewRow = {
+  orderNumber: string;
+  email: string;
+  productName: string;
+  totalPrice: number;
+  paymentProvider: string | null;
+  paymentStatus: string;
+  invoiceNumber: string | null;
+  createdAt: string;
+  reason: string;
+};
+
+/** Dry run: lists exactly the orders the purge button would delete. */
+export async function listTestOrdersPreview(): Promise<{
+  ok: boolean;
+  rows: TestOrderPreviewRow[];
+  error?: string;
+}> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin
+    .from("orders")
+    .select(
+      "order_number, email, product_name, total_price, payment_provider, payment_status, billingo_invoice_number, created_at",
+    )
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Test order preview failed:", error.message);
+    return { ok: false, rows: [], error: "A teszt megrendelések betöltése nem sikerült." };
+  }
+
+  const rows: TestOrderPreviewRow[] = [];
+  for (const order of data ?? []) {
+    const reason = testOrderReason(order);
+    if (!reason) continue;
+    rows.push({
+      orderNumber: String((order as any).order_number),
+      email: String((order as any).email ?? ""),
+      productName: String((order as any).product_name ?? ""),
+      totalPrice: Number((order as any).total_price ?? 0),
+      paymentProvider: ((order as any).payment_provider as string | null) ?? null,
+      paymentStatus: String((order as any).payment_status ?? ""),
+      invoiceNumber: ((order as any).billingo_invoice_number as string | null) ?? null,
+      createdAt: String((order as any).created_at),
+      reason,
+    });
+  }
+  return { ok: true, rows };
+}
+
 /**
- * Deletes EVERY test order (payment_provider = "test" or a TESZT- prefixed
- * order number) together with all rows that reference them: download tokens,
- * Billingo invoice logs and invoice snapshots. This clears the test data from
- * every admin surface (orders, statistics, Billingo audit and log pages).
+ * Deletes EVERY test order (test payment provider, TESZT- prefixed order number
+ * or internal test e-mail) together with all rows that reference them: download
+ * tokens, Billingo invoice logs and invoice snapshots. This clears the test data
+ * from every admin surface (orders, statistics, Billingo audit and log pages).
  */
 export async function purgeTestOrders(): Promise<{
   ok: boolean;
@@ -1222,23 +1294,9 @@ export async function purgeTestOrders(): Promise<{
     return { ok: false, deleted: 0, error: "A teszt megrendelések betöltése nem sikerült." };
   }
 
-  // Belső (teszt) e-mail címek: a plus-alias (pl. xllentac+eles4@gmail.com) is ide tartozik.
-  const internalEmails = new Set(["xllentac@gmail.com", "info@xlntbi.hu", "sarinay.david@gmail.com"]);
-  const isInternalEmail = (email: unknown) => {
-    const raw = String(email ?? "").trim().toLowerCase();
-    if (!raw.includes("@")) return false;
-    const [local, domain] = raw.split("@");
-    const base = `${(local ?? "").split("+")[0]}@${domain}`;
-    return internalEmails.has(base) || domain === "xlntbi.hu";
-  };
-
-  const tests = (rows ?? []).filter(
-    (o: any) =>
-      o.payment_provider === "test" ||
-      String(o.order_number).startsWith("TESZT-") ||
-      isInternalEmail(o.email),
-  );
+  const tests = (rows ?? []).filter((o: any) => testOrderReason(o) !== null);
   if (tests.length === 0) return { ok: true, deleted: 0 };
+
 
   const ids = tests.map((o: any) => o.id as string);
   const numbers = tests.map((o: any) => String(o.order_number));

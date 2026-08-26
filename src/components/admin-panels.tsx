@@ -13,6 +13,7 @@ import {
   adminListInvoiceLogs,
   adminListOrders,
   adminPurgeTestOrders,
+  adminPreviewTestOrders,
   adminListProductFiles,
   adminListProductPlacements,
   adminListUsers,
@@ -26,6 +27,7 @@ import {
   adminUpdateUserRole,
   adminUploadCalculatorVersion,
 } from "@/lib/admin.functions";
+import type { TestOrderPreviewRow } from "@/lib/admin.server";
 import { formatPrice, products } from "@/lib/products";
 import { applyPlacements, productCategories, sortCategories } from "@/lib/product-categories";
 import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
@@ -295,6 +297,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const invoiceSnapshot = useServerFn(adminInvoiceSnapshot);
   const sendLicense = useServerFn(adminSendLicense);
   const purgeTests = useServerFn(adminPurgeTestOrders);
+  const listTests = useServerFn(adminPreviewTestOrders);
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
@@ -308,6 +311,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [monthSel, setMonthSel] = useState<number | "all">("all");
   const [licenseFor, setLicenseFor] = useState<Order | null>(null);
   const [licenseKey, setLicenseKey] = useState("");
+  const [purgePreview, setPurgePreview] = useState<TestOrderPreviewRow[] | null>(null);
 
   const years = useMemo(() => {
     const set = new Set<number>();
@@ -496,14 +500,26 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
+  /** Dry run: shows exactly which orders the purge would remove. */
+  async function onPreviewPurge() {
+    setBusy("purge-preview");
+    setMessage("");
+    try {
+      const result = await listTests();
+      if (result.ok) {
+        setPurgePreview(result.rows);
+        if (result.rows.length === 0) setMessage("Nem találtam teszt megrendelést.");
+      } else {
+        setMessage(result.error ?? "Hiba történt.");
+      }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
   /** Removes every test order and all data referencing it. */
   async function onPurgeTests() {
-    if (
-      !window.confirm(
-        "Biztosan törlöd az ÖSSZES teszt megrendelést? Ez a hozzájuk tartozó letöltési linkeket, számlázási naplókat és számlaadatokat is véglegesen törli.",
-      )
-    )
-      return;
     setBusy("purge");
     setMessage("");
     try {
@@ -515,6 +531,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
             : "Nem találtam teszt megrendelést."
           : (result.error ?? "Hiba történt."),
       );
+      setPurgePreview(null);
       await refresh();
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Hiba történt.");
@@ -537,13 +554,79 @@ export function OrdersPanel({ email }: { email: string | null }) {
         </button>
         <button
           type="button"
-          onClick={() => void onPurgeTests()}
-          disabled={busy === "purge"}
+          onClick={() => void onPreviewPurge()}
+          disabled={busy === "purge-preview" || busy === "purge"}
           className="rounded-md border border-destructive/50 px-3 py-1.5 font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50"
         >
-          {busy === "purge" ? "Törlés…" : "Teszt megrendelések törlése"}
+          {busy === "purge-preview" ? "Betöltés…" : "Teszt megrendelések törlése"}
         </button>
       </div>
+
+      {purgePreview && purgePreview.length > 0 ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="max-h-[85vh] w-full max-w-4xl overflow-auto rounded-xl border border-border bg-card p-6 shadow-xl">
+            <h3 className="text-lg font-semibold text-foreground">
+              Törlésre jelölt teszt megrendelések ({purgePreview.length})
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              A törlés a felsorolt rendeléseket és a hozzájuk tartozó letöltési linkeket, számlázási
+              naplókat és számlaadatokat is véglegesen eltávolítja.
+            </p>
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left text-sm">
+                <thead className="text-xs uppercase text-muted-foreground">
+                  <tr>
+                    <th className="py-2 pr-3">Rendelésszám</th>
+                    <th className="py-2 pr-3">Dátum</th>
+                    <th className="py-2 pr-3">Termék</th>
+                    <th className="py-2 pr-3">E-mail</th>
+                    <th className="py-2 pr-3">Összeg</th>
+                    <th className="py-2 pr-3">Fizetés</th>
+                    <th className="py-2 pr-3">Számla</th>
+                    <th className="py-2">Miért teszt?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {purgePreview.map((row) => (
+                    <tr key={row.orderNumber} className="border-t border-border/60">
+                      <td className="py-2 pr-3 font-medium text-foreground">{row.orderNumber}</td>
+                      <td className="py-2 pr-3">
+                        {new Date(row.createdAt).toLocaleDateString("hu-HU")}
+                      </td>
+                      <td className="py-2 pr-3">{row.productName}</td>
+                      <td className="py-2 pr-3">{row.email}</td>
+                      <td className="py-2 pr-3">{formatPrice(row.totalPrice)}</td>
+                      <td className="py-2 pr-3">
+                        {row.paymentStatus === "paid" ? "Fizetve" : "Nincs fizetve"}
+                        {row.paymentProvider ? ` · ${row.paymentProvider}` : ""}
+                      </td>
+                      <td className="py-2 pr-3">{row.invoiceNumber ?? "–"}</td>
+                      <td className="py-2 text-muted-foreground">{row.reason}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-6 flex flex-wrap justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setPurgePreview(null)}
+                className="rounded-md border border-input px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
+              >
+                Mégsem
+              </button>
+              <button
+                type="button"
+                onClick={() => void onPurgeTests()}
+                disabled={busy === "purge"}
+                className="rounded-md bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground hover:opacity-90 disabled:opacity-50"
+              >
+                {busy === "purge" ? "Törlés…" : `Végleges törlés (${purgePreview.length})`}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {message ? (
         <p className="mt-6 rounded-md border border-border bg-muted px-4 py-3 text-sm text-foreground">
