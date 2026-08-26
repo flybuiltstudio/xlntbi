@@ -54,9 +54,11 @@ export const productCategories: ProductCategory[] = [
     slugs: [
       "rlb-bank-konverter",
       "rlb-bank-konverter-pro",
+      "devizabank",
       "univerzalis-bank-konverter",
       "utalasi-csomag-keszito",
     ],
+
   },
   {
     key: "riportok-beszamolok",

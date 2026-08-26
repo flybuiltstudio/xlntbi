@@ -16,6 +16,7 @@ import pdfExcelImg from "@/assets/pdf-excel-konverter.jpg";
 import nyitoVegyesImg from "@/assets/nyito-vegyes-konyvelo.jpg";
 import wifiJelszoImg from "@/assets/wifi-jelszo-nezo.jpg";
 import auditXmlImg from "@/assets/auditxml-ellenorzo-javito.jpg";
+import devizabankImg from "@/assets/devizabank.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -1405,7 +1406,67 @@ export const products: Product[] = [
       storagePath: "auditxml-ellenorzo-javito/AuditXML_Ellenorzo_Javito.exe",
     },
   },
+  {
+    slug: "devizabank",
+    priceId: "devizabank_egy_devizanem_atlagaras",
+    name: "DEVIZABANK",
+    tagline:
+      "Devizás bankszámla nyilvántartó és árfolyam-elszámoló Excel könyvelőirodáknak",
+    status: "available",
+    price: 19900,
+    currency: "HUF",
+    image: devizabankImg,
+    metaTitle: "DEVIZABANK – devizás bankszámla nyilvántartó Excel | EXCELlent",
+    metaDescription:
+      "Devizaszámla nyilvántartás átlagáras és FIFO elszámolással, automatikus MNB árfolyam-lekérdezéssel. EUR, USD, GBP, JPY. 19 900 Ft-tól.",
+    intro: [
+      "A devizaszámlák csökkenő tételeit a számviteli törvény szerint kizárólag FIFO vagy átlagáras módszerrel szabad elszámolni – ezt a 2022-es „Eszközök” és „Források” könyvvizsgálói kamarai előadások is megerősítették. Az, hogy egy esetleges (akár havi) átértékelés utólag „rendbe teszi” a számokat, nem mentesít a szabály alól.",
+      "A gyakorlatban ugyanakkor kevés program – Excel-sablon még kevesebb – kezeli helyesen azt a helyzetet, amikor a devizaszámla egyenlege nullán át fordul, vagy negatívba megy. A fejlesztő a hazai és nemzetközi könyvelőprogramok döntő többségével dolgozott már (RLB-től SAP-ig), és mindegyiknél talált olyan esetet, amit vagy egyáltalán nem, vagy csak tételek szétbontásával lehetett helyesen könyvelni.",
+      "A DEVIZABANK a „Deviza_számla” munkalap fejlécének kitöltésével (cégnév, bank, devizanem, év, elszámolási mód) azonnal használatba vehető. A táblázat zölddel a növekedést, narancssárgával a csökkenést, sárgával a kézzel kitöltendő tétel-árfolyam mezőket jelöli, így első pillantásra látszik, mit kell kitölteni és mit számol a program automatikusan.",
+    ],
+    features: [
+      "A hat speciális eset automatikus felismerése: a „H” és „I” oszlop dönti el, melyik módszer alkalmazandó, a könyvelőnek egyetlen tételt sem kell szétbontania.",
+      "Pozitívból kerek 0-ára csökkenő deviza összeg – forintban sem marad egy fillér sem.",
+      "Negatívból kerek 0-ára növő deviza összeg – forintban sem marad egy fillér sem.",
+      "Pozitívból egy tételben negatívba fordulás – nulláig átlagáron csökken, onnantól MNB-árfolyamon lesz egyre negatívabb.",
+      "Negatívból egy tételben pozitívba fordulás – nulláig átlagáron nő, onnantól MNB-árfolyamon nő tovább.",
+      "Negatívból még negatívabb egyenleg – MNB-árfolyamon, hiszen ez gyakorlatilag hitelfelvétel; negatívból a nulla felé közelítés – átlagáron, hiszen ez hiteltörlesztés.",
+      "Automatikus MNB árfolyam-lekérdezés: a beépített makró letölti és tárolja az MNB napi középárfolyamait, nem kell kézzel másolgatni.",
+      "Kész, kitöltendő sablon színkódolt oszlopokkal és „Használati” munkalappal.",
+      "„MINTA” munkalap valós szerkezetű, fiktív adatokkal feltöltött havi forgalommal – nulla-átfutással és negatívba fordulással.",
+      "Átlagáras és FIFO változat, EUR, USD, GBP és JPY devizanemre; a nagy árfolyamszámok miatt a kerekítés 8 tizedesjegyre növelve, hogy a forintosítás forintra pontos maradjon.",
+    ],
+    why: "Elsősorban olyan könyvelőirodáknak és pénzügyi szakembereknek, akik devizaszámlával rendelkező ügyfeleket könyvelnek, és akiknek jelenlegi programja vagy Excel-sablonja nem, vagy csak tételek mesterséges szétbontásával kezeli a fenti hat esetet. Korlátok őszintén: a DEVIZABANK Excel/VBA-alapú munkafüzet, nem önálló adatbázisra épülő könyvelőprogram – a tételeket kézzel (bankkivonatból) kell rögzíteni, automatikus bankkivonat-importot nem tartalmaz. Használatához Microsoft Excel szükséges, makrókat engedélyező beállítással. A program lapvédelemmel és időkorláthoz kötött licenccel védett; a licencidőszak lejárta után a fejlesztőtől kérhető a frissítés.",
+    tiers: [
+      {
+        id: "egy_devizanem_atlagaras",
+        label: "Egy devizanem, átlagáras",
+        price: 19900,
+        note: "Egy választott devizanem (pl. csak EUR), átlagáras elszámolással, céges licenc.",
+        priceId: "devizabank_egy_devizanem_atlagaras",
+      },
+      {
+        id: "egy_devizanem_atlag_fifo",
+        label: "Egy devizanem, átlagáras + FIFO",
+        price: 24900,
+        note: "Egy választott devizanem mindkét elszámolási módszerrel, céges licenc.",
+        priceId: "devizabank_egy_devizanem_atlag_fifo",
+      },
+      {
+        id: "teljes_csomag",
+        label: "Teljes csomag – 4 devizanem, mindkét módszer",
+        price: 39900,
+        note: "EUR, USD, GBP és JPY változat, átlagáras és FIFO módszerrel együtt.",
+        priceId: "devizabank_teljes_csomag",
+      },
+    ],
+    download: {
+      fileName: "DEVIZABANK.zip",
+      storagePath: "devizabank/DEVIZABANK.zip",
+    },
+  },
 ];
+
 
 export const productSlugs = products.map((p) => p.slug);
 
