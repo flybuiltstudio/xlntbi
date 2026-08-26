@@ -1215,15 +1215,28 @@ export async function purgeTestOrders(): Promise<{
 
   const { data: rows, error: listError } = await supabaseAdmin
     .from("orders")
-    .select("id, order_number, payment_provider");
+    .select("id, order_number, payment_provider, email");
 
   if (listError) {
     console.error("Test order purge listing failed:", listError.message);
     return { ok: false, deleted: 0, error: "A teszt megrendelések betöltése nem sikerült." };
   }
 
+  // Belső (teszt) e-mail címek: a plus-alias (pl. xllentac+eles4@gmail.com) is ide tartozik.
+  const internalEmails = new Set(["xllentac@gmail.com", "info@xlntbi.hu", "sarinay.david@gmail.com"]);
+  const isInternalEmail = (email: unknown) => {
+    const raw = String(email ?? "").trim().toLowerCase();
+    if (!raw.includes("@")) return false;
+    const [local, domain] = raw.split("@");
+    const base = `${(local ?? "").split("+")[0]}@${domain}`;
+    return internalEmails.has(base) || domain === "xlntbi.hu";
+  };
+
   const tests = (rows ?? []).filter(
-    (o: any) => o.payment_provider === "test" || String(o.order_number).startsWith("TESZT-"),
+    (o: any) =>
+      o.payment_provider === "test" ||
+      String(o.order_number).startsWith("TESZT-") ||
+      isInternalEmail(o.email),
   );
   if (tests.length === 0) return { ok: true, deleted: 0 };
 
