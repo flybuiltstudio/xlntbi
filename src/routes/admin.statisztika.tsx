@@ -1498,13 +1498,13 @@ function PageViewTopN({
   firstColumn,
   topN,
 }: {
-  rows: ReturnType<typeof pivotPageViews>;
+  rows: PageViewPivotRow[];
   month: number | "all";
   year: number;
   firstColumn: string;
   topN: number;
 }) {
-  const periodValue = (row: ReturnType<typeof pivotPageViews>) =>
+  const periodValue = (row: PageViewPivotRow) =>
     month === "all" ? row.total : (row.months[month] ?? 0);
 
   const ranked = rows
