@@ -19,6 +19,7 @@ import auditXmlImg from "@/assets/auditxml-ellenorzo-javito.jpg";
 import devizabankImg from "@/assets/devizabank.jpg";
 import rlbBankKonverterImg from "@/assets/rlb-bank-konverter.jpg";
 import kamatlekerdezoImg from "@/assets/kamatlekerdezo-potlekszamito.jpg";
+import navOnlineSzamlaImg from "@/assets/nav-online-szamla-letolto.jpg";
 
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
@@ -67,7 +68,7 @@ export const products: Product[] = [
     status: "available",
     price: 19900,
     currency: "HUF",
-    image: szamlaImg,
+    image: navOnlineSzamlaImg,
     metaTitle: "NAV Online Számla letöltő | EXCELlent",
     metaDescription:
       "Asztali segédprogram a NAV Online Számla adatok lekérdezéséhez és Excelbe exportálásához. 19 900 Ft.",
