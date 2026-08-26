@@ -1355,6 +1355,7 @@ function PageViewBlock({
   year,
   month,
   fileBase,
+  topN,
 }: {
   title: string;
   note: string;
@@ -1363,6 +1364,7 @@ function PageViewBlock({
   year: number;
   month: number | "all";
   fileBase: string;
+  topN: number;
 }) {
   const [exporting, setExporting] = useState<string | null>(null);
   const table = pageViewTable(title, firstColumn, rows, year, month);
