@@ -335,3 +335,131 @@ export async function adminAllowedLiveCodes(): Promise<string[]> {
     .filter((r: any) => !r.expires_at || Date.parse(r.expires_at) > now)
     .map((r: any) => String(r.code).toUpperCase());
 }
+
+// ---------------------------------------------------------------------------
+// Sync check: do the local admin_coupons rows match Stripe?
+// ---------------------------------------------------------------------------
+
+export type CouponSyncState = "ok" | "missing" | "mismatch" | "stripe_only";
+
+export type CouponSyncRow = {
+  code: string;
+  state: CouponSyncState;
+  /** Human readable (Hungarian) explanation of the difference. */
+  detail: string;
+};
+
+export type CouponSyncReport = {
+  environment: StripeEnv;
+  checkedAt: string;
+  ok: number;
+  missing: number;
+  mismatch: number;
+  stripeOnly: number;
+  rows: CouponSyncRow[];
+  /** Set when the Stripe call itself failed. */
+  error?: string;
+};
+
+/**
+ * Compares every local admin_coupons row of the environment with the actual
+ * Stripe promotion code, so the admin can see at a glance whether a coupon
+ * exists in Stripe, is out of sync, or is broken.
+ */
+export async function couponSyncStatus(environment: StripeEnv): Promise<CouponSyncReport> {
+  const checkedAt = new Date().toISOString();
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: rows } = await supabaseAdmin
+    .from("admin_coupons")
+    .select("*")
+    .eq("environment", environment);
+  const local = rows ?? [];
+
+  let stripeCoupons: AdminCouponView[];
+  try {
+    stripeCoupons = await listAdminCoupons(environment);
+  } catch (error) {
+    return {
+      environment,
+      checkedAt,
+      ok: 0,
+      missing: 0,
+      mismatch: 0,
+      stripeOnly: 0,
+      rows: [],
+      error: getStripeErrorMessage(error),
+    };
+  }
+
+  const byCode = new Map(stripeCoupons.map((c) => [c.code.toUpperCase(), c]));
+  const out: CouponSyncRow[] = [];
+
+  for (const r of local as any[]) {
+    const code = String(r.code).toUpperCase();
+    const remote = byCode.get(code);
+    if (!remote) {
+      out.push({
+        code,
+        state: "missing",
+        detail: "A kupon nem található a fizetési rendszerben (Stripe).",
+      });
+      continue;
+    }
+
+    const diffs: string[] = [];
+    const localDisabled = Boolean(r.disabled_at);
+    if (localDisabled && remote.active) diffs.push("nálunk letiltva, a Stripe-ban még aktív");
+    if (!localDisabled && !remote.active) diffs.push("a Stripe-ban inaktív, nálunk aktívként szerepel");
+
+    const localExpiry = r.expires_at ? Date.parse(r.expires_at) : null;
+    const remoteExpiry = remote.expiresAt ? Date.parse(remote.expiresAt) : null;
+    if ((localExpiry ?? 0) !== (remoteExpiry ?? 0)) {
+      const tolerated =
+        localExpiry && remoteExpiry && Math.abs(localExpiry - remoteExpiry) < 120_000;
+      if (!tolerated) diffs.push("eltérő lejárati dátum");
+    }
+
+    if (r.discount_type !== remote.discountType) diffs.push("eltérő kedvezménytípus");
+    if (r.discount_type === "percent" && Number(r.percent_off ?? 0) !== Number(remote.percentOff ?? 0)) {
+      diffs.push("eltérő százalékos kedvezmény");
+    }
+    if (r.discount_type === "amount" && Number(r.amount_off ?? 0) !== Number(remote.amountOff ?? 0)) {
+      diffs.push("eltérő kedvezmény összeg");
+    }
+    if (Number(r.max_redemptions ?? 0) !== Number(remote.maxRedemptions ?? 0)) {
+      diffs.push("eltérő beváltási limit");
+    }
+    if (Number(r.min_amount ?? 0) !== Number(remote.minAmount ?? 0)) {
+      diffs.push("eltérő minimum összeg");
+    }
+
+    out.push(
+      diffs.length > 0
+        ? { code, state: "mismatch", detail: `Hibás/eltérő beállítás: ${diffs.join(", ")}.` }
+        : { code, state: "ok", detail: "Létezik a Stripe-ban, a beállítások egyeznek." },
+    );
+  }
+
+  const localCodes = new Set((local as any[]).map((r) => String(r.code).toUpperCase()));
+  for (const remote of stripeCoupons) {
+    const code = remote.code.toUpperCase();
+    if (localCodes.has(code)) continue;
+    out.push({
+      code,
+      state: "stripe_only",
+      detail: "Csak a Stripe-ban létezik (nem ezen a felületen jött létre).",
+    });
+  }
+
+  out.sort((a, b) => a.code.localeCompare(b.code, "hu"));
+
+  return {
+    environment,
+    checkedAt,
+    ok: out.filter((r) => r.state === "ok").length,
+    missing: out.filter((r) => r.state === "missing").length,
+    mismatch: out.filter((r) => r.state === "mismatch").length,
+    stripeOnly: out.filter((r) => r.state === "stripe_only").length,
+    rows: out,
+  };
+}

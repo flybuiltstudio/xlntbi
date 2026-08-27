@@ -564,3 +564,14 @@ export const adminDisableCoupon = createServerFn({ method: "POST" })
     const { disableAdminCoupon } = await import("./coupons-admin.server");
     return disableAdminCoupon(data.code, data.environment);
   });
+
+export const adminCouponSyncStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z.object({ environment: z.enum(["sandbox", "live"]) }).parse(data ?? {}),
+  )
+  .handler(async ({ context, data }) => {
+    await gate(context as any);
+    const { couponSyncStatus } = await import("./coupons-admin.server");
+    return { report: await couponSyncStatus(data.environment) };
+  });
