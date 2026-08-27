@@ -9,6 +9,12 @@ import {
 
 const ORDER_FIELDS = "*";
 
+function isoFromUnix(value: unknown): string | null {
+  return typeof value === "number" && Number.isFinite(value)
+    ? new Date(value * 1000).toISOString()
+    : null;
+}
+
 async function buildDeps(env: StripeEnv): Promise<WebhookDeps> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const db = supabaseAdmin as any;
