@@ -27,12 +27,16 @@ export type Database = {
           environment: string
           expires_at: string | null
           id: string
+          last_synced_at: string | null
           max_redemptions: number | null
           min_amount: number | null
           percent_off: number | null
           product_slugs: string[]
+          source: string
+          stripe_active: boolean | null
           stripe_coupon_id: string
           stripe_promotion_code_id: string
+          times_redeemed: number
         }
         Insert: {
           all_products?: boolean
@@ -46,12 +50,16 @@ export type Database = {
           environment: string
           expires_at?: string | null
           id?: string
+          last_synced_at?: string | null
           max_redemptions?: number | null
           min_amount?: number | null
           percent_off?: number | null
           product_slugs?: string[]
+          source?: string
+          stripe_active?: boolean | null
           stripe_coupon_id: string
           stripe_promotion_code_id: string
+          times_redeemed?: number
         }
         Update: {
           all_products?: boolean
@@ -65,12 +73,16 @@ export type Database = {
           environment?: string
           expires_at?: string | null
           id?: string
+          last_synced_at?: string | null
           max_redemptions?: number | null
           min_amount?: number | null
           percent_off?: number | null
           product_slugs?: string[]
+          source?: string
+          stripe_active?: boolean | null
           stripe_coupon_id?: string
           stripe_promotion_code_id?: string
+          times_redeemed?: number
         }
         Relationships: []
       }
