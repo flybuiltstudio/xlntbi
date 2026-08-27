@@ -616,7 +616,7 @@ function CouponCreateForm({
               checked={unlimited}
               onChange={(e) => setUnlimited(e.target.checked)}
             />
-            Korlátlan (a lejálatig)
+            Korlátlan (a lejáratig)
           </label>
           {!unlimited ? (
             <label className="mt-1 block">
