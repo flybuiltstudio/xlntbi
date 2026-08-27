@@ -31,8 +31,10 @@ export const productCategories: ProductCategory[] = [
       "nav-online-szamla-letolto",
       "nav-penztargep-letolto",
       "rlb-kulfoldi-szamla-import",
+      "kulcs-soft-kulfoldi-szamla-import",
       "penzszam-kulfoldi-szamla-import",
     ],
+
   },
   {
     key: "vegyes-konyveles",
