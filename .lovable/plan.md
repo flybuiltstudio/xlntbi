@@ -2,14 +2,14 @@
 
 ## Mit kapsz
 
-A menüben a **Kuponok** a 2. pont lesz (a Friss verzió után, a Statisztika előtt). Az oldal három részből áll:
+A menüben a **Kuponok** a 2. pont lesz (a Megrendelések után, a Friss verzió előtt). A meglévő „Kupon előzmények" menüpont megszűnik külön elemként: a Kuponok oldalon belül alszakaszként megmaradnak az előzmények és a hibás kísérletek. Az oldal három részből áll:
 
 **1. Új kupon létrehozása (fent, nyitható űrlap)**
 - Kuponkód (pl. `NYAR2026`) — nagybetűsítve, ütközés-ellenőrzéssel
 - Kedvezmény: százalék (%) **vagy** fix összeg (Ft) — választható
 - Érvényesség vége: dátum + idő (budapesti időben), a Stripe is elutasítja utána
 - Környezet: teszt vagy éles
-- Termékek: alapból „Minden termékre" pipa; kikapcsolva megjelenik a termékek listája kategóriánként, checkboxokkal
+- Termékek: alapból „Minden termékre" pipa (alap); kikapcsolva megjelenik a termékek listája kategóriánként, checkboxokkal
 - Beváltási limit: „Korlátlan" pipa (alap), vagy megadott maximum szám
 - Minimum rendelési összeg: „Nincs minimum" pipa (alap), vagy megadott Ft összeg
 
@@ -22,6 +22,8 @@ Létrehozás után a kód azonnal használható a pénztárban a kuponkód mező
 
 **3. Kuponlista**
 Minden eddigi kupon a választott környezetből, oszlopok: kód, kedvezmény, állapot, meddig érvényes (érvényes kuponnál) vagy mikor járt le / mikor kapcsolták ki, beváltások száma / limit, minimum összeg, érintett termékek („Minden termék" vagy a nevek). Soronként **Kikapcsolás** gomb, és CSV export.
+
+Alatta a meglévő **Kupon előzmények** és **Hibás kísérletek** panelek (a mostani `/admin/kuponok` tartalma) változatlanul megmaradnak.
 
 ## Fontos működési részlet
 
@@ -36,4 +38,4 @@ Minden eddigi kupon a választott környezetből, oszlopok: kód, kedvezmény, �
   - `disableAdminCoupon(code, environment)` — promóciós kód `active: false` + `disabled_at` mentése.
 - **`src/lib/coupon-guard.server.ts`**: az engedélylista kiegészül a `admin_coupons` élő (nem lejárt, nem kikapcsolt) éles kódjaival, így a sweep nem kapcsolja ki őket.
 - **`src/lib/admin.functions.ts`**: `adminListCoupons`, `adminCreateCoupon`, `adminDisableCoupon` szerverfunkciók `requireSupabaseAuth` + admin gate-tel, Zod validációval (kód formátum, százalék 1–100, összeg > 0, jövőbeli lejárat).
-- **UI**: `src/components/CouponAdminPanel.tsx` (űrlap + szűrők + táblázat) a meglévő admin panel stílusban; beépítve a `src/routes/admin.kuponok.tsx` oldalra a meglévő előzmény- és hibás-kísérlet panelek fölé. A menüpont sorrendjét és címkéjét a `src/routes/admin.tsx` fájlban rendezem.
+- **UI**: `src/components/CouponAdminPanel.tsx` (űrlap + szűrők + táblázat) a meglévő admin panel stílusban; beépítve a `src/routes/admin.kuponok.tsx` oldalra az előzmény- és hibás-kísérlet panelek fölé. A menüpontot a `src/routes/admin.tsx` fájlban a Megrendelések és a Friss verzió közé helyezem, címkéje „Kuponok", a külön „Kupon előzmények" pontot törlöm.
