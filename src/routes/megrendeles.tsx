@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { z } from "zod";
 
+import { CouponCodeChecker } from "@/components/CouponCodeChecker";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { PaymentEnvironmentNotice } from "@/components/PaymentEnvironmentNotice";
 import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
