@@ -18,7 +18,33 @@ export type CouponCheckResult = {
   discount?: string;
   /** Normalized code to type into the checkout coupon field. */
   code?: string;
+  /** Itemized breakdown for the buyer (HUF, only when the order total is known). */
+  originalAmount?: number;
+  discountAmount?: number;
+  newAmount?: number;
 };
+
+/**
+ * Itemized discount breakdown so the buyer always sees how much is saved
+ * and what the new total is.
+ */
+function computeBreakdown(
+  coupon: { percent_off?: number | null; amount_off?: number | null; currency?: string | null } | null | undefined,
+  amount: number | undefined,
+): { originalAmount?: number; discountAmount?: number; newAmount?: number } {
+  if (!coupon || typeof amount !== "number" || !Number.isFinite(amount) || amount <= 0) return {};
+  const original = Math.round(amount);
+  let discount = 0;
+  if (coupon.percent_off) {
+    discount = Math.round((original * coupon.percent_off) / 100);
+  } else if (coupon.amount_off && String(coupon.currency ?? "huf").toLowerCase() === "huf") {
+    discount = Math.round(coupon.amount_off);
+  } else {
+    return {};
+  }
+  discount = Math.min(discount, original);
+  return { originalAmount: original, discountAmount: discount, newAmount: original - discount };
+}
 
 function formatHuf(amountInMinor: number): string {
   return `${Math.round(amountInMinor).toLocaleString("hu-HU")} Ft`;
@@ -146,6 +172,8 @@ export async function checkPromotionCode(input: {
       }
     }
 
+    const breakdown = computeBreakdown(coupon, input.amount);
+
     if (promo.restrictions?.first_time_transaction) {
       return {
         ok: true,
@@ -153,6 +181,7 @@ export async function checkPromotionCode(input: {
         message: `A kuponkód érvényes: ${describeDiscount(coupon ?? {})}.`,
         detail: "Figyelem: ez a kód csak első vásárlásnál váltható be.",
         discount: describeDiscount(coupon ?? {}),
+        ...breakdown,
       };
     }
 
@@ -162,6 +191,7 @@ export async function checkPromotionCode(input: {
       message: `A kuponkód érvényes: ${describeDiscount(coupon ?? {})}.`,
       detail: "Írd be a kódot a fizetési űrlap „Kuponkód” mezőjébe, és nyomj a Beváltás gombra.",
       discount: describeDiscount(coupon ?? {}),
+      ...breakdown,
     };
   } catch (error) {
     console.error("Coupon validation failed:", getStripeErrorMessage(error));
