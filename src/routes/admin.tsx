@@ -75,7 +75,11 @@ function AdminLayout() {
   }, [session?.id]);
 
   useEffect(() => {
-    if (role === "user" && pathname !== "/admin/statisztika") {
+    // A "user" szerepkör csak a Statisztika és a Kuponok oldalt érheti el;
+    // minden más admin útvonalról (beleértve az Ellenőrzések aloldalait is,
+    // akár közvetlen URL-megadással) visszairányítjuk.
+    const userAllowed = ["/admin/statisztika", "/admin/kuponok"];
+    if (role === "user" && !userAllowed.some((p) => pathname.startsWith(p))) {
       void navigate({ to: "/admin/statisztika", replace: true });
     }
   }, [role, pathname, navigate]);
