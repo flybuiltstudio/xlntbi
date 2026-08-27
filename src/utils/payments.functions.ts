@@ -100,3 +100,66 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
       return { error: getStripeErrorMessage(error) };
     }
   });
+
+/**
+ * Public checkout summary for the thank-you page: itemized coupon discount
+ * (original amount, discount, final total). Reads Stripe by the random
+ * checkout session id, so no order data is exposed by guessing order numbers.
+ */
+export const getCheckoutSummary = createServerFn({ method: "POST" })
+  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+    if (!/^cs_[A-Za-z0-9_-]{10,200}$/.test(data.sessionId)) {
+      throw new Error("Invalid sessionId");
+    }
+    if (data.environment !== "sandbox" && data.environment !== "live") {
+      throw new Error("Invalid environment");
+    }
+    return data;
+  })
+  .handler(
+    async ({
+      data,
+    }): Promise<{
+      ok: boolean;
+      currency?: string;
+      originalAmount?: number;
+      discountAmount?: number;
+      totalAmount?: number;
+      couponCode?: string | null;
+      paymentStatus?: string;
+    }> => {
+      try {
+        const stripe = createStripeClient(data.environment);
+        const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
+          expand: ["total_details.breakdown"],
+        });
+        const discountAmount = session.total_details?.amount_discount ?? 0;
+        const totalAmount = session.amount_total ?? 0;
+        let couponCode: string | null = null;
+        const promoRef = (session.total_details as any)?.breakdown?.discounts?.[0]?.discount
+          ?.promotion_code;
+        if (typeof promoRef === "string") {
+          try {
+            couponCode = (await stripe.promotionCodes.retrieve(promoRef)).code ?? null;
+          } catch {
+            couponCode = null;
+          }
+        } else if (promoRef && typeof promoRef === "object") {
+          couponCode = (promoRef as any).code ?? null;
+        }
+
+        return {
+          ok: true,
+          currency: String(session.currency ?? "huf").toUpperCase(),
+          originalAmount: totalAmount + discountAmount,
+          discountAmount,
+          totalAmount,
+          couponCode,
+          paymentStatus: session.payment_status ?? "unknown",
+        };
+      } catch (error) {
+        console.error("Checkout summary failed:", getStripeErrorMessage(error));
+        return { ok: false };
+      }
+    },
+  );
