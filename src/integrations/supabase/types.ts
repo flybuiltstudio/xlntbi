@@ -237,6 +237,51 @@ export type Database = {
         }
         Relationships: []
       }
+      coupon_attempts: {
+        Row: {
+          amount: number | null
+          code: string
+          created_at: string
+          detail: string | null
+          email: string | null
+          environment: string
+          id: string
+          message: string
+          order_number: string | null
+          outcome: string
+          price_id: string | null
+          reason_code: string
+        }
+        Insert: {
+          amount?: number | null
+          code: string
+          created_at?: string
+          detail?: string | null
+          email?: string | null
+          environment?: string
+          id?: string
+          message?: string
+          order_number?: string | null
+          outcome?: string
+          price_id?: string | null
+          reason_code?: string
+        }
+        Update: {
+          amount?: number | null
+          code?: string
+          created_at?: string
+          detail?: string | null
+          email?: string | null
+          environment?: string
+          id?: string
+          message?: string
+          order_number?: string | null
+          outcome?: string
+          price_id?: string | null
+          reason_code?: string
+        }
+        Relationships: []
+      }
       order_downloads: {
         Row: {
           created_at: string
@@ -302,8 +347,10 @@ export type Database = {
           city: string
           company_name: string | null
           country: string
+          coupon_code: string | null
           created_at: string
           currency: string
+          discount_amount: number
           email: string
           id: string
           ip_address: string | null
@@ -311,6 +358,7 @@ export type Database = {
           license_sent_at: string | null
           note: string | null
           order_number: string
+          original_amount: number | null
           payment_provider: string | null
           payment_reference: string | null
           payment_status: string
@@ -337,8 +385,10 @@ export type Database = {
           city: string
           company_name?: string | null
           country: string
+          coupon_code?: string | null
           created_at?: string
           currency?: string
+          discount_amount?: number
           email: string
           id?: string
           ip_address?: string | null
@@ -346,6 +396,7 @@ export type Database = {
           license_sent_at?: string | null
           note?: string | null
           order_number: string
+          original_amount?: number | null
           payment_provider?: string | null
           payment_reference?: string | null
           payment_status?: string
@@ -372,8 +423,10 @@ export type Database = {
           city?: string
           company_name?: string | null
           country?: string
+          coupon_code?: string | null
           created_at?: string
           currency?: string
+          discount_amount?: number
           email?: string
           id?: string
           ip_address?: string | null
@@ -381,6 +434,7 @@ export type Database = {
           license_sent_at?: string | null
           note?: string | null
           order_number?: string
+          original_amount?: number | null
           payment_provider?: string | null
           payment_reference?: string | null
           payment_status?: string
