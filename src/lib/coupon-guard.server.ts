@@ -48,9 +48,12 @@ async function ensureAllowedCodes(
     const existing = await stripe.promotionCodes.list({ code, limit: 10 });
     const promo = existing.data.find((p) => p.code.trim().toUpperCase() === code);
     if (promo) {
-      const needsUpdate = !promo.active || promo.expires_at !== expiresAt;
-      if (needsUpdate) {
-        await stripe.promotionCodes.update(promo.id, { active: true, expires_at: expiresAt });
+      // Note: Stripe does not allow updating expires_at on an existing
+      // promotion code (create-only field). If the code already exists we
+      // only reactivate it; the guard sweep deactivates it once the grant
+      // window closes.
+      if (!promo.active) {
+        await stripe.promotionCodes.update(promo.id, { active: true });
         activated.push(code);
       }
       continue;
