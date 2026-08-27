@@ -32,7 +32,7 @@ async function buildDeps(env: StripeEnv): Promise<WebhookDeps> {
     },
     async markOrderPaid(input) {
       const { markOrderPaid } = await import("@/lib/order-paid.server");
-      await markOrderPaid(input);
+      await markOrderPaid({ ...input, environment: env });
     },
     async cancelInvoice(order, reason) {
       const { cancelInvoiceForOrder } = await import("@/lib/billingo.server");
