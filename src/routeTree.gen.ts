@@ -64,6 +64,7 @@ import { Route as TermekIfrsKonszolidaloRouteImport } from './routes/termek.ifrs
 import { Route as TermekIngatlanalapMnbJelentesElokeszitoRouteImport } from './routes/termek.ingatlanalap-mnb-jelentes-elokeszito'
 import { Route as TermekKamatlekerdezoPotlekszamitoRouteImport } from './routes/termek.kamatlekerdezo-potlekszamito'
 import { Route as TermekKulcsNyitoVegyesKonyveloRouteImport } from './routes/termek.kulcs-nyito-vegyes-konyvelo'
+import { Route as TermekKulcsSoftKulfoldiSzamlaImportRouteImport } from './routes/termek.kulcs-soft-kulfoldi-szamla-import'
 import { Route as TermekMnbEraJelentesgeneratorRouteImport } from './routes/termek.mnb-era-jelentesgenerator'
 import { Route as TermekNavOnlineSzamlaLetoltoRouteImport } from './routes/termek.nav-online-szamla-letolto'
 import { Route as TermekNavPenztargepLetoltoRouteImport } from './routes/termek.nav-penztargep-letolto'
@@ -376,6 +377,12 @@ const TermekKulcsNyitoVegyesKonyveloRoute =
     path: '/termek/kulcs-nyito-vegyes-konyvelo',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TermekKulcsSoftKulfoldiSzamlaImportRoute =
+  TermekKulcsSoftKulfoldiSzamlaImportRouteImport.update({
+    id: '/termek/kulcs-soft-kulfoldi-szamla-import',
+    path: '/termek/kulcs-soft-kulfoldi-szamla-import',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TermekMnbEraJelentesgeneratorRoute =
   TermekMnbEraJelentesgeneratorRouteImport.update({
     id: '/termek/mnb-era-jelentesgenerator',
@@ -569,6 +576,7 @@ export interface FileRoutesByFullPath {
   '/termek/ingatlanalap-mnb-jelentes-elokeszito': typeof TermekIngatlanalapMnbJelentesElokeszitoRoute
   '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
   '/termek/kulcs-nyito-vegyes-konyvelo': typeof TermekKulcsNyitoVegyesKonyveloRoute
+  '/termek/kulcs-soft-kulfoldi-szamla-import': typeof TermekKulcsSoftKulfoldiSzamlaImportRoute
   '/termek/mnb-era-jelentesgenerator': typeof TermekMnbEraJelentesgeneratorRoute
   '/termek/nav-online-szamla-letolto': typeof TermekNavOnlineSzamlaLetoltoRoute
   '/termek/nav-penztargep-letolto': typeof TermekNavPenztargepLetoltoRoute
@@ -649,6 +657,7 @@ export interface FileRoutesByTo {
   '/termek/ingatlanalap-mnb-jelentes-elokeszito': typeof TermekIngatlanalapMnbJelentesElokeszitoRoute
   '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
   '/termek/kulcs-nyito-vegyes-konyvelo': typeof TermekKulcsNyitoVegyesKonyveloRoute
+  '/termek/kulcs-soft-kulfoldi-szamla-import': typeof TermekKulcsSoftKulfoldiSzamlaImportRoute
   '/termek/mnb-era-jelentesgenerator': typeof TermekMnbEraJelentesgeneratorRoute
   '/termek/nav-online-szamla-letolto': typeof TermekNavOnlineSzamlaLetoltoRoute
   '/termek/nav-penztargep-letolto': typeof TermekNavPenztargepLetoltoRoute
@@ -731,6 +740,7 @@ export interface FileRoutesById {
   '/termek/ingatlanalap-mnb-jelentes-elokeszito': typeof TermekIngatlanalapMnbJelentesElokeszitoRoute
   '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
   '/termek/kulcs-nyito-vegyes-konyvelo': typeof TermekKulcsNyitoVegyesKonyveloRoute
+  '/termek/kulcs-soft-kulfoldi-szamla-import': typeof TermekKulcsSoftKulfoldiSzamlaImportRoute
   '/termek/mnb-era-jelentesgenerator': typeof TermekMnbEraJelentesgeneratorRoute
   '/termek/nav-online-szamla-letolto': typeof TermekNavOnlineSzamlaLetoltoRoute
   '/termek/nav-penztargep-letolto': typeof TermekNavPenztargepLetoltoRoute
@@ -814,6 +824,7 @@ export interface FileRouteTypes {
     | '/termek/ingatlanalap-mnb-jelentes-elokeszito'
     | '/termek/kamatlekerdezo-potlekszamito'
     | '/termek/kulcs-nyito-vegyes-konyvelo'
+    | '/termek/kulcs-soft-kulfoldi-szamla-import'
     | '/termek/mnb-era-jelentesgenerator'
     | '/termek/nav-online-szamla-letolto'
     | '/termek/nav-penztargep-letolto'
@@ -894,6 +905,7 @@ export interface FileRouteTypes {
     | '/termek/ingatlanalap-mnb-jelentes-elokeszito'
     | '/termek/kamatlekerdezo-potlekszamito'
     | '/termek/kulcs-nyito-vegyes-konyvelo'
+    | '/termek/kulcs-soft-kulfoldi-szamla-import'
     | '/termek/mnb-era-jelentesgenerator'
     | '/termek/nav-online-szamla-letolto'
     | '/termek/nav-penztargep-letolto'
@@ -975,6 +987,7 @@ export interface FileRouteTypes {
     | '/termek/ingatlanalap-mnb-jelentes-elokeszito'
     | '/termek/kamatlekerdezo-potlekszamito'
     | '/termek/kulcs-nyito-vegyes-konyvelo'
+    | '/termek/kulcs-soft-kulfoldi-szamla-import'
     | '/termek/mnb-era-jelentesgenerator'
     | '/termek/nav-online-szamla-letolto'
     | '/termek/nav-penztargep-letolto'
@@ -1050,6 +1063,7 @@ export interface RootRouteChildren {
   TermekIngatlanalapMnbJelentesElokeszitoRoute: typeof TermekIngatlanalapMnbJelentesElokeszitoRoute
   TermekKamatlekerdezoPotlekszamitoRoute: typeof TermekKamatlekerdezoPotlekszamitoRoute
   TermekKulcsNyitoVegyesKonyveloRoute: typeof TermekKulcsNyitoVegyesKonyveloRoute
+  TermekKulcsSoftKulfoldiSzamlaImportRoute: typeof TermekKulcsSoftKulfoldiSzamlaImportRoute
   TermekMnbEraJelentesgeneratorRoute: typeof TermekMnbEraJelentesgeneratorRoute
   TermekNavOnlineSzamlaLetoltoRoute: typeof TermekNavOnlineSzamlaLetoltoRoute
   TermekNavPenztargepLetoltoRoute: typeof TermekNavPenztargepLetoltoRoute
@@ -1464,6 +1478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekKulcsNyitoVegyesKonyveloRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/termek/kulcs-soft-kulfoldi-szamla-import': {
+      id: '/termek/kulcs-soft-kulfoldi-szamla-import'
+      path: '/termek/kulcs-soft-kulfoldi-szamla-import'
+      fullPath: '/termek/kulcs-soft-kulfoldi-szamla-import'
+      preLoaderRoute: typeof TermekKulcsSoftKulfoldiSzamlaImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/termek/mnb-era-jelentesgenerator': {
       id: '/termek/mnb-era-jelentesgenerator'
       path: '/termek/mnb-era-jelentesgenerator'
@@ -1708,6 +1729,8 @@ const rootRouteChildren: RootRouteChildren = {
   TermekKamatlekerdezoPotlekszamitoRoute:
     TermekKamatlekerdezoPotlekszamitoRoute,
   TermekKulcsNyitoVegyesKonyveloRoute: TermekKulcsNyitoVegyesKonyveloRoute,
+  TermekKulcsSoftKulfoldiSzamlaImportRoute:
+    TermekKulcsSoftKulfoldiSzamlaImportRoute,
   TermekMnbEraJelentesgeneratorRoute: TermekMnbEraJelentesgeneratorRoute,
   TermekNavOnlineSzamlaLetoltoRoute: TermekNavOnlineSzamlaLetoltoRoute,
   TermekNavPenztargepLetoltoRoute: TermekNavPenztargepLetoltoRoute,
