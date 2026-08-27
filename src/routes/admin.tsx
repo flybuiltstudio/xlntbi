@@ -165,6 +165,17 @@ function AdminLayout() {
               >
                 Friss verzió
               </Link>
+            </>
+          ) : null}
+          <Link
+            to="/admin/statisztika"
+            className={tabBase}
+            activeProps={{ className: `${tabBase} ${tabActive}` }}
+          >
+            Statisztika
+          </Link>
+          {role === "admin" ? (
+            <>
               <Link
                 to="/admin/szamlazas"
                 className={tabBase}
