@@ -4,6 +4,7 @@ import { CouponAdminPanel } from "@/components/CouponAdminPanel";
 import { CouponAttemptsPanel } from "@/components/CouponAttemptsPanel";
 import { CouponUsagePanel } from "@/components/CouponUsagePanel";
 import { PageHero } from "@/components/PageHero";
+import { useAdminSession } from "@/components/admin-panels";
 
 export const Route = createFileRoute("/admin/kuponok")({
   head: () => ({
@@ -25,6 +26,9 @@ export const Route = createFileRoute("/admin/kuponok")({
 });
 
 function AdminCouponsPage() {
+  const { role } = useAdminSession();
+  const isAdmin = role === "admin";
+
   return (
     <>
       <PageHero>
@@ -33,9 +37,9 @@ function AdminCouponsPage() {
         </h1>
       </PageHero>
       <div className="mx-auto max-w-6xl px-4 py-14">
-        <CouponAdminPanel />
+        {isAdmin ? <CouponAdminPanel /> : null}
 
-        <div className="mt-14">
+        <div className={isAdmin ? "mt-14" : undefined}>
           <h2 className="text-xl font-bold text-foreground">Kupon előzmények</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Itt látod, melyik kuponkódot mikor váltották be, mennyi kedvezményt adott, és melyik
