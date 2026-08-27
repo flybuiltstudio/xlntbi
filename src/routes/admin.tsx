@@ -135,6 +135,13 @@ function AdminLayout() {
     "rounded-md px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground";
   const tabActive = "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground";
 
+  const [checksOpen, setChecksOpen] = useState(false);
+  const checksLinks = [
+    { to: "/admin/szamlazas", label: "Számlázás" },
+    { to: "/admin/billingo-ellenorzes", label: "Billingo ellenőrzés" },
+    { to: "/admin/fizetes-teszt", label: "Fizetés teszt" },
+  ] as const;
+
   return (
     <>
       <nav
@@ -159,13 +166,6 @@ function AdminLayout() {
               >
                 Kuponok
               </Link>
-              <Link
-                to="/admin/friss-verzio"
-                className={tabBase}
-                activeProps={{ className: `${tabBase} ${tabActive}` }}
-              >
-                Friss verzió
-              </Link>
             </>
           ) : null}
           <Link
@@ -178,26 +178,43 @@ function AdminLayout() {
           {role === "admin" ? (
             <>
               <Link
-                to="/admin/szamlazas"
+                to="/admin/friss-verzio"
                 className={tabBase}
                 activeProps={{ className: `${tabBase} ${tabActive}` }}
               >
-                Számlázás
+                Friss verzió
               </Link>
-              <Link
-                to="/admin/billingo-ellenorzes"
-                className={tabBase}
-                activeProps={{ className: `${tabBase} ${tabActive}` }}
+              <div
+                className="relative"
+                onMouseEnter={() => setChecksOpen(true)}
+                onMouseLeave={() => setChecksOpen(false)}
               >
-                Billingo ellenőrzés
-              </Link>
-              <Link
-                to="/admin/fizetes-teszt"
-                className={tabBase}
-                activeProps={{ className: `${tabBase} ${tabActive}` }}
-              >
-                Fizetés teszt
-              </Link>
+                <button
+                  type="button"
+                  onClick={() => setChecksOpen((v) => !v)}
+                  className={`${tabBase} inline-flex items-center gap-1 ${
+                    checksLinks.some((l) => pathname.startsWith(l.to)) ? `${tabBase} ${tabActive}` : ""
+                  }`}
+                  aria-expanded={checksOpen}
+                >
+                  Ellenőrzések
+                  <ChevronDown className="h-3.5 w-3.5" />
+                </button>
+                {checksOpen ? (
+                  <div className="absolute left-0 top-full z-40 mt-1 min-w-44 overflow-hidden rounded-md border border-border bg-popover py-1 shadow-md">
+                    {checksLinks.map((l) => (
+                      <Link
+                        key={l.to}
+                        to={l.to}
+                        className="block px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                        activeProps={{ className: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" }}
+                      >
+                        {l.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
               <Link
                 to="/admin/felhasznalok"
                 className={tabBase}
@@ -206,6 +223,15 @@ function AdminLayout() {
                 Felhasználók
               </Link>
             </>
+          ) : null}
+          {role === "user" ? (
+            <Link
+              to="/admin/kuponok"
+              className={tabBase}
+              activeProps={{ className: `${tabBase} ${tabActive}` }}
+            >
+              Kuponok
+            </Link>
           ) : null}
           <button
             type="button"
