@@ -53,14 +53,22 @@ async function ensureAllowedCodes(
       // only reactivate it; the guard sweep deactivates it once the grant
       // window closes.
       if (!promo.active) {
-        await stripe.promotionCodes.update(promo.id, { active: true });
-        activated.push(code);
+        try {
+          await stripe.promotionCodes.update(promo.id, { active: true });
+          activated.push(code);
+          continue;
+        } catch (e) {
+          // The backing coupon may have become invalid (deleted/expired) —
+          // fall through and create a fresh promotion code from a valid one.
+          console.warn(`Live coupon guard: reactivation of ${code} failed:`, getStripeErrorMessage(e));
+        }
+      } else {
+        continue;
       }
-      continue;
     }
-    // Not present in live: create it from a 100% coupon.
+    // Not present in live (or its coupon is invalid): create it from a 100% coupon.
     const coupons = await stripe.coupons.list({ limit: 100 });
-    const percentOff = coupons.data.find((c) => c.percent_off === 100);
+    const percentOff = coupons.data.find((c) => c.percent_off === 100 && c.valid !== false);
     if (!percentOff) {
       console.error(`Live coupon guard: no 100% coupon found to back ${code}`);
       continue;
