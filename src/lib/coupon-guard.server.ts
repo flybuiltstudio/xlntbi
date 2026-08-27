@@ -7,6 +7,9 @@
  * `expires_at` so Stripe itself rejects them after the window closes.
  * Runs automatically (throttled) whenever a live checkout session is created,
  * and on demand from the admin UI.
+ *
+ * Admin-created coupons (public.admin_coupons) are treated as allowlisted
+ * for as long as they are live, not expired, and not manually disabled.
  */
 
 import {
@@ -15,6 +18,7 @@ import {
   isAllowedLiveCode,
 } from "./coupons";
 import { createStripeClient, getStripeErrorMessage } from "./stripe.server";
+import { adminAllowedLiveCodes } from "./coupons-admin.server";
 
 const SETTING_KEY = "live_coupon_guard";
 const THROTTLE_MS = 6 * 60 * 60 * 1000; // 6 hours
