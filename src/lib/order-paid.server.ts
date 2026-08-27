@@ -11,6 +11,9 @@ const OWNER_EMAIL = "xllentac@gmail.com";
 export async function markOrderPaid(options: {
   orderNumber: string;
   paymentReference: string;
+  /** Coupon discount from the Stripe checkout session (HUF). */
+  discount?: { amount: number; promotionCodeId?: string | null };
+  environment?: "sandbox" | "live";
 }): Promise<void> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -30,6 +33,22 @@ export async function markOrderPaid(options: {
   }
   if (order.payment_status === "paid") return;
 
+  // Resolve the redeemed coupon code so the confirmation page, the emails and
+  // the invoice can show the itemized discount.
+  let couponCode: string | null = null;
+  const discountAmount = Math.max(0, Math.round(options.discount?.amount ?? 0));
+  if (discountAmount > 0 && options.discount?.promotionCodeId && options.environment) {
+    try {
+      const { createStripeClient } = await import("./stripe.server");
+      const promo = await createStripeClient(options.environment).promotionCodes.retrieve(
+        options.discount.promotionCodeId,
+      );
+      couponCode = promo.code ?? null;
+    } catch (e) {
+      console.error("Promotion code lookup failed:", e);
+    }
+  }
+
   const { error: updateError } = await supabaseAdmin
     .from("orders")
     .update({
@@ -37,6 +56,13 @@ export async function markOrderPaid(options: {
       status: "paid",
       payment_provider: "stripe",
       payment_reference: options.paymentReference,
+      ...(discountAmount > 0
+        ? {
+            discount_amount: discountAmount,
+            original_amount: order.total_price as number,
+            coupon_code: couponCode,
+          }
+        : {}),
     })
     .eq("order_number", options.orderNumber);
 
@@ -52,9 +78,20 @@ export async function markOrderPaid(options: {
     ["Rendelésszám", order.order_number],
     ["Termék", productLabel],
     ["Egységár", formatPrice(order.unit_price)],
-    ["Fizetve", formatPrice(order.total_price)],
-    ["Számlázási név", order.billing_name],
   ];
+  if (discountAmount > 0) {
+    rows.push(
+      ["Eredeti összeg", formatPrice(order.total_price as number)],
+      [
+        couponCode ? `Kuponkedvezmény (${couponCode})` : "Kuponkedvezmény",
+        `−${formatPrice(discountAmount)}`,
+      ],
+    );
+  }
+  rows.push(
+    ["Fizetve", formatPrice((order.total_price as number) - discountAmount)],
+    ["Számlázási név", order.billing_name],
+  );
   if (order.company_name) rows.push(["Cégnév", order.company_name]);
   if (order.tax_number) rows.push(["Adószám", order.tax_number]);
   rows.push(
@@ -88,7 +125,7 @@ export async function markOrderPaid(options: {
         name: order.billing_name,
         orderNumber: order.order_number,
         productName: productLabel,
-        total: formatPrice(order.total_price),
+        total: formatPrice((order.total_price as number) - discountAmount),
         paymentStatus: "paid",
         rows,
       },
@@ -101,7 +138,7 @@ export async function markOrderPaid(options: {
       data: {
         orderNumber: order.order_number,
         productName: productLabel,
-        total: formatPrice(order.total_price),
+        total: formatPrice((order.total_price as number) - discountAmount),
         customerEmail: order.email,
         paymentStatus: "paid",
         rows: rows.filter(([key]) => key !== "Rendelésszám"),
@@ -111,5 +148,8 @@ export async function markOrderPaid(options: {
   ]);
 
   // Auto-invoice via Billingo (only for paid orders; idempotent, never blocks fulfilment).
-  await issueInvoiceForOrder(order as any, { sendToBuyer: true, source: "webhook" });
+  await issueInvoiceForOrder(
+    { ...(order as any), discount_amount: discountAmount, coupon_code: couponCode },
+    { sendToBuyer: true, source: "webhook" },
+  );
 }
