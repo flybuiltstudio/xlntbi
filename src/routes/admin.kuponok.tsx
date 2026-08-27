@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { CouponAdminPanel } from "@/components/CouponAdminPanel";
 import { CouponAttemptsPanel } from "@/components/CouponAttemptsPanel";
 import { CouponUsagePanel } from "@/components/CouponUsagePanel";
 import { PageHero } from "@/components/PageHero";
@@ -7,13 +8,13 @@ import { PageHero } from "@/components/PageHero";
 export const Route = createFileRoute("/admin/kuponok")({
   head: () => ({
     meta: [
-      { title: "Admin – Kupon előzmények | EXCELlent Business Intelligence" },
+      { title: "Admin – Kuponok | EXCELlent Business Intelligence" },
       {
         name: "description",
         content:
-          "Belső felület a kuponkódok beváltásainak ellenőrzésére: mikor, mennyi kedvezmény, melyik rendeléshez.",
+          "Belső felület a kuponok kezelésére: új kupon létrehozása, meglévők listázása, szűrése és kikapcsolása, valamint a beváltási előzmények és a sikertelen kísérletek ellenőrzése.",
       },
-      { property: "og:title", content: "Admin – Kupon előzmények" },
+      { property: "og:title", content: "Admin – Kuponok" },
       { property: "og:description", content: "Belső adminisztrációs felület." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
