@@ -71,8 +71,16 @@ async function fulfil(session: any) {
 /**
  * Stripe payment failed / expired / cancelled / refunded: storno the Billingo
  * invoice if one was already issued, and mark the order accordingly.
+ *
+ * A már kifizetett rendelést csak teljes visszatérítés bonthatja vissza —
+ * késői/ismételt hibaesemény (pl. elutasított, majd újrapróbált kártya) nem
+ * teheti fizetetlenné és nem sztornózhatja az érvényes számlát.
  */
-async function unwindOrder(orderNumber: string, reason: string) {
+async function unwindOrder(
+  orderNumber: string,
+  reason: string,
+  kind: "failure" | "refund" = "failure",
+) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: order } = await supabaseAdmin
     .from("orders")
@@ -84,13 +92,18 @@ async function unwindOrder(orderNumber: string, reason: string) {
     return;
   }
 
+  if (kind === "failure" && order.payment_status === "paid") {
+    console.log("Ignoring failure event for already paid order:", orderNumber);
+    return;
+  }
+
   const { cancelInvoiceForOrder } = await import("@/lib/billingo.server");
   await cancelInvoiceForOrder(order as any, { reason, source: "stripe_cancel" });
 
   await (supabaseAdmin as any)
     .from("orders")
     .update({
-      payment_status: "failed",
+      payment_status: kind === "refund" ? "refunded" : "failed",
       status: order.status === "paid" ? "payment_failed" : order.status,
     })
     .eq("id", order.id);
@@ -102,10 +115,14 @@ async function unwind(session: any, reason: string) {
   await unwindOrder(orderNumber, reason);
 }
 
-async function unwindByPaymentIntent(object: any, reason: string) {
+async function unwindByPaymentIntent(
+  object: any,
+  reason: string,
+  kind: "failure" | "refund" = "failure",
+) {
   const orderNumber = object?.metadata?.orderNumber;
   if (orderNumber) {
-    await unwindOrder(orderNumber, reason);
+    await unwindOrder(orderNumber, reason, kind);
     return;
   }
   const paymentIntentId =
@@ -122,8 +139,9 @@ async function unwindByPaymentIntent(object: any, reason: string) {
     console.error("Failed-payment order not found for payment intent:", paymentIntentId);
     return;
   }
-  await unwindOrder(order.order_number as string, reason);
+  await unwindOrder(order.order_number as string, reason, kind);
 }
+
 
 export const Route = createFileRoute("/api/public/payments/webhook")({
   server: {
