@@ -537,6 +537,9 @@ function StatsPanel() {
                 </div>
               </section>
 
+              {/* Megrendelői és terméklista – a kezdetektől, szűrőktől függetlenül */}
+              <CustomerProductLists rows={rows} />
+
               <PageViewStats />
 
               {/* Grafikon */}
@@ -721,9 +724,6 @@ function StatsPanel() {
               </section>
             </>
           )}
-
-          {/* Megrendelői és terméklista – a kezdetektől, szűrőktől függetlenül */}
-          <CustomerProductLists rows={rows} />
         </>
       )}
     </div>

@@ -455,23 +455,25 @@ export const adminPageViewStats = createServerFn({ method: "GET" })
     return { rows: await listPageViews() };
   });
 
-/** Coupon usage history (which code, when, how much, which order). */
+/** Coupon usage history (which code, when, how much, which order).
+ *  Read-only: both `admin` and `user` roles may view. */
 export const adminListCouponUsage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
     z.object({ environment: z.enum(["sandbox", "live"]) }).parse(data),
   )
   .handler(async ({ context, data }) => {
-    await gate(context as any);
+    await gateStats(context as any);
     const { listCouponUsage } = await import("./coupon-usage.server");
     return listCouponUsage(data.environment);
   });
 
-/** Failed coupon attempts (expired / invalid / used up / below minimum). */
+/** Failed coupon attempts (expired / invalid / used up / below minimum).
+ *  Read-only: both `admin` and `user` roles may view. */
 export const adminListCouponAttempts = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await gate(context as any);
+    await gateStats(context as any);
     const { listCouponAttempts } = await import("./coupon-attempts.server");
     return { rows: await listCouponAttempts() };
   });
