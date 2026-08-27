@@ -74,15 +74,19 @@ function AdminLayout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.id]);
 
+  const [checksOpen, setChecksOpen] = useState(false);
+
+  const allowed = role ? canAccessAdminRoute(role, pathname) : false;
+
   useEffect(() => {
-    // A "user" szerepkör csak a Statisztika és a Kuponok oldalt érheti el;
-    // minden más admin útvonalról (beleértve az Ellenőrzések aloldalait is,
-    // akár közvetlen URL-megadással) visszairányítjuk.
-    const userAllowed = ["/admin/statisztika", "/admin/kuponok"];
-    if (role === "user" && !userAllowed.some((p) => pathname.startsWith(p))) {
-      void navigate({ to: "/admin/statisztika", replace: true });
+    // Központi, szerepkör-alapú route guard: minden admin aloldal ugyanabból a
+    // térképből (src/lib/admin-access.ts) kapja a jogosultságát, így nincs
+    // oldalonként külön szabály. Ismeretlen admin útvonal = csak admin.
+    if (role && !canAccessAdminRoute(role, pathname)) {
+      void navigate({ to: adminHomeFor(role), replace: true });
     }
   }, [role, pathname, navigate]);
+
 
   if (!ready || (session && !roleReady)) {
     return (
