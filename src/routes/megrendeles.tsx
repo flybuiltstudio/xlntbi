@@ -135,7 +135,12 @@ function OrderPage() {
           visszaigazolást és a számlát a sikeres fizetés után küldöm e-mailben.
         </p>
         <PaymentEnvironmentNotice className="mt-6" />
-        <CouponCodeChecker amount={total} priceId={tier.priceId} />
+        <CouponCodeChecker
+          amount={total}
+          priceId={tier.priceId}
+          email={customerEmail}
+          orderNumber={orderNumber}
+        />
         <StripeOrderCheckout
           priceId={tier.priceId}
           quantity={quantity}

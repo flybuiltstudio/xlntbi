@@ -466,3 +466,12 @@ export const adminListCouponUsage = createServerFn({ method: "POST" })
     const { listCouponUsage } = await import("./coupon-usage.server");
     return listCouponUsage(data.environment);
   });
+
+/** Failed coupon attempts (expired / invalid / used up / below minimum). */
+export const adminListCouponAttempts = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await gate(context as any);
+    const { listCouponAttempts } = await import("./coupon-attempts.server");
+    return { rows: await listCouponAttempts() };
+  });

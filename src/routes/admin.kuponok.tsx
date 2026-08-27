@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { CouponAttemptsPanel } from "@/components/CouponAttemptsPanel";
 import { CouponUsagePanel } from "@/components/CouponUsagePanel";
 import { PageHero } from "@/components/PageHero";
 
@@ -37,6 +38,7 @@ function AdminCouponsPage() {
           ellenőrizhetsz.
         </p>
         <CouponUsagePanel />
+        <CouponAttemptsPanel />
       </div>
     </>
   );

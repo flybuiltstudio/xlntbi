@@ -189,6 +189,8 @@ async function createInvoice(
   const today = new Date();
   const dateStr = today.toISOString().slice(0, 10);
   const unitPrice = order.quantity > 0 ? order.total_price / order.quantity : 0;
+  const discountAmount = Math.max(0, Math.round((order as any).discount_amount ?? 0));
+  const couponCode = ((order as any).coupon_code as string | null) ?? null;
 
   const document = {
     partner_id: partnerId,
@@ -211,8 +213,28 @@ async function createInvoice(
         vat: "AAM",
         entitlement: "AAM",
       },
+      // Coupon discount as a separate negative line, so the invoice shows the
+      // original price, the discount and the final amount actually paid.
+      ...(discountAmount > 0
+        ? [
+            {
+              name: couponCode
+                ? `Kuponkedvezmény (${couponCode})`
+                : "Kuponkedvezmény",
+              unit_price: -discountAmount,
+              unit_price_type: "gross",
+              quantity: 1,
+              unit: "db",
+              vat: "AAM",
+              entitlement: "AAM",
+            },
+          ]
+        : []),
     ],
-    comment: `Rendelésszám: ${order.order_number}`,
+    comment:
+      discountAmount > 0
+        ? `Rendelésszám: ${order.order_number}\nEredeti összeg: ${Math.round(order.total_price).toLocaleString("hu-HU")} Ft\nKuponkedvezmény${couponCode ? ` (${couponCode})` : ""}: -${discountAmount.toLocaleString("hu-HU")} Ft\nFizetett végösszeg: ${(Math.round(order.total_price) - discountAmount).toLocaleString("hu-HU")} Ft`
+        : `Rendelésszám: ${order.order_number}`,
     settings: {
       order_number: order.order_number,
     },

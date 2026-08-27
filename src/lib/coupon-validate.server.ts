@@ -8,8 +8,24 @@
 import { promotionCodesEnabled } from "./coupons";
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "./stripe.server";
 
+export type CouponReason =
+  | "empty"
+  | "malformed"
+  | "no_campaign"
+  | "not_found"
+  | "expired"
+  | "inactive"
+  | "used_up"
+  | "coupon_invalid"
+  | "coupon_expired"
+  | "below_minimum"
+  | "stripe_error"
+  | "valid";
+
 export type CouponCheckResult = {
   ok: boolean;
+  /** Machine readable failure reason (admin log + support). */
+  reason?: CouponReason;
   /** Short headline shown to the buyer. */
   message: string;
   /** Optional extra explanation / next step. */
@@ -66,21 +82,53 @@ function describeDiscount(coupon: {
   return "kedvezmény";
 }
 
-export async function checkPromotionCode(input: {
+export type CouponCheckInput = {
   code: string;
   environment: StripeEnv;
   /** Order total in HUF (major units) — used for minimum amount checks. */
   amount?: number;
   priceId?: string;
-}): Promise<CouponCheckResult> {
+  /** Buyer email + order number, when known (admin log only). */
+  email?: string;
+  orderNumber?: string;
+};
+
+/**
+ * Validates the code and records every unsuccessful attempt in
+ * `coupon_attempts`, so support can check "lejárt / érvénytelen /
+ * elhasznált / összegkorlát alatt" complaints in the admin panel.
+ */
+export async function checkPromotionCode(
+  input: CouponCheckInput,
+): Promise<CouponCheckResult> {
+  const result = await evaluatePromotionCode(input);
+  if (!result.ok) {
+    const { logCouponAttempt } = await import("./coupon-attempts.server");
+    await logCouponAttempt({
+      code: input.code.trim().toUpperCase(),
+      environment: input.environment,
+      reason: result.reason ?? "unknown",
+      message: result.message,
+      ...(result.detail ? { detail: result.detail } : {}),
+      ...(input.email ? { email: input.email } : {}),
+      ...(input.orderNumber ? { orderNumber: input.orderNumber } : {}),
+      ...(typeof input.amount === "number" ? { amount: Math.round(input.amount) } : {}),
+      ...(input.priceId ? { priceId: input.priceId } : {}),
+    });
+  }
+  return result;
+}
+
+async function evaluatePromotionCode(input: CouponCheckInput): Promise<CouponCheckResult> {
   const code = input.code.trim().toUpperCase();
 
   if (!code) {
-    return { ok: false, message: "Nem adtál meg kuponkódot." };
+    return { ok: false, reason: "empty", message: "Nem adtál meg kuponkódot." };
   }
   if (!/^[A-Z0-9_-]{2,40}$/.test(code)) {
     return {
       ok: false,
+      reason: "malformed",
       message: "Ez a kuponkód formailag érvénytelen.",
       detail: "A kuponkód csak betűket, számokat, kötőjelet és aláhúzást tartalmazhat.",
     };
@@ -88,6 +136,7 @@ export async function checkPromotionCode(input: {
   if (!promotionCodesEnabled(input.environment)) {
     return {
       ok: false,
+      reason: "no_campaign",
       message: "Jelenleg nincs érvényes kuponakció.",
       detail: "A megadott árak a végleges árak. Ha kaptál kódot, írj a info@xlntbi.hu címre.",
     };
@@ -102,6 +151,7 @@ export async function checkPromotionCode(input: {
     if (!promo) {
       return {
         ok: false,
+        reason: "not_found",
         message: "Ilyen kuponkód nem létezik.",
         detail: "Ellenőrizd a kódot – a kis- és nagybetű nem számít, de a kötőjelek igen.",
       };
@@ -115,6 +165,7 @@ export async function checkPromotionCode(input: {
       });
       return {
         ok: false,
+        reason: "expired",
         message: "Ez a kuponkód lejárt.",
         detail: `Érvényessége lejárt: ${until}.`,
       };
@@ -123,6 +174,7 @@ export async function checkPromotionCode(input: {
     if (!promo.active) {
       return {
         ok: false,
+        reason: "inactive",
         message: "Ez a kuponkód már nem használható.",
         detail: "A kódot visszavontuk vagy lejárt az akció.",
       };
@@ -134,6 +186,7 @@ export async function checkPromotionCode(input: {
     ) {
       return {
         ok: false,
+        reason: "used_up",
         message: "Ezt a kuponkódot már elhasználták.",
         detail: `A kód legfeljebb ${promo.max_redemptions} alkalommal volt beváltható.`,
       };
@@ -145,6 +198,7 @@ export async function checkPromotionCode(input: {
     if (coupon?.valid === false) {
       return {
         ok: false,
+        reason: "coupon_invalid",
         message: "Ehhez a kuponkódhoz tartozó kedvezmény már nem érvényes.",
         detail: "Kérj új kódot, vagy folytasd a vásárlást kedvezmény nélkül.",
       };
@@ -155,6 +209,7 @@ export async function checkPromotionCode(input: {
       });
       return {
         ok: false,
+        reason: "coupon_expired",
         message: "Ez a kedvezmény lejárt.",
         detail: `Beváltási határidő: ${until}.`,
       };
@@ -166,6 +221,7 @@ export async function checkPromotionCode(input: {
       if (orderMinor < minimum) {
         return {
           ok: false,
+          reason: "below_minimum",
           message: "A rendelés összege nem éri el a kupon alsó határát.",
           detail: `A kód ${formatHuf(minimum)} feletti rendelésnél váltható be, a jelenlegi összeg ${formatHuf(orderMinor)}.`,
         };
@@ -177,6 +233,7 @@ export async function checkPromotionCode(input: {
     if (promo.restrictions?.first_time_transaction) {
       return {
         ok: true,
+        reason: "valid",
         code,
         message: `A kuponkód érvényes: ${describeDiscount(coupon ?? {})}.`,
         detail: "Figyelem: ez a kód csak első vásárlásnál váltható be.",
@@ -187,6 +244,7 @@ export async function checkPromotionCode(input: {
 
     return {
       ok: true,
+      reason: "valid",
       code,
       message: `A kuponkód érvényes: ${describeDiscount(coupon ?? {})}.`,
       detail: "Írd be a kódot a fizetési űrlap „Kuponkód” mezőjébe, és nyomj a Beváltás gombra.",
@@ -197,6 +255,7 @@ export async function checkPromotionCode(input: {
     console.error("Coupon validation failed:", getStripeErrorMessage(error));
     return {
       ok: false,
+      reason: "stripe_error",
       message: "A kuponkódot most nem tudtam ellenőrizni.",
       detail: "Próbáld újra néhány másodperc múlva, vagy add meg a kódot közvetlenül a fizetési űrlapon.",
     };

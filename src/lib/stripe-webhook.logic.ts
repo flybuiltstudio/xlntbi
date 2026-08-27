@@ -37,7 +37,12 @@ export type OrderPatch = {
 export type WebhookDeps = {
   getOrderByNumber: (orderNumber: string) => Promise<OrderState | null>;
   getOrderByPaymentReference: (paymentIntentId: string) => Promise<OrderState | null>;
-  markOrderPaid: (input: { orderNumber: string; paymentReference: string }) => Promise<void>;
+  markOrderPaid: (input: {
+    orderNumber: string;
+    paymentReference: string;
+    /** Coupon discount applied in the Stripe checkout session (HUF). */
+    discount?: { amount: number; promotionCodeId?: string | null };
+  }) => Promise<void>;
   cancelInvoice: (order: OrderState, reason: string) => Promise<void>;
   updateOrder: (orderId: string, patch: OrderPatch) => Promise<void>;
   /** True when this Stripe event id was already processed. */
@@ -196,7 +201,17 @@ async function fulfil(
       ? session.payment_intent
       : (session.payment_intent?.id ?? session.id);
 
-  await deps.markOrderPaid({ orderNumber, paymentReference });
+  const discountAmount = Number(session?.total_details?.amount_discount ?? 0) || 0;
+  const promotionCodeId =
+    typeof session?.discounts?.[0]?.promotion_code === "string"
+      ? session.discounts[0].promotion_code
+      : (session?.discounts?.[0]?.promotion_code?.id ?? null);
+
+  await deps.markOrderPaid({
+    orderNumber,
+    paymentReference,
+    ...(discountAmount > 0 ? { discount: { amount: discountAmount, promotionCodeId } } : {}),
+  });
   if (order && createdAt) {
     await deps.updateOrder(order.id, { last_stripe_event_at: createdAt });
   }
