@@ -251,7 +251,13 @@ function AdminLayout() {
         </div>
       </nav>
       <AdminSessionContext.Provider value={{ email: session.email, userId: session.id, role }}>
-        <Outlet />
+        {allowed ? (
+          <Outlet />
+        ) : (
+          <div className="mx-auto max-w-6xl px-4 py-14 text-sm text-muted-foreground">
+            Ehhez az oldalhoz nincs jogosultságod. Átirányítunk…
+          </div>
+        )}
       </AdminSessionContext.Provider>
     </>
   );
