@@ -152,6 +152,13 @@ function AdminLayout() {
                 Megrendelések
               </Link>
               <Link
+                to="/admin/kuponok"
+                className={tabBase}
+                activeProps={{ className: `${tabBase} ${tabActive}` }}
+              >
+                Kuponok
+              </Link>
+              <Link
                 to="/admin/friss-verzio"
                 className={tabBase}
                 activeProps={{ className: `${tabBase} ${tabActive}` }}
@@ -182,13 +189,6 @@ function AdminLayout() {
                 activeProps={{ className: `${tabBase} ${tabActive}` }}
               >
                 Billingo ellenőrzés
-              </Link>
-              <Link
-                to="/admin/kuponok"
-                className={tabBase}
-                activeProps={{ className: `${tabBase} ${tabActive}` }}
-              >
-                Kupon előzmények
               </Link>
               <Link
                 to="/admin/fizetes-teszt"

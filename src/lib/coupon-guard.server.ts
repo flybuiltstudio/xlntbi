@@ -7,6 +7,9 @@
  * `expires_at` so Stripe itself rejects them after the window closes.
  * Runs automatically (throttled) whenever a live checkout session is created,
  * and on demand from the admin UI.
+ *
+ * Admin-created coupons (public.admin_coupons) are treated as allowlisted
+ * for as long as they are live, not expired, and not manually disabled.
  */
 
 import {
@@ -15,6 +18,7 @@ import {
   isAllowedLiveCode,
 } from "./coupons";
 import { createStripeClient, getStripeErrorMessage } from "./stripe.server";
+import { adminAllowedLiveCodes } from "./coupons-admin.server";
 
 const SETTING_KEY = "live_coupon_guard";
 const THROTTLE_MS = 6 * 60 * 60 * 1000; // 6 hours
@@ -95,6 +99,9 @@ export async function sweepLivePromotionCodes(): Promise<CouponGuardResult> {
     const now = new Date();
     const stripe = createStripeClient("live");
 
+    // Admin-created live coupons are allowlisted while not expired/disabled.
+    const adminCodes = new Set(await adminAllowedLiveCodes());
+
     // First, reactivate / create allowed codes that are still inside their window.
     activated = await ensureAllowedCodes(stripe, activeGrants(now));
 
@@ -102,7 +109,7 @@ export async function sweepLivePromotionCodes(): Promise<CouponGuardResult> {
     const codes = await stripe.promotionCodes.list({ active: true, limit: 100 });
     for (const promo of codes.data) {
       checked += 1;
-      if (isAllowedLiveCode(promo.code, now)) {
+      if (isAllowedLiveCode(promo.code, now) || adminCodes.has(promo.code.toUpperCase())) {
         kept.push(promo.code);
         continue;
       }

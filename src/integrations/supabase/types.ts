@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_coupons: {
+        Row: {
+          all_products: boolean
+          amount_off: number | null
+          code: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          disabled_at: string | null
+          discount_type: string
+          environment: string
+          expires_at: string | null
+          id: string
+          max_redemptions: number | null
+          min_amount: number | null
+          percent_off: number | null
+          product_slugs: string[]
+          stripe_coupon_id: string
+          stripe_promotion_code_id: string
+        }
+        Insert: {
+          all_products?: boolean
+          amount_off?: number | null
+          code: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          disabled_at?: string | null
+          discount_type: string
+          environment: string
+          expires_at?: string | null
+          id?: string
+          max_redemptions?: number | null
+          min_amount?: number | null
+          percent_off?: number | null
+          product_slugs?: string[]
+          stripe_coupon_id: string
+          stripe_promotion_code_id: string
+        }
+        Update: {
+          all_products?: boolean
+          amount_off?: number | null
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          disabled_at?: string | null
+          discount_type?: string
+          environment?: string
+          expires_at?: string | null
+          id?: string
+          max_redemptions?: number | null
+          min_amount?: number | null
+          percent_off?: number | null
+          product_slugs?: string[]
+          stripe_coupon_id?: string
+          stripe_promotion_code_id?: string
+        }
+        Relationships: []
+      }
       app_settings: {
         Row: {
           key: string
