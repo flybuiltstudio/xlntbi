@@ -146,6 +146,8 @@ export async function checkPromotionCode(input: {
       }
     }
 
+    const breakdown = computeBreakdown(coupon, input.amount);
+
     if (promo.restrictions?.first_time_transaction) {
       return {
         ok: true,
@@ -153,6 +155,7 @@ export async function checkPromotionCode(input: {
         message: `A kuponkód érvényes: ${describeDiscount(coupon ?? {})}.`,
         detail: "Figyelem: ez a kód csak első vásárlásnál váltható be.",
         discount: describeDiscount(coupon ?? {}),
+        ...breakdown,
       };
     }
 
@@ -162,6 +165,7 @@ export async function checkPromotionCode(input: {
       message: `A kuponkód érvényes: ${describeDiscount(coupon ?? {})}.`,
       detail: "Írd be a kódot a fizetési űrlap „Kuponkód” mezőjébe, és nyomj a Beváltás gombra.",
       discount: describeDiscount(coupon ?? {}),
+      ...breakdown,
     };
   } catch (error) {
     console.error("Coupon validation failed:", getStripeErrorMessage(error));
