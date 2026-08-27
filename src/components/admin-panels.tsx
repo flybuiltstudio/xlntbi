@@ -1163,13 +1163,15 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
       <div className="mt-4 rounded-xl border border-border bg-muted/50 px-5 py-4 text-sm text-foreground">
         <p>
           <strong>Admin:</strong> teljes hozzáférés az admin felülethez –
-          megrendelések jóváhagyása, statisztikák és exportok, fizetés-teszt,
-          felhasználók kezelése.
+          Megrendelések, Kuponok (létrehozás és módosítás), Statisztika,
+          Friss verzió feltöltés, Ellenőrzések (Számlázás, Billingo ellenőrzés,
+          Fizetés teszt) és Felhasználók kezelése.
         </p>
         <p className="mt-2">
-          <strong>Felhasználó:</strong> be tud jelentkezni, de az admin
-          felületen kizárólag a Statisztika oldalt éri el – a megrendeléseket,
-          a fizetés-tesztet és a felhasználókezelést nem.
+          <strong>Felhasználó:</strong> be tud jelentkezni az admin felületre,
+          ahol a Statisztika oldalt és a Kuponok listát (csak megtekintés)
+          éri el – a Megrendeléseket, Friss verziót, az Ellenőrzéseket és a
+          Felhasználók kezelését nem.
         </p>
       </div>
 
