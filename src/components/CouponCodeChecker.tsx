@@ -7,7 +7,19 @@ import { validatePromotionCode } from "@/utils/payments.functions";
 type CheckState =
   | { status: "idle" }
   | { status: "checking" }
-  | { status: "result"; ok: boolean; message: string; detail?: string };
+  | {
+      status: "result";
+      ok: boolean;
+      message: string;
+      detail?: string;
+      originalAmount?: number;
+      discountAmount?: number;
+      newAmount?: number;
+    };
+
+function huf(value: number): string {
+  return `${Math.round(value).toLocaleString("hu-HU")} Ft`;
+}
 
 /**
  * Lets the buyer check a coupon code before paying, with detailed Hungarian
@@ -35,6 +47,13 @@ export function CouponCodeChecker({ amount, priceId }: { amount: number; priceId
         ok: result.ok,
         message: result.message,
         ...(result.detail ? { detail: result.detail } : {}),
+        ...(typeof result.originalAmount === "number"
+          ? { originalAmount: result.originalAmount }
+          : {}),
+        ...(typeof result.discountAmount === "number"
+          ? { discountAmount: result.discountAmount }
+          : {}),
+        ...(typeof result.newAmount === "number" ? { newAmount: result.newAmount } : {}),
       });
     } catch {
       setState({
@@ -104,6 +123,32 @@ export function CouponCodeChecker({ amount, priceId }: { amount: number; priceId
             {state.detail ? <span className="mt-0.5 block text-xs">{state.detail}</span> : null}
           </span>
         </div>
+      ) : null}
+
+      {state.status === "result" &&
+      state.ok &&
+      typeof state.originalAmount === "number" &&
+      typeof state.discountAmount === "number" &&
+      typeof state.newAmount === "number" ? (
+        <dl className="mt-3 space-y-1.5 rounded-md border border-border bg-background px-3 py-3 text-sm">
+          <div className="flex items-baseline justify-between gap-4">
+            <dt className="text-muted-foreground">Eredeti összeg</dt>
+            <dd className="font-medium text-foreground">{huf(state.originalAmount)}</dd>
+          </div>
+          <div className="flex items-baseline justify-between gap-4">
+            <dt className="text-muted-foreground">Kupon kedvezmény</dt>
+            <dd className="font-semibold text-primary">−{huf(state.discountAmount)}</dd>
+          </div>
+          <div className="flex items-baseline justify-between gap-4 border-t border-border pt-2">
+            <dt className="font-semibold text-foreground">Fizetendő összeg</dt>
+            <dd className="text-base font-bold text-foreground">{huf(state.newAmount)}</dd>
+          </div>
+          <p className="pt-1 text-xs text-muted-foreground">
+            {state.newAmount === 0
+              ? "A kuponnal a teljes összeg levonásra kerül, bankkártyás terhelés nem lesz."
+              : "A végleges összeget a fizetési űrlap is kiírja a kód beváltása után."}
+          </p>
+        </dl>
       ) : null}
     </div>
   );
