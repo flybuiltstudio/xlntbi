@@ -904,6 +904,50 @@ export const products: Product[] = [
     },
   },
   {
+    slug: "kulcs-soft-kulfoldi-szamla-import",
+    name: "Kulcs-Soft Bejövő Külföldi Számla Import",
+    tagline: "Excel-alapú importáló eszköz könyvelőirodáknak · EU & harmadik ország",
+    status: "available",
+    priceId: "kulcs_soft_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
+    price: 12900,
+    currency: "HUF",
+    image: accountImg,
+    metaTitle: "Kulcs-Soft Bejövő Külföldi Számla Import | EXCELlent",
+    metaDescription:
+      "Excel-alapú importáló eszköz könyvelőirodáknak, EU-s és harmadik országbeli bejövő számlákhoz, Kulcs-Soft CSV importtal. Ár: 12 900 Ft.",
+    intro: [
+      "Ha rendszeresen könyvelsz EU-s vagy harmadik országból érkező bejövő számlákat Kulcs-Soft rendszerben, ez az eszköz egyszerűsítheti a munkádat. Az adatokat Excelben rögzíted – egy gombnyomással kész az importálható CSV fájl.",
+      "Ügyfél kód beírása után a szállítói adatok automatikusan kitöltődnek – csak a sárga mezőket kell kézzel kitölteni.",
+    ],
+    features: [
+      "Ügyfél Törzs importálás – a Kulcs-Softból exportált ügyfelek beilleszthetők, az Ügyfél kód legördülőből választható (max. 20 karakter, pontosan a Kulcs-Softban szereplő kód).",
+      "Szállító Törzs auto-kitöltés – Ügyfél kód kiválasztásával a szállítónév, adószám és EU adószám automatikusan töltődik.",
+      "Terméktörzs importálás – a Kulcs-Soft terméktörzs beilleszthető, a terméknév és termékkód legördülőből választható, így nem fordulhat elő elgépelés.",
+      "Áfa kulcsok importálása – a Kulcs-Softban lévő pontos Áfa kód szövegek importálhatók és legördülőből választhatók.",
+      "Devizakezelés – EUR, USD, CHF, GBP és más devizák, HUF árfolyam megadásával; HUF számlánál 1-et kell megadni.",
+      "CSV GENERÁLÁS gombbal – egy kattintás és kész a Kulcs-Soft importáló formátumnak megfelelő fájl.",
+      "Helyes tizedes elválasztó – a CSV-ben automatikusan VESSZŐT használ (ahogy a Kulcs-Soft elvárja), nem pontot.",
+      "Több tétel egy számlán – azonos bizonylatszámmal több sor adható meg, a Kulcs-Soft egy számlába gyűjti.",
+      "Validáció – generáláskor ellenőrzi a kötelező mezőket és figyelmeztet a hiányosságokra.",
+      "100 számlasor befogadóképesség egyszerre.",
+    ],
+    why: "A csomag tartalma: KulcsSoft_Szamla_Import.xlsm 7 munkalappal (Vezérlőpult, Számla Import, Szállító Törzs, Ügyfél Törzs, Terméktörzs, Áfa Kulcsok, VBA Makrók), a KulcsSoft_Makrok.bas importálható VBA modul, valamint előre kitöltött mintaadatok és tipikus Áfa kulcsok. A Vezérlőpult lapon lépésről lépésre útmutató található. A Terméknévnek és az Áfa kulcs szövegének pontosan egyeznie kell a Kulcs-Softban rögzítettel, ezért javasolt a legördülőből választani; HUF számlánál az Árfolyam mezőbe 1-et kell írni. Import menü a Kulcs-Softban: Karbantartás → Adatok importálása → Bejövő számlák importálása. Rendszerkövetelmény: Microsoft Excel 2016 vagy újabb (Windows), Kulcs-Soft Ügyvitel a Bejövő számlaimporter modullal.",
+    tiers: [
+      {
+        id: "egyszeri_licenc_egyetlen_iro",
+        label: "Egyszeri licenc – egyetlen iroda",
+        price: 12900,
+        note: "Korlátlan felhasználás, frissítések 1 évig díjmentesen.",
+        priceId: "kulcs_soft_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
+      },
+    ],
+    download: {
+      fileName: "KulcsSoft_Szamla_Import.xlsm",
+      storagePath: "kulcs-soft-kulfoldi-szamla-import/KulcsSoft_Szamla_Import.xlsm",
+    },
+  },
+  {
+
     slug: "penzszam-kulfoldi-szamla-import",
     name: "PÉNZSZÁM Bejövő Külföldi Számla Import",
     tagline: "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország",
