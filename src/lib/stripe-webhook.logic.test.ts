@@ -30,7 +30,7 @@ function deps(current: OrderState | null, processedIds: string[] = []) {
     cancelInvoice: vi.fn(async () => {}),
     updateOrder: vi.fn(async () => {}),
     isEventProcessed: vi.fn(async (id: string) => seen.has(id)),
-    recordEvent: vi.fn(async (entry) => {
+    recordEvent: vi.fn(async (entry: { eventId: string }) => {
       seen.add(entry.eventId);
     }),
     log: () => {},
