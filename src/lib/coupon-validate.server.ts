@@ -113,7 +113,9 @@ export async function checkPromotionCode(input: {
       };
     }
 
-    const coupon: any = promo.coupon;
+    const rawCoupon = (promo as any).promotion?.coupon ?? (promo as any).coupon;
+    const coupon: any =
+      typeof rawCoupon === "string" ? await stripe.coupons.retrieve(rawCoupon) : rawCoupon;
     if (coupon?.valid === false) {
       return {
         ok: false,
