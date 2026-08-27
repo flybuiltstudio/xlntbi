@@ -307,6 +307,7 @@ export type Database = {
           email: string
           id: string
           ip_address: string | null
+          last_stripe_event_at: string | null
           license_sent_at: string | null
           note: string | null
           order_number: string
@@ -318,6 +319,7 @@ export type Database = {
           product_name: string
           product_slug: string
           quantity: number
+          refunded_amount: number
           status: string
           tax_number: string | null
           tier_id: string | null
@@ -340,6 +342,7 @@ export type Database = {
           email: string
           id?: string
           ip_address?: string | null
+          last_stripe_event_at?: string | null
           license_sent_at?: string | null
           note?: string | null
           order_number: string
@@ -351,6 +354,7 @@ export type Database = {
           product_name: string
           product_slug: string
           quantity?: number
+          refunded_amount?: number
           status?: string
           tax_number?: string | null
           tier_id?: string | null
@@ -373,6 +377,7 @@ export type Database = {
           email?: string
           id?: string
           ip_address?: string | null
+          last_stripe_event_at?: string | null
           license_sent_at?: string | null
           note?: string | null
           order_number?: string
@@ -384,6 +389,7 @@ export type Database = {
           product_name?: string
           product_slug?: string
           quantity?: number
+          refunded_amount?: number
           status?: string
           tax_number?: string | null
           tier_id?: string | null
@@ -467,6 +473,36 @@ export type Database = {
           sort_order?: number
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      stripe_webhook_events: {
+        Row: {
+          environment: string
+          event_created_at: string | null
+          event_id: string
+          event_type: string
+          order_number: string | null
+          outcome: string | null
+          processed_at: string
+        }
+        Insert: {
+          environment?: string
+          event_created_at?: string | null
+          event_id: string
+          event_type: string
+          order_number?: string | null
+          outcome?: string | null
+          processed_at?: string
+        }
+        Update: {
+          environment?: string
+          event_created_at?: string | null
+          event_id?: string
+          event_type?: string
+          order_number?: string | null
+          outcome?: string | null
+          processed_at?: string
         }
         Relationships: []
       }
