@@ -27,26 +27,57 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
+/** Never let a hanging network call freeze the admin shell. */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error("timeout")), ms);
+    promise.then(
+      (v) => {
+        clearTimeout(timer);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(timer);
+        reject(e);
+      },
+    );
+  });
+}
+
 function AdminLayout() {
   const [session, setSession] = useState<{ id: string; email: string | null } | null>(null);
   const [ready, setReady] = useState(false);
   const [role, setRole] = useState<AdminRole | null>(null);
   const [roleReady, setRoleReady] = useState(false);
+  const [roleError, setRoleError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const fetchRole = useServerFn(adminMyRole);
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(
-        data.session ?
-          { id: data.session.user.id, email: data.session.user.email ?? null }
-        : null,
-      );
+    let done = false;
+    const apply = (s: { id: string; email: string | null } | null) => {
+      done = true;
+      setSession(s);
       setReady(true);
-    });
+    };
+    // A getSession() token-frissítés közben be tud ragadni, ezért időkorláttal
+    // futtatjuk: így az admin felület sosem áll meg örökre a „Betöltés…”-nél.
+    withTimeout(supabase.auth.getSession(), 8000)
+      .then(({ data }) =>
+        apply(
+          data.session ?
+            { id: data.session.user.id, email: data.session.user.email ?? null }
+          : null,
+        ),
+      )
+      .catch(() => {
+        if (!done) apply(null);
+      });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s ? { id: s.user.id, email: s.user.email ?? null } : null);
+      setReady(true);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -55,16 +86,21 @@ function AdminLayout() {
     if (!session) {
       setRole(null);
       setRoleReady(false);
+      setRoleError(false);
       return;
     }
     let cancelled = false;
     setRoleReady(false);
-    fetchRole()
+    setRoleError(false);
+    withTimeout(Promise.resolve(fetchRole()), 15000)
       .then((r) => {
         if (!cancelled) setRole(r.role);
       })
       .catch(() => {
-        if (!cancelled) setRole(null);
+        if (!cancelled) {
+          setRole(null);
+          setRoleError(true);
+        }
       })
       .finally(() => {
         if (!cancelled) setRoleReady(true);
@@ -73,7 +109,7 @@ function AdminLayout() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session?.id]);
+  }, [session?.id, attempt]);
 
   const [checksOpen, setChecksOpen] = useState(false);
 
@@ -88,7 +124,6 @@ function AdminLayout() {
     }
   }, [role, pathname, navigate]);
 
-
   if (!ready || (session && !roleReady)) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-14 text-sm text-muted-foreground">
@@ -96,6 +131,41 @@ function AdminLayout() {
       </div>
     );
   }
+
+  if (session && roleError) {
+    return (
+      <>
+        <PageHero>
+          <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
+            Admin
+          </h1>
+        </PageHero>
+        <div className="mx-auto max-w-6xl px-4 py-14">
+          <p className="text-sm text-muted-foreground">
+            A szerepkörödet most nem sikerült ellenőrizni (időtúllépés vagy hálózati hiba). Próbáld
+            újra, vagy jelentkezz ki és be.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setAttempt((a) => a + 1)}
+              className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Újrapróbálom
+            </button>
+            <button
+              type="button"
+              onClick={() => void supabase.auth.signOut()}
+              className="inline-flex items-center rounded-md border border-input px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            >
+              Kilépés
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
+
 
   if (!session) {
     return (
