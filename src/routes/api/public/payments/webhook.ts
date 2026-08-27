@@ -79,6 +79,27 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
         try {
           const event = await verifyWebhook(request, rawEnv);
           const deps = await buildDeps(rawEnv);
+
+          // Kupon-események: a Stripe-ban kívülről (dashboardból) végzett
+          // módosítás azonnal átvezetődik az admin_coupons táblába.
+          const { isCouponEvent } = await import("@/lib/coupon-webhook.server");
+          if (isCouponEvent(event.type)) {
+            const eventId = String((event as any).id ?? "");
+            if (eventId && (await deps.isEventProcessed(eventId))) {
+              return Response.json({ received: true, outcome: "duplicate" });
+            }
+            const { handleCouponEvent } = await import("@/lib/coupon-webhook.server");
+            const outcome = await handleCouponEvent(event as any, rawEnv);
+            await deps.recordEvent({
+              eventId: eventId || `${event.type}-${Date.now()}`,
+              eventType: event.type,
+              orderNumber: null,
+              outcome,
+              eventCreatedAt: isoFromUnix((event as any).created),
+            });
+            return Response.json({ received: true, outcome });
+          }
+
           const result = await processStripeEvent(event as any, deps);
           return Response.json({ received: true, outcome: result.outcome });
         } catch (e) {
