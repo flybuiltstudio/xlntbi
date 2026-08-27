@@ -1049,8 +1049,10 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [roleBusy, setRoleBusy] = useState<string | null>(null);
+  const [resetBusy, setResetBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [creating, setCreating] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   async function refresh() {
     setError("");
@@ -1175,7 +1177,23 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
           </label>
           <label className="block text-sm font-medium text-foreground">
             Jelszó (min. 8 karakter)
-            <input name="new-password" type="password" required minLength={8} className={inputClass} />
+            <span className="relative mt-1.5 block">
+              <input
+                name="new-password"
+                type={showNewPassword ? "text" : "password"}
+                required
+                minLength={8}
+                className={`${inputClass} mt-0 pr-11`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowNewPassword((v) => !v)}
+                aria-label={showNewPassword ? "Jelszó elrejtése" : "Jelszó mutatása"}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </span>
           </label>
           <label className="block text-sm font-medium text-foreground">
             Szerepkör
