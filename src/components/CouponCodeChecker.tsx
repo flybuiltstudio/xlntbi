@@ -23,7 +23,12 @@ export function CouponCodeChecker({ amount, priceId }: { amount: number; priceId
     setState({ status: "checking" });
     try {
       const result = await validatePromotionCode({
-        data: { code, environment: getStripeEnvironment(), amount, priceId },
+        data: {
+          code,
+          environment: getStripeEnvironment(),
+          amount,
+          ...(priceId ? { priceId } : {}),
+        },
       });
       setState({
         status: "result",
