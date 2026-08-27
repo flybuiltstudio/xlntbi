@@ -1,46 +1,39 @@
-# XLNTTESZT100 kupon időzített engedélyezése élesben
+# Kuponok admin oldal — listázás, szűrés és új kupon létrehozása
 
-Az `XLNTTESZT100` (100% kedvezmény) kód **2026. augusztus 31. 23:59:59 (budapesti idő)** végéig
-élesben is használható lesz, utána automatikusan kikapcsol és eltűnik az éles kuponok közül.
-A teszt (sandbox) oldalon változatlanul aktív marad.
+## Mit kapsz
 
-## Hogyan fog működni
+A menüben a **Kuponok** a 2. pont lesz (a Friss verzió után, a Statisztika előtt). Az oldal három részből áll:
 
-1. **Időablakos engedély** — a kód bekerül egy lejárati dátummal ellátott éles engedélylistába.
-   Amíg az ablak nyitva van, a pénztárnál élesben is megjelenik a kuponmező, és a kód levonja a 100%-ot.
-2. **Éles Stripe kupon újraaktiválása** — a kód éles Stripe promotion code-ja jelenleg inaktív
-   (korábban kikapcsoltuk), ezért újra aktiválni kell, és beállítjuk rá Stripe-oldalon is a
-   lejáratot ugyanarra az időpontra. Így akkor sem érvényes szeptember 1-től, ha valaki
-   közvetlen linkkel próbálná.
-3. **Automatikus törlés a határidő után** — a meglévő éles kuponőr (ami minden éles fizetésnél
-   futni szokott, illetve az adminból kézzel indítható) a határidő lejárta után már nem tekinti
-   engedélyezettnek a kódot, ezért kikapcsolja és a kuponmező is eltűnik a pénztárból.
-   A sandbox kód érintetlen marad.
-4. **Admin láthatóság** — a Fizetés-teszt oldal kuponőr-blokkja kiírja, hogy az engedély
-   meddig érvényes, és hogy az ablak épp nyitva van-e.
+**1. Új kupon létrehozása (fent, nyitható űrlap)**
+- Kuponkód (pl. `NYAR2026`) — nagybetűsítve, ütközés-ellenőrzéssel
+- Kedvezmény: százalék (%) **vagy** fix összeg (Ft) — választható
+- Érvényesség vége: dátum + idő (budapesti időben), a Stripe is elutasítja utána
+- Környezet: teszt vagy éles
+- Termékek: alapból „Minden termékre" pipa; kikapcsolva megjelenik a termékek listája kategóriánként, checkboxokkal
+- Beváltási limit: „Korlátlan" pipa (alap), vagy megadott maximum szám
+- Minimum rendelési összeg: „Nincs minimum" pipa (alap), vagy megadott Ft összeg
 
-## Amit tudni érdemes
+Létrehozás után a kód azonnal használható a pénztárban a kuponkód mezőben.
 
-- A lejárat pillanatában induló, még be nem fejezett éles pénztár-munkamenetnél a Stripe
-  lejárati dátuma dönt: szeptember 1. után a kód nem érvényesül.
-- A 100%-os éles rendelés valódi rendelést hoz létre: számla (AAM) kiállításra kerül és
-  letöltő link + licensz-e-mail is mehet. Ha ezt nem szeretnéd, tesztvásárlás után érdemes
-  az admin „Teszt rendelések törlése” / sztornó funkciót használni.
+**2. Szűrők**
+- Környezet: teszt / éles
+- Állapot: érvényes / érvénytelen (lejárt vagy kikapcsolt) / összes
+- Kódra kereső mező
 
-## Technikai részletek
+**3. Kuponlista**
+Minden eddigi kupon a választott környezetből, oszlopok: kód, kedvezmény, állapot, meddig érvényes (érvényes kuponnál) vagy mikor járt le / mikor kapcsolták ki, beváltások száma / limit, minimum összeg, érintett termékek („Minden termék" vagy a nevek). Soronként **Kikapcsolás** gomb, és CSV export.
 
-- `src/lib/coupons.ts`: az `ALLOWED_LIVE_PROMOTION_CODES` egyszerű string-lista helyett
-  kód + `expiresAt` (ISO, `2026-08-31T21:59:59Z` = 23:59:59 budapesti idő) párokat tárol.
-  `isAllowedLiveCode()` és `promotionCodesEnabled()` mostantól időfüggő: csak a még
-  le nem járt bejegyzéseket fogadja el. A `TEST_PROMOTION_CODES` marad.
-- `src/lib/coupon-guard.server.ts`: a sweep a lejárt bejegyzéseket nem tekinti engedélyezettnek,
-  így a határidő után az `XLNTTESZT100` élesben automatikusan `active: false` lesz;
-  a mentett guard-állapotba bekerül az engedély lejárata is.
-- Stripe (éles): az `XLNTTESZT100` promotion code visszaállítása `active: true` értékre,
-  `expires_at` = 2026-08-31 23:59:59 (+02:00) unix timestamp. Ha a kód nem újraaktiválható
-  (Stripe nem engedi minden mezőt módosítani), új promotion code jön létre ugyanahhoz a
-  100%-os couponhoz, ugyanazzal a `XLNTTESZT100` kóddal és a lejárattal.
-- `src/utils/payments.functions.ts`: változatlan hívások, de a `promotionCodesEnabled("live")`
-  az időablak alatt igazat ad, utána hamisat — a kuponmező automatikusan eltűnik.
-- `src/components/FullPurchaseTestPanel.tsx` (kuponőr-blokk): kiírja az engedély lejáratát
-  és állapotát.
+## Fontos működési részlet
+
+Élesben ma egy védőmechanizmus automatikusan kikapcsol minden olyan kupont, ami nincs a kódba írt engedélylistán. Az itt létrehozott éles kuponok bekerülnek egy adatbázisos engedélylistába, így a lejáratukig érintetlenül működnek, utána a védelem automatikusan kikapcsolja őket. A `XLNTTESZT100` viselkedése nem változik.
+
+## Technikai megvalósítás
+
+- **Migráció**: új `public.admin_coupons` tábla (`code`, `environment`, `expires_at`, `discount_type`, `percent_off`, `amount_off`, `currency`, `product_slugs text[]`, `max_redemptions`, `min_amount`, `stripe_coupon_id`, `stripe_promotion_code_id`, `created_by`, `created_at`, `disabled_at`). RLS: csak `authenticated` + `has_role(auth.uid(),'admin')` SELECT; írás kizárólag service role-lal szerverfunkcióból. GRANT: `SELECT` → `authenticated`, `ALL` → `service_role`.
+- **`src/lib/coupons-admin.server.ts`** (új):
+  - `listAdminCoupons(environment)` — a Stripe `promotionCodes.list` + `coupons.retrieve` adatokból állítja össze a listát, és összefűzi a `admin_coupons` sorok metaadataival (termékek, létrehozó).
+  - `createAdminCoupon(input)` — `stripe.coupons.create` (`percent_off` vagy `amount_off`+`currency: 'huf'`, `applies_to.products` ha nem minden termék), majd `stripe.promotionCodes.create` (`code`, `expires_at`, `max_redemptions`, `restrictions.minimum_amount`), végül DB-be mentés. Termék-hozzárendelés: a kiválasztott termék `priceId` lookup key-eiből `prices.list` → Stripe `product` id.
+  - `disableAdminCoupon(code, environment)` — promóciós kód `active: false` + `disabled_at` mentése.
+- **`src/lib/coupon-guard.server.ts`**: az engedélylista kiegészül a `admin_coupons` élő (nem lejárt, nem kikapcsolt) éles kódjaival, így a sweep nem kapcsolja ki őket.
+- **`src/lib/admin.functions.ts`**: `adminListCoupons`, `adminCreateCoupon`, `adminDisableCoupon` szerverfunkciók `requireSupabaseAuth` + admin gate-tel, Zod validációval (kód formátum, százalék 1–100, összeg > 0, jövőbeli lejárat).
+- **UI**: `src/components/CouponAdminPanel.tsx` (űrlap + szűrők + táblázat) a meglévő admin panel stílusban; beépítve a `src/routes/admin.kuponok.tsx` oldalra a meglévő előzmény- és hibás-kísérlet panelek fölé. A menüpont sorrendjét és címkéjét a `src/routes/admin.tsx` fájlban rendezem.
