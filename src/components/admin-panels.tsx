@@ -1,5 +1,6 @@
 import { useServerFn } from "@tanstack/react-start";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { Eye, EyeOff, KeyRound } from "lucide-react";
 
 import {
   adminApproveTransfer,
@@ -1049,8 +1050,10 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [roleBusy, setRoleBusy] = useState<string | null>(null);
+  const [resetBusy, setResetBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [creating, setCreating] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   async function refresh() {
     setError("");
@@ -1132,6 +1135,26 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
     setRoleBusy(null);
   }
 
+  async function onSendPasswordReset(user: AdminUserRow) {
+    if (!window.confirm(`Jelszó-visszaállító e-mail küldése ide: ${user.email}?`)) return;
+    setResetBusy(user.id);
+    setMessage("");
+    setError("");
+    try {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(user.email, {
+        redirectTo: `${window.location.origin}/admin/jelszo`,
+      });
+      if (resetError) {
+        setError(`${user.email}: ${resetError.message}`);
+      } else {
+        setMessage(`${user.email}: jelszó-visszaállító e-mail elküldve.`);
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setResetBusy(null);
+  }
+
   return (
     <section className="mt-8">
       <p className="text-sm text-muted-foreground">
@@ -1175,7 +1198,23 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
           </label>
           <label className="block text-sm font-medium text-foreground">
             Jelszó (min. 8 karakter)
-            <input name="new-password" type="password" required minLength={8} className={inputClass} />
+            <span className="relative mt-1.5 block">
+              <input
+                name="new-password"
+                type={showNewPassword ? "text" : "password"}
+                required
+                minLength={8}
+                className={`${inputClass} mt-0 pr-11`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowNewPassword((v) => !v)}
+                aria-label={showNewPassword ? "Jelszó elrejtése" : "Jelszó mutatása"}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </span>
           </label>
           <label className="block text-sm font-medium text-foreground">
             Szerepkör
@@ -1225,6 +1264,16 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
                 </p>
               </div>
               <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={resetBusy === user.id}
+                  onClick={() => void onSendPasswordReset(user)}
+                  title="Jelszó-visszaállító e-mail küldése"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-40"
+                >
+                  <KeyRound className="h-3.5 w-3.5" />
+                  {resetBusy === user.id ? "Küldés…" : "Jelszó e-mail"}
+                </button>
                 <select
                   aria-label={`Szerepkör: ${user.email}`}
                   value={user.roles[0] ?? "user"}
