@@ -29,17 +29,22 @@ function AdminCouponsPage() {
     <>
       <PageHero>
         <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
-          Kupon előzmények
+          Kuponok
         </h1>
       </PageHero>
       <div className="mx-auto max-w-6xl px-4 py-14">
-        <p className="text-sm text-muted-foreground">
-          Itt látod, melyik kuponkódot mikor váltották be, mennyi kedvezményt adott, és melyik
-          rendeléshez tartozik. Így egy hibás vagy lejárt kupon miatti ügyféligényt azonnal
-          ellenőrizhetsz.
-        </p>
-        <CouponUsagePanel />
-        <CouponAttemptsPanel />
+        <CouponAdminPanel />
+
+        <div className="mt-14">
+          <h2 className="text-xl font-bold text-foreground">Kupon előzmények</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Itt látod, melyik kuponkódot mikor váltották be, mennyi kedvezményt adott, és melyik
+            rendeléshez tartozik. Így egy hibás vagy lejárt kupon miatti ügyféligényt azonnal
+            ellenőrizhetsz.
+          </p>
+          <CouponUsagePanel />
+          <CouponAttemptsPanel />
+        </div>
       </div>
     </>
   );
