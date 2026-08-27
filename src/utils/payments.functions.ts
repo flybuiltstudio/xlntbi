@@ -13,7 +13,14 @@ type CheckoutSessionResult = { clientSecret: string } | { error: string };
 /** Detailed, Hungarian coupon validation for the checkout coupon helper. */
 export const validatePromotionCode = createServerFn({ method: "POST" })
   .inputValidator(
-    (data: { code: string; environment: StripeEnv; amount?: number; priceId?: string }) => {
+    (data: {
+      code: string;
+      environment: StripeEnv;
+      amount?: number;
+      priceId?: string;
+      email?: string;
+      orderNumber?: string;
+    }) => {
       if (typeof data.code !== "string" || data.code.length > 60) {
         throw new Error("Invalid code");
       }

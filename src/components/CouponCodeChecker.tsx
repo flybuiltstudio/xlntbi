@@ -26,7 +26,17 @@ function huf(value: number): string {
  * feedback (invalid / expired / used up / minimum amount), instead of the
  * terse generic error shown inside the Stripe checkout iframe.
  */
-export function CouponCodeChecker({ amount, priceId }: { amount: number; priceId?: string }) {
+export function CouponCodeChecker({
+  amount,
+  priceId,
+  email,
+  orderNumber,
+}: {
+  amount: number;
+  priceId?: string;
+  email?: string;
+  orderNumber?: string;
+}) {
   const [code, setCode] = useState("");
   const [state, setState] = useState<CheckState>({ status: "idle" });
 
@@ -40,6 +50,8 @@ export function CouponCodeChecker({ amount, priceId }: { amount: number; priceId
           environment: getStripeEnvironment(),
           amount,
           ...(priceId ? { priceId } : {}),
+          ...(email ? { email } : {}),
+          ...(orderNumber ? { orderNumber } : {}),
         },
       });
       setState({

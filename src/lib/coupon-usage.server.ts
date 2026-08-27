@@ -17,6 +17,8 @@ export type CouponUsageRow = {
   code: string | null;
   /** Human readable discount rule, e.g. "100%" or "5 000 Ft". */
   rule: string | null;
+  /** Discount kind for filtering. */
+  discountType: "percent" | "fixed" | null;
   /** Discount amount in HUF. */
   discountAmount: number;
   /** Amount actually paid (after discount), in HUF. */
@@ -94,6 +96,11 @@ export async function listCouponUsage(
         createdAt: new Date(session.created * 1000).toISOString(),
         code,
         rule: describeRule(discount?.coupon),
+        discountType: discount?.coupon?.percent_off
+          ? "percent"
+          : discount?.coupon?.amount_off
+            ? "fixed"
+            : null,
         discountAmount,
         paidAmount,
         originalAmount: paidAmount + discountAmount,
