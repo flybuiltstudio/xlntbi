@@ -184,6 +184,13 @@ function AdminLayout() {
                 Billingo ellenőrzés
               </Link>
               <Link
+                to="/admin/kuponok"
+                className={tabBase}
+                activeProps={{ className: `${tabBase} ${tabActive}` }}
+              >
+                Kupon előzmények
+              </Link>
+              <Link
                 to="/admin/fizetes-teszt"
                 className={tabBase}
                 activeProps={{ className: `${tabBase} ${tabActive}` }}
