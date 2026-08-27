@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/PageHero";
 import { AdminSessionContext, LoginPanel, type AdminRole } from "@/components/admin-panels";
 import { adminMyRole } from "@/lib/admin.functions";
+import { adminHomeFor, canAccessAdminRoute } from "@/lib/admin-access";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -74,15 +75,19 @@ function AdminLayout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.id]);
 
+  const [checksOpen, setChecksOpen] = useState(false);
+
+  const allowed = role ? canAccessAdminRoute(role, pathname) : false;
+
   useEffect(() => {
-    // A "user" szerepkör csak a Statisztika és a Kuponok oldalt érheti el;
-    // minden más admin útvonalról (beleértve az Ellenőrzések aloldalait is,
-    // akár közvetlen URL-megadással) visszairányítjuk.
-    const userAllowed = ["/admin/statisztika", "/admin/kuponok"];
-    if (role === "user" && !userAllowed.some((p) => pathname.startsWith(p))) {
-      void navigate({ to: "/admin/statisztika", replace: true });
+    // Központi, szerepkör-alapú route guard: minden admin aloldal ugyanabból a
+    // térképből (src/lib/admin-access.ts) kapja a jogosultságát, így nincs
+    // oldalonként külön szabály. Ismeretlen admin útvonal = csak admin.
+    if (role && !canAccessAdminRoute(role, pathname)) {
+      void navigate({ to: adminHomeFor(role), replace: true });
     }
   }, [role, pathname, navigate]);
+
 
   if (!ready || (session && !roleReady)) {
     return (
@@ -139,7 +144,6 @@ function AdminLayout() {
     "rounded-md px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground";
   const tabActive = "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground";
 
-  const [checksOpen, setChecksOpen] = useState(false);
   const checksLinks = [
     { to: "/admin/szamlazas", label: "Számlázás" },
     { to: "/admin/billingo-ellenorzes", label: "Billingo ellenőrzés" },
@@ -247,7 +251,13 @@ function AdminLayout() {
         </div>
       </nav>
       <AdminSessionContext.Provider value={{ email: session.email, userId: session.id, role }}>
-        <Outlet />
+        {allowed ? (
+          <Outlet />
+        ) : (
+          <div className="mx-auto max-w-6xl px-4 py-14 text-sm text-muted-foreground">
+            Ehhez az oldalhoz nincs jogosultságod. Átirányítunk…
+          </div>
+        )}
       </AdminSessionContext.Provider>
     </>
   );

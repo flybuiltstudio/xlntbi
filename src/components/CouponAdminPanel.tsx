@@ -3,16 +3,33 @@ import { Loader2, Plus, RefreshCw, TicketPercent } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
+  adminCouponSyncStatus,
   adminCreateCoupon,
   adminDisableCoupon,
   adminListCoupons,
 } from "@/lib/admin.functions";
+import { useAdminSession } from "@/components/admin-panels";
 import { productCategories } from "@/lib/product-categories";
 import { products } from "@/lib/products";
 import { getStripeEnvironment } from "@/lib/stripe";
 
 type Env = "sandbox" | "live";
 type Coupon = Awaited<ReturnType<typeof adminListCoupons>>["coupons"][number];
+type SyncReport = Awaited<ReturnType<typeof adminCouponSyncStatus>>["report"];
+
+const SYNC_LABEL: Record<string, string> = {
+  ok: "Létezik a Stripe-ban",
+  missing: "Nem létezik a Stripe-ban",
+  mismatch: "Hibás / eltérő beállítás",
+  stripe_only: "Csak a Stripe-ban létezik",
+};
+
+const SYNC_CLASS: Record<string, string> = {
+  ok: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  missing: "bg-destructive/10 text-destructive",
+  mismatch: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  stripe_only: "bg-muted text-muted-foreground",
+};
 
 const STATUS_LABEL: Record<string, string> = {
   valid: "Érvényes",
@@ -54,7 +71,13 @@ export function CouponAdminPanel() {
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
 
+  const { role } = useAdminSession();
+  const isAdmin = role === "admin";
+  const [sync, setSync] = useState<SyncReport | null>(null);
+  const [syncLoading, setSyncLoading] = useState(false);
+
   const listFn = useServerFn(adminListCoupons);
+  const syncFn = useServerFn(adminCouponSyncStatus);
   const createFn = useServerFn(adminCreateCoupon);
   const disableFn = useServerFn(adminDisableCoupon);
 
@@ -75,9 +98,27 @@ export function CouponAdminPanel() {
     [listFn],
   );
 
+  /** Ellenőrző szinkron: csak admin szerepkörben fut le. */
+  const runSync = useCallback(
+    async (environment: Env) => {
+      if (!isAdmin) return;
+      setSyncLoading(true);
+      try {
+        const result = await syncFn({ data: { environment } });
+        setSync(result.report);
+      } catch {
+        setSync(null);
+      } finally {
+        setSyncLoading(false);
+      }
+    },
+    [syncFn, isAdmin],
+  );
+
   useEffect(() => {
     void refresh(env);
-  }, [env, refresh]);
+    void runSync(env);
+  }, [env, refresh, runSync]);
 
   const visible = useMemo(() => {
     const needle = search.trim().toUpperCase();
@@ -139,6 +180,7 @@ export function CouponAdminPanel() {
       return;
     }
     void refresh(env);
+    void runSync(env);
   }
 
   return (
@@ -170,9 +212,95 @@ export function CouponAdminPanel() {
           onCreated={() => {
             setShowForm(false);
             void refresh(env);
+            void runSync(env);
           }}
           createFn={createFn}
         />
+      ) : null}
+
+      {isAdmin ? (
+        <div className="mt-6 rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-semibold text-foreground">
+                Ellenőrző státusz — kuponok és a Stripe összhangja
+              </h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {sync?.checkedAt ?
+                  `Utolsó ellenőrzés: ${dateHu(sync.checkedAt)}`
+                : "Még nem futott ellenőrzés."}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => void runSync(env)}
+              disabled={syncLoading}
+              className="inline-flex items-center gap-2 rounded-md border border-input px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent disabled:opacity-60"
+            >
+              {syncLoading ?
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+              : <RefreshCw className="h-4 w-4" aria-hidden="true" />}
+              Újraszinkron
+            </button>
+          </div>
+
+          {sync?.error ? (
+            <p className="mt-3 text-sm text-destructive">
+              Az ellenőrzés nem futott le: {sync.error}
+            </p>
+          ) : sync ? (
+            <>
+              <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                <span className={`rounded-full px-3 py-1 font-medium ${SYNC_CLASS["ok"]}`}>
+                  Rendben: {sync.ok}
+                </span>
+                <span className={`rounded-full px-3 py-1 font-medium ${SYNC_CLASS["mismatch"]}`}>
+                  Hibás/eltérő: {sync.mismatch}
+                </span>
+                <span className={`rounded-full px-3 py-1 font-medium ${SYNC_CLASS["missing"]}`}>
+                  Nem létezik: {sync.missing}
+                </span>
+                <span className={`rounded-full px-3 py-1 font-medium ${SYNC_CLASS["stripe_only"]}`}>
+                  Csak Stripe: {sync.stripeOnly}
+                </span>
+              </div>
+              {sync.rows.length > 0 ? (
+                <div className="mt-3 max-h-72 overflow-auto rounded-md border border-border">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
+                      <tr>
+                        <th className="px-3 py-2">Kuponkód</th>
+                        <th className="px-3 py-2">Állapot</th>
+                        <th className="px-3 py-2">Részletek</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sync.rows.map((r) => (
+                        <tr key={`${r.code}-${r.state}`} className="border-t border-border">
+                          <td className="px-3 py-2 font-mono text-xs text-foreground">{r.code}</td>
+                          <td className="px-3 py-2">
+                            <span
+                              className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${
+                                SYNC_CLASS[r.state] ?? "bg-muted text-muted-foreground"
+                              }`}
+                            >
+                              {SYNC_LABEL[r.state] ?? r.state}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2 text-xs text-muted-foreground">{r.detail}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Ebben a környezetben nincs ellenőrizhető kupon.
+                </p>
+              )}
+            </>
+          ) : null}
+        </div>
       ) : null}
 
       <div className="mt-6 flex flex-wrap items-end gap-3">
