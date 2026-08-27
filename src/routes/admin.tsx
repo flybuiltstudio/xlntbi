@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/PageHero";
 import { AdminSessionContext, LoginPanel, type AdminRole } from "@/components/admin-panels";
 import { adminMyRole } from "@/lib/admin.functions";
+import { adminHomeFor, canAccessAdminRoute } from "@/lib/admin-access";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -143,7 +144,6 @@ function AdminLayout() {
     "rounded-md px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground";
   const tabActive = "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground";
 
-  const [checksOpen, setChecksOpen] = useState(false);
   const checksLinks = [
     { to: "/admin/szamlazas", label: "Számlázás" },
     { to: "/admin/billingo-ellenorzes", label: "Billingo ellenőrzés" },
