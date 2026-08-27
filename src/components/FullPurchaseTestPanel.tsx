@@ -321,7 +321,12 @@ export function FullPurchaseTestPanel() {
           más kód (köztük a teszt kódok, pl. {TEST_PROMOTION_CODES.join(", ")}) automatikusan
           kikapcsolódik. Jelenleg engedélyezett éles kódok:{" "}
           <strong className="text-foreground">
-            {ALLOWED_LIVE_PROMOTION_CODES.length ? ALLOWED_LIVE_PROMOTION_CODES.join(", ") : "nincs"}
+            {ALLOWED_LIVE_PROMOTION_CODES.length
+              ? ALLOWED_LIVE_PROMOTION_CODES.map((g) => {
+                  const expired = Date.parse(g.expiresAt) <= Date.now();
+                  return `${g.code} (${expired ? "lejárt" : "érvényes"}: ${new Date(g.expiresAt).toLocaleString("hu-HU")}-ig)`;
+                }).join(", ")
+              : "nincs"}
           </strong>
           .
         </p>
