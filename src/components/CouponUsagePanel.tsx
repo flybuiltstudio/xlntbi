@@ -31,6 +31,9 @@ export function CouponUsagePanel() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState("");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [type, setType] = useState<"all" | "percent" | "fixed">("all");
   const load = useServerFn(adminListCouponUsage);
 
   const refresh = useCallback(
@@ -56,13 +59,28 @@ export function CouponUsagePanel() {
   }, [env, refresh]);
 
   const needle = filter.trim().toUpperCase();
-  const visible = needle
-    ? rows.filter((r) =>
-        [r.code, r.orderNumber, r.customerEmail, r.order?.billingName, r.order?.productName]
-          .filter(Boolean)
-          .some((v) => String(v).toUpperCase().includes(needle)),
-      )
-    : rows;
+  const fromTime = from ? new Date(`${from}T00:00:00`).getTime() : null;
+  const toTime = to ? new Date(`${to}T23:59:59`).getTime() : null;
+
+  const visible = rows.filter((r) => {
+    if (needle) {
+      const match = [
+        r.code,
+        r.orderNumber,
+        r.customerEmail,
+        r.order?.billingName,
+        r.order?.productName,
+      ]
+        .filter(Boolean)
+        .some((v) => String(v).toUpperCase().includes(needle));
+      if (!match) return false;
+    }
+    const created = new Date(r.createdAt).getTime();
+    if (fromTime !== null && created < fromTime) return false;
+    if (toTime !== null && created > toTime) return false;
+    if (type !== "all" && r.discountType !== type) return false;
+    return true;
+  });
 
   const totalDiscount = visible.reduce((sum, r) => sum + r.discountAmount, 0);
 
@@ -125,6 +143,36 @@ export function CouponUsagePanel() {
           </select>
         </label>
         <label className="text-sm">
+          <span className="block text-xs font-medium text-muted-foreground">Kedvezmény típusa</span>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value as "all" | "percent" | "fixed")}
+            className="mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
+          >
+            <option value="all">Mind</option>
+            <option value="percent">Százalékos</option>
+            <option value="fixed">Fix összeg</option>
+          </select>
+        </label>
+        <label className="text-sm">
+          <span className="block text-xs font-medium text-muted-foreground">Ettől</span>
+          <input
+            type="date"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+            className="mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
+          />
+        </label>
+        <label className="text-sm">
+          <span className="block text-xs font-medium text-muted-foreground">Eddig</span>
+          <input
+            type="date"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+            className="mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
+          />
+        </label>
+        <label className="text-sm">
           <span className="block text-xs font-medium text-muted-foreground">Keresés</span>
           <input
             value={filter}
@@ -153,6 +201,20 @@ export function CouponUsagePanel() {
         >
           CSV export
         </button>
+        {from || to || type !== "all" || filter ? (
+          <button
+            type="button"
+            onClick={() => {
+              setFrom("");
+              setTo("");
+              setType("all");
+              setFilter("");
+            }}
+            className="inline-flex items-center rounded-md border border-input px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+          >
+            Szűrők törlése
+          </button>
+        ) : null}
       </div>
 
       <div className="mt-4 flex flex-wrap gap-4">
