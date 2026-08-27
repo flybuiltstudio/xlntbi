@@ -10,6 +10,21 @@ import {
 
 type CheckoutSessionResult = { clientSecret: string } | { error: string };
 
+/** Detailed, Hungarian coupon validation for the checkout coupon helper. */
+export const validatePromotionCode = createServerFn({ method: "POST" })
+  .inputValidator(
+    (data: { code: string; environment: StripeEnv; amount?: number; priceId?: string }) => {
+      if (typeof data.code !== "string" || data.code.length > 60) {
+        throw new Error("Invalid code");
+      }
+      return data;
+    },
+  )
+  .handler(async ({ data }) => {
+    const { checkPromotionCode } = await import("@/lib/coupon-validate.server");
+    return checkPromotionCode(data);
+  });
+
 export const createOrderCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator(
     (data: {

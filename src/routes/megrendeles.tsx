@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { z } from "zod";
 
+import { CouponCodeChecker } from "@/components/CouponCodeChecker";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { PaymentEnvironmentNotice } from "@/components/PaymentEnvironmentNotice";
 import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
@@ -134,6 +135,7 @@ function OrderPage() {
           visszaigazolást és a számlát a sikeres fizetés után küldöm e-mailben.
         </p>
         <PaymentEnvironmentNotice className="mt-6" />
+        <CouponCodeChecker amount={total} priceId={tier.priceId} />
         <StripeOrderCheckout
           priceId={tier.priceId}
           quantity={quantity}
