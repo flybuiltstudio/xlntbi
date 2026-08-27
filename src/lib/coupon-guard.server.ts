@@ -99,6 +99,9 @@ export async function sweepLivePromotionCodes(): Promise<CouponGuardResult> {
     const now = new Date();
     const stripe = createStripeClient("live");
 
+    // Admin-created live coupons are allowlisted while not expired/disabled.
+    const adminCodes = new Set(await adminAllowedLiveCodes());
+
     // First, reactivate / create allowed codes that are still inside their window.
     activated = await ensureAllowedCodes(stripe, activeGrants(now));
 
@@ -106,7 +109,7 @@ export async function sweepLivePromotionCodes(): Promise<CouponGuardResult> {
     const codes = await stripe.promotionCodes.list({ active: true, limit: 100 });
     for (const promo of codes.data) {
       checked += 1;
-      if (isAllowedLiveCode(promo.code, now)) {
+      if (isAllowedLiveCode(promo.code, now) || adminCodes.has(promo.code.toUpperCase())) {
         kept.push(promo.code);
         continue;
       }
