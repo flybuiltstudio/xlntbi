@@ -36,9 +36,18 @@ async function handleWebhook(request: Request, env: StripeEnv) {
       break;
     }
     case "charge.refunded": {
-      await unwindByPaymentIntent(event.data.object, "A fizetés visszatérítve (Stripe).");
+      const charge = event.data.object;
+      const amount = Number(charge?.amount ?? 0);
+      const refunded = Number(charge?.amount_refunded ?? 0);
+      // Partial refunds keep the order paid and the invoice valid.
+      if (!amount || refunded < amount) {
+        console.log("Partial refund ignored for charge:", charge?.id);
+        break;
+      }
+      await unwindByPaymentIntent(charge, "A fizetés visszatérítve (Stripe).", "refund");
       break;
     }
+
     default:
       console.log("Unhandled Stripe event:", event.type);
   }
