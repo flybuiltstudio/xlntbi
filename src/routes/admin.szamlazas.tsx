@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { PageHero } from "@/components/PageHero";
 import { InvoiceLogsPanel } from "@/components/admin-panels";
+import { StripeProductNamePanel } from "@/components/StripeProductNamePanel";
 
 export const Route = createFileRoute("/admin/szamlazas")({
   head: () => ({
@@ -37,6 +38,7 @@ function AdminInvoicesPage() {
           állapot, számlaszám, hibakód és hibaüzenet.
         </p>
         <InvoiceLogsPanel />
+        <StripeProductNamePanel />
       </div>
     </>
   );
