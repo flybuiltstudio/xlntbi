@@ -1,4 +1,4 @@
-# Mobil/táblagép menü: kinyitható almenük (Szolgáltatások, Kalkulátorok, Termékeim)
+# Mobil/táblagép menü: kinyitható almenük (Szolgáltatásaim, Kalkulátorok, Termékeim)
 
 ## Probléma
 A mobil és táblagépes menü (`min-[900px]:hidden`) jelenleg egyetlen lapos listát
