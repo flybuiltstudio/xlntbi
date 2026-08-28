@@ -33,8 +33,15 @@ describe("withXlntPrefix", () => {
 });
 
 describe("catalog", () => {
-  it("every product name is prefixed", () => {
-    const missing = products.filter((p) => !hasXlntPrefix(p.name)).map((p) => p.name);
-    expect(missing).toEqual([]);
+  it("every product name in products.ts is prefixed", async () => {
+    const { readFileSync } = await import("node:fs");
+    const source = readFileSync(
+      new URL("./products.ts", import.meta.url).pathname,
+      "utf8",
+    );
+    // Only top-level product `name:` fields (2-space indent inside the array).
+    const names = [...source.matchAll(/^ {4}name: "([^"]+)",$/gm)].map((m) => m[1]);
+    expect(names.length).toBeGreaterThan(20);
+    expect(names.filter((n) => !hasXlntPrefix(n))).toEqual([]);
   });
 });
