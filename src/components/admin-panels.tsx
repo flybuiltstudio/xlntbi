@@ -1811,6 +1811,10 @@ export function ProductVersionPanel() {
               Jelenlegi fájl: <span className="font-mono">{meta?.fileName ?? "…"}</span>
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
+              Tárolt fájl (állandó, ez biztosítja a régi linkek működését):{" "}
+              <span className="font-mono">{meta?.storageFileName ?? "…"}</span>
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
               Méret: {formatFileSize(meta?.size ?? null)}
               {meta?.updatedAt
                 ? ` · Utoljára módosítva: ${new Date(meta.updatedAt).toLocaleString("hu-HU")}`
