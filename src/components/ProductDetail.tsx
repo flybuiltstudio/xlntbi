@@ -1,7 +1,10 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { usePageView } from "@/lib/use-page-view";
 import { Check } from "lucide-react";
 import { AAM_PRICE_NOTE, aamText } from "@/lib/aam";
+import { getProductFileName } from "@/lib/product-file.functions";
 import { priceFrom, formatPrice, getProduct, products } from "@/lib/products";
 import icKulfoldi from "@/assets/icons/kulfoldi.png.asset.json";
 import icIroda from "@/assets/icons/iroda.png.asset.json";
@@ -78,7 +81,16 @@ const faq = [
 export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
   const product = getProduct(slug);
   usePageView("product", slug);
+  const fetchFileName = useServerFn(getProductFileName);
+  const { data: liveFile } = useQuery({
+    queryKey: ["product-file-name", slug],
+    queryFn: () => fetchFileName({ data: { slug } }),
+    staleTime: 5 * 60 * 1000,
+  });
   if (!product) return null;
+
+  const fileName = liveFile?.fileName ?? product.download?.fileName ?? null;
+
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -150,6 +162,12 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
             <p className="mt-1 text-xs text-muted-foreground">
               {AAM_PRICE_NOTE} Digitális termék, letöltéssel teljesítjük.
             </p>
+            {fileName ? (
+              <p className="mt-2 text-xs text-muted-foreground">
+                Letölthető fájl: <span className="font-mono">{fileName}</span>
+              </p>
+            ) : null}
+
 
             {product.tiers.length > 1 ? (
               <div className="mt-6 rounded-xl border border-border p-5">
