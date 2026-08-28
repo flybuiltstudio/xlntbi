@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import logoAsset from "@/assets/xlntbi-logo.png";
+import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 import { productCategories, categoryProducts } from "@/lib/product-categories";
 
 const services = [
