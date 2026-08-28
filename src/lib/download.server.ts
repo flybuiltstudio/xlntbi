@@ -165,7 +165,7 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
 
   const { data: row, error } = await supabaseAdmin
     .from("order_downloads")
-    .select("id, storage_path, file_name, download_count, max_downloads, expires_at")
+    .select("id, storage_path, file_name, product_slug, download_count, max_downloads, expires_at")
     .eq("token", token)
     .maybeSingle();
 
@@ -181,10 +181,16 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
     return { ok: false, reason: "limit" };
   }
 
+  // Always serve the newest uploaded name, even for tokens issued earlier.
+  const serveName = await downloadFileName(
+    row.product_slug as string,
+    row.file_name as string,
+  );
+
   const { data: signed, error: signError } = await supabaseAdmin.storage
     .from(BUCKET)
     .createSignedUrl(row.storage_path as string, 300, {
-      download: row.file_name as string,
+      download: serveName,
     });
 
   if (signError || !signed?.signedUrl) {
