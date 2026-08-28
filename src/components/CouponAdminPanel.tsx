@@ -11,6 +11,7 @@ import {
 import { useAdminSession } from "@/components/admin-panels";
 import { productCategories } from "@/lib/product-categories";
 import { products } from "@/lib/products";
+import { formatMinorAsHuf, parseHufInput } from "@/lib/coupon-amount";
 import { getStripeEnvironment } from "@/lib/stripe";
 
 type Env = "sandbox" | "live";
@@ -47,8 +48,7 @@ const STATUS_CLASS: Record<string, string> = {
 
 /** Formats a Stripe minor-unit amount (fillér) as forint. */
 function huf(value: number | null): string {
-  if (value == null) return "—";
-  return `${Math.round(value / 100).toLocaleString("hu-HU")} Ft`;
+  return formatMinorAsHuf(value);
 }
 
 function dateHu(iso: string | null): string {
@@ -495,6 +495,29 @@ function CouponCreateForm({
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    // Fixed-amount coupons: the input is forint and is converted to Stripe
+    // minor units here. Reject anything that is not a plain forint amount
+    // with at most two decimals instead of silently rounding it.
+    let parsedAmountOff: number | null = null;
+    if (discountType === "amount") {
+      const parsed = parseHufInput(amountOff, "A kedvezmény összege");
+      if (!parsed.ok) {
+        setError(parsed.error);
+        return;
+      }
+      parsedAmountOff = parsed.minor;
+    }
+    let parsedMinAmount: number | null = null;
+    if (!noMin) {
+      const parsed = parseHufInput(minAmount, "A minimum rendelési összeg");
+      if (!parsed.ok) {
+        setError(parsed.error);
+        return;
+      }
+      parsedMinAmount = parsed.minor;
+    }
+
     setSubmitting(true);
     try {
       const payload = {
@@ -503,12 +526,12 @@ function CouponCreateForm({
         expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null,
         discountType,
         percentOff: discountType === "percent" ? Number(percentOff) || null : null,
-        amountOff: discountType === "amount" ? Math.round((Number(amountOff) || 0) * 100) : null,
+        amountOff: parsedAmountOff,
         currency: "huf",
         productSlugs: allProducts ? [] : selectedSlugs,
         allProducts,
         maxRedemptions: unlimited ? null : Math.round(Number(maxRedemptions) || 0),
-        minAmount: noMin ? null : Math.round((Number(minAmount) || 0) * 100),
+        minAmount: parsedMinAmount,
       };
       const res = await createFn({ data: payload });
       if (!res.ok) {
@@ -595,14 +618,23 @@ function CouponCreateForm({
           <label className="text-sm">
             <span className="block text-xs font-medium text-muted-foreground">Kedvezmény (Ft) *</span>
             <input
-              type="number"
-              min={1}
+              type="text"
+              inputMode="decimal"
               value={amountOff}
               onChange={(e) => setAmountOff(e.target.value)}
               required
               placeholder="pl. 5000"
               className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
             />
+            <span className="mt-1 block text-xs text-muted-foreground">
+              Forintban add meg, legfeljebb két tizedesjeggyel (pl. 5000 vagy 5000,50).
+              {amountOff.trim() && parseHufInput(amountOff).ok ? (
+                <>
+                  {" "}
+                  Kedvezmény: <strong>{huf(parseHufInput(amountOff).ok ? (parseHufInput(amountOff) as { minor: number }).minor : null)}</strong>
+                </>
+              ) : null}
+            </span>
           </label>
         )}
         <div />
