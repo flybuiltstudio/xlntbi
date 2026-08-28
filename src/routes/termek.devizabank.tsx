@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "DEVIZABANK – devizás bankszámla nyilvántartó Excel | EXCELlent Business Intelligence";
+const TITLE = "XLNT DEVIZABANK – devizás bankszámla nyilvántartó Excel | EXCELlent Business Intelligence";
 const DESCRIPTION =
   "Devizaszámla nyilvántartás átlagáras és FIFO elszámolással, automatikus MNB árfolyam-lekérdezéssel. EUR, USD, GBP, JPY változat, 19 900 Ft-tól.";
-const H1 = "DEVIZABANK – devizás bankszámla nyilvántartó és árfolyam-elszámoló";
+const H1 = "XLNT DEVIZABANK – devizás bankszámla nyilvántartó és árfolyam-elszámoló";
 const CANONICAL = "https://xlntbi.hu/termek/devizabank";
 const OG_IMAGE = "https://xlntbi.hu/og/devizabank.jpg";
 
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/termek/devizabank")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          name: "DEVIZABANK",
+          name: "XLNT DEVIZABANK",
           description: DESCRIPTION,
           applicationCategory: "BusinessApplication",
           operatingSystem: "Windows, Microsoft Excel",
@@ -55,7 +55,7 @@ export const Route = createFileRoute("/termek/devizabank")({
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Főoldal", item: "https://xlntbi.hu/" },
             { "@type": "ListItem", position: 2, name: "Termékeim", item: "https://xlntbi.hu/termekeim" },
-            { "@type": "ListItem", position: 3, name: "DEVIZABANK", item: CANONICAL },
+            { "@type": "ListItem", position: 3, name: "XLNT DEVIZABANK", item: CANONICAL },
           ],
         }),
       },

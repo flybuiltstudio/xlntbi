@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "MNB ERA Jelentésgenerátor R09 és R12 | XLNTBI";
+const TITLE = "XLNT MNB ERA Jelentésgenerátor R09 és R12 | XLNTBI";
 const DESCRIPTION =
   "R09 és R12 jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből. Egyetlen licenc, 29 900 Ft AAM.";
-const H1 = "MNB ERA Jelentésgenerátor (R09 és R12)";
+const H1 = "XLNT MNB ERA Jelentésgenerátor (R09 és R12)";
 const CANONICAL = "https://xlntbi.hu/termek/mnb-era-jelentesgenerator";
 const OG_IMAGE = "https://xlntbi.hu/og/mnb-era-jelentesgenerator.jpg";
 
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/termek/mnb-era-jelentesgenerator")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
-          name: "MNB ERA Jelentésgenerátor (R09 és R12)",
+          name: "XLNT MNB ERA Jelentésgenerátor (R09 és R12)",
           description: DESCRIPTION,
           applicationCategory: "BusinessApplication",
           operatingSystem: "Windows, Microsoft Excel",
