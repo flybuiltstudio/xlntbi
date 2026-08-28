@@ -133,8 +133,10 @@ export const getCheckoutSummary = createServerFn({ method: "POST" })
         const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
           expand: ["total_details.breakdown"],
         });
-        const discountAmount = session.total_details?.amount_discount ?? 0;
-        const totalAmount = session.amount_total ?? 0;
+        // Stripe returns HUF in minor units (fillér) — show forints.
+        const toMajor = (v: number) => Math.round(v / 100);
+        const discountAmount = toMajor(session.total_details?.amount_discount ?? 0);
+        const totalAmount = toMajor(session.amount_total ?? 0);
         let couponCode: string | null = null;
         const promoRef = (session.total_details as any)?.breakdown?.discounts?.[0]?.discount
           ?.promotion_code;
