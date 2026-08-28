@@ -81,7 +81,7 @@ export const productCategories: ProductCategory[] = [
     title: "Adózás",
     image: adozasImg,
     slugs: [
-      "afa-2665-xml-generalo",
+      "afa-ev65-xml-generalo",
       "a60-osszesito-nyilatkozat-xml",
       "adofolyoszamla-egyezteto",
     ],
