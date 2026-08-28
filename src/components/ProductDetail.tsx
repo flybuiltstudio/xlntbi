@@ -162,6 +162,12 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
             <p className="mt-1 text-xs text-muted-foreground">
               {AAM_PRICE_NOTE} Digitális termék, letöltéssel teljesítjük.
             </p>
+            {fileName ? (
+              <p className="mt-2 text-xs text-muted-foreground">
+                Letölthető fájl: <span className="font-mono">{fileName}</span>
+              </p>
+            ) : null}
+
 
             {product.tiers.length > 1 ? (
               <div className="mt-6 rounded-xl border border-border p-5">
