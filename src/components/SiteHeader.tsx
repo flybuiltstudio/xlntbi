@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
+import { productCategories, categoryProducts } from "@/lib/product-categories";
 
 const services = [
   { to: "/konyveles", label: "Könyvelés" },
@@ -34,6 +35,15 @@ const mainLinks = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+
+  const toggleSection = (key: string) =>
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  const closeMenu = () => {
+    setOpen(false);
+    setOpenSections({});
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
@@ -153,25 +163,176 @@ export function SiteHeader() {
               </button>
             </div>
             <ul className="space-y-1">
-              {[
-                { to: "/", label: "Főoldal" },
-                { to: "/szolgaltatasaim", label: "Szolgáltatásaim" },
-                ...services,
-                ...calculators,
-                { to: "/termekeim", label: "Termékeim" },
-                ...mainLinks,
-                { to: "/konzultacio", label: "Konzultáció" },
-              ].map((l) => (
-                <li key={l.to + l.label}>
+              {/* Főoldal */}
+              <li>
+                <Link
+                  to="/"
+                  onClick={closeMenu}
+                  className="block min-h-11 rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-accent"
+                >
+                  Főoldal
+                </Link>
+              </li>
+
+              {/* Szolgáltatásaim — kinyitható */}
+              <li>
+                <button
+                  type="button"
+                  onClick={() => toggleSection("szolgaltatasaim")}
+                  aria-expanded={openSections["szolgaltatasaim"] ?? false}
+                  className="flex min-h-11 w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-accent"
+                >
+                  Szolgáltatásaim
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                      openSections["szolgaltatasaim"] ? "rotate-180" : ""
+                    }`}
+                    aria-hidden="true"
+                  />
+                </button>
+                {openSections["szolgaltatasaim"] ? (
+                  <ul className="space-y-1 pl-3">
+                    {services.map((s) => (
+                      <li key={s.to}>
+                        <Link
+                          to={s.to}
+                          onClick={closeMenu}
+                          className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent"
+                        >
+                          {s.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </li>
+
+              {/* Kalkulátorok — kinyitható */}
+              <li>
+                <button
+                  type="button"
+                  onClick={() => toggleSection("kalkulatorok")}
+                  aria-expanded={openSections["kalkulatorok"] ?? false}
+                  className="flex min-h-11 w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-accent"
+                >
+                  Kalkulátorok
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                      openSections["kalkulatorok"] ? "rotate-180" : ""
+                    }`}
+                    aria-hidden="true"
+                  />
+                </button>
+                {openSections["kalkulatorok"] ? (
+                  <ul className="space-y-1 pl-3">
+                    {calculators.map((c) => (
+                      <li key={c.to}>
+                        <Link
+                          to={c.to}
+                          onClick={closeMenu}
+                          className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent"
+                        >
+                          {c.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </li>
+
+              {/* Termékeim — kétszintű kinyíló (kategória → termékadatlap) */}
+              <li>
+                <button
+                  type="button"
+                  onClick={() => toggleSection("termekeim")}
+                  aria-expanded={openSections["termekeim"] ?? false}
+                  className="flex min-h-11 w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-accent"
+                >
+                  Termékeim
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                      openSections["termekeim"] ? "rotate-180" : ""
+                    }`}
+                    aria-hidden="true"
+                  />
+                </button>
+                {openSections["termekeim"] ? (
+                  <ul className="space-y-1 pl-3">
+                    <li>
+                      <Link
+                        to="/termekeim"
+                        onClick={closeMenu}
+                        className="block rounded-md px-3 py-2 text-sm font-semibold text-foreground hover:bg-accent"
+                      >
+                        Összes termék
+                      </Link>
+                    </li>
+                    {productCategories.map((cat) => {
+                      const catKey = `kat-${cat.key}`;
+                      const catOpen = openSections[catKey] ?? false;
+                      const items = categoryProducts(cat);
+                      return (
+                        <li key={cat.key}>
+                          <button
+                            type="button"
+                            onClick={() => toggleSection(catKey)}
+                            aria-expanded={catOpen}
+                            className="flex min-h-11 w-full items-center justify-between rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-accent"
+                          >
+                            {cat.title}
+                            <ChevronDown
+                              className={`h-4 w-4 shrink-0 transition-transform duration-200 ${
+                                catOpen ? "rotate-180" : ""
+                              }`}
+                              aria-hidden="true"
+                            />
+                          </button>
+                          {catOpen ? (
+                            <ul className="space-y-1 pl-3">
+                              {items.map((p) => (
+                                <li key={p.slug}>
+                                  <Link
+                                    to="/termek/$slug"
+                                    params={{ slug: p.slug }}
+                                    onClick={closeMenu}
+                                    className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent"
+                                  >
+                                    {p.name}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : null}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
+              </li>
+
+              {/* Főmenü linkek */}
+              {mainLinks.map((l) => (
+                <li key={l.to}>
                   <Link
                     to={l.to}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-accent"
+                    onClick={closeMenu}
+                    className="block min-h-11 rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-accent"
                   >
                     {l.label}
                   </Link>
                 </li>
               ))}
+
+              {/* Konzultáció gomb */}
+              <li>
+                <Link
+                  to="/konzultacio"
+                  onClick={closeMenu}
+                  className="mt-1 block min-h-11 rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                >
+                  Konzultációt kérek
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
