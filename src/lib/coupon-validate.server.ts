@@ -217,15 +217,17 @@ async function evaluatePromotionCode(input: CouponCheckInput): Promise<CouponChe
       };
     }
 
-    const minimum = promo.restrictions?.minimum_amount;
+    const rawMinimum = promo.restrictions?.minimum_amount;
+    // Stripe stores the minimum in minor units (fillér); the order total arrives in forints.
+    const minimum = typeof rawMinimum === "number" ? Math.round(rawMinimum / 100) : undefined;
     if (typeof minimum === "number" && typeof input.amount === "number") {
-      const orderMinor = Math.round(input.amount);
-      if (orderMinor < minimum) {
+      const orderAmount = Math.round(input.amount);
+      if (orderAmount < minimum) {
         return {
           ok: false,
           reason: "below_minimum",
           message: "A rendelés összege nem éri el a kupon alsó határát.",
-          detail: `A kód ${formatHuf(minimum)} feletti rendelésnél váltható be, a jelenlegi összeg ${formatHuf(orderMinor)}.`,
+          detail: `A kód ${formatHuf(minimum)} feletti rendelésnél váltható be, a jelenlegi összeg ${formatHuf(orderAmount)}.`,
         };
       }
     }
