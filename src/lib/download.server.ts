@@ -36,6 +36,26 @@ function formatDate(value: Date): string {
 }
 
 /**
+ * Name the buyer sees when downloading. The storage object name is fixed
+ * (product-derived), but the admin's latest uploaded file name wins here, so a
+ * new yearly version arrives under its own name without any code change.
+ */
+async function downloadFileName(slug: string, fallback: string): Promise<string> {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data } = await supabaseAdmin
+      .from("product_file_versions")
+      .select("file_name")
+      .eq("product_slug", slug)
+      .maybeSingle();
+    const name = data?.file_name as string | undefined;
+    return name && name.trim() ? name.trim() : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+/**
  * Creates a single-order download token for the purchased file and emails the
  * link to the buyer. Idempotent: an existing, still-valid token is reused.
  */
@@ -80,6 +100,11 @@ export async function issueDownload(order: OrderRow): Promise<void> {
     ? new Date(existing.expires_at as string)
     : new Date(Date.now() + EXPIRY_DAYS * 24 * 60 * 60 * 1000);
 
+  const currentFileName = await downloadFileName(
+    order.product_slug,
+    product.download.fileName,
+  );
+
   if (!token) {
     token = newToken();
     const { error } = await supabaseAdmin.from("order_downloads").insert({
@@ -87,7 +112,7 @@ export async function issueDownload(order: OrderRow): Promise<void> {
       order_number: order.order_number,
       product_slug: order.product_slug,
       storage_path: product.download.storagePath,
-      file_name: product.download.fileName,
+      file_name: currentFileName,
       token,
       email: order.email,
       max_downloads: MAX_DOWNLOADS,
@@ -112,14 +137,14 @@ export async function issueDownload(order: OrderRow): Promise<void> {
         name: order.billing_name,
         orderNumber: order.order_number,
         productName: productLabel,
-        fileName: product.download.fileName,
+        fileName: currentFileName,
         downloadUrl: `${siteOrigin()}/api/public/letoltes/${token}`,
         expiresAt: formatDate(expiresAt),
         maxDownloads: MAX_DOWNLOADS,
         rows: [
           ["Termék", order.product_name],
           ...(order.tier_label ? [["Licenc csomag", order.tier_label] as [string, string]] : []),
-          ["Fájl", product.download.fileName],
+          ["Fájl", currentFileName],
           ["Elérhető eddig", formatDate(expiresAt)],
         ] as Array<[string, string]>,
       },
@@ -140,7 +165,7 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
 
   const { data: row, error } = await supabaseAdmin
     .from("order_downloads")
-    .select("id, storage_path, file_name, download_count, max_downloads, expires_at")
+    .select("id, storage_path, file_name, product_slug, download_count, max_downloads, expires_at")
     .eq("token", token)
     .maybeSingle();
 
@@ -156,10 +181,16 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
     return { ok: false, reason: "limit" };
   }
 
+  // Always serve the newest uploaded name, even for tokens issued earlier.
+  const serveName = await downloadFileName(
+    row.product_slug as string,
+    row.file_name as string,
+  );
+
   const { data: signed, error: signError } = await supabaseAdmin.storage
     .from(BUCKET)
     .createSignedUrl(row.storage_path as string, 300, {
-      download: row.file_name as string,
+      download: serveName,
     });
 
   if (signError || !signed?.signedUrl) {

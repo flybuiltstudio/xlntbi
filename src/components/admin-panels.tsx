@@ -5,6 +5,7 @@ import { Eye, EyeOff, KeyRound } from "lucide-react";
 import {
   adminApproveTransfer,
   adminCreateProductUploadUrl,
+  adminRecordProductFileVersion,
   adminCreateUser,
   adminDeleteCalculatorOverride,
   adminDeleteUser,
@@ -1686,6 +1687,7 @@ const fileInputClass =
 export function ProductVersionPanel() {
   const loadFiles = useServerFn(adminListProductFiles);
   const createUploadUrl = useServerFn(adminCreateProductUploadUrl);
+  const recordVersion = useServerFn(adminRecordProductFileVersion);
 
   const downloadable = useMemo(
     () => products.filter((p) => p.status === "available" && p.download),
@@ -1748,6 +1750,11 @@ export function ProductVersionPanel() {
       });
       if (!ticket.ok) throw new Error(ticket.error);
       await uploadWithProgress(ticket.path, ticket.token, file, setProgress);
+      // The product decides the storage target; the uploaded name only becomes
+      // the name buyers see on download.
+      await recordVersion({
+        data: { slug: selected.slug, fileName: file.name, fileSize: file.size },
+      });
       setMessage(
         `${selected.name}: új verzió feltöltve (${file.name}, ${formatFileSize(file.size)}). ` +
           "A korábbi vásárlók letöltő linkjei mostantól az új verziót szolgálják ki.",
@@ -1766,9 +1773,11 @@ export function ProductVersionPanel() {
     <section className="mt-10 rounded-xl border border-border bg-card p-6">
       <h2 className="text-xl font-bold text-foreground">Termék új verziója</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        A kiválasztott termék határozza meg, melyik fájl cserélődik — a feltöltött
-        fájl neve nem számít. A régi fájl felülíródik, a meglévő letöltő linkek
-        érvényesek maradnak.
+        A kiválasztott <strong>termék</strong> határozza meg, melyik fájl
+        cserélődik — a feltöltött fájl nevének nem kell egyeznie a korábbival. A
+        régi fájl felülíródik, a meglévő letöltő linkek érvényesek maradnak, és
+        a vásárlók mostantól a most feltöltött fájlnéven kapják meg az új
+        verziót.
       </p>
 
       <div className="mt-6 flex flex-col gap-4">
@@ -1800,6 +1809,10 @@ export function ProductVersionPanel() {
           <div className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm">
             <p className="font-medium text-foreground">
               Jelenlegi fájl: <span className="font-mono">{meta?.fileName ?? "…"}</span>
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Tárolt fájl (állandó, ez biztosítja a régi linkek működését):{" "}
+              <span className="font-mono">{meta?.storageFileName ?? "…"}</span>
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               Méret: {formatFileSize(meta?.size ?? null)}

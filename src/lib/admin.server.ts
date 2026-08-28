@@ -851,7 +851,10 @@ const CALCULATOR_UPLOAD_MAX_BYTES = 5 * 1024 * 1024; // 5 MB
 
 export type ProductFileInfo = {
   slug: string;
+  /** Name the buyer sees on download — the latest uploaded file's own name. */
   fileName: string;
+  /** Fixed object name inside storage; never changes, so links stay valid. */
+  storageFileName: string;
   size: number | null;
   updatedAt: string | null;
 };
@@ -860,6 +863,13 @@ export type ProductFileInfo = {
 export async function listProductFiles(): Promise<ProductFileInfo[]> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { products } = await import("@/lib/products");
+  const { data: versionRows } = await supabaseAdmin
+    .from("product_file_versions")
+    .select("product_slug, file_name");
+  const overrides = new Map<string, string>();
+  for (const row of versionRows ?? []) {
+    overrides.set(row.product_slug as string, row.file_name as string);
+  }
   const result: ProductFileInfo[] = [];
   for (const product of products) {
     const download = product.status === "available" ? product.download : undefined;
@@ -874,12 +884,45 @@ export async function listProductFiles(): Promise<ProductFileInfo[]> {
     const meta = entry?.metadata as { size?: unknown } | null | undefined;
     result.push({
       slug: product.slug,
-      fileName,
+      fileName: overrides.get(product.slug) ?? download.fileName ?? fileName,
+      storageFileName: fileName,
       size: meta && typeof meta.size === "number" ? meta.size : null,
       updatedAt: entry?.updated_at ?? entry?.created_at ?? null,
     });
   }
   return result;
+}
+
+/**
+ * Remembers the name of the file the admin just uploaded for a product.
+ * The storage object keeps its fixed, product-derived path, so existing links
+ * never break; only the name buyers see when downloading follows the upload.
+ */
+export async function recordProductFileVersion(input: {
+  slug: string;
+  fileName: string;
+  fileSize: number;
+  uploadedBy?: string | null;
+}): Promise<{ ok: boolean; error?: string }> {
+  const { products } = await import("@/lib/products");
+  const product = products.find((p) => p.slug === input.slug);
+  const download = product?.status === "available" ? product.download : undefined;
+  if (!product || !download) return { ok: false, error: "Ismeretlen termék." };
+  const cleanName = input.fileName.split(/[\\/]/).pop()?.trim() ?? "";
+  if (!cleanName) return { ok: false, error: "Érvénytelen fájlnév." };
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin.from("product_file_versions").upsert(
+    {
+      product_slug: product.slug,
+      file_name: cleanName,
+      size: input.fileSize,
+      uploaded_by: input.uploadedBy ?? null,
+      uploaded_at: new Date().toISOString(),
+    },
+    { onConflict: "product_slug" },
+  );
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
 }
 
 /**
