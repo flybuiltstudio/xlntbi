@@ -11,7 +11,7 @@ Ugyanaz a kezelés, mint a Bérszámfejtőnél és a Beszámolónál: évszám k
 
 ## Mit módosítunk
 
-1. `src/lib/products.ts` — név, slug, metaTitle, metaDescription, priceId-k, letöltési fájlnév/útvonal évszám nélkül. A bevezetőből és a jellemzőkből kikerül a „2665”, „2026-os bevalláshoz igazítva” és a „2025 júliustól” évhez kötött megfogalmazás (a f1–f4 / h1–h4 oszlopok említése marad, évszám nélkül).
+1. `src/lib/products.ts` — név, slug, metaTitle, metaDescription, priceId-k, letöltési fájlnév/útvonal évszám nélkül. A bevezetőből és a jellemzőkből kikerül a „2665” és a „2026-os bevalláshoz igazítva” megfogalmazás; a „2025 júliustól elérhető f1–f4 és h1–h4 oszlopok” említése változatlanul marad.
 2. Mindkét licenc `note` mezőjéhez bekerül: „A megvásárolt licenc a megrendelés évére érvényes – a szabályok évi változása miatt évente új verziót kell vásárolni.” Ugyanez a mondat a bevezető leírás végére is, hogy a pénztárnál és a termékoldalon is látszódjon. Licenc továbbra is kettő (1 cég 34 900 Ft, Korlátlan 99 900 Ft) — nem módosul.
 3. `src/routes/termek.afa-2665-xml-generalo.tsx` → átnevezés `termek.afa-ev65-xml-generalo.tsx`-re; TITLE, DESCRIPTION, H1, CANONICAL, JSON-LD (név, leírás, URL, breadcrumb) évszám nélkül.
 4. `src/lib/product-categories.ts` — slug frissítése a kategóriában (helye változatlan).
