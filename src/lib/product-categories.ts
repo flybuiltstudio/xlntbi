@@ -21,7 +21,7 @@ export const productCategories: ProductCategory[] = [
     key: "berszamfejtes",
     title: "Bérszámfejtés",
     image: berszamfejtesImg,
-    slugs: ["berszamfejto-2026"],
+    slugs: ["berszamfejto"],
   },
   {
     key: "szamla-nyugta",
