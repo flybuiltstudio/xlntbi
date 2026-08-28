@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "A60 összesítő nyilatkozat XML generáló | EXCELlent Business Intelligence";
-const DESCRIPTION = "Készítsd el gyorsan a NAV kompatibilis XML fájlt az A60 összesítő nyilatkozathoz, Excel alapú adatokból kiindulva.";
-const H1 = "A60 összesítő nyilatkozat XML generáló";
+const TITLE = "ÉVA60 összesítő nyilatkozat XML-generáló | EXCELlent Business Intelligence";
+const DESCRIPTION = "Készítsd el gyorsan a NAV-kompatibilis XML fájlt az A60 összesítő nyilatkozathoz, Excel alapú adatokból. A licenc a megrendelés évére érvényes.";
+const H1 = "ÉVA60 összesítő nyilatkozat XML-generáló";
 const CANONICAL = "https://xlntbi.hu/termek/a60-osszesito-nyilatkozat-xml";
 const OG_IMAGE = "https://xlntbi.hu/og/controlling.jpg";
 
@@ -31,8 +31,8 @@ export const Route = createFileRoute("/termek/a60-osszesito-nyilatkozat-xml")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "A60 összesítő nyilatkozat XML generáló",
-                  "description": "Készítsd el gyorsan a NAV kompatibilis XML fájlt az A60 összesítő nyilatkozathoz, Excel alapú adatokból kiindulva.",
+                  "name": "ÉVA60 összesítő nyilatkozat XML-generáló",
+                  "description": "Készítsd el gyorsan a NAV-kompatibilis XML fájlt az A60 összesítő nyilatkozathoz, Excel alapú adatokból. A licenc a megrendelés évére érvényes.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/a60-osszesito-nyilatkozat-xml",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/a60-osszesito-nyilatkozat-xml")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "A60 összesítő nyilatkozat XML generáló",
+                                      "name": "ÉVA60 összesítő nyilatkozat XML-generáló",
                                       "item": "https://xlntbi.hu/termek/a60-osszesito-nyilatkozat-xml"
                             }
                   ]
