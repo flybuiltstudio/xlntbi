@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Bérszámfejtő program 2026 | EXCELlent Business Intelligence";
-const DESCRIPTION = "Excel alapú bérszámfejtő program a 2026-os szabályok szerint, gyors és pontos bérszámfejtéshez kis és közepes cégeknek.";
-const H1 = "Bérszámfejtő 2026";
-const CANONICAL = "https://xlntbi.hu/termek/berszamfejto-2026";
+const TITLE = "Bérszámfejtő program | EXCELlent Business Intelligence";
+const DESCRIPTION = "Excel alapú bérszámfejtő program az aktuális szabályok szerint, gyors és pontos bérszámfejtéshez kis és közepes cégeknek.";
+const H1 = "Bérszámfejtő";
+const CANONICAL = "https://xlntbi.hu/termek/berszamfejto";
 const OG_IMAGE = "https://xlntbi.hu/og/konyveloiroda-audit.jpg";
 
-export const Route = createFileRoute("/termek/berszamfejto-2026")({
+export const Route = createFileRoute("/termek/berszamfejto")({
   head: () => ({
     meta: [
       { title: TITLE },
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/termek/berszamfejto-2026")({
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [
-      { rel: "canonical", href: "https://xlntbi.hu/termek/berszamfejto-2026" },
+      { rel: "canonical", href: "https://xlntbi.hu/termek/berszamfejto" },
     ],
     scripts: [
       {
@@ -31,11 +31,11 @@ export const Route = createFileRoute("/termek/berszamfejto-2026")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Bérszámfejtő 2026",
-                  "description": "Excel alapú bérszámfejtő program a 2026-os szabályok szerint, gyors és pontos bérszámfejtéshez kis és közepes cégeknek.",
+                  "name": "Bérszámfejtő",
+                  "description": "Excel alapú bérszámfejtő program az aktuális szabályok szerint, gyors és pontos bérszámfejtéshez kis és közepes cégeknek.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
-                  "url": "https://xlntbi.hu/termek/berszamfejto-2026",
+                  "url": "https://xlntbi.hu/termek/berszamfejto",
                   "image": "https://xlntbi.hu/og/konyveloiroda-audit.jpg",
                   "inLanguage": "hu",
                   "brand": {
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/termek/berszamfejto-2026")({
                             "price": "24900",
                             "priceCurrency": "HUF",
                             "availability": "https://schema.org/InStock",
-                            "url": "https://xlntbi.hu/termek/berszamfejto-2026"
+                            "url": "https://xlntbi.hu/termek/berszamfejto"
                   }
         }),
       },
@@ -72,8 +72,8 @@ export const Route = createFileRoute("/termek/berszamfejto-2026")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Bérszámfejtő 2026",
-                                      "item": "https://xlntbi.hu/termek/berszamfejto-2026"
+                                      "name": "Bérszámfejtő",
+                                      "item": "https://xlntbi.hu/termek/berszamfejto"
                             }
                   ]
         }),
@@ -84,5 +84,5 @@ export const Route = createFileRoute("/termek/berszamfejto-2026")({
 });
 
 function ProductRoute() {
-  return <ProductDetail slug="berszamfejto-2026" h1={H1} />;
+  return <ProductDetail slug="berszamfejto" h1={H1} />;
 }
