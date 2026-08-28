@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "NAV Online Számla letöltő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT NAV Online Számla letöltő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Töltsd le automatikusan a NAV Online Számla rendszeréből a bejövő és kimenő számlák adatait, könyvelésre kész formátumban.";
-const H1 = "NAV Online Számla letöltő";
+const H1 = "XLNT NAV Online Számla letöltő";
 const CANONICAL = "https://xlntbi.hu/termek/nav-online-szamla-letolto";
 const OG_IMAGE = "https://xlntbi.hu/og/nav-online-szamla-letolto.jpg";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/nav-online-szamla-letolto")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "NAV Online Számla letöltő",
+                  "name": "XLNT NAV Online Számla letöltő",
                   "description": "Töltsd le automatikusan a NAV Online Számla rendszeréből a bejövő és kimenő számlák adatait, könyvelésre kész formátumban.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/nav-online-szamla-letolto")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "NAV Online Számla letöltő",
+                                      "name": "XLNT NAV Online Számla letöltő",
                                       "item": "https://xlntbi.hu/termek/nav-online-szamla-letolto"
                             }
                   ]

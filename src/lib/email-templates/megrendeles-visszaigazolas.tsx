@@ -76,11 +76,11 @@ export const template = {
   previewData: {
     name: 'Kovács Anna',
     orderNumber: 'XLNT-20260819-1234',
-    productName: 'NAV Online Számla letöltő (1 db)',
+    productName: 'XLNT NAV Online Számla letöltő (1 db)',
     total: '19 900 Ft',
     paymentStatus: 'unpaid',
     rows: [
-      ['Termék', 'NAV Online Számla letöltő (1 db)'],
+      ['Termék', 'XLNT NAV Online Számla letöltő (1 db)'],
       ['Egységár', '19 900 Ft'],
       ['Fizetendő', '19 900 Ft'],
       ['Számlázási név', 'Kovács Anna'],

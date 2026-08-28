@@ -45,13 +45,13 @@ export const template = {
   displayName: 'Belső értesítő – megrendelés',
   previewData: {
     orderNumber: 'XLNT-20260819-1234',
-    productName: 'NAV Online Számla letöltő (1 db)',
+    productName: 'XLNT NAV Online Számla letöltő (1 db)',
     total: '19 900 Ft',
     customerEmail: 'anna@pelda.hu',
     paymentStatus: 'unpaid',
     rows: [
       ['Rendelésszám', 'XLNT-20260819-1234'],
-      ['Termék', 'NAV Online Számla letöltő (1 db)'],
+      ['Termék', 'XLNT NAV Online Számla letöltő (1 db)'],
       ['Fizetendő', '19 900 Ft'],
       ['Számlázási név', 'Kovács Anna'],
       ['E-mail', 'anna@pelda.hu'],

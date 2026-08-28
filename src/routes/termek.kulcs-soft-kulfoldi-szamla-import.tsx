@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Kulcs-Soft Bejövő Külföldi Számla Import | EXCELlent Business Intelligence";
+const TITLE = "XLNT Kulcs-Soft Bejövő Külföldi Számla Import | EXCELlent Business Intelligence";
 const DESCRIPTION =
   "Excel-alapú importáló eszköz könyvelőirodáknak: EU-s és harmadik országbeli bejövő számlák Kulcs-Soft CSV importja, kézi rögzítés nélkül.";
-const H1 = "Kulcs-Soft Bejövő Külföldi Számla Import";
+const H1 = "XLNT Kulcs-Soft Bejövő Külföldi Számla Import";
 const CANONICAL = "https://xlntbi.hu/termek/kulcs-soft-kulfoldi-szamla-import";
 const OG_IMAGE = "https://xlntbi.hu/og/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
 

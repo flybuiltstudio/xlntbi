@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "KULCS-SOFT nyitó és vegyes könyvelő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT KULCS-SOFT nyitó és vegyes könyvelő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Generálj nyitó és vegyes könyvelési tételeket a KULCS-SOFT könyvelőprogramhoz gyorsan, Excel alapú sablonból.";
-const H1 = "KULCS-SOFT nyitó, vegyes könyvelő";
+const H1 = "XLNT KULCS-SOFT nyitó, vegyes könyvelő";
 const CANONICAL = "https://xlntbi.hu/termek/kulcs-nyito-vegyes-konyvelo";
 const OG_IMAGE = "https://xlntbi.hu/og/nyito-vegyes-konyvelo.jpg";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/kulcs-nyito-vegyes-konyvelo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "KULCS-SOFT nyitó, vegyes könyvelő",
+                  "name": "XLNT KULCS-SOFT nyitó, vegyes könyvelő",
                   "description": "Generálj nyitó és vegyes könyvelési tételeket a KULCS-SOFT könyvelőprogramhoz gyorsan, Excel alapú sablonból.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/kulcs-nyito-vegyes-konyvelo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "KULCS-SOFT nyitó, vegyes könyvelő",
+                                      "name": "XLNT KULCS-SOFT nyitó, vegyes könyvelő",
                                       "item": "https://xlntbi.hu/termek/kulcs-nyito-vegyes-konyvelo"
                             }
                   ]

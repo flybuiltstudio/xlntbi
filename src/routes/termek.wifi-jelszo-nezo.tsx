@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "WiFi jelszó néző program | EXCELlent Business Intelligence";
+const TITLE = "XLNT WiFi jelszó néző program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Nézd meg egyszerűen a számítógépeden korábban mentett WiFi hálózatok jelszavait egy kattintással.";
-const H1 = "WiFi jelszó néző";
+const H1 = "XLNT WiFi jelszó néző";
 const CANONICAL = "https://xlntbi.hu/termek/wifi-jelszo-nezo";
 const OG_IMAGE = "https://xlntbi.hu/og/wifi-jelszo-nezo.jpg";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/wifi-jelszo-nezo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "WiFi jelszó néző",
+                  "name": "XLNT WiFi jelszó néző",
                   "description": "Nézd meg egyszerűen a számítógépeden korábban mentett WiFi hálózatok jelszavait egy kattintással.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/wifi-jelszo-nezo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "WiFi jelszó néző",
+                                      "name": "XLNT WiFi jelszó néző",
                                       "item": "https://xlntbi.hu/termek/wifi-jelszo-nezo"
                             }
                   ]

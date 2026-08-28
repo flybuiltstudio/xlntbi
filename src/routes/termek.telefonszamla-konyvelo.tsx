@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Telefonszámla könyvelő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT Telefonszámla könyvelő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Dolgozd fel és könyveld automatikusan a céges telefonszámlák tételeit, magán és üzleti hívások szétválasztásával.";
-const H1 = "Telefonszámla könyvelő";
+const H1 = "XLNT Telefonszámla könyvelő";
 const CANONICAL = "https://xlntbi.hu/termek/telefonszamla-konyvelo";
 const OG_IMAGE = "https://xlntbi.hu/og/termekek.jpg";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/telefonszamla-konyvelo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Telefonszámla könyvelő",
+                  "name": "XLNT Telefonszámla könyvelő",
                   "description": "Dolgozd fel és könyveld automatikusan a céges telefonszámlák tételeit, magán és üzleti hívások szétválasztásával.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/telefonszamla-konyvelo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Telefonszámla könyvelő",
+                                      "name": "XLNT Telefonszámla könyvelő",
                                       "item": "https://xlntbi.hu/termek/telefonszamla-konyvelo"
                             }
                   ]

@@ -94,7 +94,7 @@ export const template = {
   previewData: {
     name: 'Kovács Anna',
     orderNumber: 'XLNT-20260819-1234',
-    productName: 'NAV Online Számla letöltő – Örökös licenc (1 db)',
+    productName: 'XLNT NAV Online Számla letöltő – Örökös licenc (1 db)',
     fileName: 'nav-online-szamla-letolto.zip',
     downloadUrl: 'https://xlntbi.hu/letoltes/abc123',
     expiresAt: '2026. 09. 02.',

@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Bérszámfejtő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT Bérszámfejtő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Excel alapú bérszámfejtő program az aktuális szabályok szerint, gyors és pontos bérszámfejtéshez kis és közepes cégeknek.";
-const H1 = "Bérszámfejtő";
+const H1 = "XLNT Bérszámfejtő";
 const CANONICAL = "https://xlntbi.hu/termek/berszamfejto";
 const OG_IMAGE = "https://xlntbi.hu/og/konyveloiroda-audit.jpg";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/berszamfejto")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Bérszámfejtő",
+                  "name": "XLNT Bérszámfejtő",
                   "description": "Excel alapú bérszámfejtő program az aktuális szabályok szerint, gyors és pontos bérszámfejtéshez kis és közepes cégeknek.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/berszamfejto")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Bérszámfejtő",
+                                      "name": "XLNT Bérszámfejtő",
                                       "item": "https://xlntbi.hu/termek/berszamfejto"
                             }
                   ]

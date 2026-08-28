@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Univerzális bankkivonat konverter | EXCELlent Business Intelligence";
+const TITLE = "XLNT Univerzális bankkivonat konverter | EXCELlent Business Intelligence";
 const DESCRIPTION = "Alakíts át bármely bank kivonatát a könyvelőprogramod által elfogadott formátumra, rugalmasan testreszabható beállításokkal.";
-const H1 = "Univerzális bank konverter";
+const H1 = "XLNT Univerzális bank konverter";
 const CANONICAL = "https://xlntbi.hu/termek/univerzalis-bank-konverter";
 const OG_IMAGE = "https://xlntbi.hu/og/online-kalkulator.jpg";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/univerzalis-bank-konverter")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Univerzális bank konverter",
+                  "name": "XLNT Univerzális bank konverter",
                   "description": "Alakíts át bármely bank kivonatát a könyvelőprogramod által elfogadott formátumra, rugalmasan testreszabható beállításokkal.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/univerzalis-bank-konverter")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Univerzális bank konverter",
+                                      "name": "XLNT Univerzális bank konverter",
                                       "item": "https://xlntbi.hu/termek/univerzalis-bank-konverter"
                             }
                   ]

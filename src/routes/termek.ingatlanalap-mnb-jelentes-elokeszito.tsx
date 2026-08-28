@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Ingatlanalap MNB Jelentés-előkészítő (NEÉ, 50A, 51M) | XLNTBI";
+const TITLE = "XLNT Ingatlanalap MNB Jelentés-előkészítő (NEÉ, 50A, 51M) | XLNTBI";
 const DESCRIPTION =
   "NEÉ-számoló, 51M ingatlankitettség és 50A jelentéslap egy Excel-munkafüzetben, beépített ERA/STEFI generátorral. Egyetlen licenc, 39 900 Ft AAM.";
-const H1 = "Ingatlanalap MNB Jelentés-előkészítő – NEÉ Számoló és ERA/STEFI Generátor";
+const H1 = "XLNT Ingatlanalap MNB Jelentés-előkészítő – NEÉ Számoló és ERA/STEFI Generátor";
 const CANONICAL = "https://xlntbi.hu/termek/ingatlanalap-mnb-jelentes-elokeszito";
 const OG_IMAGE = "https://xlntbi.hu/og/ingatlanalap-mnb-jelentes-elokeszito.jpg";
 

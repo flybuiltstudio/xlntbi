@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Késedelmi kamat és pótlékszámító program | EXCELlent Business Intelligence";
+const TITLE = "XLNT Késedelmi kamat és pótlékszámító program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Számold ki gyorsan és pontosan a késedelmi kamatot és az adóhatósági pótlékot a hatályos jegybanki alapkamat alapján.";
-const H1 = "Kamatlekérdező, pótlékszámító";
+const H1 = "XLNT Kamatlekérdező, pótlékszámító";
 const CANONICAL = "https://xlntbi.hu/termek/kamatlekerdezo-potlekszamito";
 const OG_IMAGE = "https://xlntbi.hu/og/kamatlekerdezo-potlekszamito.jpg";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/kamatlekerdezo-potlekszamito")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Kamatlekérdező, pótlékszámító",
+                  "name": "XLNT Kamatlekérdező, pótlékszámító",
                   "description": "Számold ki gyorsan és pontosan a késedelmi kamatot és az adóhatósági pótlékot a hatályos jegybanki alapkamat alapján.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/kamatlekerdezo-potlekszamito")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Kamatlekérdező, pótlékszámító",
+                                      "name": "XLNT Kamatlekérdező, pótlékszámító",
                                       "item": "https://xlntbi.hu/termek/kamatlekerdezo-potlekszamito"
                             }
                   ]

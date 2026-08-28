@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Monthly Financial Report Template | EXCELlent Business Intelligence";
+const TITLE = "XLNT Monthly Financial Report Template | EXCELlent Business Intelligence";
 const DESCRIPTION = "Automated monthly financial report template that gives a clear overview of your company's performance and key metrics.";
-const H1 = "Monthly Report";
+const H1 = "XLNT Monthly Report";
 const CANONICAL = "https://xlntbi.hu/termek/havi-riport-en";
 const OG_IMAGE = "https://xlntbi.hu/og/bi.jpg";
 
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/termek/havi-riport-en")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Monthly Report",
+                  "name": "XLNT Monthly Report",
                   "description": "Automated monthly financial report template that gives a clear overview of your company's performance and key metrics.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -75,7 +75,7 @@ export const Route = createFileRoute("/termek/havi-riport-en")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Monthly Report",
+                                      "name": "XLNT Monthly Report",
                                       "item": "https://xlntbi.hu/termek/havi-riport-en"
                             }
                   ]

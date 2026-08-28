@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "RLB bank konverter – alap kiadás banki kivonat importhoz | EXCELlent Business Intelligence";
+const TITLE = "XLNT RLB bank konverter – alap kiadás banki kivonat importhoz | EXCELlent Business Intelligence";
 const DESCRIPTION = "Az alap kiadás: alakítsd át és importáld a banki kivonatokat egyszerűen az RLB könyvelőprogramba, kézi adatrögzítés nélkül. Bővített funkciókért válaszd a PRO verziót.";
-const H1 = "RLB bank konverter";
+const H1 = "XLNT RLB bank konverter";
 const CANONICAL = "https://xlntbi.hu/termek/rlb-bank-konverter";
 const OG_IMAGE = "https://xlntbi.hu/og/rlb-bank-konverter.jpg";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/rlb-bank-konverter")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "RLB bank konverter",
+                  "name": "XLNT RLB bank konverter",
                   "description": "Az alap kiadás: alakítsd át és importáld a banki kivonatokat egyszerűen az RLB könyvelőprogramba, kézi adatrögzítés nélkül. Bővített funkciókért válaszd a PRO verziót.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/rlb-bank-konverter")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "RLB bank konverter",
+                                      "name": "XLNT RLB bank konverter",
                                       "item": "https://xlntbi.hu/termek/rlb-bank-konverter"
                             }
                   ]

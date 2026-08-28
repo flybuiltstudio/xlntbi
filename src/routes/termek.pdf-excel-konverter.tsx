@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "PDF Excel konverter könyvelőknek | EXCELlent Business Intelligence";
+const TITLE = "XLNT PDF Excel konverter könyvelőknek | EXCELlent Business Intelligence";
 const DESCRIPTION = "Alakíts át PDF dokumentumokat, kimutatásokat és bankkivonatokat gyorsan szerkeszthető Excel táblázattá.";
-const H1 = "PDF Excel konverter";
+const H1 = "XLNT PDF Excel konverter";
 const CANONICAL = "https://xlntbi.hu/termek/pdf-excel-konverter";
 const OG_IMAGE = "https://xlntbi.hu/og/pdf-excel-konverter.jpg";
 
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/pdf-excel-konverter")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "PDF Excel konverter",
+                  "name": "XLNT PDF Excel konverter",
                   "description": "Alakíts át PDF dokumentumokat, kimutatásokat és bankkivonatokat gyorsan szerkeszthető Excel táblázattá.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/pdf-excel-konverter")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "PDF Excel konverter",
+                                      "name": "XLNT PDF Excel konverter",
                                       "item": "https://xlntbi.hu/termek/pdf-excel-konverter"
                             }
                   ]
