@@ -578,6 +578,30 @@ export type Database = {
         }
         Relationships: []
       }
+      product_file_versions: {
+        Row: {
+          file_name: string
+          product_slug: string
+          size: number | null
+          uploaded_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          file_name: string
+          product_slug: string
+          size?: number | null
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          file_name?: string
+          product_slug?: string
+          size?: number | null
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
       product_placements: {
         Row: {
           category: string
