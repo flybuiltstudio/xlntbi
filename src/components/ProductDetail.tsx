@@ -81,7 +81,16 @@ const faq = [
 export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
   const product = getProduct(slug);
   usePageView("product", slug);
+  const fetchFileName = useServerFn(getProductFileName);
+  const { data: liveFile } = useQuery({
+    queryKey: ["product-file-name", slug],
+    queryFn: () => fetchFileName({ data: { slug } }),
+    staleTime: 5 * 60 * 1000,
+  });
   if (!product) return null;
+
+  const fileName = liveFile?.fileName ?? product.download?.fileName ?? null;
+
 
   const faqJsonLd = {
     "@context": "https://schema.org",
