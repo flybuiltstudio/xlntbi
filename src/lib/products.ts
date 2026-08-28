@@ -403,13 +403,6 @@ export const products: Product[] = [
         priceId: "berszamfejto_2026_alap",
       },
       {
-        id: "standard",
-        label: "Standard",
-        price: 39900,
-        note: "Több cég, bővített kimutatásokkal.",
-        priceId: "berszamfejto_2026_standard",
-      },
-      {
         id: "konyveloi",
         label: "Könyvelői",
         price: 74900,
