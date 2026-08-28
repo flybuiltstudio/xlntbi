@@ -7,7 +7,7 @@ rajzol ki ~20 elemmel: Főoldal, Szolgáltatásaim, 8 szolgáltatás-aloldal,
 és a 6 kalkulátor külön elválasztás nélkül sorjázik — átláthatatlan.
 
 ## Megoldás: harmonika (accordion) almenük
-A mobil menüben a `Termékeim`, `Kalkulátorok` és `Szolgáltatásaim` legyen
+A mobil menüben a `Szolgáltatásaim`, `Kalkulátorok` és `Termékeim` legyen
 kinyitható / becsukható blokk, mint a desktopos lenyíló menü, csak érintésre
 nyíló variánssal. A többi főmenü link (Főoldal, Oktatás, Rólam, Kapcsolat,
 Konzultáció) marad egyszerű link.
