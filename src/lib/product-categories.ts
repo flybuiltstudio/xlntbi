@@ -30,6 +30,7 @@ export const productCategories: ProductCategory[] = [
     slugs: [
       "nav-online-szamla-letolto",
       "nav-penztargep-letolto",
+      "telefonszamla-konyvelo",
       "rlb-kulfoldi-szamla-import",
       "kulcs-soft-kulfoldi-szamla-import",
       "penzszam-kulfoldi-szamla-import",
@@ -41,7 +42,6 @@ export const productCategories: ProductCategory[] = [
     title: "Vegyes könyvelés",
     image: vegyesImg,
     slugs: [
-      "telefonszamla-konyvelo",
       "utnyilvantartas-kikuldetesi-rendelveny",
       "kamatlekerdezo-potlekszamito",
       "rlb-nyito-vegyes-konyvelo",
