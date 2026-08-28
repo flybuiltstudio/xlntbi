@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 
-import { products } from "./product-name-fixtures";
 import { hasXlntPrefix, withXlntPrefix } from "./product-name";
 
 describe("withXlntPrefix", () => {
