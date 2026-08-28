@@ -23,6 +23,8 @@ import navOnlineSzamlaImg from "@/assets/nav-online-szamla-letolto.jpg";
 import mnbEraImg from "@/assets/mnb-era-jelentesgenerator.jpg";
 import ingatlanalapMnbImg from "@/assets/ingatlanalap-mnb-jelentes-elokeszito.jpg";
 
+import { hasXlntPrefix, withXlntPrefix } from "@/lib/product-name";
+
 export type ProductTier = {
   /** Stable, product-scoped tier id used in orders and URLs. */
   id: string;
@@ -1589,6 +1591,15 @@ export const products: Product[] = [
   },
 ];
 
+// Brand guard: every product name (and meta title) is served with the
+// "XLNT " prefix, even if a new entry above forgets it. Idempotent, so an
+// already prefixed name stays unchanged.
+for (const product of products) {
+  product.name = withXlntPrefix(product.name);
+  if (!hasXlntPrefix(product.metaTitle)) {
+    product.metaTitle = withXlntPrefix(product.metaTitle);
+  }
+}
 
 export const productSlugs = products.map((p) => p.slug);
 

@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 
 import { AAM_MODE } from "@/lib/aam";
 import { promotionCodesEnabled } from "@/lib/coupons";
+import { withXlntPrefix } from "@/lib/product-name";
 import {
   type StripeEnv,
   createStripeClient,
@@ -85,7 +86,7 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
         // price — the amount shown on the site is the final amount.
         automatic_tax: { enabled: !AAM_MODE },
         payment_intent_data: {
-          description: product.name,
+          description: withXlntPrefix(product.name),
           // Lets failure/refund webhooks resolve the order without a lookup.
           metadata: { orderNumber: data.orderNumber },
         },
