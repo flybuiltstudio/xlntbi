@@ -54,7 +54,8 @@ function computeBreakdown(
   if (coupon.percent_off) {
     discount = Math.round((original * coupon.percent_off) / 100);
   } else if (coupon.amount_off && String(coupon.currency ?? "huf").toLowerCase() === "huf") {
-    discount = Math.round(coupon.amount_off);
+    // Stripe stores HUF amounts in minor units (fillér).
+    discount = Math.round(coupon.amount_off / 100);
   } else {
     return {};
   }
