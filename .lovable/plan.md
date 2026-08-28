@@ -1,4 +1,4 @@
-# Mobil/táblagép menü: kinyitható almenük (Szolgáltatások, Kalkulátorok, Termékeim)
+# Mobil/táblagép menü: kinyitható almenük (Szolgáltatásaim, Kalkulátorok, Termékeim)
 
 ## Probléma
 A mobil és táblagépes menü (`min-[900px]:hidden`) jelenleg egyetlen lapos listát
@@ -7,7 +7,7 @@ rajzol ki ~20 elemmel: Főoldal, Szolgáltatásaim, 8 szolgáltatás-aloldal,
 és a 6 kalkulátor külön elválasztás nélkül sorjázik — átláthatatlan.
 
 ## Megoldás: harmonika (accordion) almenük
-A mobil menüben a `Termékeim`, `Kalkulátorok` és `Szolgáltatásaim` legyen
+A mobil menüben a `Szolgáltatásaim`, `Kalkulátorok` és `Termékeim` legyen
 kinyitható / becsukható blokk, mint a desktopos lenyíló menü, csak érintésre
 nyíló variánssal. A többi főmenü link (Főoldal, Oktatás, Rólam, Kapcsolat,
 Konzultáció) marad egyszerű link.
@@ -15,6 +15,12 @@ Konzultáció) marad egyszerű link.
 ### Új mobil menü szerkezete (sorrend)
 ```
 Főoldal                              → link
+Szolgáltatásaim   [chevron]         → kinyitható
+   Könyvelés, Adótanácsadás, Fintech és BI, Kontrolling, Cégaudit,
+   Könyvvizsgálat, Könyvelőiroda audit, Digitális időmegtakarítási audit
+Kalkulátorok       [chevron]         → kinyitható
+   Összes kalkulátor, Számla dátumok, Invoice Dates (EN),
+   Bérteszt, Jövedelemadó, Átalányadó
 Termékeim          [chevron]         → kinyitható (1. szint)
    Összes termék                     → link a /termekeim oldalra
    Bérszámfejtés              [chevron] → kinyitható (2. szint: kategória)
@@ -31,20 +37,15 @@ Termékeim          [chevron]         → kinyitható (1. szint)
       → termékadatlap-linkek
    Egyebek                    [chevron]
       → termékadatlap-linkek
-Kalkulátorok       [chevron]         → kinyitható
-   Összes kalkulátor, Számla dátumok, Invoice Dates (EN),
-   Bérteszt, Jövedelemadó, Átalányadó
-Szolgáltatásaim    [chevron]         → kinyitható
-   Könyvelés, Adótanácsadás, Fintech és BI, Kontrolling, Cégaudit,
-   Könyvvizsgálat, Könyvelőiroda audit, Digitális időmegtakarítási audit
 Oktatás                              → link
 Rólam                                → link
 Kapcsolat                            → link
 Konzultáció                          → gomb
 ```
 
-A sorrend megegyezik a desktop főnavigációval (a korábban jóváhagyott terv
-szerint: Főoldal → Termékeim → Kalkulátorok → Szolgáltatásaim → …).
+A sorrend megegyezik a desktop főnavigációval: **Főoldal → Szolgáltatásaim
+→ Kalkulátorok → Termékeim → Oktatás → Rólam → Kapcsolat → Konzultáció**.
+Szolgáltatás előre, Termékeim utána — ahogy kérted.
 
 ### Termékeim: kétszintű kinyíló (kategória → termékadatlap)
 - A `Termékeim` fejsor kinyitásakor először egy „Összes termék" link jelenik meg
