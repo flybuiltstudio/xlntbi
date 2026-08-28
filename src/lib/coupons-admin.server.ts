@@ -10,6 +10,7 @@
 
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "./stripe.server";
 import { products } from "./products";
+import { minorToHuf } from "./coupon-amount";
 
 export type DiscountType = "percent" | "amount";
 
@@ -208,6 +209,16 @@ export async function createAdminCoupon(input: CreateCouponInput): Promise<Admin
     if (!input.amountOff || input.amountOff <= 0) {
       throw new Error("A kedvezmény összege nagyobb kell legyen nullánál.");
     }
+    // amountOff arrives in Stripe minor units (fillér): it must be an integer,
+    // i.e. the forint input had at most two decimals.
+    if (!Number.isSafeInteger(input.amountOff)) {
+      throw new Error(
+        "A kedvezmény összege csak forintban, legfeljebb két tizedesjeggyel adható meg.",
+      );
+    }
+    if (minorToHuf(input.amountOff) > 10_000_000) {
+      throw new Error("A kedvezmény összege túl nagy (max. 10 000 000 Ft).");
+    }
     couponParams.amount_off = input.amountOff;
     couponParams.currency = (input.currency || "huf").toLowerCase();
   }
@@ -233,6 +244,11 @@ export async function createAdminCoupon(input: CreateCouponInput): Promise<Admin
   }
   if (input.maxRedemptions && input.maxRedemptions > 0) {
     promoParams.max_redemptions = input.maxRedemptions;
+  }
+  if (input.minAmount != null && !Number.isSafeInteger(input.minAmount)) {
+    throw new Error(
+      "A minimum rendelési összeg csak forintban, legfeljebb két tizedesjeggyel adható meg.",
+    );
   }
   if (input.minAmount && input.minAmount > 0) {
     promoParams.restrictions = {

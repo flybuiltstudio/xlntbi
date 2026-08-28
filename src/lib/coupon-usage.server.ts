@@ -7,6 +7,7 @@
  */
 
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "./stripe.server";
+import { describeDiscountRule } from "./coupon-amount";
 
 export type CouponUsageRow = {
   /** Stripe checkout session id. */
@@ -44,15 +45,7 @@ export type CouponUsageRow = {
 };
 
 function describeRule(coupon: any): string | null {
-  if (!coupon) return null;
-  if (coupon.percent_off) return `${coupon.percent_off}%`;
-  if (coupon.amount_off) {
-    const currency = String(coupon.currency ?? "huf").toUpperCase();
-    return currency === "HUF"
-      ? `${Math.round(coupon.amount_off / 100).toLocaleString("hu-HU")} Ft`
-      : `${coupon.amount_off / 100} ${currency}`;
-  }
-  return null;
+  return describeDiscountRule(coupon);
 }
 
 export async function listCouponUsage(
