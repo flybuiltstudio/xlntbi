@@ -71,7 +71,7 @@ export const productCategories: ProductCategory[] = [
       "havi-riport-en",
       "mnb-era-jelentesgenerator",
       "ingatlanalap-mnb-jelentes-elokeszito",
-      "beszamolo-2025",
+      "beszamolo",
       "szamviteli-konszolidalo",
       "ifrs-konszolidalo",
     ],
