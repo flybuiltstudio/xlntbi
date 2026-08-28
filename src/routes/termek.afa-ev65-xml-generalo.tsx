@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "ÉV65 ÁFA-bevallás ÁNYK XML-generáló | EXCELlent Business Intelligence";
-const DESCRIPTION = "Generálj gyorsan, hibamentesen NAV kompatibilis XML fájlt az ÉV65-ös ÁFA-bevalláshoz, Excelből kiindulva.";
-const H1 = "ÉV65 ÁFA-bevallás ÁNYK XML-generáló";
+const TITLE = "év65 ÁFA-bevallás ÁNYK XML-generáló | EXCELlent Business Intelligence";
+const DESCRIPTION = "Generálj gyorsan, hibamentesen NAV kompatibilis XML fájlt az év65-ös ÁFA-bevalláshoz, Excelből kiindulva.";
+const H1 = "év65 ÁFA-bevallás ÁNYK XML-generáló";
 const CANONICAL = "https://xlntbi.hu/termek/afa-ev65-xml-generalo";
 const OG_IMAGE = "https://xlntbi.hu/og/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
 
@@ -31,8 +31,8 @@ export const Route = createFileRoute("/termek/afa-ev65-xml-generalo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "ÉV65 ÁFA-bevallás ÁNYK XML-generáló",
-                  "description": "Generálj gyorsan, hibamentesen NAV kompatibilis XML fájlt az ÉV65-ös ÁFA-bevalláshoz, Excelből kiindulva.",
+                  "name": "év65 ÁFA-bevallás ÁNYK XML-generáló",
+                  "description": "Generálj gyorsan, hibamentesen NAV kompatibilis XML fájlt az év65-ös ÁFA-bevalláshoz, Excelből kiindulva.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/afa-ev65-xml-generalo",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/afa-ev65-xml-generalo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "ÉV65 ÁFA-bevallás ÁNYK XML-generáló",
+                                      "name": "év65 ÁFA-bevallás ÁNYK XML-generáló",
                                       "item": "https://xlntbi.hu/termek/afa-ev65-xml-generalo"
                             }
                   ]
