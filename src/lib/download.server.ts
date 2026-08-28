@@ -36,6 +36,26 @@ function formatDate(value: Date): string {
 }
 
 /**
+ * Name the buyer sees when downloading. The storage object name is fixed
+ * (product-derived), but the admin's latest uploaded file name wins here, so a
+ * new yearly version arrives under its own name without any code change.
+ */
+async function downloadFileName(slug: string, fallback: string): Promise<string> {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data } = await supabaseAdmin
+      .from("product_file_versions")
+      .select("file_name")
+      .eq("product_slug", slug)
+      .maybeSingle();
+    const name = data?.file_name as string | undefined;
+    return name && name.trim() ? name.trim() : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+/**
  * Creates a single-order download token for the purchased file and emails the
  * link to the buyer. Idempotent: an existing, still-valid token is reused.
  */
