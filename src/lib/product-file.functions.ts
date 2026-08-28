@@ -12,7 +12,7 @@ export const getProductFileName = createServerFn({ method: "GET" })
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       const { data: row } = await supabaseAdmin
         .from("product_file_versions")
-        .select("file_name, updated_at")
+        .select("file_name")
         .eq("product_slug", data.slug)
         .maybeSingle();
       const name = (row?.file_name as string | undefined)?.trim();
