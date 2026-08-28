@@ -201,7 +201,9 @@ async function fulfil(
       ? session.payment_intent
       : (session.payment_intent?.id ?? session.id);
 
-  const discountAmount = Number(session?.total_details?.amount_discount ?? 0) || 0;
+  // Stripe reports HUF in minor units (fillér) — convert to forints, which is
+  // what the orders table, the emails and the invoice use.
+  const discountAmount = Math.round((Number(session?.total_details?.amount_discount ?? 0) || 0) / 100);
   const promotionCodeId =
     typeof session?.discounts?.[0]?.promotion_code === "string"
       ? session.discounts[0].promotion_code
