@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/sup-nyito-vegyes-konyvelo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "SUP nyitó, vegyes könyvelő",
+                  "name": "XLNT SUP nyitó, vegyes könyvelő",
                   "description": "Generálj nyitó és vegyes könyvelési tételeket a SUP könyvelőrendszerhez gyorsan, Excel alapú sablonból kiindulva.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/sup-nyito-vegyes-konyvelo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "SUP nyitó, vegyes könyvelő",
+                                      "name": "XLNT SUP nyitó, vegyes könyvelő",
                                       "item": "https://xlntbi.hu/termek/sup-nyito-vegyes-konyvelo"
                             }
                   ]

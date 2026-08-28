@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/nav-penztargep-letolto")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "NAV pénztárgép adatok letöltő",
+                  "name": "XLNT NAV pénztárgép adatok letöltő",
                   "description": "Töltsd le és dolgozd fel automatikusan a NAV rendszeréből a pénztárgépes forgalmi adatokat, gyors ellenőrzéshez és könyveléshez.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/nav-penztargep-letolto")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "NAV pénztárgép adatok letöltő",
+                                      "name": "XLNT NAV pénztárgép adatok letöltő",
                                       "item": "https://xlntbi.hu/termek/nav-penztargep-letolto"
                             }
                   ]

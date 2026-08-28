@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/kulcs-nyito-vegyes-konyvelo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "KULCS-SOFT nyitó, vegyes könyvelő",
+                  "name": "XLNT KULCS-SOFT nyitó, vegyes könyvelő",
                   "description": "Generálj nyitó és vegyes könyvelési tételeket a KULCS-SOFT könyvelőprogramhoz gyorsan, Excel alapú sablonból.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/kulcs-nyito-vegyes-konyvelo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "KULCS-SOFT nyitó, vegyes könyvelő",
+                                      "name": "XLNT KULCS-SOFT nyitó, vegyes könyvelő",
                                       "item": "https://xlntbi.hu/termek/kulcs-nyito-vegyes-konyvelo"
                             }
                   ]

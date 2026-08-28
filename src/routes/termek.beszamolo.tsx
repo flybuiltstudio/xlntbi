@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/beszamolo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Éves beszámoló készítő",
+                  "name": "XLNT Éves beszámoló készítő",
                   "description": "Állítsd össze gyorsan, hibamentesen az éves beszámolót a hatályos szabályok szerint, Excel alapú sablonnal.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/beszamolo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Éves beszámoló készítő",
+                                      "name": "XLNT Éves beszámoló készítő",
                                       "item": "https://xlntbi.hu/termek/beszamolo"
                             }
                   ]

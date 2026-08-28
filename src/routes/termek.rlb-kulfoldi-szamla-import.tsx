@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/rlb-kulfoldi-szamla-import")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Külföldi számla import, RLB",
+                  "name": "XLNT Külföldi számla import, RLB",
                   "description": "Importáld gyorsan a külföldi bankszámlakivonatokat az RLB könyvelőprogramba, automatizált feldolgozással.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/rlb-kulfoldi-szamla-import")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Külföldi számla import, RLB",
+                                      "name": "XLNT Külföldi számla import, RLB",
                                       "item": "https://xlntbi.hu/termek/rlb-kulfoldi-szamla-import"
                             }
                   ]

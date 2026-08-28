@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/adofolyoszamla-egyezteto")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Adófolyószámla egyeztető",
+                  "name": "XLNT Adófolyószámla egyeztető",
                   "description": "Egyeztesd automatikusan a NAV adófolyószámla adatait a könyveléseddel, és szűrd ki gyorsan az eltéréseket.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/adofolyoszamla-egyezteto")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Adófolyószámla egyeztető",
+                                      "name": "XLNT Adófolyószámla egyeztető",
                                       "item": "https://xlntbi.hu/termek/adofolyoszamla-egyezteto"
                             }
                   ]

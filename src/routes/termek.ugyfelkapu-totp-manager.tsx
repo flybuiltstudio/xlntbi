@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/ugyfelkapu-totp-manager")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Ügyfélkapu TOTP kezelő",
+                  "name": "XLNT Ügyfélkapu TOTP kezelő",
                   "description": "Kezeld egy helyen több ügyfél Ügyfélkapus kétfaktoros hitelesítő kódjait, biztonságosan és gyorsan, könyvelőirodáknak.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/ugyfelkapu-totp-manager")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Ügyfélkapu TOTP kezelő",
+                                      "name": "XLNT Ügyfélkapu TOTP kezelő",
                                       "item": "https://xlntbi.hu/termek/ugyfelkapu-totp-manager"
                             }
                   ]

@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/szamviteli-konszolidalo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Számviteli konszolidáló",
+                  "name": "XLNT Számviteli konszolidáló",
                   "description": "Készíts konszolidált beszámolót cégcsoportodnak gyorsan és átláthatóan, magyar számviteli szabályok szerint.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/szamviteli-konszolidalo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Számviteli konszolidáló",
+                                      "name": "XLNT Számviteli konszolidáló",
                                       "item": "https://xlntbi.hu/termek/szamviteli-konszolidalo"
                             }
                   ]

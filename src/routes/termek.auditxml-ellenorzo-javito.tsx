@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/auditxml-ellenorzo-javito")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "AuditXML ellenőrző, javító",
+                  "name": "XLNT AuditXML ellenőrző, javító",
                   "description": "Ellenőrizd és javítsd gyorsan a NAV AuditXML (SAF-T) exportfájlokat, mielőtt beküldenéd vagy továbbadnád azokat.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/auditxml-ellenorzo-javito")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "AuditXML ellenőrző, javító",
+                                      "name": "XLNT AuditXML ellenőrző, javító",
                                       "item": "https://xlntbi.hu/termek/auditxml-ellenorzo-javito"
                             }
                   ]

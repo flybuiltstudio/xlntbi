@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/kamatlekerdezo-potlekszamito")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Kamatlekérdező, pótlékszámító",
+                  "name": "XLNT Kamatlekérdező, pótlékszámító",
                   "description": "Számold ki gyorsan és pontosan a késedelmi kamatot és az adóhatósági pótlékot a hatályos jegybanki alapkamat alapján.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/kamatlekerdezo-potlekszamito")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Kamatlekérdező, pótlékszámító",
+                                      "name": "XLNT Kamatlekérdező, pótlékszámító",
                                       "item": "https://xlntbi.hu/termek/kamatlekerdezo-potlekszamito"
                             }
                   ]

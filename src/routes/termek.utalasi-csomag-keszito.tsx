@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/utalasi-csomag-keszito")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Utalási csomag készítő",
+                  "name": "XLNT Utalási csomag készítő",
                   "description": "Generálj gyorsan banki utalási csomagot (pl. bér, szállítói) Excel adatokból, a bankod által elfogadott formátumban.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/utalasi-csomag-keszito")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Utalási csomag készítő",
+                                      "name": "XLNT Utalási csomag készítő",
                                       "item": "https://xlntbi.hu/termek/utalasi-csomag-keszito"
                             }
                   ]

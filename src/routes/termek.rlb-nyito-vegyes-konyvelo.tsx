@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/rlb-nyito-vegyes-konyvelo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "RLB nyitó, vegyes könyvelő",
+                  "name": "XLNT RLB nyitó, vegyes könyvelő",
                   "description": "Generálj nyitó és vegyes könyvelési tételeket az RLB rendszerhez gyorsan, Excel alapú sablonból kiindulva.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/rlb-nyito-vegyes-konyvelo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "RLB nyitó, vegyes könyvelő",
+                                      "name": "XLNT RLB nyitó, vegyes könyvelő",
                                       "item": "https://xlntbi.hu/termek/rlb-nyito-vegyes-konyvelo"
                             }
                   ]

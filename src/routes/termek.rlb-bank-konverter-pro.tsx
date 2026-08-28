@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/rlb-bank-konverter-pro")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "RLB bank konverter Pro",
+                  "name": "XLNT RLB bank konverter Pro",
                   "description": "Az RLB bank konverter PRO kiadása: több bankformátum, kötegelt feldolgozás, automatikus partner- és főkönyvi felismerés, gyorsabb, hibamentes import.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/rlb-bank-konverter-pro")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "RLB bank konverter Pro",
+                                      "name": "XLNT RLB bank konverter Pro",
                                       "item": "https://xlntbi.hu/termek/rlb-bank-konverter-pro"
                             }
                   ]

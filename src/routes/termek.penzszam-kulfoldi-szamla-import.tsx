@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/penzszam-kulfoldi-szamla-import")(
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Külföldi bankszámla import, Pénzsz@mla",
+                  "name": "XLNT Külföldi bankszámla import, Pénzsz@mla",
                   "description": "Importáld gyorsan a külföldi bankszámlakivonatokat a Pénzsz@mla könyvelőprogramba, kézi rögzítés nélkül.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/penzszam-kulfoldi-szamla-import")(
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Külföldi bankszámla import, Pénzsz@mla",
+                                      "name": "XLNT Külföldi bankszámla import, Pénzsz@mla",
                                       "item": "https://xlntbi.hu/termek/penzszam-kulfoldi-szamla-import"
                             }
                   ]

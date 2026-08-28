@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/ifrs-konszolidalo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "IFRS konszolidáló",
+                  "name": "XLNT IFRS konszolidáló",
                   "description": "Állítsd össze cégcsoportod IFRS szerinti konszolidált beszámolóját gyorsan, egységes Excel alapú munkafolyamattal.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/ifrs-konszolidalo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "IFRS konszolidáló",
+                                      "name": "XLNT IFRS konszolidáló",
                                       "item": "https://xlntbi.hu/termek/ifrs-konszolidalo"
                             }
                   ]

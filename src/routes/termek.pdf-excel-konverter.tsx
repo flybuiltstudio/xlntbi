@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/pdf-excel-konverter")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "PDF Excel konverter",
+                  "name": "XLNT PDF Excel konverter",
                   "description": "Alakíts át PDF dokumentumokat, kimutatásokat és bankkivonatokat gyorsan szerkeszthető Excel táblázattá.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/pdf-excel-konverter")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "PDF Excel konverter",
+                                      "name": "XLNT PDF Excel konverter",
                                       "item": "https://xlntbi.hu/termek/pdf-excel-konverter"
                             }
                   ]

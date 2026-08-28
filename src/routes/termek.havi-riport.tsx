@@ -34,7 +34,7 @@ export const Route = createFileRoute("/termek/havi-riport")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Havi riport",
+                  "name": "XLNT Havi riport",
                   "description": "Automatizált havi pénzügyi riport sablon, ami áttekinthetően mutatja cége havi teljesítményét és a fontos mutatókat.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -75,7 +75,7 @@ export const Route = createFileRoute("/termek/havi-riport")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Havi riport",
+                                      "name": "XLNT Havi riport",
                                       "item": "https://xlntbi.hu/termek/havi-riport"
                             }
                   ]
