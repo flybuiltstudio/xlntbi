@@ -5,6 +5,7 @@ import { Eye, EyeOff, KeyRound } from "lucide-react";
 import {
   adminApproveTransfer,
   adminCreateProductUploadUrl,
+  adminRecordProductFileVersion,
   adminCreateUser,
   adminDeleteCalculatorOverride,
   adminDeleteUser,
