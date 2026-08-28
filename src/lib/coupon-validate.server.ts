@@ -76,8 +76,9 @@ function describeDiscount(coupon: {
   if (coupon.percent_off) return `${coupon.percent_off}% kedvezmény`;
   if (coupon.amount_off) {
     const currency = (coupon.currency ?? "huf").toUpperCase();
+    // Stripe amounts are minor units for both HUF (fillér) and e.g. EUR (cent).
     return currency === "HUF"
-      ? `${formatHuf(coupon.amount_off)} kedvezmény`
+      ? `${formatHuf(coupon.amount_off / 100)} kedvezmény`
       : `${coupon.amount_off / 100} ${currency} kedvezmény`;
   }
   return "kedvezmény";
