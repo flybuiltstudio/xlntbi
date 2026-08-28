@@ -146,17 +146,11 @@ export const products: Product[] = [
   },
   {
     slug: "afa-ev65-xml-generalo",
-    name: "ÉV65 ÁFA-bevallás ÁNYK XML-generáló",
-    tagline: "Automatikus M-lap XML előállítás könyvelőknek — percek alatt, hibák nélkül",
-    status: "available",
-    priceId: "afa_ev65_xml_generalo_1_ceg",
-    price: 34900,
-    currency: "HUF",
-    image: accountImg,
-    metaTitle: "ÉV65 ÁFA-bevallás ÁNYK XML-generáló | EXCELlent",
-    metaDescription: "Automatikus M-lap XML előállítás könyvelőknek — percek alatt, hibák nélkül. Ár: 34 900 Ft-tól.",
-    intro: [
-      "Az xlntbi.hu ÉV65 XML-generáló egy Windows asztali alkalmazás (önálló .exe), amely a könyvelőprogram adataiból — egyetlen kattintással — előállítja a NAV ÉV65-ös ÁFA-bevallás M-lapjaihoz szükséges ÁNYK-kompatibilis XML-fájlt. Nincs több kézi másolás, elírási hiba vagy sorkihagyás az összezítő jelentésben.",
+    name: "év65 ÁFA-bevallás ÁNYK XML-generáló",
+...
+    metaTitle: "év65 ÁFA-bevallás ÁNYK XML-generáló | EXCELlent",
+...
+      "Az xlntbi.hu év65 XML-generáló egy Windows asztali alkalmazás (önálló .exe), amely a könyvelőprogram adataiból — egyetlen kattintással — előállítja a NAV év65-ös ÁFA-bevallás M-lapjaihoz szükséges ÁNYK-kompatibilis XML-fájlt. Nincs több kézi másolás, elírási hiba vagy sorkihagyás az összezítő jelentésben.",
       "Az eszköz mindkét lapot — az alap M-02-t és a korrekciós M-02-K-t — automatikusan kitölti, beleértve az új, 2025 júliustól elérhető f1–f4 és h1–h4 oszlopokat is.",
       "A megvásárolt licenc a megrendelés évére érvényes – a szabályok évi változása miatt évente új verziót kell vásárolni.",
     ],
