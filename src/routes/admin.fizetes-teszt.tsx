@@ -332,7 +332,7 @@ function TestPanel() {
                   quantity={created.quantity}
                   orderNumber={created.orderNumber}
                   customerEmail={created.customerEmail}
-                  productLabel={created.productName}
+                  productLabel={`${product.name} – ${tier.label}`}
                 />
               ) : (
                 <p className="mt-4 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
