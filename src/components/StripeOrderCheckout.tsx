@@ -1,6 +1,7 @@
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { useMemo } from "react";
 
+import { withXlntPrefix } from "@/lib/product-name";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import { createOrderCheckoutSession } from "@/utils/payments.functions";
 
@@ -43,6 +44,12 @@ export function StripeOrderCheckout({
 
   return (
     <div id="checkout" className="mt-6">
+      {productLabel ? (
+        <p className="mb-3 text-sm text-muted-foreground">
+          Fizetendő termék:{" "}
+          <strong className="text-foreground">{withXlntPrefix(productLabel)}</strong>
+        </p>
+      ) : null}
       <EmbeddedCheckoutProvider stripe={getStripe()} options={options}>
         <EmbeddedCheckout />
       </EmbeddedCheckoutProvider>

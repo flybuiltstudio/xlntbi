@@ -146,6 +146,7 @@ function OrderPage() {
           quantity={quantity}
           orderNumber={orderNumber}
           customerEmail={customerEmail}
+          productLabel={`${product.name} – ${tier.label}`}
         />
       </div>
     );
