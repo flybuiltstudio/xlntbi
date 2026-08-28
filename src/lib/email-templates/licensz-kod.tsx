@@ -76,7 +76,7 @@ export const template = {
   previewData: {
     name: 'Kovács Anna',
     orderNumber: 'XLNT-20260819-1234',
-    productName: 'NAV Online Számla letöltő',
+    productName: 'XLNT NAV Online Számla letöltő',
     tierLabel: 'Örökös licenc',
     licenseKey:
       'X000-0000-0000-0000-0202-6083-1000-0000-0202-6081-1689-B92F-E556-1813-8C18-79F6-C',

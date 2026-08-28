@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/univerzalis-bank-konverter")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Univerzális bank konverter",
+                  "name": "XLNT Univerzális bank konverter",
                   "description": "Alakíts át bármely bank kivonatát a könyvelőprogramod által elfogadott formátumra, rugalmasan testreszabható beállításokkal.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/univerzalis-bank-konverter")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Univerzális bank konverter",
+                                      "name": "XLNT Univerzális bank konverter",
                                       "item": "https://xlntbi.hu/termek/univerzalis-bank-konverter"
                             }
                   ]

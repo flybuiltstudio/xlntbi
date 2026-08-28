@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/a60-osszesito-nyilatkozat-xml")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "évA60 összesítő nyilatkozat XML-generáló",
+                  "name": "XLNT évA60 összesítő nyilatkozat XML-generáló",
                   "description": "Készítsd el gyorsan a NAV-kompatibilis XML fájlt az A60 összesítő nyilatkozathoz, Excel alapú adatokból. A licenc a megrendelés évére érvényes.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/a60-osszesito-nyilatkozat-xml")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "évA60 összesítő nyilatkozat XML-generáló",
+                                      "name": "XLNT évA60 összesítő nyilatkozat XML-generáló",
                                       "item": "https://xlntbi.hu/termek/a60-osszesito-nyilatkozat-xml"
                             }
                   ]

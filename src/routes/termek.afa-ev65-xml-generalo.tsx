@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/afa-ev65-xml-generalo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "év65 ÁFA-bevallás ÁNYK XML-generáló",
+                  "name": "XLNT év65 ÁFA-bevallás ÁNYK XML-generáló",
                   "description": "Generálj gyorsan, hibamentesen NAV kompatibilis XML fájlt az év65-ös ÁFA-bevalláshoz, Excelből kiindulva.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/afa-ev65-xml-generalo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "év65 ÁFA-bevallás ÁNYK XML-generáló",
+                                      "name": "XLNT év65 ÁFA-bevallás ÁNYK XML-generáló",
                                       "item": "https://xlntbi.hu/termek/afa-ev65-xml-generalo"
                             }
                   ]

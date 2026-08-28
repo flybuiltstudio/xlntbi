@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/nav-online-szamla-letolto")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "NAV Online Számla letöltő",
+                  "name": "XLNT NAV Online Számla letöltő",
                   "description": "Töltsd le automatikusan a NAV Online Számla rendszeréből a bejövő és kimenő számlák adatait, könyvelésre kész formátumban.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/nav-online-szamla-letolto")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "NAV Online Számla letöltő",
+                                      "name": "XLNT NAV Online Számla letöltő",
                                       "item": "https://xlntbi.hu/termek/nav-online-szamla-letolto"
                             }
                   ]

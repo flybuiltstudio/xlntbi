@@ -1513,7 +1513,7 @@ export const products: Product[] = [
     price: 29900,
     currency: "HUF",
     image: mnbEraImg,
-    metaTitle: "MNB ERA Jelentésgenerátor R09 és R12 | XLNTBI",
+    metaTitle: "XLNT MNB ERA Jelentésgenerátor R09 és R12 | XLNTBI",
     metaDescription:
       "R09 és R12 jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből. Egyetlen licenc, 29 900 Ft AAM.",
     intro: [
@@ -1555,7 +1555,7 @@ export const products: Product[] = [
     price: 39900,
     currency: "HUF",
     image: ingatlanalapMnbImg,
-    metaTitle: "Ingatlanalap MNB Jelentés-előkészítő (NEÉ, 50A, 51M) | XLNTBI",
+    metaTitle: "XLNT Ingatlanalap MNB Jelentés-előkészítő (NEÉ, 50A, 51M) | XLNTBI",
     metaDescription:
       "NEÉ-számoló, 51M ingatlankitettség és 50A jelentéslap egy Excel-munkafüzetben, beépített ERA/STEFI generátorral. Egyetlen licenc, 39 900 Ft.",
     intro: [

@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/utnyilvantartas-kikuldetesi-rendel
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Útnyilvántartás, kiküldetési rendelvény",
+                  "name": "XLNT Útnyilvántartás, kiküldetési rendelvény",
                   "description": "Vezess szabályos útnyilvántartást és készíts kiküldetési rendelvényt könnyen, a NAV elvárásainak megfelelően.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/utnyilvantartas-kikuldetesi-rendel
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Útnyilvántartás, kiküldetési rendelvény",
+                                      "name": "XLNT Útnyilvántartás, kiküldetési rendelvény",
                                       "item": "https://xlntbi.hu/termek/utnyilvantartas-kikuldetesi-rendelveny"
                             }
                   ]

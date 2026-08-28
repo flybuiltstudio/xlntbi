@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/berszamfejto")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Bérszámfejtő",
+                  "name": "XLNT Bérszámfejtő",
                   "description": "Excel alapú bérszámfejtő program az aktuális szabályok szerint, gyors és pontos bérszámfejtéshez kis és közepes cégeknek.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/berszamfejto")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Bérszámfejtő",
+                                      "name": "XLNT Bérszámfejtő",
                                       "item": "https://xlntbi.hu/termek/berszamfejto"
                             }
                   ]

@@ -31,7 +31,7 @@ export const Route = createFileRoute("/termek/cegkivonat-excel-konverter")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Cégkivonat Excel konverter",
+                  "name": "XLNT Cégkivonat Excel konverter",
                   "description": "Alakítsd át a céginformációs szolgálat cégkivonatait automatikusan Excel táblázattá, gyors adatfeldolgozáshoz.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/cegkivonat-excel-konverter")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Cégkivonat Excel konverter",
+                                      "name": "XLNT Cégkivonat Excel konverter",
                                       "item": "https://xlntbi.hu/termek/cegkivonat-excel-konverter"
                             }
                   ]
