@@ -227,18 +227,18 @@ export const products: Product[] = [
   },
   {
     slug: "a60-osszesito-nyilatkozat-xml",
-    name: "ÉVA60 összesítő nyilatkozat XML-generáló",
+    name: "évA60 összesítő nyilatkozat XML-generáló",
     tagline: "A60 összesítő nyilatkozat Excelből, ÁNYK-ba tölthető XML-lel és VIES-ellenőrzéssel",
     status: "available",
     priceId: "a60_osszesito_nyilatkozat_xml_1_ceg",
     price: 24900,
     currency: "HUF",
     image: controllingImg,
-    metaTitle: "ÉVA60 összesítő nyilatkozat XML-generáló | EXCELlent",
+    metaTitle: "évA60 összesítő nyilatkozat XML-generáló | EXCELlent",
     metaDescription: "A60 összesítő nyilatkozat Excelből, ÁNYK-ba tölthető XML-lel és VIES-ellenőrzéssel. Ár: 24 900 Ft-tól.",
     intro: [
       "A közösségi ügyletekről az áfabevallás mellett összesítő nyilatkozatot (A60) is be kell nyújtani – és ezt az eÁFA rendszer sem váltja ki. A nyomtatvány ÁNYK-ban való kitöltése azonban lassú, a partnerek közösségi adószámát külön kellene ellenőrizni, és könnyű elvéteni a helyesbítéseket.",
-      "Az ÉVA60 XML ezt a munkát teszi gyorsabbá és biztonságosabbá: a tételeket egy jól átlátható Excel-táblázatba viszi be, a program pedig legenerálja belőle az ÁNYK-ba tölthető nyomtatványt. Nincs kényszer, nincs felesleges kör – csak egy eszköz, amelyik leveszi a válláról a mechanikus részt.",
+      "Az évA60 XML ezt a munkát teszi gyorsabbá és biztonságosabbá: a tételeket egy jól átlátható Excel-táblázatba viszi be, a program pedig legenerálja belőle az ÁNYK-ba tölthető nyomtatványt. Nincs kényszer, nincs felesleges kör – csak egy eszköz, amelyik leveszi a válláról a mechanikus részt.",
       "A megvásárolt licenc a megrendelés évére érvényes – a szabályok évi változása miatt évente új verziót kell vásárolni.",
     ],
     features: [
