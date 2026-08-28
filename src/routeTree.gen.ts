@@ -56,7 +56,7 @@ import { Route as TermekAdofolyoszamlaEgyeztetoRouteImport } from './routes/term
 import { Route as TermekAfa2665XmlGeneraloRouteImport } from './routes/termek.afa-2665-xml-generalo'
 import { Route as TermekAuditxmlEllenorzoJavitoRouteImport } from './routes/termek.auditxml-ellenorzo-javito'
 import { Route as TermekBerszamfejto2026RouteImport } from './routes/termek.berszamfejto-2026'
-import { Route as TermekBeszamolo2025RouteImport } from './routes/termek.beszamolo-2025'
+import { Route as TermekBeszamoloRouteImport } from './routes/termek.beszamolo'
 import { Route as TermekCegkivonatExcelKonverterRouteImport } from './routes/termek.cegkivonat-excel-konverter'
 import { Route as TermekDevizabankRouteImport } from './routes/termek.devizabank'
 import { Route as TermekHaviRiportRouteImport } from './routes/termek.havi-riport'
@@ -334,9 +334,9 @@ const TermekBerszamfejto2026Route = TermekBerszamfejto2026RouteImport.update({
   path: '/termek/berszamfejto-2026',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TermekBeszamolo2025Route = TermekBeszamolo2025RouteImport.update({
-  id: '/termek/beszamolo-2025',
-  path: '/termek/beszamolo-2025',
+const TermekBeszamoloRoute = TermekBeszamoloRouteImport.update({
+  id: '/termek/beszamolo',
+  path: '/termek/beszamolo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermekCegkivonatExcelKonverterRoute =
@@ -574,7 +574,7 @@ export interface FileRoutesByFullPath {
   '/termek/afa-2665-xml-generalo': typeof TermekAfa2665XmlGeneraloRoute
   '/termek/auditxml-ellenorzo-javito': typeof TermekAuditxmlEllenorzoJavitoRoute
   '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
-  '/termek/beszamolo-2025': typeof TermekBeszamolo2025Route
+  '/termek/beszamolo': typeof TermekBeszamoloRoute
   '/termek/cegkivonat-excel-konverter': typeof TermekCegkivonatExcelKonverterRoute
   '/termek/devizabank': typeof TermekDevizabankRoute
   '/termek/havi-riport': typeof TermekHaviRiportRoute
@@ -656,7 +656,7 @@ export interface FileRoutesByTo {
   '/termek/afa-2665-xml-generalo': typeof TermekAfa2665XmlGeneraloRoute
   '/termek/auditxml-ellenorzo-javito': typeof TermekAuditxmlEllenorzoJavitoRoute
   '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
-  '/termek/beszamolo-2025': typeof TermekBeszamolo2025Route
+  '/termek/beszamolo': typeof TermekBeszamoloRoute
   '/termek/cegkivonat-excel-konverter': typeof TermekCegkivonatExcelKonverterRoute
   '/termek/devizabank': typeof TermekDevizabankRoute
   '/termek/havi-riport': typeof TermekHaviRiportRoute
@@ -740,7 +740,7 @@ export interface FileRoutesById {
   '/termek/afa-2665-xml-generalo': typeof TermekAfa2665XmlGeneraloRoute
   '/termek/auditxml-ellenorzo-javito': typeof TermekAuditxmlEllenorzoJavitoRoute
   '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
-  '/termek/beszamolo-2025': typeof TermekBeszamolo2025Route
+  '/termek/beszamolo': typeof TermekBeszamoloRoute
   '/termek/cegkivonat-excel-konverter': typeof TermekCegkivonatExcelKonverterRoute
   '/termek/devizabank': typeof TermekDevizabankRoute
   '/termek/havi-riport': typeof TermekHaviRiportRoute
@@ -825,7 +825,7 @@ export interface FileRouteTypes {
     | '/termek/afa-2665-xml-generalo'
     | '/termek/auditxml-ellenorzo-javito'
     | '/termek/berszamfejto-2026'
-    | '/termek/beszamolo-2025'
+    | '/termek/beszamolo'
     | '/termek/cegkivonat-excel-konverter'
     | '/termek/devizabank'
     | '/termek/havi-riport'
@@ -907,7 +907,7 @@ export interface FileRouteTypes {
     | '/termek/afa-2665-xml-generalo'
     | '/termek/auditxml-ellenorzo-javito'
     | '/termek/berszamfejto-2026'
-    | '/termek/beszamolo-2025'
+    | '/termek/beszamolo'
     | '/termek/cegkivonat-excel-konverter'
     | '/termek/devizabank'
     | '/termek/havi-riport'
@@ -990,7 +990,7 @@ export interface FileRouteTypes {
     | '/termek/afa-2665-xml-generalo'
     | '/termek/auditxml-ellenorzo-javito'
     | '/termek/berszamfejto-2026'
-    | '/termek/beszamolo-2025'
+    | '/termek/beszamolo'
     | '/termek/cegkivonat-excel-konverter'
     | '/termek/devizabank'
     | '/termek/havi-riport'
@@ -1066,7 +1066,7 @@ export interface RootRouteChildren {
   TermekAfa2665XmlGeneraloRoute: typeof TermekAfa2665XmlGeneraloRoute
   TermekAuditxmlEllenorzoJavitoRoute: typeof TermekAuditxmlEllenorzoJavitoRoute
   TermekBerszamfejto2026Route: typeof TermekBerszamfejto2026Route
-  TermekBeszamolo2025Route: typeof TermekBeszamolo2025Route
+  TermekBeszamoloRoute: typeof TermekBeszamoloRoute
   TermekCegkivonatExcelKonverterRoute: typeof TermekCegkivonatExcelKonverterRoute
   TermekDevizabankRoute: typeof TermekDevizabankRoute
   TermekHaviRiportRoute: typeof TermekHaviRiportRoute
@@ -1434,11 +1434,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekBerszamfejto2026RouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/termek/beszamolo-2025': {
-      id: '/termek/beszamolo-2025'
-      path: '/termek/beszamolo-2025'
-      fullPath: '/termek/beszamolo-2025'
-      preLoaderRoute: typeof TermekBeszamolo2025RouteImport
+    '/termek/beszamolo': {
+      id: '/termek/beszamolo'
+      path: '/termek/beszamolo'
+      fullPath: '/termek/beszamolo'
+      preLoaderRoute: typeof TermekBeszamoloRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/termek/cegkivonat-excel-konverter': {
@@ -1739,7 +1739,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermekAfa2665XmlGeneraloRoute: TermekAfa2665XmlGeneraloRoute,
   TermekAuditxmlEllenorzoJavitoRoute: TermekAuditxmlEllenorzoJavitoRoute,
   TermekBerszamfejto2026Route: TermekBerszamfejto2026Route,
-  TermekBeszamolo2025Route: TermekBeszamolo2025Route,
+  TermekBeszamoloRoute: TermekBeszamoloRoute,
   TermekCegkivonatExcelKonverterRoute: TermekCegkivonatExcelKonverterRoute,
   TermekDevizabankRoute: TermekDevizabankRoute,
   TermekHaviRiportRoute: TermekHaviRiportRoute,
