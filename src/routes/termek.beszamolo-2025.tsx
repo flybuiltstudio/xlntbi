@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Éves beszámoló készítő program 2025 | EXCELlent Business Intelligence";
-const DESCRIPTION = "Állítsd össze gyorsan, hibamentesen a 2025-ös éves beszámolót a hatályos szabályok szerint, Excel alapú sablonnal.";
-const H1 = "Éves beszámoló készítő, 2025";
+const TITLE = "Éves beszámoló készítő program | EXCELlent Business Intelligence";
+const DESCRIPTION = "Állítsd össze gyorsan, hibamentesen az éves beszámolót a hatályos szabályok szerint, Excel alapú sablonnal.";
+const H1 = "Éves beszámoló készítő";
 const CANONICAL = "https://xlntbi.hu/termek/beszamolo-2025";
 const OG_IMAGE = "https://xlntbi.hu/og/close-up-busy-businesswoman.jpg";
 
@@ -31,8 +31,8 @@ export const Route = createFileRoute("/termek/beszamolo-2025")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "Éves beszámoló készítő, 2025",
-                  "description": "Állítsd össze gyorsan, hibamentesen a 2025-ös éves beszámolót a hatályos szabályok szerint, Excel alapú sablonnal.",
+                  "name": "Éves beszámoló készítő",
+                  "description": "Állítsd össze gyorsan, hibamentesen az éves beszámolót a hatályos szabályok szerint, Excel alapú sablonnal.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/beszamolo-2025",
@@ -44,7 +44,7 @@ export const Route = createFileRoute("/termek/beszamolo-2025")({
                   },
                   "offers": {
                             "@type": "Offer",
-                            "price": "14900",
+                            "price": "24900",
                             "priceCurrency": "HUF",
                             "availability": "https://schema.org/InStock",
                             "url": "https://xlntbi.hu/termek/beszamolo-2025"
@@ -72,7 +72,7 @@ export const Route = createFileRoute("/termek/beszamolo-2025")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "Éves beszámoló készítő, 2025",
+                                      "name": "Éves beszámoló készítő",
                                       "item": "https://xlntbi.hu/termek/beszamolo-2025"
                             }
                   ]
