@@ -53,7 +53,7 @@ import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles_.
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
 import { Route as TermekA60OsszesitoNyilatkozatXmlRouteImport } from './routes/termek.a60-osszesito-nyilatkozat-xml'
 import { Route as TermekAdofolyoszamlaEgyeztetoRouteImport } from './routes/termek.adofolyoszamla-egyezteto'
-import { Route as TermekAfa2665XmlGeneraloRouteImport } from './routes/termek.afa-2665-xml-generalo'
+import { Route as TermekAfaEv65XmlGeneraloRouteImport } from './routes/termek.afa-ev65-xml-generalo'
 import { Route as TermekAuditxmlEllenorzoJavitoRouteImport } from './routes/termek.auditxml-ellenorzo-javito'
 import { Route as TermekBerszamfejto2026RouteImport } from './routes/termek.berszamfejto-2026'
 import { Route as TermekBeszamoloRouteImport } from './routes/termek.beszamolo'
@@ -317,10 +317,10 @@ const TermekAdofolyoszamlaEgyeztetoRoute =
     path: '/termek/adofolyoszamla-egyezteto',
     getParentRoute: () => rootRouteImport,
   } as any)
-const TermekAfa2665XmlGeneraloRoute =
-  TermekAfa2665XmlGeneraloRouteImport.update({
-    id: '/termek/afa-2665-xml-generalo',
-    path: '/termek/afa-2665-xml-generalo',
+const TermekAfaEv65XmlGeneraloRoute =
+  TermekAfaEv65XmlGeneraloRouteImport.update({
+    id: '/termek/afa-ev65-xml-generalo',
+    path: '/termek/afa-ev65-xml-generalo',
     getParentRoute: () => rootRouteImport,
   } as any)
 const TermekAuditxmlEllenorzoJavitoRoute =
@@ -571,7 +571,7 @@ export interface FileRoutesByFullPath {
   '/termek/$slug': typeof TermekSlugRoute
   '/termek/a60-osszesito-nyilatkozat-xml': typeof TermekA60OsszesitoNyilatkozatXmlRoute
   '/termek/adofolyoszamla-egyezteto': typeof TermekAdofolyoszamlaEgyeztetoRoute
-  '/termek/afa-2665-xml-generalo': typeof TermekAfa2665XmlGeneraloRoute
+  '/termek/afa-ev65-xml-generalo': typeof TermekAfaEv65XmlGeneraloRoute
   '/termek/auditxml-ellenorzo-javito': typeof TermekAuditxmlEllenorzoJavitoRoute
   '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
   '/termek/beszamolo': typeof TermekBeszamoloRoute
@@ -653,7 +653,7 @@ export interface FileRoutesByTo {
   '/termek/$slug': typeof TermekSlugRoute
   '/termek/a60-osszesito-nyilatkozat-xml': typeof TermekA60OsszesitoNyilatkozatXmlRoute
   '/termek/adofolyoszamla-egyezteto': typeof TermekAdofolyoszamlaEgyeztetoRoute
-  '/termek/afa-2665-xml-generalo': typeof TermekAfa2665XmlGeneraloRoute
+  '/termek/afa-ev65-xml-generalo': typeof TermekAfaEv65XmlGeneraloRoute
   '/termek/auditxml-ellenorzo-javito': typeof TermekAuditxmlEllenorzoJavitoRoute
   '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
   '/termek/beszamolo': typeof TermekBeszamoloRoute
@@ -737,7 +737,7 @@ export interface FileRoutesById {
   '/termek/$slug': typeof TermekSlugRoute
   '/termek/a60-osszesito-nyilatkozat-xml': typeof TermekA60OsszesitoNyilatkozatXmlRoute
   '/termek/adofolyoszamla-egyezteto': typeof TermekAdofolyoszamlaEgyeztetoRoute
-  '/termek/afa-2665-xml-generalo': typeof TermekAfa2665XmlGeneraloRoute
+  '/termek/afa-ev65-xml-generalo': typeof TermekAfaEv65XmlGeneraloRoute
   '/termek/auditxml-ellenorzo-javito': typeof TermekAuditxmlEllenorzoJavitoRoute
   '/termek/berszamfejto-2026': typeof TermekBerszamfejto2026Route
   '/termek/beszamolo': typeof TermekBeszamoloRoute
@@ -822,7 +822,7 @@ export interface FileRouteTypes {
     | '/termek/$slug'
     | '/termek/a60-osszesito-nyilatkozat-xml'
     | '/termek/adofolyoszamla-egyezteto'
-    | '/termek/afa-2665-xml-generalo'
+    | '/termek/afa-ev65-xml-generalo'
     | '/termek/auditxml-ellenorzo-javito'
     | '/termek/berszamfejto-2026'
     | '/termek/beszamolo'
@@ -904,7 +904,7 @@ export interface FileRouteTypes {
     | '/termek/$slug'
     | '/termek/a60-osszesito-nyilatkozat-xml'
     | '/termek/adofolyoszamla-egyezteto'
-    | '/termek/afa-2665-xml-generalo'
+    | '/termek/afa-ev65-xml-generalo'
     | '/termek/auditxml-ellenorzo-javito'
     | '/termek/berszamfejto-2026'
     | '/termek/beszamolo'
@@ -987,7 +987,7 @@ export interface FileRouteTypes {
     | '/termek/$slug'
     | '/termek/a60-osszesito-nyilatkozat-xml'
     | '/termek/adofolyoszamla-egyezteto'
-    | '/termek/afa-2665-xml-generalo'
+    | '/termek/afa-ev65-xml-generalo'
     | '/termek/auditxml-ellenorzo-javito'
     | '/termek/berszamfejto-2026'
     | '/termek/beszamolo'
@@ -1063,7 +1063,7 @@ export interface RootRouteChildren {
   TermekSlugRoute: typeof TermekSlugRoute
   TermekA60OsszesitoNyilatkozatXmlRoute: typeof TermekA60OsszesitoNyilatkozatXmlRoute
   TermekAdofolyoszamlaEgyeztetoRoute: typeof TermekAdofolyoszamlaEgyeztetoRoute
-  TermekAfa2665XmlGeneraloRoute: typeof TermekAfa2665XmlGeneraloRoute
+  TermekAfaEv65XmlGeneraloRoute: typeof TermekAfaEv65XmlGeneraloRoute
   TermekAuditxmlEllenorzoJavitoRoute: typeof TermekAuditxmlEllenorzoJavitoRoute
   TermekBerszamfejto2026Route: typeof TermekBerszamfejto2026Route
   TermekBeszamoloRoute: typeof TermekBeszamoloRoute
@@ -1413,11 +1413,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekAdofolyoszamlaEgyeztetoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/termek/afa-2665-xml-generalo': {
-      id: '/termek/afa-2665-xml-generalo'
-      path: '/termek/afa-2665-xml-generalo'
-      fullPath: '/termek/afa-2665-xml-generalo'
-      preLoaderRoute: typeof TermekAfa2665XmlGeneraloRouteImport
+    '/termek/afa-ev65-xml-generalo': {
+      id: '/termek/afa-ev65-xml-generalo'
+      path: '/termek/afa-ev65-xml-generalo'
+      fullPath: '/termek/afa-ev65-xml-generalo'
+      preLoaderRoute: typeof TermekAfaEv65XmlGeneraloRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/termek/auditxml-ellenorzo-javito': {
@@ -1736,7 +1736,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermekSlugRoute: TermekSlugRoute,
   TermekA60OsszesitoNyilatkozatXmlRoute: TermekA60OsszesitoNyilatkozatXmlRoute,
   TermekAdofolyoszamlaEgyeztetoRoute: TermekAdofolyoszamlaEgyeztetoRoute,
-  TermekAfa2665XmlGeneraloRoute: TermekAfa2665XmlGeneraloRoute,
+  TermekAfaEv65XmlGeneraloRoute: TermekAfaEv65XmlGeneraloRoute,
   TermekAuditxmlEllenorzoJavitoRoute: TermekAuditxmlEllenorzoJavitoRoute,
   TermekBerszamfejto2026Route: TermekBerszamfejto2026Route,
   TermekBeszamoloRoute: TermekBeszamoloRoute,

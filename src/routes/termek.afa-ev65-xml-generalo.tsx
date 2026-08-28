@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "ÁFA bevallás XML generáló (2665) | EXCELlent Business Intelligence";
-const DESCRIPTION = "Generálj gyorsan, hibamentesen NAV kompatibilis XML fájlt az ÁFA bevalláshoz (2665-ös nyomtatvány), Excelből kiindulva.";
-const H1 = "ÁFA 2665 XML generáló";
-const CANONICAL = "https://xlntbi.hu/termek/afa-2665-xml-generalo";
+const TITLE = "ÉV65 ÁFA-bevallás ÁNYK XML-generáló | EXCELlent Business Intelligence";
+const DESCRIPTION = "Generálj gyorsan, hibamentesen NAV kompatibilis XML fájlt az ÉV65-ös ÁFA-bevalláshoz, Excelből kiindulva.";
+const H1 = "ÉV65 ÁFA-bevallás ÁNYK XML-generáló";
+const CANONICAL = "https://xlntbi.hu/termek/afa-ev65-xml-generalo";
 const OG_IMAGE = "https://xlntbi.hu/og/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
 
-export const Route = createFileRoute("/termek/afa-2665-xml-generalo")({
+export const Route = createFileRoute("/termek/afa-ev65-xml-generalo")({
   head: () => ({
     meta: [
       { title: TITLE },
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/termek/afa-2665-xml-generalo")({
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [
-      { rel: "canonical", href: "https://xlntbi.hu/termek/afa-2665-xml-generalo" },
+      { rel: "canonical", href: "https://xlntbi.hu/termek/afa-ev65-xml-generalo" },
     ],
     scripts: [
       {
@@ -31,11 +31,11 @@ export const Route = createFileRoute("/termek/afa-2665-xml-generalo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "ÁFA 2665 XML generáló",
-                  "description": "Generálj gyorsan, hibamentesen NAV kompatibilis XML fájlt az ÁFA bevalláshoz (2665-ös nyomtatvány), Excelből kiindulva.",
+                  "name": "ÉV65 ÁFA-bevallás ÁNYK XML-generáló",
+                  "description": "Generálj gyorsan, hibamentesen NAV kompatibilis XML fájlt az ÉV65-ös ÁFA-bevalláshoz, Excelből kiindulva.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
-                  "url": "https://xlntbi.hu/termek/afa-2665-xml-generalo",
+                  "url": "https://xlntbi.hu/termek/afa-ev65-xml-generalo",
                   "image": "https://xlntbi.hu/og/account-assets-audit-bank-bookkeeping-finance-concept.jpg",
                   "inLanguage": "hu",
                   "brand": {
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/termek/afa-2665-xml-generalo")({
                             "price": "34900",
                             "priceCurrency": "HUF",
                             "availability": "https://schema.org/InStock",
-                            "url": "https://xlntbi.hu/termek/afa-2665-xml-generalo"
+                            "url": "https://xlntbi.hu/termek/afa-ev65-xml-generalo"
                   }
         }),
       },
@@ -72,8 +72,8 @@ export const Route = createFileRoute("/termek/afa-2665-xml-generalo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "ÁFA 2665 XML generáló",
-                                      "item": "https://xlntbi.hu/termek/afa-2665-xml-generalo"
+                                      "name": "ÉV65 ÁFA-bevallás ÁNYK XML-generáló",
+                                      "item": "https://xlntbi.hu/termek/afa-ev65-xml-generalo"
                             }
                   ]
         }),
@@ -84,5 +84,5 @@ export const Route = createFileRoute("/termek/afa-2665-xml-generalo")({
 });
 
 function ProductRoute() {
-  return <ProductDetail slug="afa-2665-xml-generalo" h1={H1} />;
+  return <ProductDetail slug="afa-ev65-xml-generalo" h1={H1} />;
 }
