@@ -100,6 +100,11 @@ export async function issueDownload(order: OrderRow): Promise<void> {
     ? new Date(existing.expires_at as string)
     : new Date(Date.now() + EXPIRY_DAYS * 24 * 60 * 60 * 1000);
 
+  const currentFileName = await downloadFileName(
+    order.product_slug,
+    product.download.fileName,
+  );
+
   if (!token) {
     token = newToken();
     const { error } = await supabaseAdmin.from("order_downloads").insert({
@@ -107,7 +112,7 @@ export async function issueDownload(order: OrderRow): Promise<void> {
       order_number: order.order_number,
       product_slug: order.product_slug,
       storage_path: product.download.storagePath,
-      file_name: product.download.fileName,
+      file_name: currentFileName,
       token,
       email: order.email,
       max_downloads: MAX_DOWNLOADS,
@@ -132,14 +137,14 @@ export async function issueDownload(order: OrderRow): Promise<void> {
         name: order.billing_name,
         orderNumber: order.order_number,
         productName: productLabel,
-        fileName: product.download.fileName,
+        fileName: currentFileName,
         downloadUrl: `${siteOrigin()}/api/public/letoltes/${token}`,
         expiresAt: formatDate(expiresAt),
         maxDownloads: MAX_DOWNLOADS,
         rows: [
           ["Termék", order.product_name],
           ...(order.tier_label ? [["Licenc csomag", order.tier_label] as [string, string]] : []),
-          ["Fájl", product.download.fileName],
+          ["Fájl", currentFileName],
           ["Elérhető eddig", formatDate(expiresAt)],
         ] as Array<[string, string]>,
       },
