@@ -4,10 +4,10 @@ import { ProductDetail } from "@/components/ProductDetail";
 const TITLE = "Éves beszámoló készítő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Állítsd össze gyorsan, hibamentesen az éves beszámolót a hatályos szabályok szerint, Excel alapú sablonnal.";
 const H1 = "Éves beszámoló készítő";
-const CANONICAL = "https://xlntbi.hu/termek/beszamolo-2025";
+const CANONICAL = "https://xlntbi.hu/termek/beszamolo";
 const OG_IMAGE = "https://xlntbi.hu/og/close-up-busy-businesswoman.jpg";
 
-export const Route = createFileRoute("/termek/beszamolo-2025")({
+export const Route = createFileRoute("/termek/beszamolo")({
   head: () => ({
     meta: [
       { title: TITLE },
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/termek/beszamolo-2025")({
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [
-      { rel: "canonical", href: "https://xlntbi.hu/termek/beszamolo-2025" },
+      { rel: "canonical", href: "https://xlntbi.hu/termek/beszamolo" },
     ],
     scripts: [
       {
@@ -35,7 +35,7 @@ export const Route = createFileRoute("/termek/beszamolo-2025")({
                   "description": "Állítsd össze gyorsan, hibamentesen az éves beszámolót a hatályos szabályok szerint, Excel alapú sablonnal.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
-                  "url": "https://xlntbi.hu/termek/beszamolo-2025",
+                  "url": "https://xlntbi.hu/termek/beszamolo",
                   "image": "https://xlntbi.hu/og/close-up-busy-businesswoman.jpg",
                   "inLanguage": "hu",
                   "brand": {
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/termek/beszamolo-2025")({
                             "price": "24900",
                             "priceCurrency": "HUF",
                             "availability": "https://schema.org/InStock",
-                            "url": "https://xlntbi.hu/termek/beszamolo-2025"
+                            "url": "https://xlntbi.hu/termek/beszamolo"
                   }
         }),
       },
@@ -73,7 +73,7 @@ export const Route = createFileRoute("/termek/beszamolo-2025")({
                                       "@type": "ListItem",
                                       "position": 3,
                                       "name": "Éves beszámoló készítő",
-                                      "item": "https://xlntbi.hu/termek/beszamolo-2025"
+                                      "item": "https://xlntbi.hu/termek/beszamolo"
                             }
                   ]
         }),
@@ -84,5 +84,5 @@ export const Route = createFileRoute("/termek/beszamolo-2025")({
 });
 
 function ProductRoute() {
-  return <ProductDetail slug="beszamolo-2025" h1={H1} />;
+  return <ProductDetail slug="beszamolo" h1={H1} />;
 }
