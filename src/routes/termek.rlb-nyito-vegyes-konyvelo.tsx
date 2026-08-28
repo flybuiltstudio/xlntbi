@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "RLB nyitó és vegyes könyvelő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT RLB nyitó és vegyes könyvelő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Generálj nyitó és vegyes könyvelési tételeket az RLB rendszerhez gyorsan, Excel alapú sablonból kiindulva.";
-const H1 = "RLB nyitó, vegyes könyvelő";
+const H1 = "XLNT RLB nyitó, vegyes könyvelő";
 const CANONICAL = "https://xlntbi.hu/termek/rlb-nyito-vegyes-konyvelo";
 const OG_IMAGE = "https://xlntbi.hu/og/nyito-vegyes-konyvelo.jpg";
 

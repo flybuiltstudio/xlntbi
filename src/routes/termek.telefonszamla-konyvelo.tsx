@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Telefonszámla könyvelő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT Telefonszámla könyvelő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Dolgozd fel és könyveld automatikusan a céges telefonszámlák tételeit, magán és üzleti hívások szétválasztásával.";
-const H1 = "Telefonszámla könyvelő";
+const H1 = "XLNT Telefonszámla könyvelő";
 const CANONICAL = "https://xlntbi.hu/termek/telefonszamla-konyvelo";
 const OG_IMAGE = "https://xlntbi.hu/og/termekek.jpg";
 

@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "NAV törzsszám, partnerellenőrző program | EXCELlent Business Intelligence";
+const TITLE = "XLNT NAV törzsszám, partnerellenőrző program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Ellenőrizd tömegesen partnereid adószámát és NAV státuszát, hogy elkerüld a kockázatos üzleti partnerkapcsolatokat.";
-const H1 = "NAV törzsszám, partnerellenőrző";
+const H1 = "XLNT NAV törzsszám, partnerellenőrző";
 const CANONICAL = "https://xlntbi.hu/termek/nav-torzsszam-partnerellenorzo";
 const OG_IMAGE = "https://xlntbi.hu/og/bi.jpg";
 

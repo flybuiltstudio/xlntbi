@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Ügyfélkapu TOTP kezelő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT Ügyfélkapu TOTP kezelő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Kezeld egy helyen több ügyfél Ügyfélkapus kétfaktoros hitelesítő kódjait, biztonságosan és gyorsan, könyvelőirodáknak.";
-const H1 = "Ügyfélkapu TOTP kezelő";
+const H1 = "XLNT Ügyfélkapu TOTP kezelő";
 const CANONICAL = "https://xlntbi.hu/termek/ugyfelkapu-totp-manager";
 const OG_IMAGE = "https://xlntbi.hu/og/135731.jpg";
 

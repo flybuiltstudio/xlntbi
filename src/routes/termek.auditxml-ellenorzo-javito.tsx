@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "AuditXML ellenőrző és javító program | EXCELlent Business Intelligence";
+const TITLE = "XLNT AuditXML ellenőrző és javító program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Ellenőrizd és javítsd gyorsan a NAV AuditXML (SAF-T) exportfájlokat, mielőtt beküldenéd vagy továbbadnád azokat.";
-const H1 = "AuditXML ellenőrző, javító";
+const H1 = "XLNT AuditXML ellenőrző, javító";
 const CANONICAL = "https://xlntbi.hu/termek/auditxml-ellenorzo-javito";
 const OG_IMAGE = "https://xlntbi.hu/og/auditxml-ellenorzo-javito.jpg";
 

@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Útnyilvántartás és kiküldetési rendelvény sablon | EXCELlent Business Intelligence";
+const TITLE = "XLNT Útnyilvántartás és kiküldetési rendelvény sablon | EXCELlent Business Intelligence";
 const DESCRIPTION = "Vezess szabályos útnyilvántartást és készíts kiküldetési rendelvényt könnyen, a NAV elvárásainak megfelelően.";
-const H1 = "Útnyilvántartás, kiküldetési rendelvény";
+const H1 = "XLNT Útnyilvántartás, kiküldetési rendelvény";
 const CANONICAL = "https://xlntbi.hu/termek/utnyilvantartas-kikuldetesi-rendelveny";
 const OG_IMAGE = "https://xlntbi.hu/og/135731.jpg";
 

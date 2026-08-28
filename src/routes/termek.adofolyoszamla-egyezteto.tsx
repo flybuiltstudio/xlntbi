@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Adófolyószámla egyeztető program | EXCELlent Business Intelligence";
+const TITLE = "XLNT Adófolyószámla egyeztető program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Egyeztesd automatikusan a NAV adófolyószámla adatait a könyveléseddel, és szűrd ki gyorsan az eltéréseket.";
-const H1 = "Adófolyószámla egyeztető";
+const H1 = "XLNT Adófolyószámla egyeztető";
 const CANONICAL = "https://xlntbi.hu/termek/adofolyoszamla-egyezteto";
 const OG_IMAGE = "https://xlntbi.hu/og/cegaudit.jpg";
 

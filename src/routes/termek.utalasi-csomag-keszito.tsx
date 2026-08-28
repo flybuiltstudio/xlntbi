@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Utalási csomag készítő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT Utalási csomag készítő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Generálj gyorsan banki utalási csomagot (pl. bér, szállítói) Excel adatokból, a bankod által elfogadott formátumban.";
-const H1 = "Utalási csomag készítő";
+const H1 = "XLNT Utalási csomag készítő";
 const CANONICAL = "https://xlntbi.hu/termek/utalasi-csomag-keszito";
 const OG_IMAGE = "https://xlntbi.hu/og/utalasi-csomag-keszito.jpg";
 

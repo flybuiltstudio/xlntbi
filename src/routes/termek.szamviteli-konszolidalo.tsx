@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Számviteli konszolidáló program | EXCELlent Business Intelligence";
+const TITLE = "XLNT Számviteli konszolidáló program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Készíts konszolidált beszámolót cégcsoportodnak gyorsan és átláthatóan, magyar számviteli szabályok szerint.";
-const H1 = "Számviteli konszolidáló";
+const H1 = "XLNT Számviteli konszolidáló";
 const CANONICAL = "https://xlntbi.hu/termek/szamviteli-konszolidalo";
 const OG_IMAGE = "https://xlntbi.hu/og/controlling.jpg";
 

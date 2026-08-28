@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "RLB bank konverter Pro – bővített, automatizált banki import | EXCELlent Business Intelligence";
+const TITLE = "XLNT RLB bank konverter Pro – bővített, automatizált banki import | EXCELlent Business Intelligence";
 const DESCRIPTION = "Az RLB bank konverter PRO kiadása: több bankformátum, kötegelt feldolgozás, automatikus partner- és főkönyvi felismerés, gyorsabb, hibamentes import.";
-const H1 = "RLB bank konverter Pro";
+const H1 = "XLNT RLB bank konverter Pro";
 const CANONICAL = "https://xlntbi.hu/termek/rlb-bank-konverter-pro";
 const OG_IMAGE = "https://xlntbi.hu/og/konyveloiroda-audit.jpg";
 

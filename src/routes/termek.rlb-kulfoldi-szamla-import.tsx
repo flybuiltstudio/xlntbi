@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Külföldi számla import RLB könyvelőprogramba | EXCELlent Business Intelligence";
+const TITLE = "XLNT Külföldi számla import RLB könyvelőprogramba | EXCELlent Business Intelligence";
 const DESCRIPTION = "Importáld gyorsan a külföldi bankszámlakivonatokat az RLB könyvelőprogramba, automatizált feldolgozással.";
-const H1 = "Külföldi számla import, RLB";
+const H1 = "XLNT Külföldi számla import, RLB";
 const CANONICAL = "https://xlntbi.hu/termek/rlb-kulfoldi-szamla-import";
 const OG_IMAGE = "https://xlntbi.hu/og/close-up-busy-businesswoman.jpg";
 

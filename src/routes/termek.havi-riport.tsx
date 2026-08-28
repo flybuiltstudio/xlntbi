@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Havi pénzügyi riport sablon | EXCELlent Business Intelligence";
+const TITLE = "XLNT Havi pénzügyi riport sablon | EXCELlent Business Intelligence";
 const DESCRIPTION = "Automatizált havi pénzügyi riport sablon, ami áttekinthetően mutatja cége havi teljesítményét és a fontos mutatókat.";
-const H1 = "Havi riport";
+const H1 = "XLNT Havi riport";
 const CANONICAL = "https://xlntbi.hu/termek/havi-riport";
 const OG_IMAGE = "https://xlntbi.hu/og/online-kalkulator.jpg";
 

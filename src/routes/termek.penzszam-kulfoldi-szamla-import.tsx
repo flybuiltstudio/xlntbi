@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Külföldi bankszámla import Pénzsz@mla rendszerbe | EXCELlent Business Intelligence";
+const TITLE = "XLNT Külföldi bankszámla import Pénzsz@mla rendszerbe | EXCELlent Business Intelligence";
 const DESCRIPTION = "Importáld gyorsan a külföldi bankszámlakivonatokat a Pénzsz@mla könyvelőprogramba, kézi rögzítés nélkül.";
-const H1 = "Külföldi bankszámla import, Pénzsz@mla";
+const H1 = "XLNT Külföldi bankszámla import, Pénzsz@mla";
 const CANONICAL = "https://xlntbi.hu/termek/penzszam-kulfoldi-szamla-import";
 const OG_IMAGE = "https://xlntbi.hu/og/cegaudit.jpg";
 

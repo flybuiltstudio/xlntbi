@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "NAV pénztárgép adatok letöltő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT NAV pénztárgép adatok letöltő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Töltsd le és dolgozd fel automatikusan a NAV rendszeréből a pénztárgépes forgalmi adatokat, gyors ellenőrzéshez és könyveléshez.";
-const H1 = "NAV pénztárgép adatok letöltő";
+const H1 = "XLNT NAV pénztárgép adatok letöltő";
 const CANONICAL = "https://xlntbi.hu/termek/nav-penztargep-letolto";
 const OG_IMAGE = "https://xlntbi.hu/og/close-up-busy-businesswoman.jpg";
 

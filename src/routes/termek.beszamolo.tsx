@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Éves beszámoló készítő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT Éves beszámoló készítő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Állítsd össze gyorsan, hibamentesen az éves beszámolót a hatályos szabályok szerint, Excel alapú sablonnal.";
-const H1 = "Éves beszámoló készítő";
+const H1 = "XLNT Éves beszámoló készítő";
 const CANONICAL = "https://xlntbi.hu/termek/beszamolo";
 const OG_IMAGE = "https://xlntbi.hu/og/close-up-busy-businesswoman.jpg";
 

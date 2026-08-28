@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "évA60 összesítő nyilatkozat XML-generáló | EXCELlent Business Intelligence";
+const TITLE = "XLNT évA60 összesítő nyilatkozat XML-generáló | EXCELlent Business Intelligence";
 const DESCRIPTION = "Készítsd el gyorsan a NAV-kompatibilis XML fájlt az A60 összesítő nyilatkozathoz, Excel alapú adatokból. A licenc a megrendelés évére érvényes.";
-const H1 = "évA60 összesítő nyilatkozat XML-generáló";
+const H1 = "XLNT évA60 összesítő nyilatkozat XML-generáló";
 const CANONICAL = "https://xlntbi.hu/termek/a60-osszesito-nyilatkozat-xml";
 const OG_IMAGE = "https://xlntbi.hu/og/controlling.jpg";
 

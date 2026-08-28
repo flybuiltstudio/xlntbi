@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "Cégkivonat Excel konverter | EXCELlent Business Intelligence";
+const TITLE = "XLNT Cégkivonat Excel konverter | EXCELlent Business Intelligence";
 const DESCRIPTION = "Alakítsd át a céginformációs szolgálat cégkivonatait automatikusan Excel táblázattá, gyors adatfeldolgozáshoz.";
-const H1 = "Cégkivonat Excel konverter";
+const H1 = "XLNT Cégkivonat Excel konverter";
 const CANONICAL = "https://xlntbi.hu/termek/cegkivonat-excel-konverter";
 const OG_IMAGE = "https://xlntbi.hu/og/termekek.jpg";
 

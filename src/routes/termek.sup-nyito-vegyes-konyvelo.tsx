@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
-const TITLE = "SUP nyitó és vegyes könyvelő program | EXCELlent Business Intelligence";
+const TITLE = "XLNT SUP nyitó és vegyes könyvelő program | EXCELlent Business Intelligence";
 const DESCRIPTION = "Generálj nyitó és vegyes könyvelési tételeket a SUP könyvelőrendszerhez gyorsan, Excel alapú sablonból kiindulva.";
-const H1 = "SUP nyitó, vegyes könyvelő";
+const H1 = "XLNT SUP nyitó, vegyes könyvelő";
 const CANONICAL = "https://xlntbi.hu/termek/sup-nyito-vegyes-konyvelo";
 const OG_IMAGE = "https://xlntbi.hu/og/nyito-vegyes-konyvelo.jpg";
 
