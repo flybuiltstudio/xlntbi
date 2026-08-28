@@ -54,7 +54,8 @@ function computeBreakdown(
   if (coupon.percent_off) {
     discount = Math.round((original * coupon.percent_off) / 100);
   } else if (coupon.amount_off && String(coupon.currency ?? "huf").toLowerCase() === "huf") {
-    discount = Math.round(coupon.amount_off);
+    // Stripe stores HUF amounts in minor units (fillér).
+    discount = Math.round(coupon.amount_off / 100);
   } else {
     return {};
   }
@@ -75,8 +76,9 @@ function describeDiscount(coupon: {
   if (coupon.percent_off) return `${coupon.percent_off}% kedvezmény`;
   if (coupon.amount_off) {
     const currency = (coupon.currency ?? "huf").toUpperCase();
+    // Stripe amounts are minor units for both HUF (fillér) and e.g. EUR (cent).
     return currency === "HUF"
-      ? `${formatHuf(coupon.amount_off)} kedvezmény`
+      ? `${formatHuf(coupon.amount_off / 100)} kedvezmény`
       : `${coupon.amount_off / 100} ${currency} kedvezmény`;
   }
   return "kedvezmény";
@@ -215,15 +217,17 @@ async function evaluatePromotionCode(input: CouponCheckInput): Promise<CouponChe
       };
     }
 
-    const minimum = promo.restrictions?.minimum_amount;
+    const rawMinimum = promo.restrictions?.minimum_amount;
+    // Stripe stores the minimum in minor units (fillér); the order total arrives in forints.
+    const minimum = typeof rawMinimum === "number" ? Math.round(rawMinimum / 100) : undefined;
     if (typeof minimum === "number" && typeof input.amount === "number") {
-      const orderMinor = Math.round(input.amount);
-      if (orderMinor < minimum) {
+      const orderAmount = Math.round(input.amount);
+      if (orderAmount < minimum) {
         return {
           ok: false,
           reason: "below_minimum",
           message: "A rendelés összege nem éri el a kupon alsó határát.",
-          detail: `A kód ${formatHuf(minimum)} feletti rendelésnél váltható be, a jelenlegi összeg ${formatHuf(orderMinor)}.`,
+          detail: `A kód ${formatHuf(minimum)} feletti rendelésnél váltható be, a jelenlegi összeg ${formatHuf(orderAmount)}.`,
         };
       }
     }
