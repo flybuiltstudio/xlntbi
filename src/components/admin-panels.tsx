@@ -1811,9 +1811,9 @@ export function ProductVersionPanel() {
               Jelenlegi fájl: <span className="font-mono">{meta?.fileName ?? "…"}</span>
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Tárolt fájl (állandó, ez biztosítja a régi linkek működését):{" "}
-              <span className="font-mono">{meta?.storageFileName ?? "…"}</span>
+              Ez a név jelenik meg a vevőnek és a termék adatlapján. Új feltöltés felülírja.
             </p>
+
             <p className="mt-1 text-xs text-muted-foreground">
               Méret: {formatFileSize(meta?.size ?? null)}
               {meta?.updatedAt
