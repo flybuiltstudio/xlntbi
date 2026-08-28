@@ -1,6 +1,7 @@
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from "@stripe/react-stripe-js";
 import { useMemo } from "react";
 
+import { withXlntPrefix } from "@/lib/product-name";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import { createOrderCheckoutSession } from "@/utils/payments.functions";
 
@@ -9,9 +10,17 @@ type Props = {
   quantity: number;
   orderNumber: string;
   customerEmail: string;
+  /** Terméknév a saját katalógusból (mindig „XLNT ” előtaggal jelenik meg). */
+  productLabel?: string;
 };
 
-export function StripeOrderCheckout({ priceId, quantity, orderNumber, customerEmail }: Props) {
+export function StripeOrderCheckout({
+  priceId,
+  quantity,
+  orderNumber,
+  customerEmail,
+  productLabel,
+}: Props) {
   const options = useMemo(
     () => ({
       fetchClientSecret: async () => {
@@ -35,6 +44,12 @@ export function StripeOrderCheckout({ priceId, quantity, orderNumber, customerEm
 
   return (
     <div id="checkout" className="mt-6">
+      {productLabel ? (
+        <p className="mb-3 text-sm text-muted-foreground">
+          Fizetendő termék:{" "}
+          <strong className="text-foreground">{withXlntPrefix(productLabel)}</strong>
+        </p>
+      ) : null}
       <EmbeddedCheckoutProvider stripe={getStripe()} options={options}>
         <EmbeddedCheckout />
       </EmbeddedCheckoutProvider>
