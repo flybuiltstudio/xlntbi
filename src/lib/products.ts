@@ -498,7 +498,7 @@ export const products: Product[] = [
         id: "egy_ceg",
         label: "Céges licenc",
         price: 24900,
-        note: "Egyetlen adószámhoz kötve.",
+        note: "Egyetlen adószámhoz kötve. A vásárlás az adott évi verzióra szól.",
         priceId: "beszamolo_egy_ceg",
       },
       {
