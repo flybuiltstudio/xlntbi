@@ -247,6 +247,25 @@ export const adminCreateProductUploadUrl = createServerFn({ method: "POST" })
     return createProductUploadUrl(data);
   });
 
+/** Records the uploaded file's own name after a successful storage upload. */
+export const adminRecordProductFileVersion = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        slug: z.string().min(1),
+        fileName: z.string().min(1),
+        fileSize: z.number().int().nonnegative(),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { recordProductFileVersion } = await import("./admin.server");
+    return recordProductFileVersion({ ...data, uploadedBy: context.userId });
+  });
+
 export const adminListCalculatorOverrides = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
