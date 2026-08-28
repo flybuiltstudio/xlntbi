@@ -9,9 +9,17 @@ type Props = {
   quantity: number;
   orderNumber: string;
   customerEmail: string;
+  /** Terméknév a saját katalógusból (mindig „XLNT ” előtaggal jelenik meg). */
+  productLabel?: string;
 };
 
-export function StripeOrderCheckout({ priceId, quantity, orderNumber, customerEmail }: Props) {
+export function StripeOrderCheckout({
+  priceId,
+  quantity,
+  orderNumber,
+  customerEmail,
+  productLabel,
+}: Props) {
   const options = useMemo(
     () => ({
       fetchClientSecret: async () => {
