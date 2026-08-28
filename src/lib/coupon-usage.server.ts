@@ -49,7 +49,7 @@ function describeRule(coupon: any): string | null {
   if (coupon.amount_off) {
     const currency = String(coupon.currency ?? "huf").toUpperCase();
     return currency === "HUF"
-      ? `${Math.round(coupon.amount_off).toLocaleString("hu-HU")} Ft`
+      ? `${Math.round(coupon.amount_off / 100).toLocaleString("hu-HU")} Ft`
       : `${coupon.amount_off / 100} ${currency}`;
   }
   return null;

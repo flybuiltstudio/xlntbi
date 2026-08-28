@@ -45,9 +45,10 @@ const STATUS_CLASS: Record<string, string> = {
   used_up: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
 };
 
+/** Formats a Stripe minor-unit amount (fillér) as forint. */
 function huf(value: number | null): string {
   if (value == null) return "—";
-  return `${Math.round(value).toLocaleString("hu-HU")} Ft`;
+  return `${Math.round(value / 100).toLocaleString("hu-HU")} Ft`;
 }
 
 function dateHu(iso: string | null): string {
