@@ -10,39 +10,13 @@
  */
 
 import { withXlntPrefix } from "./product-name";
+import type {
+  StripeNameReport,
+  StripeNameRow,
+  StripeNameSyncResult,
+} from "./stripe-product-names";
 import { products } from "./products";
 import { createStripeClient, getStripeErrorMessage, type StripeEnv } from "./stripe.server";
-
-export type StripeNameRow = {
-  /** Human-readable Stripe price lookup key (as used in the catalog). */
-  priceId: string;
-  /** Catalog product slug. */
-  slug: string;
-  /** Stripe internal product id, when the price was found. */
-  stripeProductId: string | null;
-  /** Current display name in Stripe. */
-  currentName: string | null;
-  /** Desired, prefixed display name. */
-  desiredName: string;
-  status: "ok" | "needs_fix" | "missing";
-};
-
-export type StripeNameReport = {
-  environment: StripeEnv;
-  rows: StripeNameRow[];
-  okCount: number;
-  fixCount: number;
-  missingCount: number;
-  error?: string;
-};
-
-export type StripeNameSyncResult = {
-  environment: StripeEnv;
-  updated: string[];
-  skipped: number;
-  errors: Array<{ priceId: string; message: string }>;
-  report: StripeNameReport;
-};
 
 type CatalogEntry = { priceId: string; slug: string; desiredName: string };
 
@@ -179,3 +153,5 @@ export async function syncStripeProductNames(
   const report = await listStripeProductNameStatus(environment);
   return { environment, updated, skipped: before.okCount, errors, report };
 }
+
+export type { StripeNameReport, StripeNameRow, StripeNameSyncResult };

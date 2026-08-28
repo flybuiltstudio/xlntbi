@@ -8,13 +8,14 @@ import {
 } from "@/lib/stripe-product-names.functions";
 import type {
   StripeNameReport,
+  StripeNameStatus,
   StripeNameSyncResult,
-} from "@/lib/stripe-product-names.server";
+} from "@/lib/stripe-product-names";
 import { getStripeEnvironment } from "@/lib/stripe";
 
 type Env = "sandbox" | "live";
 
-const STATUS_LABEL: Record<StripeNameReport["rows"][number]["status"], string> = {
+const STATUS_LABEL: Record<StripeNameStatus, string> = {
   ok: "Rendben",
   needs_fix: "Javítandó",
   missing: "Nincs a Stripe-ban",
