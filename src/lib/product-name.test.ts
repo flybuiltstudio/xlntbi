@@ -45,3 +45,27 @@ describe("catalog", () => {
     expect(names.filter((n) => !hasXlntPrefix(n))).toEqual([]);
   });
 });
+
+describe("catalog and Stripe naming", () => {
+  it("every catalog product name and meta title is prefixed", async () => {
+    const { products } = await import("./products");
+    for (const product of products) {
+      expect(hasXlntPrefix(product.name)).toBe(true);
+      expect(hasXlntPrefix(product.metaTitle)).toBe(true);
+    }
+  });
+
+  it("the Stripe name target of every price is prefixed and stable", async () => {
+    const { catalogNameTargets } = await import("./stripe-product-names.server");
+    const targets = catalogNameTargets();
+    expect(targets.length).toBeGreaterThan(0);
+    const seen = new Set<string>();
+    for (const target of targets) {
+      expect(hasXlntPrefix(target.desiredName)).toBe(true);
+      // Idempotent: running the normalizer again changes nothing.
+      expect(withXlntPrefix(target.desiredName)).toBe(target.desiredName);
+      expect(seen.has(target.priceId)).toBe(false);
+      seen.add(target.priceId);
+    }
+  });
+});
