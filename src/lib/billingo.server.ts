@@ -1,3 +1,4 @@
+import { couponInvoiceLineName } from "./coupon-amount";
 /**
  * Billingo.hu API v3 integration.
  *
@@ -218,9 +219,7 @@ async function createInvoice(
       ...(discountAmount > 0
         ? [
             {
-              name: couponCode
-                ? `Kuponkedvezmény (${couponCode})`
-                : "Kuponkedvezmény",
+              name: couponInvoiceLineName(couponCode, discountAmount),
               unit_price: -discountAmount,
               unit_price_type: "gross",
               quantity: 1,
