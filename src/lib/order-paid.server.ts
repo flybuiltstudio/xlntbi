@@ -1,4 +1,5 @@
 import { sendEmails } from "./notify.server";
+import { withXlntPrefix } from "./product-name";
 import { formatPrice } from "./products";
 import { issueInvoiceForOrder } from "./billingo.server";
 
@@ -71,9 +72,10 @@ export async function markOrderPaid(options: {
     return;
   }
 
+  const orderProductName = withXlntPrefix(order.product_name);
   const productLabel = order.tier_label
-    ? `${order.product_name} – ${order.tier_label} (${order.quantity} db)`
-    : `${order.product_name} (${order.quantity} db)`;
+    ? `${orderProductName} – ${order.tier_label} (${order.quantity} db)`
+    : `${orderProductName} (${order.quantity} db)`;
   const rows: Array<[string, string]> = [
     ["Rendelésszám", order.order_number],
     ["Termék", productLabel],
@@ -109,7 +111,7 @@ export async function markOrderPaid(options: {
     id: order.id as string,
     order_number: order.order_number as string,
     product_slug: order.product_slug as string,
-    product_name: order.product_name as string,
+    product_name: withXlntPrefix(order.product_name as string),
     tier_label: (order.tier_label as string | null) ?? null,
     quantity: order.quantity as number,
     billing_name: order.billing_name as string,

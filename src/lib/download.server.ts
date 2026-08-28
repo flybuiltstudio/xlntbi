@@ -1,5 +1,6 @@
 import { sendEmails } from "./notify.server";
 import { getProduct } from "./products";
+import { withXlntPrefix } from "./product-name";
 
 const OWNER_EMAIL = "xllentac@gmail.com";
 const BUCKET = "termekfajlok";
@@ -60,6 +61,7 @@ async function downloadFileName(slug: string, fallback: string): Promise<string>
  * link to the buyer. Idempotent: an existing, still-valid token is reused.
  */
 export async function issueDownload(order: OrderRow): Promise<void> {
+  const productName = withXlntPrefix(order.product_name);
   const product = getProduct(order.product_slug);
   if (!product?.download) {
     // No binary yet (e.g. "coming soon" product) — notify the owner to handle it.
@@ -70,13 +72,13 @@ export async function issueDownload(order: OrderRow): Promise<void> {
         key: `${order.order_number}-nofile`,
         data: {
           orderNumber: order.order_number,
-          productName: order.product_name,
+          productName,
           total: "—",
           customerEmail: order.email,
           paymentStatus: "paid",
           rows: [
             ["Figyelem", "Ehhez a termékhez nincs feltöltött fájl, a letöltést kézzel küldd el."],
-            ["Termék", order.product_name],
+            ["Termék", productName],
             ["E-mail", order.email],
           ] as Array<[string, string]>,
         },
@@ -125,8 +127,8 @@ export async function issueDownload(order: OrderRow): Promise<void> {
   }
 
   const productLabel = order.tier_label
-    ? `${order.product_name} – ${order.tier_label} (${order.quantity} db)`
-    : `${order.product_name} (${order.quantity} db)`;
+    ? `${productName} – ${order.tier_label} (${order.quantity} db)`
+    : `${productName} (${order.quantity} db)`;
 
   await sendEmails([
     {
@@ -142,7 +144,7 @@ export async function issueDownload(order: OrderRow): Promise<void> {
         expiresAt: formatDate(expiresAt),
         maxDownloads: MAX_DOWNLOADS,
         rows: [
-          ["Termék", order.product_name],
+          ["Termék", productName],
           ...(order.tier_label ? [["Licenc csomag", order.tier_label] as [string, string]] : []),
           ["Fájl", currentFileName],
           ["Elérhető eddig", formatDate(expiresAt)],

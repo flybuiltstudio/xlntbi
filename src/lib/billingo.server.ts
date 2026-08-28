@@ -1,4 +1,5 @@
 import { couponInvoiceLineName } from "./coupon-amount";
+import { withXlntPrefix } from "./product-name";
 /**
  * Billingo.hu API v3 integration.
  *
@@ -176,9 +177,8 @@ function paymentMethodFor(order: OrderRow): string {
 }
 
 function productNameLabel(order: OrderRow): string {
-  return order.tier_label
-    ? `${order.product_name} – ${order.tier_label}`
-    : order.product_name;
+  const name = withXlntPrefix(order.product_name);
+  return order.tier_label ? `${name} – ${order.tier_label}` : name;
 }
 
 /** Creates the invoice document (already marked paid). Returns the Billingo invoice id + number. */
