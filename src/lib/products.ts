@@ -505,7 +505,7 @@ export const products: Product[] = [
         id: "konyveloiroda",
         label: "Könyvelőiroda",
         price: 44900,
-        note: "Adószám-korlátozás nélkül, korlátlan számú cégre.",
+        note: "Adószám-korlátozás nélkül, korlátlan számú cégre. A vásárlás az adott évi verzióra szól.",
         priceId: "beszamolo_konyveloiroda",
       },
     ],
