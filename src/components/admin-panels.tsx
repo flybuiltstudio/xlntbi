@@ -520,16 +520,41 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
-  /** Removes every test order and all data referencing it. */
+  /** Takes an order off the list and never offers it for deletion again. */
+  async function onKeepTestOrder(row: TestOrderPreviewRow) {
+    setBusy(`keep-${row.orderNumber}`);
+    try {
+      const result = await keepTest({ data: { orderNumber: row.orderNumber } });
+      if (result.ok) {
+        setPurgePreview((prev) => {
+          const next = (prev ?? []).filter((r) => r.orderNumber !== row.orderNumber);
+          return next.length > 0 ? next : null;
+        });
+        setMessage(`${row.orderNumber}: kivéve a törlési listából, többé nem ajánlom fel.`);
+      } else {
+        setMessage(result.error ?? "Hiba történt.");
+      }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
+  /** Removes the listed test orders and all data referencing them. */
   async function onPurgeTests() {
+    const numbers = (purgePreview ?? []).map((row) => row.orderNumber);
+    if (numbers.length === 0) return;
     setBusy("purge");
     setMessage("");
     try {
-      const result = await purgeTests();
+      const result = await purgeTests({ data: { orderNumbers: numbers } });
       setMessage(
         result.ok
           ? result.deleted > 0
-            ? `${result.deleted} teszt megrendelés és minden hozzá tartozó adat törölve.`
+            ? `${result.deleted} teszt megrendelés és minden hozzá tartozó adat törölve.` +
+              (result.canceled > 0
+                ? ` ${result.canceled} Billingo számla sztornózva.`
+                : " Sztornózandó Billingo számla nem volt.")
             : "Nem találtam teszt megrendelést."
           : (result.error ?? "Hiba történt."),
       );
@@ -540,6 +565,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
     }
     setBusy(null);
   }
+
 
   return (
     <div className="mt-8">
