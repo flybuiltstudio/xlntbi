@@ -83,7 +83,9 @@ export async function listCouponUsage(
         code = (promoRef as any).code ?? null;
       }
 
-      const paidAmount = session.amount_total ?? 0;
+      // Stripe returns minor units (fillér); every display surface expects HUF.
+      const discountHuf = minorToHuf(discountAmount);
+      const paidHuf = minorToHuf(session.amount_total ?? 0);
       rows.push({
         sessionId: session.id,
         createdAt: new Date(session.created * 1000).toISOString(),
@@ -94,10 +96,11 @@ export async function listCouponUsage(
           : discount?.coupon?.amount_off
             ? "fixed"
             : null,
-        discountAmount,
-        paidAmount,
-        originalAmount: paidAmount + discountAmount,
+        discountAmount: discountHuf,
+        paidAmount: paidHuf,
+        originalAmount: paidHuf + discountHuf,
         currency: String(session.currency ?? "huf").toUpperCase(),
+
         paymentStatus: session.payment_status ?? "unknown",
         customerEmail: session.customer_email ?? session.customer_details?.email ?? null,
         orderNumber:
