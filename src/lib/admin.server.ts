@@ -1363,12 +1363,15 @@ export async function listTestOrdersPreview(): Promise<{
     return { ok: false, rows: [], error: "A teszt megrendelések betöltése nem sikerült." };
   }
 
+  const kept = await keptOrderNumbers();
   const rows: TestOrderPreviewRow[] = [];
   for (const order of data ?? []) {
     const reason = testOrderReason(order);
     if (!reason) continue;
+    const orderNumber = String((order as any).order_number);
+    if (kept.has(orderNumber)) continue;
     rows.push({
-      orderNumber: String((order as any).order_number),
+      orderNumber,
       email: String((order as any).email ?? ""),
       productName: String((order as any).product_name ?? ""),
       totalPrice: Number((order as any).total_price ?? 0),
@@ -1383,39 +1386,91 @@ export async function listTestOrdersPreview(): Promise<{
 }
 
 /**
- * Deletes EVERY test order (test payment provider, TESZT- prefixed order number
- * or internal test e-mail) together with all rows that reference them: download
- * tokens, Billingo invoice logs and invoice snapshots. This clears the test data
- * from every admin surface (orders, statistics, Billingo audit and log pages).
+ * Deletes test orders (test payment provider, TESZT- prefixed order number,
+ * internal or developer test e-mail) together with all rows that reference
+ * them: download tokens, Billingo invoice logs and invoice snapshots.
+ *
+ * Orders on the keep list are never touched. When `orderNumbers` is given, only
+ * those orders are deleted (the admin may have removed rows from the preview).
+ *
+ * Before deletion every order that still carries a Billingo invoice id is
+ * cancelled (storno). Double storno is impossible: the invoice reference is
+ * cleared by the cancel call, and orders that already have a successful
+ * "canceled" log entry are skipped.
  */
-export async function purgeTestOrders(): Promise<{
-  ok: boolean;
-  deleted: number;
-  error?: string;
-}> {
+export async function purgeTestOrders(
+  orderNumbers?: string[],
+): Promise<{ ok: boolean; deleted: number; canceled: number; error?: string }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
   const { data: rows, error: listError } = await supabaseAdmin
     .from("orders")
-    .select("id, order_number, payment_provider, email");
+    .select(
+      "id, order_number, payment_provider, email, billingo_invoice_id, billingo_invoice_number",
+    );
 
   if (listError) {
     console.error("Test order purge listing failed:", listError.message);
-    return { ok: false, deleted: 0, error: "A teszt megrendelések betöltése nem sikerült." };
+    return {
+      ok: false,
+      deleted: 0,
+      canceled: 0,
+      error: "A teszt megrendelések betöltése nem sikerült.",
+    };
   }
 
-  const tests = (rows ?? []).filter((o: any) => testOrderReason(o) !== null);
-  if (tests.length === 0) return { ok: true, deleted: 0 };
+  const kept = await keptOrderNumbers();
+  const selection = orderNumbers && orderNumbers.length > 0 ? new Set(orderNumbers) : null;
 
+  const tests = (rows ?? []).filter((o: any) => {
+    if (testOrderReason(o) === null) return false;
+    const number = String(o.order_number);
+    if (kept.has(number)) return false;
+    if (selection && !selection.has(number)) return false;
+    return true;
+  });
+  if (tests.length === 0) return { ok: true, deleted: 0, canceled: 0 };
 
   const ids = tests.map((o: any) => o.id as string);
   const numbers = tests.map((o: any) => String(o.order_number));
+
+  // Storno the still-open Billingo invoices before the rows disappear.
+  const invoiced = tests.filter((o: any) => o.billingo_invoice_id);
+  let canceled = 0;
+  if (invoiced.length > 0) {
+    const { data: cancelLogs } = await supabaseAdmin
+      .from("billingo_invoice_logs")
+      .select("billingo_invoice_id, status")
+      .in(
+        "billingo_invoice_id",
+        invoiced.map((o: any) => o.billingo_invoice_id as number),
+      )
+      .eq("status", "canceled");
+    const alreadyCanceled = new Set(
+      (cancelLogs ?? []).map((l: any) => Number(l.billingo_invoice_id)),
+    );
+
+    const { cancelInvoiceForOrder } = await import("./billingo.server");
+    for (const order of invoiced as any[]) {
+      if (alreadyCanceled.has(Number(order.billingo_invoice_id))) continue;
+      const result = await cancelInvoiceForOrder(order, {
+        source: "admin",
+        reason: "Teszt megrendelés törlése az admin felületről.",
+      });
+      if (result.ok && !result.skipped) canceled += 1;
+    }
+  }
 
   for (const table of ["order_downloads", "billingo_invoice_snapshots"] as const) {
     const { error } = await supabaseAdmin.from(table).delete().in("order_id", ids);
     if (error) {
       console.error(`Test order purge failed on ${table}:`, error.message);
-      return { ok: false, deleted: 0, error: "A kapcsolódó teszt adatok törlése nem sikerült." };
+      return {
+        ok: false,
+        deleted: 0,
+        canceled,
+        error: "A kapcsolódó teszt adatok törlése nem sikerült.",
+      };
     }
   }
 
@@ -1425,7 +1480,7 @@ export async function purgeTestOrders(): Promise<{
     .or(`order_id.in.(${ids.join(",")}),order_number.in.(${numbers.join(",")})`);
   if (logError) {
     console.error("Test order purge failed on billingo_invoice_logs:", logError.message);
-    return { ok: false, deleted: 0, error: "A számlázási naplók törlése nem sikerült." };
+    return { ok: false, deleted: 0, canceled, error: "A számlázási naplók törlése nem sikerült." };
   }
 
   const { data: deleted, error } = await supabaseAdmin
@@ -1435,7 +1490,13 @@ export async function purgeTestOrders(): Promise<{
     .select("id");
   if (error) {
     console.error("Test order purge failed:", error.message);
-    return { ok: false, deleted: 0, error: "A teszt megrendelések törlése nem sikerült." };
+    return {
+      ok: false,
+      deleted: 0,
+      canceled,
+      error: "A teszt megrendelések törlése nem sikerült.",
+    };
   }
-  return { ok: true, deleted: deleted?.length ?? 0 };
+  return { ok: true, deleted: deleted?.length ?? 0, canceled };
 }
+
