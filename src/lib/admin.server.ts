@@ -1452,7 +1452,11 @@ export async function purgeTestOrders(
 
     const { cancelInvoiceForOrder } = await import("./billingo.server");
     for (const order of invoiced as any[]) {
-      if (alreadyCanceled.has(Number(order.billingo_invoice_id))) continue;
+      const invoiceId = Number(order.billingo_invoice_id);
+      // Skip invoices already stornoed earlier, and never touch the same
+      // invoice id twice inside one purge run either.
+      if (alreadyCanceled.has(invoiceId)) continue;
+      alreadyCanceled.add(invoiceId);
       const result = await cancelInvoiceForOrder(order, {
         source: "admin_purge",
         reason: "Teszt megrendelés törlése az admin felületről.",
