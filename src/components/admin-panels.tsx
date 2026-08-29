@@ -1242,7 +1242,9 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
         <p className="mt-8 text-sm text-muted-foreground">Nincs felhasználó.</p>
       ) : (
         <div className="mt-6 space-y-3">
-          {users.map((user) => (
+          {users.map((user) => {
+            const isSuperAdmin = user.email.trim().toLowerCase() === "xllentac@gmail.com";
+            return (
             <article
               key={user.id}
               className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card px-5 py-4 text-sm text-foreground"
@@ -1253,6 +1255,11 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
                   {user.id === currentUserId ? (
                     <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
                       ez te vagy
+                    </span>
+                  ) : null}
+                  {isSuperAdmin ? (
+                    <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                      szuper admin
                     </span>
                   ) : null}
                 </p>
@@ -1280,7 +1287,7 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
                 <select
                   aria-label={`Szerepkör: ${user.email}`}
                   value={user.roles[0] ?? "user"}
-                  disabled={roleBusy === user.id || user.id === currentUserId}
+                  disabled={roleBusy === user.id || user.id === currentUserId || isSuperAdmin}
                   onChange={(e) => {
                     const role = e.target.value === "admin" ? "admin" : "user";
                     if (role !== (user.roles[0] ?? "user")) void onChangeRole(user, role);
@@ -1292,7 +1299,8 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
                 </select>
                 <button
                   type="button"
-                  disabled={busy === user.id || user.id === currentUserId}
+                  disabled={busy === user.id || user.id === currentUserId || isSuperAdmin}
+                  title={isSuperAdmin ? "A szuper admin nem törölhető" : undefined}
                   onClick={() => void onDelete(user)}
                   className="rounded-md border border-destructive/40 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-40"
                 >
@@ -1300,7 +1308,8 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
                 </button>
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
       )}
     </section>
