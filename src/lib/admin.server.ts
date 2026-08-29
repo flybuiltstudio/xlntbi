@@ -1274,20 +1274,63 @@ const INTERNAL_TEST_EMAILS = new Set([
   "sarinay.david@gmail.com",
 ]);
 
-function isInternalTestEmail(email: unknown): boolean {
+/** Fejlesztői próbarendelések e-mail címei (a fejlesztő saját tesztjei). */
+const DEVELOPER_TEST_EMAILS = new Set(["fleck.tomi@gmail.com"]);
+
+function baseEmail(email: unknown): string {
   const raw = String(email ?? "").trim().toLowerCase();
-  if (!raw.includes("@")) return false;
+  if (!raw.includes("@")) return "";
   const [local, domain] = raw.split("@");
-  const base = `${(local ?? "").split("+")[0]}@${domain}`;
+  return `${(local ?? "").split("+")[0]}@${domain}`;
+}
+
+function isInternalTestEmail(email: unknown): boolean {
+  const base = baseEmail(email);
+  if (!base) return false;
+  const domain = base.split("@")[1];
   return INTERNAL_TEST_EMAILS.has(base) || domain === "xlntbi.hu";
+}
+
+function isDeveloperTestEmail(email: unknown): boolean {
+  const base = baseEmail(email);
+  return base ? DEVELOPER_TEST_EMAILS.has(base) : false;
 }
 
 function testOrderReason(order: any): string | null {
   if (order.payment_provider === "test") return "Teszt fizetési mód";
   if (String(order.order_number).startsWith("TESZT-")) return "TESZT- előtagú rendelésszám";
   if (isInternalTestEmail(order.email)) return "Belső teszt e-mail cím";
+  if (isDeveloperTestEmail(order.email)) return "Fejlesztői próbarendelés";
   return null;
 }
+
+/** Rendelésszámok, amiket az admin kivett a törlési listából – többé nem ajánljuk fel. */
+const KEEP_SETTING_KEY = "test_purge_keep";
+
+async function keptOrderNumbers(): Promise<Set<string>> {
+  const { getSetting } = await import("./app-settings.server");
+  const value = await getSetting(KEEP_SETTING_KEY);
+  const list = Array.isArray(value["orderNumbers"]) ? value["orderNumbers"] : [];
+  return new Set(list.map((n: unknown) => String(n)));
+}
+
+/** Adds an order number to the keep list, so the purge never offers it again. */
+export async function keepTestOrder(
+  orderNumber: string,
+): Promise<{ ok: boolean; error?: string }> {
+  try {
+    const { getSetting, setSetting } = await import("./app-settings.server");
+    const value = await getSetting(KEEP_SETTING_KEY);
+    const list = Array.isArray(value["orderNumbers"]) ? value["orderNumbers"].map(String) : [];
+    if (!list.includes(orderNumber)) list.push(orderNumber);
+    await setSetting(KEEP_SETTING_KEY, { orderNumbers: list });
+    return { ok: true };
+  } catch (e: any) {
+    console.error("Keep test order failed:", e?.message);
+    return { ok: false, error: "A megrendelés megtartása nem sikerült." };
+  }
+}
+
 
 export type TestOrderPreviewRow = {
   orderNumber: string;
