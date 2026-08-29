@@ -300,6 +300,8 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const sendLicense = useServerFn(adminSendLicense);
   const purgeTests = useServerFn(adminPurgeTestOrders);
   const listTests = useServerFn(adminPreviewTestOrders);
+  const keepTest = useServerFn(adminKeepTestOrder);
+
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
