@@ -7,7 +7,7 @@
  */
 
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "./stripe.server";
-import { describeDiscountRule } from "./coupon-amount";
+import { describeDiscountRule, minorToHuf } from "./coupon-amount";
 
 export type CouponUsageRow = {
   /** Stripe checkout session id. */
