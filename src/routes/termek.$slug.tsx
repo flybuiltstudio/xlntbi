@@ -1,13 +1,18 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
-import { getProduct } from "@/lib/products";
+import { getProduct, resolveProductSlug } from "@/lib/products";
 
 export const Route = createFileRoute("/termek/$slug")({
   loader: ({ params }) => {
+    const canonical = resolveProductSlug(params.slug);
+    if (canonical !== params.slug) {
+      throw redirect({ to: "/termek/$slug", params: { slug: canonical }, statusCode: 301 });
+    }
     const product = getProduct(params.slug);
     if (!product) throw notFound();
     return { product };
   },
+
   head: ({ loaderData }) => {
     const product = loaderData?.product;
     if (!product) return {};

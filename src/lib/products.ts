@@ -1603,9 +1603,27 @@ for (const product of products) {
 
 export const productSlugs = products.map((p) => p.slug);
 
-export function getProduct(slug: string): Product | undefined {
-  return products.find((p) => p.slug === slug);
+/**
+ * Old slugs kept alive after the "year removal" renames, so bookmarked links,
+ * Google results and orders persisted with the old slug keep working.
+ */
+export const LEGACY_PRODUCT_SLUGS: Record<string, string> = {
+  "berszamfejto-2026": "berszamfejto",
+  "beszamolo-2025": "beszamolo",
+  "afa-2665-xml-generalo": "afa-ev65-xml-generalo",
+  "26a60-osszesito-nyilatkozat-xml": "a60-osszesito-nyilatkozat-xml",
+};
+
+/** Canonical slug for a possibly legacy slug. */
+export function resolveProductSlug(slug: string): string {
+  return LEGACY_PRODUCT_SLUGS[slug] ?? slug;
 }
+
+export function getProduct(slug: string): Product | undefined {
+  const canonical = resolveProductSlug(slug);
+  return products.find((p) => p.slug === canonical);
+}
+
 
 export function getTier(product: Product, tierId?: string | null): ProductTier {
   return product.tiers.find((t) => t.id === tierId) ?? product.tiers[0]!;
