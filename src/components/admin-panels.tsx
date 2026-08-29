@@ -602,10 +602,12 @@ export function OrdersPanel({ email }: { email: string | null }) {
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               A törlés a felsorolt rendeléseket és a hozzájuk tartozó letöltési linkeket, számlázási
-              naplókat és számlaadatokat is véglegesen eltávolítja.
+              naplókat és számlaadatokat is véglegesen eltávolítja. Ha van hozzá Billingo számla, azt
+              a törlés előtt sztornózom (duplán soha). A „Kivesz” gombbal kivett rendelést többé nem
+              ajánlom fel törlésre.
             </p>
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[720px] text-left text-sm">
+              <table className="w-full min-w-[820px] text-left text-sm">
                 <thead className="text-xs uppercase text-muted-foreground">
                   <tr>
                     <th className="py-2 pr-3">Rendelésszám</th>
@@ -615,7 +617,8 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     <th className="py-2 pr-3">Összeg</th>
                     <th className="py-2 pr-3">Fizetés</th>
                     <th className="py-2 pr-3">Számla</th>
-                    <th className="py-2">Miért teszt?</th>
+                    <th className="py-2 pr-3">Miért teszt?</th>
+                    <th className="py-2"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -633,11 +636,22 @@ export function OrdersPanel({ email }: { email: string | null }) {
                         {row.paymentProvider ? ` · ${row.paymentProvider}` : ""}
                       </td>
                       <td className="py-2 pr-3">{row.invoiceNumber ?? "–"}</td>
-                      <td className="py-2 text-muted-foreground">{row.reason}</td>
+                      <td className="py-2 pr-3 text-muted-foreground">{row.reason}</td>
+                      <td className="py-2">
+                        <button
+                          type="button"
+                          onClick={() => void onKeepTestOrder(row)}
+                          disabled={busy === `keep-${row.orderNumber}` || busy === "purge"}
+                          className="rounded-md border border-input px-2.5 py-1 text-xs font-medium text-foreground hover:bg-accent disabled:opacity-50"
+                        >
+                          {busy === `keep-${row.orderNumber}` ? "…" : "Kivesz"}
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+
             </div>
             <div className="mt-6 flex flex-wrap justify-end gap-3">
               <button
