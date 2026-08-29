@@ -267,6 +267,7 @@ export type InvoiceAttemptSource =
   | "admin_retry"
   | "billingo_webhook"
   | "stripe_cancel"
+  | "admin_purge"
   | "self_test";
 
 export type InvoiceAttemptStatus = "success" | "error" | "canceled" | "cancel_error";

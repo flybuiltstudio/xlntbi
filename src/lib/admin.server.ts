@@ -1454,7 +1454,7 @@ export async function purgeTestOrders(
     for (const order of invoiced as any[]) {
       if (alreadyCanceled.has(Number(order.billingo_invoice_id))) continue;
       const result = await cancelInvoiceForOrder(order, {
-        source: "admin",
+        source: "admin_purge",
         reason: "Teszt megrendelés törlése az admin felületről.",
       });
       if (result.ok && !result.skipped) canceled += 1;
