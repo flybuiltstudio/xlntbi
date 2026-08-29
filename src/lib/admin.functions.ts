@@ -453,12 +453,27 @@ export const adminSweepLiveCoupons = createServerFn({ method: "POST" })
 
 export const adminPurgeTestOrders = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .inputValidator((data: unknown) =>
+    z.object({ orderNumbers: z.array(z.string()).optional() }).parse(data ?? {}),
+  )
+  .handler(async ({ context, data }) => {
     const { gate } = await import("./admin-gate.server");
     await gate(context as any);
     const { purgeTestOrders } = await import("./admin.server");
-    return purgeTestOrders();
+    return purgeTestOrders(data.orderNumbers);
   });
+
+/** Removes an order from the purge preview permanently (keep list). */
+export const adminKeepTestOrder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ orderNumber: z.string().min(3) }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { keepTestOrder } = await import("./admin.server");
+    return keepTestOrder(data.orderNumber);
+  });
+
 
 export const adminPreviewTestOrders = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
