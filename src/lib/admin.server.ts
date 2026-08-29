@@ -1,5 +1,23 @@
 const ADMIN_EMAILS = ["xllentac@gmail.com", "info@xlntbi.hu"];
 
+/** The owner account: cannot be deleted or demoted, even by another admin. */
+export const SUPER_ADMIN_EMAIL = "xllentac@gmail.com";
+
+export function isSuperAdminEmail(email: string | null | undefined): boolean {
+  return (email ?? "").trim().toLowerCase() === SUPER_ADMIN_EMAIL;
+}
+
+/** Looks up the auth e-mail of a user id (null when unknown). */
+async function emailOfUser(userId: string): Promise<string | null> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.auth.admin.getUserById(userId);
+  if (error) {
+    console.error("User lookup failed:", error.message);
+    return null;
+  }
+  return data.user?.email ?? null;
+}
+
 export type AdminOrder = {
   id: string;
   orderNumber: string;
@@ -174,6 +192,9 @@ export async function updateUserRole(
   if (userId === requesterId) {
     return { ok: false, error: "A saját szerepkörödet nem módosíthatod." };
   }
+  if (isSuperAdminEmail(await emailOfUser(userId))) {
+    return { ok: false, error: "A szuper admin szerepköre nem módosítható." };
+  }
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
   const { error: deleteError } = await supabaseAdmin
@@ -202,6 +223,9 @@ export async function deleteUser(
 ): Promise<{ ok: boolean; error?: string }> {
   if (userId === requesterId) {
     return { ok: false, error: "Saját magadat nem törölheted." };
+  }
+  if (isSuperAdminEmail(await emailOfUser(userId))) {
+    return { ok: false, error: "A szuper admin (xllentac@gmail.com) nem törölhető." };
   }
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { error } = await supabaseAdmin.auth.admin.deleteUser(userId);
