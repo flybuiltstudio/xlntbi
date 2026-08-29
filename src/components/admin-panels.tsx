@@ -16,6 +16,8 @@ import {
   adminListOrders,
   adminPurgeTestOrders,
   adminPreviewTestOrders,
+  adminKeepTestOrder,
+
   adminListProductFiles,
   adminListProductPlacements,
   adminListUsers,
@@ -300,6 +302,8 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const sendLicense = useServerFn(adminSendLicense);
   const purgeTests = useServerFn(adminPurgeTestOrders);
   const listTests = useServerFn(adminPreviewTestOrders);
+  const keepTest = useServerFn(adminKeepTestOrder);
+
 
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
@@ -520,16 +524,41 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
-  /** Removes every test order and all data referencing it. */
+  /** Takes an order off the list and never offers it for deletion again. */
+  async function onKeepTestOrder(row: TestOrderPreviewRow) {
+    setBusy(`keep-${row.orderNumber}`);
+    try {
+      const result = await keepTest({ data: { orderNumber: row.orderNumber } });
+      if (result.ok) {
+        setPurgePreview((prev) => {
+          const next = (prev ?? []).filter((r) => r.orderNumber !== row.orderNumber);
+          return next.length > 0 ? next : null;
+        });
+        setMessage(`${row.orderNumber}: kivéve a törlési listából, többé nem ajánlom fel.`);
+      } else {
+        setMessage(result.error ?? "Hiba történt.");
+      }
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
+  /** Removes the listed test orders and all data referencing them. */
   async function onPurgeTests() {
+    const numbers = (purgePreview ?? []).map((row) => row.orderNumber);
+    if (numbers.length === 0) return;
     setBusy("purge");
     setMessage("");
     try {
-      const result = await purgeTests();
+      const result = await purgeTests({ data: { orderNumbers: numbers } });
       setMessage(
         result.ok
           ? result.deleted > 0
-            ? `${result.deleted} teszt megrendelés és minden hozzá tartozó adat törölve.`
+            ? `${result.deleted} teszt megrendelés és minden hozzá tartozó adat törölve.` +
+              (result.canceled > 0
+                ? ` ${result.canceled} Billingo számla sztornózva.`
+                : " Sztornózandó Billingo számla nem volt.")
             : "Nem találtam teszt megrendelést."
           : (result.error ?? "Hiba történt."),
       );
@@ -540,6 +569,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
     }
     setBusy(null);
   }
+
 
   return (
     <div className="mt-8">
@@ -572,10 +602,12 @@ export function OrdersPanel({ email }: { email: string | null }) {
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               A törlés a felsorolt rendeléseket és a hozzájuk tartozó letöltési linkeket, számlázási
-              naplókat és számlaadatokat is véglegesen eltávolítja.
+              naplókat és számlaadatokat is véglegesen eltávolítja. Ha van hozzá Billingo számla, azt
+              a törlés előtt sztornózom (duplán soha). A „Kivesz” gombbal kivett rendelést többé nem
+              ajánlom fel törlésre.
             </p>
             <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[720px] text-left text-sm">
+              <table className="w-full min-w-[820px] text-left text-sm">
                 <thead className="text-xs uppercase text-muted-foreground">
                   <tr>
                     <th className="py-2 pr-3">Rendelésszám</th>
@@ -585,7 +617,8 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     <th className="py-2 pr-3">Összeg</th>
                     <th className="py-2 pr-3">Fizetés</th>
                     <th className="py-2 pr-3">Számla</th>
-                    <th className="py-2">Miért teszt?</th>
+                    <th className="py-2 pr-3">Miért teszt?</th>
+                    <th className="py-2"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -603,11 +636,22 @@ export function OrdersPanel({ email }: { email: string | null }) {
                         {row.paymentProvider ? ` · ${row.paymentProvider}` : ""}
                       </td>
                       <td className="py-2 pr-3">{row.invoiceNumber ?? "–"}</td>
-                      <td className="py-2 text-muted-foreground">{row.reason}</td>
+                      <td className="py-2 pr-3 text-muted-foreground">{row.reason}</td>
+                      <td className="py-2">
+                        <button
+                          type="button"
+                          onClick={() => void onKeepTestOrder(row)}
+                          disabled={busy === `keep-${row.orderNumber}` || busy === "purge"}
+                          className="rounded-md border border-input px-2.5 py-1 text-xs font-medium text-foreground hover:bg-accent disabled:opacity-50"
+                        >
+                          {busy === `keep-${row.orderNumber}` ? "…" : "Kivesz"}
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+
             </div>
             <div className="mt-6 flex flex-wrap justify-end gap-3">
               <button
