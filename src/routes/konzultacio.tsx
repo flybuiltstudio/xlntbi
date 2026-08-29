@@ -62,6 +62,7 @@ const SERVICES = [
   "Könyvvizsgálat",
   "Könyvelőiroda audit",
   "Digitális időmegtakarítási audit",
+  "Egyedi fejlesztés",
   "Oktatás",
   "Egyéb",
 ];
