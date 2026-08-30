@@ -2,13 +2,19 @@ import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useState } from "react";
 
 import { useAdminSession } from "@/components/admin-panels";
-import { adminCatalogAudit } from "@/lib/catalog-audit.functions";
+import {
+  adminCatalogAudit,
+  adminCatalogAuditCronState,
+  adminFixCatalogIssues,
+} from "@/lib/catalog-audit.functions";
 import {
   AUDIT_STATUS_LABEL,
   auditReportToCsv,
   type AuditStatus,
   type CatalogAuditReport,
 } from "@/lib/catalog-audit";
+import { FIX_KIND_LABEL, type CatalogFixResult } from "@/lib/catalog-fix";
+import type { CatalogAuditCronState } from "@/lib/catalog-audit-cron";
 import { getStripeEnvironmentSafe } from "@/lib/stripe";
 
 type Env = "sandbox" | "live";
