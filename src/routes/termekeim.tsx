@@ -124,16 +124,22 @@ function TermekeimPage() {
               </ul>
             </div>
 
+            <Link
+              to="/termekeim"
+              hash="megrendelheto-termekek"
+              className="mt-6 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+            >
+              Termékek megtekintése
+            </Link>
             <p className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
               Egyedi termékek fejlesztését is vállalom.
               Vedd fel velem a kapcsolatot a Konzultációt kérek oldal segítségével.
             </p>
             <Link
-              to="/termekeim"
-              hash="megrendelheto-termekek"
-              className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              to="/konzultacio"
+              className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
-              Termékek megtekintése
+              Konzultációt kérek
             </Link>
           </div>
           <div>
