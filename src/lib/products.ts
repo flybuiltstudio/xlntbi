@@ -1502,7 +1502,7 @@ export const products: Product[] = [
     ],
     download: {
       fileName: "XLNT DEVIZABANK.zip",
-      storagePath: "devizabank/XLNT DEVIZABANK.zip",
+      storagePath: "devizabank/DEVIZABANK.zip",
     },
   },
   {
