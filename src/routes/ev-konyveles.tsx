@@ -128,7 +128,7 @@ function EvKonyvelesPage() {
         </p>
         <p className="mt-4 text-base leading-relaxed text-muted-foreground">
           Az egyéni vállalkozó könyvelése valójában nem könyvelés, hanem bérszámfejtés. Ezért sok
-          céget könyvelő szakember nem is ért hozzá.
+          cégeket könyvelő szakember nem is ért hozzá.
         </p>
         <h2 className="mt-8 text-2xl font-bold text-foreground">
           Könyvelés, ami alkalmazkodik a vállalkozásodhoz
