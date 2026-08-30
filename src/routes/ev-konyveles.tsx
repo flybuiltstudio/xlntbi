@@ -4,7 +4,6 @@ import { Check, ChevronDown } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { usePageView } from "@/lib/use-page-view";
 import heroImage from "@/assets/ev-konyveles-poster.jpg";
-import heroVideo from "@/assets/ev-konyveles-hero.mp4.asset.json";
 
 const TITLE = "EV Könyvelés – KATA és átalányadózó vállalkozóknak | EXCELlent Business Intelligence";
 const DESCRIPTION = "KATA és átalányadózó egyéni vállalkozók könyvelése kedvező díjazással, automatizált folyamatokkal és 20 év szakmai tapasztalattal.";
@@ -148,14 +147,10 @@ function EvKonyvelesPage() {
               Konzultációt kérek
             </Link>
           </div>
-          <video
-            src={heroVideo.url}
-            poster={heroImage}
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-label="Egyéni vállalkozó könyvelése – hangulatvideó"
+          <img
+            src={heroImage}
+            alt="Egyéni vállalkozó könyvelése – otthoni iroda laptopon, számológéppel"
+            loading="lazy"
             className="w-full rounded-xl border border-border object-cover shadow-sm"
           />
         </div>
