@@ -14,7 +14,7 @@ export const COMPANY = {
   phone: "20/962-2176",
   phoneIntl: "+36 20 962 2176",
   website: "xlntbi.hu",
-  facebook: "https://www.facebook.com/xllentac",
+  facebook: "https://www.facebook.com/xlntbi",
 } as const;
 
 export const HOSTING = {
