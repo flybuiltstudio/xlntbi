@@ -1497,6 +1497,7 @@ export async function purgeTestOrders(
         ok: false,
         deleted: 0,
         canceled,
+        cancelFailed,
         error: "A kapcsolódó teszt adatok törlése nem sikerült.",
       };
     }
@@ -1508,7 +1509,13 @@ export async function purgeTestOrders(
     .or(`order_id.in.(${ids.join(",")}),order_number.in.(${numbers.join(",")})`);
   if (logError) {
     console.error("Test order purge failed on billingo_invoice_logs:", logError.message);
-    return { ok: false, deleted: 0, canceled, error: "A számlázási naplók törlése nem sikerült." };
+    return {
+      ok: false,
+      deleted: 0,
+      canceled,
+      cancelFailed,
+      error: "A számlázási naplók törlése nem sikerült.",
+    };
   }
 
   const { data: deleted, error } = await supabaseAdmin
@@ -1522,9 +1529,10 @@ export async function purgeTestOrders(
       ok: false,
       deleted: 0,
       canceled,
+      cancelFailed,
       error: "A teszt megrendelések törlése nem sikerült.",
     };
   }
-  return { ok: true, deleted: deleted?.length ?? 0, canceled };
+  return { ok: true, deleted: deleted?.length ?? 0, canceled, cancelFailed };
 }
 
