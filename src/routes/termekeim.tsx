@@ -137,7 +137,7 @@ function TermekeimPage() {
             </p>
             <Link
               to="/konzultacio"
-              className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+              className="mt-4 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
             >
               Konzultációt kérek
             </Link>
