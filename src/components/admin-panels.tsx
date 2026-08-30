@@ -552,16 +552,22 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setMessage("");
     try {
       const result = await purgeTests({ data: { orderNumbers: numbers } });
+      const failed = (result as { cancelFailed?: string[] }).cancelFailed ?? [];
+      const failedNote =
+        failed.length > 0
+          ? ` Figyelem: ${failed.length} rendelés Billingo sztornója nem sikerült (${failed.join(", ")}), ezeket nem töröltem – próbáld újra.`
+          : "";
       setMessage(
         result.ok
-          ? result.deleted > 0
-            ? `${result.deleted} teszt megrendelés és minden hozzá tartozó adat törölve.` +
-              (result.canceled > 0
-                ? ` ${result.canceled} Billingo számla sztornózva.`
-                : " Sztornózandó Billingo számla nem volt.")
-            : "Nem találtam teszt megrendelést."
-          : (result.error ?? "Hiba történt."),
+          ? (result.deleted > 0
+              ? `${result.deleted} teszt megrendelés és minden hozzá tartozó adat törölve.` +
+                (result.canceled > 0
+                  ? ` ${result.canceled} Billingo számla sztornózva.`
+                  : " Sztornózandó Billingo számla nem volt.")
+              : "Nem találtam törölhető teszt megrendelést.") + failedNote
+          : (result.error ?? "Hiba történt.") + failedNote,
       );
+
       setPurgePreview(null);
       await refresh();
     } catch (e) {
