@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, FileText } from "lucide-react";
-import portraitImg from "@/assets/En-modern-konyveloirodaban.jpg";
+import portraitImgAsset from "@/assets/En-modern-konyveloirodaban.jpg.asset.json";
+const portraitImg = portraitImgAsset.url;
 import { PageHero } from "@/components/PageHero";
 
 
