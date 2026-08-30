@@ -42,6 +42,7 @@ import { Route as AdminFrissVerzioRouteImport } from './routes/admin.friss-verzi
 import { Route as AdminJelszoRouteImport } from './routes/admin.jelszo'
 import { Route as AdminKatalogusEllenorzesRouteImport } from './routes/admin.katalogus-ellenorzes'
 import { Route as AdminKuponokRouteImport } from './routes/admin.kuponok'
+import { Route as AdminRendelesiAuditRouteImport } from './routes/admin.rendelesi-audit'
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as AdminSzamlazasRouteImport } from './routes/admin.szamlazas'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
@@ -257,6 +258,11 @@ const AdminKatalogusEllenorzesRoute =
 const AdminKuponokRoute = AdminKuponokRouteImport.update({
   id: '/kuponok',
   path: '/kuponok',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRendelesiAuditRoute = AdminRendelesiAuditRouteImport.update({
+  id: '/rendelesi-audit',
+  path: '/rendelesi-audit',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminStatisztikaRoute = AdminStatisztikaRouteImport.update({
@@ -568,6 +574,7 @@ export interface FileRoutesByFullPath {
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/katalogus-ellenorzes': typeof AdminKatalogusEllenorzesRoute
   '/admin/kuponok': typeof AdminKuponokRoute
+  '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
@@ -651,6 +658,7 @@ export interface FileRoutesByTo {
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/katalogus-ellenorzes': typeof AdminKatalogusEllenorzesRoute
   '/admin/kuponok': typeof AdminKuponokRoute
+  '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
@@ -736,6 +744,7 @@ export interface FileRoutesById {
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/katalogus-ellenorzes': typeof AdminKatalogusEllenorzesRoute
   '/admin/kuponok': typeof AdminKuponokRoute
+  '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
@@ -822,6 +831,7 @@ export interface FileRouteTypes {
     | '/admin/jelszo'
     | '/admin/katalogus-ellenorzes'
     | '/admin/kuponok'
+    | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
     | '/kalkulatorok/atalanyado'
@@ -905,6 +915,7 @@ export interface FileRouteTypes {
     | '/admin/jelszo'
     | '/admin/katalogus-ellenorzes'
     | '/admin/kuponok'
+    | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
     | '/kalkulatorok/atalanyado'
@@ -989,6 +1000,7 @@ export interface FileRouteTypes {
     | '/admin/jelszo'
     | '/admin/katalogus-ellenorzes'
     | '/admin/kuponok'
+    | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
     | '/kalkulatorok/atalanyado'
@@ -1349,6 +1361,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminKuponokRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/rendelesi-audit': {
+      id: '/admin/rendelesi-audit'
+      path: '/rendelesi-audit'
+      fullPath: '/admin/rendelesi-audit'
+      preLoaderRoute: typeof AdminRendelesiAuditRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/statisztika': {
       id: '/admin/statisztika'
       path: '/statisztika'
@@ -1703,6 +1722,7 @@ interface AdminRouteChildren {
   AdminJelszoRoute: typeof AdminJelszoRoute
   AdminKatalogusEllenorzesRoute: typeof AdminKatalogusEllenorzesRoute
   AdminKuponokRoute: typeof AdminKuponokRoute
+  AdminRendelesiAuditRoute: typeof AdminRendelesiAuditRoute
   AdminStatisztikaRoute: typeof AdminStatisztikaRoute
   AdminSzamlazasRoute: typeof AdminSzamlazasRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1716,6 +1736,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminJelszoRoute: AdminJelszoRoute,
   AdminKatalogusEllenorzesRoute: AdminKatalogusEllenorzesRoute,
   AdminKuponokRoute: AdminKuponokRoute,
+  AdminRendelesiAuditRoute: AdminRendelesiAuditRoute,
   AdminStatisztikaRoute: AdminStatisztikaRoute,
   AdminSzamlazasRoute: AdminSzamlazasRoute,
   AdminIndexRoute: AdminIndexRoute,
