@@ -27,6 +27,7 @@ export const ADMIN_ROUTE_ACCESS: AdminRouteRule[] = [
   { prefix: "/admin/friss-verzio", roles: ["admin"] },
   { prefix: "/admin/szamlazas", roles: ["admin"] },
   { prefix: "/admin/billingo-ellenorzes", roles: ["admin"] },
+  { prefix: "/admin/katalogus-ellenorzes", roles: ["admin"] },
   { prefix: "/admin/fizetes-teszt", roles: ["admin"] },
   { prefix: "/admin/felhasznalok", roles: ["admin"] },
   // Order list (/admin) — admin only.
