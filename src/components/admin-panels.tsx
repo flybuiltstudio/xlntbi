@@ -1210,13 +1210,19 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
           <strong>Admin:</strong> teljes hozzáférés az admin felülethez –
           Megrendelések, Kuponok (létrehozás és módosítás), Statisztika,
           Friss verzió feltöltés, Ellenőrzések (Számlázás, Billingo ellenőrzés,
-          Fizetés teszt) és Felhasználók kezelése.
+          Katalógus ellenőrzés, Rendelési audit, Fizetés teszt), Felhasználók
+          kezelése és Jelszó módosítása.
         </p>
         <p className="mt-2">
           <strong>Felhasználó:</strong> be tud jelentkezni az admin felületre,
-          ahol a Statisztika oldalt és a Kuponok listát (csak megtekintés)
-          éri el – a Megrendeléseket, Friss verziót, az Ellenőrzéseket és a
-          Felhasználók kezelését nem.
+          ahol a Statisztika oldalt, a Kuponok listát (csak megtekintés) és a
+          Jelszó módosítása oldalt éri el – a Megrendeléseket, a Friss verziót,
+          az Ellenőrzéseket és a Felhasználók kezelését nem.
+        </p>
+        <p className="mt-2">
+          <strong>Szuper admin</strong> ({SUPER_ADMIN_EMAIL}): a rendszer
+          elsődleges adminisztrátora. Nem törölhető, és a szerepköre sem
+          módosítható – mindig teljes (admin) hozzáférése marad.
         </p>
       </div>
 
