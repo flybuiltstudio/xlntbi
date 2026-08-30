@@ -2,13 +2,19 @@ import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useState } from "react";
 
 import { useAdminSession } from "@/components/admin-panels";
-import { adminCatalogAudit } from "@/lib/catalog-audit.functions";
+import {
+  adminCatalogAudit,
+  adminCatalogAuditCronState,
+  adminFixCatalogIssues,
+} from "@/lib/catalog-audit.functions";
 import {
   AUDIT_STATUS_LABEL,
   auditReportToCsv,
   type AuditStatus,
   type CatalogAuditReport,
 } from "@/lib/catalog-audit";
+import { FIX_KIND_LABEL, type CatalogFixResult } from "@/lib/catalog-fix";
+import type { CatalogAuditCronState } from "@/lib/catalog-audit-cron";
 import { getStripeEnvironmentSafe } from "@/lib/stripe";
 
 type Env = "sandbox" | "live";
@@ -43,8 +49,13 @@ export function CatalogAuditPanel() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [onlyProblems, setOnlyProblems] = useState(true);
+  const [fixing, setFixing] = useState(false);
+  const [fixResult, setFixResult] = useState<CatalogFixResult | null>(null);
+  const [cron, setCron] = useState<CatalogAuditCronState | null>(null);
 
   const auditFn = useServerFn(adminCatalogAudit);
+  const fixFn = useServerFn(adminFixCatalogIssues);
+  const cronFn = useServerFn(adminCatalogAuditCronState);
 
   const run = useCallback(
     async (environment: Env) => {
@@ -64,9 +75,32 @@ export function CatalogAuditPanel() {
     [auditFn, isAdmin],
   );
 
+  const fix = useCallback(async () => {
+    if (!isAdmin) return;
+    setFixing(true);
+    setError(null);
+    try {
+      const res = await fixFn({ data: { environment: env } });
+      setFixResult(res.result);
+      // Re-run the audit so the table reflects the repaired state.
+      await run(env);
+    } catch {
+      setFixResult(null);
+      setError("A hibák javítása sikertelen.");
+    } finally {
+      setFixing(false);
+    }
+  }, [env, fixFn, isAdmin, run]);
+
   useEffect(() => {
     void run(env);
   }, [env, run]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    void cronFn().then((res) => setCron(res.state)).catch(() => setCron(null));
+  }, [cronFn, isAdmin]);
+
 
   function exportCsv() {
     if (!report) return;
@@ -126,6 +160,15 @@ export function CatalogAuditPanel() {
         >
           CSV export
         </button>
+        <button
+          type="button"
+          onClick={() => void fix()}
+          disabled={loading || fixing}
+          title="Csak a biztonságosan javítható hibákat módosítja: Stripe terméknév, inaktív ár újraaktiválása, elavult letöltési token útvonala."
+          className="rounded-md border border-primary px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary/10 disabled:opacity-50"
+        >
+          {fixing ? "Javítás folyamatban…" : "Talált hibák javítása"}
+        </button>
         <label className="flex items-center gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"
@@ -139,6 +182,56 @@ export function CatalogAuditPanel() {
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
       {report?.stripeError ? (
         <p className="mt-3 text-sm text-destructive">Stripe hiba: {report.stripeError}</p>
+      ) : null}
+
+      {cron ? (
+        <p className="mt-3 rounded-md border border-border bg-card p-3 text-sm text-muted-foreground">
+          <strong className="text-foreground">Heti automatikus audit</strong> — minden hétfőn
+          3:00-kor fut az éles környezetre, hiba esetén e-mail értesítéssel. Utolsó futás:{" "}
+          {new Date(cron.lastRunAt ?? "").toLocaleString("hu-HU")} ({cron.environment}):{" "}
+          {cron.errorCount} hiba, {cron.warnCount} figyelmeztetés
+          {cron.notified ? " · értesítő elküldve" : ""}
+          {cron.error ? ` · futási hiba: ${cron.error}` : ""}
+        </p>
+      ) : (
+        <p className="mt-3 rounded-md border border-border bg-card p-3 text-sm text-muted-foreground">
+          <strong className="text-foreground">Heti automatikus audit</strong> — minden hétfőn
+          3:00-kor fut az éles környezetre; hiba esetén e-mail értesítés megy. Még nem volt
+          ütemezett futás.
+        </p>
+      )}
+
+      {fixResult ? (
+        <div className="mt-3 rounded-md border border-border bg-card p-3 text-sm">
+          <p className="text-foreground">
+            Javítás: {fixResult.summary.fixed} sikeres, {fixResult.summary.failed} sikertelen,{" "}
+            {fixResult.summary.manual} kézi beavatkozást igényel.
+          </p>
+          {fixResult.actions.length > 0 ? (
+            <ul className="mt-2 list-disc space-y-0.5 pl-5 text-muted-foreground">
+              {fixResult.actions.map((action, i) => (
+                <li key={`${action.kind}-${action.target}-${i}`}>
+                  <span className={action.ok ? "text-primary" : "text-destructive"}>
+                    {FIX_KIND_LABEL[action.kind]}
+                  </span>{" "}
+                  – {action.target}: {action.detail}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {fixResult.manual.length > 0 ? (
+            <>
+              <p className="mt-3 font-medium text-foreground">
+                Automatikusan nem javítható (kézi döntés kell):
+              </p>
+              <ul className="mt-1 list-disc space-y-0.5 pl-5 text-muted-foreground">
+                {fixResult.manual.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </>
+          ) : null}
+        </div>
       ) : null}
 
       {report ? (
