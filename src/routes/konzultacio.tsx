@@ -55,6 +55,7 @@ export const Route = createFileRoute("/konzultacio")({
 
 const SERVICES = [
   "Könyvelés",
+  "EV Könyvelés",
   "Adótanács",
   "Fintech és BI",
   "Kontrolling",
