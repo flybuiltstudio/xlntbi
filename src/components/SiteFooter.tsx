@@ -120,7 +120,7 @@ export function SiteFooter() {
             <li className="flex items-center gap-2">
               <Facebook className="h-4 w-4" aria-hidden="true" />
               <a
-                href="https://www.facebook.com/xllentac"
+                href="https://www.facebook.com/xlntbi"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="opacity-90 hover:opacity-100"
