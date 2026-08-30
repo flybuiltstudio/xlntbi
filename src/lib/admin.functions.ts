@@ -463,6 +463,27 @@ export const adminPurgeTestOrders = createServerFn({ method: "POST" })
     return purgeTestOrders(data.orderNumbers);
   });
 
+/** Order ids with a failed Billingo storno that has not succeeded since. */
+export const adminListCancelFailedOrders = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { listCancelFailedOrderIds } = await import("./admin.server");
+    return { orderIds: await listCancelFailedOrderIds() };
+  });
+
+/** Retries the Billingo storno of an order whose earlier cancellation failed. */
+export const adminRetryCancellation = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ orderId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { retryCancellation } = await import("./admin.server");
+    return retryCancellation(data.orderId);
+  });
+
 /** Removes an order from the purge preview permanently (keep list). */
 export const adminKeepTestOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

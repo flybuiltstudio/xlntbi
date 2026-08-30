@@ -1536,3 +1536,72 @@ export async function purgeTestOrders(
   return { ok: true, deleted: deleted?.length ?? 0, canceled, cancelFailed };
 }
 
+/**
+ * Order ids whose Billingo invoice storno failed earlier and has not been
+ * canceled since (cancel_error exists, no canceled log for the invoice).
+ */
+export async function listCancelFailedOrderIds(): Promise<string[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await (supabaseAdmin as any)
+    .from("billingo_invoice_logs")
+    .select("order_id, billingo_invoice_id, status")
+    .in("status", ["cancel_error", "canceled"]);
+  if (error || !data) return [];
+
+  const canceledInvoices = new Set<number>();
+  const failedByOrder = new Map<string, number>();
+  for (const row of data as any[]) {
+    const invoiceId = row.billingo_invoice_id == null ? null : Number(row.billingo_invoice_id);
+    if (invoiceId === null) continue;
+    if (row.status === "canceled") canceledInvoices.add(invoiceId);
+    else if (row.order_id) failedByOrder.set(String(row.order_id), invoiceId);
+  }
+
+  const ids: string[] = [];
+  for (const [orderId, invoiceId] of failedByOrder) {
+    if (!canceledInvoices.has(invoiceId)) ids.push(orderId);
+  }
+  return ids;
+}
+
+/**
+ * Retries the Billingo storno of an order whose earlier cancellation failed.
+ * Refuses to run when the invoice is already canceled, so it never stornos
+ * twice.
+ */
+export async function retryCancellation(
+  orderId: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order, error } = await supabaseAdmin
+    .from("orders")
+    .select("*")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (error || !order) return { ok: false, error: "A megrendelés nem található." };
+  if (!(order as any).billingo_invoice_id) {
+    return { ok: false, error: "Ehhez a megrendeléshez nincs Billingo számla, nincs mit sztornózni." };
+  }
+
+  const invoiceId = Number((order as any).billingo_invoice_id);
+  const { data: canceledLogs } = await (supabaseAdmin as any)
+    .from("billingo_invoice_logs")
+    .select("id")
+    .eq("billingo_invoice_id", invoiceId)
+    .eq("status", "canceled")
+    .limit(1);
+  if ((canceledLogs ?? []).length > 0) {
+    return { ok: false, error: "Ezt a számlát már korábban sztornóztam, nem sztornózom duplán." };
+  }
+
+  const { cancelInvoiceForOrder } = await import("./billingo.server");
+  const result = await cancelInvoiceForOrder(order as any, {
+    source: "admin_retry",
+    reason: "Sztornó újrapróbálása az admin felületről.",
+  });
+  if (!result.ok) return { ok: false, error: result.error ?? "A sztornó nem sikerült." };
+  return { ok: true };
+}
+
+
