@@ -125,7 +125,8 @@ function TermekeimPage() {
             </div>
 
             <p className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
-              Egyedi termékek fejlesztését is vállalom. Vedd fel velem a kapcsolatot a Konzultációt kérek oldal segítségével.
+              Egyedi termékek fejlesztését is vállalom.
+              Vedd fel velem a kapcsolatot a Konzultációt kérek oldal segítségével.
             </p>
             <Link
               to="/termekeim"
