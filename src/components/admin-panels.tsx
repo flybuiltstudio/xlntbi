@@ -17,6 +17,8 @@ import {
   adminPurgeTestOrders,
   adminPreviewTestOrders,
   adminKeepTestOrder,
+  adminListCancelFailedOrders,
+  adminRetryCancellation,
 
   adminListProductFiles,
   adminListProductPlacements,
@@ -303,6 +305,8 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const purgeTests = useServerFn(adminPurgeTestOrders);
   const listTests = useServerFn(adminPreviewTestOrders);
   const keepTest = useServerFn(adminKeepTestOrder);
+  const listCancelFailed = useServerFn(adminListCancelFailedOrders);
+  const retryCancellation = useServerFn(adminRetryCancellation);
 
 
   const [orders, setOrders] = useState<Order[] | null>(null);
@@ -318,6 +322,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [licenseFor, setLicenseFor] = useState<Order | null>(null);
   const [licenseKey, setLicenseKey] = useState("");
   const [purgePreview, setPurgePreview] = useState<TestOrderPreviewRow[] | null>(null);
+  const [cancelFailedIds, setCancelFailedIds] = useState<Set<string>>(new Set());
 
   const years = useMemo(() => {
     const set = new Set<number>();
@@ -358,6 +363,12 @@ export function OrdersPanel({ email }: { email: string | null }) {
     } catch (e) {
       setError(e instanceof Error ? e.message : "A megrendelések betöltése nem sikerült.");
       setOrders([]);
+    }
+    try {
+      const failed = await listCancelFailed();
+      setCancelFailedIds(new Set(failed.orderIds));
+    } catch {
+      // A sztornó-hibás jelölés kimarad, ha a lekérdezés nem sikerül.
     }
   }
 
@@ -461,6 +472,24 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
+
+  /** Retries the Billingo storno of an order whose earlier cancellation failed. */
+  async function onRetryCancellation(order: Order) {
+    setBusy(order.id);
+    setMessage("");
+    try {
+      const result = await retryCancellation({ data: { orderId: order.id } });
+      setMessage(
+        result.ok
+          ? `${order.orderNumber}: Billingo sztornó sikeresen újraküldve.`
+          : (result.error ?? "A sztornó újrapróbálása nem sikerült."),
+      );
+      await refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
 
   async function onRetryInvoice(order: Order) {
     setBusy(order.id);
