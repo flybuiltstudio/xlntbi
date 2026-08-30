@@ -18,6 +18,7 @@ import { Route as CegauditRouteImport } from './routes/cegaudit'
 import { Route as CookieTajekoztatoRouteImport } from './routes/cookie-tajekoztato'
 import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
 import { Route as ElallasASzerzodestolRouteImport } from './routes/elallas-a-szerzodestol'
+import { Route as EvKonyvelesRouteImport } from './routes/ev-konyveles'
 import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
 import { Route as FizetesEsTeljesitesRouteImport } from './routes/fizetes-es-teljesites'
 import { Route as FogyasztovedelemRouteImport } from './routes/fogyasztovedelem'
@@ -138,6 +139,11 @@ const DigitalisIdomegtakaritasiAuditRoute =
 const ElallasASzerzodestolRoute = ElallasASzerzodestolRouteImport.update({
   id: '/elallas-a-szerzodestol',
   path: '/elallas-a-szerzodestol',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvKonyvelesRoute = EvKonyvelesRouteImport.update({
+  id: '/ev-konyveles',
+  path: '/ev-konyveles',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FintechEsBiRoute = FintechEsBiRouteImport.update({
@@ -558,6 +564,7 @@ export interface FileRoutesByFullPath {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
+  '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
   '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
   '/fogyasztovedelem': typeof FogyasztovedelemRoute
@@ -643,6 +650,7 @@ export interface FileRoutesByTo {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
+  '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
   '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
   '/fogyasztovedelem': typeof FogyasztovedelemRoute
@@ -730,6 +738,7 @@ export interface FileRoutesById {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
+  '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
   '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
   '/fogyasztovedelem': typeof FogyasztovedelemRoute
@@ -818,6 +827,7 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
+    | '/ev-konyveles'
     | '/fintech-es-bi'
     | '/fizetes-es-teljesites'
     | '/fogyasztovedelem'
@@ -903,6 +913,7 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
+    | '/ev-konyveles'
     | '/fintech-es-bi'
     | '/fizetes-es-teljesites'
     | '/fogyasztovedelem'
@@ -989,6 +1000,7 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
+    | '/ev-konyveles'
     | '/fintech-es-bi'
     | '/fizetes-es-teljesites'
     | '/fogyasztovedelem'
@@ -1076,6 +1088,7 @@ export interface RootRouteChildren {
   CookieTajekoztatoRoute: typeof CookieTajekoztatoRoute
   DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
   ElallasASzerzodestolRoute: typeof ElallasASzerzodestolRoute
+  EvKonyvelesRoute: typeof EvKonyvelesRoute
   FintechEsBiRoute: typeof FintechEsBiRoute
   FizetesEsTeljesitesRoute: typeof FizetesEsTeljesitesRoute
   FogyasztovedelemRoute: typeof FogyasztovedelemRoute
@@ -1205,6 +1218,13 @@ declare module '@tanstack/react-router' {
       path: '/elallas-a-szerzodestol'
       fullPath: '/elallas-a-szerzodestol'
       preLoaderRoute: typeof ElallasASzerzodestolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ev-konyveles': {
+      id: '/ev-konyveles'
+      path: '/ev-konyveles'
+      fullPath: '/ev-konyveles'
+      preLoaderRoute: typeof EvKonyvelesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/fintech-es-bi': {
@@ -1775,6 +1795,7 @@ const rootRouteChildren: RootRouteChildren = {
   CookieTajekoztatoRoute: CookieTajekoztatoRoute,
   DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
   ElallasASzerzodestolRoute: ElallasASzerzodestolRoute,
+  EvKonyvelesRoute: EvKonyvelesRoute,
   FintechEsBiRoute: FintechEsBiRoute,
   FizetesEsTeljesitesRoute: FizetesEsTeljesitesRoute,
   FogyasztovedelemRoute: FogyasztovedelemRoute,
