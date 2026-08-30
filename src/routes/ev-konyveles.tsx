@@ -3,13 +3,13 @@ import { useLocation } from "@tanstack/react-router";
 import { Check, ChevronDown } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { usePageView } from "@/lib/use-page-view";
-import heroImage from "@/assets/En-modern-konyveloirodaban.jpg";
+import heroImage from "@/assets/ev-konyveles-poster.jpg";
 import heroVideo from "@/assets/ev-konyveles-hero.mp4.asset.json";
 
 const TITLE = "EV Könyvelés – KATA és átalányadózó vállalkozóknak | EXCELlent Business Intelligence";
 const DESCRIPTION = "KATA és átalányadózó egyéni vállalkozók könyvelése kedvező díjazással, automatizált folyamatokkal és 20 év szakmai tapasztalattal.";
 const CANONICAL = "https://xlntbi.hu/ev-konyveles";
-const OG_IMAGE = "https://xlntbi.hu/og/En-modern-konyveloirodaban.jpg";
+const OG_IMAGE = "https://xlntbi.hu/og/ev-konyveles-poster.jpg";
 
 const faqItems = [
   {
