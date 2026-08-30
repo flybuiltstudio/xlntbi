@@ -116,40 +116,46 @@ function EvKonyvelesPage() {
 
       {/* Intro + image */}
       <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
-        <img
-          src={heroImage}
-          alt="Egyéni vállalkozó könyvelése – otthoni iroda laptopon, számológéppel"
-          loading="lazy"
-          className="w-full rounded-xl border border-border object-cover shadow-sm"
-        />
-        <p className="mt-10 text-base leading-relaxed text-muted-foreground">
-          20 év szakmai tapasztalat, korszerű automatizálás és személyes szakértelem. Egyszerűbb és
-          összetettebb egyéni vállalkozói helyzetekhez is.
-        </p>
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-          Az egyéni vállalkozó könyvelése valójában nem könyvelés, hanem bérszámfejtés. Ezért sok
-          cégeket könyvelő szakember nem is ért hozzá.
-        </p>
-        <h2 className="mt-8 text-2xl font-bold text-foreground">
-          Könyvelés, ami alkalmazkodik a vállalkozásodhoz
-        </h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
-          Egy egyéni vállalkozás könyvelése lehet egyszerű, de egy külföldi partner, egy külföldi
-          szolgáltatótól – például a Google-től vagy a Facebooktól – igénybe vett hirdetés, az
-          áfakörösség vagy más speciális ügylet gyorsan több szakértelmet igényelhet. A célom, hogy
-          akkor is biztos szakmai hátteret kapj, ha a vállalkozásod túlmutat a legegyszerűbb eseteken.
-        </p>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
-          Több mint 20 év könyvelési tapasztalatomat ötvözöm olyan automatizált megoldásokkal, amelyek
-          jelentősen csökkentik a rutinszerű adminisztrációt. Így több szakmai figyelmet fordíthatok
-          arra, ahol valóban szükség van rá, miközben a szolgáltatás díja kedvező marad.
-        </p>
-        <Link
-          to="/konzultacio"
-          className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-        >
-          Konzultációt kérek
-        </Link>
+        <div className="grid items-start gap-10 md:grid-cols-2">
+          <img
+            src={heroImage}
+            alt="Egyéni vállalkozó könyvelése – otthoni iroda laptopon, számológéppel"
+            loading="lazy"
+            className="w-full rounded-xl border border-border object-cover shadow-sm"
+          />
+          <div>
+            <p className="text-base leading-relaxed text-muted-foreground">
+              20 év szakmai tapasztalat, korszerű automatizálás és személyes szakértelem. Egyszerűbb és
+              összetettebb egyéni vállalkozói helyzetekhez is.
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              Az egyéni vállalkozó könyvelése valójában nem könyvelés, hanem bérszámfejtés. Ezért sok
+              cégeket könyvelő szakember nem is ért hozzá.
+            </p>
+            <h2 className="mt-8 text-2xl font-bold text-foreground">
+              Könyvelés, ami alkalmazkodik a vállalkozásodhoz
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              Egy egyéni vállalkozás könyvelése lehet egyszerű, de egy külföldi partner, egy külföldi
+              szolgáltatótól – például a Google-től vagy a Facebooktól – igénybe vett hirdetés, az
+              áfakörösség vagy más speciális ügylet gyorsan több szakértelmet igényelhet. A célom, hogy
+              akkor is biztos szakmai hátteret kapj, ha a vállalkozásod túlmutat a legegyszerűbb
+              eseteken.
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              Több mint 20 év könyvelési tapasztalatomat ötvözöm olyan automatizált megoldásokkal,
+              amelyek jelentősen csökkentik a rutinszerű adminisztrációt. Így több szakmai figyelmet
+              fordíthatok arra, ahol valóban szükség van rá, miközben a szolgáltatás díja kedvező
+              marad.
+            </p>
+            <Link
+              to="/konzultacio"
+              className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+            >
+              Konzultációt kérek
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* Árazás */}
