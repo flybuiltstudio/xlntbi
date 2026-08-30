@@ -86,7 +86,7 @@ function KonyvelesPage() {
       image={heroImage}
       imageAlt={"Könyvelés – irodai munka közben"}
       listTitle={"Szolgáltatások"}
-      listItems={["Teljes körű könyvelés", "Bevallások előkészítése és benyújtása", "Éves zárás és beszámoló-előkészítés", "Folyamatos szakmai egyeztetés", "Online ügyintézés", "Digitális, papírmentes működés támogatása"]}
+      listItems={["Teljes körű könyvelés", "Bevallások elkészítése és benyújtása", "Éves zárás és beszámoló-elkészítés", "Folyamatos szakmai egyeztetés", "Online ügyintézés", "Digitális, papírmentes működés támogatása"]}
       closing={{"eyebrow": "Kinek ajánlott?", "heading": "Rendezett könyvelés azoknak, akik tisztán szeretnének látni", "items": ["Cégeknek", "Egyéni vállalkozóknak", "Magánszemélyeknek", "Olyan ügyfeleknek, akik rendezett és átlátható könyvelést szeretnének"]}}
     />
   );
