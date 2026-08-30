@@ -1220,7 +1220,7 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
           az Ellenőrzéseket és a Felhasználók kezelését nem.
         </p>
         <p className="mt-2">
-          <strong>Szuper admin</strong> ({SUPER_ADMIN_EMAIL}): a rendszer
+          <strong>Szuper admin</strong> (xllentac@gmail.com): a rendszer
           elsődleges adminisztrátora. Nem törölhető, és a szerepköre sem
           módosítható – mindig teljes (admin) hozzáférése marad.
         </p>
