@@ -49,8 +49,13 @@ export function CatalogAuditPanel() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [onlyProblems, setOnlyProblems] = useState(true);
+  const [fixing, setFixing] = useState(false);
+  const [fixResult, setFixResult] = useState<CatalogFixResult | null>(null);
+  const [cron, setCron] = useState<CatalogAuditCronState | null>(null);
 
   const auditFn = useServerFn(adminCatalogAudit);
+  const fixFn = useServerFn(adminFixCatalogIssues);
+  const cronFn = useServerFn(adminCatalogAuditCronState);
 
   const run = useCallback(
     async (environment: Env) => {
@@ -70,9 +75,32 @@ export function CatalogAuditPanel() {
     [auditFn, isAdmin],
   );
 
+  const fix = useCallback(async () => {
+    if (!isAdmin) return;
+    setFixing(true);
+    setError(null);
+    try {
+      const res = await fixFn({ data: { environment: env } });
+      setFixResult(res.result);
+      // Re-run the audit so the table reflects the repaired state.
+      await run(env);
+    } catch {
+      setFixResult(null);
+      setError("A hibák javítása sikertelen.");
+    } finally {
+      setFixing(false);
+    }
+  }, [env, fixFn, isAdmin, run]);
+
   useEffect(() => {
     void run(env);
   }, [env, run]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    void cronFn().then((res) => setCron(res.state)).catch(() => setCron(null));
+  }, [cronFn, isAdmin]);
+
 
   function exportCsv() {
     if (!report) return;
