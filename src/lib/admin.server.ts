@@ -1437,12 +1437,12 @@ export async function purgeTestOrders(
   });
   if (tests.length === 0) return { ok: true, deleted: 0, canceled: 0 };
 
-  const ids = tests.map((o: any) => o.id as string);
-  const numbers = tests.map((o: any) => String(o.order_number));
-
   // Storno the still-open Billingo invoices before the rows disappear.
   const invoiced = tests.filter((o: any) => o.billingo_invoice_id);
   let canceled = 0;
+  // Orders whose invoice could not be stornoed must stay in the database,
+  // otherwise a live Billingo invoice would be left with no record here.
+  const cancelFailedNumbers = new Set<string>();
   if (invoiced.length > 0) {
     const { data: cancelLogs } = await supabaseAdmin
       .from("billingo_invoice_logs")
@@ -1468,8 +1468,26 @@ export async function purgeTestOrders(
         reason: "Teszt megrendelés törlése az admin felületről.",
       });
       if (result.ok && !result.skipped) canceled += 1;
+      else if (!result.ok) cancelFailedNumbers.add(String(order.order_number));
     }
   }
+
+  const purgeable = tests.filter((o: any) => !cancelFailedNumbers.has(String(o.order_number)));
+  const cancelFailed = [...cancelFailedNumbers];
+  if (purgeable.length === 0) {
+    return {
+      ok: false,
+      deleted: 0,
+      canceled,
+      cancelFailed,
+      error:
+        "Egyik teszt megrendelést sem töröltem: a Billingo sztornó nem sikerült. Nézd meg a Rendelési auditot, és próbáld újra.",
+    };
+  }
+
+  const ids = purgeable.map((o: any) => o.id as string);
+  const numbers = purgeable.map((o: any) => String(o.order_number));
+
 
   for (const table of ["order_downloads", "billingo_invoice_snapshots"] as const) {
     const { error } = await supabaseAdmin.from(table).delete().in("order_id", ids);
