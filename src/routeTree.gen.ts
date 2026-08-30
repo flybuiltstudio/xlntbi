@@ -87,6 +87,7 @@ import { Route as TermekUtalasiCsomagKeszitoRouteImport } from './routes/termek.
 import { Route as TermekUtnyilvantartasKikuldetesiRendelvenyRouteImport } from './routes/termek.utnyilvantartas-kikuldetesi-rendelveny'
 import { Route as TermekWifiJelszoNezoRouteImport } from './routes/termek.wifi-jelszo-nezo'
 import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
+import { Route as ApiPublicKatalogusAuditCronRouteImport } from './routes/api/public/katalogus-audit/cron'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
@@ -513,6 +514,12 @@ const ApiPublicBillingoWebhookRoute =
     path: '/api/public/billingo/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicKatalogusAuditCronRoute =
+  ApiPublicKatalogusAuditCronRouteImport.update({
+    id: '/api/public/katalogus-audit/cron',
+    path: '/api/public/katalogus-audit/cron',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicLetoltesTokenRoute = ApiPublicLetoltesTokenRouteImport.update({
   id: '/api/public/letoltes/$token',
   path: '/api/public/letoltes/$token',
@@ -620,6 +627,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -704,6 +712,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -790,6 +799,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -877,6 +887,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/kalkulatorok/'
     | '/api/public/billingo/webhook'
+    | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
@@ -961,6 +972,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/kalkulatorok'
     | '/api/public/billingo/webhook'
+    | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
@@ -1046,6 +1058,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/kalkulatorok/'
     | '/api/public/billingo/webhook'
+    | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
     | '/lovable/email/auth/preview'
@@ -1121,6 +1134,7 @@ export interface RootRouteChildren {
   TermekWifiJelszoNezoRoute: typeof TermekWifiJelszoNezoRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
   ApiPublicBillingoWebhookRoute: typeof ApiPublicBillingoWebhookRoute
+  ApiPublicKatalogusAuditCronRoute: typeof ApiPublicKatalogusAuditCronRoute
   ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -1676,6 +1690,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicBillingoWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/katalogus-audit/cron': {
+      id: '/api/public/katalogus-audit/cron'
+      path: '/api/public/katalogus-audit/cron'
+      fullPath: '/api/public/katalogus-audit/cron'
+      preLoaderRoute: typeof ApiPublicKatalogusAuditCronRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/letoltes/$token': {
       id: '/api/public/letoltes/$token'
       path: '/api/public/letoltes/$token'
@@ -1818,6 +1839,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermekWifiJelszoNezoRoute: TermekWifiJelszoNezoRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
   ApiPublicBillingoWebhookRoute: ApiPublicBillingoWebhookRoute,
+  ApiPublicKatalogusAuditCronRoute: ApiPublicKatalogusAuditCronRoute,
   ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
