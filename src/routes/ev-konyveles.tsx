@@ -120,6 +120,10 @@ function EvKonyvelesPage() {
         <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             <p className="text-base leading-relaxed text-muted-foreground">
+              20 év szakmai tapasztalat, korszerű automatizálás és személyes szakértelem. Egyszerűbb és
+              összetettebb egyéni vállalkozói helyzetekhez is.
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
               Az egyéni vállalkozó könyvelése valójában nem könyvelés, hanem bérszámfejtés. Ezért sok
               céget könyvelő szakember nem is ért hozzá.
             </p>
