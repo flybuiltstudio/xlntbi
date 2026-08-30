@@ -218,6 +218,7 @@ function AdminLayout() {
     { to: "/admin/szamlazas", label: "Számlázás" },
     { to: "/admin/billingo-ellenorzes", label: "Billingo ellenőrzés" },
     { to: "/admin/katalogus-ellenorzes", label: "Katalógus ellenőrzés" },
+    { to: "/admin/rendelesi-audit", label: "Rendelési audit" },
     { to: "/admin/fizetes-teszt", label: "Fizetés teszt" },
   ] as const;
 
