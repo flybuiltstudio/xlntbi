@@ -10,6 +10,7 @@
 
 import { runCatalogAudit } from "./catalog-audit.server";
 import { getSetting, setSetting } from "./app-settings.server";
+import type { CatalogAuditCronState } from "./catalog-audit-cron";
 import { sendEmails } from "./notify.server";
 import type { StripeEnv } from "./stripe.server";
 import type { CatalogAuditReport } from "./catalog-audit";
@@ -17,16 +18,6 @@ import type { CatalogAuditReport } from "./catalog-audit";
 export const CATALOG_AUDIT_CRON_KEY = "catalog_audit_cron";
 const OWNER_EMAIL = "xllentac@gmail.com";
 const MAX_ISSUES_IN_EMAIL = 25;
-
-export type CatalogAuditCronState = {
-  lastRunAt: string | null;
-  environment: string | null;
-  errorCount: number;
-  warnCount: number;
-  notified: boolean;
-  error: string | null;
-  issues: string[];
-};
 
 function collectIssues(report: CatalogAuditReport): string[] {
   const issues: string[] = [];
