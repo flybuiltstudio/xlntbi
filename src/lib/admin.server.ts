@@ -1400,7 +1400,13 @@ export async function listTestOrdersPreview(): Promise<{
  */
 export async function purgeTestOrders(
   orderNumbers?: string[],
-): Promise<{ ok: boolean; deleted: number; canceled: number; error?: string }> {
+): Promise<{
+  ok: boolean;
+  deleted: number;
+  canceled: number;
+  cancelFailed?: string[];
+  error?: string;
+}> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
   const { data: rows, error: listError } = await supabaseAdmin
