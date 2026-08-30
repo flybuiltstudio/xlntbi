@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { HeroPlanks } from "@/components/HeroPlanks";
-import aboutImg from "@/assets/En-modern-konyveloirodaban.jpg";
+import aboutImgAsset from "@/assets/En-modern-konyveloirodaban.jpg.asset.json";
+const aboutImg = aboutImgAsset.url;
 import icHatekonysag from "@/assets/icons/hatekonysag.png.asset.json";
 import icInnovacio from "@/assets/icons/innovacio.png.asset.json";
 import icKomplexitas from "@/assets/icons/komplexitas.png.asset.json";
