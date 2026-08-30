@@ -194,7 +194,7 @@ function EvKonyvelesPage() {
             </table>
           </div>
           <p className="mt-4 text-sm text-muted-foreground">
-            Az átalányadós díj az ügy összetettségétől függően változhat.
+             Az átalányadós díj a vállalkozás összetettségétől függően változhat.
           </p>
         </div>
       </section>
