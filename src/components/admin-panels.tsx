@@ -1014,6 +1014,17 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     {busy === order.id ? "Feldolgozás…" : "Billingo számla újraküldése"}
                   </button>
                 ) : null}
+                {cancelFailedIds.has(order.id) ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => void onRetryCancellation(order)}
+                    className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
+                    title="A korábbi Billingo sztornó hibára futott – újrapróbálás (duplán soha nem sztornóz)"
+                  >
+                    {busy === order.id ? "Feldolgozás…" : "Sztornó újrapróbálása"}
+                  </button>
+                ) : null}
                 {order.billingoInvoiceId ? (
                   <>
                     <button
