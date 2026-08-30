@@ -4,6 +4,7 @@ import { Check, ChevronDown } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { usePageView } from "@/lib/use-page-view";
 import heroImage from "@/assets/En-modern-konyveloirodaban.jpg";
+import heroVideo from "@/assets/ev-konyveles-hero.mp4.asset.json";
 
 const TITLE = "EV Könyvelés – KATA és átalányadózó vállalkozóknak | EXCELlent Business Intelligence";
 const DESCRIPTION = "KATA és átalányadózó egyéni vállalkozók könyvelése kedvező díjazással, automatizált folyamatokkal és 20 év szakmai tapasztalattal.";
@@ -112,10 +113,6 @@ function EvKonyvelesPage() {
         <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
           KATA és átalányadózó egyéni vállalkozók könyvelése
         </h1>
-        <p className="mt-3 max-w-3xl text-base leading-relaxed text-primary-foreground/85">
-          20 év szakmai tapasztalat, korszerű automatizálás és személyes szakértelem. Egyszerűbb és
-          összetettebb egyéni vállalkozói helyzetekhez is.
-        </p>
       </PageHero>
 
       {/* Intro + image */}
@@ -123,6 +120,10 @@ function EvKonyvelesPage() {
         <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             <p className="text-base leading-relaxed text-muted-foreground">
+              20 év szakmai tapasztalat, korszerű automatizálás és személyes szakértelem. Egyszerűbb és
+              összetettebb egyéni vállalkozói helyzetekhez is.
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
               Az egyéni vállalkozó könyvelése valójában nem könyvelés, hanem bérszámfejtés. Ezért sok
               céget könyvelő szakember nem is ért hozzá.
             </p>
@@ -147,10 +148,14 @@ function EvKonyvelesPage() {
               Konzultációt kérek
             </Link>
           </div>
-          <img
-            src={heroImage}
-            alt="Egyéni vállalkozó könyvelése modern könyvelőirodában"
-            loading="lazy"
+          <video
+            src={heroVideo.url}
+            poster={heroImage}
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label="Egyéni vállalkozó könyvelése – hangulatvideó"
             className="w-full rounded-xl border border-border object-cover shadow-sm"
           />
         </div>
