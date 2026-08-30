@@ -1,6 +1,7 @@
 /** Service subpages, shared by the Szolgáltatásaim page and the admin statistics. */
 export const serviceItems = [
   { to: "/konyveles", label: "Könyvelési szolgáltatások" },
+  { to: "/ev-konyveles", label: "EV Könyvelés – KATA és átalányadó" },
   { to: "/adotanacsadas", label: "Adózási és ügyviteli tanácsadás" },
   { to: "/fintech-es-bi", label: "Fintech és BI tanácsadás" },
   { to: "/kontrolling", label: "Kontrolling modern riport- és automatizációs eszközökkel" },
