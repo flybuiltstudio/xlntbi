@@ -1347,15 +1347,23 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
                   <option value="admin">Admin</option>
                   <option value="user">Felhasználó</option>
                 </select>
-                <button
-                  type="button"
-                  disabled={busy === user.id || user.id === currentUserId || isSuperAdmin}
-                  title={isSuperAdmin ? "A szuper admin nem törölhető" : undefined}
-                  onClick={() => void onDelete(user)}
-                  className="rounded-md border border-destructive/40 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-40"
-                >
-                  {busy === user.id ? "Törlés…" : "Törlés"}
-                </button>
+                {isSuperAdmin ? (
+                  <span
+                    className="rounded-md border border-input bg-muted px-4 py-2 text-xs font-semibold text-muted-foreground"
+                    title="A szuper admin nem törölhető"
+                  >
+                    Nem törölhető
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={busy === user.id || user.id === currentUserId}
+                    onClick={() => void onDelete(user)}
+                    className="rounded-md border border-destructive/40 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-40"
+                  >
+                    {busy === user.id ? "Törlés…" : "Törlés"}
+                  </button>
+                )}
               </div>
             </article>
             );
