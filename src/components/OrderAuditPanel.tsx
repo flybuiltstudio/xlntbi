@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 
 import { useAdminSession } from "@/components/admin-panels";
 import { adminOrderAudit } from "@/lib/order-audit.functions";
@@ -199,8 +199,8 @@ export function OrderAuditPanel() {
               const key = row.orderId ?? `num-${row.orderNumber}`;
               const isOpen = open === key;
               return (
-                <>
-                  <tr key={key} className="border-t border-border align-top">
+                <Fragment key={key}>
+                  <tr className="border-t border-border align-top">
                     <td className="px-3 py-2 font-medium text-foreground">
                       <button
                         type="button"
@@ -260,7 +260,7 @@ export function OrderAuditPanel() {
                     </td>
                   </tr>
                   {isOpen ? (
-                    <tr key={`${key}-events`} className="border-t border-border bg-muted/30">
+                    <tr className="border-t border-border bg-muted/30">
                       <td colSpan={7} className="px-3 py-3">
                         <p className="mb-2 text-xs font-semibold uppercase text-muted-foreground">
                           Billingo naplóbejegyzések
@@ -280,7 +280,7 @@ export function OrderAuditPanel() {
                       </td>
                     </tr>
                   ) : null}
-                </>
+                </Fragment>
               );
             })}
           </tbody>
