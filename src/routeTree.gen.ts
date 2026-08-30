@@ -18,6 +18,7 @@ import { Route as CegauditRouteImport } from './routes/cegaudit'
 import { Route as CookieTajekoztatoRouteImport } from './routes/cookie-tajekoztato'
 import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
 import { Route as ElallasASzerzodestolRouteImport } from './routes/elallas-a-szerzodestol'
+import { Route as EvRouteImport } from './routes/ev'
 import { Route as EvKonyvelesRouteImport } from './routes/ev-konyveles'
 import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
 import { Route as FizetesEsTeljesitesRouteImport } from './routes/fizetes-es-teljesites'
@@ -139,6 +140,11 @@ const DigitalisIdomegtakaritasiAuditRoute =
 const ElallasASzerzodestolRoute = ElallasASzerzodestolRouteImport.update({
   id: '/elallas-a-szerzodestol',
   path: '/elallas-a-szerzodestol',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvRoute = EvRouteImport.update({
+  id: '/ev',
+  path: '/ev',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EvKonyvelesRoute = EvKonyvelesRouteImport.update({
@@ -564,6 +570,7 @@ export interface FileRoutesByFullPath {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
+  '/ev': typeof EvRoute
   '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
   '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
@@ -650,6 +657,7 @@ export interface FileRoutesByTo {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
+  '/ev': typeof EvRoute
   '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
   '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
@@ -738,6 +746,7 @@ export interface FileRoutesById {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
+  '/ev': typeof EvRoute
   '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
   '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
@@ -827,6 +836,7 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
+    | '/ev'
     | '/ev-konyveles'
     | '/fintech-es-bi'
     | '/fizetes-es-teljesites'
@@ -913,6 +923,7 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
+    | '/ev'
     | '/ev-konyveles'
     | '/fintech-es-bi'
     | '/fizetes-es-teljesites'
@@ -1000,6 +1011,7 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
+    | '/ev'
     | '/ev-konyveles'
     | '/fintech-es-bi'
     | '/fizetes-es-teljesites'
@@ -1088,6 +1100,7 @@ export interface RootRouteChildren {
   CookieTajekoztatoRoute: typeof CookieTajekoztatoRoute
   DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
   ElallasASzerzodestolRoute: typeof ElallasASzerzodestolRoute
+  EvRoute: typeof EvRoute
   EvKonyvelesRoute: typeof EvKonyvelesRoute
   FintechEsBiRoute: typeof FintechEsBiRoute
   FizetesEsTeljesitesRoute: typeof FizetesEsTeljesitesRoute
@@ -1218,6 +1231,13 @@ declare module '@tanstack/react-router' {
       path: '/elallas-a-szerzodestol'
       fullPath: '/elallas-a-szerzodestol'
       preLoaderRoute: typeof ElallasASzerzodestolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ev': {
+      id: '/ev'
+      path: '/ev'
+      fullPath: '/ev'
+      preLoaderRoute: typeof EvRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ev-konyveles': {
@@ -1795,6 +1815,7 @@ const rootRouteChildren: RootRouteChildren = {
   CookieTajekoztatoRoute: CookieTajekoztatoRoute,
   DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
   ElallasASzerzodestolRoute: ElallasASzerzodestolRoute,
+  EvRoute: EvRoute,
   EvKonyvelesRoute: EvKonyvelesRoute,
   FintechEsBiRoute: FintechEsBiRoute,
   FizetesEsTeljesitesRoute: FizetesEsTeljesitesRoute,
