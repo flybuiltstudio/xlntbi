@@ -905,7 +905,7 @@ export const products: Product[] = [
     priceId: "kulcs_soft_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
     price: 12900,
     currency: "HUF",
-    image: accountImg,
+    image: kulcsSoftImportImg,
     metaTitle: "XLNT Kulcs-Soft Bejövő Külföldi Számla Import | EXCELlent",
     metaDescription:
       "Excel-alapú importáló eszköz könyvelőirodáknak, EU-s és harmadik országbeli bejövő számlákhoz, Kulcs-Soft CSV importtal. Ár: 12 900 Ft.",
@@ -949,7 +949,7 @@ export const products: Product[] = [
     priceId: "novitax_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
     price: 12900,
     currency: "HUF",
-    image: accountImg,
+    image: novitaxImportImg,
     metaTitle: "XLNT NOVITAX Bejövő Külföldi Számla Import | EXCELlent",
     metaDescription:
       "Novitax NTAX bejövő külföldi számlák Excel-alapú rögzítése és CSV-importja, partnerimporttal. Ár: 12 900 Ft.",
