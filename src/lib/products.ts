@@ -23,6 +23,8 @@ import kamatlekerdezoImg from "@/assets/kamatlekerdezo-potlekszamito.jpg";
 import navOnlineSzamlaImg from "@/assets/nav-online-szamla-letolto.jpg";
 import mnbEraImg from "@/assets/mnb-era-jelentesgenerator.jpg";
 import ingatlanalapMnbImg from "@/assets/ingatlanalap-mnb-jelentes-elokeszito.jpg";
+import kulcsSoftImportImg from "@/assets/kulcs-soft-kulfoldi-import.jpg";
+import novitaxImportImg from "@/assets/novitax-kulfoldi-import.jpg";
 
 import { hasXlntPrefix, withXlntPrefix } from "@/lib/product-name";
 
@@ -903,7 +905,7 @@ export const products: Product[] = [
     priceId: "kulcs_soft_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
     price: 12900,
     currency: "HUF",
-    image: accountImg,
+    image: kulcsSoftImportImg,
     metaTitle: "XLNT Kulcs-Soft Bejövő Külföldi Számla Import | EXCELlent",
     metaDescription:
       "Excel-alapú importáló eszköz könyvelőirodáknak, EU-s és harmadik országbeli bejövő számlákhoz, Kulcs-Soft CSV importtal. Ár: 12 900 Ft.",
@@ -947,7 +949,7 @@ export const products: Product[] = [
     priceId: "novitax_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
     price: 12900,
     currency: "HUF",
-    image: accountImg,
+    image: novitaxImportImg,
     metaTitle: "XLNT NOVITAX Bejövő Külföldi Számla Import | EXCELlent",
     metaDescription:
       "Novitax NTAX bejövő külföldi számlák Excel-alapú rögzítése és CSV-importja, partnerimporttal. Ár: 12 900 Ft.",
