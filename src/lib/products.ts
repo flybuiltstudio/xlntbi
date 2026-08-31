@@ -1328,11 +1328,11 @@ export const products: Product[] = [
     tagline: "Telefonszámlából könyvelés – percek alatt, hívószámonként, hibátlan áfával",
     status: "available",
     priceId: "telefonszamla_konyvelo_alap_licenc_1_adoszam",
-    price: 12900,
+    price: 14900,
     currency: "HUF",
     image: termekekImg,
     metaTitle: "XLNT Telefonszámla Könyvelő | EXCELlent",
-    metaDescription: "Telefonszámlából könyvelés – percek alatt, hívószámonként, hibátlan áfával. Ár: 12 900 Ft-tól.",
+    metaDescription: "Telefonszámlából könyvelés – percek alatt, hívószámonként, hibátlan áfával. Ár: 14 900 Ft-tól.",
     intro: [
       "A többtelefonszámos céges számlák könyvelése hónapról hónapra ugyanaz a fárasztó, hibalehetőségekkel teli kézi munka. A Telefonszámla Könyvelő beolvassa a PDF-számlát, hívószámonként szétbontja a tételeket, és egyetlen kattintással a könyvelőprogramjába importálható fájlt készít – helyes áfakulcsokkal és a telefonszolgáltatás magán/céges áfabontásával együtt. A Magyar Telekom és a Yettel üzleti mobilszámláit automatikusan felismeri.",
       "Könyvelőirodáknak és cégeknek, amelyek több hívószámos, üzleti mobilszámlákat könyvelnek (Magyar Telekom, Yettel), és RLB, Kulcs-Soft, Novitax vagy Pénzszám rendszert használnak.",
