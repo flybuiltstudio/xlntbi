@@ -1352,7 +1352,7 @@ export const products: Product[] = [
       {
         id: "alap_licenc_1_adoszam",
         label: "Alap licenc – 1 adószám",
-        price: 12900,
+        price: 14900,
         note: "Egy vállalkozás / adószám részére.",
         priceId: "telefonszamla_konyvelo_alap_licenc_1_adoszam",
       },
