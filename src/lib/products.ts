@@ -940,6 +940,48 @@ export const products: Product[] = [
   },
   {
 
+    slug: "novitax-kulfoldi-szamla-import",
+    name: "XLNT NOVITAX Bejövő Külföldi Számla Import",
+    tagline: "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország",
+    status: "available",
+    priceId: "novitax_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
+    price: 11900,
+    currency: "HUF",
+    image: accountImg,
+    metaTitle: "XLNT NOVITAX Bejövő Külföldi Számla Import | EXCELlent",
+    metaDescription:
+      "Novitax NTAX bejövő külföldi számlák Excel-alapú rögzítése és CSV-importja, partnerimporttal. Ár: 11 900 Ft.",
+    intro: [
+      "Ha rendszeresen könyvelsz EU-s vagy harmadik országból érkező bejövő számlákat Novitax NTAX rendszerben, ez az eszköz az adatrögzítés terhét veszi le a válladról. Excelben rögzíted a számlákat – egy gombnyomással kész a Novitax Feladási modulba betölthető szamla.csv fájl, a partnereket pedig közvetlenül a Novitaxból importálod be.",
+      "Partnerkód beírásakor a szállítói adatok, naplókód, főkönyvi számok és ÁFA típus automatikusan kitöltődnek a Szállító Törzsből.",
+    ],
+    features: [
+      "Partner import a Novitaxból – az exportált partner CSV egyetlen gombnyomással beolvasható, az oszlopok automatikusan azonosítódnak a fejléc alapján.",
+      "Szállító Törzs auto-kitöltés – a partnerkód alapján automatikusan kitöltődik a szállítónév, naplókód, Tartozik/Követel főkönyvi szám, ÁFA típus, pénznem és munkaszám.",
+      "Novitax-kompatibilis ÁFA típusok – a Novitax belső ÁFA-kódjai legördülőből választhatók.",
+      "A könyvelési hónap automatikusan a számla keltéből számítódik, de felülírható.",
+      "Devizakezelés – EUR, USD, CHF és más devizák, külön jelölt devizás mezőkkel és megadható váltóhellyel.",
+      "szamla.csv generálása egy kattintással, a Novitax által elvárt 40 mezős struktúrában.",
+      "ÁFA Segédlet a Novitax bejövő számlákhoz használható ÁFA-kódokkal.",
+      "Validáció – generáláskor ellenőrzi a kötelező mezőket és figyelmeztet a hiányosságokra.",
+      "100 számlasor befogadóképesség egyszerre.",
+    ],
+    why: "A csomag 6 munkalapot tartalmaz: Vezérlőpult, Számla Import, Szállító Törzs, Partner Törzs, ÁFA Segédlet és VBA Makrók. A használathoz Microsoft Excel 2016 vagy újabb Windows-verzió, valamint a Novitax NTAX Kettős könyvvitel Feladási modulja szükséges. A Novitaxban az import útvonala: NTAX → Feladási modul → Számlák bemásolása külső file-ból.",
+    tiers: [
+      {
+        id: "egyszeri_licenc_egyetlen_iro",
+        label: "Egyszeri licenc – egyetlen iroda",
+        price: 11900,
+        note: "Korlátlan felhasználás, frissítések 1 évig díjmentesen.",
+        priceId: "novitax_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
+      },
+    ],
+    download: {
+      fileName: "Novitax_Szamla_Import.xlsm",
+      storagePath: "novitax-kulfoldi-szamla-import/Novitax_Szamla_Import.xlsm",
+    },
+  },
+  {
     slug: "penzszam-kulfoldi-szamla-import",
     name: "XLNT PÉNZSZÁM Bejövő Külföldi Számla Import",
     tagline: "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország",

@@ -33,6 +33,7 @@ export const productCategories: ProductCategory[] = [
       "telefonszamla-konyvelo",
       "rlb-kulfoldi-szamla-import",
       "kulcs-soft-kulfoldi-szamla-import",
+      "novitax-kulfoldi-szamla-import",
       "penzszam-kulfoldi-szamla-import",
     ],
 
