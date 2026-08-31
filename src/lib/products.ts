@@ -945,12 +945,12 @@ export const products: Product[] = [
     tagline: "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország",
     status: "available",
     priceId: "novitax_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
-    price: 11900,
+    price: 12900,
     currency: "HUF",
     image: accountImg,
     metaTitle: "XLNT NOVITAX Bejövő Külföldi Számla Import | EXCELlent",
     metaDescription:
-      "Novitax NTAX bejövő külföldi számlák Excel-alapú rögzítése és CSV-importja, partnerimporttal. Ár: 11 900 Ft.",
+      "Novitax NTAX bejövő külföldi számlák Excel-alapú rögzítése és CSV-importja, partnerimporttal. Ár: 12 900 Ft.",
     intro: [
       "Ha rendszeresen könyvelsz EU-s vagy harmadik országból érkező bejövő számlákat Novitax NTAX rendszerben, ez az eszköz az adatrögzítés terhét veszi le a válladról. Excelben rögzíted a számlákat – egy gombnyomással kész a Novitax Feladási modulba betölthető szamla.csv fájl, a partnereket pedig közvetlenül a Novitaxból importálod be.",
       "Partnerkód beírásakor a szállítói adatok, naplókód, főkönyvi számok és ÁFA típus automatikusan kitöltődnek a Szállító Törzsből.",
@@ -971,7 +971,7 @@ export const products: Product[] = [
       {
         id: "egyszeri_licenc_egyetlen_iro",
         label: "Egyszeri licenc – egyetlen iroda",
-        price: 11900,
+        price: 12900,
         note: "Korlátlan felhasználás, frissítések 1 évig díjmentesen.",
         priceId: "novitax_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
       },
