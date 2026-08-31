@@ -971,7 +971,7 @@ export const products: Product[] = [
       {
         id: "egyszeri_licenc_egyetlen_iro",
         label: "Egyszeri licenc – egyetlen iroda",
-        price: 11900,
+        price: 12900,
         note: "Korlátlan felhasználás, frissítések 1 évig díjmentesen.",
         priceId: "novitax_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
       },
