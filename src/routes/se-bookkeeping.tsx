@@ -197,16 +197,16 @@ function SeBookkeepingPage() {
               <tbody>
                 <tr className="border-b border-border">
                   <td className="px-5 py-4 font-medium text-card-foreground">KATA bookkeeping</td>
-                  <td className="px-5 py-4 text-card-foreground">10,000 HUF / month</td>
+                  <td className="px-5 py-4 text-card-foreground">15,000 HUF / month</td>
                 </tr>
                 <tr>
                   <td className="px-5 py-4 font-medium text-card-foreground">
                     Bookkeeping for a flat-rate self-employed entrepreneur
                   </td>
                   <td className="px-5 py-4 text-card-foreground">
-                    from 50,000 HUF / quarter
+                    from 60,000 HUF / quarter
                     <span className="block text-xs text-muted-foreground">
-                      (less than 17,000 HUF per month)
+                      (20,000 HUF per month)
                     </span>
                   </td>
                 </tr>
