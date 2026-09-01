@@ -44,7 +44,7 @@ export const Route = createFileRoute("/termek/telefonszamla-konyvelo")({
                   },
                   "offers": {
                             "@type": "Offer",
-                            "price": "12900",
+                            "price": "14900",
                             "priceCurrency": "HUF",
                             "availability": "https://schema.org/InStock",
                             "url": "https://xlntbi.hu/termek/telefonszamla-konyvelo"
