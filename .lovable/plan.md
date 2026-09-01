@@ -1,6 +1,6 @@
 # Angol nyelvű "SE bookkeeping" oldal
 
-Az EV Könyvelés oldal angol párja, saját URL-en, a menüben az EV Könyvelés és az Adótanácsadás között.
+Az EV Könyvelés oldal angol párja, saját URL-en, a menüben az EV Könyvelés és az Adótanácsadás között. Az `/se` rövid link átirányít ide.
 
 ## Mit építek
 
@@ -12,17 +12,19 @@ Az EV Könyvelés oldal angol párja, saját URL-en, a menüben az EV Könyvelé
 
 2. **Menü:** a "Szolgáltatásaim" legördülőben (asztali és mobil egyaránt) új pont **SE bookkeeping** néven, az EV Könyvelés és az Adótanácsadás között (`SiteHeader.tsx` és `src/lib/services.ts`).
 
-3. **SEO:**
+3. **Rövid link:** új `src/routes/se.tsx`, amely `beforeLoad`-ban `redirect({ to: "/se-bookkeeping", replace: true })` – mint a meglévő `ev.tsx`.
+
+4. **SEO:**
    - Angol title / meta description / OG + Twitter tagek, canonical `https://xlntbi.hu/se-bookkeeping`.
    - Service + BreadcrumbList + FAQPage JSON-LD angolul.
    - `hreflang` páros a két oldal között: a magyar oldal `hu`, az angol `en`, mindkettőn kölcsönös hivatkozás.
-   - Az oldal felkerül a sitemap.xml-be.
+   - Az `/se-bookkeeping` és `/se` felkerül a sitemap.xml-be.
    - Az oldal tetején egy diszkrét nyelvváltó link a magyar változatra (és fordítva).
 
-4. **Oldalletöltés-mérés:** ugyanaz a `usePageView("service", pathname)` hívás, hogy a statisztikában is látszódjon.
+5. **Oldalletöltés-mérés:** ugyanaz a `usePageView("service", pathname)` hívás, hogy a statisztikában is látszódjon.
 
 ## Technikai részletek
 
-- Új fájl: `src/routes/se-bookkeeping.tsx`, `createFileRoute("/se-bookkeeping")`.
-- A `<html lang="hu">` globális marad; az angol oldal szövegblokkjai `lang="en"` attribútumot kapnak a fő tartalmi konténeren.
+- Új fájlok: `src/routes/se-bookkeeping.tsx` (`createFileRoute("/se-bookkeeping")`) és `src/routes/se.tsx` (`createFileRoute("/se")`).
+- A `<html lang="hu">` globális marad; az angol oldal fő tartalmi konténerén `lang="en"`.
 - SSR-ben teljes szöveg renderelődik (nincs kliensoldali betöltés), egyetlen `<h1>`.
