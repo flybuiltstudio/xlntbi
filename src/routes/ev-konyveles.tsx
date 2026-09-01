@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLocation } from "@tanstack/react-router";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, Languages } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { usePageView } from "@/lib/use-page-view";
 import heroImage from "@/assets/ev-konyveles-poster.jpg";
@@ -9,6 +9,7 @@ const TITLE = "EV Könyvelés – KATA és átalányadózó vállalkozóknak | E
 const DESCRIPTION = "KATA és átalányadózó egyéni vállalkozók könyvelése kedvező díjazással, automatizált folyamatokkal és 20 év szakmai tapasztalattal.";
 const CANONICAL = "https://xlntbi.hu/ev-konyveles";
 const OG_IMAGE = "https://xlntbi.hu/og/ev-konyveles-poster.jpg";
+const EN_URL = "https://xlntbi.hu/se-bookkeeping";
 
 const faqItems = [
   {
@@ -50,12 +51,18 @@ export const Route = createFileRoute("/ev-konyveles")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: CANONICAL },
       { property: "og:image", content: OG_IMAGE },
+      { property: "og:locale", content: "hu_HU" },
+      { property: "og:locale:alternate", content: "en_HU" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
       { name: "twitter:image", content: OG_IMAGE },
     ],
-    links: [{ rel: "canonical", href: CANONICAL }],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hreflang: "hu", href: CANONICAL },
+      { rel: "alternate", hreflang: "en", href: EN_URL },
+    ],
     scripts: [
       {
         type: "application/ld+json",
@@ -112,6 +119,13 @@ function EvKonyvelesPage() {
         <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
           KATA és átalányadózó egyéni vállalkozók könyvelése
         </h1>
+        <Link
+          to="/se-bookkeeping"
+          className="mt-4 inline-flex items-center gap-2 rounded-md bg-white/10 px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-white/20"
+        >
+          <Languages className="h-3.5 w-3.5" aria-hidden="true" />
+          English
+        </Link>
       </PageHero>
 
       {/* Intro + image */}
