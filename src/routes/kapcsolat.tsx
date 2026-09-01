@@ -120,6 +120,39 @@ function KapcsolatPage() {
                 info@xlntbi.hu
               </a>
             </li>
+            <li className="flex items-start gap-3">
+              <Facebook className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+              <a
+                href="https://www.facebook.com/xlntbi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground"
+              >
+                Facebook
+              </a>
+            </li>
+            <li className="flex items-start gap-3">
+              <Instagram className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+              <a
+                href="https://www.instagram.com/xlntbi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground"
+              >
+                Instagram
+              </a>
+            </li>
+            <li className="flex items-start gap-3">
+              <Linkedin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+              <a
+                href="https://www.linkedin.com/company/xlntbi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground"
+              >
+                LinkedIn
+              </a>
+            </li>
           </ul>
           <figure className="mt-2 overflow-hidden rounded-2xl border border-border/60 shadow-lg">
             <img
