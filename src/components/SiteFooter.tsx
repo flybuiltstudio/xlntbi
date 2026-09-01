@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Mail, Phone } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import { openCookieSettings } from "@/components/CookieConsent";
 
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
