@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Mail, Phone } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import { openCookieSettings } from "@/components/CookieConsent";
 
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
@@ -126,6 +126,28 @@ export function SiteFooter() {
                 className="opacity-90 hover:opacity-100"
               >
                 Facebook
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <Instagram className="h-4 w-4" aria-hidden="true" />
+              <a
+                href="https://www.instagram.com/xlntbi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opacity-90 hover:opacity-100"
+              >
+                Instagram
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <Linkedin className="h-4 w-4" aria-hidden="true" />
+              <a
+                href="https://www.linkedin.com/company/xlntbi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opacity-90 hover:opacity-100"
+              >
+                LinkedIn
               </a>
             </li>
           </ul>

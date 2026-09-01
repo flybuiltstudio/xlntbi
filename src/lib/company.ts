@@ -15,6 +15,8 @@ export const COMPANY = {
   phoneIntl: "+36 20 962 2176",
   website: "xlntbi.hu",
   facebook: "https://www.facebook.com/xlntbi",
+  instagram: "https://www.instagram.com/xlntbi/",
+  linkedin: "https://www.linkedin.com/company/xlntbi/",
 } as const;
 
 export const HOSTING = {

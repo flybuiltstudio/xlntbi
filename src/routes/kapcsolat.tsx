@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, Phone } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import kapcsolatBusiness from "@/assets/kapcsolat-business.jpg";
 import { PageHero } from "@/components/PageHero";
@@ -118,6 +118,39 @@ function KapcsolatPage() {
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
               <a href="mailto:info@xlntbi.hu" className="hover:text-foreground">
                 info@xlntbi.hu
+              </a>
+            </li>
+            <li className="flex items-start gap-3">
+              <Facebook className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+              <a
+                href="https://www.facebook.com/xlntbi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground"
+              >
+                Facebook
+              </a>
+            </li>
+            <li className="flex items-start gap-3">
+              <Instagram className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+              <a
+                href="https://www.instagram.com/xlntbi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground"
+              >
+                Instagram
+              </a>
+            </li>
+            <li className="flex items-start gap-3">
+              <Linkedin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+              <a
+                href="https://www.linkedin.com/company/xlntbi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground"
+              >
+                LinkedIn
               </a>
             </li>
           </ul>
