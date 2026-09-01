@@ -51,12 +51,18 @@ export const Route = createFileRoute("/ev-konyveles")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: CANONICAL },
       { property: "og:image", content: OG_IMAGE },
+      { property: "og:locale", content: "hu_HU" },
+      { property: "og:locale:alternate", content: "en_HU" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
       { name: "twitter:image", content: OG_IMAGE },
     ],
-    links: [{ rel: "canonical", href: CANONICAL }],
+    links: [
+      { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hreflang: "hu", href: CANONICAL },
+      { rel: "alternate", hreflang: "en", href: EN_URL },
+    ],
     scripts: [
       {
         type: "application/ld+json",
