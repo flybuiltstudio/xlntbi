@@ -9,6 +9,7 @@ const TITLE = "EV Könyvelés – KATA és átalányadózó vállalkozóknak | E
 const DESCRIPTION = "KATA és átalányadózó egyéni vállalkozók könyvelése kedvező díjazással, automatizált folyamatokkal és 20 év szakmai tapasztalattal.";
 const CANONICAL = "https://xlntbi.hu/ev-konyveles";
 const OG_IMAGE = "https://xlntbi.hu/og/ev-konyveles-poster.jpg";
+const EN_URL = "https://xlntbi.hu/se-bookkeeping";
 
 const faqItems = [
   {
