@@ -128,6 +128,28 @@ export function SiteFooter() {
                 Facebook
               </a>
             </li>
+            <li className="flex items-center gap-2">
+              <Instagram className="h-4 w-4" aria-hidden="true" />
+              <a
+                href="https://www.instagram.com/xlntbi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opacity-90 hover:opacity-100"
+              >
+                Instagram
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <Linkedin className="h-4 w-4" aria-hidden="true" />
+              <a
+                href="https://www.linkedin.com/company/xlntbi/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="opacity-90 hover:opacity-100"
+              >
+                LinkedIn
+              </a>
+            </li>
           </ul>
 
           <h2 className="mt-6 text-sm font-semibold uppercase tracking-wider opacity-80">
