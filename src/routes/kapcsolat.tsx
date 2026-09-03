@@ -198,7 +198,7 @@ function KapcsolatPage() {
               messageLabel="Üzenet"
               defaultMessage={`Kedves Dávid!
 
-A megjelölt témá(k)ban mikor tudunk beszélni?
+A megjelölt témá(k)ról mikor tudunk beszélni?
 
 Köszönöm!`}
               submitLabel="Üzenet elküldése"
