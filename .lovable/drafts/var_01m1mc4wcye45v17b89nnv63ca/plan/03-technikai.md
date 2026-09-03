@@ -24,9 +24,10 @@
 
 **API-kulcsok**
 Az admin felületen megadott kulcsok nem kerülnek az adatbázisba: a secret
-tárolóba mennek (`MAILERLITE_API_KEY`, `MAILCHIMP_API_KEY` +
-`MAILCHIMP_SERVER_PREFIX`, `EMAILOCTOPUS_API_KEY`, `SENDER_API_KEY`), és csak
-szerveroldalon olvashatók. Az oldal csak azt jelzi, hogy be van-e állítva.
+tárolóba mennek (`MAILERLITE_API_KEY`, `EMAILOCTOPUS_API_KEY`,
+`SENDER_API_KEY`, `SENDPULSE_CLIENT_ID` + `SENDPULSE_CLIENT_SECRET`,
+`BREVO_API_KEY`), és csak szerveroldalon olvashatók. Az oldal csak azt jelzi,
+hogy be van-e állítva. Brevónál a beépített Brevo-összekötés is használható.
 
 **Admin oldal**
 - `src/routes/admin.hirlevel.tsx` + `src/components/NewsletterAdminPanel.tsx`.
@@ -35,8 +36,13 @@ szerveroldalon olvashatók. Az oldal csak azt jelzi, hogy be van-e állítva.
   kampány küldése adagolva a meglévő `send-email.ts` réteggel, új
   `src/lib/email-templates/hirlevel.tsx` és `hirlevel-megerosites.tsx`
   sablonokkal. Minden szerverfüggvény `requireSupabaseAuth` + admin `gate`.
+- Szerkesztő: könnyű rich-text szerkesztő (`contentEditable` alapú, félkövér /
+  dőlt / lista / címsor / link / kép), a kimenet e-mail-biztos HTML-re
+  tisztítva (inline stílusok, táblázatos elrendezés, sanitizálás). Kép feltöltés
+  a meglévő védett tárolóba, aláírt vagy publikus olvasási útvonallal a levél
+  számára.
 - Export: a meglévő `src/lib/stats-export.ts` mintájára CSV/XLSX/XML/PDF, plusz
-  szolgáltató-specifikus CSV fejlécek.
+  öt szolgáltató-specifikus CSV fejléckészlet.
 - `src/lib/admin-access.ts`: `{ prefix: "/admin/hirlevel", roles: ["admin"] }`.
 - `src/routes/admin.tsx`: „Hírlevél" fül csak admin szerepkörnek.
 - `src/components/admin-panels.tsx` (UsersPanel): szerepkör-leírások frissítése.

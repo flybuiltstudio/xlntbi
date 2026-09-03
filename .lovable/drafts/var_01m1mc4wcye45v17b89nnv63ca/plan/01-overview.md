@@ -17,7 +17,7 @@ A bevett gyakorlat: az űrlap adatai a saját adatbázisba mennek, a feliratkoz�
 **dupla opt-in** megerősítő levelet kap (erre a magyar és EU-s szabályozás miatt
 is szükség van), és minden kiküldött levélben van **leiratkozó link**. A
 kiküldést vagy saját rendszerből, vagy külső hírlevélküldőből (MailerLite,
-Mailchimp, EmailOctopus, Sender) végzik.
+EmailOctopus, Sender, SendPulse, Brevo) végzik.
 
 A kérésnek megfelelően **mindkettő elkészül**: az adat mindig nálad marad
 (exportálható), és az adminban választható, hogy melyik szolgáltatóba menjen át.
@@ -29,32 +29,31 @@ rádiógombos módválasztó:
 
 | # | Mód | Mit ad |
 |---|-----|--------|
-| 1 | Saját lista + admin levélküldő | Lista kezelése, export, egyszerű levélküldő (tárgy + szöveg) a beépített e-mail-rendszerrel |
+| 1 | Saját lista + admin levélküldő | Lista kezelése, export, levélküldő a beépített e-mail-rendszerrel |
 | 2 | MailerLite | API-kulcs megadása, feliratkozók átadása |
-| 3 | Mailchimp | API-kulcs + szerver-prefix megadása |
-| 4 | EmailOctopus | API-kulcs + lista-azonosító |
-| 5 | Sender | API-kulcs megadása |
-
-> Az eredeti listában a 2. és 3. pont is MailerLite volt. A 3. helyre
-> **Mailchimp** kerül, mert korábban azt említetted — ha mást szeretnél oda,
-> szólj, és kicserélem.
+| 3 | EmailOctopus | API-kulcs + lista-azonosító |
+| 4 | Sender | API-kulcs megadása |
+| 5 | SendPulse | API azonosító + titkos kulcs |
+| 6 | Brevo | API-kulcs (vagy a beépített Brevo-összekötés) |
 
 A választott mód mentődik, és mindig az érvényes: a feliratkozás minden esetben
-a saját listába kerül, és a 2–5. módban a szolgáltatóba is átmegy.
+a saját listába kerül, és a 2–6. módban a szolgáltatóba is átmegy.
 
 ### Lista és export
 
 Táblázat: név, e-mail, telefon, cégnév, feliratkozás dátuma, megerősítve,
-leiratkozva. Keresés és szűrés. Export: **CSV, XLSX, XML, PDF**, plusz a három
-külső rendszer importformátumához illeszkedő CSV-változat (MailerLite,
-Mailchimp/EmailOctopus, Sender – mindegyik CSV-t vár, fejléc-elnevezésre
-szabva).
+leiratkozva. Keresés és szűrés. Export: **CSV, XLSX, XML, PDF**, plusz mind az
+**öt külső rendszer** (MailerLite, EmailOctopus, Sender, SendPulse, Brevo)
+importformátumához illeszkedő, a saját fejléceikre szabott CSV.
 
 ### Levélküldő (1. mód)
 
-Tárgy + szöveg (egyszerű szövegszerkesztés), előnézet, teszt-küldés magadnak,
-majd kiküldés a megerősített, nem leiratkozott feliratkozóknak — adagolva, hogy
-ne fusson időtúllépésbe. Minden levél alján leiratkozó link.
+Formázható szerkesztő: félkövér, dőlt, aláhúzás, felsorolás, címsorok,
+**link beszúrása** és **kép beillesztése** (a kép a projekt saját tárolójába
+kerül, a levélben teljes URL-lel hivatkozva — így minden levelezőben látszik).
+Előnézet, teszt-küldés magadnak, majd kiküldés a megerősített, nem leiratkozott
+feliratkozóknak — adagolva, hogy ne fusson időtúllépésbe. Minden levél alján
+leiratkozó link.
 
 ## 4. Felhasználók oldal
 
