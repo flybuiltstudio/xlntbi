@@ -117,13 +117,24 @@ const sections: LegalSection[] = [
     ],
   },
   {
-    heading: "8. Sütik (cookie-k)",
+    heading: "8. Hírlevél",
+    list: [
+      "Kezelt adatok: vezetéknév, keresztnév, e-mail cím, valamint – ha megadják – telefonszám és cégnév. A visszaélések szűréséhez IP-címet és böngészőazonosítót (user agent), a feliratkozás igazolásához a hozzájárulás és a megerősítés időpontját rögzítjük.",
+      "Cél: hírlevél küldése a szolgáltatásokról, a digitális termékek újdonságairól, jogszabályi változásokról és határidőkről.",
+      "Jogalap: az érintett önkéntes, kifejezett hozzájárulása (GDPR 6. cikk (1) a)). A feliratkozás kettős megerősítéssel (double opt-in) történik: a hírlevél csak az e-mailben kapott megerősítő link után indul.",
+      "Megőrzési idő: a hozzájárulás visszavonásáig (leiratkozásig). A leiratkozás tényét és időpontját a jogszabályi elszámoltathatóság érdekében ezt követően is nyilvántartjuk.",
+      "Leiratkozás: minden hírlevél alján egy kattintással elérhető leiratkozó link szerepel, illetve leiratkozási kérés az info@xlntbi.hu címre is küldhető.",
+      "Külső levelezőrendszer: ha a hírlevél kiküldése külső szolgáltatóval (MailerLite, EmailOctopus, Sender, SendPulse vagy Brevo) történik, a feliratkozó neve, e-mail címe és a megadott telefonszám, cégnév az érintett szolgáltatóhoz is továbbításra kerül, kizárólag a hírlevél kiküldése céljából.",
+    ],
+  },
+  {
+    heading: "9. Sütik (cookie-k)",
     paragraphs: [
       "A weboldal a működéshez szükséges sütiket használ, ideértve a bankkártyás fizetés biztonságos lebonyolításához a Stripe által elhelyezett sütiket is. Analitikai és marketing sütiket jelenleg nem alkalmazunk. Részletek a Cookie-tájékoztató oldalon.",
     ],
   },
   {
-    heading: "9. Adatfeldolgozók és címzettek",
+    heading: "10. Adatfeldolgozók és címzettek",
     paragraphs: [
       "Az adatkezelés során az alábbi adatfeldolgozók, illetve önálló adatkezelők működnek közre:",
     ],
@@ -133,20 +144,20 @@ const sections: LegalSection[] = [
     ],
   },
   {
-    heading: "10. Automatizált döntéshozatal, profilalkotás, AI-eszközök",
+    heading: "11. Automatizált döntéshozatal, profilalkotás, AI-eszközök",
     paragraphs: [
       "Az adatkezelés során automatizált döntéshozatal és profilalkotás nem történik.",
       "A szolgáltató a szoftverei és belső folyamatai fejlesztéséhez AI-eszközöket használ, azonban a weboldalon beküldött személyes adatokat AI-modell tanítására nem használjuk fel, és azokat AI-szolgáltatónak nem továbbítjuk.",
     ],
   },
   {
-    heading: "11. Adatbiztonság",
+    heading: "12. Adatbiztonság",
     paragraphs: [
       "Az adatok titkosított (HTTPS) kapcsolaton keresztül kerülnek továbbításra. Az adatbázisban a beküldések jogosultsághoz kötött (row level security) védelem mellett tárolódnak, azokhoz csak az adatkezelő és a szükséges mértékben az adatfeldolgozók férhetnek hozzá.",
     ],
   },
   {
-    heading: "12. Az érintettek jogai",
+    heading: "13. Az érintettek jogai",
     paragraphs: ["Az érintettet az alábbi jogok illetik meg:"],
     list: [
       "Tájékoztatáshoz és hozzáféréshez való jog (GDPR 15. cikk)",
@@ -162,14 +173,14 @@ const sections: LegalSection[] = [
     ],
   },
   {
-    heading: "13. Jogorvoslat",
+    heading: "14. Jogorvoslat",
     paragraphs: [
       `Ha az érintett úgy véli, hogy személyes adatainak kezelése során jogsérelem érte, panaszt nyújthat be a felügyeleti hatósághoz: ${AUTHORITIES.naih}.`,
       "Az érintett a lakóhelye vagy tartózkodási helye szerinti törvényszékhez is fordulhat, a GDPR 79. cikke és az Infotv. alapján.",
     ],
   },
   {
-    heading: "14. A tájékoztató módosítása",
+    heading: "15. A tájékoztató módosítása",
     paragraphs: [
       "Az adatkezelő fenntartja a jogot a tájékoztató módosítására. A mindenkor hatályos változat a weboldalon érhető el.",
       "Hatályos: 2026. augusztus 19-től.",
