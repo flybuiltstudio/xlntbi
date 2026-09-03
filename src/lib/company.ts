@@ -17,6 +17,7 @@ export const COMPANY = {
   facebook: "https://www.facebook.com/xlntbi",
   instagram: "https://www.instagram.com/xlntbi/",
   linkedin: "https://www.linkedin.com/company/xlntbi/",
+  tiktok: "https://www.tiktok.com/@xlntbi",
 } as const;
 
 export const HOSTING = {
