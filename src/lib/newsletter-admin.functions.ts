@@ -85,3 +85,23 @@ export const sendNewsletterCampaign = createServerFn({ method: "POST" })
       userEmail: claimsEmail(context) ?? "",
     });
   });
+
+const testEmailSchema = z.object({
+  template: z.enum(["hirlevel-megerosites", "hirlevel"]),
+  to: z.string().trim().email().max(200),
+});
+
+/** Admin-only deliverability test with the newsletter / opt-in templates. */
+export const sendNewsletterTestEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => testEmailSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { gate, claimsEmail } = await import("./admin-gate.server");
+    await gate(context);
+    const { sendNewsletterTestEmail: send } = await import("./newsletter-admin.server");
+    return send({
+      template: data.template,
+      to: data.to,
+      userEmail: claimsEmail(context) ?? "",
+    });
+  });

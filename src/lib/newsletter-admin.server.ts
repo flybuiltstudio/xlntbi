@@ -298,3 +298,59 @@ export async function sendCampaign(input: {
     recipients: recipients.length,
   };
 }
+
+/**
+ * Sends a single test email with one of the newsletter templates so the admin
+ * can check deliverability (inbox vs. spam) before a real campaign.
+ */
+export async function sendNewsletterTestEmail(input: {
+  template: "hirlevel-megerosites" | "hirlevel";
+  to: string;
+  userEmail: string;
+}) {
+  const to = input.to.trim() || input.userEmail;
+  if (!to) return { ok: false as const, error: "Adj meg egy e-mail címet." };
+
+  const { siteOrigin } = await import("./newsletter.server");
+  const origin = siteOrigin();
+  const stamp = new Date().toLocaleString("hu-HU");
+
+  try {
+    const result =
+      input.template === "hirlevel-megerosites" ?
+        await sendTemplateEmail("hirlevel-megerosites", to, {
+          templateData: {
+            name: "Teszt Feliratkozó",
+            confirmUrl: `${origin}/hirlevel-megerosites?token=teszt`,
+          },
+          idempotencyKey: `hirlevel-optin-teszt-${crypto.randomUUID()}`,
+        })
+      : await sendTemplateEmail("hirlevel", to, {
+          templateData: {
+            subject: `Kézbesítési teszt – ${stamp}`,
+            html: sanitizeNewsletterHtml(
+              `<p>Ez egy <strong>kézbesítési teszt</strong> az xlntbi.hu hírlevél-rendszeréből.</p>` +
+                `<p>Küldés ideje: ${stamp}. Ha ez a levél a Levélszemét mappában landolt, jelöld „Nem spam”-ként.</p>`,
+            ),
+            unsubscribeUrl: `${origin}/leiratkozas?token=teszt`,
+          },
+          idempotencyKey: `hirlevel-kezbesites-teszt-${crypto.randomUUID()}`,
+        });
+
+    if (!result.sent) {
+      return {
+        ok: false as const,
+        error:
+          result.reason === "recipient_suppressed" ?
+            "Ez a cím tiltólistán van (korábbi visszapattanás vagy leiratkozás miatt), ezért nem kapott levelet."
+          : "A levelet nem sikerült kiküldeni.",
+      };
+    }
+    return { ok: true as const, to, from: "noreply@notify.xlntbi.hu" };
+  } catch (error) {
+    return {
+      ok: false as const,
+      error: error instanceof Error ? error.message : "A teszt levél nem ment ki.",
+    };
+  }
+}
