@@ -191,138 +191,298 @@ export function NewsletterAdminPanel() {
           feliratkozók oda is átkerülnek.
         </p>
 
-        <div className="mt-6 space-y-3">
-          {NEWSLETTER_MODES.map((entry, index) => (
-            <label
-              key={entry.id}
-              className={`flex cursor-pointer gap-3 rounded-lg border p-4 transition ${
-                mode === entry.id ? "border-primary bg-primary/5" : "border-border hover:bg-muted/50"
-              }`}
-            >
-              <input
-                type="radio"
-                name="newsletter-mode"
-                className="mt-1"
-                checked={mode === entry.id}
-                onChange={() => setMode(entry.id)}
-              />
-              <span className="min-w-0">
-                <span className="block text-sm font-semibold text-foreground">
-                  {index + 1}) {entry.label}
-                </span>
-                <span className="mt-0.5 block text-sm text-muted-foreground">{entry.hint}</span>
-                {entry.id !== "own" && settings?.providers[entry.id] ? (
-                  <span className="mt-1.5 block text-xs font-medium text-muted-foreground">
-                    {settings.providers[entry.id]!.configured ?
-                      "API-kulcs beállítva"
-                    : "API-kulcs még nincs megadva"}
-                  </span>
-                ) : null}
-              </span>
-            </label>
-          ))}
-        </div>
-
-        {modeEntry.fields.length > 0 ? (
-          <div className="mt-6 grid gap-4 rounded-lg border border-border p-4 sm:grid-cols-2">
-            {modeEntry.fields.map((field) => (
-              <label key={field.key} className="block text-sm">
-                <span className="font-medium text-foreground">{field.label}</span>
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+          <div className="space-y-3">
+            {NEWSLETTER_MODES.map((entry, index) => (
+              <label
+                key={entry.id}
+                className={`flex cursor-pointer gap-3 rounded-lg border p-4 transition ${
+                  mode === entry.id ? "border-primary bg-primary/5" : "border-border hover:bg-muted/50"
+                }`}
+              >
                 <input
-                  type={field.secret ? "password" : "text"}
-                  autoComplete="off"
-                  className={inputClass}
-                  placeholder={
-                    field.secret ?
-                      settings?.providers[mode]?.configured ?
-                        "Beállítva – csak felülíráshoz írd be újra"
-                      : "Ide illeszd be az API-kulcsot"
-                    : ""
-                  }
-                  value={fields[field.key] ?? ""}
-                  onChange={(event) =>
-                    setFields((prev) => ({ ...prev, [field.key]: event.target.value }))
-                  }
+                  type="radio"
+                  name="newsletter-mode"
+                  className="mt-1"
+                  checked={mode === entry.id}
+                  onChange={() => setMode(entry.id)}
                 />
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-foreground">
+                    {index + 1}) {entry.label}
+                  </span>
+                  <span className="mt-0.5 block text-sm text-muted-foreground">{entry.hint}</span>
+                  {entry.id !== "own" && settings?.providers[entry.id] ? (
+                    <span className="mt-1.5 block text-xs font-medium text-muted-foreground">
+                      {settings.providers[entry.id]!.configured ?
+                        "API-kulcs beállítva"
+                      : "API-kulcs még nincs megadva"}
+                    </span>
+                  ) : null}
+                </span>
               </label>
             ))}
-            <p className="text-xs text-muted-foreground sm:col-span-2">
-              Az API-kulcsokat csak a szerver olvassa, a felületre soha nem kerülnek vissza.
-            </p>
           </div>
-        ) : null}
+
+          <div className="space-y-4">
+            {modeEntry.fields.length > 0 ? (
+              <div className="grid gap-4 rounded-lg border border-border p-4 sm:grid-cols-2">
+                {modeEntry.fields.map((field) => (
+                  <label key={field.key} className="block text-sm">
+                    <span className="font-medium text-foreground">{field.label}</span>
+                    <input
+                      type={field.secret ? "password" : "text"}
+                      autoComplete="off"
+                      className={inputClass}
+                      placeholder={
+                        field.secret ?
+                          settings?.providers[mode]?.configured ?
+                            "Beállítva – csak felülíráshoz írd be újra"
+                          : "Ide illeszd be az API-kulcsot"
+                        : ""
+                      }
+                      value={fields[field.key] ?? ""}
+                      onChange={(event) =>
+                        setFields((prev) => ({ ...prev, [field.key]: event.target.value }))
+                      }
+                    />
+                  </label>
+                ))}
+                <p className="text-xs text-muted-foreground sm:col-span-2">
+                  Az API-kulcsokat csak a szerver olvassa, a felületre soha nem kerülnek vissza.
+                </p>
+              </div>
+            ) : null}
+
+            <div className="flex flex-wrap gap-3">
+              <button
+                type="button"
+                className={primaryBtn}
+                disabled={busy === "save"}
+                onClick={() =>
+                  run("save", async () => {
+                    const next = await saveSettings({ data: { mode, fields } });
+                    setSettings(next);
+                    setMessage({ kind: "ok", text: "A hírlevél beállítás mentva." });
+                  })
+                }
+              >
+                {busy === "save" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                Beállítás mentése
+              </button>
+
+              {mode !== "own" ? (
+                <>
+                  <button
+                    type="button"
+                    className={actionBtn}
+                    disabled={busy === "test"}
+                    onClick={() =>
+                      run("test", async () => {
+                        const result = await testConnection({ data: { mode } });
+                        setMessage(
+                          result.ok ?
+                            { kind: "ok", text: "A kapcsolat működik." }
+                          : { kind: "err", text: `Nem sikerült a kapcsolat: ${result.error}` },
+                        );
+                      })
+                    }
+                  >
+                    {busy === "test" ?
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    : <PlugZap className="h-4 w-4" />}
+                    Kapcsolat tesztelése
+                  </button>
+                  <button
+                    type="button"
+                    className={actionBtn}
+                    disabled={busy === "sync"}
+                    onClick={() =>
+                      run("sync", async () => {
+                        const result = await syncNow();
+                        if (!result.ok) {
+                          setMessage({ kind: "err", text: result.error });
+                          return;
+                        }
+                        setMessage({
+                          kind: "ok",
+                          text: `Szinkronizálva: ${result.synced} feliratkozó, hibás: ${result.failed}.${
+                            result.lastError ? ` Utolsó hiba: ${result.lastError}` : ""
+                          }`,
+                        });
+                        await reload();
+                      })
+                    }
+                  >
+                    {busy === "sync" ?
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    : <RefreshCw className="h-4 w-4" />}
+                    Lista szinkronizálása
+                  </button>
+                </>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------- Campaign (Levélküldő) ---------------- */}
+      <section>
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+          <Mail className="h-5 w-5 text-primary" /> Levélküldő
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          A levél a beépített e-mail-rendszerrel megy ki a megerősített feliratkozóknak, automatikus
+          leiratkozó linkkel. Küldés előtt érdemes tesztlevelet kérni magadnak.
+        </p>
+
+        <label className="mt-6 block text-sm">
+          <span className="font-medium text-foreground">Tárgy</span>
+          <input
+            className={inputClass}
+            value={subject}
+            maxLength={160}
+            onChange={(event) => setSubject(event.target.value)}
+            placeholder="Például: Új Excel-eszközök és határidők"
+          />
+        </label>
+
+        <div className="mt-4 text-sm">
+          <span className="font-medium text-foreground">A levél szövege</span>
+          <NewsletterEditor value={html} onChange={setHtml} />
+        </div>
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <label className="block text-sm">
+            <span className="font-medium text-foreground">Teszt e-mail cím</span>
+            <input
+              className={inputClass}
+              value={testEmail}
+              onChange={(event) => setTestEmail(event.target.value)}
+              placeholder="sajat@cimem.hu"
+            />
+          </label>
+        </div>
 
         <div className="mt-5 flex flex-wrap gap-3">
           <button
             type="button"
-            className={primaryBtn}
-            disabled={busy === "save"}
+            className={actionBtn}
+            disabled={busy === "test-send"}
             onClick={() =>
-              run("save", async () => {
-                const next = await saveSettings({ data: { mode, fields } });
-                setSettings(next);
-                setMessage({ kind: "ok", text: "A hírlevél beállítás mentve." });
+              run("test-send", async () => {
+                const result = await sendCampaign({
+                  data: { subject, html, testEmail, testOnly: true },
+                });
+                setMessage(
+                  result.ok ?
+                    { kind: "ok", text: "A tesztlevél elment." }
+                  : { kind: "err", text: result.error },
+                );
               })
             }
           >
-            {busy === "save" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            Beállítás mentése
+            {busy === "test-send" ?
+              <Loader2 className="h-4 w-4 animate-spin" />
+            : <Send className="h-4 w-4" />}
+            Tesztlevél küldése
           </button>
+          <button
+            type="button"
+            className={primaryBtn}
+            disabled={busy === "send"}
+            onClick={() =>
+              run("send", async () => {
+                if (
+                  !window.confirm(
+                    `Kiküldöm a levelet ${counts.confirmed} megerősített feliratkozónak. Folytatom?`,
+                  )
+                ) {
+                  return;
+                }
+                const result = await sendCampaign({
+                  data: { subject, html, testEmail, testOnly: false },
+                });
+                if (!result.ok) {
+                  setMessage({ kind: "err", text: result.error });
+                  return;
+                }
+                setMessage({
+                  kind: "ok",
+                  text: `Kiküldve: ${result.sent} levél, hibás: ${result.failed}.`,
+                });
+                setCampaigns(await loadCampaigns());
+              })
+            }
+          >
+            {busy === "send" ?
+              <Loader2 className="h-4 w-4 animate-spin" />
+            : <Send className="h-4 w-4" />}
+            Kiküldés a listára
+          </button>
+        </div>
 
-          {mode !== "own" ? (
-            <>
+        <div className="mt-6 rounded-lg border border-border bg-muted/30 p-4">
+          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <MailCheck className="h-4 w-4" />
+            Kézbesítési teszt
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Küldj egy próbalevelet bármelyik sablonnal a megadott címre, és nézd meg,
+            hogy a beérkező üzenetek közé vagy a Levélszemétbe kerül-e. Feladó:{" "}
+            <span className="font-medium text-foreground">noreply@notify.xlntbi.hu</span>
+          </p>
+          <label className="mt-3 block text-sm sm:max-w-sm">
+            <span className="font-medium text-foreground">Címzett e-mail cím</span>
+            <input
+              className={inputClass}
+              value={deliveryEmail}
+              onChange={(event) => setDeliveryEmail(event.target.value)}
+              placeholder="sajat@cimem.hu"
+            />
+          </label>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {(
+              [
+                { key: "hirlevel-megerosites", label: "Megerősítő sablon küldése" },
+                { key: "hirlevel", label: "Hírlevél sablon küldése" },
+              ] as const
+            ).map((item) => (
               <button
+                key={item.key}
                 type="button"
                 className={actionBtn}
-                disabled={busy === "test"}
+                disabled={busy === `delivery-${item.key}`}
                 onClick={() =>
-                  run("test", async () => {
-                    const result = await testConnection({ data: { mode } });
+                  run(`delivery-${item.key}`, async () => {
+                    const to = deliveryEmail.trim();
+                    if (!to) {
+                      setMessage({ kind: "err", text: "Adj meg egy címzett e-mail címet." });
+                      return;
+                    }
+                    const result = await sendTestEmail({ data: { template: item.key, to } });
                     setMessage(
                       result.ok ?
-                        { kind: "ok", text: "A kapcsolat működik." }
-                      : { kind: "err", text: `Nem sikerült a kapcsolat: ${result.error}` },
+                        {
+                          kind: "ok",
+                          text: `Teszt levél elküldve a ${result.to} címre (feladó: ${result.from}). Ha nem látod, nézd meg a Levélszemét mappát is.`,
+                        }
+                      : { kind: "err", text: result.error },
                     );
                   })
                 }
               >
-                {busy === "test" ?
+                {busy === `delivery-${item.key}` ?
                   <Loader2 className="h-4 w-4 animate-spin" />
-                : <PlugZap className="h-4 w-4" />}
-                Kapcsolat tesztelése
+                : <MailCheck className="h-4 w-4" />}
+                {item.label}
               </button>
-              <button
-                type="button"
-                className={actionBtn}
-                disabled={busy === "sync"}
-                onClick={() =>
-                  run("sync", async () => {
-                    const result = await syncNow();
-                    if (!result.ok) {
-                      setMessage({ kind: "err", text: result.error });
-                      return;
-                    }
-                    setMessage({
-                      kind: "ok",
-                      text: `Szinkronizálva: ${result.synced} feliratkozó, hibás: ${result.failed}.${
-                        result.lastError ? ` Utolsó hiba: ${result.lastError}` : ""
-                      }`,
-                    });
-                    await reload();
-                  })
-                }
-              >
-                {busy === "sync" ?
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                : <RefreshCw className="h-4 w-4" />}
-                Lista szinkronizálása
-              </button>
-            </>
-          ) : null}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ---------------- Subscribers ---------------- */}
+      {/* ---------------- Subscribers (Feliratkozók) ---------------- */}
       <section>
         <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <Users className="h-5 w-5 text-primary" /> Feliratkozók
@@ -454,163 +614,12 @@ export function NewsletterAdminPanel() {
         </div>
       </section>
 
-      {/* ---------------- Campaign ---------------- */}
+      {/* ---------------- Sent campaigns (Elküldött hírlevelek) ---------------- */}
       <section>
         <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
-          <Mail className="h-5 w-5 text-primary" /> Levélküldő
+          <Send className="h-5 w-5 text-primary" /> Elküldött hírlevelek
         </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          A levél a beépített e-mail-rendszerrel megy ki a megerősített feliratkozóknak, automatikus
-          leiratkozó linkkel. Küldés előtt érdemes tesztlevelet kérni magadnak.
-        </p>
-
-        <label className="mt-6 block text-sm">
-          <span className="font-medium text-foreground">Tárgy</span>
-          <input
-            className={inputClass}
-            value={subject}
-            maxLength={160}
-            onChange={(event) => setSubject(event.target.value)}
-            placeholder="Például: Új Excel-eszközök és határidők"
-          />
-        </label>
-
-        <div className="mt-4 text-sm">
-          <span className="font-medium text-foreground">A levél szövege</span>
-          <NewsletterEditor value={html} onChange={setHtml} />
-        </div>
-
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <label className="block text-sm">
-            <span className="font-medium text-foreground">Teszt e-mail cím</span>
-            <input
-              className={inputClass}
-              value={testEmail}
-              onChange={(event) => setTestEmail(event.target.value)}
-              placeholder="sajat@cimem.hu"
-            />
-          </label>
-        </div>
-
-        <div className="mt-6 rounded-lg border border-border bg-muted/30 p-4">
-          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-            <MailCheck className="h-4 w-4" />
-            Kézbesítési teszt
-          </h3>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Küldj egy próbalevelet bármelyik sablonnal a megadott címre, és nézd meg,
-            hogy a beérkező üzenetek közé vagy a Levélszemétbe kerül-e. Feladó:{" "}
-            <span className="font-medium text-foreground">noreply@notify.xlntbi.hu</span>
-          </p>
-          <label className="mt-3 block text-sm sm:max-w-sm">
-            <span className="font-medium text-foreground">Címzett e-mail cím</span>
-            <input
-              className={inputClass}
-              value={deliveryEmail}
-              onChange={(event) => setDeliveryEmail(event.target.value)}
-              placeholder="sajat@cimem.hu"
-            />
-          </label>
-          <div className="mt-3 flex flex-wrap gap-3">
-            {(
-              [
-                { key: "hirlevel-megerosites", label: "Megerősítő sablon küldése" },
-                { key: "hirlevel", label: "Hírlevél sablon küldése" },
-              ] as const
-            ).map((item) => (
-              <button
-                key={item.key}
-                type="button"
-                className={actionBtn}
-                disabled={busy === `delivery-${item.key}`}
-                onClick={() =>
-                  run(`delivery-${item.key}`, async () => {
-                    const to = deliveryEmail.trim();
-                    if (!to) {
-                      setMessage({ kind: "err", text: "Adj meg egy címzett e-mail címet." });
-                      return;
-                    }
-                    const result = await sendTestEmail({ data: { template: item.key, to } });
-                    setMessage(
-                      result.ok ?
-                        {
-                          kind: "ok",
-                          text: `Teszt levél elküldve a ${result.to} címre (feladó: ${result.from}). Ha nem látod, nézd meg a Levélszemét mappát is.`,
-                        }
-                      : { kind: "err", text: result.error },
-                    );
-                  })
-                }
-              >
-                {busy === `delivery-${item.key}` ?
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                : <MailCheck className="h-4 w-4" />}
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-5 flex flex-wrap gap-3">
-          <button
-            type="button"
-            className={actionBtn}
-            disabled={busy === "test-send"}
-            onClick={() =>
-              run("test-send", async () => {
-                const result = await sendCampaign({
-                  data: { subject, html, testEmail, testOnly: true },
-                });
-                setMessage(
-                  result.ok ?
-                    { kind: "ok", text: "A tesztlevél elment." }
-                  : { kind: "err", text: result.error },
-                );
-              })
-            }
-          >
-            {busy === "test-send" ?
-              <Loader2 className="h-4 w-4 animate-spin" />
-            : <Send className="h-4 w-4" />}
-            Tesztlevél küldése
-          </button>
-          <button
-            type="button"
-            className={primaryBtn}
-            disabled={busy === "send"}
-            onClick={() =>
-              run("send", async () => {
-                if (
-                  !window.confirm(
-                    `Kiküldöm a levelet ${counts.confirmed} megerősített feliratkozónak. Folytatom?`,
-                  )
-                ) {
-                  return;
-                }
-                const result = await sendCampaign({
-                  data: { subject, html, testEmail, testOnly: false },
-                });
-                if (!result.ok) {
-                  setMessage({ kind: "err", text: result.error });
-                  return;
-                }
-                setMessage({
-                  kind: "ok",
-                  text: `Kiküldve: ${result.sent} levél, hibás: ${result.failed}.`,
-                });
-                setCampaigns(await loadCampaigns());
-              })
-            }
-          >
-            {busy === "send" ?
-              <Loader2 className="h-4 w-4 animate-spin" />
-            : <Send className="h-4 w-4" />}
-            Kiküldés a listára
-          </button>
-        </div>
-
-        <h3 className="mt-10 text-base font-semibold text-foreground">Elküldött hírlevelek</h3>
-        <div className="mt-3 overflow-x-auto rounded-lg border border-border">
+        <div className="mt-5 overflow-x-auto rounded-lg border border-border">
           <table className="w-full text-sm">
             <thead className="bg-muted/60 text-left">
               <tr>
