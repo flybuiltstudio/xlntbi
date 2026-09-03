@@ -1274,8 +1274,11 @@ const INTERNAL_TEST_EMAILS = new Set([
   "sarinay.david@gmail.com",
 ]);
 
-/** Fejlesztői próbarendelések e-mail címei (a fejlesztő saját tesztjei). */
-const DEVELOPER_TEST_EMAILS = new Set(["fleck.tomi@gmail.com"]);
+/** Fejlesztői próbarendelések e-mail címei (a fejlesztők saját tesztjei). */
+const DEVELOPER_TEST_EMAILS = new Set([
+  "fleck.tomi@gmail.com",
+  "szegi.roland1999@gmail.com",
+]);
 
 function baseEmail(email: unknown): string {
   const raw = String(email ?? "").trim().toLowerCase();
