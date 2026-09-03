@@ -31,9 +31,9 @@ export function PaymentEnvironmentNotice({
   const env = getStripeEnvironmentSafe();
   const test = env === "sandbox";
 
-  // Customers only need the test-mode warning; a live checkout must not show
-  // internal plumbing (environment name, webhook endpoint).
-  if (!test && !showTechnical) return null;
+  // Customers never see environment plumbing or test-mode notices — those are
+  // admin-only. Live checkout stays clean.
+  if (!showTechnical) return null;
 
   return (
     <div
