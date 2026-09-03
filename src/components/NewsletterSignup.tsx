@@ -101,17 +101,37 @@ export function NewsletterSignup() {
                       Nem kaptál levelet 1–2 percen belül?
                     </p>
                     <p className="mt-1.5">
-                      Ellenőrizd a <strong>Levélszemét</strong> (Spam) mappában is.
-                      Húzd át a levelet az elsődleges postafiókba, és tedd a
-                      <strong> noreply@notify.xlntbi.hu</strong> címet a
-                      Megbízható feladók közé, hogy a későbbi hírlevelek is
-                      megérkezzenek.
+                      Ellenőrizd a <strong>Levélszemét</strong> (Spam) mappában is. A
+                      levelek a <strong>noreply@notify.xlntbi.hu</strong> címről
+                      érkeznek.
                     </p>
-                    <p className="mt-1.5">
-                      Gmail használata esetén húzd át a megerősítő levelet az
-                      <strong> Elsődleges</strong> mappába, és erősítsd meg a
-                      feladó bizalmasságát.
+                    <p className="mt-2 font-semibold text-amber-100">Gmail esetén</p>
+                    <ul className="mt-1 list-disc space-y-1 pl-5">
+                      <li>
+                        Ha a <strong>Promóciók</strong> vagy <strong>Közösségi</strong>
+                        {" "}fülön van, húzd át a levelet az <strong>Elsődleges</strong>
+                        {" "}fülre, és a felugró kérdésnél válaszd az „Igen”-t, hogy a
+                        további levelek is ide kerüljenek.
+                      </li>
+                      <li>
+                        Ha a Spamben landolt, nyisd meg és kattints a{" "}
+                        <strong>„Nem spam”</strong> gombra.
+                      </li>
+                      <li>
+                        Nyisd meg a levelet, a feladó neve melletti három pontnál
+                        válaszd a <strong>„Feladó hozzáadása a névjegyekhez”</strong>
+                        {" "}lehetőséget – így a Gmail megbízható feladóként kezeli.
+                      </li>
+                    </ul>
+                    <p className="mt-2 font-semibold text-amber-100">
+                      Outlook / más levelező esetén
                     </p>
+                    <p className="mt-1">
+                      Vedd fel a <strong>noreply@notify.xlntbi.hu</strong> címet a{" "}
+                      <strong>Megbízható feladók</strong> (Biztonságos feladók) listájára,
+                      hogy a későbbi hírlevelek biztosan megérkezzenek.
+                    </p>
+
                   </div>
                 ) : null}
                 <button
