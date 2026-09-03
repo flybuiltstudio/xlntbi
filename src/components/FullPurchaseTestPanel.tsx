@@ -160,7 +160,7 @@ export function FullPurchaseTestPanel() {
         </p>
 
         <div className="mt-5">
-          <PaymentEnvironmentNotice />
+          <PaymentEnvironmentNotice showTechnical />
         </div>
 
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
