@@ -260,22 +260,8 @@ function StatsPanel() {
     return { months, labels, yearTotals };
   }, [payFiltered, activeYear]);
 
-  /** Per-year buckets when "Összes év" is selected. */
-  const yearly = useMemo(() => {
-    const map = new Map<number, { year: number; orders: number; qty: number; revenue: number }>();
-    for (const row of payFiltered) {
-      const year = new Date(row.createdAt).getFullYear();
-      const entry = map.get(year) ?? { year, orders: 0, qty: 0, revenue: 0 };
-      entry.orders += 1;
-      entry.qty += row.quantity;
-      entry.revenue += row.totalPrice;
-      map.set(year, entry);
-    }
-    return [...map.values()].sort((a, b) => a.year - b.year);
-  }, [payFiltered]);
-
   const maxMonthQty = Math.max(1, ...monthly.months.map((m) => m.qty));
-  const maxYearQty = Math.max(1, ...yearly.map((y) => y.qty));
+
 
   const runExport = async (kind: string, fn: () => Promise<void> | void) => {
     if (!rows || exporting) return;
