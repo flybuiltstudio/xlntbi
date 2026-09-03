@@ -1530,11 +1530,11 @@ function PageViewChart({
           <strong className="text-foreground">{year}</strong> – oldalletöltések havonta (db),
           {firstColumn.toLowerCase()}enként színezve
         </p>
-        <div className="mt-6 flex h-60 items-end gap-1 sm:gap-2">
+        <div className="mt-6 flex h-60 items-stretch gap-1 sm:gap-2">
           {MONTHS_SHORT.map((label, i) => (
-            <div key={label} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+            <div key={label} className="flex h-full min-w-0 flex-1 flex-col items-center gap-2">
               <span className="text-xs font-semibold text-foreground">{monthTotals[i]}</span>
-              <div className="flex w-full flex-col justify-end" style={{ height: "100%" }}>
+              <div className="flex min-h-0 w-full max-w-12 flex-1 flex-col justify-end overflow-hidden rounded-t-md bg-muted/50">
                 {active.map((row, ri) => {
                   const value = row.months[i] ?? 0;
                   if (value <= 0) return null;
@@ -1554,6 +1554,7 @@ function PageViewChart({
             </div>
           ))}
         </div>
+
         <PageViewLegend items={active.map((row, ri) => ({ label: row.label, color: colorOf(ri) }))} />
       </div>
     );
