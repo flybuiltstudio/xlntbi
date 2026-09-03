@@ -49,6 +49,7 @@ importformátumához illeszkedő, a saját fejléceikre szabott CSV.
 ### Levélküldő (1. mód)
 
 Formázható szerkesztő: félkövér, dőlt, aláhúzás, felsorolás, címsorok,
+**betűszín és háttérszín** (színválasztóval, az arculati színekkel gyorsgombként),
 **link beszúrása** és **kép beillesztése** (a kép a projekt saját tárolójába
 kerül, a levélben teljes URL-lel hivatkozva — így minden levelezőben látszik).
 Előnézet, teszt-küldés magadnak, majd kiküldés a megerősített, nem leiratkozott
