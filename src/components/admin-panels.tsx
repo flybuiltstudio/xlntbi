@@ -1256,14 +1256,15 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
           <strong>Admin:</strong> teljes hozzáférés az admin felülethez –
           Megrendelések, Kuponok (létrehozás és módosítás), Statisztika,
           Friss verzió feltöltés, Ellenőrzések (Számlázás, Billingo ellenőrzés,
-          Katalógus ellenőrzés, Rendelési audit, Fizetés teszt), Felhasználók
-          kezelése és Jelszó módosítása.
+          Katalógus ellenőrzés, Rendelési audit, Fizetés teszt), Hírlevél
+          (feliratkozók, exportok és levélküldés), Felhasználók kezelése és
+          Jelszó módosítása.
         </p>
         <p className="mt-2">
           <strong>Felhasználó:</strong> be tud jelentkezni az admin felületre,
           ahol a Statisztika oldalt, a Kuponok listát (csak megtekintés) és a
           Jelszó módosítása oldalt éri el – a Megrendeléseket, a Friss verziót,
-          az Ellenőrzéseket és a Felhasználók kezelését nem.
+          az Ellenőrzéseket, a Hírlevelet és a Felhasználók kezelését nem.
         </p>
         <p className="mt-2">
           <strong>Szuper admin</strong> (xllentac@gmail.com): a rendszer

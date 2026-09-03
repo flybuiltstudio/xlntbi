@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import kapcsolatBusiness from "@/assets/kapcsolat-business.jpg";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { PageHero } from "@/components/PageHero";
 
 
@@ -98,14 +99,18 @@ function KapcsolatPage() {
 
       <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
 
-      <p className="max-w-2xl text-base leading-relaxed text-muted-foreground">
-        Írj bátran, ha kérdésed van a szolgáltatásaimmal kapcsolatban.
-        <br />
-        Töltsd ki az űrlapot, és rövid időn belül válaszolok.
-      </p>
-
-      <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_1.4fr]">
+      <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
         <div className="space-y-6">
+          <div className="rounded-2xl border border-border/60 bg-muted/40 p-5">
+            <h2 className="text-base font-semibold text-foreground">Hírlevél</h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+              Jogszabályi változások, határidők és új Excel-eszközök – havonta néhány levélben.
+            </p>
+            <div className="mt-4">
+              <NewsletterSignup />
+            </div>
+          </div>
+
           <h2 className="text-xl font-semibold text-foreground">Elérhetőségeim</h2>
           <ul className="space-y-4 text-sm text-muted-foreground">
             <li className="flex items-start gap-3">
@@ -180,7 +185,12 @@ function KapcsolatPage() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold text-foreground">Írj nekem</h2>
+          <p className="max-w-2xl text-base leading-relaxed text-muted-foreground">
+            Írj bátran, ha kérdésed van a szolgáltatásaimmal vagy termékeimmel kapcsolatban.
+            <br />
+            Töltsd ki az űrlapot, és rövid időn belül válaszolok.
+          </p>
+          <h2 className="mt-8 text-xl font-semibold text-foreground">Írj nekem</h2>
           <div className="mt-5">
             <ContactForm
               formType="kapcsolat"

@@ -3,6 +3,8 @@ import type { ComponentType } from 'react'
 import { template as belsoKatalogusAudit } from './belso-katalogus-audit'
 import { template as belsoRendelesErtesito } from './belso-rendeles-ertesito'
 import { template as belsoUrlapErtesito } from './belso-urlap-ertesito'
+import { template as hirlevel } from './hirlevel'
+import { template as hirlevelMegerosites } from './hirlevel-megerosites'
 import { template as letoltesElerheto } from './letoltes-elerheto'
 import { template as licenszKod } from './licensz-kod'
 import { template as kapcsolatVisszaigazolas } from './kapcsolat-visszaigazolas'
@@ -31,4 +33,6 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'belso-katalogus-audit': belsoKatalogusAudit,
   'letoltes-elerheto': letoltesElerheto,
   'licensz-kod': licenszKod,
+  'hirlevel-megerosites': hirlevelMegerosites,
+  'hirlevel': hirlevel,
 }

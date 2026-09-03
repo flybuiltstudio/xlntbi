@@ -23,6 +23,7 @@ import { Route as EvKonyvelesRouteImport } from './routes/ev-konyveles'
 import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
 import { Route as FizetesEsTeljesitesRouteImport } from './routes/fizetes-es-teljesites'
 import { Route as FogyasztovedelemRouteImport } from './routes/fogyasztovedelem'
+import { Route as HirlevelMegerositesRouteImport } from './routes/hirlevel-megerosites'
 import { Route as ImpresszumRouteImport } from './routes/impresszum'
 import { Route as KapcsolatRouteImport } from './routes/kapcsolat'
 import { Route as KontrollingRouteImport } from './routes/kontrolling'
@@ -30,6 +31,7 @@ import { Route as KonyvelesRouteImport } from './routes/konyveles'
 import { Route as KonyveloirodaAuditRouteImport } from './routes/konyveloiroda-audit'
 import { Route as KonyvvizsgalatRouteImport } from './routes/konyvvizsgalat'
 import { Route as KonzultacioRouteImport } from './routes/konzultacio'
+import { Route as LeiratkozasRouteImport } from './routes/leiratkozas'
 import { Route as LetoltesHibaRouteImport } from './routes/letoltes-hiba'
 import { Route as MegrendelesRouteImport } from './routes/megrendeles'
 import { Route as OktatasRouteImport } from './routes/oktatas'
@@ -43,6 +45,7 @@ import { Route as AdminBillingoEllenorzesRouteImport } from './routes/admin.bill
 import { Route as AdminFelhasznalokRouteImport } from './routes/admin.felhasznalok'
 import { Route as AdminFizetesTesztRouteImport } from './routes/admin.fizetes-teszt'
 import { Route as AdminFrissVerzioRouteImport } from './routes/admin.friss-verzio'
+import { Route as AdminHirlevelRouteImport } from './routes/admin.hirlevel'
 import { Route as AdminJelszoRouteImport } from './routes/admin.jelszo'
 import { Route as AdminKatalogusEllenorzesRouteImport } from './routes/admin.katalogus-ellenorzes'
 import { Route as AdminKuponokRouteImport } from './routes/admin.kuponok'
@@ -169,6 +172,11 @@ const FogyasztovedelemRoute = FogyasztovedelemRouteImport.update({
   path: '/fogyasztovedelem',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HirlevelMegerositesRoute = HirlevelMegerositesRouteImport.update({
+  id: '/hirlevel-megerosites',
+  path: '/hirlevel-megerosites',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ImpresszumRoute = ImpresszumRouteImport.update({
   id: '/impresszum',
   path: '/impresszum',
@@ -202,6 +210,11 @@ const KonyvvizsgalatRoute = KonyvvizsgalatRouteImport.update({
 const KonzultacioRoute = KonzultacioRouteImport.update({
   id: '/konzultacio',
   path: '/konzultacio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeiratkozasRoute = LeiratkozasRouteImport.update({
+  id: '/leiratkozas',
+  path: '/leiratkozas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LetoltesHibaRoute = LetoltesHibaRouteImport.update({
@@ -267,6 +280,11 @@ const AdminFizetesTesztRoute = AdminFizetesTesztRouteImport.update({
 const AdminFrissVerzioRoute = AdminFrissVerzioRouteImport.update({
   id: '/friss-verzio',
   path: '/friss-verzio',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHirlevelRoute = AdminHirlevelRouteImport.update({
+  id: '/hirlevel',
+  path: '/hirlevel',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminJelszoRoute = AdminJelszoRouteImport.update({
@@ -587,6 +605,7 @@ export interface FileRoutesByFullPath {
   '/fintech-es-bi': typeof FintechEsBiRoute
   '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
   '/fogyasztovedelem': typeof FogyasztovedelemRoute
+  '/hirlevel-megerosites': typeof HirlevelMegerositesRoute
   '/impresszum': typeof ImpresszumRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
@@ -594,6 +613,7 @@ export interface FileRoutesByFullPath {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
+  '/leiratkozas': typeof LeiratkozasRoute
   '/letoltes-hiba': typeof LetoltesHibaRoute
   '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
@@ -606,6 +626,7 @@ export interface FileRoutesByFullPath {
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/friss-verzio': typeof AdminFrissVerzioRoute
+  '/admin/hirlevel': typeof AdminHirlevelRoute
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/katalogus-ellenorzes': typeof AdminKatalogusEllenorzesRoute
   '/admin/kuponok': typeof AdminKuponokRoute
@@ -676,6 +697,7 @@ export interface FileRoutesByTo {
   '/fintech-es-bi': typeof FintechEsBiRoute
   '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
   '/fogyasztovedelem': typeof FogyasztovedelemRoute
+  '/hirlevel-megerosites': typeof HirlevelMegerositesRoute
   '/impresszum': typeof ImpresszumRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
@@ -683,6 +705,7 @@ export interface FileRoutesByTo {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
+  '/leiratkozas': typeof LeiratkozasRoute
   '/letoltes-hiba': typeof LetoltesHibaRoute
   '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
@@ -695,6 +718,7 @@ export interface FileRoutesByTo {
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/friss-verzio': typeof AdminFrissVerzioRoute
+  '/admin/hirlevel': typeof AdminHirlevelRoute
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/katalogus-ellenorzes': typeof AdminKatalogusEllenorzesRoute
   '/admin/kuponok': typeof AdminKuponokRoute
@@ -767,6 +791,7 @@ export interface FileRoutesById {
   '/fintech-es-bi': typeof FintechEsBiRoute
   '/fizetes-es-teljesites': typeof FizetesEsTeljesitesRoute
   '/fogyasztovedelem': typeof FogyasztovedelemRoute
+  '/hirlevel-megerosites': typeof HirlevelMegerositesRoute
   '/impresszum': typeof ImpresszumRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
@@ -774,6 +799,7 @@ export interface FileRoutesById {
   '/konyveloiroda-audit': typeof KonyveloirodaAuditRoute
   '/konyvvizsgalat': typeof KonyvvizsgalatRoute
   '/konzultacio': typeof KonzultacioRoute
+  '/leiratkozas': typeof LeiratkozasRoute
   '/letoltes-hiba': typeof LetoltesHibaRoute
   '/megrendeles': typeof MegrendelesRoute
   '/oktatas': typeof OktatasRoute
@@ -786,6 +812,7 @@ export interface FileRoutesById {
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/friss-verzio': typeof AdminFrissVerzioRoute
+  '/admin/hirlevel': typeof AdminHirlevelRoute
   '/admin/jelszo': typeof AdminJelszoRoute
   '/admin/katalogus-ellenorzes': typeof AdminKatalogusEllenorzesRoute
   '/admin/kuponok': typeof AdminKuponokRoute
@@ -859,6 +886,7 @@ export interface FileRouteTypes {
     | '/fintech-es-bi'
     | '/fizetes-es-teljesites'
     | '/fogyasztovedelem'
+    | '/hirlevel-megerosites'
     | '/impresszum'
     | '/kapcsolat'
     | '/kontrolling'
@@ -866,6 +894,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/konzultacio'
+    | '/leiratkozas'
     | '/letoltes-hiba'
     | '/megrendeles'
     | '/oktatas'
@@ -878,6 +907,7 @@ export interface FileRouteTypes {
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/friss-verzio'
+    | '/admin/hirlevel'
     | '/admin/jelszo'
     | '/admin/katalogus-ellenorzes'
     | '/admin/kuponok'
@@ -948,6 +978,7 @@ export interface FileRouteTypes {
     | '/fintech-es-bi'
     | '/fizetes-es-teljesites'
     | '/fogyasztovedelem'
+    | '/hirlevel-megerosites'
     | '/impresszum'
     | '/kapcsolat'
     | '/kontrolling'
@@ -955,6 +986,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/konzultacio'
+    | '/leiratkozas'
     | '/letoltes-hiba'
     | '/megrendeles'
     | '/oktatas'
@@ -967,6 +999,7 @@ export interface FileRouteTypes {
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/friss-verzio'
+    | '/admin/hirlevel'
     | '/admin/jelszo'
     | '/admin/katalogus-ellenorzes'
     | '/admin/kuponok'
@@ -1038,6 +1071,7 @@ export interface FileRouteTypes {
     | '/fintech-es-bi'
     | '/fizetes-es-teljesites'
     | '/fogyasztovedelem'
+    | '/hirlevel-megerosites'
     | '/impresszum'
     | '/kapcsolat'
     | '/kontrolling'
@@ -1045,6 +1079,7 @@ export interface FileRouteTypes {
     | '/konyveloiroda-audit'
     | '/konyvvizsgalat'
     | '/konzultacio'
+    | '/leiratkozas'
     | '/letoltes-hiba'
     | '/megrendeles'
     | '/oktatas'
@@ -1057,6 +1092,7 @@ export interface FileRouteTypes {
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/friss-verzio'
+    | '/admin/hirlevel'
     | '/admin/jelszo'
     | '/admin/katalogus-ellenorzes'
     | '/admin/kuponok'
@@ -1129,6 +1165,7 @@ export interface RootRouteChildren {
   FintechEsBiRoute: typeof FintechEsBiRoute
   FizetesEsTeljesitesRoute: typeof FizetesEsTeljesitesRoute
   FogyasztovedelemRoute: typeof FogyasztovedelemRoute
+  HirlevelMegerositesRoute: typeof HirlevelMegerositesRoute
   ImpresszumRoute: typeof ImpresszumRoute
   KapcsolatRoute: typeof KapcsolatRoute
   KontrollingRoute: typeof KontrollingRoute
@@ -1136,6 +1173,7 @@ export interface RootRouteChildren {
   KonyveloirodaAuditRoute: typeof KonyveloirodaAuditRoute
   KonyvvizsgalatRoute: typeof KonyvvizsgalatRoute
   KonzultacioRoute: typeof KonzultacioRoute
+  LeiratkozasRoute: typeof LeiratkozasRoute
   LetoltesHibaRoute: typeof LetoltesHibaRoute
   MegrendelesRoute: typeof MegrendelesRoute
   OktatasRoute: typeof OktatasRoute
@@ -1294,6 +1332,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FogyasztovedelemRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hirlevel-megerosites': {
+      id: '/hirlevel-megerosites'
+      path: '/hirlevel-megerosites'
+      fullPath: '/hirlevel-megerosites'
+      preLoaderRoute: typeof HirlevelMegerositesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/impresszum': {
       id: '/impresszum'
       path: '/impresszum'
@@ -1341,6 +1386,13 @@ declare module '@tanstack/react-router' {
       path: '/konzultacio'
       fullPath: '/konzultacio'
       preLoaderRoute: typeof KonzultacioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leiratkozas': {
+      id: '/leiratkozas'
+      path: '/leiratkozas'
+      fullPath: '/leiratkozas'
+      preLoaderRoute: typeof LeiratkozasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/letoltes-hiba': {
@@ -1432,6 +1484,13 @@ declare module '@tanstack/react-router' {
       path: '/friss-verzio'
       fullPath: '/admin/friss-verzio'
       preLoaderRoute: typeof AdminFrissVerzioRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hirlevel': {
+      id: '/admin/hirlevel'
+      path: '/hirlevel'
+      fullPath: '/admin/hirlevel'
+      preLoaderRoute: typeof AdminHirlevelRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/jelszo': {
@@ -1820,6 +1879,7 @@ interface AdminRouteChildren {
   AdminFelhasznalokRoute: typeof AdminFelhasznalokRoute
   AdminFizetesTesztRoute: typeof AdminFizetesTesztRoute
   AdminFrissVerzioRoute: typeof AdminFrissVerzioRoute
+  AdminHirlevelRoute: typeof AdminHirlevelRoute
   AdminJelszoRoute: typeof AdminJelszoRoute
   AdminKatalogusEllenorzesRoute: typeof AdminKatalogusEllenorzesRoute
   AdminKuponokRoute: typeof AdminKuponokRoute
@@ -1834,6 +1894,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFelhasznalokRoute: AdminFelhasznalokRoute,
   AdminFizetesTesztRoute: AdminFizetesTesztRoute,
   AdminFrissVerzioRoute: AdminFrissVerzioRoute,
+  AdminHirlevelRoute: AdminHirlevelRoute,
   AdminJelszoRoute: AdminJelszoRoute,
   AdminKatalogusEllenorzesRoute: AdminKatalogusEllenorzesRoute,
   AdminKuponokRoute: AdminKuponokRoute,
@@ -1860,6 +1921,7 @@ const rootRouteChildren: RootRouteChildren = {
   FintechEsBiRoute: FintechEsBiRoute,
   FizetesEsTeljesitesRoute: FizetesEsTeljesitesRoute,
   FogyasztovedelemRoute: FogyasztovedelemRoute,
+  HirlevelMegerositesRoute: HirlevelMegerositesRoute,
   ImpresszumRoute: ImpresszumRoute,
   KapcsolatRoute: KapcsolatRoute,
   KontrollingRoute: KontrollingRoute,
@@ -1867,6 +1929,7 @@ const rootRouteChildren: RootRouteChildren = {
   KonyveloirodaAuditRoute: KonyveloirodaAuditRoute,
   KonyvvizsgalatRoute: KonyvvizsgalatRoute,
   KonzultacioRoute: KonzultacioRoute,
+  LeiratkozasRoute: LeiratkozasRoute,
   LetoltesHibaRoute: LetoltesHibaRoute,
   MegrendelesRoute: MegrendelesRoute,
   OktatasRoute: OktatasRoute,
