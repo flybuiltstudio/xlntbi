@@ -1183,11 +1183,6 @@ function PageViewStats() {
     for (const row of [...counts.product, ...counts.service]) set.add(row.year);
     return [...set].sort((a, b) => b - a);
   }, [counts]);
-  const [year, setYear] = useState<number>(new Date().getFullYear());
-  const activeYear = years.includes(year) ? year : (years[0] ?? new Date().getFullYear());
-  const [month, setMonth] = useState<number | "all">("all");
-  const periodLabel =
-    month === "all" ? String(activeYear) : `${activeYear}. ${MONTHS[month] ?? ""}`;
 
   const productEntries = useMemo(
     () => products.map((p) => ({ key: p.slug, label: p.name })),
@@ -1197,9 +1192,6 @@ function PageViewStats() {
     () => serviceItems.map((item) => ({ key: item.to, label: item.label })),
     [],
   );
-
-  const productRows = pivotPageViews(productEntries, counts.product, activeYear);
-  const serviceRows = pivotPageViews(serviceEntries, counts.service, activeYear);
 
   if (loading) {
     return (
@@ -1213,60 +1205,25 @@ function PageViewStats() {
   }
 
   return (
-    <section className="mt-14 space-y-10">
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm font-semibold text-foreground">Oldalletöltések éve:</span>
-        {years.map((y) => (
-          <button
-            key={y}
-            type="button"
-            className={filterChip(y === activeYear)}
-            onClick={() => setYear(y)}
-          >
-            {y}
-          </button>
-        ))}
-      </div>
-
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm font-semibold text-foreground">Hónap:</span>
-        <button
-          type="button"
-          className={filterChip(month === "all")}
-          onClick={() => setMonth("all")}
-        >
-          Egész év
-        </button>
-        {MONTHS.map((label, i) => (
-          <button
-            key={label}
-            type="button"
-            className={filterChip(month === i)}
-            onClick={() => setMonth(i)}
-          >
-            {MONTHS_SHORT[i]}
-          </button>
-        ))}
-      </div>
-
+    <section className="mt-14 space-y-14">
       <PageViewBlock
-        title={`Termék Részletek oldalak letöltései – ${periodLabel}`}
+        titleBase="Termék Részletek oldalak letöltései"
         note="Csak a publikált (éles) oldalon mért megnyitások. Minden termék szerepel, akkor is, ha nulla."
         firstColumn="Termék"
-        rows={productRows}
-        year={activeYear}
-        month={month}
+        entries={productEntries}
+        counts={counts.product}
+        years={years}
         fileBase="termek-oldalletoltesek"
         topN={5}
       />
 
       <PageViewBlock
-        title={`Szolgáltatás aloldalak letöltései – ${periodLabel}`}
+        titleBase="Szolgáltatás aloldalak letöltései"
         note="Csak a publikált (éles) oldalon mért megnyitások. Minden szolgáltatás szerepel, akkor is, ha nulla."
         firstColumn="Szolgáltatás"
-        rows={serviceRows}
-        year={activeYear}
-        month={month}
+        entries={serviceEntries}
+        counts={counts.service}
+        years={years}
         fileBase="szolgaltatas-oldalletoltesek"
         topN={3}
       />
@@ -1275,29 +1232,37 @@ function PageViewStats() {
 }
 
 function PageViewBlock({
-  title,
+  titleBase,
   note,
   firstColumn,
-  rows,
-  year,
-  month,
+  entries,
+  counts,
+  years,
   fileBase,
   topN,
 }: {
-  title: string;
+  titleBase: string;
   note: string;
   firstColumn: string;
-  rows: ReturnType<typeof pivotPageViews>;
-  year: number;
-  month: number | "all";
+  entries: { key: string; label: string }[];
+  counts: PageViewCount[];
+  years: number[];
   fileBase: string;
   topN: number;
 }) {
   const [exporting, setExporting] = useState<string | null>(null);
+  const [yearSel, setYearSel] = useState<number>(new Date().getFullYear());
+  const [month, setMonth] = useState<number | "all">("all");
+  const year = years.includes(yearSel) ? yearSel : (years[0] ?? new Date().getFullYear());
+
+  const rows = useMemo(() => pivotPageViews(entries, counts, year), [entries, counts, year]);
+  const periodLabel = month === "all" ? String(year) : `${year}. ${MONTHS[month] ?? ""}`;
+  const title = `${titleBase} – ${periodLabel}`;
   const table = pageViewTable(title, firstColumn, rows, year, month);
   const filename = `xlntbi-${fileBase}-${year}${month === "all" ? "" : `-${month + 1}`}`;
   const btn =
     "inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted disabled:opacity-60";
+
 
   const run = async (id: string, fn: () => void | Promise<void>) => {
     setExporting(id);
