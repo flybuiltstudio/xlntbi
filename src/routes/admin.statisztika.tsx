@@ -1281,6 +1281,49 @@ function PageViewBlock({
       <h2 className="text-xl font-bold text-foreground">{title}</h2>
       <p className="mt-2 text-sm text-muted-foreground">{note}</p>
 
+      <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Év
+          </span>
+          {years.map((y) => (
+            <button
+              key={y}
+              type="button"
+              className={filterChip(y === year)}
+              onClick={() => setYearSel(y)}
+            >
+              {y}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Hónap
+          </span>
+          <button
+            type="button"
+            className={filterChip(month === "all")}
+            onClick={() => setMonth("all")}
+          >
+            Egész év
+          </button>
+          {MONTHS_SHORT.map((label, i) => (
+            <button
+              key={label}
+              type="button"
+              className={filterChip(month === i)}
+              onClick={() => setMonth(i)}
+              title={MONTHS[i]}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+
+
       <div className="mt-4 flex flex-wrap gap-2">
         <button
           type="button"
