@@ -3,6 +3,7 @@ import {
   Download,
   Loader2,
   Mail,
+  MailCheck,
   PlugZap,
   RefreshCw,
   Send,
@@ -18,6 +19,7 @@ import {
   listNewsletterSubscribers,
   saveNewsletterSettings,
   sendNewsletterCampaign,
+  sendNewsletterTestEmail,
   syncNewsletterSubscribers,
   testNewsletterConnection,
 } from "@/lib/newsletter-admin.functions";
@@ -64,6 +66,7 @@ export function NewsletterAdminPanel() {
   const testConnection = useServerFn(testNewsletterConnection);
   const syncNow = useServerFn(syncNewsletterSubscribers);
   const sendCampaign = useServerFn(sendNewsletterCampaign);
+  const sendTestEmail = useServerFn(sendNewsletterTestEmail);
 
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -78,6 +81,7 @@ export function NewsletterAdminPanel() {
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("<p>Kedves Olvasó!</p><p></p>");
   const [testEmail, setTestEmail] = useState("");
+  const [deliveryEmail, setDeliveryEmail] = useState("");
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -486,6 +490,65 @@ export function NewsletterAdminPanel() {
               placeholder="sajat@cimem.hu"
             />
           </label>
+        </div>
+
+        <div className="mt-6 rounded-lg border border-border bg-muted/30 p-4">
+          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <MailCheck className="h-4 w-4" />
+            Kézbesítési teszt
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Küldj egy próbalevelet bármelyik sablonnal a megadott címre, és nézd meg,
+            hogy a beérkező üzenetek közé vagy a Levélszemétbe kerül-e. Feladó:{" "}
+            <span className="font-medium text-foreground">noreply@notify.xlntbi.hu</span>
+          </p>
+          <label className="mt-3 block text-sm sm:max-w-sm">
+            <span className="font-medium text-foreground">Címzett e-mail cím</span>
+            <input
+              className={inputClass}
+              value={deliveryEmail}
+              onChange={(event) => setDeliveryEmail(event.target.value)}
+              placeholder="sajat@cimem.hu"
+            />
+          </label>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {(
+              [
+                { key: "hirlevel-megerosites", label: "Megerősítő sablon küldése" },
+                { key: "hirlevel", label: "Hírlevél sablon küldése" },
+              ] as const
+            ).map((item) => (
+              <button
+                key={item.key}
+                type="button"
+                className={actionBtn}
+                disabled={busy === `delivery-${item.key}`}
+                onClick={() =>
+                  run(`delivery-${item.key}`, async () => {
+                    const to = deliveryEmail.trim();
+                    if (!to) {
+                      setMessage({ kind: "err", text: "Adj meg egy címzett e-mail címet." });
+                      return;
+                    }
+                    const result = await sendTestEmail({ data: { template: item.key, to } });
+                    setMessage(
+                      result.ok ?
+                        {
+                          kind: "ok",
+                          text: `Teszt levél elküldve a ${result.to} címre (feladó: ${result.from}). Ha nem látod, nézd meg a Levélszemét mappát is.`,
+                        }
+                      : { kind: "err", text: result.error },
+                    );
+                  })
+                }
+              >
+                {busy === `delivery-${item.key}` ?
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                : <MailCheck className="h-4 w-4" />}
+                {item.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="mt-5 flex flex-wrap gap-3">
