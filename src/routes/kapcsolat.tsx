@@ -153,6 +153,19 @@ function KapcsolatPage() {
                 LinkedIn
               </a>
             </li>
+            <li className="flex items-start gap-3">
+              <svg className="mt-0.5 h-4 w-4 shrink-0 text-primary" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .57.04.84.13V9.4a6.34 6.34 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43V8.69a8.16 8.16 0 0 0 4.77 1.52V6.76a4.83 4.83 0 0 1-.04-.07z" />
+              </svg>
+              <a
+                href="https://www.tiktok.com/@xlntbi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground"
+              >
+                TikTok
+              </a>
+            </li>
           </ul>
           <figure className="mt-2 overflow-hidden rounded-2xl border border-border/60 shadow-lg">
             <img
