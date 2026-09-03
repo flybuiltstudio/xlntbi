@@ -37,10 +37,11 @@ hogy be van-e állítva. Brevónál a beépített Brevo-összekötés is haszná
   `src/lib/email-templates/hirlevel.tsx` és `hirlevel-megerosites.tsx`
   sablonokkal. Minden szerverfüggvény `requireSupabaseAuth` + admin `gate`.
 - Szerkesztő: könnyű rich-text szerkesztő (`contentEditable` alapú, félkövér /
-  dőlt / lista / címsor / link / kép), a kimenet e-mail-biztos HTML-re
-  tisztítva (inline stílusok, táblázatos elrendezés, sanitizálás). Kép feltöltés
-  a meglévő védett tárolóba, aláírt vagy publikus olvasási útvonallal a levél
-  számára.
+  dőlt / lista / címsor / link / kép / betűszín / háttérszín), a kimenet
+  e-mail-biztos HTML-re tisztítva (inline stílusok, táblázatos elrendezés,
+  sanitizálás — csak engedélyezett tagek és `color` / `background-color`
+  stílusok maradnak). Kép feltöltés a meglévő védett tárolóba, aláírt vagy
+  publikus olvasási útvonallal a levél számára.
 - Export: a meglévő `src/lib/stats-export.ts` mintájára CSV/XLSX/XML/PDF, plusz
   öt szolgáltató-specifikus CSV fejléckészlet.
 - `src/lib/admin-access.ts`: `{ prefix: "/admin/hirlevel", roles: ["admin"] }`.
