@@ -102,7 +102,7 @@ function KonzultacioPage() {
           messageLabel="Üzenet"
           defaultMessage={`Kedves Dávid!
 
-A megjelölt témá(k)ban szeretnék konzultálni Önnel!
+A megjelölt témá(k)ról szeretnék konzultálni Önnel!
 
 Köszönöm!`}
           submitLabel="Konzultáció kérése"
