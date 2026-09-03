@@ -191,134 +191,138 @@ export function NewsletterAdminPanel() {
           feliratkozók oda is átkerülnek.
         </p>
 
-        <div className="mt-6 space-y-3">
-          {NEWSLETTER_MODES.map((entry, index) => (
-            <label
-              key={entry.id}
-              className={`flex cursor-pointer gap-3 rounded-lg border p-4 transition ${
-                mode === entry.id ? "border-primary bg-primary/5" : "border-border hover:bg-muted/50"
-              }`}
-            >
-              <input
-                type="radio"
-                name="newsletter-mode"
-                className="mt-1"
-                checked={mode === entry.id}
-                onChange={() => setMode(entry.id)}
-              />
-              <span className="min-w-0">
-                <span className="block text-sm font-semibold text-foreground">
-                  {index + 1}) {entry.label}
-                </span>
-                <span className="mt-0.5 block text-sm text-muted-foreground">{entry.hint}</span>
-                {entry.id !== "own" && settings?.providers[entry.id] ? (
-                  <span className="mt-1.5 block text-xs font-medium text-muted-foreground">
-                    {settings.providers[entry.id]!.configured ?
-                      "API-kulcs beállítva"
-                    : "API-kulcs még nincs megadva"}
-                  </span>
-                ) : null}
-              </span>
-            </label>
-          ))}
-        </div>
-
-        {modeEntry.fields.length > 0 ? (
-          <div className="mt-6 grid gap-4 rounded-lg border border-border p-4 sm:grid-cols-2">
-            {modeEntry.fields.map((field) => (
-              <label key={field.key} className="block text-sm">
-                <span className="font-medium text-foreground">{field.label}</span>
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+          <div className="space-y-3">
+            {NEWSLETTER_MODES.map((entry, index) => (
+              <label
+                key={entry.id}
+                className={`flex cursor-pointer gap-3 rounded-lg border p-4 transition ${
+                  mode === entry.id ? "border-primary bg-primary/5" : "border-border hover:bg-muted/50"
+                }`}
+              >
                 <input
-                  type={field.secret ? "password" : "text"}
-                  autoComplete="off"
-                  className={inputClass}
-                  placeholder={
-                    field.secret ?
-                      settings?.providers[mode]?.configured ?
-                        "Beállítva – csak felülíráshoz írd be újra"
-                      : "Ide illeszd be az API-kulcsot"
-                    : ""
-                  }
-                  value={fields[field.key] ?? ""}
-                  onChange={(event) =>
-                    setFields((prev) => ({ ...prev, [field.key]: event.target.value }))
-                  }
+                  type="radio"
+                  name="newsletter-mode"
+                  className="mt-1"
+                  checked={mode === entry.id}
+                  onChange={() => setMode(entry.id)}
                 />
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-foreground">
+                    {index + 1}) {entry.label}
+                  </span>
+                  <span className="mt-0.5 block text-sm text-muted-foreground">{entry.hint}</span>
+                  {entry.id !== "own" && settings?.providers[entry.id] ? (
+                    <span className="mt-1.5 block text-xs font-medium text-muted-foreground">
+                      {settings.providers[entry.id]!.configured ?
+                        "API-kulcs beállítva"
+                      : "API-kulcs még nincs megadva"}
+                    </span>
+                  ) : null}
+                </span>
               </label>
             ))}
-            <p className="text-xs text-muted-foreground sm:col-span-2">
-              Az API-kulcsokat csak a szerver olvassa, a felületre soha nem kerülnek vissza.
-            </p>
           </div>
-        ) : null}
 
-        <div className="mt-5 flex flex-wrap gap-3">
-          <button
-            type="button"
-            className={primaryBtn}
-            disabled={busy === "save"}
-            onClick={() =>
-              run("save", async () => {
-                const next = await saveSettings({ data: { mode, fields } });
-                setSettings(next);
-                setMessage({ kind: "ok", text: "A hírlevél beállítás mentve." });
-              })
-            }
-          >
-            {busy === "save" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            Beállítás mentése
-          </button>
+          <div className="space-y-4">
+            {modeEntry.fields.length > 0 ? (
+              <div className="grid gap-4 rounded-lg border border-border p-4 sm:grid-cols-2">
+                {modeEntry.fields.map((field) => (
+                  <label key={field.key} className="block text-sm">
+                    <span className="font-medium text-foreground">{field.label}</span>
+                    <input
+                      type={field.secret ? "password" : "text"}
+                      autoComplete="off"
+                      className={inputClass}
+                      placeholder={
+                        field.secret ?
+                          settings?.providers[mode]?.configured ?
+                            "Beállítva – csak felülíráshoz írd be újra"
+                          : "Ide illeszd be az API-kulcsot"
+                        : ""
+                      }
+                      value={fields[field.key] ?? ""}
+                      onChange={(event) =>
+                        setFields((prev) => ({ ...prev, [field.key]: event.target.value }))
+                      }
+                    />
+                  </label>
+                ))}
+                <p className="text-xs text-muted-foreground sm:col-span-2">
+                  Az API-kulcsokat csak a szerver olvassa, a felületre soha nem kerülnek vissza.
+                </p>
+              </div>
+            ) : null}
 
-          {mode !== "own" ? (
-            <>
+            <div className="flex flex-wrap gap-3">
               <button
                 type="button"
-                className={actionBtn}
-                disabled={busy === "test"}
+                className={primaryBtn}
+                disabled={busy === "save"}
                 onClick={() =>
-                  run("test", async () => {
-                    const result = await testConnection({ data: { mode } });
-                    setMessage(
-                      result.ok ?
-                        { kind: "ok", text: "A kapcsolat működik." }
-                      : { kind: "err", text: `Nem sikerült a kapcsolat: ${result.error}` },
-                    );
+                  run("save", async () => {
+                    const next = await saveSettings({ data: { mode, fields } });
+                    setSettings(next);
+                    setMessage({ kind: "ok", text: "A hírlevél beállítás mentva." });
                   })
                 }
               >
-                {busy === "test" ?
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                : <PlugZap className="h-4 w-4" />}
-                Kapcsolat tesztelése
+                {busy === "save" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                Beállítás mentése
               </button>
-              <button
-                type="button"
-                className={actionBtn}
-                disabled={busy === "sync"}
-                onClick={() =>
-                  run("sync", async () => {
-                    const result = await syncNow();
-                    if (!result.ok) {
-                      setMessage({ kind: "err", text: result.error });
-                      return;
+
+              {mode !== "own" ? (
+                <>
+                  <button
+                    type="button"
+                    className={actionBtn}
+                    disabled={busy === "test"}
+                    onClick={() =>
+                      run("test", async () => {
+                        const result = await testConnection({ data: { mode } });
+                        setMessage(
+                          result.ok ?
+                            { kind: "ok", text: "A kapcsolat működik." }
+                          : { kind: "err", text: `Nem sikerült a kapcsolat: ${result.error}` },
+                        );
+                      })
                     }
-                    setMessage({
-                      kind: "ok",
-                      text: `Szinkronizálva: ${result.synced} feliratkozó, hibás: ${result.failed}.${
-                        result.lastError ? ` Utolsó hiba: ${result.lastError}` : ""
-                      }`,
-                    });
-                    await reload();
-                  })
-                }
-              >
-                {busy === "sync" ?
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                : <RefreshCw className="h-4 w-4" />}
-                Lista szinkronizálása
-              </button>
-            </>
-          ) : null}
+                  >
+                    {busy === "test" ?
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    : <PlugZap className="h-4 w-4" />}
+                    Kapcsolat tesztelése
+                  </button>
+                  <button
+                    type="button"
+                    className={actionBtn}
+                    disabled={busy === "sync"}
+                    onClick={() =>
+                      run("sync", async () => {
+                        const result = await syncNow();
+                        if (!result.ok) {
+                          setMessage({ kind: "err", text: result.error });
+                          return;
+                        }
+                        setMessage({
+                          kind: "ok",
+                          text: `Szinkronizálva: ${result.synced} feliratkozó, hibás: ${result.failed}.${
+                            result.lastError ? ` Utolsó hiba: ${result.lastError}` : ""
+                          }`,
+                        });
+                        await reload();
+                      })
+                    }
+                  >
+                    {busy === "sync" ?
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    : <RefreshCw className="h-4 w-4" />}
+                    Lista szinkronizálása
+                  </button>
+                </>
+              ) : null}
+            </div>
+          </div>
         </div>
       </section>
 
