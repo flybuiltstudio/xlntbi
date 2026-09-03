@@ -542,24 +542,20 @@ function StatsPanel() {
 
               <PageViewStats />
 
-              {/* Grafikon */}
-              <section className="mt-14">
-                <h2 className="text-xl font-bold text-foreground">
-                  {activeYear !== null ? "Havi bontás grafikonon" : "Éves bontás grafikonon"}
-                </h2>
+              {/* Grafikon – csak konkrét évre */}
+              {activeYear !== null ? (
+                <section className="mt-14">
+                  <h2 className="text-xl font-bold text-foreground">Havi bontás grafikonon</h2>
 
-                <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
-                  <p className="text-sm text-muted-foreground">
-                    <strong className="text-foreground">
-                      {activeYear !== null ? activeYear : "Összes év"}
-                    </strong>{" "}
-                    – megrendelt mennyiség {activeYear !== null ? "havonta" : "évente"} (db)
-                    {payFilter !== "all"
-                      ? ` – ${PAY_OPTIONS.find((o) => o.id === payFilter)?.label.toLowerCase()} megrendelések`
-                      : ""}
-                  </p>
+                  <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
+                    <p className="text-sm text-muted-foreground">
+                      <strong className="text-foreground">{activeYear}</strong> – megrendelt
+                      mennyiség havonta (db)
+                      {payFilter !== "all"
+                        ? ` – ${PAY_OPTIONS.find((o) => o.id === payFilter)?.label.toLowerCase()} megrendelések`
+                        : ""}
+                    </p>
 
-                  {activeYear !== null ? (
                     <div className="mt-6 flex h-60 items-end gap-1 sm:gap-2">
                       {monthly.months.map((m) => (
                         <div
@@ -598,61 +594,31 @@ function StatsPanel() {
                         </div>
                       ))}
                     </div>
-                  ) : (
-                    <div className="mt-6 flex h-60 items-end gap-2 sm:gap-4">
-                      {yearly.map((y) => (
-                        <div key={y.year} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-                          <span className="text-xs font-semibold text-foreground">
-                            {y.qty > 0 ? y.qty : ""}
-                          </span>
-                          <div
-                            className={`flex h-44 w-full max-w-24 flex-col justify-end overflow-hidden rounded-t-md ${
-                              y.qty > 0 ? "bg-muted/50" : "border-b-2 border-border/60"
-                            }`}
-                            title={`${y.year}: ${y.qty} db, ${formatPrice(y.revenue)}`}
+
+                    {monthly.labels.length > 0 ? (
+                      <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+                        {monthly.labels.map((label, li) => (
+                          <li
+                            key={label}
+                            className="inline-flex items-center gap-2 text-xs text-muted-foreground"
                           >
-                            {y.qty > 0 ? (
-                              <div
-                                style={{
-                                  height: `${(y.qty / maxYearQty) * 100}%`,
-                                  backgroundColor: PALETTE[0],
-                                }}
-                                title={`${y.year}: ${y.qty} db`}
-                              />
-                            ) : null}
-                          </div>
-                          <span className="text-[11px] text-muted-foreground">{y.year}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                            <span
+                              className="h-3 w-3 shrink-0 rounded-sm"
+                              style={{ backgroundColor: PALETTE[li % PALETTE.length] }}
+                            />
+                            {label}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="mt-5 text-sm text-muted-foreground">
+                        Ebben az évben még nincs megrendelés.
+                      </p>
+                    )}
+                  </div>
 
-                  {activeYear !== null && monthly.labels.length > 0 ? (
-                    <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
-                      {monthly.labels.map((label, li) => (
-                        <li
-                          key={label}
-                          className="inline-flex items-center gap-2 text-xs text-muted-foreground"
-                        >
-                          <span
-                            className="h-3 w-3 shrink-0 rounded-sm"
-                            style={{ backgroundColor: PALETTE[li % PALETTE.length] }}
-                          />
-                          {label}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                  {activeYear !== null && monthly.labels.length === 0 ? (
-                    <p className="mt-5 text-sm text-muted-foreground">
-                      Ebben az évben még nincs megrendelés.
-                    </p>
-                  ) : null}
-                </div>
-
-                {/* Havi / éves táblázat */}
-                <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
-                  {activeYear !== null ? (
+                  {/* Havi táblázat */}
+                  <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
                     <table className="w-full min-w-[520px] text-sm">
                       <thead>
                         <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
@@ -690,38 +656,10 @@ function StatsPanel() {
                         </tr>
                       </tfoot>
                     </table>
-                  ) : (
-                    <table className="w-full min-w-[520px] text-sm">
-                      <thead>
-                        <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
-                          <th className="px-4 py-3 font-semibold">Év</th>
-                          <th className="px-4 py-3 text-right font-semibold">Megrendelés</th>
-                          <th className="px-4 py-3 text-right font-semibold">Mennyiség</th>
-                          <th className="px-4 py-3 text-right font-semibold">Árbevétel</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {yearly.map((y) => (
-                          <tr key={y.year} className="border-b border-border/60 last:border-0">
-                            <td className="px-4 py-2.5 font-medium text-foreground">{y.year}</td>
-                            <td className="px-4 py-2.5 text-right">{y.orders} db</td>
-                            <td className="px-4 py-2.5 text-right">{y.qty} db</td>
-                            <td className="px-4 py-2.5 text-right">{formatPrice(y.revenue)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                      <tfoot>
-                        <tr className="border-t border-border bg-muted/50 font-semibold text-foreground">
-                          <td className="px-4 py-3">Összesen</td>
-                          <td className="px-4 py-3 text-right">{kpi.orders} db</td>
-                          <td className="px-4 py-3 text-right">{kpi.qty} db</td>
-                          <td className="px-4 py-3 text-right">{formatPrice(kpi.revenue)}</td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  )}
-                </div>
-              </section>
+                  </div>
+                </section>
+              ) : null}
+
             </>
           )}
         </>
