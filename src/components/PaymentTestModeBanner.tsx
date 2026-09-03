@@ -8,12 +8,6 @@ export function PaymentTestModeBanner() {
       </div>
     );
   }
-  if (clientToken.startsWith("pk_test_")) {
-    return (
-      <div className="w-full border-b border-amber-300 bg-amber-100 px-4 py-2 text-center text-sm text-amber-900">
-        Teszt üzemmód: az előnézetben leadott fizetések nem valódiak.
-      </div>
-    );
-  }
+  // Test-mode notice removed: the shop is live, customers must not see it.
   return null;
 }
