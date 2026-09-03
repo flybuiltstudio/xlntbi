@@ -1297,29 +1297,6 @@ function PageViewBlock({
             </button>
           ))}
         </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Hónap
-          </span>
-          <button
-            type="button"
-            className={filterChip(month === "all")}
-            onClick={() => setMonth("all")}
-          >
-            Egész év
-          </button>
-          {MONTHS_SHORT.map((label, i) => (
-            <button
-              key={label}
-              type="button"
-              className={filterChip(month === i)}
-              onClick={() => setMonth(i)}
-              title={MONTHS[i]}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
       </div>
 
 
