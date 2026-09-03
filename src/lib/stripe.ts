@@ -46,6 +46,13 @@ export function getStripeEnvironmentSafe(): StripeEnv | null {
  */
 export function webhookEndpoint(): string {
   const env = getStripeEnvironmentSafe() ?? "sandbox";
-  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  // Live events must always land on the production domain, even when the page
+  // is opened from a preview host.
+  const origin =
+    env === "live"
+      ? "https://xlntbi.hu"
+      : typeof window === "undefined"
+        ? ""
+        : window.location.origin;
   return `${origin}/api/public/payments/webhook?env=${env}`;
 }
