@@ -354,6 +354,108 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_campaigns: {
+        Row: {
+          body_html: string
+          created_by: string | null
+          created_by_email: string | null
+          failed_count: number
+          id: string
+          recipients: number
+          sent_at: string
+          sent_count: number
+          subject: string
+          test_only: boolean
+        }
+        Insert: {
+          body_html?: string
+          created_by?: string | null
+          created_by_email?: string | null
+          failed_count?: number
+          id?: string
+          recipients?: number
+          sent_at?: string
+          sent_count?: number
+          subject: string
+          test_only?: boolean
+        }
+        Update: {
+          body_html?: string
+          created_by?: string | null
+          created_by_email?: string | null
+          failed_count?: number
+          id?: string
+          recipients?: number
+          sent_at?: string
+          sent_count?: number
+          subject?: string
+          test_only?: boolean
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          company: string | null
+          confirm_token: string | null
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          first_name: string
+          id: string
+          ip_address: string | null
+          last_name: string
+          phone: string | null
+          provider_error: string | null
+          provider_name: string | null
+          provider_synced_at: string | null
+          source: string
+          status: string
+          unsubscribed_at: string | null
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          company?: string | null
+          confirm_token?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          first_name: string
+          id?: string
+          ip_address?: string | null
+          last_name: string
+          phone?: string | null
+          provider_error?: string | null
+          provider_name?: string | null
+          provider_synced_at?: string | null
+          source?: string
+          status?: string
+          unsubscribed_at?: string | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          company?: string | null
+          confirm_token?: string | null
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string
+          id?: string
+          ip_address?: string | null
+          last_name?: string
+          phone?: string | null
+          provider_error?: string | null
+          provider_name?: string | null
+          provider_synced_at?: string | null
+          source?: string
+          status?: string
+          unsubscribed_at?: string | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       order_downloads: {
         Row: {
           created_at: string
