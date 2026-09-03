@@ -95,6 +95,25 @@ export function NewsletterSignup() {
                     "Küldtem egy megerősítő levelet a megadott e-mail címre. Kattints benne a megerősítő linkre, és onnantól megkapod a hírlevelet."
                   : "Ez az e-mail cím már megerősített feliratkozó, így nincs több teendőd."}
                 </p>
+                {done === "pending" ? (
+                  <div className="mt-4 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3.5 text-sm leading-relaxed text-amber-200">
+                    <p className="font-semibold text-amber-100">
+                      Nem kaptál levelet 1–2 percen belül?
+                    </p>
+                    <p className="mt-1.5">
+                      Ellenőrizd a <strong>Levélszemét</strong> (Spam) mappában is.
+                      Húzd át a levelet az elsődleges postafiókba, és tedd a
+                      <strong> noreply@notify.xlntbi.hu</strong> címet a
+                      Megbízható feladók közé, hogy a későbbi hírlevelek is
+                      megérkezzenek.
+                    </p>
+                    <p className="mt-1.5">
+                      Gmail használata esetén húzd át a megerősítő levelet az
+                      <strong> Elsődleges</strong> mappába, és erősítsd meg a
+                      feladó bizalmasságát.
+                    </p>
+                  </div>
+                ) : null}
                 <button
                   type="button"
                   onClick={close}
