@@ -240,6 +240,13 @@ function AdminLayout() {
                 Megrendelések
               </Link>
               <Link
+                to="/admin/hirlevel"
+                className={tabBase}
+                activeProps={{ className: `${tabBase} ${tabActive}` }}
+              >
+                Hírlevél
+              </Link>
+              <Link
                 to="/admin/kuponok"
                 className={tabBase}
                 activeProps={{ className: `${tabBase} ${tabActive}` }}
