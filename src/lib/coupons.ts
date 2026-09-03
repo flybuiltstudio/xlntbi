@@ -50,9 +50,11 @@ export function isAllowedLiveCode(code: string, now: Date = new Date()): boolean
 
 /** Whether the checkout should offer a promotion-code field at all. */
 export function promotionCodesEnabled(
-  environment: "sandbox" | "live",
-  now: Date = new Date(),
+  _environment: "sandbox" | "live",
+  _now: Date = new Date(),
 ): boolean {
-  if (environment === "sandbox") return true;
-  return ALLOWED_LIVE_PROMOTION_CODES.some((g) => Date.parse(g.expiresAt) > now.getTime());
+  // The coupon field is always offered. Which codes actually work is decided
+  // by Stripe (active + expires_at) and, in live, by the coupon guard, which
+  // keeps only allowlisted and admin-created coupons active.
+  return true;
 }

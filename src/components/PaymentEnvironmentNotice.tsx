@@ -6,7 +6,14 @@ import { isCardPaymentAvailable, getStripeEnvironmentSafe, webhookEndpoint } fro
  * Shows unambiguously whether the checkout runs in TEST (preview/sandbox) or
  * LIVE Stripe mode, and which webhook endpoint receives the payment events.
  */
-export function PaymentEnvironmentNotice({ className = "" }: { className?: string }) {
+export function PaymentEnvironmentNotice({
+  className = "",
+  showTechnical = false,
+}: {
+  className?: string;
+  /** Admin-only: reveals the Stripe environment and webhook endpoint. */
+  showTechnical?: boolean;
+}) {
   if (!isCardPaymentAvailable()) {
     return (
       <div
@@ -23,6 +30,10 @@ export function PaymentEnvironmentNotice({ className = "" }: { className?: strin
 
   const env = getStripeEnvironmentSafe();
   const test = env === "sandbox";
+
+  // Customers only need the test-mode warning; a live checkout must not show
+  // internal plumbing (environment name, webhook endpoint).
+  if (!test && !showTechnical) return null;
 
   return (
     <div
@@ -45,6 +56,7 @@ export function PaymentEnvironmentNotice({ className = "" }: { className?: strin
           </>
         )}
       </p>
+      {showTechnical ? (
       <dl className="mt-2 grid gap-1 text-xs sm:grid-cols-2">
         <div>
           <dt className="inline font-medium">Stripe környezet: </dt>
@@ -55,6 +67,7 @@ export function PaymentEnvironmentNotice({ className = "" }: { className?: strin
           <dd className="inline break-all font-mono">{webhookEndpoint()}</dd>
         </div>
       </dl>
+      ) : null}
     </div>
   );
 }
