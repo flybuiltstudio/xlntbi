@@ -303,13 +303,6 @@ function AdminLayout() {
                 ) : null}
               </div>
               <Link
-                to="/admin/hirlevel"
-                className={tabBase}
-                activeProps={{ className: `${tabBase} ${tabActive}` }}
-              >
-                Hírlevél
-              </Link>
-              <Link
                 to="/admin/felhasznalok"
                 className={tabBase}
                 activeProps={{ className: `${tabBase} ${tabActive}` }}
