@@ -88,6 +88,11 @@ export async function verifyWebhook(
       : getEnv('PAYMENTS_LIVE_WEBHOOK_SECRET');
 
   if (!signature || !body) {
+    // Unsigned/empty POSTs are not Stripe deliveries (scanners, health probes).
+    // Log enough to tell them apart from a real, broken Stripe delivery.
+    console.warn(
+      `Stripe webhook rejected: no signature/body (env=${env}, hasSignature=${!!signature}, bodyLength=${body.length})`,
+    );
     throw new Error('Missing signature or body');
   }
 
@@ -103,10 +108,25 @@ export async function verifyWebhook(
     throw new Error('Invalid signature format');
   }
 
-  const age = Math.abs(Date.now() / 1000 - Number(timestamp));
-  if (age > 300) {
+  // Stripe's own default tolerance is 300s; we allow 600s so that ordinary
+  // clock skew between Stripe and this Worker never drops a real payment
+  // event. Replay protection still comes from the HMAC + the event log
+  // (stripe_webhook_events) idempotency check downstream.
+  const skewSeconds = Date.now() / 1000 - Number(timestamp);
+  if (Math.abs(skewSeconds) > 600) {
+    let eventInfo = '';
+    try {
+      const parsed = JSON.parse(body) as { id?: string; type?: string };
+      eventInfo = ` (event ${parsed.id ?? '?'} / ${parsed.type ?? '?'})`;
+    } catch {
+      /* body is not JSON — nothing to report */
+    }
+    console.error(
+      `Stripe webhook rejected: timestamp skew ${Math.round(skewSeconds)}s, env=${env}${eventInfo}`,
+    );
     throw new Error('Webhook timestamp too old');
   }
+
 
   const key = await crypto.subtle.importKey(
     'raw',
