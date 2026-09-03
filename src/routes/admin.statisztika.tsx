@@ -1252,8 +1252,8 @@ function PageViewBlock({
 }) {
   const [exporting, setExporting] = useState<string | null>(null);
   const [yearSel, setYearSel] = useState<number>(new Date().getFullYear());
-  const [month, setMonth] = useState<number | "all">("all");
   const year = years.includes(yearSel) ? yearSel : (years[0] ?? new Date().getFullYear());
+  const month = "all" as const;
 
   const rows = useMemo(() => pivotPageViews(entries, counts, year), [entries, counts, year]);
   const periodLabel = month === "all" ? String(year) : `${year}. ${MONTHS[month] ?? ""}`;
