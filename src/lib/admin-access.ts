@@ -29,6 +29,7 @@ export const ADMIN_ROUTE_ACCESS: AdminRouteRule[] = [
   { prefix: "/admin/billingo-ellenorzes", roles: ["admin"] },
   { prefix: "/admin/katalogus-ellenorzes", roles: ["admin"] },
   { prefix: "/admin/rendelesi-audit", roles: ["admin"] },
+  { prefix: "/admin/nav-ellenorzes", roles: ["admin"] },
   { prefix: "/admin/fizetes-teszt", roles: ["admin"] },
   { prefix: "/admin/hirlevel", roles: ["admin"] },
   { prefix: "/admin/felhasznalok", roles: ["admin"] },

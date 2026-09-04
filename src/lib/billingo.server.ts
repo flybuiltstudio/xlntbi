@@ -1,4 +1,5 @@
 import { couponInvoiceLineName } from "./coupon-amount";
+import { REVERSE_CHARGE_NOTE, VAT_KEYS, vatTreatmentFor } from "./eu-vat";
 import { withXlntPrefix } from "./product-name";
 /**
  * Billingo.hu API v3 integration.
@@ -193,6 +194,12 @@ async function createInvoice(
   const discountAmount = Math.max(0, Math.round((order as any).discount_amount ?? 0));
   const couponCode = ((order as any).coupon_code as string | null) ?? null;
 
+  // AAM domestically; EU B2B buyer (VAT id of another member state) gets the
+  // EUFAD37 key plus the mandatory "Reverse charge" note.
+  const treatment = vatTreatmentFor(order.tax_number);
+  const { vat, entitlement } = VAT_KEYS[treatment];
+  const reverseCharge = treatment === "eufad37";
+
   const document = {
     partner_id: partnerId,
     block_id: blockId,
@@ -211,8 +218,8 @@ async function createInvoice(
         unit_price_type: "gross",
         quantity: order.quantity,
         unit: "db",
-        vat: "AAM",
-        entitlement: "AAM",
+        vat,
+        entitlement,
       },
       // Coupon discount as a separate negative line, so the invoice shows the
       // original price, the discount and the final amount actually paid.
@@ -224,16 +231,24 @@ async function createInvoice(
               unit_price_type: "gross",
               quantity: 1,
               unit: "db",
-              vat: "AAM",
-              entitlement: "AAM",
+              vat,
+              entitlement,
             },
           ]
         : []),
     ],
-    comment:
-      discountAmount > 0
-        ? `Rendelésszám: ${order.order_number}\nEredeti összeg: ${Math.round(order.total_price).toLocaleString("hu-HU")} Ft\nKuponkedvezmény${couponCode ? ` (${couponCode})` : ""}: -${discountAmount.toLocaleString("hu-HU")} Ft\nFizetett végösszeg: ${(Math.round(order.total_price) - discountAmount).toLocaleString("hu-HU")} Ft`
-        : `Rendelésszám: ${order.order_number}`,
+    comment: [
+      `Rendelésszám: ${order.order_number}`,
+      ...(discountAmount > 0
+        ? [
+            `Eredeti összeg: ${Math.round(order.total_price).toLocaleString("hu-HU")} Ft`,
+            `Kuponkedvezmény${couponCode ? ` (${couponCode})` : ""}: -${discountAmount.toLocaleString("hu-HU")} Ft`,
+            `Fizetett végösszeg: ${(Math.round(order.total_price) - discountAmount).toLocaleString("hu-HU")} Ft`,
+          ]
+        : []),
+      ...(reverseCharge ? [REVERSE_CHARGE_NOTE] : []),
+    ].join("\n"),
+
     settings: {
       order_number: order.order_number,
     },
