@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ServicePage } from "@/components/ServicePage";
 import { buildHead } from "@/lib/i18n/head";
-import heroImageAsset from "@/assets/oktatas.jpg.asset.json";
+import heroImage from "@/assets/oktatas.jpg";
 
-const heroImage = heroImageAsset.url;
 
 const TITLE = "Training: accounting, tax and Power BI courses | EXCELlent Business Intelligence";
 const DESCRIPTION =
