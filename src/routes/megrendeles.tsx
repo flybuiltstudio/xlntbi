@@ -12,6 +12,7 @@ import { isCardPaymentAvailable } from "@/lib/stripe";
 import { formatPrice, getProduct, getTier, products } from "@/lib/products";
 import { submitOrder } from "@/lib/order.functions";
 import { checkTaxNumber } from "@/lib/tax-number";
+import { euVatPrefix } from "@/lib/eu-vat";
 
 const TITLE = "Megrendelés | EXCELlent digitális termékek";
 const DESC =
@@ -64,6 +65,7 @@ function OrderPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
   const [taxError, setTaxError] = useState("");
+  const [taxValue, setTaxValue] = useState("");
 
   const product = getProduct(slug) ?? orderable[0]!;
   const tier = getTier(product, tierId);
