@@ -8,7 +8,7 @@ import heroImage from "@/assets/ev-konyveles-poster.jpg";
 const TITLE = "Self-employed bookkeeping – KATA & flat-rate | EXCELlent Business Intelligence";
 const DESCRIPTION =
   "Bookkeeping for KATA and flat-rate self-employed entrepreneurs at favourable rates, with automated processes and 20 years of professional experience.";
-const CANONICAL = "https://xlntbi.hu/se-bookkeeping";
+const CANONICAL = "https://xlntbi.hu/en/sole-trader-bookkeeping";
 const OG_IMAGE = "https://xlntbi.hu/og/ev-konyveles-poster.jpg";
 const HU_URL = "https://xlntbi.hu/ev-konyveles";
 
@@ -42,7 +42,7 @@ const scopeItems = [
   "Professional help with individual questions",
 ];
 
-export const Route = createFileRoute("/se-bookkeeping")({
+export const Route = createFileRoute("/en/sole-trader-bookkeeping")({
   head: () => ({
     meta: [
       { title: TITLE },
@@ -61,8 +61,8 @@ export const Route = createFileRoute("/se-bookkeeping")({
     ],
     links: [
       { rel: "canonical", href: CANONICAL },
-      { rel: "alternate", hreflang: "en", href: CANONICAL },
-      { rel: "alternate", hreflang: "hu", href: HU_URL },
+      { rel: "alternate", hrefLang: "en", href: CANONICAL }, { rel: "alternate", hrefLang: "x-default", href: HU_URL },
+      { rel: "alternate", hrefLang: "hu", href: HU_URL },
     ],
     scripts: [
       {
@@ -89,7 +89,7 @@ export const Route = createFileRoute("/se-bookkeeping")({
           "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: "https://xlntbi.hu/" },
-            { "@type": "ListItem", position: 2, name: "Services", item: "https://xlntbi.hu/szolgaltatasaim" },
+            { "@type": "ListItem", position: 2, name: "Services", item: "https://xlntbi.hu/en/services" },
             { "@type": "ListItem", position: 3, name: "SE bookkeeping", item: CANONICAL },
           ],
         }),
@@ -166,7 +166,7 @@ function SeBookkeepingPage() {
             to where it is truly needed, while the service fee stays favourable.
           </p>
           <Link
-            to="/konzultacio"
+            to="/en/consultation"
             className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
           >
             Request a consultation
@@ -302,7 +302,7 @@ function SeBookkeepingPage() {
             business.
           </p>
           <Link
-            to="/konzultacio"
+            to="/en/consultation"
             className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
           >
             Request a consultation
