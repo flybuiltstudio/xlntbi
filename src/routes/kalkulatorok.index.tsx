@@ -30,6 +30,9 @@ export const Route = createFileRoute("/kalkulatorok/")({
     ],
     links: [
       { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/kalkulatorok" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/en/calculators" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/kalkulatorok" },
     ],
     scripts: [
       {
