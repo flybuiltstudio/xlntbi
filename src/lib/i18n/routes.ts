@@ -68,6 +68,9 @@ export function counterpartPath(pathname: string, target: Lang): string {
   const p = normalise(pathname);
   const pair = ROUTE_PAIRS.find((r) => r.hu === p || r.en === p);
   if (pair) return target === "en" ? pair.en : pair.hu;
+  // No counterpart (product, order, newsletter pages): staying on the
+  // current page beats dropping the visitor on the home page.
+  if (langFromPath(p) === target) return pathname || "/";
   return target === "en" ? "/en" : "/";
 }
 
