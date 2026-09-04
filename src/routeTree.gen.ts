@@ -64,6 +64,7 @@ import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as EnControllingRouteImport } from './routes/en.controlling'
 import { Route as EnDigitalTimeSavingAuditRouteImport } from './routes/en.digital-time-saving-audit'
 import { Route as EnFintechAndBiRouteImport } from './routes/en.fintech-and-bi'
+import { Route as EnProductsRouteImport } from './routes/en.products'
 import { Route as EnServicesRouteImport } from './routes/en.services'
 import { Route as EnSoleTraderBookkeepingRouteImport } from './routes/en.sole-trader-bookkeeping'
 import { Route as EnStatutoryAuditRouteImport } from './routes/en.statutory-audit'
@@ -394,6 +395,11 @@ const EnDigitalTimeSavingAuditRoute =
 const EnFintechAndBiRoute = EnFintechAndBiRouteImport.update({
   id: '/fintech-and-bi',
   path: '/fintech-and-bi',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnProductsRoute = EnProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => EnRoute,
 } as any)
 const EnServicesRoute = EnServicesRouteImport.update({
@@ -747,6 +753,7 @@ export interface FileRoutesByFullPath {
   '/en/controlling': typeof EnControllingRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
+  '/en/products': typeof EnProductsRoute
   '/en/services': typeof EnServicesRoute
   '/en/sole-trader-bookkeeping': typeof EnSoleTraderBookkeepingRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
@@ -855,6 +862,7 @@ export interface FileRoutesByTo {
   '/en/controlling': typeof EnControllingRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
+  '/en/products': typeof EnProductsRoute
   '/en/services': typeof EnServicesRoute
   '/en/sole-trader-bookkeeping': typeof EnSoleTraderBookkeepingRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
@@ -966,6 +974,7 @@ export interface FileRoutesById {
   '/en/controlling': typeof EnControllingRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
+  '/en/products': typeof EnProductsRoute
   '/en/services': typeof EnServicesRoute
   '/en/sole-trader-bookkeeping': typeof EnSoleTraderBookkeepingRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
@@ -1078,6 +1087,7 @@ export interface FileRouteTypes {
     | '/en/controlling'
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
+    | '/en/products'
     | '/en/services'
     | '/en/sole-trader-bookkeeping'
     | '/en/statutory-audit'
@@ -1186,6 +1196,7 @@ export interface FileRouteTypes {
     | '/en/controlling'
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
+    | '/en/products'
     | '/en/services'
     | '/en/sole-trader-bookkeeping'
     | '/en/statutory-audit'
@@ -1296,6 +1307,7 @@ export interface FileRouteTypes {
     | '/en/controlling'
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
+    | '/en/products'
     | '/en/services'
     | '/en/sole-trader-bookkeeping'
     | '/en/statutory-audit'
@@ -1823,6 +1835,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnFintechAndBiRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/products': {
+      id: '/en/products'
+      path: '/products'
+      fullPath: '/en/products'
+      preLoaderRoute: typeof EnProductsRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/en/services': {
       id: '/en/services'
       path: '/services'
@@ -2241,6 +2260,7 @@ interface EnRouteChildren {
   EnControllingRoute: typeof EnControllingRoute
   EnDigitalTimeSavingAuditRoute: typeof EnDigitalTimeSavingAuditRoute
   EnFintechAndBiRoute: typeof EnFintechAndBiRoute
+  EnProductsRoute: typeof EnProductsRoute
   EnServicesRoute: typeof EnServicesRoute
   EnSoleTraderBookkeepingRoute: typeof EnSoleTraderBookkeepingRoute
   EnStatutoryAuditRoute: typeof EnStatutoryAuditRoute
@@ -2259,6 +2279,7 @@ const EnRouteChildren: EnRouteChildren = {
   EnControllingRoute: EnControllingRoute,
   EnDigitalTimeSavingAuditRoute: EnDigitalTimeSavingAuditRoute,
   EnFintechAndBiRoute: EnFintechAndBiRoute,
+  EnProductsRoute: EnProductsRoute,
   EnServicesRoute: EnServicesRoute,
   EnSoleTraderBookkeepingRoute: EnSoleTraderBookkeepingRoute,
   EnStatutoryAuditRoute: EnStatutoryAuditRoute,
