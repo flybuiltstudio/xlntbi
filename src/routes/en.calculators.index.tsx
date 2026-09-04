@@ -66,8 +66,8 @@ function EnglishCalculators() {
                 onError={(e) => {
                   // Missing asset: fall back to a neutral placeholder instead of a broken image.
                   const img = e.currentTarget;
-                  if (img.dataset.fallback) return;
-                  img.dataset.fallback = "1";
+                  if (img.dataset['fallback']) return;
+                  img.dataset['fallback'] = "1";
                   img.src = fallbackImg;
                 }}
                 className="h-56 w-full object-cover"
