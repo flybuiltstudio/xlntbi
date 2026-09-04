@@ -78,6 +78,14 @@ function OrderPage() {
     | { state: "invalid" }
     | { state: "unknown" }
   >({ state: "idle" });
+  const [navState, setNavState] = useState<
+    | { state: "idle" }
+    | { state: "checking" }
+    | { state: "valid"; name: string | null }
+    | { state: "invalid" }
+    | { state: "unknown" }
+  >({ state: "idle" });
+
 
   const product = getProduct(slug) ?? orderable[0]!;
   const tier = getTier(product, tierId);
