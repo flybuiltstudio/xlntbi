@@ -65,6 +65,7 @@ import { Route as EnFintechAndBiRouteImport } from './routes/en.fintech-and-bi'
 import { Route as EnServicesRouteImport } from './routes/en.services'
 import { Route as EnStatutoryAuditRouteImport } from './routes/en.statutory-audit'
 import { Route as EnTaxAdvisoryRouteImport } from './routes/en.tax-advisory'
+import { Route as EnTrainingRouteImport } from './routes/en.training'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokAtalanyadoRouteImport } from './routes/kalkulatorok.atalanyado'
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
@@ -397,6 +398,11 @@ const EnTaxAdvisoryRoute = EnTaxAdvisoryRouteImport.update({
   path: '/tax-advisory',
   getParentRoute: () => EnRoute,
 } as any)
+const EnTrainingRoute = EnTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => EnRoute,
+} as any)
 const KalkulatorokIndexRoute = KalkulatorokIndexRouteImport.update({
   id: '/kalkulatorok/',
   path: '/kalkulatorok/',
@@ -724,6 +730,7 @@ export interface FileRoutesByFullPath {
   '/en/services': typeof EnServicesRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
+  '/en/training': typeof EnTrainingRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -828,6 +835,7 @@ export interface FileRoutesByTo {
   '/en/services': typeof EnServicesRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
+  '/en/training': typeof EnTrainingRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -935,6 +943,7 @@ export interface FileRoutesById {
   '/en/services': typeof EnServicesRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
+  '/en/training': typeof EnTrainingRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -1043,6 +1052,7 @@ export interface FileRouteTypes {
     | '/en/services'
     | '/en/statutory-audit'
     | '/en/tax-advisory'
+    | '/en/training'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -1147,6 +1157,7 @@ export interface FileRouteTypes {
     | '/en/services'
     | '/en/statutory-audit'
     | '/en/tax-advisory'
+    | '/en/training'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -1253,6 +1264,7 @@ export interface FileRouteTypes {
     | '/en/services'
     | '/en/statutory-audit'
     | '/en/tax-advisory'
+    | '/en/training'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -1782,6 +1794,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnTaxAdvisoryRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/training': {
+      id: '/en/training'
+      path: '/training'
+      fullPath: '/en/training'
+      preLoaderRoute: typeof EnTrainingRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/kalkulatorok/': {
       id: '/kalkulatorok/'
       path: '/kalkulatorok'
@@ -2166,6 +2185,7 @@ interface EnRouteChildren {
   EnServicesRoute: typeof EnServicesRoute
   EnStatutoryAuditRoute: typeof EnStatutoryAuditRoute
   EnTaxAdvisoryRoute: typeof EnTaxAdvisoryRoute
+  EnTrainingRoute: typeof EnTrainingRoute
   EnIndexRoute: typeof EnIndexRoute
 }
 
@@ -2180,6 +2200,7 @@ const EnRouteChildren: EnRouteChildren = {
   EnServicesRoute: EnServicesRoute,
   EnStatutoryAuditRoute: EnStatutoryAuditRoute,
   EnTaxAdvisoryRoute: EnTaxAdvisoryRoute,
+  EnTrainingRoute: EnTrainingRoute,
   EnIndexRoute: EnIndexRoute,
 }
 
