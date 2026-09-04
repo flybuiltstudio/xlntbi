@@ -38,7 +38,6 @@ import { Route as MegrendelesRouteImport } from './routes/megrendeles'
 import { Route as OktatasRouteImport } from './routes/oktatas'
 import { Route as RolamRouteImport } from './routes/rolam'
 import { Route as SeRouteImport } from './routes/se'
-import { Route as SeBookkeepingRouteImport } from './routes/se-bookkeeping'
 import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
 import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -64,6 +63,7 @@ import { Route as EnControllingRouteImport } from './routes/en.controlling'
 import { Route as EnDigitalTimeSavingAuditRouteImport } from './routes/en.digital-time-saving-audit'
 import { Route as EnFintechAndBiRouteImport } from './routes/en.fintech-and-bi'
 import { Route as EnServicesRouteImport } from './routes/en.services'
+import { Route as EnSoleTraderBookkeepingRouteImport } from './routes/en.sole-trader-bookkeeping'
 import { Route as EnStatutoryAuditRouteImport } from './routes/en.statutory-audit'
 import { Route as EnTaxAdvisoryRouteImport } from './routes/en.tax-advisory'
 import { Route as EnTrainingRouteImport } from './routes/en.training'
@@ -262,11 +262,6 @@ const SeRoute = SeRouteImport.update({
   path: '/se',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SeBookkeepingRoute = SeBookkeepingRouteImport.update({
-  id: '/se-bookkeeping',
-  path: '/se-bookkeeping',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SzolgaltatasaimRoute = SzolgaltatasaimRouteImport.update({
   id: '/szolgaltatasaim',
   path: '/szolgaltatasaim',
@@ -392,6 +387,11 @@ const EnFintechAndBiRoute = EnFintechAndBiRouteImport.update({
 const EnServicesRoute = EnServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnSoleTraderBookkeepingRoute = EnSoleTraderBookkeepingRouteImport.update({
+  id: '/sole-trader-bookkeeping',
+  path: '/sole-trader-bookkeeping',
   getParentRoute: () => EnRoute,
 } as any)
 const EnStatutoryAuditRoute = EnStatutoryAuditRouteImport.update({
@@ -711,7 +711,6 @@ export interface FileRoutesByFullPath {
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
   '/se': typeof SeRoute
-  '/se-bookkeeping': typeof SeBookkeepingRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
@@ -735,6 +734,7 @@ export interface FileRoutesByFullPath {
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
   '/en/services': typeof EnServicesRoute
+  '/en/sole-trader-bookkeeping': typeof EnSoleTraderBookkeepingRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
   '/en/training': typeof EnTrainingRoute
@@ -817,7 +817,6 @@ export interface FileRoutesByTo {
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
   '/se': typeof SeRoute
-  '/se-bookkeeping': typeof SeBookkeepingRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
@@ -841,6 +840,7 @@ export interface FileRoutesByTo {
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
   '/en/services': typeof EnServicesRoute
+  '/en/sole-trader-bookkeeping': typeof EnSoleTraderBookkeepingRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
   '/en/training': typeof EnTrainingRoute
@@ -926,7 +926,6 @@ export interface FileRoutesById {
   '/oktatas': typeof OktatasRoute
   '/rolam': typeof RolamRoute
   '/se': typeof SeRoute
-  '/se-bookkeeping': typeof SeBookkeepingRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
@@ -950,6 +949,7 @@ export interface FileRoutesById {
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
   '/en/services': typeof EnServicesRoute
+  '/en/sole-trader-bookkeeping': typeof EnSoleTraderBookkeepingRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
   '/en/training': typeof EnTrainingRoute
@@ -1036,7 +1036,6 @@ export interface FileRouteTypes {
     | '/oktatas'
     | '/rolam'
     | '/se'
-    | '/se-bookkeeping'
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/admin/billingo-ellenorzes'
@@ -1060,6 +1059,7 @@ export interface FileRouteTypes {
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
     | '/en/services'
+    | '/en/sole-trader-bookkeeping'
     | '/en/statutory-audit'
     | '/en/tax-advisory'
     | '/en/training'
@@ -1142,7 +1142,6 @@ export interface FileRouteTypes {
     | '/oktatas'
     | '/rolam'
     | '/se'
-    | '/se-bookkeeping'
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/admin/billingo-ellenorzes'
@@ -1166,6 +1165,7 @@ export interface FileRouteTypes {
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
     | '/en/services'
+    | '/en/sole-trader-bookkeeping'
     | '/en/statutory-audit'
     | '/en/tax-advisory'
     | '/en/training'
@@ -1250,7 +1250,6 @@ export interface FileRouteTypes {
     | '/oktatas'
     | '/rolam'
     | '/se'
-    | '/se-bookkeeping'
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/admin/billingo-ellenorzes'
@@ -1274,6 +1273,7 @@ export interface FileRouteTypes {
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
     | '/en/services'
+    | '/en/sole-trader-bookkeeping'
     | '/en/statutory-audit'
     | '/en/tax-advisory'
     | '/en/training'
@@ -1359,7 +1359,6 @@ export interface RootRouteChildren {
   OktatasRoute: typeof OktatasRoute
   RolamRoute: typeof RolamRoute
   SeRoute: typeof SeRoute
-  SeBookkeepingRoute: typeof SeBookkeepingRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
   TermekeimRoute: typeof TermekeimRoute
   KalkulatorokAtalanyadoRoute: typeof KalkulatorokAtalanyadoRoute
@@ -1617,13 +1616,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/se-bookkeeping': {
-      id: '/se-bookkeeping'
-      path: '/se-bookkeeping'
-      fullPath: '/se-bookkeeping'
-      preLoaderRoute: typeof SeBookkeepingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/szolgaltatasaim': {
       id: '/szolgaltatasaim'
       path: '/szolgaltatasaim'
@@ -1797,6 +1789,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/en/services'
       preLoaderRoute: typeof EnServicesRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/sole-trader-bookkeeping': {
+      id: '/en/sole-trader-bookkeeping'
+      path: '/sole-trader-bookkeeping'
+      fullPath: '/en/sole-trader-bookkeeping'
+      preLoaderRoute: typeof EnSoleTraderBookkeepingRouteImport
       parentRoute: typeof EnRoute
     }
     '/en/statutory-audit': {
@@ -2203,6 +2202,7 @@ interface EnRouteChildren {
   EnDigitalTimeSavingAuditRoute: typeof EnDigitalTimeSavingAuditRoute
   EnFintechAndBiRoute: typeof EnFintechAndBiRoute
   EnServicesRoute: typeof EnServicesRoute
+  EnSoleTraderBookkeepingRoute: typeof EnSoleTraderBookkeepingRoute
   EnStatutoryAuditRoute: typeof EnStatutoryAuditRoute
   EnTaxAdvisoryRoute: typeof EnTaxAdvisoryRoute
   EnTrainingRoute: typeof EnTrainingRoute
@@ -2219,6 +2219,7 @@ const EnRouteChildren: EnRouteChildren = {
   EnDigitalTimeSavingAuditRoute: EnDigitalTimeSavingAuditRoute,
   EnFintechAndBiRoute: EnFintechAndBiRoute,
   EnServicesRoute: EnServicesRoute,
+  EnSoleTraderBookkeepingRoute: EnSoleTraderBookkeepingRoute,
   EnStatutoryAuditRoute: EnStatutoryAuditRoute,
   EnTaxAdvisoryRoute: EnTaxAdvisoryRoute,
   EnTrainingRoute: EnTrainingRoute,
@@ -2257,7 +2258,6 @@ const rootRouteChildren: RootRouteChildren = {
   OktatasRoute: OktatasRoute,
   RolamRoute: RolamRoute,
   SeRoute: SeRoute,
-  SeBookkeepingRoute: SeBookkeepingRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
   TermekeimRoute: TermekeimRoute,
   KalkulatorokAtalanyadoRoute: KalkulatorokAtalanyadoRoute,
