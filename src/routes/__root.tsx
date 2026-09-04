@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -15,6 +16,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CookieConsent } from "@/components/CookieConsent";
 import { initAnalytics } from "@/lib/analytics";
+import { langFromPath, useLanguagePersistence } from "@/lib/i18n";
 
 
 
@@ -116,8 +118,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
-    <html lang="hu">
+    <html lang={langFromPath(pathname)}>
       <head>
         <HeadContent />
       </head>
@@ -132,6 +135,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  useLanguagePersistence();
 
   useEffect(() => {
     // Initialise Google Analytics (only loads after statistics consent).
