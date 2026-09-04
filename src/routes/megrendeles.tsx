@@ -49,6 +49,7 @@ function OrderPage() {
   const { termek, csomag } = Route.useSearch();
   const submit = useServerFn(submitOrder);
   const verifyEuVat = useServerFn(checkEuVat);
+  const verifyNavTax = useServerFn(checkNavTax);
 
   const orderable = products.filter((p) => p.status === "available");
   const initialSlug =
