@@ -19,7 +19,7 @@ const STORAGE_KEY = "xlntbi-lang";
  * Language switching and localised navigation build paths at runtime, so the
  * typed literal union cannot be used. This is the single narrow cast for it.
  */
-export type RoutePath = LinkProps["to"];
+export type RoutePath = NonNullable<LinkProps["to"]>;
 export const asPath = (path: string): RoutePath => path as RoutePath;
 
 export function storeLang(lang: Lang) {
