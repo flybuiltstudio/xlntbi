@@ -54,6 +54,7 @@ import { Route as AdminNavEllenorzesRouteImport } from './routes/admin.nav-ellen
 import { Route as AdminRendelesiAuditRouteImport } from './routes/admin.rendelesi-audit'
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as AdminSzamlazasRouteImport } from './routes/admin.szamlazas'
+import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as EnAccountingFirmAuditRouteImport } from './routes/en.accounting-firm-audit'
 import { Route as EnBookkeepingRouteImport } from './routes/en.bookkeeping'
 import { Route as EnCompanyAuditRouteImport } from './routes/en.company-audit'
@@ -337,6 +338,11 @@ const AdminSzamlazasRoute = AdminSzamlazasRouteImport.update({
   id: '/szamlazas',
   path: '/szamlazas',
   getParentRoute: () => AdminRoute,
+} as any)
+const EnIndexRoute = EnIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EnRoute,
 } as any)
 const EnAccountingFirmAuditRoute = EnAccountingFirmAuditRouteImport.update({
   id: '/accounting-firm-audit',
@@ -745,6 +751,7 @@ export interface FileRoutesByFullPath {
   '/termek/utnyilvantartas-kikuldetesi-rendelveny': typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
   '/termek/wifi-jelszo-nezo': typeof TermekWifiJelszoNezoRoute
   '/admin/': typeof AdminIndexRoute
+  '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
@@ -763,7 +770,6 @@ export interface FileRoutesByTo {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
-  '/en': typeof EnRouteWithChildren
   '/ev': typeof EvRoute
   '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
@@ -847,6 +853,7 @@ export interface FileRoutesByTo {
   '/termek/utnyilvantartas-kikuldetesi-rendelveny': typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
   '/termek/wifi-jelszo-nezo': typeof TermekWifiJelszoNezoRoute
   '/admin': typeof AdminIndexRoute
+  '/en': typeof EnIndexRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
@@ -951,6 +958,7 @@ export interface FileRoutesById {
   '/termek/utnyilvantartas-kikuldetesi-rendelveny': typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
   '/termek/wifi-jelszo-nezo': typeof TermekWifiJelszoNezoRoute
   '/admin/': typeof AdminIndexRoute
+  '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
@@ -1056,6 +1064,7 @@ export interface FileRouteTypes {
     | '/termek/utnyilvantartas-kikuldetesi-rendelveny'
     | '/termek/wifi-jelszo-nezo'
     | '/admin/'
+    | '/en/'
     | '/kalkulatorok/'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
@@ -1074,7 +1083,6 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
-    | '/en'
     | '/ev'
     | '/ev-konyveles'
     | '/fintech-es-bi'
@@ -1158,6 +1166,7 @@ export interface FileRouteTypes {
     | '/termek/utnyilvantartas-kikuldetesi-rendelveny'
     | '/termek/wifi-jelszo-nezo'
     | '/admin'
+    | '/en'
     | '/kalkulatorok'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
@@ -1261,6 +1270,7 @@ export interface FileRouteTypes {
     | '/termek/utnyilvantartas-kikuldetesi-rendelveny'
     | '/termek/wifi-jelszo-nezo'
     | '/admin/'
+    | '/en/'
     | '/kalkulatorok/'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
@@ -1670,6 +1680,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/szamlazas'
       preLoaderRoute: typeof AdminSzamlazasRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/en/': {
+      id: '/en/'
+      path: '/'
+      fullPath: '/en/'
+      preLoaderRoute: typeof EnIndexRouteImport
+      parentRoute: typeof EnRoute
     }
     '/en/accounting-firm-audit': {
       id: '/en/accounting-firm-audit'
@@ -2109,6 +2126,7 @@ interface EnRouteChildren {
   EnFintechAndBiRoute: typeof EnFintechAndBiRoute
   EnStatutoryAuditRoute: typeof EnStatutoryAuditRoute
   EnTaxAdvisoryRoute: typeof EnTaxAdvisoryRoute
+  EnIndexRoute: typeof EnIndexRoute
 }
 
 const EnRouteChildren: EnRouteChildren = {
@@ -2120,6 +2138,7 @@ const EnRouteChildren: EnRouteChildren = {
   EnFintechAndBiRoute: EnFintechAndBiRoute,
   EnStatutoryAuditRoute: EnStatutoryAuditRoute,
   EnTaxAdvisoryRoute: EnTaxAdvisoryRoute,
+  EnIndexRoute: EnIndexRoute,
 }
 
 const EnRouteWithChildren = EnRoute._addFileChildren(EnRouteChildren)
