@@ -12,6 +12,7 @@ import { isCardPaymentAvailable } from "@/lib/stripe";
 import { formatPrice, getProduct, getTier, products } from "@/lib/products";
 import { submitOrder } from "@/lib/order.functions";
 import { checkTaxNumber } from "@/lib/tax-number";
+import { euVatPrefix } from "@/lib/eu-vat";
 
 const TITLE = "Megrendelés | EXCELlent digitális termékek";
 const DESC =
@@ -64,6 +65,7 @@ function OrderPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
   const [taxError, setTaxError] = useState("");
+  const [taxValue, setTaxValue] = useState("");
 
   const product = getProduct(slug) ?? orderable[0]!;
   const tier = getTier(product, tierId);
@@ -281,24 +283,34 @@ function OrderPage() {
             <input name="companyName" maxLength={160} className={inputClass} />
           </label>
           <label className="block text-sm font-medium text-foreground">
-            Adószám
+            Adószám / EU adószám
             <input
               name="taxNumber"
               maxLength={40}
               inputMode="text"
-              placeholder="12345678-1-42"
+              placeholder="12345678-1-42 vagy DE123456789"
               aria-invalid={taxError ? true : undefined}
-              onChange={() => taxError && setTaxError("")}
+              onChange={(e) => {
+                if (taxError) setTaxError("");
+                setTaxValue(e.currentTarget.value);
+              }}
               className={inputClass}
             />
             {taxError ? (
               <span className="mt-1.5 block text-xs font-normal text-destructive">{taxError}</span>
+            ) : euVatPrefix(taxValue) && euVatPrefix(taxValue) !== "HU" ? (
+              <span className="mt-1.5 block text-xs font-normal text-muted-foreground">
+                EU-s adószámot adtál meg – a számla fordított adózással (reverse charge) készül,
+                az áfát a vevő rendezi a saját országában.
+              </span>
             ) : (
               <span className="mt-1.5 block text-xs font-normal text-muted-foreground">
-                Csak cégnél / egyéni vállalkozónál. Magyar formátum: 12345678-1-42
+                Csak cégnél / egyéni vállalkozónál. Magyar formátum: 12345678-1-42, EU-s adószám
+                országkóddal: pl. DE123456789, ATU12345678, SK2020123456
               </span>
             )}
           </label>
+
           <label className="block text-sm font-medium text-foreground">
             Ország *
             <input

@@ -1,5 +1,11 @@
 import { couponInvoiceLineName } from "./coupon-amount";
-import { REVERSE_CHARGE_NOTE, VAT_KEYS, vatTreatmentFor } from "./eu-vat";
+import {
+  euVatPrefix,
+  isEuReverseCharge,
+  REVERSE_CHARGE_NOTE,
+  VAT_KEYS,
+  vatTreatmentFor,
+} from "./eu-vat";
 import { withXlntPrefix } from "./product-name";
 /**
  * Billingo.hu API v3 integration.
@@ -95,16 +101,61 @@ function countryCode(name: string): string {
     "magyar koztarsasag": "HU",
     németország: "DE",
     germany: "DE",
+    deutschland: "DE",
     ausztria: "AT",
     austria: "AT",
+    österreich: "AT",
     szlovákia: "SK",
     slovakia: "SK",
+    szlovénia: "SI",
+    slovenia: "SI",
     románia: "RO",
     romania: "RO",
     horvátország: "HR",
     croatia: "HR",
     szerbia: "RS",
     serbia: "RS",
+    csehország: "CZ",
+    "cseh köztársaság": "CZ",
+    czechia: "CZ",
+    "czech republic": "CZ",
+    lengyelország: "PL",
+    poland: "PL",
+    hollandia: "NL",
+    netherlands: "NL",
+    belgium: "BE",
+    franciaország: "FR",
+    france: "FR",
+    olaszország: "IT",
+    italy: "IT",
+    spanyolország: "ES",
+    spain: "ES",
+    portugália: "PT",
+    portugal: "PT",
+    írország: "IE",
+    ireland: "IE",
+    dánia: "DK",
+    denmark: "DK",
+    svédország: "SE",
+    sweden: "SE",
+    finnország: "FI",
+    finland: "FI",
+    észtország: "EE",
+    estonia: "EE",
+    lettország: "LV",
+    latvia: "LV",
+    litvánia: "LT",
+    lithuania: "LT",
+    luxemburg: "LU",
+    luxembourg: "LU",
+    bulgária: "BG",
+    bulgaria: "BG",
+    görögország: "GR",
+    greece: "GR",
+    ciprus: "CY",
+    cyprus: "CY",
+    málta: "MT",
+    malta: "MT",
     uk: "GB",
     "egyesült királyság": "GB",
     "united kingdom": "GB",
@@ -114,10 +165,29 @@ function countryCode(name: string): string {
   return "HU";
 }
 
-/** Tax type for the partner: HAS_TAX_NUMBER when an adószám is present. */
-function partnerTaxType(taxNumber: string | null): string {
-  return taxNumber ? "HAS_TAX_NUMBER" : "NO_TAX_NUMBER";
+/**
+ * Country code for the Billingo partner. When the buyer gave an EU VAT number
+ * of another member state, that prefix is the authoritative country (the free
+ * text "Ország" field can be spelled anything), so it wins over the name map.
+ */
+function partnerCountryCode(order: OrderRow): string {
+  const prefix = euVatPrefix(order.tax_number);
+  if (prefix && prefix !== "HU") return prefix === "EL" ? "GR" : prefix === "XI" ? "GB" : prefix;
+  return countryCode(order.country);
 }
+
+/**
+ * Tax type for the partner. A buyer with an EU VAT number from another member
+ * state must be created as a foreign partner, otherwise Billingo rejects the
+ * reverse-charge (EUFAD37) invoice. Non-EU buyers outside Hungary are foreign
+ * as well; domestic buyers depend on whether they gave an adószám.
+ */
+function partnerTaxType(order: OrderRow): string {
+  if (isEuReverseCharge(order.tax_number)) return "FOREIGN";
+  if (partnerCountryCode(order) !== "HU") return "FOREIGN";
+  return order.tax_number ? "HAS_TAX_NUMBER" : "NO_TAX_NUMBER";
+}
+
 
 /** Picks the document block matching the fulfilment year, falling back to the latest invoice block. */
 async function resolveBlockId(fulfilmentYear: number): Promise<number> {
@@ -136,6 +206,20 @@ async function resolveBlockId(fulfilmentYear: number): Promise<number> {
 
 /** Finds an existing partner by email or tax number, otherwise creates one. Returns the partner id. */
 async function findOrCreatePartner(order: OrderRow): Promise<number> {
+  const partner = {
+    name: order.company_name || order.billing_name,
+    address: {
+      country_code: partnerCountryCode(order),
+      post_code: order.postal_code,
+      city: order.city,
+      address: order.address_line,
+    },
+    emails: order.email ? [order.email] : [],
+    taxcode: order.tax_number ?? "",
+    phone: order.phone,
+    tax_type: partnerTaxType(order),
+  };
+
   // Try to find by email.
   if (order.email) {
     const data = await billingo(
@@ -145,22 +229,26 @@ async function findOrCreatePartner(order: OrderRow): Promise<number> {
     const match = partners.find((p) =>
       (p.emails ?? []).some((e: string) => e.toLowerCase() === order.email.toLowerCase()),
     );
-    if (match && typeof match.id === "number") return match.id;
+    if (match && typeof match.id === "number") {
+      // An older record may still be domestic; a reverse-charge invoice is only
+      // accepted for a FOREIGN partner, so bring the stored partner in line.
+      const needsUpdate =
+        match.tax_type !== partner.tax_type ||
+        (match.address?.country_code ?? "") !== partner.address.country_code ||
+        (match.taxcode ?? "") !== partner.taxcode;
+      if (needsUpdate) {
+        try {
+          await billingo(`/partners/${match.id}`, {
+            method: "PUT",
+            body: JSON.stringify({ ...match, ...partner }),
+          });
+        } catch (e: any) {
+          console.error("Billingo partner frissítése nem sikerült:", e?.message ?? e);
+        }
+      }
+      return match.id;
+    }
   }
-
-  const partner = {
-    name: order.company_name || order.billing_name,
-    address: {
-      country_code: countryCode(order.country),
-      post_code: order.postal_code,
-      city: order.city,
-      address: order.address_line,
-    },
-    emails: order.email ? [order.email] : [],
-    taxcode: order.tax_number ?? "",
-    phone: order.phone,
-    tax_type: partnerTaxType(order.tax_number),
-  };
 
   const created = await billingo(`/partners`, {
     method: "POST",
@@ -171,6 +259,7 @@ async function findOrCreatePartner(order: OrderRow): Promise<number> {
   }
   return created.id;
 }
+
 
 function paymentMethodFor(order: OrderRow): string {
   // bankcard for card payments (Stripe), elore_utalas for bank transfers.
