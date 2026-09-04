@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 
 import { template as belsoKatalogusAudit } from './belso-katalogus-audit'
+import { template as belsoNavHiba } from './belso-nav-hiba'
 import { template as belsoRendelesErtesito } from './belso-rendeles-ertesito'
 import { template as belsoUrlapErtesito } from './belso-urlap-ertesito'
 import { template as hirlevel } from './hirlevel'
