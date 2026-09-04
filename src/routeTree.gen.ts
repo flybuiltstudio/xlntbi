@@ -59,6 +59,7 @@ import { Route as EnAboutRouteImport } from './routes/en.about'
 import { Route as EnAccountingFirmAuditRouteImport } from './routes/en.accounting-firm-audit'
 import { Route as EnBookkeepingRouteImport } from './routes/en.bookkeeping'
 import { Route as EnCompanyAuditRouteImport } from './routes/en.company-audit'
+import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as EnControllingRouteImport } from './routes/en.controlling'
 import { Route as EnDigitalTimeSavingAuditRouteImport } from './routes/en.digital-time-saving-audit'
 import { Route as EnFintechAndBiRouteImport } from './routes/en.fintech-and-bi'
@@ -365,6 +366,11 @@ const EnBookkeepingRoute = EnBookkeepingRouteImport.update({
 const EnCompanyAuditRoute = EnCompanyAuditRouteImport.update({
   id: '/company-audit',
   path: '/company-audit',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnContactRoute = EnContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => EnRoute,
 } as any)
 const EnControllingRoute = EnControllingRouteImport.update({
@@ -724,6 +730,7 @@ export interface FileRoutesByFullPath {
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
+  '/en/contact': typeof EnContactRoute
   '/en/controlling': typeof EnControllingRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
@@ -829,6 +836,7 @@ export interface FileRoutesByTo {
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
+  '/en/contact': typeof EnContactRoute
   '/en/controlling': typeof EnControllingRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
@@ -937,6 +945,7 @@ export interface FileRoutesById {
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
+  '/en/contact': typeof EnContactRoute
   '/en/controlling': typeof EnControllingRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
@@ -1046,6 +1055,7 @@ export interface FileRouteTypes {
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
     | '/en/company-audit'
+    | '/en/contact'
     | '/en/controlling'
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
@@ -1151,6 +1161,7 @@ export interface FileRouteTypes {
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
     | '/en/company-audit'
+    | '/en/contact'
     | '/en/controlling'
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
@@ -1258,6 +1269,7 @@ export interface FileRouteTypes {
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
     | '/en/company-audit'
+    | '/en/contact'
     | '/en/controlling'
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
@@ -1752,6 +1764,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnCompanyAuditRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/contact': {
+      id: '/en/contact'
+      path: '/contact'
+      fullPath: '/en/contact'
+      preLoaderRoute: typeof EnContactRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/en/controlling': {
       id: '/en/controlling'
       path: '/controlling'
@@ -2179,6 +2198,7 @@ interface EnRouteChildren {
   EnAccountingFirmAuditRoute: typeof EnAccountingFirmAuditRoute
   EnBookkeepingRoute: typeof EnBookkeepingRoute
   EnCompanyAuditRoute: typeof EnCompanyAuditRoute
+  EnContactRoute: typeof EnContactRoute
   EnControllingRoute: typeof EnControllingRoute
   EnDigitalTimeSavingAuditRoute: typeof EnDigitalTimeSavingAuditRoute
   EnFintechAndBiRoute: typeof EnFintechAndBiRoute
@@ -2194,6 +2214,7 @@ const EnRouteChildren: EnRouteChildren = {
   EnAccountingFirmAuditRoute: EnAccountingFirmAuditRoute,
   EnBookkeepingRoute: EnBookkeepingRoute,
   EnCompanyAuditRoute: EnCompanyAuditRoute,
+  EnContactRoute: EnContactRoute,
   EnControllingRoute: EnControllingRoute,
   EnDigitalTimeSavingAuditRoute: EnDigitalTimeSavingAuditRoute,
   EnFintechAndBiRoute: EnFintechAndBiRoute,
