@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { submitContactForm } from "@/lib/contact.functions";
-import { asPath, useLocalPath, useT } from "@/lib/i18n";
+import { useLocalPath, useT } from "@/lib/i18n";
 
 type Props = {
   formType: "kapcsolat" | "konzultacio";
