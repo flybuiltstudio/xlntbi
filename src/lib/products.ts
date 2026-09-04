@@ -23,6 +23,7 @@ import kamatlekerdezoImg from "@/assets/kamatlekerdezo-potlekszamito.jpg";
 import navOnlineSzamlaImg from "@/assets/nav-online-szamla-letolto.jpg";
 import mnbEraImg from "@/assets/mnb-era-jelentesgenerator.jpg";
 import ingatlanalapMnbImg from "@/assets/ingatlanalap-mnb-jelentes-elokeszito.jpg";
+import kapcsoltsagEllenorzoImg from "@/assets/kapcsoltsag-ellenorzo.jpg";
 import kulcsSoftImportImg from "@/assets/kulcs-soft-kulfoldi-import.jpg";
 import novitaxImportImg from "@/assets/novitax-kulfoldi-import.jpg";
 
