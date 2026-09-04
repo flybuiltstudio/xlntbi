@@ -11,6 +11,7 @@ import { AAM_PRICE_NOTE_SHORT, aamText } from "@/lib/aam";
 import { isCardPaymentAvailable } from "@/lib/stripe";
 import { formatPrice, getProduct, getTier, products } from "@/lib/products";
 import { submitOrder } from "@/lib/order.functions";
+import { checkTaxNumber } from "@/lib/tax-number";
 
 const TITLE = "Megrendelés | EXCELlent digitális termékek";
 const DESC =
@@ -62,6 +63,7 @@ function OrderPage() {
   const [customerEmail, setCustomerEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
+  const [taxError, setTaxError] = useState("");
 
   const product = getProduct(slug) ?? orderable[0]!;
   const tier = getTier(product, tierId);
@@ -76,6 +78,17 @@ function OrderPage() {
     event.preventDefault();
     const form = event.currentTarget;
     const fd = new FormData(form);
+
+    const taxCheck = checkTaxNumber(String(fd.get("taxNumber") ?? ""));
+    if (!taxCheck.ok) {
+      setTaxError(taxCheck.error);
+      setStatus("error");
+      setErrorMessage(taxCheck.error);
+      form.querySelector<HTMLInputElement>('input[name="taxNumber"]')?.focus();
+      return;
+    }
+    setTaxError("");
+
     setStatus("sending");
     setErrorMessage("");
 
@@ -269,7 +282,22 @@ function OrderPage() {
           </label>
           <label className="block text-sm font-medium text-foreground">
             Adószám
-            <input name="taxNumber" maxLength={40} className={inputClass} />
+            <input
+              name="taxNumber"
+              maxLength={40}
+              inputMode="text"
+              placeholder="12345678-1-42"
+              aria-invalid={taxError ? true : undefined}
+              onChange={() => taxError && setTaxError("")}
+              className={inputClass}
+            />
+            {taxError ? (
+              <span className="mt-1.5 block text-xs font-normal text-destructive">{taxError}</span>
+            ) : (
+              <span className="mt-1.5 block text-xs font-normal text-muted-foreground">
+                Csak cégnél / egyéni vállalkozónál. Magyar formátum: 12345678-1-42
+              </span>
+            )}
           </label>
           <label className="block text-sm font-medium text-foreground">
             Ország *
