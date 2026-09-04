@@ -1,5 +1,11 @@
 import { couponInvoiceLineName } from "./coupon-amount";
-import { REVERSE_CHARGE_NOTE, VAT_KEYS, vatTreatmentFor } from "./eu-vat";
+import {
+  euVatPrefix,
+  isEuReverseCharge,
+  REVERSE_CHARGE_NOTE,
+  VAT_KEYS,
+  vatTreatmentFor,
+} from "./eu-vat";
 import { withXlntPrefix } from "./product-name";
 /**
  * Billingo.hu API v3 integration.
@@ -215,7 +221,7 @@ async function findOrCreatePartner(order: OrderRow): Promise<number> {
   const partner = {
     name: order.company_name || order.billing_name,
     address: {
-      country_code: countryCode(order.country),
+      country_code: partnerCountryCode(order),
       post_code: order.postal_code,
       city: order.city,
       address: order.address_line,
@@ -223,7 +229,7 @@ async function findOrCreatePartner(order: OrderRow): Promise<number> {
     emails: order.email ? [order.email] : [],
     taxcode: order.tax_number ?? "",
     phone: order.phone,
-    tax_type: partnerTaxType(order.tax_number),
+    tax_type: partnerTaxType(order),
   };
 
   const created = await billingo(`/partners`, {
