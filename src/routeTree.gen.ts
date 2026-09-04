@@ -60,15 +60,22 @@ import { Route as EnAccountingFirmAuditRouteImport } from './routes/en.accountin
 import { Route as EnBookkeepingRouteImport } from './routes/en.bookkeeping'
 import { Route as EnCompanyAuditRouteImport } from './routes/en.company-audit'
 import { Route as EnConsultationRouteImport } from './routes/en.consultation'
+import { Route as EnConsumerInformationRouteImport } from './routes/en.consumer-information'
 import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as EnControllingRouteImport } from './routes/en.controlling'
+import { Route as EnCookiePolicyRouteImport } from './routes/en.cookie-policy'
 import { Route as EnDigitalTimeSavingAuditRouteImport } from './routes/en.digital-time-saving-audit'
 import { Route as EnFintechAndBiRouteImport } from './routes/en.fintech-and-bi'
+import { Route as EnImprintRouteImport } from './routes/en.imprint'
+import { Route as EnPaymentAndDeliveryRouteImport } from './routes/en.payment-and-delivery'
+import { Route as EnPrivacyPolicyRouteImport } from './routes/en.privacy-policy'
 import { Route as EnProductsRouteImport } from './routes/en.products'
+import { Route as EnRightOfWithdrawalRouteImport } from './routes/en.right-of-withdrawal'
 import { Route as EnServicesRouteImport } from './routes/en.services'
 import { Route as EnSoleTraderBookkeepingRouteImport } from './routes/en.sole-trader-bookkeeping'
 import { Route as EnStatutoryAuditRouteImport } from './routes/en.statutory-audit'
 import { Route as EnTaxAdvisoryRouteImport } from './routes/en.tax-advisory'
+import { Route as EnTermsRouteImport } from './routes/en.terms'
 import { Route as EnTrainingRouteImport } from './routes/en.training'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
 import { Route as KalkulatorokAtalanyadoRouteImport } from './routes/kalkulatorok.atalanyado'
@@ -382,6 +389,11 @@ const EnConsultationRoute = EnConsultationRouteImport.update({
   path: '/consultation',
   getParentRoute: () => EnRoute,
 } as any)
+const EnConsumerInformationRoute = EnConsumerInformationRouteImport.update({
+  id: '/consumer-information',
+  path: '/consumer-information',
+  getParentRoute: () => EnRoute,
+} as any)
 const EnContactRoute = EnContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -390,6 +402,11 @@ const EnContactRoute = EnContactRouteImport.update({
 const EnControllingRoute = EnControllingRouteImport.update({
   id: '/controlling',
   path: '/controlling',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnCookiePolicyRoute = EnCookiePolicyRouteImport.update({
+  id: '/cookie-policy',
+  path: '/cookie-policy',
   getParentRoute: () => EnRoute,
 } as any)
 const EnDigitalTimeSavingAuditRoute =
@@ -403,9 +420,29 @@ const EnFintechAndBiRoute = EnFintechAndBiRouteImport.update({
   path: '/fintech-and-bi',
   getParentRoute: () => EnRoute,
 } as any)
+const EnImprintRoute = EnImprintRouteImport.update({
+  id: '/imprint',
+  path: '/imprint',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnPaymentAndDeliveryRoute = EnPaymentAndDeliveryRouteImport.update({
+  id: '/payment-and-delivery',
+  path: '/payment-and-delivery',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnPrivacyPolicyRoute = EnPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => EnRoute,
+} as any)
 const EnProductsRoute = EnProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnRightOfWithdrawalRoute = EnRightOfWithdrawalRouteImport.update({
+  id: '/right-of-withdrawal',
+  path: '/right-of-withdrawal',
   getParentRoute: () => EnRoute,
 } as any)
 const EnServicesRoute = EnServicesRouteImport.update({
@@ -426,6 +463,11 @@ const EnStatutoryAuditRoute = EnStatutoryAuditRouteImport.update({
 const EnTaxAdvisoryRoute = EnTaxAdvisoryRouteImport.update({
   id: '/tax-advisory',
   path: '/tax-advisory',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnTermsRoute = EnTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => EnRoute,
 } as any)
 const EnTrainingRoute = EnTrainingRouteImport.update({
@@ -788,15 +830,22 @@ export interface FileRoutesByFullPath {
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
   '/en/consultation': typeof EnConsultationRoute
+  '/en/consumer-information': typeof EnConsumerInformationRoute
   '/en/contact': typeof EnContactRoute
   '/en/controlling': typeof EnControllingRoute
+  '/en/cookie-policy': typeof EnCookiePolicyRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
+  '/en/imprint': typeof EnImprintRoute
+  '/en/payment-and-delivery': typeof EnPaymentAndDeliveryRoute
+  '/en/privacy-policy': typeof EnPrivacyPolicyRoute
   '/en/products': typeof EnProductsRoute
+  '/en/right-of-withdrawal': typeof EnRightOfWithdrawalRoute
   '/en/services': typeof EnServicesRoute
   '/en/sole-trader-bookkeeping': typeof EnSoleTraderBookkeepingRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
+  '/en/terms': typeof EnTermsRoute
   '/en/training': typeof EnTrainingRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -903,15 +952,22 @@ export interface FileRoutesByTo {
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
   '/en/consultation': typeof EnConsultationRoute
+  '/en/consumer-information': typeof EnConsumerInformationRoute
   '/en/contact': typeof EnContactRoute
   '/en/controlling': typeof EnControllingRoute
+  '/en/cookie-policy': typeof EnCookiePolicyRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
+  '/en/imprint': typeof EnImprintRoute
+  '/en/payment-and-delivery': typeof EnPaymentAndDeliveryRoute
+  '/en/privacy-policy': typeof EnPrivacyPolicyRoute
   '/en/products': typeof EnProductsRoute
+  '/en/right-of-withdrawal': typeof EnRightOfWithdrawalRoute
   '/en/services': typeof EnServicesRoute
   '/en/sole-trader-bookkeeping': typeof EnSoleTraderBookkeepingRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
+  '/en/terms': typeof EnTermsRoute
   '/en/training': typeof EnTrainingRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -1021,15 +1077,22 @@ export interface FileRoutesById {
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
   '/en/consultation': typeof EnConsultationRoute
+  '/en/consumer-information': typeof EnConsumerInformationRoute
   '/en/contact': typeof EnContactRoute
   '/en/controlling': typeof EnControllingRoute
+  '/en/cookie-policy': typeof EnCookiePolicyRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
   '/en/fintech-and-bi': typeof EnFintechAndBiRoute
+  '/en/imprint': typeof EnImprintRoute
+  '/en/payment-and-delivery': typeof EnPaymentAndDeliveryRoute
+  '/en/privacy-policy': typeof EnPrivacyPolicyRoute
   '/en/products': typeof EnProductsRoute
+  '/en/right-of-withdrawal': typeof EnRightOfWithdrawalRoute
   '/en/services': typeof EnServicesRoute
   '/en/sole-trader-bookkeeping': typeof EnSoleTraderBookkeepingRoute
   '/en/statutory-audit': typeof EnStatutoryAuditRoute
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
+  '/en/terms': typeof EnTermsRoute
   '/en/training': typeof EnTrainingRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
@@ -1140,15 +1203,22 @@ export interface FileRouteTypes {
     | '/en/bookkeeping'
     | '/en/company-audit'
     | '/en/consultation'
+    | '/en/consumer-information'
     | '/en/contact'
     | '/en/controlling'
+    | '/en/cookie-policy'
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
+    | '/en/imprint'
+    | '/en/payment-and-delivery'
+    | '/en/privacy-policy'
     | '/en/products'
+    | '/en/right-of-withdrawal'
     | '/en/services'
     | '/en/sole-trader-bookkeeping'
     | '/en/statutory-audit'
     | '/en/tax-advisory'
+    | '/en/terms'
     | '/en/training'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
@@ -1255,15 +1325,22 @@ export interface FileRouteTypes {
     | '/en/bookkeeping'
     | '/en/company-audit'
     | '/en/consultation'
+    | '/en/consumer-information'
     | '/en/contact'
     | '/en/controlling'
+    | '/en/cookie-policy'
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
+    | '/en/imprint'
+    | '/en/payment-and-delivery'
+    | '/en/privacy-policy'
     | '/en/products'
+    | '/en/right-of-withdrawal'
     | '/en/services'
     | '/en/sole-trader-bookkeeping'
     | '/en/statutory-audit'
     | '/en/tax-advisory'
+    | '/en/terms'
     | '/en/training'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
@@ -1372,15 +1449,22 @@ export interface FileRouteTypes {
     | '/en/bookkeeping'
     | '/en/company-audit'
     | '/en/consultation'
+    | '/en/consumer-information'
     | '/en/contact'
     | '/en/controlling'
+    | '/en/cookie-policy'
     | '/en/digital-time-saving-audit'
     | '/en/fintech-and-bi'
+    | '/en/imprint'
+    | '/en/payment-and-delivery'
+    | '/en/privacy-policy'
     | '/en/products'
+    | '/en/right-of-withdrawal'
     | '/en/services'
     | '/en/sole-trader-bookkeeping'
     | '/en/statutory-audit'
     | '/en/tax-advisory'
+    | '/en/terms'
     | '/en/training'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
@@ -1883,6 +1967,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnConsultationRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/consumer-information': {
+      id: '/en/consumer-information'
+      path: '/consumer-information'
+      fullPath: '/en/consumer-information'
+      preLoaderRoute: typeof EnConsumerInformationRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/en/contact': {
       id: '/en/contact'
       path: '/contact'
@@ -1895,6 +1986,13 @@ declare module '@tanstack/react-router' {
       path: '/controlling'
       fullPath: '/en/controlling'
       preLoaderRoute: typeof EnControllingRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/cookie-policy': {
+      id: '/en/cookie-policy'
+      path: '/cookie-policy'
+      fullPath: '/en/cookie-policy'
+      preLoaderRoute: typeof EnCookiePolicyRouteImport
       parentRoute: typeof EnRoute
     }
     '/en/digital-time-saving-audit': {
@@ -1911,11 +2009,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnFintechAndBiRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/imprint': {
+      id: '/en/imprint'
+      path: '/imprint'
+      fullPath: '/en/imprint'
+      preLoaderRoute: typeof EnImprintRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/payment-and-delivery': {
+      id: '/en/payment-and-delivery'
+      path: '/payment-and-delivery'
+      fullPath: '/en/payment-and-delivery'
+      preLoaderRoute: typeof EnPaymentAndDeliveryRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/privacy-policy': {
+      id: '/en/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/en/privacy-policy'
+      preLoaderRoute: typeof EnPrivacyPolicyRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/en/products': {
       id: '/en/products'
       path: '/products'
       fullPath: '/en/products'
       preLoaderRoute: typeof EnProductsRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/right-of-withdrawal': {
+      id: '/en/right-of-withdrawal'
+      path: '/right-of-withdrawal'
+      fullPath: '/en/right-of-withdrawal'
+      preLoaderRoute: typeof EnRightOfWithdrawalRouteImport
       parentRoute: typeof EnRoute
     }
     '/en/services': {
@@ -1944,6 +2070,13 @@ declare module '@tanstack/react-router' {
       path: '/tax-advisory'
       fullPath: '/en/tax-advisory'
       preLoaderRoute: typeof EnTaxAdvisoryRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/terms': {
+      id: '/en/terms'
+      path: '/terms'
+      fullPath: '/en/terms'
+      preLoaderRoute: typeof EnTermsRouteImport
       parentRoute: typeof EnRoute
     }
     '/en/training': {
@@ -2374,15 +2507,22 @@ interface EnRouteChildren {
   EnBookkeepingRoute: typeof EnBookkeepingRoute
   EnCompanyAuditRoute: typeof EnCompanyAuditRoute
   EnConsultationRoute: typeof EnConsultationRoute
+  EnConsumerInformationRoute: typeof EnConsumerInformationRoute
   EnContactRoute: typeof EnContactRoute
   EnControllingRoute: typeof EnControllingRoute
+  EnCookiePolicyRoute: typeof EnCookiePolicyRoute
   EnDigitalTimeSavingAuditRoute: typeof EnDigitalTimeSavingAuditRoute
   EnFintechAndBiRoute: typeof EnFintechAndBiRoute
+  EnImprintRoute: typeof EnImprintRoute
+  EnPaymentAndDeliveryRoute: typeof EnPaymentAndDeliveryRoute
+  EnPrivacyPolicyRoute: typeof EnPrivacyPolicyRoute
   EnProductsRoute: typeof EnProductsRoute
+  EnRightOfWithdrawalRoute: typeof EnRightOfWithdrawalRoute
   EnServicesRoute: typeof EnServicesRoute
   EnSoleTraderBookkeepingRoute: typeof EnSoleTraderBookkeepingRoute
   EnStatutoryAuditRoute: typeof EnStatutoryAuditRoute
   EnTaxAdvisoryRoute: typeof EnTaxAdvisoryRoute
+  EnTermsRoute: typeof EnTermsRoute
   EnTrainingRoute: typeof EnTrainingRoute
   EnIndexRoute: typeof EnIndexRoute
   EnCalculatorsFlatRateTaxRoute: typeof EnCalculatorsFlatRateTaxRoute
@@ -2398,15 +2538,22 @@ const EnRouteChildren: EnRouteChildren = {
   EnBookkeepingRoute: EnBookkeepingRoute,
   EnCompanyAuditRoute: EnCompanyAuditRoute,
   EnConsultationRoute: EnConsultationRoute,
+  EnConsumerInformationRoute: EnConsumerInformationRoute,
   EnContactRoute: EnContactRoute,
   EnControllingRoute: EnControllingRoute,
+  EnCookiePolicyRoute: EnCookiePolicyRoute,
   EnDigitalTimeSavingAuditRoute: EnDigitalTimeSavingAuditRoute,
   EnFintechAndBiRoute: EnFintechAndBiRoute,
+  EnImprintRoute: EnImprintRoute,
+  EnPaymentAndDeliveryRoute: EnPaymentAndDeliveryRoute,
+  EnPrivacyPolicyRoute: EnPrivacyPolicyRoute,
   EnProductsRoute: EnProductsRoute,
+  EnRightOfWithdrawalRoute: EnRightOfWithdrawalRoute,
   EnServicesRoute: EnServicesRoute,
   EnSoleTraderBookkeepingRoute: EnSoleTraderBookkeepingRoute,
   EnStatutoryAuditRoute: EnStatutoryAuditRoute,
   EnTaxAdvisoryRoute: EnTaxAdvisoryRoute,
+  EnTermsRoute: EnTermsRoute,
   EnTrainingRoute: EnTrainingRoute,
   EnIndexRoute: EnIndexRoute,
   EnCalculatorsFlatRateTaxRoute: EnCalculatorsFlatRateTaxRoute,

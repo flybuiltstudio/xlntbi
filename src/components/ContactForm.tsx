@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { submitContactForm } from "@/lib/contact.functions";
+import { asPath, useLocalPath, useT } from "@/lib/i18n";
 
 type Props = {
   formType: "kapcsolat" | "konzultacio";
@@ -12,9 +13,9 @@ type Props = {
   messageLabel?: string;
   submitLabel?: string;
   defaultMessage?: string;
+  allTimeLabel?: string;
+  emailMethodLabel?: string;
 };
-
-const ALL_MARKER = "Bármikor";
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/40";
@@ -22,14 +23,22 @@ const inputClass =
 export function ContactForm({
   formType,
   serviceOptions,
-  serviceLabel = "Milyen szolgáltatás érdekel?",
+  serviceLabel,
   showCompany = false,
   contactMethodOptions,
   contactTimeOptions,
-  messageLabel = "Miben segíthetek?",
-  submitLabel = "Küldés",
+  messageLabel,
+  submitLabel,
   defaultMessage = "",
+  allTimeLabel = "Bármikor",
+  emailMethodLabel = "E-mailben",
 }: Props) {
+  const t = useT();
+  const localPath = useLocalPath();
+  const ALL_MARKER = allTimeLabel;
+  const resolvedServiceLabel = serviceLabel ?? t("form.serviceLabel");
+  const resolvedMessageLabel = messageLabel ?? t("form.message");
+  const resolvedSubmitLabel = submitLabel ?? t("form.submit");
 
   const submit = useServerFn(submitContactForm);
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
@@ -38,7 +47,7 @@ export function ContactForm({
   const [contactTimes, setContactTimes] = useState<string[]>([]);
 
   // E-mail contact doesn't need a time window — disable the whole "Mikor kereshetem?" block.
-  const emailOnly = contactMethod === "E-mailben";
+  const emailOnly = contactMethod === emailMethodLabel;
 
   // Time-only options: everything except "Bármikor".
   const timeOnly = (contactTimeOptions ?? []).filter((o) => o !== ALL_MARKER);
@@ -101,7 +110,7 @@ export function ContactForm({
     } catch {
       setStatus("error");
       setErrorMessage(
-        "Az űrlap beküldése nem sikerült. Kérlek, ellenőrizd a megadott adatokat, vagy írj a info@xlntbi.hu címre.",
+        t("form.genericError"),
       );
     }
   }
@@ -109,17 +118,14 @@ export function ContactForm({
   if (status === "done") {
     return (
       <div className="rounded-xl border border-primary/30 bg-primary/5 p-8">
-        <h2 className="text-xl font-semibold text-foreground">Köszönöm a megkeresésedet!</h2>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-          Az üzenetedet megkaptam, és visszaigazoló e-mailt küldtem a megadott címre. Rövid időn
-          belül felveszem veled a kapcsolatot.
-        </p>
+        <h2 className="text-xl font-semibold text-foreground">{t("form.thanksTitle")}</h2>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t("form.thanksText")}</p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
           className="mt-6 inline-flex items-center rounded-md border border-input px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
         >
-          Új üzenet írása
+          {t("form.newMessage")}
         </button>
       </div>
     );
@@ -129,19 +135,19 @@ export function ContactForm({
     <form onSubmit={onSubmit} className="rounded-xl border border-border bg-card p-6 md:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="block text-sm font-medium text-foreground">
-          Vezetéknév *
+          {t("form.lastName")} *
           <input name="lastName" required minLength={2} maxLength={80} className={inputClass} />
         </label>
         <label className="block text-sm font-medium text-foreground">
-          Keresztnév *
+          {t("form.firstName")} *
           <input name="firstName" required minLength={2} maxLength={80} className={inputClass} />
         </label>
         <label className="block text-sm font-medium text-foreground">
-          E-mail *
+          {t("form.email")} *
           <input name="email" type="email" required maxLength={160} className={inputClass} />
         </label>
         <label className="block text-sm font-medium text-foreground">
-          Telefonszám *
+          {t("form.phone")} *
           <input
             name="phone"
             type="tel"
@@ -154,21 +160,21 @@ export function ContactForm({
         {showCompany ? (
           <>
             <label className="block text-sm font-medium text-foreground">
-              Cégnév
+              {t("form.company")}
               <input
                 name="company"
                 maxLength={160}
-                placeholder="Nem kötelező"
+                placeholder={t("form.optional")}
                 className={inputClass}
               />
             </label>
             <label className="block text-sm font-medium text-foreground">
-              Adószám
+              {t("form.taxNumber")}
               <input
                 name="taxNumber"
                 maxLength={32}
                 inputMode="numeric"
-                placeholder="Nem kötelező"
+                placeholder={t("form.optional")}
                 className={inputClass}
               />
             </label>
@@ -178,7 +184,7 @@ export function ContactForm({
 
       {serviceOptions?.length ? (
         <fieldset className="mt-6">
-          <legend className="text-sm font-medium text-foreground">{serviceLabel}</legend>
+          <legend className="text-sm font-medium text-foreground">{resolvedServiceLabel}</legend>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {serviceOptions.map((option) => (
               <label
@@ -200,7 +206,7 @@ export function ContactForm({
 
       {contactMethodOptions?.length ? (
         <fieldset className="mt-6">
-          <legend className="text-sm font-medium text-foreground">Hogyan kereshetem?</legend>
+          <legend className="text-sm font-medium text-foreground">{t("form.howReach")}</legend>
           <div className="mt-3 flex flex-wrap gap-4">
             {contactMethodOptions.map((option) => (
               <label key={option} className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -212,7 +218,7 @@ export function ContactForm({
                   onChange={(e) => {
                     setContactMethod(e.target.value);
                     // Selecting e-mail contact clears any chosen time window.
-                    if (e.target.value === "E-mailben") {
+                    if (e.target.value === emailMethodLabel) {
                       setContactTimes([]);
                     }
                   }}
@@ -228,7 +234,7 @@ export function ContactForm({
       {contactTimeOptions?.length ? (
         <fieldset className="mt-6">
           <div className="flex items-center gap-4">
-            <legend className="text-sm font-medium text-foreground">Mikor kereshetem?</legend>
+            <legend className="text-sm font-medium text-foreground">{t("form.whenReach")}</legend>
             {contactTimeOptions.includes(ALL_MARKER) ? (
               <label
                 className={`flex items-center gap-2 text-sm text-muted-foreground ${emailOnly ? "cursor-not-allowed opacity-50" : ""}`}
@@ -270,7 +276,7 @@ export function ContactForm({
 
       <label className="mt-6 block text-sm font-medium text-foreground">
 
-        {messageLabel} *
+        {resolvedMessageLabel} *
         <textarea
           name="message"
           required
@@ -298,15 +304,14 @@ export function ContactForm({
           className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-primary)]"
         />
         <span>
-          Hozzájárulok, hogy a megadott adataimat a megkeresésem megválaszolása céljából kezeljék, és
-          megismertem az{" "}
+          {t("form.privacy")}{" "}
           <a
-            href="/adatvedelmi-tajekoztato"
+            href={localPath("/adatvedelmi-tajekoztato")}
             target="_blank"
             rel="noreferrer"
             className="underline hover:text-foreground"
           >
-            Adatvédelmi tájékoztatót
+            {t("form.privacyLink")}
           </a>
           . *
         </span>
@@ -323,7 +328,7 @@ export function ContactForm({
         disabled={status === "sending"}
         className="mt-6 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:opacity-60"
       >
-        {status === "sending" ? "Küldés…" : submitLabel}
+        {status === "sending" ? t("form.sending") : resolvedSubmitLabel}
       </button>
     </form>
   );
