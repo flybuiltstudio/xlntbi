@@ -1692,6 +1692,62 @@ export const products: Product[] = [
       storagePath: "kapcsoltsag-ellenorzo/Kapcsoltsag_ellenorzo.zip",
     },
   },
+  {
+    slug: "vallalkozas-meret-besorolo",
+    priceId: "vallalkozas_meret_besorolo_licenc",
+    name: "XLNT Vállalkozásméret-besoroló",
+    tagline:
+      "Átlátható segítség a mikro-, kis-, közép- és nagyvállalati besoroláshoz",
+    status: "available",
+    price: 4990,
+    currency: "HUF",
+    image: vallalkozasMeretBesoroloImg,
+    metaTitle: "XLNT Vállalkozásméret-besoroló Excel | XLNTBI",
+    metaDescription:
+      "Excel kalkulátor a KKV-besoroláshoz: létszám, árbevétel és mérlegfőösszeg alapján mikro-, kis-, közép- vagy nagyvállalat. Év végi és év eleji lap, 4 990 Ft AAM.",
+    intro: [
+      "A Vállalkozásméret-besoroló Excel kalkulátor abban segít, hogy a megadott létszám-, árbevétel- és mérlegfőösszeg-adatok alapján gyorsan áttekinthető legyen a vállalkozás várható KKV-besorolása. A munkafüzet külön kezeli az év végi és az év eleji nézőpontot, így praktikus kiindulópont lehet az innovációs járulék, egyes TAO-kedvezmények és a KKV-minősítés vizsgálatához.",
+      "A kitöltendő mezők sárga háttérrel vannak kiemelve, a munkafüzet pedig automatikusan kiszámítja az összesített mutatókat, a forintosított küszöbértékeket, majd kiírja a várható kategóriát: mikro-, kis-, közép- vagy nagyvállalat.",
+    ],
+    features: [
+      "Két külön számítási lap: „Év végi besorolás” a lezárt üzleti év adataihoz, „Év eleji besorolás” az üzleti év első napján fennálló minősítéshez.",
+      "Egyszerű adatbevitel: a kitöltendő mezők sárga háttérrel kiemelve.",
+      "Automatikus eredmény: összesített mutatók, küszöbértékek és a várható kategória.",
+      "Külön mezők a partner- és a kapcsolódó vállalkozások figyelembe veendő adataihoz.",
+      "EUR/HUF küszöbértékek a megadott MNB középárfolyam alapján, forintban.",
+      "KKV-státusz és az innovációs járulékkal kapcsolatos alapvető besorolási jelzés.",
+      "Magyar és angol nyelvű háttéranyag külön lapon.",
+      "Szerkeszthető munkafüzet: a lapok nincsenek levédve, saját folyamathoz alakítható.",
+    ],
+    why: "A munkafüzet döntéstámogató segédlet. A végleges adózási, számviteli vagy jogi döntés előtt mindig ellenőrizni kell az aktuális jogszabályokat, az alkalmazandó kétéves szabályt, valamint a partner- és kapcsolódó vállalkozások konkrét adatait. Microsoft Excel szükséges, engedélyezett makrókkal (.xlsm).",
+    steps: [
+      {
+        title: "Adatok megadása",
+        text: "Töltse ki a sárga mezőket: létszám (FTE), éves nettó árbevétel, mérlegfőösszeg, MNB EUR/HUF középárfolyam, állami vagy önkormányzati részesedés.",
+      },
+      {
+        title: "Partner- és kapcsolódó adatok",
+        text: "Adja meg a partnervállalkozások arányos, a kapcsolódó vállalkozások teljes hozzáadandó adatait.",
+      },
+      {
+        title: "Eredmény áttekintése",
+        text: "Nézze meg az automatikus besorolást, a KKV-státuszt és az innovációs járulékhoz kapcsolódó jelzést, majd ellenőrizze a hatályos jogszabályokat.",
+      },
+    ],
+    tiers: [
+      {
+        id: "licenc",
+        label: "Alapverzió",
+        price: 4990,
+        note: "Vállalkozásméret-besoroló Excel munkafüzet, év végi és év eleji lap, magyar és angol háttéranyag.",
+        priceId: "vallalkozas_meret_besorolo_licenc",
+      },
+    ],
+    download: {
+      fileName: "Vallalkozas_meret_besorolo.zip",
+      storagePath: "vallalkozas-meret-besorolo/Vallalkozas_meret_besorolo.zip",
+    },
+  },
 ];
 
 // Brand guard: every product name (and meta title) is served with the
