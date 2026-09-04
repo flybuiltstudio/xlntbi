@@ -4,7 +4,6 @@
   <url><loc>https://xlntbi.hu/szolgaltatasaim</loc><priority>0.9</priority></url>
   <url><loc>https://xlntbi.hu/konyveles</loc><priority>0.8</priority></url>
   <url><loc>https://xlntbi.hu/ev-konyveles</loc><priority>0.8</priority></url>
-  <url><loc>https://xlntbi.hu/se-bookkeeping</loc><priority>0.8</priority></url>
   <url><loc>https://xlntbi.hu/adotanacsadas</loc><priority>0.8</priority></url>
   <url><loc>https://xlntbi.hu/fintech-es-bi</loc><priority>0.8</priority></url>
   <url><loc>https://xlntbi.hu/kontrolling</loc><priority>0.8</priority></url>
@@ -16,7 +15,6 @@
   <url><loc>https://xlntbi.hu/termekeim</loc><priority>0.9</priority></url>
   <url><loc>https://xlntbi.hu/kalkulatorok</loc><priority>0.9</priority></url>
   <url><loc>https://xlntbi.hu/kalkulatorok/szamla-datumok</loc><priority>0.7</priority></url>
-  <url><loc>https://xlntbi.hu/kalkulatorok/invoice-dates</loc><priority>0.7</priority></url>
   <url><loc>https://xlntbi.hu/kalkulatorok/berteszt</loc><priority>0.7</priority></url>
   <url><loc>https://xlntbi.hu/kalkulatorok/jovedelemado</loc><priority>0.7</priority></url>
   <url><loc>https://xlntbi.hu/kalkulatorok/atalanyado</loc><priority>0.7</priority></url>
@@ -58,4 +56,32 @@
   <url><loc>https://xlntbi.hu/termek/utalasi-csomag-keszito</loc><priority>0.8</priority></url>
   <url><loc>https://xlntbi.hu/termek/utnyilvantartas-kikuldetesi-rendelveny</loc><priority>0.8</priority></url>
   <url><loc>https://xlntbi.hu/termek/wifi-jelszo-nezo</loc><priority>0.8</priority></url>
+  <url><loc>https://xlntbi.hu/en</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/services</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/bookkeeping</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/sole-trader-bookkeeping</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/tax-advisory</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/fintech-and-bi</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/controlling</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/company-audit</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/statutory-audit</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/accounting-firm-audit</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/digital-time-saving-audit</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/calculators</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/calculators/invoice-dates</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/calculators/salary-test</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/calculators/income-tax</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/calculators/flat-rate-tax</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/products</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/training</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/about</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/contact</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/consultation</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/imprint</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/privacy-policy</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/cookie-policy</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/terms</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/right-of-withdrawal</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/payment-and-delivery</loc><priority>0.7</priority></url>
+  <url><loc>https://xlntbi.hu/en/consumer-information</loc><priority>0.7</priority></url>
 </urlset>
