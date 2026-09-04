@@ -14,6 +14,7 @@ import { submitOrder } from "@/lib/order.functions";
 import { checkTaxNumber } from "@/lib/tax-number";
 import { euVatPrefix } from "@/lib/eu-vat";
 import { checkEuVat } from "@/lib/vies.functions";
+import { checkNavTax } from "@/lib/nav-taxpayer.functions";
 
 const TITLE = "Megrendelés | EXCELlent digitális termékek";
 const DESC =
