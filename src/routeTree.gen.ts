@@ -18,6 +18,7 @@ import { Route as CegauditRouteImport } from './routes/cegaudit'
 import { Route as CookieTajekoztatoRouteImport } from './routes/cookie-tajekoztato'
 import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
 import { Route as ElallasASzerzodestolRouteImport } from './routes/elallas-a-szerzodestol'
+import { Route as EnRouteImport } from './routes/en'
 import { Route as EvRouteImport } from './routes/ev'
 import { Route as EvKonyvelesRouteImport } from './routes/ev-konyveles'
 import { Route as FintechEsBiRouteImport } from './routes/fintech-es-bi'
@@ -154,6 +155,11 @@ const DigitalisIdomegtakaritasiAuditRoute =
 const ElallasASzerzodestolRoute = ElallasASzerzodestolRouteImport.update({
   id: '/elallas-a-szerzodestol',
   path: '/elallas-a-szerzodestol',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnRoute = EnRouteImport.update({
+  id: '/en',
+  path: '/en',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EvRoute = EvRouteImport.update({
@@ -333,45 +339,45 @@ const AdminSzamlazasRoute = AdminSzamlazasRouteImport.update({
   getParentRoute: () => AdminRoute,
 } as any)
 const EnAccountingFirmAuditRoute = EnAccountingFirmAuditRouteImport.update({
-  id: '/en/accounting-firm-audit',
-  path: '/en/accounting-firm-audit',
-  getParentRoute: () => rootRouteImport,
+  id: '/accounting-firm-audit',
+  path: '/accounting-firm-audit',
+  getParentRoute: () => EnRoute,
 } as any)
 const EnBookkeepingRoute = EnBookkeepingRouteImport.update({
-  id: '/en/bookkeeping',
-  path: '/en/bookkeeping',
-  getParentRoute: () => rootRouteImport,
+  id: '/bookkeeping',
+  path: '/bookkeeping',
+  getParentRoute: () => EnRoute,
 } as any)
 const EnCompanyAuditRoute = EnCompanyAuditRouteImport.update({
-  id: '/en/company-audit',
-  path: '/en/company-audit',
-  getParentRoute: () => rootRouteImport,
+  id: '/company-audit',
+  path: '/company-audit',
+  getParentRoute: () => EnRoute,
 } as any)
 const EnControllingRoute = EnControllingRouteImport.update({
-  id: '/en/controlling',
-  path: '/en/controlling',
-  getParentRoute: () => rootRouteImport,
+  id: '/controlling',
+  path: '/controlling',
+  getParentRoute: () => EnRoute,
 } as any)
 const EnDigitalTimeSavingAuditRoute =
   EnDigitalTimeSavingAuditRouteImport.update({
-    id: '/en/digital-time-saving-audit',
-    path: '/en/digital-time-saving-audit',
-    getParentRoute: () => rootRouteImport,
+    id: '/digital-time-saving-audit',
+    path: '/digital-time-saving-audit',
+    getParentRoute: () => EnRoute,
   } as any)
 const EnFintechAndBiRoute = EnFintechAndBiRouteImport.update({
-  id: '/en/fintech-and-bi',
-  path: '/en/fintech-and-bi',
-  getParentRoute: () => rootRouteImport,
+  id: '/fintech-and-bi',
+  path: '/fintech-and-bi',
+  getParentRoute: () => EnRoute,
 } as any)
 const EnStatutoryAuditRoute = EnStatutoryAuditRouteImport.update({
-  id: '/en/statutory-audit',
-  path: '/en/statutory-audit',
-  getParentRoute: () => rootRouteImport,
+  id: '/statutory-audit',
+  path: '/statutory-audit',
+  getParentRoute: () => EnRoute,
 } as any)
 const EnTaxAdvisoryRoute = EnTaxAdvisoryRouteImport.update({
-  id: '/en/tax-advisory',
-  path: '/en/tax-advisory',
-  getParentRoute: () => rootRouteImport,
+  id: '/tax-advisory',
+  path: '/tax-advisory',
+  getParentRoute: () => EnRoute,
 } as any)
 const KalkulatorokIndexRoute = KalkulatorokIndexRouteImport.update({
   id: '/kalkulatorok/',
@@ -655,6 +661,7 @@ export interface FileRoutesByFullPath {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
+  '/en': typeof EnRouteWithChildren
   '/ev': typeof EvRoute
   '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
@@ -756,6 +763,7 @@ export interface FileRoutesByTo {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
+  '/en': typeof EnRouteWithChildren
   '/ev': typeof EvRoute
   '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
@@ -859,6 +867,7 @@ export interface FileRoutesById {
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
+  '/en': typeof EnRouteWithChildren
   '/ev': typeof EvRoute
   '/ev-konyveles': typeof EvKonyvelesRoute
   '/fintech-es-bi': typeof FintechEsBiRoute
@@ -963,6 +972,7 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
+    | '/en'
     | '/ev'
     | '/ev-konyveles'
     | '/fintech-es-bi'
@@ -1064,6 +1074,7 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
+    | '/en'
     | '/ev'
     | '/ev-konyveles'
     | '/fintech-es-bi'
@@ -1166,6 +1177,7 @@ export interface FileRouteTypes {
     | '/cookie-tajekoztato'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
+    | '/en'
     | '/ev'
     | '/ev-konyveles'
     | '/fintech-es-bi'
@@ -1269,6 +1281,7 @@ export interface RootRouteChildren {
   CookieTajekoztatoRoute: typeof CookieTajekoztatoRoute
   DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
   ElallasASzerzodestolRoute: typeof ElallasASzerzodestolRoute
+  EnRoute: typeof EnRouteWithChildren
   EvRoute: typeof EvRoute
   EvKonyvelesRoute: typeof EvKonyvelesRoute
   FintechEsBiRoute: typeof FintechEsBiRoute
@@ -1291,14 +1304,6 @@ export interface RootRouteChildren {
   SeBookkeepingRoute: typeof SeBookkeepingRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
   TermekeimRoute: typeof TermekeimRoute
-  EnAccountingFirmAuditRoute: typeof EnAccountingFirmAuditRoute
-  EnBookkeepingRoute: typeof EnBookkeepingRoute
-  EnCompanyAuditRoute: typeof EnCompanyAuditRoute
-  EnControllingRoute: typeof EnControllingRoute
-  EnDigitalTimeSavingAuditRoute: typeof EnDigitalTimeSavingAuditRoute
-  EnFintechAndBiRoute: typeof EnFintechAndBiRoute
-  EnStatutoryAuditRoute: typeof EnStatutoryAuditRoute
-  EnTaxAdvisoryRoute: typeof EnTaxAdvisoryRoute
   KalkulatorokAtalanyadoRoute: typeof KalkulatorokAtalanyadoRoute
   KalkulatorokBertesztRoute: typeof KalkulatorokBertesztRoute
   KalkulatorokInvoiceDatesRoute: typeof KalkulatorokInvoiceDatesRoute
@@ -1412,6 +1417,13 @@ declare module '@tanstack/react-router' {
       path: '/elallas-a-szerzodestol'
       fullPath: '/elallas-a-szerzodestol'
       preLoaderRoute: typeof ElallasASzerzodestolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en': {
+      id: '/en'
+      path: '/en'
+      fullPath: '/en'
+      preLoaderRoute: typeof EnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ev': {
@@ -1661,59 +1673,59 @@ declare module '@tanstack/react-router' {
     }
     '/en/accounting-firm-audit': {
       id: '/en/accounting-firm-audit'
-      path: '/en/accounting-firm-audit'
+      path: '/accounting-firm-audit'
       fullPath: '/en/accounting-firm-audit'
       preLoaderRoute: typeof EnAccountingFirmAuditRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EnRoute
     }
     '/en/bookkeeping': {
       id: '/en/bookkeeping'
-      path: '/en/bookkeeping'
+      path: '/bookkeeping'
       fullPath: '/en/bookkeeping'
       preLoaderRoute: typeof EnBookkeepingRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EnRoute
     }
     '/en/company-audit': {
       id: '/en/company-audit'
-      path: '/en/company-audit'
+      path: '/company-audit'
       fullPath: '/en/company-audit'
       preLoaderRoute: typeof EnCompanyAuditRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EnRoute
     }
     '/en/controlling': {
       id: '/en/controlling'
-      path: '/en/controlling'
+      path: '/controlling'
       fullPath: '/en/controlling'
       preLoaderRoute: typeof EnControllingRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EnRoute
     }
     '/en/digital-time-saving-audit': {
       id: '/en/digital-time-saving-audit'
-      path: '/en/digital-time-saving-audit'
+      path: '/digital-time-saving-audit'
       fullPath: '/en/digital-time-saving-audit'
       preLoaderRoute: typeof EnDigitalTimeSavingAuditRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EnRoute
     }
     '/en/fintech-and-bi': {
       id: '/en/fintech-and-bi'
-      path: '/en/fintech-and-bi'
+      path: '/fintech-and-bi'
       fullPath: '/en/fintech-and-bi'
       preLoaderRoute: typeof EnFintechAndBiRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EnRoute
     }
     '/en/statutory-audit': {
       id: '/en/statutory-audit'
-      path: '/en/statutory-audit'
+      path: '/statutory-audit'
       fullPath: '/en/statutory-audit'
       preLoaderRoute: typeof EnStatutoryAuditRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EnRoute
     }
     '/en/tax-advisory': {
       id: '/en/tax-advisory'
-      path: '/en/tax-advisory'
+      path: '/tax-advisory'
       fullPath: '/en/tax-advisory'
       preLoaderRoute: typeof EnTaxAdvisoryRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof EnRoute
     }
     '/kalkulatorok/': {
       id: '/kalkulatorok/'
@@ -2088,6 +2100,30 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface EnRouteChildren {
+  EnAccountingFirmAuditRoute: typeof EnAccountingFirmAuditRoute
+  EnBookkeepingRoute: typeof EnBookkeepingRoute
+  EnCompanyAuditRoute: typeof EnCompanyAuditRoute
+  EnControllingRoute: typeof EnControllingRoute
+  EnDigitalTimeSavingAuditRoute: typeof EnDigitalTimeSavingAuditRoute
+  EnFintechAndBiRoute: typeof EnFintechAndBiRoute
+  EnStatutoryAuditRoute: typeof EnStatutoryAuditRoute
+  EnTaxAdvisoryRoute: typeof EnTaxAdvisoryRoute
+}
+
+const EnRouteChildren: EnRouteChildren = {
+  EnAccountingFirmAuditRoute: EnAccountingFirmAuditRoute,
+  EnBookkeepingRoute: EnBookkeepingRoute,
+  EnCompanyAuditRoute: EnCompanyAuditRoute,
+  EnControllingRoute: EnControllingRoute,
+  EnDigitalTimeSavingAuditRoute: EnDigitalTimeSavingAuditRoute,
+  EnFintechAndBiRoute: EnFintechAndBiRoute,
+  EnStatutoryAuditRoute: EnStatutoryAuditRoute,
+  EnTaxAdvisoryRoute: EnTaxAdvisoryRoute,
+}
+
+const EnRouteWithChildren = EnRoute._addFileChildren(EnRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdatvedelmiTajekoztatoRoute: AdatvedelmiTajekoztatoRoute,
@@ -2098,6 +2134,7 @@ const rootRouteChildren: RootRouteChildren = {
   CookieTajekoztatoRoute: CookieTajekoztatoRoute,
   DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
   ElallasASzerzodestolRoute: ElallasASzerzodestolRoute,
+  EnRoute: EnRouteWithChildren,
   EvRoute: EvRoute,
   EvKonyvelesRoute: EvKonyvelesRoute,
   FintechEsBiRoute: FintechEsBiRoute,
@@ -2120,14 +2157,6 @@ const rootRouteChildren: RootRouteChildren = {
   SeBookkeepingRoute: SeBookkeepingRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
   TermekeimRoute: TermekeimRoute,
-  EnAccountingFirmAuditRoute: EnAccountingFirmAuditRoute,
-  EnBookkeepingRoute: EnBookkeepingRoute,
-  EnCompanyAuditRoute: EnCompanyAuditRoute,
-  EnControllingRoute: EnControllingRoute,
-  EnDigitalTimeSavingAuditRoute: EnDigitalTimeSavingAuditRoute,
-  EnFintechAndBiRoute: EnFintechAndBiRoute,
-  EnStatutoryAuditRoute: EnStatutoryAuditRoute,
-  EnTaxAdvisoryRoute: EnTaxAdvisoryRoute,
   KalkulatorokAtalanyadoRoute: KalkulatorokAtalanyadoRoute,
   KalkulatorokBertesztRoute: KalkulatorokBertesztRoute,
   KalkulatorokInvoiceDatesRoute: KalkulatorokInvoiceDatesRoute,
