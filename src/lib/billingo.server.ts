@@ -1,4 +1,5 @@
 import { couponInvoiceLineName } from "./coupon-amount";
+import { REVERSE_CHARGE_NOTE, VAT_KEYS, vatTreatmentFor } from "./eu-vat";
 import { withXlntPrefix } from "./product-name";
 /**
  * Billingo.hu API v3 integration.
