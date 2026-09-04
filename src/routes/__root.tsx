@@ -17,30 +17,34 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { CookieConsent } from "@/components/CookieConsent";
 import { initAnalytics } from "@/lib/analytics";
 import { langFromPath, useLanguagePersistence } from "@/lib/i18n";
+import { translate } from "@/lib/i18n/dictionary";
 
 
 
 function NotFoundComponent() {
+  const pathname = useRouterState({ select: (st) => st.location.pathname });
+  const lang = langFromPath(pathname);
+  const tr = (k: Parameters<typeof translate>[1]) => translate(lang, k);
+  const home = lang === "en" ? "/en" : "/";
+  const contact = lang === "en" ? "/en/contact" : "/kapcsolat";
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Ez az oldal nem található</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          A keresett oldal nem létezik, vagy időközben átkerült máshová.
-        </p>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">{tr("notFound.title")}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{tr("notFound.text")}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <Link
-            to="/"
+            to={home}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Vissza a főoldalra
+            {tr("notFound.home")}
           </Link>
           <Link
-            to="/kapcsolat"
+            to={contact}
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Kapcsolat
+            {tr("nav.contact")}
           </Link>
         </div>
       </div>
@@ -52,6 +56,9 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const pathname = useRouterState({ select: (st) => st.location.pathname });
+  const lang = langFromPath(pathname);
+  const tr = (k: Parameters<typeof translate>[1]) => translate(lang, k);
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
@@ -60,11 +67,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Ez az oldal nem töltődött be
+          {tr("error.title")}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Hiba történt nálunk. Próbáld újra, vagy térj vissza a főoldalra.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{tr("error.text")}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -73,13 +78,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Újratöltés
+            {tr("error.retry")}
           </button>
           <a
-            href="/"
+            href={lang === "en" ? "/en" : "/"}
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Vissza a főoldalra
+            {tr("notFound.home")}
           </a>
         </div>
       </div>
