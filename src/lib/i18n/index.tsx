@@ -1,4 +1,4 @@
-import { Link, useLocation, useRouter } from "@tanstack/react-router";
+import { Link, useLocation, useRouter, type LinkProps } from "@tanstack/react-router";
 import { useCallback, useEffect } from "react";
 import { dictionary, translate, type TranslationKey } from "./dictionary";
 import {
@@ -14,6 +14,13 @@ export type { TranslationKey };
 export * from "./routes";
 
 const STORAGE_KEY = "xlntbi-lang";
+
+/**
+ * Language switching and localised navigation build paths at runtime, so the
+ * typed literal union cannot be used. This is the single narrow cast for it.
+ */
+export type RoutePath = LinkProps["to"];
+export const asPath = (path: string): RoutePath => path as RoutePath;
 
 export function storeLang(lang: Lang) {
   try {
@@ -62,7 +69,7 @@ export function useLanguagePersistence() {
   useEffect(() => {
     const stored = readStoredLang();
     if (pathname === "/" && stored === "en") {
-      void router.navigate({ to: "/en", replace: true });
+      void router.navigate({ to: asPath("/en"), replace: true });
       return;
     }
     if (stored !== lang) storeLang(lang);
@@ -97,7 +104,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
       role="group"
     >
       <Link
-        to={huTarget}
+        to={asPath(huTarget)}
         onClick={() => storeLang("hu")}
         aria-current={lang === "hu" ? "true" : undefined}
         aria-label={translate(lang, "nav.languageHu")}
@@ -109,7 +116,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
         |
       </span>
       <Link
-        to={enTarget}
+        to={asPath(enTarget)}
         onClick={() => storeLang("en")}
         aria-current={lang === "en" ? "true" : undefined}
         aria-label={translate(lang, "nav.languageEn")}
