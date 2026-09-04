@@ -78,6 +78,26 @@ export async function handleOrder(data: Order) {
     return { ok: false as const, error: "Ez a termék még nem megrendelhető." };
   }
 
+  // Live VIES check for other member states' VAT numbers. Fail-open: only a
+  // definite "invalid" answer stops the order, an unreachable VIES does not.
+  const { euVatPrefix } = await import("./eu-vat");
+  const euPrefix = euVatPrefix(data.taxNumber);
+  if (euPrefix && euPrefix !== "HU") {
+    const { checkViesVatNumber } = await import("./vies.server");
+    const vies = await checkViesVatNumber(data.taxNumber);
+    if (vies.status === "invalid") {
+      return {
+        ok: false as const,
+        error:
+          "Az EU-s adószám az uniós VIES nyilvántartásban nem érvényes. Kérlek, ellenőrizd a számot, vagy hagyd üresen az adószám mezőt.",
+      };
+    }
+    if (vies.status === "unknown") {
+      console.log(`VIES ellenőrzés nem volt elvégezhető (${data.taxNumber}): ${vies.reason ?? "-"}`);
+    }
+  }
+
+
   const tier = getTier(product, data.tierId);
   const number = orderNumber();
   const total = tier.price * data.quantity;

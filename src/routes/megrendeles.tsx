@@ -13,6 +13,7 @@ import { formatPrice, getProduct, getTier, products } from "@/lib/products";
 import { submitOrder } from "@/lib/order.functions";
 import { checkTaxNumber } from "@/lib/tax-number";
 import { euVatPrefix } from "@/lib/eu-vat";
+import { checkEuVat } from "@/lib/vies.functions";
 
 const TITLE = "Megrendelés | EXCELlent digitális termékek";
 const DESC =
@@ -45,6 +46,7 @@ const inputClass =
 function OrderPage() {
   const { termek, csomag } = Route.useSearch();
   const submit = useServerFn(submitOrder);
+  const verifyEuVat = useServerFn(checkEuVat);
 
   const orderable = products.filter((p) => p.status === "available");
   const initialSlug =
@@ -66,6 +68,13 @@ function OrderPage() {
   const [orderNumber, setOrderNumber] = useState("");
   const [taxError, setTaxError] = useState("");
   const [taxValue, setTaxValue] = useState("");
+  const [viesState, setViesState] = useState<
+    | { state: "idle" }
+    | { state: "checking" }
+    | { state: "valid"; name: string | null }
+    | { state: "invalid" }
+    | { state: "unknown" }
+  >({ state: "idle" });
 
   const product = getProduct(slug) ?? orderable[0]!;
   const tier = getTier(product, tierId);
@@ -293,15 +302,49 @@ function OrderPage() {
               onChange={(e) => {
                 if (taxError) setTaxError("");
                 setTaxValue(e.currentTarget.value);
+                setViesState({ state: "idle" });
+              }}
+              onBlur={(e) => {
+                const value = e.currentTarget.value;
+                const prefix = euVatPrefix(value);
+                if (!prefix || prefix === "HU") {
+                  setViesState({ state: "idle" });
+                  return;
+                }
+                setViesState({ state: "checking" });
+                verifyEuVat({ data: { taxNumber: value } })
+                  .then((r) => {
+                    if (r.status === "valid") setViesState({ state: "valid", name: r.name });
+                    else if (r.status === "invalid") setViesState({ state: "invalid" });
+                    else setViesState({ state: "unknown" });
+                  })
+                  .catch(() => setViesState({ state: "unknown" }));
               }}
               className={inputClass}
             />
             {taxError ? (
               <span className="mt-1.5 block text-xs font-normal text-destructive">{taxError}</span>
+            ) : viesState.state === "checking" ? (
+              <span className="mt-1.5 block text-xs font-normal text-muted-foreground">
+                EU adószám ellenőrzése a VIES nyilvántartásban…
+              </span>
+            ) : viesState.state === "invalid" ? (
+              <span className="mt-1.5 block text-xs font-normal text-destructive">
+                Ez az EU-s adószám a VIES nyilvántartásban nem érvényes. Kérlek, ellenőrizd, vagy
+                hagyd üresen a mezőt.
+              </span>
+            ) : viesState.state === "valid" ? (
+              <span className="mt-1.5 block text-xs font-normal text-primary">
+                Érvényes EU adószám{viesState.name ? ` – ${viesState.name}` : ""}. A számla
+                fordított adózással (reverse charge) készül.
+              </span>
             ) : euVatPrefix(taxValue) && euVatPrefix(taxValue) !== "HU" ? (
               <span className="mt-1.5 block text-xs font-normal text-muted-foreground">
                 EU-s adószámot adtál meg – a számla fordított adózással (reverse charge) készül,
                 az áfát a vevő rendezi a saját országában.
+                {viesState.state === "unknown"
+                  ? " (A VIES nyilvántartás most nem elérhető, ezért a szám érvényességét nem tudtuk ellenőrizni – a rendelés így is leadható.)"
+                  : ""}
               </span>
             ) : (
               <span className="mt-1.5 block text-xs font-normal text-muted-foreground">
@@ -309,6 +352,7 @@ function OrderPage() {
                 országkóddal: pl. DE123456789, ATU12345678, SK2020123456
               </span>
             )}
+
           </label>
 
           <label className="block text-sm font-medium text-foreground">
