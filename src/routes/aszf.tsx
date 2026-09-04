@@ -16,6 +16,7 @@ export const Route = createFileRoute("/aszf")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: CANONICAL },
+      { property: "og:locale", content: "hu_HU" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
@@ -23,6 +24,9 @@ export const Route = createFileRoute("/aszf")({
     ],
     links: [
       { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/aszf" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/en/terms" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/aszf" },
     ],
     scripts: [
       {

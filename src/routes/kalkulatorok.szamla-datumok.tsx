@@ -27,6 +27,7 @@ export const Route = createFileRoute("/kalkulatorok/szamla-datumok")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: CANONICAL },
+      { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
@@ -36,7 +37,7 @@ export const Route = createFileRoute("/kalkulatorok/szamla-datumok")({
     links: [
       { rel: "canonical", href: CANONICAL },
       { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/kalkulatorok/szamla-datumok" },
-      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/kalkulatorok/invoice-dates" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/en/calculators/invoice-dates" },
       { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/kalkulatorok/szamla-datumok" },
     ],
     scripts: [

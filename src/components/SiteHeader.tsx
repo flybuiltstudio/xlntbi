@@ -7,7 +7,7 @@ import { productCategories, categoryProducts } from "@/lib/product-categories";
 const services = [
   { to: "/konyveles", label: "Könyvelés" },
   { to: "/ev-konyveles", label: "EV Könyvelés" },
-  { to: "/se-bookkeeping", label: "SE bookkeeping" },
+  { to: "/en/sole-trader-bookkeeping", label: "SE bookkeeping" },
   { to: "/adotanacsadas", label: "Adótanácsadás" },
   { to: "/fintech-es-bi", label: "Fintech és BI" },
   { to: "/kontrolling", label: "Kontrolling" },

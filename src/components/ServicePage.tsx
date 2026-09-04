@@ -1,4 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
+import { asPath, useLocalPath, useT } from "@/lib/i18n";
 import { usePageView } from "@/lib/use-page-view";
 import { PageHero } from "@/components/PageHero";
 import {
@@ -66,6 +67,32 @@ const ICON_RULES: Array<[RegExp, LucideIcon]> = [
   [/robot|bot/i, Bot],
   [/szemlélet|tudás/i, Brain],
   [/dokumentum|irat|szerződés/i, FileText],
+  // English equivalents for the English pages
+  [/report|dashboard|statement/i, BarChart3],
+  [/power bi|data (link|entry|model)|database/i, Database],
+  [/excel|formula|spreadsheet/i, FileSpreadsheet],
+  [/macro|automat/i, Cog],
+  [/\bai\b|artificial/i, Sparkles],
+  [/speed|error source|manual step/i, Zap],
+  [/audit|due diligence|review/i, ClipboardCheck],
+  [/control|quality/i, ShieldCheck],
+  [/risk/i, Search],
+  [/nav|tax return|taxation|tax/i, Landmark],
+  [/vat|percentage/i, Percent],
+  [/profit|analysis|decision/i, TrendingUp],
+  [/project|process|workflow/i, Workflow],
+  [/closing|deadline/i, CalendarClock],
+  [/payment|payroll|finance|fee|cost/i, CircleDollarSign],
+  [/training|exam|course|practice/i, GraduationCap],
+  [/communication/i, MessageSquare],
+  [/team|accounting firm/i, Users],
+  [/compan|business|sme/i, Building2],
+  [/individual|sole trader|self-employed|owner/i, User],
+  [/digital|online|paperless|software/i, Laptop],
+  [/bookkeeping|accountant|administration/i, ScrollText],
+  [/model|logic/i, ChartPie],
+  [/integrat|connect/i, Link2],
+  [/document|contract/i, FileText],
 ];
 
 function iconFor(label: string): LucideIcon {
@@ -110,6 +137,8 @@ export function ServicePage({
   children,
 }: ServicePageProps) {
   const pathname = useLocation({ select: (l) => l.pathname });
+  const t = useT();
+  const localPath = useLocalPath();
   usePageView("service", pathname);
   return (
     <div>
@@ -165,10 +194,10 @@ export function ServicePage({
           })}
         </ul>
         <Link
-          to="/kapcsolat"
+          to={asPath(localPath("/kapcsolat"))}
           className="mt-8 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
         >
-          Kapcsolat
+          {t("service.contactButton")}
         </Link>
       </section>
 

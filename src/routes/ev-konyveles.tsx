@@ -9,7 +9,7 @@ const TITLE = "EV Könyvelés – KATA és átalányadózó vállalkozóknak | E
 const DESCRIPTION = "KATA és átalányadózó egyéni vállalkozók könyvelése kedvező díjazással, automatizált folyamatokkal és 20 év szakmai tapasztalattal.";
 const CANONICAL = "https://xlntbi.hu/ev-konyveles";
 const OG_IMAGE = "https://xlntbi.hu/og/ev-konyveles-poster.jpg";
-const EN_URL = "https://xlntbi.hu/se-bookkeeping";
+const EN_URL = "https://xlntbi.hu/en/sole-trader-bookkeeping";
 
 const faqItems = [
   {
@@ -60,6 +60,9 @@ export const Route = createFileRoute("/ev-konyveles")({
     ],
     links: [
       { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/ev-konyveles" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/en/sole-trader-bookkeeping" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/ev-konyveles" },
       { rel: "alternate", hreflang: "hu", href: CANONICAL },
       { rel: "alternate", hreflang: "en", href: EN_URL },
     ],
@@ -120,7 +123,7 @@ function EvKonyvelesPage() {
           KATA és átalányadózó egyéni vállalkozók könyvelése
         </h1>
         <Link
-          to="/se-bookkeeping"
+          to="/en/sole-trader-bookkeeping"
           className="mt-4 inline-flex items-center gap-2 rounded-md bg-white/10 px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-white/20"
         >
           <Languages className="h-3.5 w-3.5" aria-hidden="true" />

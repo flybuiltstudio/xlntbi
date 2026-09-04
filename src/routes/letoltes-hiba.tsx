@@ -23,6 +23,7 @@ export const Route = createFileRoute("/letoltes-hiba")({
         content: "Lejárt vagy érvénytelen letöltési link – kérj újat e-mailben.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "hu_HU" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
     ],

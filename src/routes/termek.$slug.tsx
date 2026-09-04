@@ -25,6 +25,7 @@ export const Route = createFileRoute("/termek/$slug")({
         { property: "og:description", content: product.metaDescription },
         { property: "og:type", content: "product" },
         { property: "og:url", content: pageUrl },
+      { property: "og:locale", content: "hu_HU" },
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: product.metaTitle },
         { name: "twitter:description", content: product.metaDescription },
