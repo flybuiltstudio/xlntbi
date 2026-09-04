@@ -206,18 +206,6 @@ async function resolveBlockId(fulfilmentYear: number): Promise<number> {
 
 /** Finds an existing partner by email or tax number, otherwise creates one. Returns the partner id. */
 async function findOrCreatePartner(order: OrderRow): Promise<number> {
-  // Try to find by email.
-  if (order.email) {
-    const data = await billingo(
-      `/partners?query=${encodeURIComponent(order.email)}`,
-    );
-    const partners: Array<any> = data?.data ?? [];
-    const match = partners.find((p) =>
-      (p.emails ?? []).some((e: string) => e.toLowerCase() === order.email.toLowerCase()),
-    );
-    if (match && typeof match.id === "number") return match.id;
-  }
-
   const partner = {
     name: order.company_name || order.billing_name,
     address: {
@@ -232,6 +220,36 @@ async function findOrCreatePartner(order: OrderRow): Promise<number> {
     tax_type: partnerTaxType(order),
   };
 
+  // Try to find by email.
+  if (order.email) {
+    const data = await billingo(
+      `/partners?query=${encodeURIComponent(order.email)}`,
+    );
+    const partners: Array<any> = data?.data ?? [];
+    const match = partners.find((p) =>
+      (p.emails ?? []).some((e: string) => e.toLowerCase() === order.email.toLowerCase()),
+    );
+    if (match && typeof match.id === "number") {
+      // An older record may still be domestic; a reverse-charge invoice is only
+      // accepted for a FOREIGN partner, so bring the stored partner in line.
+      const needsUpdate =
+        match.tax_type !== partner.tax_type ||
+        (match.address?.country_code ?? "") !== partner.address.country_code ||
+        (match.taxcode ?? "") !== partner.taxcode;
+      if (needsUpdate) {
+        try {
+          await billingo(`/partners/${match.id}`, {
+            method: "PUT",
+            body: JSON.stringify({ ...match, ...partner }),
+          });
+        } catch (e: any) {
+          console.error("Billingo partner frissítése nem sikerült:", e?.message ?? e);
+        }
+      }
+      return match.id;
+    }
+  }
+
   const created = await billingo(`/partners`, {
     method: "POST",
     body: JSON.stringify(partner),
@@ -241,6 +259,7 @@ async function findOrCreatePartner(order: OrderRow): Promise<number> {
   }
   return created.id;
 }
+
 
 function paymentMethodFor(order: OrderRow): string {
   // bankcard for card payments (Stripe), elore_utalas for bank transfers.
