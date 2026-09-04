@@ -23,6 +23,7 @@ import kamatlekerdezoImg from "@/assets/kamatlekerdezo-potlekszamito.jpg";
 import navOnlineSzamlaImg from "@/assets/nav-online-szamla-letolto.jpg";
 import mnbEraImg from "@/assets/mnb-era-jelentesgenerator.jpg";
 import ingatlanalapMnbImg from "@/assets/ingatlanalap-mnb-jelentes-elokeszito.jpg";
+import kapcsoltsagEllenorzoImg from "@/assets/kapcsoltsag-ellenorzo.jpg";
 import kulcsSoftImportImg from "@/assets/kulcs-soft-kulfoldi-import.jpg";
 import novitaxImportImg from "@/assets/novitax-kulfoldi-import.jpg";
 
@@ -1632,6 +1633,62 @@ export const products: Product[] = [
       fileName: "Ingatlanalap_MNB_jelentesek_NEE.xlsm",
       storagePath:
         "ingatlanalap-mnb-jelentes-elokeszito/Ingatlanalap_MNB_jelentesek_NEE.xlsm",
+    },
+  },
+  {
+    slug: "kapcsoltsag-ellenorzo",
+    priceId: "kapcsoltsag_ellenorzo_licenc",
+    name: "XLNT Kapcsoltság-ellenőrző",
+    tagline:
+      "Tao. tv., számviteli tv. és KKV tv. szerinti kapcsoltság külön-külön, egyetlen Excel munkafüzetben",
+    status: "available",
+    price: 5990,
+    currency: "HUF",
+    image: kapcsoltsagEllenorzoImg,
+    metaTitle: "XLNT Kapcsoltság-ellenőrző Excel | XLNTBI",
+    metaDescription:
+      "Kapcsolt, kapcsolódó és partnervállalkozás vizsgálata a Tao. tv., a számviteli tv. és a KKV tv. szerint, külön eredménysorokban. Egyetlen licenc, 5 990 Ft AAM.",
+    intro: [
+      "A kapcsoltság vizsgálatánál gyakori nehézség, hogy a Tao. törvény, a számviteli törvény és a KKV törvény eltérő fogalmakat és küszöböket használ ugyanarra a tulajdonosi vagy irányítási helyzetre. A Kapcsoltság-ellenőrző a megadott adatok alapján elkülönítve mutatja meg, hogy a vállalkozások kapcsoltak vagy kapcsolódók-e a három törvény logikája szerint.",
+      "A munkafüzetben a sárga mezők jelzik a kitöltendő adatokat: tulajdoni részesedés, szavazati jog, többségi befolyás és a KKV-kapcsolat. Az eredményblokk külön sorokban, rövid automatikus indoklással segíti az első értékelést – így a minősítés, a dokumentálás vagy egy belső ellenőrzés gyorsabban és rendezettebben készíthető elő.",
+    ],
+    features: [
+      "Sárga, jól látható kitöltendő bemeneti mezők.",
+      "Automatikus eredmények és rövid, érthető indoklás.",
+      "Tao. tv. szerinti kapcsolt vállalkozás vizsgálata.",
+      "Számviteli tv. szerinti kapcsoltság, jelentős tulajdoni részesedés és egyéb részesedési viszony.",
+      "KKV tv. szerinti kapcsolódó vállalkozás és partnervállalkozás.",
+      "Magyar és angol nyelvű jogszabályi összefoglaló lap.",
+      "Szerkeszthető, újra felhasználható Excel-formátum.",
+      "Kinek készült: könyvelőknek, adótanácsadóknak, könyvvizsgálóknak, cégvezetőknek, pályázati és KKV-minősítéshez adatot gyűjtő vállalkozásoknak.",
+    ],
+    why: "A termék előzetes döntéstámogató előszűrő eszköz, amely nem helyettesíti az egyedi adózási, számviteli vagy jogi tanácsadást. Közvetett tulajdonosi láncok, közeli hozzátartozói kapcsolatok, csoportszintű viszonyok és speciális irányítási jogok esetén szakértői felülvizsgálat szükséges. A jogszabályok változása miatt időszakos frissítés ajánlott. Microsoft Excel szükséges, engedélyezett makrókkal (.xlsm).",
+    steps: [
+      {
+        title: "Bemeneti adatok kitöltése",
+        text: "Töltse ki a sárga mezőket a rendelkezésre álló tulajdoni, szavazati, irányítási és KKV-adatokkal.",
+      },
+      {
+        title: "Eredmények áttekintése",
+        text: "Nézze meg a külön eredménysorokat: a három törvény eltérő fogalmai nem mosódnak össze.",
+      },
+      {
+        title: "Előszűrés és ellenőrzés",
+        text: "Összetett tulajdonosi vagy irányítási struktúra esetén használja a fájlt előszűrésként, majd ellenőrizze a teljes tényállást.",
+      },
+    ],
+    tiers: [
+      {
+        id: "licenc",
+        label: "Alapverzió",
+        price: 5990,
+        note: "Kapcsoltság-ellenőrző Excel, bemeneti és eredményblokkok, magyar és angol összefoglaló lap.",
+        priceId: "kapcsoltsag_ellenorzo_licenc",
+      },
+    ],
+    download: {
+      fileName: "Kapcsoltsag_ellenorzo.zip",
+      storagePath: "kapcsoltsag-ellenorzo/Kapcsoltsag_ellenorzo.zip",
     },
   },
 ];
