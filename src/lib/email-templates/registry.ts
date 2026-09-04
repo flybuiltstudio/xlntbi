@@ -32,6 +32,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'megrendeles-visszaigazolas': megrendelesVisszaigazolas,
   'belso-rendeles-ertesito': belsoRendelesErtesito,
   'belso-katalogus-audit': belsoKatalogusAudit,
+  'belso-nav-hiba': belsoNavHiba,
   'letoltes-elerheto': letoltesElerheto,
   'licensz-kod': licenszKod,
   'hirlevel-megerosites': hirlevelMegerosites,
