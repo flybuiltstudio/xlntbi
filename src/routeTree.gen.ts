@@ -111,6 +111,7 @@ import { Route as TermekUniverzalisBankKonverterRouteImport } from './routes/ter
 import { Route as TermekUtalasiCsomagKeszitoRouteImport } from './routes/termek.utalasi-csomag-keszito'
 import { Route as TermekUtnyilvantartasKikuldetesiRendelvenyRouteImport } from './routes/termek.utnyilvantartas-kikuldetesi-rendelveny'
 import { Route as TermekWifiJelszoNezoRouteImport } from './routes/termek.wifi-jelszo-nezo'
+import { Route as EnCalculatorsIndexRouteImport } from './routes/en.calculators.index'
 import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
 import { Route as ApiPublicKatalogusAuditCronRouteImport } from './routes/api/public/katalogus-audit/cron'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
@@ -659,6 +660,11 @@ const TermekWifiJelszoNezoRoute = TermekWifiJelszoNezoRouteImport.update({
   path: '/termek/wifi-jelszo-nezo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnCalculatorsIndexRoute = EnCalculatorsIndexRouteImport.update({
+  id: '/calculators/',
+  path: '/calculators/',
+  getParentRoute: () => EnRoute,
+} as any)
 const ApiPublicBillingoWebhookRoute =
   ApiPublicBillingoWebhookRouteImport.update({
     id: '/api/public/billingo/webhook',
@@ -802,6 +808,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
@@ -911,6 +918,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/en': typeof EnIndexRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
+  '/en/calculators': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
@@ -1023,6 +1031,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
@@ -1136,6 +1145,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/en/'
     | '/kalkulatorok/'
+    | '/en/calculators/'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
@@ -1245,6 +1255,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/en'
     | '/kalkulatorok'
+    | '/en/calculators'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
@@ -1356,6 +1367,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/en/'
     | '/kalkulatorok/'
+    | '/en/calculators/'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
@@ -2164,6 +2176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekWifiJelszoNezoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/calculators/': {
+      id: '/en/calculators/'
+      path: '/calculators'
+      fullPath: '/en/calculators/'
+      preLoaderRoute: typeof EnCalculatorsIndexRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/api/public/billingo/webhook': {
       id: '/api/public/billingo/webhook'
       path: '/api/public/billingo/webhook'
@@ -2267,6 +2286,7 @@ interface EnRouteChildren {
   EnTaxAdvisoryRoute: typeof EnTaxAdvisoryRoute
   EnTrainingRoute: typeof EnTrainingRoute
   EnIndexRoute: typeof EnIndexRoute
+  EnCalculatorsIndexRoute: typeof EnCalculatorsIndexRoute
 }
 
 const EnRouteChildren: EnRouteChildren = {
@@ -2286,6 +2306,7 @@ const EnRouteChildren: EnRouteChildren = {
   EnTaxAdvisoryRoute: EnTaxAdvisoryRoute,
   EnTrainingRoute: EnTrainingRoute,
   EnIndexRoute: EnIndexRoute,
+  EnCalculatorsIndexRoute: EnCalculatorsIndexRoute,
 }
 
 const EnRouteWithChildren = EnRoute._addFileChildren(EnRouteChildren)
