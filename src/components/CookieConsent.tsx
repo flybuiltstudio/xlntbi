@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Cookie, X } from "lucide-react";
+import { asPath, useLocalPath, useT } from "@/lib/i18n";
 
 const STORAGE_KEY = "xlntbi-cookie-consent-v1";
 
@@ -49,6 +50,8 @@ export function openCookieSettings() {
 }
 
 export function CookieConsent() {
+  const t = useT();
+  const localPath = useLocalPath();
   const [open, setOpen] = useState(false);
   const [details, setDetails] = useState(false);
   const [statistics, setStatistics] = useState(false);
@@ -85,32 +88,28 @@ export function CookieConsent() {
     <div
       role="dialog"
       aria-modal="false"
-      aria-label="Cookie-hozzájárulás"
+      aria-label={t("cookie.aria")}
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/98 shadow-[0_-8px_30px_rgba(0,0,0,0.18)] backdrop-blur"
     >
       <div className="mx-auto max-w-6xl px-4 py-3">
         <div className="flex items-start gap-2.5">
           <Cookie className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
           <div className="flex-1">
-            <h2 className="text-sm font-semibold text-foreground">
-              Cookie-k és adatkezelés
-            </h2>
+            <h2 className="text-sm font-semibold text-foreground">{t("cookie.title")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">
-              A működéshez szükséges cookie-kat mindig használjuk. Statisztikai és marketing
-              célú cookie-kat csak a hozzájárulásoddal helyezünk el, és a hozzájárulás bármikor
-              visszavonható. Részletek:{" "}
+              {t("cookie.text")}{" "}
               <Link
-                to="/cookie-tajekoztato"
+                to={asPath(localPath("/cookie-tajekoztato"))}
                 className="font-medium text-primary underline underline-offset-2"
               >
-                Cookie-tájékoztató
+                {t("footer.cookiePolicy")}
               </Link>{" "}
-              és{" "}
+              {t("cookie.and")}{" "}
               <Link
-                to="/adatvedelmi-tajekoztato"
+                to={asPath(localPath("/adatvedelmi-tajekoztato"))}
                 className="font-medium text-primary underline underline-offset-2"
               >
-                Adatvédelmi tájékoztató
+                {t("footer.privacy")}
               </Link>
               .
             </p>
@@ -122,16 +121,12 @@ export function CookieConsent() {
                     type="checkbox"
                     checked
                     disabled
-                    aria-label="Működéshez szükséges cookie-k (mindig aktív)"
+                    aria-label={t("cookie.necessaryAria")}
                     className="mt-1 h-4 w-4 accent-primary"
                   />
                   <span>
-                    <span className="font-medium text-foreground">
-                      Működéshez szükséges
-                    </span>{" "}
-                    <span className="text-muted-foreground">
-                      (mindig aktív) – bejelentkezés, kosár, fizetés, biztonság.
-                    </span>
+                    <span className="font-medium text-foreground">{t("cookie.necessary")}</span>{" "}
+                    <span className="text-muted-foreground">{t("cookie.necessaryText")}</span>
                   </span>
                 </label>
                 <label className="flex items-start gap-3 text-sm">
@@ -142,10 +137,8 @@ export function CookieConsent() {
                     className="mt-1 h-4 w-4 accent-primary"
                   />
                   <span>
-                    <span className="font-medium text-foreground">Statisztikai</span>{" "}
-                    <span className="text-muted-foreground">
-                      – névtelen látogatottsági mérés az oldal fejlesztéséhez.
-                    </span>
+                    <span className="font-medium text-foreground">{t("cookie.statistics")}</span>{" "}
+                    <span className="text-muted-foreground">{t("cookie.statisticsText")}</span>
                   </span>
                 </label>
                 <label className="flex items-start gap-3 text-sm">
@@ -156,10 +149,8 @@ export function CookieConsent() {
                     className="mt-1 h-4 w-4 accent-primary"
                   />
                   <span>
-                    <span className="font-medium text-foreground">Marketing</span>{" "}
-                    <span className="text-muted-foreground">
-                      – hirdetések mérése és személyre szabása.
-                    </span>
+                    <span className="font-medium text-foreground">{t("cookie.marketing")}</span>{" "}
+                    <span className="text-muted-foreground">{t("cookie.marketingText")}</span>
                   </span>
                 </label>
               </div>
@@ -171,14 +162,14 @@ export function CookieConsent() {
                 onClick={() => decide(true, true)}
                 className="inline-flex items-center justify-center rounded-md bg-primary px-3.5 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Mindet elfogadom
+                {t("cookie.acceptAll")}
               </button>
               <button
                 type="button"
                 onClick={() => decide(false, false)}
                 className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
               >
-                Csak a szükségeseket
+                {t("cookie.necessaryOnly")}
               </button>
               {details ? (
                 <button
@@ -186,7 +177,7 @@ export function CookieConsent() {
                   onClick={() => decide(statistics, marketing)}
                   className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
                 >
-                  Kiválasztottak mentése
+                  {t("cookie.saveSelected")}
                 </button>
               ) : (
                 <button
@@ -194,7 +185,7 @@ export function CookieConsent() {
                   onClick={() => setDetails(true)}
                   className="inline-flex items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-medium text-foreground underline underline-offset-4 transition-colors hover:text-primary"
                 >
-                  Beállítások
+                  {t("cookie.settings")}
                 </button>
               )}
             </div>
@@ -203,7 +194,7 @@ export function CookieConsent() {
             <button
               type="button"
               onClick={() => setOpen(false)}
-              aria-label="Panel bezárása"
+              aria-label={t("cookie.close")}
               className="rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground"
             >
               <X className="h-4 w-4" />
