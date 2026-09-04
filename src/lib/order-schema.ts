@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { checkTaxNumber } from "./tax-number";
+
 export const orderSchema = z.object({
   productSlug: z.string().trim().min(2).max(80),
   tierId: z.string().trim().min(1).max(80),
