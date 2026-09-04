@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
 import invoiceDatesImg from "@/assets/kalkulator-invoice-dates.jpg";
 import bertesztImg from "@/assets/berteszt.jpg";
 import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
+import fallbackImg from "@/assets/berteszt.jpg";
 import { PageHero } from "@/components/PageHero";
 import { buildHead } from "@/lib/i18n/head";
 
@@ -42,12 +42,6 @@ const items = [
     image: atalanyadoImg,
     alt: "Flat-rate tax calculator",
   },
-  {
-    to: "/kalkulatorok/szamla-datumok",
-    label: "Invoice dates (Hungarian version)",
-    image: szamlaDatumokImg,
-    alt: "Hungarian invoice dates calculator",
-  },
 ] as const;
 
 function EnglishCalculators() {
@@ -69,6 +63,13 @@ function EnglishCalculators() {
                 src={item.image}
                 alt={item.alt}
                 loading="lazy"
+                onError={(e) => {
+                  // Missing asset: fall back to a neutral placeholder instead of a broken image.
+                  const img = e.currentTarget;
+                  if (img.dataset.fallback) return;
+                  img.dataset.fallback = "1";
+                  img.src = fallbackImg;
+                }}
                 className="h-56 w-full object-cover"
               />
               <h2 className="p-6 text-xl font-semibold text-card-foreground">{item.label}</h2>
