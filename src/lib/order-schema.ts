@@ -8,7 +8,20 @@ export const orderSchema = z.object({
   quantity: z.coerce.number().int().min(1).max(20),
   billingName: z.string().trim().min(2).max(160),
   companyName: z.string().trim().max(160).optional().default(""),
-  taxNumber: z.string().trim().max(40).optional().default(""),
+  taxNumber: z
+    .string()
+    .trim()
+    .max(40)
+    .optional()
+    .default("")
+    .superRefine((value, ctx) => {
+      const result = checkTaxNumber(value ?? "");
+      if (!result.ok) ctx.addIssue({ code: "custom", message: result.error });
+    })
+    .transform((value) => {
+      const result = checkTaxNumber(value ?? "");
+      return result.ok ? result.normalized : (value ?? "");
+    }),
   country: z.string().trim().min(2).max(80),
   postalCode: z.string().trim().min(2).max(20),
   city: z.string().trim().min(2).max(80),
