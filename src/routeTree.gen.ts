@@ -55,6 +55,7 @@ import { Route as AdminRendelesiAuditRouteImport } from './routes/admin.rendeles
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as AdminSzamlazasRouteImport } from './routes/admin.szamlazas'
 import { Route as EnIndexRouteImport } from './routes/en.index'
+import { Route as EnAboutRouteImport } from './routes/en.about'
 import { Route as EnAccountingFirmAuditRouteImport } from './routes/en.accounting-firm-audit'
 import { Route as EnBookkeepingRouteImport } from './routes/en.bookkeeping'
 import { Route as EnCompanyAuditRouteImport } from './routes/en.company-audit'
@@ -343,6 +344,11 @@ const AdminSzamlazasRoute = AdminSzamlazasRouteImport.update({
 const EnIndexRoute = EnIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnAboutRoute = EnAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => EnRoute,
 } as any)
 const EnAccountingFirmAuditRoute = EnAccountingFirmAuditRouteImport.update({
@@ -708,6 +714,7 @@ export interface FileRoutesByFullPath {
   '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
+  '/en/about': typeof EnAboutRoute
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
@@ -811,6 +818,7 @@ export interface FileRoutesByTo {
   '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
+  '/en/about': typeof EnAboutRoute
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
@@ -917,6 +925,7 @@ export interface FileRoutesById {
   '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
+  '/en/about': typeof EnAboutRoute
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
@@ -1024,6 +1033,7 @@ export interface FileRouteTypes {
     | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
+    | '/en/about'
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
     | '/en/company-audit'
@@ -1127,6 +1137,7 @@ export interface FileRouteTypes {
     | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
+    | '/en/about'
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
     | '/en/company-audit'
@@ -1232,6 +1243,7 @@ export interface FileRouteTypes {
     | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
+    | '/en/about'
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
     | '/en/company-audit'
@@ -1700,6 +1712,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnIndexRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/about': {
+      id: '/en/about'
+      path: '/about'
+      fullPath: '/en/about'
+      preLoaderRoute: typeof EnAboutRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/en/accounting-firm-audit': {
       id: '/en/accounting-firm-audit'
       path: '/accounting-firm-audit'
@@ -2137,6 +2156,7 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface EnRouteChildren {
+  EnAboutRoute: typeof EnAboutRoute
   EnAccountingFirmAuditRoute: typeof EnAccountingFirmAuditRoute
   EnBookkeepingRoute: typeof EnBookkeepingRoute
   EnCompanyAuditRoute: typeof EnCompanyAuditRoute
@@ -2150,6 +2170,7 @@ interface EnRouteChildren {
 }
 
 const EnRouteChildren: EnRouteChildren = {
+  EnAboutRoute: EnAboutRoute,
   EnAccountingFirmAuditRoute: EnAccountingFirmAuditRoute,
   EnBookkeepingRoute: EnBookkeepingRoute,
   EnCompanyAuditRoute: EnCompanyAuditRoute,
