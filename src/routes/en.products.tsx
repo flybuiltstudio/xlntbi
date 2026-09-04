@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import { aamText } from "@/lib/aam";
 import { priceFrom, formatPrice } from "@/lib/products";
+import { productSummaryEn } from "@/lib/products-en";
 import { applyPlacements, categoryProducts, getCategory } from "@/lib/product-categories";
 import { getProductPlacements } from "@/lib/product-placements.functions";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
@@ -120,8 +121,8 @@ function EnglishProducts() {
       <section id="products" className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-2xl font-bold text-foreground">Products available to order</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Choose a category to open the products it contains. Product names, descriptions and the
-          order process are in Hungarian.
+          Choose a category to open the products it contains. Product names and the order process
+          are in Hungarian.
         </p>
 
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
@@ -141,14 +142,14 @@ function EnglishProducts() {
               >
                 <img
                   src={category.image}
-                  alt={`${category.title} – category`}
+                  alt={`${category.titleEn} – category`}
                   loading="lazy"
                   width={512}
                   height={512}
                   className="aspect-square w-full object-cover"
                 />
                 <span className="px-2 py-2 text-center text-xs font-semibold leading-tight text-foreground">
-                  {category.title}
+                  {category.titleEn}
                   <span className="block text-[11px] font-normal text-muted-foreground">
                     {count} products
                   </span>
@@ -160,7 +161,7 @@ function EnglishProducts() {
 
         {open ? (
           <div className="mt-10">
-            <h3 className="text-xl font-bold text-foreground">{open.title}</h3>
+            <h3 className="text-xl font-bold text-foreground">{open.titleEn}</h3>
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               {categoryProducts(open).map((product) => (
                 <article
@@ -176,7 +177,7 @@ function EnglishProducts() {
                   <div className="flex flex-1 flex-col p-6">
                     <h4 className="text-lg font-semibold text-foreground">{product.name}</h4>
                     <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-                      {aamText(product.intro[0] ?? "")}
+                      {aamText(productSummaryEn(product.slug, product.intro[0] ?? ""))}
                     </p>
                     <p className="mt-4 text-xl font-bold text-foreground">
                       {product.tiers.length > 1

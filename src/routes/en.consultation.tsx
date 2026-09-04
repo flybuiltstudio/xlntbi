@@ -59,6 +59,8 @@ function EnglishConsultation() {
             showCompany
             contactMethodOptions={CONTACT_METHODS}
             contactTimeOptions={CONTACT_TIMES}
+            allTimeLabel="Any time"
+            emailMethodLabel="By e-mail"
             messageLabel="Message"
             defaultMessage={`Dear Dávid,
 

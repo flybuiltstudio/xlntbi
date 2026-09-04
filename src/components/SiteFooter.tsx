@@ -1,35 +1,51 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import { openCookieSettings } from "@/components/CookieConsent";
+import { asPath, useLocalPath, useT, type TranslationKey } from "@/lib/i18n";
 
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 import heroImg from "@/assets/bcg-savok.jpg";
 import dspLogo from "@/assets/dsp-logo-feher.png.asset.json";
 import neumannLogo from "@/assets/neumann-logo-feher.png.asset.json";
 
-const pages = [
-  { to: "/", label: "Főoldal" },
-  { to: "/szolgaltatasaim", label: "Szolgáltatásaim" },
-  { to: "/kalkulatorok", label: "Kalkulátorok" },
-  { to: "/termekeim", label: "Termékeim" },
-  { to: "/oktatas", label: "Oktatás" },
-  { to: "/rolam", label: "Rólam" },
-  { to: "/kapcsolat", label: "Kapcsolat" },
-  { to: "/konzultacio", label: "Konzultáció" },
-] as const;
+type FooterLink = { to: string; key: TranslationKey };
 
-const services = [
-  { to: "/konyveles", label: "Könyvelés" },
-  { to: "/adotanacsadas", label: "Adótanácsadás" },
-  { to: "/fintech-es-bi", label: "Fintech és BI" },
-  { to: "/kontrolling", label: "Kontrolling" },
-  { to: "/cegaudit", label: "Cégaudit" },
-  { to: "/konyvvizsgalat", label: "Könyvvizsgálat" },
-  { to: "/konyveloiroda-audit", label: "Könyvelőiroda audit" },
-  { to: "/digitalis-idomegtakaritasi-audit", label: "Digitális időmegtakarítási audit" },
-] as const;
+const pages: FooterLink[] = [
+  { to: "/", key: "nav.home" },
+  { to: "/szolgaltatasaim", key: "nav.services" },
+  { to: "/kalkulatorok", key: "nav.calculators" },
+  { to: "/termekeim", key: "nav.products" },
+  { to: "/oktatas", key: "nav.training" },
+  { to: "/rolam", key: "nav.about" },
+  { to: "/kapcsolat", key: "nav.contact" },
+  { to: "/konzultacio", key: "footer.consultation" },
+];
+
+const services: FooterLink[] = [
+  { to: "/konyveles", key: "service.bookkeeping" },
+  { to: "/adotanacsadas", key: "service.taxAdvisory" },
+  { to: "/fintech-es-bi", key: "service.fintechBi" },
+  { to: "/kontrolling", key: "service.controlling" },
+  { to: "/cegaudit", key: "service.companyAudit" },
+  { to: "/konyvvizsgalat", key: "service.statutoryAudit" },
+  { to: "/konyveloiroda-audit", key: "service.firmAudit" },
+  { to: "/digitalis-idomegtakaritasi-audit", key: "service.timeAudit" },
+];
+
+const legal: FooterLink[] = [
+  { to: "/impresszum", key: "footer.imprint" },
+  { to: "/adatvedelmi-tajekoztato", key: "footer.privacy" },
+  { to: "/cookie-tajekoztato", key: "footer.cookiePolicy" },
+  { to: "/aszf", key: "footer.terms" },
+  { to: "/elallas-a-szerzodestol", key: "footer.withdrawal" },
+  { to: "/fizetes-es-teljesites", key: "footer.payment" },
+  { to: "/fogyasztovedelem", key: "footer.consumer" },
+];
 
 export function SiteFooter() {
+  const t = useT();
+  const localPath = useLocalPath();
+
   return (
     <footer className="relative isolate overflow-hidden bg-brand-dark text-primary-foreground">
       <img
@@ -45,20 +61,18 @@ export function SiteFooter() {
           <div className="flex flex-col items-center justify-center gap-8 sm:flex-row sm:justify-between sm:gap-4">
             <img
               src={dspLogo.url}
-              alt="Demján Sándor Program logó"
+              alt={t("footer.dspAlt")}
               className="h-[177px] w-auto object-contain"
               loading="lazy"
             />
             <img
               src={neumannLogo.url}
-              alt="Neumann János Nonprofit Kft. logó"
+              alt={t("footer.neumannAlt")}
               className="h-[112px] w-auto object-contain"
               loading="lazy"
             />
           </div>
-          <p className="mt-8 text-center text-[17px] opacity-60">
-            A weboldal a Demján Sándor Program keretében és támogatásával valósult meg.
-          </p>
+          <p className="mt-8 text-center text-[17px] opacity-60">{t("footer.dspNote")}</p>
         </div>
       </div>
 
@@ -67,7 +81,7 @@ export function SiteFooter() {
           <div className="inline-block rounded-2xl bg-white p-2.5">
             <img
               src={logoAsset.url}
-              alt="EXCELlent Business Intelligence logó"
+              alt={t("nav.logoAlt")}
               className="h-36 w-auto object-contain"
               loading="lazy"
             />
@@ -76,26 +90,36 @@ export function SiteFooter() {
           <p className="mt-1 text-sm opacity-90">Sarinay Dávid</p>
         </div>
 
-        <nav aria-label="Oldalak a láblécben">
-          <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">Oldalak</h2>
+        <nav aria-label={t("footer.pagesAria")}>
+          <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">
+            {t("footer.pages")}
+          </h2>
           <ul className="mt-4 space-y-2 text-sm">
             {pages.map((l) => (
               <li key={l.to}>
-                <Link to={l.to} className="opacity-90 transition-opacity hover:opacity-100">
-                  {l.label}
+                <Link
+                  to={asPath(localPath(l.to))}
+                  className="opacity-90 transition-opacity hover:opacity-100"
+                >
+                  {t(l.key)}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
 
-        <nav aria-label="Szolgáltatások a láblécben">
-          <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">Szolgáltatásaim</h2>
+        <nav aria-label={t("footer.servicesAria")}>
+          <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">
+            {t("nav.services")}
+          </h2>
           <ul className="mt-4 space-y-2 text-sm">
             {services.map((l) => (
               <li key={l.to}>
-                <Link to={l.to} className="opacity-90 transition-opacity hover:opacity-100">
-                  {l.label}
+                <Link
+                  to={asPath(localPath(l.to))}
+                  className="opacity-90 transition-opacity hover:opacity-100"
+                >
+                  {t(l.key)}
                 </Link>
               </li>
             ))}
@@ -103,7 +127,9 @@ export function SiteFooter() {
         </nav>
 
         <div>
-          <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">Elérhetőség</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wider opacity-80">
+            {t("footer.contact")}
+          </h2>
           <ul className="mt-4 space-y-2 text-sm">
             <li className="flex items-center gap-2">
               <Phone className="h-4 w-4" aria-hidden="true" />
@@ -166,21 +192,19 @@ export function SiteFooter() {
           </ul>
 
           <h2 className="mt-6 text-sm font-semibold uppercase tracking-wider opacity-80">
-            Jogi információk
+            {t("footer.legal")}
           </h2>
-          <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-1">
-            {[
-              { to: "/impresszum", label: "Impresszum" },
-              { to: "/adatvedelmi-tajekoztato", label: "Adatvédelmi tájékoztató" },
-              { to: "/cookie-tajekoztato", label: "Cookie-tájékoztató" },
-              { to: "/aszf", label: "ÁSZF" },
-              { to: "/elallas-a-szerzodestol", label: "Elállási tájékoztató" },
-              { to: "/fizetes-es-teljesites", label: "Fizetési és teljesítési feltételek" },
-              { to: "/fogyasztovedelem", label: "Fogyasztóvédelmi tájékoztatás" },
-            ].map((l) => (
+          <ul
+            aria-label={t("footer.legalAria")}
+            className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm sm:grid-cols-1"
+          >
+            {legal.map((l) => (
               <li key={l.to}>
-                <Link to={l.to} className="opacity-90 transition-opacity hover:opacity-100">
-                  {l.label}
+                <Link
+                  to={asPath(localPath(l.to))}
+                  className="opacity-90 transition-opacity hover:opacity-100"
+                >
+                  {t(l.key)}
                 </Link>
               </li>
             ))}
@@ -191,14 +215,16 @@ export function SiteFooter() {
       <div className="relative border-t border-primary-foreground/20">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 text-xs opacity-80 md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} Sarinay Dávid EV – EXCELlent Business Intelligence</p>
-          <button
-            type="button"
-            onClick={openCookieSettings}
-            className="text-left underline underline-offset-4 opacity-90 transition-opacity hover:opacity-100"
-          >
-            Cookie-beállítások
-          </button>
-
+          <div className="flex flex-wrap items-center gap-4">
+            <button
+              type="button"
+              onClick={openCookieSettings}
+              className="text-left underline underline-offset-4 opacity-90 transition-opacity hover:opacity-100"
+            >
+              {t("footer.cookieSettings")}
+            </button>
+            <span className="opacity-80">{t("footer.aiNote")}</span>
+          </div>
         </div>
       </div>
     </footer>
