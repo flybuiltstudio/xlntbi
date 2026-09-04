@@ -16,6 +16,7 @@ export const Route = createFileRoute("/digitalis-idomegtakaritasi-audit")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: CANONICAL },
+      { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
@@ -24,6 +25,9 @@ export const Route = createFileRoute("/digitalis-idomegtakaritasi-audit")({
     ],
     links: [
       { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/digitalis-idomegtakaritasi-audit" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/en/digital-time-saving-audit" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/digitalis-idomegtakaritasi-audit" },
     ],
     scripts: [
       {

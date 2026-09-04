@@ -60,6 +60,9 @@ export const Route = createFileRoute("/ev-konyveles")({
     ],
     links: [
       { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/ev-konyveles" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/en/sole-trader-bookkeeping" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/ev-konyveles" },
       { rel: "alternate", hreflang: "hu", href: CANONICAL },
       { rel: "alternate", hreflang: "en", href: EN_URL },
     ],

@@ -16,6 +16,7 @@ export const Route = createFileRoute("/fizetes-es-teljesites")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: CANONICAL },
+      { property: "og:locale", content: "hu_HU" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
@@ -23,6 +24,9 @@ export const Route = createFileRoute("/fizetes-es-teljesites")({
     ],
     links: [
       { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/fizetes-es-teljesites" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/en/payment-and-delivery" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/fizetes-es-teljesites" },
     ],
     scripts: [
       {

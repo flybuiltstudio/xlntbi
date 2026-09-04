@@ -29,6 +29,7 @@ export const Route = createFileRoute("/megrendeles_/koszonjuk")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "hu_HU" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex, nofollow" },
     ],

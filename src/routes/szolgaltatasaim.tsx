@@ -18,6 +18,7 @@ export const Route = createFileRoute("/szolgaltatasaim")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: CANONICAL },
+      { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
@@ -26,6 +27,9 @@ export const Route = createFileRoute("/szolgaltatasaim")({
     ],
     links: [
       { rel: "canonical", href: CANONICAL },
+      { rel: "alternate", hrefLang: "hu", href: "https://xlntbi.hu/szolgaltatasaim" },
+      { rel: "alternate", hrefLang: "en", href: "https://xlntbi.hu/en/services" },
+      { rel: "alternate", hrefLang: "x-default", href: "https://xlntbi.hu/szolgaltatasaim" },
     ],
     scripts: [
       {

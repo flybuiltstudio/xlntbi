@@ -16,6 +16,7 @@ export const Route = createFileRoute("/termek/rlb-kulfoldi-szamla-import")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "product" },
       { property: "og:url", content: CANONICAL },
+      { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
