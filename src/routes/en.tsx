@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/en")({
-  component: EnglishLayout;
+  component: EnglishLayout,
 });
 
 function EnglishLayout() {
