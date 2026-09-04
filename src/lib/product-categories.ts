@@ -11,6 +11,8 @@ export type ProductCategory = {
   /** URL-safe key used in the ?kategoria= search param. */
   key: string;
   title: string;
+  /** English category title for the /en pages. */
+  titleEn: string;
   image: string;
   /** Product slugs, in the order they should appear inside the category. */
   slugs: string[];
@@ -20,12 +22,14 @@ export const productCategories: ProductCategory[] = [
   {
     key: "berszamfejtes",
     title: "Bérszámfejtés",
+    titleEn: "Payroll",
     image: berszamfejtesImg,
     slugs: ["berszamfejto"],
   },
   {
     key: "szamla-nyugta",
     title: "Számla, nyugta könyvelés",
+    titleEn: "Invoice and receipt bookkeeping",
     image: szamlaNyugtaImg,
     slugs: [
       "nav-online-szamla-letolto",
@@ -41,6 +45,7 @@ export const productCategories: ProductCategory[] = [
   {
     key: "vegyes-konyveles",
     title: "Vegyes könyvelés",
+    titleEn: "General ledger entries",
     image: vegyesImg,
     slugs: [
       "utnyilvantartas-kikuldetesi-rendelveny",
@@ -53,6 +58,7 @@ export const productCategories: ProductCategory[] = [
   {
     key: "bank",
     title: "Bank",
+    titleEn: "Banking",
     image: bankImg,
     slugs: [
       "rlb-bank-konverter",
@@ -66,6 +72,7 @@ export const productCategories: ProductCategory[] = [
   {
     key: "riportok-beszamolok",
     title: "Riportok és beszámolók",
+    titleEn: "Reports and financial statements",
     image: riportokImg,
     slugs: [
       "havi-riport",
@@ -81,6 +88,7 @@ export const productCategories: ProductCategory[] = [
   {
     key: "adozas",
     title: "Adózás",
+    titleEn: "Taxation",
     image: adozasImg,
     slugs: [
       "afa-ev65-xml-generalo",
@@ -91,6 +99,7 @@ export const productCategories: ProductCategory[] = [
   {
     key: "egyebek",
     title: "Egyebek",
+    titleEn: "Other tools",
     image: egyebekImg,
     slugs: [
       "ugyfelkapu-totp-manager",
