@@ -59,6 +59,7 @@ import { Route as EnAboutRouteImport } from './routes/en.about'
 import { Route as EnAccountingFirmAuditRouteImport } from './routes/en.accounting-firm-audit'
 import { Route as EnBookkeepingRouteImport } from './routes/en.bookkeeping'
 import { Route as EnCompanyAuditRouteImport } from './routes/en.company-audit'
+import { Route as EnConsultationRouteImport } from './routes/en.consultation'
 import { Route as EnContactRouteImport } from './routes/en.contact'
 import { Route as EnControllingRouteImport } from './routes/en.controlling'
 import { Route as EnDigitalTimeSavingAuditRouteImport } from './routes/en.digital-time-saving-audit'
@@ -367,6 +368,11 @@ const EnBookkeepingRoute = EnBookkeepingRouteImport.update({
 const EnCompanyAuditRoute = EnCompanyAuditRouteImport.update({
   id: '/company-audit',
   path: '/company-audit',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnConsultationRoute = EnConsultationRouteImport.update({
+  id: '/consultation',
+  path: '/consultation',
   getParentRoute: () => EnRoute,
 } as any)
 const EnContactRoute = EnContactRouteImport.update({
@@ -736,6 +742,7 @@ export interface FileRoutesByFullPath {
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
+  '/en/consultation': typeof EnConsultationRoute
   '/en/contact': typeof EnContactRoute
   '/en/controlling': typeof EnControllingRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
@@ -843,6 +850,7 @@ export interface FileRoutesByTo {
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
+  '/en/consultation': typeof EnConsultationRoute
   '/en/contact': typeof EnContactRoute
   '/en/controlling': typeof EnControllingRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
@@ -953,6 +961,7 @@ export interface FileRoutesById {
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
   '/en/company-audit': typeof EnCompanyAuditRoute
+  '/en/consultation': typeof EnConsultationRoute
   '/en/contact': typeof EnContactRoute
   '/en/controlling': typeof EnControllingRoute
   '/en/digital-time-saving-audit': typeof EnDigitalTimeSavingAuditRoute
@@ -1064,6 +1073,7 @@ export interface FileRouteTypes {
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
     | '/en/company-audit'
+    | '/en/consultation'
     | '/en/contact'
     | '/en/controlling'
     | '/en/digital-time-saving-audit'
@@ -1171,6 +1181,7 @@ export interface FileRouteTypes {
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
     | '/en/company-audit'
+    | '/en/consultation'
     | '/en/contact'
     | '/en/controlling'
     | '/en/digital-time-saving-audit'
@@ -1280,6 +1291,7 @@ export interface FileRouteTypes {
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
     | '/en/company-audit'
+    | '/en/consultation'
     | '/en/contact'
     | '/en/controlling'
     | '/en/digital-time-saving-audit'
@@ -1776,6 +1788,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnCompanyAuditRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/consultation': {
+      id: '/en/consultation'
+      path: '/consultation'
+      fullPath: '/en/consultation'
+      preLoaderRoute: typeof EnConsultationRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/en/contact': {
       id: '/en/contact'
       path: '/contact'
@@ -2217,6 +2236,7 @@ interface EnRouteChildren {
   EnAccountingFirmAuditRoute: typeof EnAccountingFirmAuditRoute
   EnBookkeepingRoute: typeof EnBookkeepingRoute
   EnCompanyAuditRoute: typeof EnCompanyAuditRoute
+  EnConsultationRoute: typeof EnConsultationRoute
   EnContactRoute: typeof EnContactRoute
   EnControllingRoute: typeof EnControllingRoute
   EnDigitalTimeSavingAuditRoute: typeof EnDigitalTimeSavingAuditRoute
@@ -2234,6 +2254,7 @@ const EnRouteChildren: EnRouteChildren = {
   EnAccountingFirmAuditRoute: EnAccountingFirmAuditRoute,
   EnBookkeepingRoute: EnBookkeepingRoute,
   EnCompanyAuditRoute: EnCompanyAuditRoute,
+  EnConsultationRoute: EnConsultationRoute,
   EnContactRoute: EnContactRoute,
   EnControllingRoute: EnControllingRoute,
   EnDigitalTimeSavingAuditRoute: EnDigitalTimeSavingAuditRoute,
