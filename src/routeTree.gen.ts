@@ -118,6 +118,7 @@ import { Route as TermekUgyfelkapuTotpManagerRouteImport } from './routes/termek
 import { Route as TermekUniverzalisBankKonverterRouteImport } from './routes/termek.univerzalis-bank-konverter'
 import { Route as TermekUtalasiCsomagKeszitoRouteImport } from './routes/termek.utalasi-csomag-keszito'
 import { Route as TermekUtnyilvantartasKikuldetesiRendelvenyRouteImport } from './routes/termek.utnyilvantartas-kikuldetesi-rendelveny'
+import { Route as TermekVallalkozasMeretBesoroloRouteImport } from './routes/termek.vallalkozas-meret-besorolo'
 import { Route as TermekWifiJelszoNezoRouteImport } from './routes/termek.wifi-jelszo-nezo'
 import { Route as EnCalculatorsIndexRouteImport } from './routes/en.calculators.index'
 import { Route as EnCalculatorsFlatRateTaxRouteImport } from './routes/en.calculators.flat-rate-tax'
@@ -708,6 +709,12 @@ const TermekUtnyilvantartasKikuldetesiRendelvenyRoute =
     path: '/termek/utnyilvantartas-kikuldetesi-rendelveny',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TermekVallalkozasMeretBesoroloRoute =
+  TermekVallalkozasMeretBesoroloRouteImport.update({
+    id: '/termek/vallalkozas-meret-besorolo',
+    path: '/termek/vallalkozas-meret-besorolo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TermekWifiJelszoNezoRoute = TermekWifiJelszoNezoRouteImport.update({
   id: '/termek/wifi-jelszo-nezo',
   path: '/termek/wifi-jelszo-nezo',
@@ -887,6 +894,7 @@ export interface FileRoutesByFullPath {
   '/termek/univerzalis-bank-konverter': typeof TermekUniverzalisBankKonverterRoute
   '/termek/utalasi-csomag-keszito': typeof TermekUtalasiCsomagKeszitoRoute
   '/termek/utnyilvantartas-kikuldetesi-rendelveny': typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
+  '/termek/vallalkozas-meret-besorolo': typeof TermekVallalkozasMeretBesoroloRoute
   '/termek/wifi-jelszo-nezo': typeof TermekWifiJelszoNezoRoute
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
@@ -1009,6 +1017,7 @@ export interface FileRoutesByTo {
   '/termek/univerzalis-bank-konverter': typeof TermekUniverzalisBankKonverterRoute
   '/termek/utalasi-csomag-keszito': typeof TermekUtalasiCsomagKeszitoRoute
   '/termek/utnyilvantartas-kikuldetesi-rendelveny': typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
+  '/termek/vallalkozas-meret-besorolo': typeof TermekVallalkozasMeretBesoroloRoute
   '/termek/wifi-jelszo-nezo': typeof TermekWifiJelszoNezoRoute
   '/admin': typeof AdminIndexRoute
   '/en': typeof EnIndexRoute
@@ -1134,6 +1143,7 @@ export interface FileRoutesById {
   '/termek/univerzalis-bank-konverter': typeof TermekUniverzalisBankKonverterRoute
   '/termek/utalasi-csomag-keszito': typeof TermekUtalasiCsomagKeszitoRoute
   '/termek/utnyilvantartas-kikuldetesi-rendelveny': typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
+  '/termek/vallalkozas-meret-besorolo': typeof TermekVallalkozasMeretBesoroloRoute
   '/termek/wifi-jelszo-nezo': typeof TermekWifiJelszoNezoRoute
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
@@ -1260,6 +1270,7 @@ export interface FileRouteTypes {
     | '/termek/univerzalis-bank-konverter'
     | '/termek/utalasi-csomag-keszito'
     | '/termek/utnyilvantartas-kikuldetesi-rendelveny'
+    | '/termek/vallalkozas-meret-besorolo'
     | '/termek/wifi-jelszo-nezo'
     | '/admin/'
     | '/en/'
@@ -1382,6 +1393,7 @@ export interface FileRouteTypes {
     | '/termek/univerzalis-bank-konverter'
     | '/termek/utalasi-csomag-keszito'
     | '/termek/utnyilvantartas-kikuldetesi-rendelveny'
+    | '/termek/vallalkozas-meret-besorolo'
     | '/termek/wifi-jelszo-nezo'
     | '/admin'
     | '/en'
@@ -1506,6 +1518,7 @@ export interface FileRouteTypes {
     | '/termek/univerzalis-bank-konverter'
     | '/termek/utalasi-csomag-keszito'
     | '/termek/utnyilvantartas-kikuldetesi-rendelveny'
+    | '/termek/vallalkozas-meret-besorolo'
     | '/termek/wifi-jelszo-nezo'
     | '/admin/'
     | '/en/'
@@ -1597,6 +1610,7 @@ export interface RootRouteChildren {
   TermekUniverzalisBankKonverterRoute: typeof TermekUniverzalisBankKonverterRoute
   TermekUtalasiCsomagKeszitoRoute: typeof TermekUtalasiCsomagKeszitoRoute
   TermekUtnyilvantartasKikuldetesiRendelvenyRoute: typeof TermekUtnyilvantartasKikuldetesiRendelvenyRoute
+  TermekVallalkozasMeretBesoroloRoute: typeof TermekVallalkozasMeretBesoroloRoute
   TermekWifiJelszoNezoRoute: typeof TermekWifiJelszoNezoRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
   ApiPublicBillingoWebhookRoute: typeof ApiPublicBillingoWebhookRoute
@@ -2373,6 +2387,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekUtnyilvantartasKikuldetesiRendelvenyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/termek/vallalkozas-meret-besorolo': {
+      id: '/termek/vallalkozas-meret-besorolo'
+      path: '/termek/vallalkozas-meret-besorolo'
+      fullPath: '/termek/vallalkozas-meret-besorolo'
+      preLoaderRoute: typeof TermekVallalkozasMeretBesoroloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/termek/wifi-jelszo-nezo': {
       id: '/termek/wifi-jelszo-nezo'
       path: '/termek/wifi-jelszo-nezo'
@@ -2644,6 +2665,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermekUtalasiCsomagKeszitoRoute: TermekUtalasiCsomagKeszitoRoute,
   TermekUtnyilvantartasKikuldetesiRendelvenyRoute:
     TermekUtnyilvantartasKikuldetesiRendelvenyRoute,
+  TermekVallalkozasMeretBesoroloRoute: TermekVallalkozasMeretBesoroloRoute,
   TermekWifiJelszoNezoRoute: TermekWifiJelszoNezoRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
   ApiPublicBillingoWebhookRoute: ApiPublicBillingoWebhookRoute,
