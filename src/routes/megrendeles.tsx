@@ -13,6 +13,7 @@ import { formatPrice, getProduct, getTier, products } from "@/lib/products";
 import { submitOrder } from "@/lib/order.functions";
 import { checkTaxNumber } from "@/lib/tax-number";
 import { euVatPrefix } from "@/lib/eu-vat";
+import { checkEuVat } from "@/lib/vies.functions";
 
 const TITLE = "Megrendelés | EXCELlent digitális termékek";
 const DESC =
@@ -66,6 +67,13 @@ function OrderPage() {
   const [orderNumber, setOrderNumber] = useState("");
   const [taxError, setTaxError] = useState("");
   const [taxValue, setTaxValue] = useState("");
+  const [viesState, setViesState] = useState<
+    | { state: "idle" }
+    | { state: "checking" }
+    | { state: "valid"; name: string | null }
+    | { state: "invalid" }
+    | { state: "unknown" }
+  >({ state: "idle" });
 
   const product = getProduct(slug) ?? orderable[0]!;
   const tier = getTier(product, tierId);
