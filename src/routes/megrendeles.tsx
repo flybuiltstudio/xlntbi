@@ -76,6 +76,17 @@ function OrderPage() {
     event.preventDefault();
     const form = event.currentTarget;
     const fd = new FormData(form);
+
+    const taxCheck = checkTaxNumber(String(fd.get("taxNumber") ?? ""));
+    if (!taxCheck.ok) {
+      setTaxError(taxCheck.error);
+      setStatus("error");
+      setErrorMessage(taxCheck.error);
+      form.querySelector<HTMLInputElement>('input[name="taxNumber"]')?.focus();
+      return;
+    }
+    setTaxError("");
+
     setStatus("sending");
     setErrorMessage("");
 
