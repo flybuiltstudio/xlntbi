@@ -95,7 +95,24 @@ export async function handleOrder(data: Order) {
     if (vies.status === "unknown") {
       console.log(`VIES ellenőrzés nem volt elvégezhető (${data.taxNumber}): ${vies.reason ?? "-"}`);
     }
+  } else if (data.taxNumber) {
+    // Live NAV (Online Számla) taxpayer check for Hungarian tax numbers.
+    // Fail-open as well: only a definite "invalid" answer stops the order.
+    const { checkNavTaxNumber } = await import("./nav-taxpayer.server");
+    const nav = await checkNavTaxNumber(data.taxNumber);
+    if (nav.status === "invalid") {
+      return {
+        ok: false as const,
+        error:
+          "Ez az adószám a NAV nyilvántartásában nem érvényes adózóhoz tartozik. Kérlek, ellenőrizd a számot, vagy hagyd üresen az adószám mezőt.",
+      };
+    }
+    if (nav.status === "unknown") {
+      console.log(`NAV ellenőrzés nem volt elvégezhető (${data.taxNumber}): ${nav.reason ?? "-"}`);
+    }
   }
+
+
 
 
   const tier = getTier(product, data.tierId);

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
 import invoiceDatesImg from "@/assets/kalkulator-invoice-dates.jpg";
-import bertesztImg from "@/assets/kalkulator-berteszt.jpg";
+import bertesztImg from "@/assets/berteszt.jpg";
 import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
 import { PageHero } from "@/components/PageHero";

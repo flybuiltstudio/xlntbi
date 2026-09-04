@@ -14,6 +14,7 @@ import { submitOrder } from "@/lib/order.functions";
 import { checkTaxNumber } from "@/lib/tax-number";
 import { euVatPrefix } from "@/lib/eu-vat";
 import { checkEuVat } from "@/lib/vies.functions";
+import { checkNavTax } from "@/lib/nav-taxpayer.functions";
 
 const TITLE = "Megrendelés | EXCELlent digitális termékek";
 const DESC =
@@ -48,6 +49,7 @@ function OrderPage() {
   const { termek, csomag } = Route.useSearch();
   const submit = useServerFn(submitOrder);
   const verifyEuVat = useServerFn(checkEuVat);
+  const verifyNavTax = useServerFn(checkNavTax);
 
   const orderable = products.filter((p) => p.status === "available");
   const initialSlug =
@@ -76,6 +78,14 @@ function OrderPage() {
     | { state: "invalid" }
     | { state: "unknown" }
   >({ state: "idle" });
+  const [navState, setNavState] = useState<
+    | { state: "idle" }
+    | { state: "checking" }
+    | { state: "valid"; name: string | null }
+    | { state: "invalid" }
+    | { state: "unknown" }
+  >({ state: "idle" });
+
 
   const product = getProduct(slug) ?? orderable[0]!;
   const tier = getTier(product, tierId);
@@ -304,22 +314,38 @@ function OrderPage() {
                 if (taxError) setTaxError("");
                 setTaxValue(e.currentTarget.value);
                 setViesState({ state: "idle" });
+                setNavState({ state: "idle" });
               }}
               onBlur={(e) => {
                 const value = e.currentTarget.value;
                 const prefix = euVatPrefix(value);
-                if (!prefix || prefix === "HU") {
-                  setViesState({ state: "idle" });
+                if (prefix && prefix !== "HU") {
+                  setNavState({ state: "idle" });
+                  setViesState({ state: "checking" });
+                  verifyEuVat({ data: { taxNumber: value } })
+                    .then((r) => {
+                      if (r.status === "valid") setViesState({ state: "valid", name: r.name });
+                      else if (r.status === "invalid") setViesState({ state: "invalid" });
+                      else setViesState({ state: "unknown" });
+                    })
+                    .catch(() => setViesState({ state: "unknown" }));
                   return;
                 }
-                setViesState({ state: "checking" });
-                verifyEuVat({ data: { taxNumber: value } })
+                setViesState({ state: "idle" });
+                // Hungarian number: live NAV taxpayer check, but only when the
+                // format itself is already correct.
+                if (!value.trim() || !checkTaxNumber(value).ok) {
+                  setNavState({ state: "idle" });
+                  return;
+                }
+                setNavState({ state: "checking" });
+                verifyNavTax({ data: { taxNumber: value } })
                   .then((r) => {
-                    if (r.status === "valid") setViesState({ state: "valid", name: r.name });
-                    else if (r.status === "invalid") setViesState({ state: "invalid" });
-                    else setViesState({ state: "unknown" });
+                    if (r.status === "valid") setNavState({ state: "valid", name: r.name });
+                    else if (r.status === "invalid") setNavState({ state: "invalid" });
+                    else setNavState({ state: "unknown" });
                   })
-                  .catch(() => setViesState({ state: "unknown" }));
+                  .catch(() => setNavState({ state: "unknown" }));
               }}
               className={inputClass}
             />
@@ -347,12 +373,32 @@ function OrderPage() {
                   ? " (A VIES nyilvántartás most nem elérhető, ezért a szám érvényességét nem tudtuk ellenőrizni – a rendelés így is leadható.)"
                   : ""}
               </span>
+            ) : navState.state === "checking" ? (
+              <span className="mt-1.5 block text-xs font-normal text-muted-foreground">
+                Adószám ellenőrzése a NAV nyilvántartásában…
+              </span>
+            ) : navState.state === "invalid" ? (
+              <span className="mt-1.5 block text-xs font-normal text-destructive">
+                Ez az adószám a NAV nyilvántartásában nem érvényes adózóhoz tartozik. Kérlek,
+                ellenőrizd, vagy hagyd üresen a mezőt.
+              </span>
+            ) : navState.state === "valid" ? (
+              <span className="mt-1.5 block text-xs font-normal text-primary">
+                Érvényes adószám{navState.name ? ` – ${navState.name}` : ""} a NAV nyilvántartása
+                szerint.
+              </span>
+            ) : navState.state === "unknown" ? (
+              <span className="mt-1.5 block text-xs font-normal text-muted-foreground">
+                A NAV nyilvántartás most nem elérhető, ezért az adószámot nem tudtuk ellenőrizni – a
+                rendelés így is leadható.
+              </span>
             ) : (
               <span className="mt-1.5 block text-xs font-normal text-muted-foreground">
                 Csak cégnél / egyéni vállalkozónál. Magyar formátum: 12345678-1-42, EU-s adószám
                 országkóddal: pl. DE123456789, ATU12345678, SK2020123456
               </span>
             )}
+
 
           </label>
 
