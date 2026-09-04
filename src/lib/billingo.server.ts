@@ -95,16 +95,61 @@ function countryCode(name: string): string {
     "magyar koztarsasag": "HU",
     németország: "DE",
     germany: "DE",
+    deutschland: "DE",
     ausztria: "AT",
     austria: "AT",
+    österreich: "AT",
     szlovákia: "SK",
     slovakia: "SK",
+    szlovénia: "SI",
+    slovenia: "SI",
     románia: "RO",
     romania: "RO",
     horvátország: "HR",
     croatia: "HR",
     szerbia: "RS",
     serbia: "RS",
+    csehország: "CZ",
+    "cseh köztársaság": "CZ",
+    czechia: "CZ",
+    "czech republic": "CZ",
+    lengyelország: "PL",
+    poland: "PL",
+    hollandia: "NL",
+    netherlands: "NL",
+    belgium: "BE",
+    franciaország: "FR",
+    france: "FR",
+    olaszország: "IT",
+    italy: "IT",
+    spanyolország: "ES",
+    spain: "ES",
+    portugália: "PT",
+    portugal: "PT",
+    írország: "IE",
+    ireland: "IE",
+    dánia: "DK",
+    denmark: "DK",
+    svédország: "SE",
+    sweden: "SE",
+    finnország: "FI",
+    finland: "FI",
+    észtország: "EE",
+    estonia: "EE",
+    lettország: "LV",
+    latvia: "LV",
+    litvánia: "LT",
+    lithuania: "LT",
+    luxemburg: "LU",
+    luxembourg: "LU",
+    bulgária: "BG",
+    bulgaria: "BG",
+    görögország: "GR",
+    greece: "GR",
+    ciprus: "CY",
+    cyprus: "CY",
+    málta: "MT",
+    malta: "MT",
     uk: "GB",
     "egyesült királyság": "GB",
     "united kingdom": "GB",
@@ -114,10 +159,29 @@ function countryCode(name: string): string {
   return "HU";
 }
 
-/** Tax type for the partner: HAS_TAX_NUMBER when an adószám is present. */
-function partnerTaxType(taxNumber: string | null): string {
-  return taxNumber ? "HAS_TAX_NUMBER" : "NO_TAX_NUMBER";
+/**
+ * Country code for the Billingo partner. When the buyer gave an EU VAT number
+ * of another member state, that prefix is the authoritative country (the free
+ * text "Ország" field can be spelled anything), so it wins over the name map.
+ */
+function partnerCountryCode(order: OrderRow): string {
+  const prefix = euVatPrefix(order.tax_number);
+  if (prefix && prefix !== "HU") return prefix === "EL" ? "GR" : prefix === "XI" ? "GB" : prefix;
+  return countryCode(order.country);
 }
+
+/**
+ * Tax type for the partner. A buyer with an EU VAT number from another member
+ * state must be created as a foreign partner, otherwise Billingo rejects the
+ * reverse-charge (EUFAD37) invoice. Non-EU buyers outside Hungary are foreign
+ * as well; domestic buyers depend on whether they gave an adószám.
+ */
+function partnerTaxType(order: OrderRow): string {
+  if (isEuReverseCharge(order.tax_number)) return "FOREIGN";
+  if (partnerCountryCode(order) !== "HU") return "FOREIGN";
+  return order.tax_number ? "HAS_TAX_NUMBER" : "NO_TAX_NUMBER";
+}
+
 
 /** Picks the document block matching the fulfilment year, falling back to the latest invoice block. */
 async function resolveBlockId(fulfilmentYear: number): Promise<number> {
