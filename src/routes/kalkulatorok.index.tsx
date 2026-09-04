@@ -69,7 +69,7 @@ const items = [
     alt: "Számla dátumok kalkulátor",
   },
   {
-    to: "/kalkulatorok/invoice-dates",
+    to: "/en/calculators/invoice-dates",
     label: "Invoice Dates (EN)",
     image: invoiceDatesImg,
     alt: "Invoice Dates calculator",

@@ -112,6 +112,10 @@ import { Route as TermekUtalasiCsomagKeszitoRouteImport } from './routes/termek.
 import { Route as TermekUtnyilvantartasKikuldetesiRendelvenyRouteImport } from './routes/termek.utnyilvantartas-kikuldetesi-rendelveny'
 import { Route as TermekWifiJelszoNezoRouteImport } from './routes/termek.wifi-jelszo-nezo'
 import { Route as EnCalculatorsIndexRouteImport } from './routes/en.calculators.index'
+import { Route as EnCalculatorsFlatRateTaxRouteImport } from './routes/en.calculators.flat-rate-tax'
+import { Route as EnCalculatorsIncomeTaxRouteImport } from './routes/en.calculators.income-tax'
+import { Route as EnCalculatorsInvoiceDatesRouteImport } from './routes/en.calculators.invoice-dates'
+import { Route as EnCalculatorsSalaryTestRouteImport } from './routes/en.calculators.salary-test'
 import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
 import { Route as ApiPublicKatalogusAuditCronRouteImport } from './routes/api/public/katalogus-audit/cron'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
@@ -665,6 +669,28 @@ const EnCalculatorsIndexRoute = EnCalculatorsIndexRouteImport.update({
   path: '/calculators/',
   getParentRoute: () => EnRoute,
 } as any)
+const EnCalculatorsFlatRateTaxRoute =
+  EnCalculatorsFlatRateTaxRouteImport.update({
+    id: '/calculators/flat-rate-tax',
+    path: '/calculators/flat-rate-tax',
+    getParentRoute: () => EnRoute,
+  } as any)
+const EnCalculatorsIncomeTaxRoute = EnCalculatorsIncomeTaxRouteImport.update({
+  id: '/calculators/income-tax',
+  path: '/calculators/income-tax',
+  getParentRoute: () => EnRoute,
+} as any)
+const EnCalculatorsInvoiceDatesRoute =
+  EnCalculatorsInvoiceDatesRouteImport.update({
+    id: '/calculators/invoice-dates',
+    path: '/calculators/invoice-dates',
+    getParentRoute: () => EnRoute,
+  } as any)
+const EnCalculatorsSalaryTestRoute = EnCalculatorsSalaryTestRouteImport.update({
+  id: '/calculators/salary-test',
+  path: '/calculators/salary-test',
+  getParentRoute: () => EnRoute,
+} as any)
 const ApiPublicBillingoWebhookRoute =
   ApiPublicBillingoWebhookRouteImport.update({
     id: '/api/public/billingo/webhook',
@@ -808,6 +834,10 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
+  '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
+  '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
+  '/en/calculators/salary-test': typeof EnCalculatorsSalaryTestRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
@@ -918,6 +948,10 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/en': typeof EnIndexRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
+  '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
+  '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
+  '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
+  '/en/calculators/salary-test': typeof EnCalculatorsSalaryTestRoute
   '/en/calculators': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
@@ -1031,6 +1065,10 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
+  '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
+  '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
+  '/en/calculators/salary-test': typeof EnCalculatorsSalaryTestRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
@@ -1145,6 +1183,10 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/en/'
     | '/kalkulatorok/'
+    | '/en/calculators/flat-rate-tax'
+    | '/en/calculators/income-tax'
+    | '/en/calculators/invoice-dates'
+    | '/en/calculators/salary-test'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
@@ -1255,6 +1297,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/en'
     | '/kalkulatorok'
+    | '/en/calculators/flat-rate-tax'
+    | '/en/calculators/income-tax'
+    | '/en/calculators/invoice-dates'
+    | '/en/calculators/salary-test'
     | '/en/calculators'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
@@ -1367,6 +1413,10 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/en/'
     | '/kalkulatorok/'
+    | '/en/calculators/flat-rate-tax'
+    | '/en/calculators/income-tax'
+    | '/en/calculators/invoice-dates'
+    | '/en/calculators/salary-test'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
@@ -2183,6 +2233,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnCalculatorsIndexRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/calculators/flat-rate-tax': {
+      id: '/en/calculators/flat-rate-tax'
+      path: '/calculators/flat-rate-tax'
+      fullPath: '/en/calculators/flat-rate-tax'
+      preLoaderRoute: typeof EnCalculatorsFlatRateTaxRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/calculators/income-tax': {
+      id: '/en/calculators/income-tax'
+      path: '/calculators/income-tax'
+      fullPath: '/en/calculators/income-tax'
+      preLoaderRoute: typeof EnCalculatorsIncomeTaxRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/calculators/invoice-dates': {
+      id: '/en/calculators/invoice-dates'
+      path: '/calculators/invoice-dates'
+      fullPath: '/en/calculators/invoice-dates'
+      preLoaderRoute: typeof EnCalculatorsInvoiceDatesRouteImport
+      parentRoute: typeof EnRoute
+    }
+    '/en/calculators/salary-test': {
+      id: '/en/calculators/salary-test'
+      path: '/calculators/salary-test'
+      fullPath: '/en/calculators/salary-test'
+      preLoaderRoute: typeof EnCalculatorsSalaryTestRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/api/public/billingo/webhook': {
       id: '/api/public/billingo/webhook'
       path: '/api/public/billingo/webhook'
@@ -2286,6 +2364,10 @@ interface EnRouteChildren {
   EnTaxAdvisoryRoute: typeof EnTaxAdvisoryRoute
   EnTrainingRoute: typeof EnTrainingRoute
   EnIndexRoute: typeof EnIndexRoute
+  EnCalculatorsFlatRateTaxRoute: typeof EnCalculatorsFlatRateTaxRoute
+  EnCalculatorsIncomeTaxRoute: typeof EnCalculatorsIncomeTaxRoute
+  EnCalculatorsInvoiceDatesRoute: typeof EnCalculatorsInvoiceDatesRoute
+  EnCalculatorsSalaryTestRoute: typeof EnCalculatorsSalaryTestRoute
   EnCalculatorsIndexRoute: typeof EnCalculatorsIndexRoute
 }
 
@@ -2306,6 +2388,10 @@ const EnRouteChildren: EnRouteChildren = {
   EnTaxAdvisoryRoute: EnTaxAdvisoryRoute,
   EnTrainingRoute: EnTrainingRoute,
   EnIndexRoute: EnIndexRoute,
+  EnCalculatorsFlatRateTaxRoute: EnCalculatorsFlatRateTaxRoute,
+  EnCalculatorsIncomeTaxRoute: EnCalculatorsIncomeTaxRoute,
+  EnCalculatorsInvoiceDatesRoute: EnCalculatorsInvoiceDatesRoute,
+  EnCalculatorsSalaryTestRoute: EnCalculatorsSalaryTestRoute,
   EnCalculatorsIndexRoute: EnCalculatorsIndexRoute,
 }
 
