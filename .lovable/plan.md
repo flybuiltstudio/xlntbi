@@ -7,7 +7,7 @@
 - Az angol konzultációs oldalon ugyanez a sorrend jelenjen meg, „Request a DEMO” megnevezéssel.
 
 ## Termékeim oldalak
-- A jelenlegi piros egyedi fejlesztési szöveg fölé kerüljön a megadott DEMO-tájékoztató narancssárga, jól olvasható szöveggel.
+- A jelenlegi piros egyedi fejlesztési szöveg fölé kerüljön a DEMO-tájékoztató narancssárga, jól olvasható szöveggel, pontosan ezzel a szöveggel: „Bármelyik termékből kérhető DEMO. Ehhez nézd meg az alábbi programmal a géped azonosítóját. És ezt az azonosítót, valamint hogy hány napra van szükséged a teszteléshez, írd meg nekem a Konzultációt kérek oldal segítségével. A DEMO-k teljes verziók, csak a használati idő van lekorlátozva."
 - A WeTransfer-hivatkozásról letöltöm a HWID programot, és a meglévő védett termékfájl-tárhelyen külön segédprogramként tárolom; nem hozok létre belőle terméket.
 - A tájékoztató alatt legyen egy „HWID” feliratú letöltőgomb, amely a saját tárhelyről indítja a program letöltését, nem a WeTransfer oldalára vezet.
 - Ez alatt változatlanul maradjon a jelenlegi piros szöveg, majd a konzultációs gomb.
