@@ -9,6 +9,8 @@ interface Props {
   name?: string
   orderNumber?: string
   productName?: string
+  productLabel?: string
+  tierLabel?: string
   fileName?: string
   downloadUrl?: string
   expiresAt?: string
@@ -35,10 +37,39 @@ const button = {
   textDecoration: 'none',
 }
 
+const notice = {
+  ...paragraph,
+  color: '#C2410C',
+  fontWeight: 700,
+  margin: '16px 0 12px',
+}
+
+function buildMailto(name?: string, productName?: string, tierLabel?: string): string {
+  const buyer = name || 'Vásárló'
+  const product = productName || 'Termék'
+  const tier = tierLabel || '—'
+  const subject = `${buyer} – ${product} – ${tier} – LICENSZET KÉREK`
+  // 16-character HWID placeholder (sample: 13B9D1D807614D61)
+  const hwidBlank = '＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿'
+  const body = [
+    'Tisztelt Sarinay Dávid!',
+    '',
+    'Az alábbi termékre licenszkódot kérek:',
+    '',
+    `Vásárló neve:  ${buyer}`,
+    `Termék:        ${product}`,
+    `Licenc csomag: ${tier}`,
+    `>> HWID: ${hwidBlank}  (KITÖLTENDŐ!) <<`,
+  ].join('\n')
+  return `mailto:info@xlntbi.hu?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
+
 const Email = ({
   name,
   orderNumber,
   productName,
+  productLabel,
+  tierLabel,
   fileName,
   downloadUrl,
   expiresAt,
@@ -58,7 +89,7 @@ const Email = ({
         </Text>
         <Section style={box}>
           <Text style={{ ...paragraph, margin: '0 0 4px', fontWeight: 700 }}>
-            {productName || 'Termék'}
+            {productLabel || productName || 'Termék'}
           </Text>
           <Text style={{ ...small, margin: '0 0 14px' }}>
             Rendelésszám: {orderNumber || '—'} · Fájl: {fileName || '—'}
@@ -68,6 +99,15 @@ const Email = ({
               Szoftver letöltése
             </Button>
           ) : null}
+        </Section>
+        <Text style={notice}>
+          A letöltés után indítsd el / nyisd meg a megvásárolt terméket, és a megjelenő HWID-t küldd
+          el a megvásárolt termék nevével és licensz típusával együtt az info@xlntbi.hu emailcímre.
+        </Text>
+        <Section style={{ margin: '0 0 20px' }}>
+          <Button href={buildMailto(name, productName, tierLabel)} style={button}>
+            Licenszet kérek e-mailben
+          </Button>
         </Section>
         {rows && rows.length > 0 ? <DataTable rows={rows} /> : null}
         <Text style={paragraph}>
@@ -94,7 +134,9 @@ export const template = {
   previewData: {
     name: 'Kovács Anna',
     orderNumber: 'XLNT-20260819-1234',
-    productName: 'XLNT NAV Online Számla letöltő – Örökös licenc (1 db)',
+    productName: 'XLNT NAV Online Számla letöltő',
+    productLabel: 'XLNT NAV Online Számla letöltő – Örökös licenc (1 db)',
+    tierLabel: 'Örökös licenc',
     fileName: 'nav-online-szamla-letolto.zip',
     downloadUrl: 'https://xlntbi.hu/letoltes/abc123',
     expiresAt: '2026. 09. 02.',
