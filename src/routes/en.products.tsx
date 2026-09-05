@@ -88,10 +88,10 @@ function EnglishProducts() {
               View the products
             </Link>
             <p className="mt-6 text-sm font-semibold leading-relaxed text-orange-600 dark:text-orange-500">
-              You can request a DEMO of any product. To do so, use the program below to find your
-              computer's hardware ID. Then send me this ID, along with how many days you need for
-              testing, via the Request a consultation page. DEMOs are full versions — only the usage
-              time is limited.
+              A DEMO can be requested for any product. Use the program below to find your machine's
+              identifier. Then send me this identifier, the name of the product you would like to try,
+              and how many days you need for testing via the Request a consultation page. DEMOs are
+              full versions; only the usage period is limited.
             </p>
             <a
               href="/api/public/hwid-download"
