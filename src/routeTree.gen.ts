@@ -120,6 +120,7 @@ import { Route as TermekUtalasiCsomagKeszitoRouteImport } from './routes/termek.
 import { Route as TermekUtnyilvantartasKikuldetesiRendelvenyRouteImport } from './routes/termek.utnyilvantartas-kikuldetesi-rendelveny'
 import { Route as TermekVallalkozasMeretBesoroloRouteImport } from './routes/termek.vallalkozas-meret-besorolo'
 import { Route as TermekWifiJelszoNezoRouteImport } from './routes/termek.wifi-jelszo-nezo'
+import { Route as ApiPublicHwidDownloadRouteImport } from './routes/api/public/hwid-download'
 import { Route as EnCalculatorsIndexRouteImport } from './routes/en.calculators.index'
 import { Route as EnCalculatorsFlatRateTaxRouteImport } from './routes/en.calculators.flat-rate-tax'
 import { Route as EnCalculatorsIncomeTaxRouteImport } from './routes/en.calculators.income-tax'
@@ -720,6 +721,11 @@ const TermekWifiJelszoNezoRoute = TermekWifiJelszoNezoRouteImport.update({
   path: '/termek/wifi-jelszo-nezo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHwidDownloadRoute = ApiPublicHwidDownloadRouteImport.update({
+  id: '/api/public/hwid-download',
+  path: '/api/public/hwid-download',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnCalculatorsIndexRoute = EnCalculatorsIndexRouteImport.update({
   id: '/calculators/',
   path: '/calculators/',
@@ -899,6 +905,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/hwid-download': typeof ApiPublicHwidDownloadRoute
   '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
@@ -1022,6 +1029,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/en': typeof EnIndexRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
+  '/api/public/hwid-download': typeof ApiPublicHwidDownloadRoute
   '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
@@ -1148,6 +1156,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
+  '/api/public/hwid-download': typeof ApiPublicHwidDownloadRoute
   '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
@@ -1275,6 +1284,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/en/'
     | '/kalkulatorok/'
+    | '/api/public/hwid-download'
     | '/en/calculators/flat-rate-tax'
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
@@ -1398,6 +1408,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/en'
     | '/kalkulatorok'
+    | '/api/public/hwid-download'
     | '/en/calculators/flat-rate-tax'
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
@@ -1523,6 +1534,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/en/'
     | '/kalkulatorok/'
+    | '/api/public/hwid-download'
     | '/en/calculators/flat-rate-tax'
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
@@ -1613,6 +1625,7 @@ export interface RootRouteChildren {
   TermekVallalkozasMeretBesoroloRoute: typeof TermekVallalkozasMeretBesoroloRoute
   TermekWifiJelszoNezoRoute: typeof TermekWifiJelszoNezoRoute
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
+  ApiPublicHwidDownloadRoute: typeof ApiPublicHwidDownloadRoute
   ApiPublicBillingoWebhookRoute: typeof ApiPublicBillingoWebhookRoute
   ApiPublicKatalogusAuditCronRoute: typeof ApiPublicKatalogusAuditCronRoute
   ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
@@ -2401,6 +2414,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekWifiJelszoNezoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hwid-download': {
+      id: '/api/public/hwid-download'
+      path: '/api/public/hwid-download'
+      fullPath: '/api/public/hwid-download'
+      preLoaderRoute: typeof ApiPublicHwidDownloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/calculators/': {
       id: '/en/calculators/'
       path: '/calculators'
@@ -2668,6 +2688,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermekVallalkozasMeretBesoroloRoute: TermekVallalkozasMeretBesoroloRoute,
   TermekWifiJelszoNezoRoute: TermekWifiJelszoNezoRoute,
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
+  ApiPublicHwidDownloadRoute: ApiPublicHwidDownloadRoute,
   ApiPublicBillingoWebhookRoute: ApiPublicBillingoWebhookRoute,
   ApiPublicKatalogusAuditCronRoute: ApiPublicKatalogusAuditCronRoute,
   ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
