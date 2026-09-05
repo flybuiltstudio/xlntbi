@@ -87,6 +87,18 @@ function EnglishProducts() {
             >
               View the products
             </Link>
+            <p className="mt-6 text-sm font-semibold leading-relaxed text-orange-600 dark:text-orange-500">
+              You can request a DEMO of any product. To do so, use the program below to find your
+              computer's hardware ID. Then send me this ID, along with how many days you need for
+              testing, via the Request a consultation page. DEMOs are full versions — only the usage
+              time is limited.
+            </p>
+            <a
+              href="/api/public/hwid-download"
+              className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
+            >
+              Download HWID
+            </a>
             <p className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
               I also develop custom products. Get in touch with me through the consultation page.
             </p>
