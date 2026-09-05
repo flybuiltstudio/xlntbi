@@ -8,11 +8,12 @@
 
 ## Termékeim oldalak
 - A jelenlegi piros egyedi fejlesztési szöveg fölé kerüljön a megadott DEMO-tájékoztató narancssárga, jól olvasható szöveggel.
-- A tájékoztató alatt legyen egy „HWID” feliratú letöltőgomb, amely a megadott WeTransfer hivatkozást nyitja meg.
+- A WeTransfer-hivatkozásról letöltöm a HWID programot, és a meglévő védett termékfájl-tárhelyen külön segédprogramként tárolom; nem hozok létre belőle terméket.
+- A tájékoztató alatt legyen egy „HWID” feliratú letöltőgomb, amely a saját tárhelyről indítja a program letöltését, nem a WeTransfer oldalára vezet.
 - Ez alatt változatlanul maradjon a jelenlegi piros szöveg, majd a konzultációs gomb.
-- Az angol Termékek oldalon ugyanilyen blokk készüljön pontos, természetes angol fordítással és ugyanazzal a HWID-hivatkozással.
+- Az angol Termékek oldalon ugyanilyen blokk készüljön pontos, természetes angol fordítással és ugyanazzal a saját tárhelyes HWID-letöltéssel.
 
 ## Ellenőrzés
 - Ellenőrzöm mindkét nyelven a témák pontos sorrendjét.
-- Ellenőrzöm asztali és mobil nézetben a DEMO-szöveg, a HWID gomb és a meglévő piros szöveg sorrendjét, valamint a hivatkozást.
+- Ellenőrzöm asztali és mobil nézetben a DEMO-szöveg, a HWID gomb és a meglévő piros szöveg sorrendjét, valamint azt, hogy a letöltés a saját tárhelyről működik.
 - Lefuttatom a kapcsolódó típus- és működési ellenőrzéseket.
