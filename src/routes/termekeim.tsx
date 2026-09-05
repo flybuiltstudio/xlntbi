@@ -137,9 +137,9 @@ function TermekeimPage() {
             </Link>
             <p className="mt-6 text-sm font-semibold leading-relaxed text-orange-600 dark:text-orange-500">
               Bármelyik termékből kérhető DEMO. Ehhez nézd meg az alábbi programmal a géped
-              azonosítóját. És ezt az azonosítót, valamint hogy hány napra van szükséged a
-              teszteléshez, írd meg nekem a Konzultációt kérek oldal segítségével. A DEMO-k teljes
-              verziók, csak a használati idő van lekorlátozva.
+              azonosítóját. És ezt az azonosítót, a kipróbálni vágyott termék nevét, valamint hogy
+              hány napra van szükséged a teszteléshez, írd meg nekem a Konzultációt kérek oldal
+              segítségével. A DEMO-k teljes verziók, csak a használati idő van lekorlátozva.
             </p>
             <a
               href="/api/public/hwid-download"
