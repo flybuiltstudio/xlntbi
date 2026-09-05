@@ -138,7 +138,9 @@ export async function issueDownload(order: OrderRow): Promise<void> {
       data: {
         name: order.billing_name,
         orderNumber: order.order_number,
-        productName: productLabel,
+        productName,
+        productLabel,
+        tierLabel: order.tier_label ?? "",
         fileName: currentFileName,
         downloadUrl: `${siteOrigin()}/api/public/letoltes/${token}`,
         expiresAt: formatDate(expiresAt),
