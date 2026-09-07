@@ -293,6 +293,16 @@ export const adminUploadCalculatorVersion = createServerFn({ method: "POST" })
     return uploadCalculatorVersion({ ...data, updatedBy: context.userId });
   });
 
+export const adminRegenerateCalculatorEnglish = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ key: z.string().min(1) }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { regenerateEnglishCalculator } = await import("./admin.server");
+    return regenerateEnglishCalculator({ huKey: data.key, updatedBy: context.userId });
+  });
+
 export const adminDeleteCalculatorOverride = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ key: z.string().min(1) }).parse(data))

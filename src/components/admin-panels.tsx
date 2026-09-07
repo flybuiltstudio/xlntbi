@@ -32,11 +32,17 @@ import {
   adminRetryInvoice,
   adminUpdateUserRole,
   adminUploadCalculatorVersion,
+  adminRegenerateCalculatorEnglish,
 } from "@/lib/admin.functions";
 import type { TestOrderPreviewRow } from "@/lib/admin.server";
 import { formatPrice, products } from "@/lib/products";
 import { applyPlacements, productCategories, sortCategories } from "@/lib/product-categories";
-import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
+import {
+  EN_CALCULATORS,
+  HU_CALCULATORS,
+  calculatorLabel,
+  englishCounterpart,
+} from "@/lib/calculators/registry";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -1987,14 +1993,17 @@ export function CalculatorVersionPanel() {
   const loadOverrides = useServerFn(adminListCalculatorOverrides);
   const upload = useServerFn(adminUploadCalculatorVersion);
   const remove = useServerFn(adminDeleteCalculatorOverride);
+  const regenerateEnglish = useServerFn(adminRegenerateCalculatorEnglish);
 
-  const [calcKey, setCalcKey] = useState<string>(CALCULATORS[0].key);
+  const [calcKey, setCalcKey] = useState<string>(HU_CALCULATORS[0]?.key ?? "berteszt");
   const [overrides, setOverrides] = useState<CalculatorOverrideRow[] | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [inputKey, setInputKey] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [enBusy, setEnBusy] = useState(false);
   const [restoreBusy, setRestoreBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const [warning, setWarning] = useState("");
   const [error, setError] = useState("");
 
   async function refresh() {
@@ -2038,10 +2047,14 @@ export function CalculatorVersionPanel() {
         data: { key: calcKey, fileName: file.name, content },
       });
       if (!result.ok) throw new Error(result.error);
-      setMessage(
+      let text =
         `${calculatorLabel(calcKey)}: frissítve a feltöltött fájllal (${file.name}). ` +
-          "A nyilvános oldal mostantól ezt a verziót mutatja.",
-      );
+        "A nyilvános oldal mostantól ezt a verziót mutatja.";
+      if (result.enUpdated) {
+        text += " Az angol változat automatikusan elkészült és szintén élesben van.";
+      }
+      setMessage(text);
+      setWarning(result.enError ?? "");
       setFile(null);
       setInputKey((k) => k + 1);
       await refresh();
@@ -2051,11 +2064,32 @@ export function CalculatorVersionPanel() {
     setBusy(false);
   }
 
+  /** Re-translates the stored Hungarian version into the English calculator. */
+  async function onRegenerateEnglish() {
+    if (enBusy || busy) return;
+    setEnBusy(true);
+    setMessage("");
+    setWarning("");
+    setError("");
+    try {
+      const result = await regenerateEnglish({ data: { key: calcKey } });
+      if (!result.ok) throw new Error(result.error);
+      setMessage(
+        `${calculatorLabel(calcKey)}: az angol változat (${calculatorLabel(result.enKey)}) újra elkészült és élesben van.`,
+      );
+      await refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setEnBusy(false);
+  }
+
   /** Deletes the override, restoring the bundled calculator version. */
   async function onRestore(key: string) {
     if (restoreBusy) return;
     setRestoreBusy(key);
     setMessage("");
+    setWarning("");
     setError("");
     try {
       await remove({ data: { key } });
@@ -2067,13 +2101,18 @@ export function CalculatorVersionPanel() {
     setRestoreBusy(null);
   }
 
+  const selectedIsHu = HU_CALCULATORS.some((c) => c.key === calcKey);
+  const pairKey = englishCounterpart(calcKey);
+
   return (
     <section className="mt-10 rounded-xl border border-border bg-card p-6">
       <h2 className="text-xl font-bold text-foreground">Kalkulátor frissítése</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        A kiválasztott kalkulátor határozza meg a célt — a feltöltött fájl neve nem
-        számít. A feltöltött HTML váltja le a kalkulátor nyilvános oldalát; az
-        eredeti verzió bármikor visszaállítható.
+        A magyar és az angol kalkulátorok külön elemek: a magyar feltöltés nem
+        látszik az angol oldalon. Ha magyar kalkulátort töltesz fel, az angol
+        párja automatikusan elkészül angolul, és azonnal élesbe kerül. Az angol
+        változat kézzel is felülírható, és az eredeti verzió bármikor
+        visszaállítható.
       </p>
 
       <div className="mt-6 flex flex-col gap-4">
@@ -2082,21 +2121,40 @@ export function CalculatorVersionPanel() {
           <select
             className={`${selectClass} mt-1.5 w-full max-w-md`}
             value={calcKey}
-            disabled={busy}
+            disabled={busy || enBusy}
             onChange={(e) => {
               setCalcKey(e.target.value);
               setMessage("");
+              setWarning("");
               setError("");
             }}
           >
-            {CALCULATORS.map((c) => (
-              <option key={c.key} value={c.key}>
-                {c.label}
-                {overrideKeys.has(c.key) ? " — feltöltött verzió" : " — eredeti verzió"}
-              </option>
-            ))}
+            <optgroup label="Magyar kalkulátorok">
+              {HU_CALCULATORS.map((c) => (
+                <option key={c.key} value={c.key}>
+                  {c.label}
+                  {overrideKeys.has(c.key) ? " — feltöltött verzió" : " — eredeti verzió"}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="Angol kalkulátorok">
+              {EN_CALCULATORS.map((c) => (
+                <option key={c.key} value={c.key}>
+                  {c.label}
+                  {overrideKeys.has(c.key) ? " — feltöltött verzió" : " — eredeti verzió"}
+                </option>
+              ))}
+            </optgroup>
           </select>
         </label>
+
+        {selectedIsHu && pairKey ? (
+          <p className="text-xs text-muted-foreground">
+            Angol párja: <strong>{calculatorLabel(pairKey)}</strong> — feltöltés után
+            automatikusan frissül.
+          </p>
+        ) : null}
+
 
         <label className="text-sm font-medium text-foreground">
           Új verzió (.html, legfeljebb 5 MB)
@@ -2110,16 +2168,27 @@ export function CalculatorVersionPanel() {
           />
         </label>
 
-        <div>
+        <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
-            disabled={!file || busy}
+            disabled={!file || busy || enBusy}
             onClick={() => void onUpload()}
             className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-40"
           >
             {busy ? "Feltöltés…" : "Kalkulátor frissítése"}
           </button>
+          {selectedIsHu && pairKey ? (
+            <button
+              type="button"
+              disabled={busy || enBusy}
+              onClick={() => void onRegenerateEnglish()}
+              className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted disabled:opacity-40"
+            >
+              {enBusy ? "Fordítás folyamatban…" : "Angol változat újragenerálása"}
+            </button>
+          ) : null}
         </div>
+
 
         {busy ? (
           <div className="max-w-md">
@@ -2138,6 +2207,12 @@ export function CalculatorVersionPanel() {
         ) : null}
 
         {error ? <UploadErrorBox detail={error} /> : null}
+        {warning ? (
+          <p className="rounded-md border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-foreground">
+            A magyar verzió élesben van, de az angol fordítás nem sikerült: {warning}{" "}
+            Az „Angol változat újragenerálása” gombbal újra megpróbálható.
+          </p>
+        ) : null}
         {message ? (
           <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
             {message}

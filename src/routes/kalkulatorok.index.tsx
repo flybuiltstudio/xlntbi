@@ -3,7 +3,6 @@ import { PageHero } from "@/components/PageHero";
 import bertesztImg from "@/assets/berteszt.jpg";
 import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
-import invoiceDatesImg from "@/assets/kalkulator-invoice-dates.jpg";
 import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
 
 
@@ -69,28 +68,22 @@ const items = [
     alt: "Számla dátumok kalkulátor",
   },
   {
-    to: "/en/calculators/invoice-dates",
-    label: "Invoice Dates (EN)",
-    image: invoiceDatesImg,
-    alt: "Invoice Dates calculator",
-  },
-  {
     to: "/kalkulatorok/berteszt",
     label: "Bérteszt",
     image: bertesztImg,
     alt: "Bérteszt kalkulátor",
   },
   {
-    to: "/kalkulatorok/jovedelemado",
-    label: "Jövedelemadó",
-    image: jovedelemadoImg,
-    alt: "Jövedelemadó kalkulátor",
-  },
-  {
     to: "/kalkulatorok/atalanyado",
     label: "Átalányadó",
     image: atalanyadoImg,
     alt: "Átalányadó kalkulátor",
+  },
+  {
+    to: "/kalkulatorok/jovedelemado",
+    label: "Jövedelemadó",
+    image: jovedelemadoImg,
+    alt: "Jövedelemadó kalkulátor",
   },
 ] as const;
 

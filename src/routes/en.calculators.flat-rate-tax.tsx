@@ -7,8 +7,8 @@ import { getCalculatorOverride } from "@/lib/calculator.functions";
 import { buildHead } from "@/lib/i18n/head";
 
 const overrideQueryOptions = queryOptions({
-  queryKey: ["calculator-override", "atalanyado"],
-  queryFn: () => getCalculatorOverride({ data: { key: "atalanyado" } }),
+  queryKey: ["calculator-override", "atalanyado-en"],
+  queryFn: () => getCalculatorOverride({ data: { key: "atalanyado-en" } }),
   staleTime: 60_000,
 });
 

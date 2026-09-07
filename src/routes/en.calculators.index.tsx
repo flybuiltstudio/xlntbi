@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import invoiceDatesImg from "@/assets/kalkulator-invoice-dates.jpg";
-import bertesztImg from "@/assets/berteszt.jpg";
-import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
-import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
-import fallbackImg from "@/assets/berteszt.jpg";
+import salaryTestImg from "@/assets/kalkulator-salary-test.jpg";
+import incomeTaxImg from "@/assets/kalkulator-income-tax.jpg";
+import flatRateTaxImg from "@/assets/kalkulator-flat-rate-tax.jpg";
+import fallbackImg from "@/assets/kalkulator-invoice-dates.jpg";
 import { PageHero } from "@/components/PageHero";
 import { buildHead } from "@/lib/i18n/head";
 
@@ -27,20 +27,20 @@ const items = [
   {
     to: "/en/calculators/salary-test",
     label: "Salary test",
-    image: bertesztImg,
+    image: salaryTestImg,
     alt: "Salary test calculator",
-  },
-  {
-    to: "/en/calculators/income-tax",
-    label: "Personal income tax",
-    image: jovedelemadoImg,
-    alt: "Personal income tax calculator",
   },
   {
     to: "/en/calculators/flat-rate-tax",
     label: "Flat-rate tax",
-    image: atalanyadoImg,
+    image: flatRateTaxImg,
     alt: "Flat-rate tax calculator",
+  },
+  {
+    to: "/en/calculators/income-tax",
+    label: "Personal income tax",
+    image: incomeTaxImg,
+    alt: "Personal income tax calculator",
   },
 ] as const;
 
