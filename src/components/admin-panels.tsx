@@ -2168,16 +2168,27 @@ export function CalculatorVersionPanel() {
           />
         </label>
 
-        <div>
+        <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
-            disabled={!file || busy}
+            disabled={!file || busy || enBusy}
             onClick={() => void onUpload()}
             className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-40"
           >
             {busy ? "Feltöltés…" : "Kalkulátor frissítése"}
           </button>
+          {selectedIsHu && pairKey ? (
+            <button
+              type="button"
+              disabled={busy || enBusy}
+              onClick={() => void onRegenerateEnglish()}
+              className="rounded-md border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted disabled:opacity-40"
+            >
+              {enBusy ? "Fordítás folyamatban…" : "Angol változat újragenerálása"}
+            </button>
+          ) : null}
         </div>
+
 
         {busy ? (
           <div className="max-w-md">
