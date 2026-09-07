@@ -2207,6 +2207,12 @@ export function CalculatorVersionPanel() {
         ) : null}
 
         {error ? <UploadErrorBox detail={error} /> : null}
+        {warning ? (
+          <p className="rounded-md border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-foreground">
+            A magyar verzió élesben van, de az angol fordítás nem sikerült: {warning}{" "}
+            Az „Angol változat újragenerálása” gombbal újra megpróbálható.
+          </p>
+        ) : null}
         {message ? (
           <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-foreground">
             {message}
