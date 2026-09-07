@@ -40,12 +40,14 @@ Az angol kalkulátort ettől függetlenül továbbra is fel tudod tölteni kézz
 
 - A magyar `/kalkulatorok` oldalról kikerül az angol Invoice Dates kártya.
 - A sorrend mindkét nyelven egységesen: Számla dátumok, Bérteszt, Átalányadó, Jövedelemadó (az angol oldalon: Invoice dates, Salary test, Flat-rate tax, Personal income tax).
+- Az angol lista mind a négy kártyája angol nyelvű képet kap: a Salary test, a Flat-rate tax és a Personal income tax kártya ma a magyar képet használja, ezekhez az angol kalkulátor-felületről készül kép (a böngészőben megnyitva, valós képernyőkép az angol oldalról), ahogy az Invoice dates kártyánál is angol kép van.
 
 ## Technikai részletek
 
 - `src/lib/calculators/registry.ts`: `CALCULATORS` bejegyzések `lang: "hu" | "en"` és `enKey` mezővel; új angol kulcsok (`invoice-dates-en`, `berteszt-en`, `jovedelemado-en`, `atalanyado-en`), plusz csoportosított listát adó segédfüggvények. A meglévő `invoice-dates` kulcs megmarad kompatibilitási okból, de nem szerepel a felületen.
 - `src/routes/en.calculators.*.tsx`: a `getCalculatorOverride` hívások az angol kulcsokra állnak át (`berteszt-en`, `jovedelemado-en`, `atalanyado-en`, `invoice-dates-en`). Az SSR-es megjelenítés és a beépített változatra visszaesés változatlan.
 - `src/routes/kalkulatorok.index.tsx` és `src/routes/en.calculators.index.tsx`: a magyar listából törlődik az Invoice Dates kártya; a sorrend mindkét oldalon Számla dátumok, Bérteszt, Átalányadó, Jövedelemadó.
+- Új angol kártyaképek (`src/assets/kalkulator-salary-test.jpg`, `kalkulator-flat-rate-tax.jpg`, `kalkulator-income-tax.jpg`) a `/en/calculators/...` oldalak valós képernyőképéből (Playwright, 1280 px széles nézet), a magyar képek méret- és vágásarányához illesztve; az `en.calculators.index.tsx` importjai ezekre váltanak, a `fallbackImg` felesleges import törlődik.
 - Új `src/lib/calculator-translate.server.ts`: Lovable AI Gateway hívás az AI SDK-n keresztül (`@/lib/ai-gateway.server` helper vagy létrehozása, ha még nincs), `streamText` + `await result.text`, hosszabb futásra is biztonságosan; szigorú system prompt: csak a látható szöveg fordul, HTML-szerkezet, attribútumok, JS-logika és számok maradnak.
 - `src/lib/admin.server.ts` `uploadCalculatorVersion`: magyar kulcs esetén a mentés után elkészíti és upsertálja az `enKey` bejegyzést is; visszatérési értékben `enUpdated` / `enError`. `src/lib/admin.functions.ts` új `adminRegenerateCalculatorEnglish` szerverfüggvény ugyanazon admin-kapuval.
 - `src/components/admin-panels.tsx` `CalculatorVersionPanel`: `optgroup`-os választó, nyelvjelölés, angol frissítés státusza, „Angol változat újragenerálása” gomb. Csak a panel szövege és szerkezete változik.
