@@ -3,7 +3,6 @@ import { PageHero } from "@/components/PageHero";
 import bertesztImg from "@/assets/berteszt.jpg";
 import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
-import invoiceDatesImg from "@/assets/kalkulator-invoice-dates.jpg";
 import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
 
 
