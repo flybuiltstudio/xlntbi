@@ -1338,20 +1338,21 @@ export const products: Product[] = [
     metaTitle: "XLNT Telefonszámla Könyvelő | EXCELlent",
     metaDescription: "Telefonszámlából könyvelés – percek alatt, hívószámonként, hibátlan áfával. Ár: 14 900 Ft-tól.",
     intro: [
-      "A többtelefonszámos céges számlák könyvelése hónapról hónapra ugyanaz a fárasztó, hibalehetőségekkel teli kézi munka. A Telefonszámla Könyvelő beolvassa a PDF-számlát, hívószámonként szétbontja a tételeket, és egyetlen kattintással a könyvelőprogramjába importálható fájlt készít – helyes áfakulcsokkal és a telefonszolgáltatás magán/céges áfabontásával együtt. A Magyar Telekom és a Yettel üzleti mobilszámláit automatikusan felismeri.",
-      "Könyvelőirodáknak és cégeknek, amelyek több hívószámos, üzleti mobilszámlákat könyvelnek (Magyar Telekom, Yettel), és RLB, Kulcs-Soft, Novitax vagy Pénzszám rendszert használnak.",
+      "A többtelefonszámos céges számlák könyvelése hónapról hónapra ugyanaz a fárasztó, hibalehetőségekkel teli kézi munka. A Telefonszámla Könyvelő beolvassa a PDF-számlát, hívószámonként szétbontja a tételeket, és egyetlen kattintással a könyvelőprogramjába importálható fájlt készít – helyes áfakulcsokkal és a telefonszolgáltatás magán/céges áfabontásával együtt. A Magyar Telekom (mobil és vezetékes), a Yettel és a One üzleti számláit automatikusan felismeri.",
+      "Könyvelőirodáknak és cégeknek, amelyek több hívószámos, üzleti mobilszámlákat könyvelnek (Magyar Telekom – mobil és vezetékes –, Yettel, One), és RLB, Kulcs-Soft, Novitax vagy Pénzszám rendszert használnak.",
     ],
     features: [
       "Időt spórol: a havi telefonszámla-könyvelés kézi munkája perces feladattá zsugorodik.",
-      "Ellenőrzött: a hívószámonkénti bontás összegét a program a számla végösszegével automatikusan egyezőségre ellenőrzi (rekonciliáció).",
-      "Rugalmas: egy program két szolgáltatót ismer fel és négy könyvelőrendszerbe exportál – nem kell külön eszköz.",
-      "Beolvasás: Magyar Telekom és Yettel üzleti mobilszámla automatikus felismerése (fejléc, hívószámok, áfa-összesítő).",
-      "Automatikus bontás: szöveges PDF-nél a program hívószámonként Telefon (27%), Internet/adat (5%) és Parkolás tételekre bont, és a számlával egyezőségre ellenőriz.",
+      "Ellenőrzött: a program a bontás összegét hívószámonként összeveti a számla végösszegével, és csak akkor tölti ki, ha egyezik (rekonciliáció). Ha nem, jelzi – nem tippel.",
+      "Rugalmas: három szolgáltató automatikus felismerése és négy könyvelőrendszerbe export – nem kell külön eszköz.",
+      "Beolvasás: Magyar Telekom mobil ÉS vezetékes, Yettel és One üzleti számla automatikus felismerése (fejléc, hívószámok / szolgáltatás-azonosítók, áfa-összesítő). A régebbi Telekom-elrendezéseket (2018–2022, szkennelt példányokat is) szintén felismeri.",
+      "Automatikus bontás: szöveges PDF-nél hívószámonként (vezetékes számlánál szolgáltatásonként) Telefon (27%), Internet/adat (5%), Parkolás és készülékbiztosítás (áfamentes) tételekre bont; a szolgáltatói kedvezményeket is kezeli.",
       "Bontás: hívószámhoz munkaszám rendelhető; a telefontétel bruttójából automatikus magán / céges nem-levonható / céges levonható + áfa sorok (szabadon állítható százalékok és főkönyvi számok).",
       "Kontírozás: kész könyvelési leképezés (költség- és szállító-főkönyvek, áfakódok); a szállító törzsben a Magyar Telekom, a Yettel és a One előre felvéve (adószám, cím, Követel-főkönyv).",
       "SZJA + SZOCHO: a magáncélú 20%-ra – igény szerint, a fő lapon kapcsolható – kiszámolja az SZJA-t és a szochót (egyes meghatározott juttatás), külön vegyes tételként. A kulcsok a hatályos értékek, de átírhatók.",
       "Export: RLB, Kulcs-Soft, Novitax, Pénzszám – plusz általános CSV. A formátumok a hivatalos importmakrókkal egyeznek.",
     ],
+    why: "Szöveges PDF-ből a beolvasás és a hívószámonkénti bontás pontos – a tesztelt hét szövegréteges Telekom- (mobil és vezetékes), Yettel- és One-számlán minden szekció fillérre egyezett a számla végösszegével. Régi, szkennelt (kép-alapú) számlánál a program tűrő mintával olvassa ki a hívószámonkénti végösszegeket, de tételt csak akkor képez, ha azok pontosan kiadják a számla végösszegét: a három tesztelt szkennelt számlából egynél sikerült, kettőnél a program kiírja, mit olvasott ki, és Te viszed fel az összegeket (a magyar OCR-hez a Tesseract magyar nyelvi csomag ajánlott). A telefon-áfabontás százalékai, az SZJA/szocho kulcsai és minden főkönyvi szám a saját számlatükrödhöz, illetve a mindenkori jogszabályhoz igazíthatók a programon belül.",
     tiers: [
       {
         id: "alap_licenc_1_adoszam",
