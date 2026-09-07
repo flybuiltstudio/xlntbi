@@ -7,6 +7,7 @@ A feltöltő lista összemossa a két nyelvet, és emiatt van egy valódi hiba i
 - Az angol Bérteszt, Jövedelemadó és Átalányadó oldal ugyanarra a bejegyzésre hivatkozik, mint a magyar. Ha ma magyar verziót töltesz fel, az angol oldalon is a magyar tartalom jelenik meg.
 - Az angol Invoice Dates oldal olyan bejegyzést keres, ami a listában nem is szerepel, így oda felöltés soha nem érvényesül.
 - A listában „Invoice Dates (EN)” a magyarok között van.
+- A magyar Kalkulátorok oldalon (`/kalkulatorok`) megjelent az angol Invoice Dates kártya is, és a sorrend sem egyezik a kérttel.
 
 ## Amit építek
 
