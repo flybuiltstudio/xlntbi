@@ -40,6 +40,7 @@ Az angol kalkulátort ettől függetlenül továbbra is fel tudod tölteni kézz
 
 - A magyar `/kalkulatorok` oldalról kikerül az angol Invoice Dates kártya.
 - A sorrend mindkét nyelven egységesen: Számla dátumok, Bérteszt, Átalányadó, Jövedelemadó (az angol oldalon: Invoice dates, Salary test, Flat-rate tax, Personal income tax).
+- Az angol lista mind a négy kártyája angol nyelvű képet kap: a Salary test, a Flat-rate tax és a Personal income tax kártya ma a magyar képet használja, ezekhez az angol kalkulátor-felületről készül kép (a böngészőben megnyitva, valós képernyőkép az angol oldalról), ahogy az Invoice dates kártyánál is angol kép van.
 
 ## Technikai részletek
 
