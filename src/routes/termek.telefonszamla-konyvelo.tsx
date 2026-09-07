@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
 
 const TITLE = "XLNT Telefonszámla könyvelő program | EXCELlent Business Intelligence";
-const DESCRIPTION = "Dolgozd fel és könyveld automatikusan a céges telefonszámlák tételeit, magán és üzleti hívások szétválasztásával.";
+const DESCRIPTION = "Telefonszámlából könyvelés percek alatt: Telekom (mobil és vezetékes), Yettel és One számlák hívószámonkénti bontása, magán/céges áfabontással, RLB, Kulcs-Soft, Novitax és Pénzszám exporttal.";
 const H1 = "XLNT Telefonszámla könyvelő";
 const CANONICAL = "https://xlntbi.hu/termek/telefonszamla-konyvelo";
 const OG_IMAGE = "https://xlntbi.hu/og/termekek.jpg";
