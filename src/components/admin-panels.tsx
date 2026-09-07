@@ -32,11 +32,17 @@ import {
   adminRetryInvoice,
   adminUpdateUserRole,
   adminUploadCalculatorVersion,
+  adminRegenerateCalculatorEnglish,
 } from "@/lib/admin.functions";
 import type { TestOrderPreviewRow } from "@/lib/admin.server";
 import { formatPrice, products } from "@/lib/products";
 import { applyPlacements, productCategories, sortCategories } from "@/lib/product-categories";
-import { CALCULATORS, calculatorLabel } from "@/lib/calculators/registry";
+import {
+  EN_CALCULATORS,
+  HU_CALCULATORS,
+  calculatorLabel,
+  englishCounterpart,
+} from "@/lib/calculators/registry";
 import { MONTHS, MONTHS_SHORT } from "@/lib/stats-export";
 import { supabase } from "@/integrations/supabase/client";
 
