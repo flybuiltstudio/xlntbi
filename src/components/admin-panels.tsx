@@ -1987,14 +1987,17 @@ export function CalculatorVersionPanel() {
   const loadOverrides = useServerFn(adminListCalculatorOverrides);
   const upload = useServerFn(adminUploadCalculatorVersion);
   const remove = useServerFn(adminDeleteCalculatorOverride);
+  const regenerateEnglish = useServerFn(adminRegenerateCalculatorEnglish);
 
-  const [calcKey, setCalcKey] = useState<string>(CALCULATORS[0].key);
+  const [calcKey, setCalcKey] = useState<string>(HU_CALCULATORS[0]?.key ?? "berteszt");
   const [overrides, setOverrides] = useState<CalculatorOverrideRow[] | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [inputKey, setInputKey] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [enBusy, setEnBusy] = useState(false);
   const [restoreBusy, setRestoreBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const [warning, setWarning] = useState("");
   const [error, setError] = useState("");
 
   async function refresh() {
