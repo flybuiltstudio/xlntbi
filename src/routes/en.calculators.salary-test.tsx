@@ -7,8 +7,8 @@ import { getCalculatorOverride } from "@/lib/calculator.functions";
 import { buildHead } from "@/lib/i18n/head";
 
 const overrideQueryOptions = queryOptions({
-  queryKey: ["calculator-override", "berteszt"],
-  queryFn: () => getCalculatorOverride({ data: { key: "berteszt" } }),
+  queryKey: ["calculator-override", "berteszt-en"],
+  queryFn: () => getCalculatorOverride({ data: { key: "berteszt-en" } }),
   staleTime: 60_000,
 });
 

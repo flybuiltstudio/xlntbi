@@ -7,8 +7,8 @@ import { getCalculatorOverride } from "@/lib/calculator.functions";
 import { buildHead } from "@/lib/i18n/head";
 
 const overrideQueryOptions = queryOptions({
-  queryKey: ["calculator-override", "jovedelemado"],
-  queryFn: () => getCalculatorOverride({ data: { key: "jovedelemado" } }),
+  queryKey: ["calculator-override", "jovedelemado-en"],
+  queryFn: () => getCalculatorOverride({ data: { key: "jovedelemado-en" } }),
   staleTime: 60_000,
 });
 
