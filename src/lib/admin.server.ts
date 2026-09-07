@@ -1020,8 +1020,13 @@ export async function uploadCalculatorVersion(input: {
   fileName: string;
   content: string;
   updatedBy: string;
-}): Promise<{ ok: true } | { ok: false; error: string }> {
-  const { isCalculatorKey } = await import("@/lib/calculators/registry");
+}): Promise<
+  | { ok: true; enKey?: string; enUpdated?: boolean; enError?: string }
+  | { ok: false; error: string }
+> {
+  const { isCalculatorKey, englishCounterpart } = await import(
+    "@/lib/calculators/registry"
+  );
   if (!isCalculatorKey(input.key)) return { ok: false, error: "Ismeretlen kalkulátor." };
   if (!input.fileName.toLowerCase().endsWith(".html")) {
     return { ok: false, error: "Csak .html fájl tölthető fel." };
@@ -1030,6 +1035,35 @@ export async function uploadCalculatorVersion(input: {
   if (byteLength === 0 || byteLength > CALCULATOR_UPLOAD_MAX_BYTES) {
     return { ok: false, error: "A fájl mérete legfeljebb 5 MB lehet." };
   }
+  const saved = await storeCalculatorOverride({
+    key: input.key,
+    fileName: input.fileName,
+    content: input.content,
+    updatedBy: input.updatedBy,
+  });
+  if (!saved.ok) return saved;
+
+  // Uploading a Hungarian version also refreshes its English counterpart.
+  const enKey = englishCounterpart(input.key);
+  if (!enKey) return { ok: true };
+  const translated = await regenerateEnglishCalculator({
+    huKey: input.key,
+    huContent: input.content,
+    fileName: input.fileName,
+    updatedBy: input.updatedBy,
+  });
+  return translated.ok
+    ? { ok: true, enKey, enUpdated: true }
+    : { ok: true, enKey, enUpdated: false, enError: translated.error };
+}
+
+/** Writes one calculator override row (markup + inline script). */
+async function storeCalculatorOverride(input: {
+  key: string;
+  fileName: string;
+  content: string;
+  updatedBy: string;
+}): Promise<{ ok: true } | { ok: false; error: string }> {
   const { splitCalculatorHtml } = await import("@/lib/calculators/split");
   const { html, script } = splitCalculatorHtml(input.content);
   if (!html) return { ok: false, error: "A fájl nem tartalmaz megjeleníthető tartalmat." };
@@ -1047,6 +1081,58 @@ export async function uploadCalculatorVersion(input: {
   );
   if (error) return { ok: false, error: "A mentés nem sikerült. Próbáld újra." };
   return { ok: true };
+}
+
+/**
+ * Translates a Hungarian calculator document to English and stores it as the
+ * English calculator's override. When `huContent` is omitted, the currently
+ * stored Hungarian override is reassembled and translated.
+ */
+export async function regenerateEnglishCalculator(input: {
+  huKey: string;
+  huContent?: string;
+  fileName?: string;
+  updatedBy: string;
+}): Promise<{ ok: true; enKey: string } | { ok: false; error: string }> {
+  const { englishCounterpart } = await import("@/lib/calculators/registry");
+  const enKey = englishCounterpart(input.huKey);
+  if (!enKey) return { ok: false, error: "Ehhez a kalkulátorhoz nincs angol párja." };
+
+  let source = input.huContent;
+  let fileName = input.fileName;
+  if (!source) {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data } = await supabaseAdmin
+      .from("calculator_overrides")
+      .select("html, script, file_name")
+      .eq("key", input.huKey)
+      .maybeSingle();
+    if (!data) {
+      return {
+        ok: false,
+        error:
+          "Ehhez a kalkulátorhoz nincs feltöltött magyar verzió, amiből fordítani lehetne.",
+      };
+    }
+    source = data.script ? `${data.html}\n<script>\n${data.script}\n</script>` : data.html;
+    fileName = data.file_name;
+  }
+
+  const { translateCalculatorHtmlToEnglish } = await import(
+    "@/lib/calculator-translate.server"
+  );
+  const translated = await translateCalculatorHtmlToEnglish(source);
+  if (!translated.ok) return { ok: false, error: translated.error };
+
+  const enFileName = (fileName ?? `${input.huKey}.html`).replace(/\.html$/i, "-en.html");
+  const stored = await storeCalculatorOverride({
+    key: enKey,
+    fileName: enFileName,
+    content: translated.content,
+    updatedBy: input.updatedBy,
+  });
+  if (!stored.ok) return { ok: false, error: stored.error };
+  return { ok: true, enKey };
 }
 
 /** Removes a calculator override, restoring the bundled version. */
