@@ -36,6 +36,11 @@ Magyar kalkulátor feltöltésekor a rendszer ugyanabban a lépésben elkészít
 
 Az angol kalkulátort ettől függetlenül továbbra is fel tudod tölteni kézzel, ha felül akarod írni a fordítást.
 
+### 3. Kalkulátor-lista oldalak rendezése
+
+- A magyar `/kalkulatorok` oldalról kikerül az angol Invoice Dates kártya.
+- A sorrend mindkét nyelven egységesen: Számla dátumok, Bérteszt, Átalányadó, Jövedelemadó (az angol oldalon: Invoice dates, Salary test, Flat-rate tax, Personal income tax).
+
 ## Technikai részletek
 
 - `src/lib/calculators/registry.ts`: `CALCULATORS` bejegyzések `lang: "hu" | "en"` és `enKey` mezővel; új angol kulcsok (`invoice-dates-en`, `berteszt-en`, `jovedelemado-en`, `atalanyado-en`), plusz csoportosított listát adó segédfüggvények. A meglévő `invoice-dates` kulcs megmarad kompatibilitási okból, de nem szerepel a felületen.
