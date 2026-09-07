@@ -33,7 +33,7 @@ export const Route = createFileRoute("/termek/telefonszamla-konyvelo")({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
                   "name": "XLNT Telefonszámla könyvelő",
-                  "description": "Dolgozd fel és könyveld automatikusan a céges telefonszámlák tételeit, magán és üzleti hívások szétválasztásával.",
+                  "description": "Telefonszámlából könyvelés percek alatt: Telekom (mobil és vezetékes), Yettel és One számlák hívószámonkénti bontása, magán/céges áfabontással, RLB, Kulcs-Soft, Novitax és Pénzszám exporttal.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/telefonszamla-konyvelo",
