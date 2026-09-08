@@ -8,7 +8,7 @@ import {
 
 const TITLE_BASE = "XLNT Kapcsoltság-ellenőrző Excel | XLNTBI";
 const DESCRIPTION_BASE =
-  "Kapcsolt, kapcsolódó és partnervállalkozás vizsgálata a Tao. tv., a számviteli tv. és a KKV tv. szerint, külön eredménysorokban. Egyetlen licenc, 5 990 Ft AAM.";
+  "Kapcsolt, kapcsolódó és partnervállalkozás vizsgálata a Tao. tv., a számviteli tv. és a KKV tv. szerint, külön eredménysorokban. Egyetlen licenc.";
 const H1 = "XLNT Kapcsoltság-ellenőrző";
 const CANONICAL = "https://xlntbi.hu/termek/kapcsoltsag-ellenorzo";
 const SLUG = "kapcsoltsag-ellenorzo";

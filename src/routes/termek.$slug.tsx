@@ -30,7 +30,16 @@ export const Route = createFileRoute("/termek/$slug")({
         { name: "twitter:title", content: product.metaTitle },
         { name: "twitter:description", content: product.metaDescription },
       ],
-      links: [{ rel: "canonical", href: pageUrl }],
+      links: [
+        { rel: "canonical", href: pageUrl },
+        { rel: "alternate", hrefLang: "hu", href: pageUrl },
+        {
+          rel: "alternate",
+          hrefLang: "en",
+          href: `https://xlntbi.hu/en/product/${product.slug}`,
+        },
+        { rel: "alternate", hrefLang: "x-default", href: pageUrl },
+      ],
     };
   },
   component: ProductPage,

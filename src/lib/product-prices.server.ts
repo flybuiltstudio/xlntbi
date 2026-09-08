@@ -104,6 +104,7 @@ async function syncOne(
   lookupKey: string,
   priceHuf: number,
 ): Promise<PriceSyncRow> {
+  // HUF is a decimal currency at Stripe: amounts travel in fillér.
   const minor = Math.round(priceHuf * 100);
   try {
     const stripe = createStripeClient(environment);
@@ -118,7 +119,12 @@ async function syncOne(
       };
     }
     if (current.active && current.unit_amount === minor) {
-      return { priceId: lookupKey, environment, ok: true, message: "Már egyezett." };
+      return {
+        priceId: lookupKey,
+        environment,
+        ok: true,
+        message: `Már egyezett: ${priceHuf.toLocaleString("hu-HU")} Ft.`,
+      };
     }
 
     const productId =
@@ -136,11 +142,12 @@ async function syncOne(
     if (created.id !== current.id) {
       await stripe.prices.update(current.id, { active: false });
     }
+    const readBack = (created.unit_amount ?? minor) / 100;
     return {
       priceId: lookupKey,
       environment,
       ok: true,
-      message: `Frissítve: ${priceHuf.toLocaleString("hu-HU")} Ft.`,
+      message: `Frissítve, a Stripe-ban most: ${readBack.toLocaleString("hu-HU")} Ft.`,
     };
   } catch (error) {
     return {
@@ -152,10 +159,59 @@ async function syncOne(
   }
 }
 
+/** Effective price of a tier right now (override first, catalog otherwise). */
+async function currentPrice(slug: string, tierId: string, fallback: number): Promise<number> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("product_price_overrides")
+    .select("price")
+    .eq("slug", slug)
+    .eq("tier_id", tierId)
+    .maybeSingle();
+  return typeof data?.price === "number" ? data.price : fallback;
+}
+
 /**
- * Saves one tier price and syncs it to Stripe (sandbox and live). The saved
- * value applies on the site even if a Stripe environment is unavailable — the
- * failure is reported back and stored on the row.
+ * Pushes a price to Stripe first, and only shows it on the site when the LIVE
+ * environment accepted it. If live fails, the sandbox change is rolled back to
+ * the previous amount and the site keeps the old price, so the displayed price
+ * can never differ from what the customer is charged.
+ */
+async function pushPrice(input: {
+  slug: string;
+  tierId: string;
+  lookupKey: string;
+  price: number;
+  previousPrice: number;
+}): Promise<{ ok: boolean; error?: string; sync: PriceSyncRow[] }> {
+  const sync: PriceSyncRow[] = [];
+  for (const environment of ["sandbox", "live"] as StripeEnv[]) {
+    sync.push(await syncOne(environment, input.lookupKey, input.price));
+  }
+  const live = sync.find((row) => row.environment === "live")!;
+  if (!live.ok) {
+    const sandbox = sync.find((row) => row.environment === "sandbox")!;
+    if (sandbox.ok && input.previousPrice !== input.price) {
+      const rollback = await syncOne("sandbox", input.lookupKey, input.previousPrice);
+      sync.push({
+        ...rollback,
+        message: rollback.ok
+          ? `Visszaállítva a korábbi árra: ${input.previousPrice.toLocaleString("hu-HU")} Ft.`
+          : `A teszt ár visszaállítása sem sikerült: ${rollback.message}`,
+      });
+    }
+    return {
+      ok: false,
+      error: `Az éles Stripe-ár frissítése nem sikerült, ezért az oldalon a régi ár (${input.previousPrice.toLocaleString("hu-HU")} Ft) maradt. Stripe hibája: ${live.message}`,
+      sync,
+    };
+  }
+  return { ok: true, sync };
+}
+
+/**
+ * Saves one tier price. The new amount only appears on the site if Stripe (live
+ * included) accepted it.
  */
 export async function saveProductPrice(input: {
   slug: string;
@@ -168,13 +224,19 @@ export async function saveProductPrice(input: {
 
   const product = getProduct(input.slug)!;
   const tier = product.tiers.find((t) => t.id === input.tierId)!;
+  const catalogPrice = catalogTierPrice(input.slug, input.tierId) ?? tier.price;
+  const previousPrice = await currentPrice(input.slug, input.tierId, catalogPrice);
 
-  const sync: PriceSyncRow[] = [];
-  for (const environment of ["sandbox", "live"] as StripeEnv[]) {
-    sync.push(await syncOne(environment, tier.priceId, input.price));
-  }
-  const failed = sync.filter((row) => !row.ok);
+  const pushed = await pushPrice({
+    slug: input.slug,
+    tierId: input.tierId,
+    lookupKey: tier.priceId,
+    price: input.price,
+    previousPrice,
+  });
+  if (!pushed.ok) return pushed;
 
+  const now = new Date().toISOString();
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { error } = await supabaseAdmin.from("product_price_overrides").upsert(
     {
@@ -182,27 +244,23 @@ export async function saveProductPrice(input: {
       tier_id: input.tierId,
       price: input.price,
       stripe_price_id: tier.priceId,
-      synced_sandbox_at: sync.find((row) => row.environment === "sandbox")?.ok
-        ? new Date().toISOString()
+      synced_sandbox_at: pushed.sync.find((row) => row.environment === "sandbox")?.ok
+        ? now
         : null,
-      synced_live_at: sync.find((row) => row.environment === "live")?.ok
-        ? new Date().toISOString()
-        : null,
-      sync_error: failed.length
-        ? failed.map((row) => `${row.environment}: ${row.message}`).join(" · ")
-        : null,
+      synced_live_at: now,
+      sync_error: null,
       updated_by: input.updatedBy,
-      updated_at: new Date().toISOString(),
+      updated_at: now,
     },
     { onConflict: "slug,tier_id" },
   );
   if (error) {
-    return { ok: false, error: "Az ár mentése nem sikerült az adatbázisba.", sync };
+    return { ok: false, error: "Az ár mentése nem sikerült az adatbázisba.", sync: pushed.sync };
   }
 
   const { ensureProductOverrides } = await import("./product-overrides.server");
   await ensureProductOverrides(true);
-  return { ok: true, sync };
+  return { ok: true, sync: pushed.sync };
 }
 
 /** Restores the bundled catalog price of a tier (Stripe included). */
@@ -215,10 +273,16 @@ export async function resetProductPrice(input: {
   if (!product || !tier) return { ok: false, error: "Ismeretlen licenccsomag.", sync: [] };
 
   const catalogPrice = catalogTierPrice(input.slug, input.tierId) ?? tier.price;
-  const sync: PriceSyncRow[] = [];
-  for (const environment of ["sandbox", "live"] as StripeEnv[]) {
-    sync.push(await syncOne(environment, tier.priceId, catalogPrice));
-  }
+  const previousPrice = await currentPrice(input.slug, input.tierId, catalogPrice);
+
+  const pushed = await pushPrice({
+    slug: input.slug,
+    tierId: input.tierId,
+    lookupKey: tier.priceId,
+    price: catalogPrice,
+    previousPrice,
+  });
+  if (!pushed.ok) return pushed;
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   await supabaseAdmin
@@ -229,5 +293,6 @@ export async function resetProductPrice(input: {
 
   const { ensureProductOverrides } = await import("./product-overrides.server");
   await ensureProductOverrides(true);
-  return { ok: true, sync };
+  return { ok: true, sync: pushed.sync };
 }
+

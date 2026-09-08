@@ -80,7 +80,7 @@ export const products: Product[] = [
     image: navOnlineSzamlaImg,
     metaTitle: "XLNT NAV Online Számla letöltő | EXCELlent",
     metaDescription:
-      "Asztali segédprogram a NAV Online Számla adatok lekérdezéséhez és Excelbe exportálásához. 19 900 Ft.",
+      "Asztali segédprogram a NAV Online Számla adatok lekérdezéséhez és Excelbe exportálásához.",
     intro: [
       "Ez a XLNT NAV Online Számla letöltő egy kényelmes, asztali segédprogram, amellyel néhány kattintással lekérdezhetők és menthetők a NAV Online Számla rendszerből a számlaadatok. A program gyorsabbá teszi a napi adminisztrációt, csökkenti a kézi másolgatást, és segít abban, hogy a letöltött adatok rendezett, Excelben is könnyen használható, akár onnan könyvelőprogramba importálható formában álljanak rendelkezésre.",
     ],
@@ -107,7 +107,6 @@ export const products: Product[] = [
       fileName: "nav_online_szamla_letolto.exe",
       storagePath: "nav-online-szamla-letolto/nav_online_szamla_letolto.exe",
     },
-
   },
   {
     slug: "nav-penztargep-letolto",
@@ -120,7 +119,7 @@ export const products: Product[] = [
     image: penztargepImg,
     metaTitle: "XLNT NAV Pénztárgép letöltő | EXCELlent",
     metaDescription:
-      "Asztali segédprogram a pénztárgépes adatok és AEE naplóállományok letöltéséhez, könyvelőbarát Excel kimenettel. 19 900 Ft.",
+      "Asztali segédprogram a pénztárgépes adatok és AEE naplóállományok letöltéséhez, könyvelőbarát Excel kimenettel.",
     intro: [
       "XLNT NAV Pénztárgép letöltő – egy praktikus asztali segédprogram, amellyel gyorsan és átláthatóan lekérhetők és menthetők a pénztárgéphez kapcsolódó adatok. A program úgy készült, hogy a napi adminisztrációt egyszerűbbé tegye, csökkentse a kézi munkát, és rendezett, jól kezelhető kimenetet adjon.",
       "A szoftver fő előnye, hogy egy helyen kezeli a szükséges lekérdezéseket, a mentést és az adatfeldolgozást, így kevesebb kattintással lehet eljutni a használható eredményig. Ez különösen hasznos lehet azoknak, akik rendszeresen dolgoznak pénztárgépes adatokkal, és fontos nekik az áttekinthető, megbízható működés.",
@@ -161,7 +160,7 @@ export const products: Product[] = [
     currency: "HUF",
     image: accountImg,
     metaTitle: "XLNT év65 ÁFA-bevallás ÁNYK XML-generáló | EXCELlent",
-    metaDescription: "Automatikus M-lap XML előállítás könyvelőknek — percek alatt, hibák nélkül. Ár: 34 900 Ft-tól.",
+    metaDescription: "Automatikus M-lap XML előállítás könyvelőknek — percek alatt, hibák nélkül.",
     intro: [
       "Az xlntbi.hu év65 XML-generáló egy Windows asztali alkalmazás (önálló .exe), amely a könyvelőprogram adataiból — egyetlen kattintással — előállítja a NAV év65-ös ÁFA-bevallás M-lapjaihoz szükséges ÁNYK-kompatibilis XML-fájlt. Nincs több kézi másolás, elírási hiba vagy sorkihagyás az összezítő jelentésben.",
       "Az eszköz mindkét lapot — az alap M-02-t és a korrekciós M-02-K-t — automatikusan kitölti, beleértve az új, 2025 júliustól elérhető f1–f4 és h1–h4 oszlopokat is.",
@@ -205,7 +204,8 @@ export const products: Product[] = [
     currency: "HUF",
     image: businessImg,
     metaTitle: "XLNT Ügyfélkapu+ TOTP Manager | EXCELlent",
-    metaDescription: "Egy helyen kezelheted az összes Ügyfélkapu+ belépési kódodat, közvetlenül Excelből. Ár: 7 990 Ft-tól.",
+    metaDescription:
+      "Egy helyen kezelheted az összes Ügyfélkapu+ belépési kódodat, közvetlenül Excelből.",
     intro: [
       "Ha könyvelőként, könyvvizsgálóként vagy adótanácsadóként több ügyfél Ügyfélkapu+ fiókjához kell rendszeresen belépned, ismered a helyzetet: minden egyes alkalommal elő kell venni a telefont, megnyitni az authenticator appot, megkeresni a megfelelő fiókot, leolvasni a kódot — és imádkozni, hogy ne járjon le, mire átgépeled.",
       "Az XLNT Ügyfélkapu+ TOTP Manager ezt a napi rutint szünteti meg. Egyetlen Excel táblázatban látod az összes ügyfeled belépési adatát és az aktuálisan érvényes kódot — egy kattintással másolhatod a vágólapra.",
@@ -242,7 +242,8 @@ export const products: Product[] = [
     currency: "HUF",
     image: controllingImg,
     metaTitle: "XLNT évA60 összesítő nyilatkozat XML-generáló | EXCELlent",
-    metaDescription: "A60 összesítő nyilatkozat Excelből, ÁNYK-ba tölthető XML-lel és VIES-ellenőrzéssel. Ár: 24 900 Ft-tól.",
+    metaDescription:
+      "A60 összesítő nyilatkozat Excelből, ÁNYK-ba tölthető XML-lel és VIES-ellenőrzéssel.",
     intro: [
       "A közösségi ügyletekről az áfabevallás mellett összesítő nyilatkozatot (A60) is be kell nyújtani – és ezt az eÁFA rendszer sem váltja ki. A nyomtatvány ÁNYK-ban való kitöltése azonban lassú, a partnerek közösségi adószámát külön kellene ellenőrizni, és könnyű elvéteni a helyesbítéseket.",
       "Az évA60 XML ezt a munkát teszi gyorsabbá és biztonságosabbá: a tételeket egy jól átlátható Excel-táblázatba viszi be, a program pedig legenerálja belőle az ÁNYK-ba tölthető nyomtatványt. Nincs kényszer, nincs felesleges kör – csak egy eszköz, amelyik leveszi a válláról a mechanikus részt.",
@@ -281,14 +282,16 @@ export const products: Product[] = [
   {
     slug: "adofolyoszamla-egyezteto",
     name: "XLNT Adófolyószámla egyeztető",
-    tagline: "Excel + VBA eszköz könyvelőknek · a NAV adófolyószámla és a főkönyv percek alatt egyeztetve",
+    tagline:
+      "Excel + VBA eszköz könyvelőknek · a NAV adófolyószámla és a főkönyv percek alatt egyeztetve",
     status: "available",
     priceId: "adofolyoszamla_egyezteto_1_ceg",
     price: 9900,
     currency: "HUF",
     image: auditImg,
     metaTitle: "XLNT Adófolyószámla egyeztető | EXCELlent",
-    metaDescription: "Excel + VBA eszköz könyvelőknek · a NAV adófolyószámla és a főkönyv percek alatt egyeztetve. Ár: 9 900 Ft-tól.",
+    metaDescription:
+      "Excel + VBA eszköz könyvelőknek · a NAV adófolyószámla és a főkönyv percek alatt egyeztetve.",
     intro: [
       "A zárás egyik visszatérő, időrabló feladata az adófolyószámla és a főkönyv összevetése. Ez az eszköz beolvassa a NAV kivonatot, kigyűjti a főkönyvi egyenlegeket, és adónemenként megmutatja, hol tér el a kettő – egyetlen Excel munkafüzetben, telepítés és felhő nélkül.",
       "A NAV folyószámla mellett az önkormányzati (helyi iparűzési adó, késedelmi pótlék) egyeztetést is támogatja. Nincs havidíjas platform, nincs adatfeltöltés idegen szerverre: a fájl az Ön gépén marad, a saját könyvelési adataival dolgozik.",
@@ -342,7 +345,8 @@ export const products: Product[] = [
     currency: "HUF",
     image: biImg,
     metaTitle: "XLNT NAV Törzsszám- és Partnerellenőrző | EXCELlent",
-    metaDescription: "Excel munkafüzet makróval – adószám-ellenőrzés, EU VIES és cégkeresés egy helyen. Ár: 19 900 Ft-tól.",
+    metaDescription:
+      "Excel munkafüzet makróval – adószám-ellenőrzés, EU VIES és cégkeresés egy helyen.",
     intro: [
       "Ha könyvelőként vagy vállalkozóként naponta ellenőriz partnereket, ezt a munkát ma jellemzően három különböző weboldalon kattintgatva végzi el. Ez a munkafüzet mindhármat egy Excel-táblába hozza: a NAV Online Számla rendszer hivatalos adószám-ellenőrzését, az Európai Bizottság VIES szolgáltatását, és – opcionálisan – a cégnév alapján történő keresést.",
       "Nem egy újabb havidíjas felhőszolgáltatás. Egyetlen Excel-fájl, amit letölt, kitölt, és onnantól a saját gépén dolgozik vele. Tömegesen is: egy oszlopba beírja a törzsszámokat, elindítja, és megkapja az eredményt.",
@@ -389,7 +393,7 @@ export const products: Product[] = [
     currency: "HUF",
     image: officeImg,
     metaTitle: "XLNT Bérszámfejtő | EXCELlent",
-    metaDescription: "Excel-alapú bérszámfejtés ÁNYK-exporttal – mikro- és kisvállalkozásoknak. Ár: 24 900 Ft-tól.",
+    metaDescription: "Excel-alapú bérszámfejtés ÁNYK-exporttal – mikro- és kisvállalkozásoknak.",
     intro: [
       "Havonta ugyanaz a kör: kiszámolni a bruttót, a kedvezményeket, a járulékokat – aztán kézzel átpötyögni a számokat az ÁNYK 08-as bevallásába. A XLNT Bérszámfejtő mindkét lépést leveszi a válláról: egy ismerős Excel-munkafüzetben számfejt, majd egyetlen gombnyomással előállítja az ÁNYK-ba importálható XML-t.",
       "A havi összesítő lapon egyetlen legördülő menüvel váltja a hónapot, és azonnal ott van minden szám, amit a 08-as bevallás kér – ugyanezekből dolgozik az exportáló makró is.",
@@ -434,7 +438,8 @@ export const products: Product[] = [
     currency: "HUF",
     image: utalasiImg,
     metaTitle: "XLNT Banki Utalási Csomag Készítő Excelben | EXCELlent",
-    metaDescription: "A havi utalásait Excelből, egyetlen gombnyomással – gépelés és elütés nélkül. Ár: 19 900 Ft-tól.",
+    metaDescription:
+      "A havi utalásait Excelből, egyetlen gombnyomással – gépelés és elütés nélkül.",
     intro: [
       "Ha havonta több partnernek utal, ismeri az egyhangú munkát: minden tételt egyesével begépelni a netbankba, számlaszámot és összeget figyelve. Ez az Excel-eszköz ezt veszi le a válláról. Ön egy áttekinthető táblázatba viszi a tételeket, a program pedig kész banki importfájlt készít belőle – amit már csak be kell töltenie a netbankba, ellenőriznie és aláírnia.",
       "A sárgával jelölt cellákba írja a tételeket – partnerenként egy sor. A táblázat összesíti a tételszámot és a végösszeget, így export előtt azonnal látja, mit küld.",
@@ -473,14 +478,16 @@ export const products: Product[] = [
   {
     slug: "beszamolo",
     name: "XLNT Beszámoló",
-    tagline: "Éves beszámoló, kiegészítő melléklet, OBR-fájl és adóbevallások — egyetlen Excel-fájlban",
+    tagline:
+      "Éves beszámoló, kiegészítő melléklet, OBR-fájl és adóbevallások — egyetlen Excel-fájlban",
     status: "available",
     priceId: "beszamolo_egy_ceg",
     price: 24900,
     currency: "HUF",
     image: closeupImg,
     metaTitle: "XLNT Beszámoló | EXCELlent",
-    metaDescription: "Éves beszámoló, kiegészítő melléklet, OBR-fájl és adóbevallások — egyetlen Excel-fájlban. Ár: 24 900 Ft-tól.",
+    metaDescription:
+      "Éves beszámoló, kiegészítő melléklet, OBR-fájl és adóbevallások — egyetlen Excel-fájlban.",
     intro: [
       "A zárási szezonban ritkán a szakmai döntés viszi el az időt. Az idő nagy része az adatok mozgatásával megy el: a főkönyvből a mérlegbe, a mérlegből az adószámításba, onnan a bevallásokba, majd vissza a kiegészítő mellékletbe. És minden egyes átvezetésnél ott a kérdés, hogy tényleg egyezik-e minden mindennel.",
       "Ez a fájl ezt a láncot kapcsolja össze. A főkönyvi kivonatot egyszer tölti fel, a többi — a beszámoló, a kiegészítő melléklet, az OBR-fájl, a társasági adó vagy KIVA bevallás és a helyi iparűzési adó bevallás — ugyanabból az adatállományból készül. Így egymással is, és a főkönyvvel is egyezik.",
@@ -526,7 +533,8 @@ export const products: Product[] = [
     currency: "HUF",
     image: termekekImg,
     metaTitle: "XLNT Cégkivonat → Excel konverter | EXCELlent",
-    metaDescription: "Magyar cégkivonatok és NAV adatlapok – egy kattintással, tiszta Excel táblázatban. Ár: 12 900 Ft-tól.",
+    metaDescription:
+      "Magyar cégkivonatok és NAV adatlapok – egy kattintással, tiszta Excel táblázatban.",
     intro: [
       "Ha valaha is bemásoltad már kézzel egy cégkivonat adatait Excelbe – tudod, mennyi idő. Ez a program PDF-ből automatikusan kinyeri az összes adatot, és átlátható, azonnal használható Excel fájlt készít belőle.",
     ],
@@ -562,7 +570,7 @@ export const products: Product[] = [
     currency: "HUF",
     image: calcImg,
     metaTitle: "XLNT Havi Riport | EXCELlent",
-    metaDescription: "Teljes havi pénzügyi riportcsomag könyvelőknek – egyetlen Excelben. Ár: 29 900 Ft-tól.",
+    metaDescription: "Teljes havi pénzügyi riportcsomag könyvelőknek – egyetlen Excelben.",
     intro: [
       "Egy import, több mint 25 kész riportlap. Betöltöd a könyvelőprogram főkönyvi kivonatát vagy kartonját, megnyomsz egy gombot, és a munkafüzet feltölti a mérleget, az eredménykimutatást (éves, egyszerűsített és havi bontásban), a cash flow-t, a vevő- és szállítókorosítást, az ÁFA-összesítőt, a dashboardot és a kiegészítő melléklet részletezőit – mindezt a saját géped Exceljében, adatkapcsolat és havidíj nélkül.",
       "Egyetlen gombbal legenerálja a Magyar Könyvvizsgálói Kamara AuditXML2 (v1.0.23.0) adatexport-fájlját a főkönyvi tételekből. A generátor a kamara hivatalos XSD-sémájához igazítva ellenőrzi az adatokat (adószám, pénznem, dátumok, mezőhosszak), és BOM nélküli UTF-8 fájlt ír – amit a kamarai ellenőrző is hibátlannak fogad el.",
@@ -611,7 +619,7 @@ export const products: Product[] = [
     image: biImg,
     metaTitle: "XLNT Monthly Report (English) | EXCELlent",
     metaDescription:
-      "English version of the XLNT monthly reporting pack for accountants: 25+ report sheets from one import, MKVK AuditXML2 export. From 49 900 Ft.",
+      "English version of the XLNT monthly reporting pack for accountants: 25+ report sheets from one import, MKVK AuditXML2 export.",
     intro: [
       "One import, more than 25 finished report sheets. Load the trial balance or the ledger export of your accounting software, press one button, and the workbook fills the balance sheet, the income statement (annual, simplified and monthly), the cash flow, the receivables and payables ageing, the VAT summary, the dashboard and the notes-to-the-accounts detail sheets – all in the Excel on your own machine, with no data connection and no monthly fee.",
       "With a single button it generates the Chamber of Hungarian Auditors' AuditXML2 (v1.0.23.0) data-export file from the ledger entries. The generator validates the data against the Chamber's official XSD schema (tax number, currency, dates, field lengths) and writes a UTF-8 file without a BOM – which the Chamber's own checker accepts without errors.",
@@ -661,7 +669,8 @@ export const products: Product[] = [
     currency: "HUF",
     image: kamatlekerdezoImg,
     metaTitle: "XLNT Kamatlekérdező és Pótlékszámító | EXCELlent",
-    metaDescription: "Késedelmi pótlék, önellenőrzési pótlék és kamatszámítás naponkénti kamattáblával. Ár: 7 900 Ft-tól.",
+    metaDescription:
+      "Késedelmi pótlék, önellenőrzési pótlék és kamatszámítás naponkénti kamattáblával.",
     intro: [
       "Ha könyvelőként vagy adótanácsadóként dolgozik, valószínűleg Ön is ismeri a helyzetet: egy késedelmi pótlék vagy önellenőrzési pótlék kiszámításához előbb elő kell keresni az adott időszakban érvényes jegybanki alapkamatot, majd napra pontosan végigszámolni a törvényi képletet. Ez a munkafüzet ezt a lépést veszi le a válláról.",
       "Nem varázslatot ígérünk, hanem egy jól átlátható, ellenőrizhető eszközt: minden érték mögött ott a forrás és a jogszabályi hivatkozás. Nézze meg nyugodtan, és döntse el Ön, hogy beilleszthető-e a munkájába.",
@@ -706,14 +715,16 @@ export const products: Product[] = [
   {
     slug: "utnyilvantartas-kikuldetesi-rendelveny",
     name: "XLNT Útnyilvántartás és Kiküldetési rendelvény",
-    tagline: "Saját gépjárműves és kiküldetéses elszámolás a hatályos magyar szabályok szerint, magyarul és angolul",
+    tagline:
+      "Saját gépjárműves és kiküldetéses elszámolás a hatályos magyar szabályok szerint, magyarul és angolul",
     status: "available",
     priceId: "utnyilvantartas_kikuldetesi_rendelveny_1_eves_ceges_licenc",
     price: 12900,
     currency: "HUF",
     image: businessImg,
     metaTitle: "XLNT Útnyilvántartás és Kiküldetési rendelvény | EXCELlent",
-    metaDescription: "Saját gépjárműves és kiküldetéses elszámolás a hatályos magyar szabályok szerint, magyarul és angolul. Ár: 12 900 Ft-tól.",
+    metaDescription:
+      "Saját gépjárműves és kiküldetéses elszámolás a hatályos magyar szabályok szerint, magyarul és angolul.",
     intro: [
       "Egyetlen, gondosan felépített Excel-fájl, amellyel a saját gépjárműves és a kiküldetéses elszámolásokat a hatályos magyar szabályok szerint készítheti el – magyarul és angolul is. Egy lapon egész havi, akár több úttal; a napokat, az árfolyamot és a könyvelési tételeket a rendszer számítja. Nincs havidíj: letölti, és a következő elszámolásnál már használhatja.",
       "Minden csomag: korlátlan munkatárs és jármű, magyar + angol lapok, RLB-export, PDF-gomb, élő NAV/MNB adatok. A licenc adószámhoz és időtartamhoz köthető.",
@@ -754,20 +765,23 @@ export const products: Product[] = [
     ],
     download: {
       fileName: "Utnyilvantartas_Kikuldetesi_rendelveny.xlsm",
-      storagePath: "utnyilvantartas-kikuldetesi-rendelveny/Utnyilvantartas_Kikuldetesi_rendelveny.xlsm",
+      storagePath:
+        "utnyilvantartas-kikuldetesi-rendelveny/Utnyilvantartas_Kikuldetesi_rendelveny.xlsm",
     },
   },
   {
     slug: "szamviteli-konszolidalo",
     name: "XLNT Számviteli Konszolidáló",
-    tagline: "Összevont (konszolidált) éves beszámoló Excelben — lépésről lépésre, ellenőrzött egyezőségekkel, magyarul és angolul",
+    tagline:
+      "Összevont (konszolidált) éves beszámoló Excelben — lépésről lépésre, ellenőrzött egyezőségekkel, magyarul és angolul",
     status: "available",
     priceId: "szamviteli_konszolidalo_egy_cegcsoport",
     price: 79900,
     currency: "HUF",
     image: controllingImg,
     metaTitle: "XLNT Számviteli Konszolidáló | EXCELlent",
-    metaDescription: "Összevont (konszolidált) éves beszámoló Excelben, a magyar számviteli törvény szerint — lépésről lépésre, ellenőrzött egyezőségekkel. Ár: 79 900 Ft-tól.",
+    metaDescription:
+      "Összevont (konszolidált) éves beszámoló Excelben, a magyar számviteli törvény szerint — lépésről lépésre, ellenőrzött egyezőségekkel.",
     intro: [
       "Összevont (konszolidált) éves beszámoló Excelben — lépésről lépésre, ellenőrzött egyezőségekkel, magyarul és angolul.",
       "Eszközök = Források ✓ · Napló: Tartozik = Követel ✓ · Eredmény = Mérleg szerinti eredmény ✓ · Cash flow = Pénzeszközök változása ✓.",
@@ -786,27 +800,90 @@ export const products: Product[] = [
     ],
     why: "A konszolidálás nehéz része a szerkezet és az egyezőség. Ezt veszi le a válláról a program: a mérleg, az eredménykimutatás és a cash flow a törvényi mellékletek szerint, készen áll; a korrekciók egyetlen naplóba kerülnek, ahonnan a beszámoló automatikusan összeáll, beépített egyezőség-ellenőrzésekkel.",
     steps: [
-      { title: "1. Alapbeállítások", text: "Anyavállalat adatai, üzleti év, pénznem, adókulcs, nyelv." },
-      { title: "2. Konszolidációs kör", text: "Cégek felvétele, bevonás módja (teljes / kvótás / equity / kivont), tulajdoni hányad." },
-      { title: "3. Egyedi beszámolók bevitele", text: "Cégenkénti, már egységesített mérleg- és eredménykimutatás-adatok." },
-      { title: "4. Tőkekonszolidáció", text: "Részesedés könyv szerinti értéke a megillető saját tőkével szemben; különbözet, külső tagok." },
-      { title: "5. Adósságkonszolidálás", text: "A csoporton belüli követelések és kötelezettségek kiszűrése." },
-      { title: "6. Közbenső eredmény kiszűrése", text: "A záró készletben / eszközben maradt csoporton belüli eredmény kiszűrése." },
-      { title: "7. Bevételek és ráfordítások konszolidálása", text: "Belső árbevétel-ráfordítás párok és a csoporton belüli osztalék kiszűrése." },
-      { title: "8. Társult vállalkozások (equity)", text: "Társult vállalkozások értékelése tőkerészesedési módszerrel." },
-      { title: "9. Adókülönbözet", text: "A konszolidálás miatti eredménykülönbözetre jutó számított társasági adó." },
-      { title: "10. Konszolidációs napló", text: "Minden korrekció egy helyen, tartozik/követel bontásban. Ez hajtja a munkatáblát." },
-      { title: "11. Konszolidációs munkatábla", text: "Egyedi adatok összege + korrekciók = konszolidált érték, soronként." },
-      { title: "12. Konszolidált mérleg", text: "Az összevont (konszolidált) mérleg tárgyév / előző év bontásban." },
-      { title: "13. Konszolidált eredménykimutatás", text: "Összköltség eljárású összevont eredménykimutatás." },
-      { title: "14. Ellenőrzések", text: "Egyezőségi próbák: mérlegfőösszeg, napló T=K, eredményegyezés." },
-      { title: "15. Sorséma (szerkeszthető)", text: "A mérleg- és eredménysorok listája; itt lehet átnevezni vagy bővíteni." },
-      { title: "16. Súgó és jogszabályi háttér", text: "Lépésenkénti útmutató és a vonatkozó törvényhelyek." },
-      { title: "17. Előző évi (nyitó) adatok", text: "Az előző évi konszolidált mérleg és eredménykimutatás – ebből számol a cash flow." },
-      { title: "18. Konszolidált cash flow-kimutatás", text: "A Szt. 7. sz. melléklete szerinti szerkezetben, a konszolidált adatokból levezetve." },
-      { title: "19. Konszolidált mérleg – „B” változat", text: "Ugyanazok az adatok, a „B” változat szerinti tagolásban." },
-      { title: "20. Eredménykimutatás – összköltséges és forgalmi változat", text: "A 3. sz. melléklet szerinti tagolás. A program az eredménykimutatás összköltséges és forgalmi változatát is tudja." },
-      { title: "21. OBR (e-beszámoló) fájl elkészítése", text: "A kész konszolidált mérlegből és eredménykimutatásból egy gombnyomással elkészíti a hivatalos OBR-portálra feltölthető .obr fájlt, a kötelező mellékletekkel (PDF) becsomagolva." },
+      {
+        title: "1. Alapbeállítások",
+        text: "Anyavállalat adatai, üzleti év, pénznem, adókulcs, nyelv.",
+      },
+      {
+        title: "2. Konszolidációs kör",
+        text: "Cégek felvétele, bevonás módja (teljes / kvótás / equity / kivont), tulajdoni hányad.",
+      },
+      {
+        title: "3. Egyedi beszámolók bevitele",
+        text: "Cégenkénti, már egységesített mérleg- és eredménykimutatás-adatok.",
+      },
+      {
+        title: "4. Tőkekonszolidáció",
+        text: "Részesedés könyv szerinti értéke a megillető saját tőkével szemben; különbözet, külső tagok.",
+      },
+      {
+        title: "5. Adósságkonszolidálás",
+        text: "A csoporton belüli követelések és kötelezettségek kiszűrése.",
+      },
+      {
+        title: "6. Közbenső eredmény kiszűrése",
+        text: "A záró készletben / eszközben maradt csoporton belüli eredmény kiszűrése.",
+      },
+      {
+        title: "7. Bevételek és ráfordítások konszolidálása",
+        text: "Belső árbevétel-ráfordítás párok és a csoporton belüli osztalék kiszűrése.",
+      },
+      {
+        title: "8. Társult vállalkozások (equity)",
+        text: "Társult vállalkozások értékelése tőkerészesedési módszerrel.",
+      },
+      {
+        title: "9. Adókülönbözet",
+        text: "A konszolidálás miatti eredménykülönbözetre jutó számított társasági adó.",
+      },
+      {
+        title: "10. Konszolidációs napló",
+        text: "Minden korrekció egy helyen, tartozik/követel bontásban. Ez hajtja a munkatáblát.",
+      },
+      {
+        title: "11. Konszolidációs munkatábla",
+        text: "Egyedi adatok összege + korrekciók = konszolidált érték, soronként.",
+      },
+      {
+        title: "12. Konszolidált mérleg",
+        text: "Az összevont (konszolidált) mérleg tárgyév / előző év bontásban.",
+      },
+      {
+        title: "13. Konszolidált eredménykimutatás",
+        text: "Összköltség eljárású összevont eredménykimutatás.",
+      },
+      {
+        title: "14. Ellenőrzések",
+        text: "Egyezőségi próbák: mérlegfőösszeg, napló T=K, eredményegyezés.",
+      },
+      {
+        title: "15. Sorséma (szerkeszthető)",
+        text: "A mérleg- és eredménysorok listája; itt lehet átnevezni vagy bővíteni.",
+      },
+      {
+        title: "16. Súgó és jogszabályi háttér",
+        text: "Lépésenkénti útmutató és a vonatkozó törvényhelyek.",
+      },
+      {
+        title: "17. Előző évi (nyitó) adatok",
+        text: "Az előző évi konszolidált mérleg és eredménykimutatás – ebből számol a cash flow.",
+      },
+      {
+        title: "18. Konszolidált cash flow-kimutatás",
+        text: "A Szt. 7. sz. melléklete szerinti szerkezetben, a konszolidált adatokból levezetve.",
+      },
+      {
+        title: "19. Konszolidált mérleg – „B” változat",
+        text: "Ugyanazok az adatok, a „B” változat szerinti tagolásban.",
+      },
+      {
+        title: "20. Eredménykimutatás – összköltséges és forgalmi változat",
+        text: "A 3. sz. melléklet szerinti tagolás. A program az eredménykimutatás összköltséges és forgalmi változatát is tudja.",
+      },
+      {
+        title: "21. OBR (e-beszámoló) fájl elkészítése",
+        text: "A kész konszolidált mérlegből és eredménykimutatásból egy gombnyomással elkészíti a hivatalos OBR-portálra feltölthető .obr fájlt, a kötelező mellékletekkel (PDF) becsomagolva.",
+      },
     ],
     tiers: [
       {
@@ -832,14 +909,16 @@ export const products: Product[] = [
   {
     slug: "ifrs-konszolidalo",
     name: "XLNT IFRS Konszolidáló",
-    tagline: "Összevont (konszolidált) IFRS pénzügyi kimutatások Excelben – az IFRS 18 kötelező részösszegeivel, magyarul és angolul",
+    tagline:
+      "Összevont (konszolidált) IFRS pénzügyi kimutatások Excelben – az IFRS 18 kötelező részösszegeivel, magyarul és angolul",
     status: "available",
     priceId: "ifrs_konszolidalo_egy_cegcsoport",
     price: 149900,
     currency: "HUF",
     image: ifrsImg,
     metaTitle: "XLNT IFRS Konszolidáló | EXCELlent",
-    metaDescription: "Konszolidált IFRS pénzügyi kimutatások Excelben – IFRS 18 részösszegekkel, goodwill- és devizaszámítással, magyarul és angolul. Ár: 149 900 Ft-tól.",
+    metaDescription:
+      "Konszolidált IFRS pénzügyi kimutatások Excelben – IFRS 18 részösszegekkel, goodwill- és devizaszámítással, magyarul és angolul.",
     intro: [
       "Összevont (konszolidált) IFRS pénzügyi kimutatások Excelben – az IFRS 18 kötelező részösszegeivel, magyarul és angolul. IFRS 10 · IFRS 3 · IAS 28 · IAS 21 · IAS 36 · IAS 7 · IFRS 18.",
       "A munkafüzet az IFRS 18 (Presentation and Disclosure in Financial Statements) szerinti bemutatásra épül. Az IFRS 18 a 2027. január 1-jén vagy azt követően kezdődő időszakokra hatályos (korábbi alkalmazás megengedett), felváltja az IAS 1-et, és az EU 2026 februárjában befogadta. Mivel az áttérés visszamenőleges, a 2026-os összehasonlító adatokat is az új szerkezetben kell bemutatni.",
@@ -857,26 +936,86 @@ export const products: Product[] = [
     ],
     why: "Egyszeri megvásárlás, időbeli korlát nélkül. A program a bevitt adatokból számol. A séma az IAS 1.54 minimumára és az IFRS 18 kategóriáira épül – mivel az IFRS-ben nincs kötelező formátum, ez szabadon szerkeszthető keret. Makrós Excel-munkafüzet: Windows + asztali Excel 2010 vagy újabb szükséges, engedélyezett makrókkal.",
     steps: [
-      { title: "1. Alapbeállítások", text: "Anyavállalat adatai, beszámolási időszak, pénznem, adókulcs, nyelv, bemutatási mód." },
-      { title: "2. Konszolidációs kör (IFRS 10)", text: "Társaságok, ellenőrzés, tulajdoni hányad, NCI értékelése (IFRS 3.19), pénznem és árfolyamok." },
-      { title: "3. Egyedi pénzügyi kimutatások", text: "Társaságonként, IFRS-re már átdolgozott mérleg-, eredmény- és OCI-adatok." },
-      { title: "4. Akvizíciós elszámolás (IFRS 3)", text: "Átadott ellenérték, azonosítható nettó eszközök valós értéke, NCI, goodwill számítása." },
-      { title: "5. Csoporton belüli egyenlegek (IFRS 10)", text: "Csoporton belüli követelések és kötelezettségek teljes kiszűrése." },
-      { title: "6. Nem realizált eredmény", text: "Készletben és eszközökben maradt csoporton belüli nem realizált eredmény kiszűrése." },
-      { title: "7. Csoporton belüli bevételek és ráfordítások", text: "Belső árbevétel-ráfordítás párok és a csoporton belüli osztalék kiszűrése." },
-      { title: "8. Társult és közös vezetésű vállalkozások (IAS 28)", text: "Tőkerészesedési (equity) módszer szerinti értékelés." },
-      { title: "9. Halasztott adó (IAS 12)", text: "A konszolidációs korrekciók átmeneti különbözeteire jutó halasztott adó." },
-      { title: "10. Goodwill értékvesztés-teszt (IAS 36)", text: "A goodwill nem amortizálható; évente értékvesztés-tesztet kell végezni." },
-      { title: "11. Konszolidációs napló", text: "Minden korrekció egy helyen, tartozik/követel bontásban. Ez hajtja a munkatáblát." },
-      { title: "12. Konszolidációs munkatábla", text: "Egyedi adatok összege + korrekciók = konszolidált érték, soronként." },
-      { title: "13. Konszolidált pénzügyi helyzet kimutatása", text: "Az IAS 1.54 szerinti minimum sortételekkel, tárgyév / előző év bontásban." },
-      { title: "14. Konszolidált eredmény és OCI", text: "Az IFRS 18 kategóriái és a két kötelező részösszeg, majd az egyéb átfogó jövedelem." },
-      { title: "15. Saját tőke változásának kimutatása", text: "Tőkeelemenkénti levezetés nyitótól záróig, NCI-vel együtt." },
-      { title: "16. Konszolidált cash flow (IAS 7)", text: "Indirekt módszer – az IFRS 18 módosítása szerint az üzemi eredményből kiindulva." },
-      { title: "17. Előző évi (nyitó) adatok", text: "Az előző évi konszolidált adatok – ebből számol a cash flow és az összehasonlító oszlop." },
-      { title: "18. Ellenőrzések", text: "Egyezőségi próbák: mérlegfőösszeg, napló T=K, tőkekimutatás, cash flow." },
-      { title: "19. Sorséma (szerkeszthető)", text: "Az IFRS nem ír elő kötött formátumot – itt szabadon átnevezhet vagy bővíthet." },
-      { title: "20. Súgó és standardhivatkozások", text: "Lépésenkénti útmutató és a vonatkozó IFRS standardok." },
+      {
+        title: "1. Alapbeállítások",
+        text: "Anyavállalat adatai, beszámolási időszak, pénznem, adókulcs, nyelv, bemutatási mód.",
+      },
+      {
+        title: "2. Konszolidációs kör (IFRS 10)",
+        text: "Társaságok, ellenőrzés, tulajdoni hányad, NCI értékelése (IFRS 3.19), pénznem és árfolyamok.",
+      },
+      {
+        title: "3. Egyedi pénzügyi kimutatások",
+        text: "Társaságonként, IFRS-re már átdolgozott mérleg-, eredmény- és OCI-adatok.",
+      },
+      {
+        title: "4. Akvizíciós elszámolás (IFRS 3)",
+        text: "Átadott ellenérték, azonosítható nettó eszközök valós értéke, NCI, goodwill számítása.",
+      },
+      {
+        title: "5. Csoporton belüli egyenlegek (IFRS 10)",
+        text: "Csoporton belüli követelések és kötelezettségek teljes kiszűrése.",
+      },
+      {
+        title: "6. Nem realizált eredmény",
+        text: "Készletben és eszközökben maradt csoporton belüli nem realizált eredmény kiszűrése.",
+      },
+      {
+        title: "7. Csoporton belüli bevételek és ráfordítások",
+        text: "Belső árbevétel-ráfordítás párok és a csoporton belüli osztalék kiszűrése.",
+      },
+      {
+        title: "8. Társult és közös vezetésű vállalkozások (IAS 28)",
+        text: "Tőkerészesedési (equity) módszer szerinti értékelés.",
+      },
+      {
+        title: "9. Halasztott adó (IAS 12)",
+        text: "A konszolidációs korrekciók átmeneti különbözeteire jutó halasztott adó.",
+      },
+      {
+        title: "10. Goodwill értékvesztés-teszt (IAS 36)",
+        text: "A goodwill nem amortizálható; évente értékvesztés-tesztet kell végezni.",
+      },
+      {
+        title: "11. Konszolidációs napló",
+        text: "Minden korrekció egy helyen, tartozik/követel bontásban. Ez hajtja a munkatáblát.",
+      },
+      {
+        title: "12. Konszolidációs munkatábla",
+        text: "Egyedi adatok összege + korrekciók = konszolidált érték, soronként.",
+      },
+      {
+        title: "13. Konszolidált pénzügyi helyzet kimutatása",
+        text: "Az IAS 1.54 szerinti minimum sortételekkel, tárgyév / előző év bontásban.",
+      },
+      {
+        title: "14. Konszolidált eredmény és OCI",
+        text: "Az IFRS 18 kategóriái és a két kötelező részösszeg, majd az egyéb átfogó jövedelem.",
+      },
+      {
+        title: "15. Saját tőke változásának kimutatása",
+        text: "Tőkeelemenkénti levezetés nyitótól záróig, NCI-vel együtt.",
+      },
+      {
+        title: "16. Konszolidált cash flow (IAS 7)",
+        text: "Indirekt módszer – az IFRS 18 módosítása szerint az üzemi eredményből kiindulva.",
+      },
+      {
+        title: "17. Előző évi (nyitó) adatok",
+        text: "Az előző évi konszolidált adatok – ebből számol a cash flow és az összehasonlító oszlop.",
+      },
+      {
+        title: "18. Ellenőrzések",
+        text: "Egyezőségi próbák: mérlegfőösszeg, napló T=K, tőkekimutatás, cash flow.",
+      },
+      {
+        title: "19. Sorséma (szerkeszthető)",
+        text: "Az IFRS nem ír elő kötött formátumot – itt szabadon átnevezhet vagy bővíthet.",
+      },
+      {
+        title: "20. Súgó és standardhivatkozások",
+        text: "Lépésenkénti útmutató és a vonatkozó IFRS standardok.",
+      },
     ],
     tiers: [
       {
@@ -910,7 +1049,7 @@ export const products: Product[] = [
     image: kulcsSoftImportImg,
     metaTitle: "XLNT Kulcs-Soft Bejövő Külföldi Számla Import | EXCELlent",
     metaDescription:
-      "Excel-alapú importáló eszköz könyvelőirodáknak, EU-s és harmadik országbeli bejövő számlákhoz, Kulcs-Soft CSV importtal. Ár: 12 900 Ft.",
+      "Excel-alapú importáló eszköz könyvelőirodáknak, EU-s és harmadik országbeli bejövő számlákhoz, Kulcs-Soft CSV importtal.",
     intro: [
       "Ha rendszeresen könyvelsz EU-s vagy harmadik országból érkező bejövő számlákat Kulcs-Soft rendszerben, ez az eszköz egyszerűsítheti a munkádat. Az adatokat Excelben rögzíted – egy gombnyomással kész az importálható CSV fájl.",
       "Ügyfél kód beírása után a szállítói adatok automatikusan kitöltődnek – csak a sárga mezőket kell kézzel kitölteni.",
@@ -943,10 +1082,10 @@ export const products: Product[] = [
     },
   },
   {
-
     slug: "novitax-kulfoldi-szamla-import",
     name: "XLNT NOVITAX Bejövő Külföldi Számla Import",
-    tagline: "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország",
+    tagline:
+      "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország",
     status: "available",
     priceId: "novitax_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
     price: 12900,
@@ -954,7 +1093,7 @@ export const products: Product[] = [
     image: novitaxImportImg,
     metaTitle: "XLNT NOVITAX Bejövő Külföldi Számla Import | EXCELlent",
     metaDescription:
-      "Novitax NTAX bejövő külföldi számlák Excel-alapú rögzítése és CSV-importja, partnerimporttal. Ár: 12 900 Ft.",
+      "Novitax NTAX bejövő külföldi számlák Excel-alapú rögzítése és CSV-importja, partnerimporttal.",
     intro: [
       "Ha rendszeresen könyvelsz EU-s vagy harmadik országból érkező bejövő számlákat Novitax NTAX rendszerben, ez az eszköz az adatrögzítés terhét veszi le a válladról. Excelben rögzíted a számlákat – egy gombnyomással kész a Novitax Feladási modulba betölthető szamla.csv fájl, a partnereket pedig közvetlenül a Novitaxból importálod be.",
       "Partnerkód beírásakor a szállítói adatok, naplókód, főkönyvi számok és ÁFA típus automatikusan kitöltődnek a Szállító Törzsből.",
@@ -988,14 +1127,16 @@ export const products: Product[] = [
   {
     slug: "penzszam-kulfoldi-szamla-import",
     name: "XLNT PÉNZSZÁM Bejövő Külföldi Számla Import",
-    tagline: "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország",
+    tagline:
+      "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország",
     status: "available",
     priceId: "penzszam_kulfoldi_szamla_import_egyszeri_licenc_egyetlen_iro",
     price: 12900,
     currency: "HUF",
     image: auditImg,
     metaTitle: "XLNT PÉNZSZÁM Bejövő Külföldi Számla Import | EXCELlent",
-    metaDescription: "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország. Ár: 12 900 Ft-tól.",
+    metaDescription:
+      "Excel-alapú CSV generáló és partner-importáló eszköz könyvelőirodáknak · EU & harmadik ország.",
     intro: [
       "Ha rendszeresen könyvelsz EU-s vagy harmadik országból érkező bejövő számlákat PÉNZSZÁM rendszerben, ez az eszköz a manuális adatrögzítés terhét veszi le. A partnereket közvetlenül a PÉNZSZÁMBÓL importálod, a számlákat Excelben rögzíted – egy gombnyomással kész a pontosan 84 mezős, kötelező ellenőrző sorral ellátott CSV fájl.",
     ],
@@ -1027,14 +1168,16 @@ export const products: Product[] = [
   {
     slug: "pdf-excel-konverter",
     name: "XLNT PDF → Excel konverter",
-    tagline: "Bármilyen PDF tartalma – szöveg, táblázat, kép – egy kattintással Excelbe, az eredeti elrendezést megőrizve",
+    tagline:
+      "Bármilyen PDF tartalma – szöveg, táblázat, kép – egy kattintással Excelbe, az eredeti elrendezést megőrizve",
     status: "available",
     priceId: "pdf_excel_konverter_orokos_licenc",
     price: 12900,
     currency: "HUF",
     image: pdfExcelImg,
     metaTitle: "XLNT PDF → Excel konverter | EXCELlent",
-    metaDescription: "Bármilyen PDF tartalma – szöveg, táblázat, kép – egy kattintással Excelbe, az eredeti elrendezést megőrizve. Ár: 12 900 Ft-tól.",
+    metaDescription:
+      "Bármilyen PDF tartalma – szöveg, táblázat, kép – egy kattintással Excelbe, az eredeti elrendezést megőrizve.",
     intro: [
       "A legtöbb PDF→Excel konverter csak a nyers szöveget önti ki, formázás és rendszer nélkül. Ez a program másképp dolgozik: megtartja a betűméretet, a kiemeléseket, a táblázatok szerkezetét és a beágyazott képeket is – úgy, hogy az Excel fájl tényleg hasonlítson az eredeti dokumentumra.",
       "Akkor is működik, ha a PDF szkennelt vagy fényképként mentett dokumentum – ilyenkor a program beépített karakterfelismeréssel (OCR) olvassa ki a szöveget, magyar és angol nyelven egyaránt.",
@@ -1065,14 +1208,16 @@ export const products: Product[] = [
   {
     slug: "rlb-bank-konverter-pro",
     name: "XLNT RLB Bank Konverter PRO",
-    tagline: "23 bemeneti formátum · kontírozás · Kivonatmágus · PDF automatikus felismerés (OCR-rel)",
+    tagline:
+      "23 bemeneti formátum · kontírozás · Kivonatmágus · PDF automatikus felismerés (OCR-rel)",
     status: "available",
     priceId: "rlb_bank_konverter_pro_pro_egyszeri_licenc",
     price: 29900,
     currency: "HUF",
     image: officeImg,
     metaTitle: "XLNT RLB Bank Konverter PRO | EXCELlent",
-    metaDescription: "23 bemeneti formátum · kontírozás · Kivonatmágus · PDF automatikus felismerés (OCR-rel). Ár: 29 900 Ft-tól.",
+    metaDescription:
+      "23 bemeneti formátum · kontírozás · Kivonatmágus · PDF automatikus felismerés (OCR-rel).",
     intro: [
       "A PRO verzió az alap konverter tudásán messze túlmegy: nemcsak konvertál, hanem a banki forgalmat a könyvelői logika szerint előkészítve adja át. Felismeri a NAV-befizetéseket, béreket, bankköltségeket, egyezteti a banki és a könyvelési partnerneveket, és minden konvertált kivonathoz egy áttekinthető Excel-kimutatást is generál – mindezt PDF fájlokból is, OCR-támogatással.",
       "A PRO verzió az elektronikus fájlformátumokon felül a legtöbb nagyobb bank PDF kivonatát is feldolgozza – akár szöveges, akár szkennelt (képes) PDF esetén.",
@@ -1114,7 +1259,7 @@ export const products: Product[] = [
     currency: "HUF",
     image: rlbBankKonverterImg,
     metaTitle: "XLNT RLB Bank Konverter | EXCELlent",
-    metaDescription: "10 banki formátumból RLB-kompatibilis CSV – automatikusan. Ár: 14 900 Ft-tól.",
+    metaDescription: "10 banki formátumból RLB-kompatibilis CSV – automatikusan.",
     intro: [
       "Az egyre több bankot, pénzügyi szolgáltatót és exportformátumot kezelő könyvelési munkában az egyik legnehézkesebb feladat az egységes, rendezetten importálható banki adat előállítása az RLB-be. Ez az eszköz azt a munkát veszi le a válláról, amit eddig soronként, kézzel kellett elvégezni.",
       "Egyetlen ablakban, egyszerre akár tíz különböző formátumú fájlt tölt be, és egy gombnyomással alakítja át az RLB által beolvasható CSV formátumra.",
@@ -1157,7 +1302,7 @@ export const products: Product[] = [
     currency: "HUF",
     image: closeupImg,
     metaTitle: "XLNT RLB Bejövő Külföldi Számla Import | EXCELlent",
-    metaDescription: "Excel-alapú, makróvezérelt importáló eszköz könyvelőirodák számára. Ár: 9 900 Ft-tól.",
+    metaDescription: "Excel-alapú, makróvezérelt importáló eszköz könyvelőirodák számára.",
     intro: [
       "EU-s és harmadik országbeli szállítói számlák könyvelése Excelből, közvetlenül az RLB rendszerbe – manuális újrabegépelés nélkül. Ez az eszköz azoknak a könyvelőirodáknak készült, amelyek rendszeresen kezelnek devizás bejövő számlákat, és időt szeretnének megtakarítani az adatrögzítésen.",
     ],
@@ -1196,7 +1341,7 @@ export const products: Product[] = [
     image: nyitoVegyesImg,
     metaTitle: "XLNT Nyitó és Vegyes Könyvelő – RLB kiadás | EXCELlent",
     metaDescription:
-      "Nyitó egyenlegek, havi vegyes és bérkönyvelés Excelben, RLB többsoros vegyes importfájllal. Ár: 19 900 Ft-tól.",
+      "Nyitó egyenlegek, havi vegyes és bérkönyvelés Excelben, RLB többsoros vegyes importfájllal.",
     intro: [
       "A hónap végi vegyes könyvelés és a nyitás a legidőigényesebb, legtöbb kézi munkát követelő feladatok közé tartozik. Ez az eszköz Excelben, ismerős felületen oldja meg mindezt: Ön beilleszti vagy rögzíti a tételeket, a program pedig előállítja az RLB által beolvasható importfájlt – gépelés, átszámozgatás és tükörsor-párosítás nélkül.",
     ],
@@ -1243,7 +1388,7 @@ export const products: Product[] = [
     image: nyitoVegyesImg,
     metaTitle: "XLNT Nyitó és Vegyes Könyvelő – Kulcs-Soft kiadás | EXCELlent",
     metaDescription:
-      "Nyitó egyenlegek, havi vegyes és bérkönyvelés Excelben, Kulcs-Könyvelés vegyes importfájllal. Ár: 19 900 Ft-tól.",
+      "Nyitó egyenlegek, havi vegyes és bérkönyvelés Excelben, Kulcs-Könyvelés vegyes importfájllal.",
     intro: [
       "A hónap végi vegyes könyvelés és a nyitás a legidőigényesebb, legtöbb kézi munkát követelő feladatok közé tartozik. Ez az eszköz Excelben, ismerős felületen oldja meg mindezt: Ön beilleszti vagy rögzíti a tételeket, a program pedig előállítja a Kulcs-Könyvelés által beolvasható importfájlt – gépelés, átszámozgatás és tükörsor-párosítás nélkül.",
     ],
@@ -1275,8 +1420,7 @@ export const products: Product[] = [
     ],
     download: {
       fileName: "Kulcs_Nyito_Vegyes_Konyvelo.xlsm",
-      storagePath:
-        "kulcs-nyito-vegyes-konyvelo/Kulcs_Nyito_Vegyes_Konyvelo.xlsm",
+      storagePath: "kulcs-nyito-vegyes-konyvelo/Kulcs_Nyito_Vegyes_Konyvelo.xlsm",
     },
   },
   {
@@ -1291,7 +1435,7 @@ export const products: Product[] = [
     image: nyitoVegyesImg,
     metaTitle: "XLNT Nyitó és Vegyes Könyvelő – SUP kiadás | EXCELlent",
     metaDescription:
-      "Nyitó egyenlegek, havi vegyes és bérkönyvelés Excelben, Qsoft SUP vegyes importfájllal. Ár: 19 900 Ft-tól.",
+      "Nyitó egyenlegek, havi vegyes és bérkönyvelés Excelben, Qsoft SUP vegyes importfájllal.",
     intro: [
       "A hónap végi vegyes könyvelés és a nyitás a legidőigényesebb, legtöbb kézi munkát követelő feladatok közé tartozik. Ez az eszköz Excelben, ismerős felületen oldja meg mindezt: Ön beilleszti vagy rögzíti a tételeket, a program pedig előállítja a Qsoft SUP által beolvasható importfájlt – gépelés, átszámozgatás és tükörsor-párosítás nélkül.",
     ],
@@ -1336,7 +1480,7 @@ export const products: Product[] = [
     currency: "HUF",
     image: termekekImg,
     metaTitle: "XLNT Telefonszámla Könyvelő | EXCELlent",
-    metaDescription: "Telefonszámlából könyvelés – percek alatt, hívószámonként, hibátlan áfával. Ár: 14 900 Ft-tól.",
+    metaDescription: "Telefonszámlából könyvelés – percek alatt, hívószámonként, hibátlan áfával.",
     intro: [
       "A többtelefonszámos céges számlák könyvelése hónapról hónapra ugyanaz a fárasztó, hibalehetőségekkel teli kézi munka. A Telefonszámla Könyvelő beolvassa a PDF-számlát, hívószámonként szétbontja a tételeket, és egyetlen kattintással a könyvelőprogramjába importálható fájlt készít – helyes áfakulcsokkal és a telefonszolgáltatás magán/céges áfabontásával együtt. A Magyar Telekom (mobil és vezetékes), a Yettel és a One üzleti számláit automatikusan felismeri.",
       "Könyvelőirodáknak és cégeknek, amelyek több hívószámos, üzleti mobilszámlákat könyvelnek (Magyar Telekom – mobil és vezetékes –, Yettel, One), és RLB, Kulcs-Soft, Novitax vagy Pénzszám rendszert használnak.",
@@ -1384,7 +1528,7 @@ export const products: Product[] = [
     currency: "HUF",
     image: calcImg,
     metaTitle: "XLNT Univerzális bankkivonat-konverter | EXCELlent",
-    metaDescription: "Automatikus bankkivonat-konverter könyvelőknek és vállalkozásoknak. Ár: 19 900 Ft-tól.",
+    metaDescription: "Automatikus bankkivonat-konverter könyvelőknek és vállalkozásoknak.",
     intro: [
       "A könyvelőirodák és vállalkozások egyik legnagyobb időrabló feladata a havi bankkivonatok kézi rögzítése vagy félig manuális másolgatása.",
     ],
@@ -1426,7 +1570,7 @@ export const products: Product[] = [
     image: wifiJelszoImg,
     metaTitle: "XLNT WiFi Jelszó Néző | EXCELlent",
     metaDescription:
-      "Az ezen a gépen elmentett Wi-Fi jelszavak egy listában, másolással és CSV-exporttal. Windowsra, egyszeri licenc: 2 900 Ft.",
+      "Az ezen a gépen elmentett Wi-Fi jelszavak egy listában, másolással és CSV-exporttal. Windowsra.",
     intro: [
       "Új telefon, új laptop, vendég az irodában – és a Wi-Fi jelszó rég feledésbe merült. A XLNT WiFi Jelszó Néző összegyűjti és áttekinthető listában megmutatja mindazokat a Wi-Fi jelszavakat, amelyeket ez a számítógép korábban elmentett. Nincs regisztráció, nincs bonyolult telepítés: elindítja, és látja.",
       "Könyvelőirodáknak, rendszergazdáknak, informatikusoknak, ügyfélszolgálatoknak – és mindenkinek, aki több gépet kezel, vagy egyszerűen csak gyorsan szeretné visszakeresni egy korábban beállított hálózat jelszavát, anélkül hogy a routert kellene előkeresnie.",
@@ -1459,15 +1603,14 @@ export const products: Product[] = [
     slug: "auditxml-ellenorzo-javito",
     priceId: "auditxml_ellenorzo_javito_teljes_licenc",
     name: "XLNT AuditXML Ellenőrző-Javító",
-    tagline:
-      "Egyszerű ellenőrző és javító eszköz MKVK AuditXML és NAV számla adatexport XML-ekhez",
+    tagline: "Egyszerű ellenőrző és javító eszköz MKVK AuditXML és NAV számla adatexport XML-ekhez",
     status: "available",
     price: 4990,
     currency: "HUF",
     image: auditXmlImg,
     metaTitle: "XLNT AuditXML Ellenőrző-Javító | EXCELlent",
     metaDescription:
-      "MKVK AuditXML és NAV számla adatexport XML-ek ellenőrzése és a gyakori hibák javítása. Windows .exe, örökös licenc: 4 990 Ft.",
+      "MKVK AuditXML és NAV számla adatexport XML-ek ellenőrzése és a gyakori hibák javítása. Windows .exe.",
     intro: [
       "Egy kis, önálló Windows-segédeszköz, amely gyorsan ellenőrzi az AuditXML és a NAV számla adatexport állományokat, és a leggyakoribb, gépiesen javítható hibákat – külön rákérdezés után – ki is javítja: sérült ékezetek, rossz kódolás, túl hosszú mező, vesszős tizedesjel, hibás dátumformátum. Amit nem lehet biztonságosan javítani, azt csak jelzi.",
       "A program áttekinthető, sötét témájú felülete bal oldalon az ellenőrzést, jobb oldalon a részletes naplót mutatja.",
@@ -1498,15 +1641,14 @@ export const products: Product[] = [
     slug: "devizabank",
     priceId: "devizabank_egy_devizanem_atlagaras",
     name: "XLNT DEVIZABANK",
-    tagline:
-      "Devizás bankszámla nyilvántartó és árfolyam-elszámoló Excel könyvelőirodáknak",
+    tagline: "Devizás bankszámla nyilvántartó és árfolyam-elszámoló Excel könyvelőirodáknak",
     status: "available",
     price: 19900,
     currency: "HUF",
     image: devizabankImg,
     metaTitle: "XLNT DEVIZABANK – devizás bankszámla nyilvántartó Excel | EXCELlent",
     metaDescription:
-      "Devizaszámla nyilvántartás átlagáras és FIFO elszámolással, automatikus MNB árfolyam-lekérdezéssel. EUR, USD, GBP, JPY. 19 900 Ft-tól.",
+      "Devizaszámla nyilvántartás átlagáras és FIFO elszámolással, automatikus MNB árfolyam-lekérdezéssel. EUR, USD, GBP, JPY.",
     intro: [
       "A devizaszámlák csökkenő tételeit a számviteli törvény szerint kizárólag FIFO vagy átlagáras módszerrel szabad elszámolni – ezt a 2022-es „Eszközök” és „Források” könyvvizsgálói kamarai előadások is megerősítették. Az, hogy egy esetleges (akár havi) átértékelés utólag „rendbe teszi” a számokat, nem mentesít a szabály alól.",
       "A gyakorlatban ugyanakkor kevés program – Excel-sablon még kevesebb – kezeli helyesen azt a helyzetet, amikor a devizaszámla egyenlege nullán át fordul, vagy negatívba megy. A fejlesztő a hazai és nemzetközi könyvelőprogramok döntő többségével dolgozott már (RLB-től SAP-ig), és mindegyiknél talált olyan esetet, amit vagy egyáltalán nem, vagy csak tételek szétbontásával lehetett helyesen könyvelni.",
@@ -1565,7 +1707,7 @@ export const products: Product[] = [
     image: mnbEraImg,
     metaTitle: "XLNT MNB ERA Jelentésgenerátor R09 és R12 | XLNTBI",
     metaDescription:
-      "R09 és R12 jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből. Egyetlen licenc, 29 900 Ft AAM.",
+      "R09 és R12 jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből.",
     intro: [
       "Az MNB felé teljesítendő R09 és R12 jegybanki adatszolgáltatások beküldése az ERA/STEFI rendszerben szigorú formátumszabályokhoz kötött: előírt fájlnév, XML-séma vagy sorkódos CSV-szerkezet, pontos dátum- és számformátumok. A kézi összeállítás lassú és hibalehetőségekkel teli – egyetlen elrontott vessző vagy dátumkód a teljes jelentés visszautasítását okozhatja.",
       "Az MNB ERA Jelentésgenerátor két Excel-sablon és a hozzájuk tartozó VBA-makró, amelyek a megszokott táblázatos környezetben kitöltött adatokból a hivatalos STEFI Felhasználói kézikönyv előírásai szerinti, beküldhető R09 és R12 jelentésfájlt állítják elő – helyes fájlnévvel és szerkezettel.",
@@ -1607,7 +1749,7 @@ export const products: Product[] = [
     image: ingatlanalapMnbImg,
     metaTitle: "XLNT Ingatlanalap MNB Jelentés-előkészítő (NEÉ, 50A, 51M) | XLNTBI",
     metaDescription:
-      "NEÉ-számoló, 51M ingatlankitettség és 50A jelentéslap egy Excel-munkafüzetben, beépített ERA/STEFI generátorral. Egyetlen licenc, 39 900 Ft.",
+      "NEÉ-számoló, 51M ingatlankitettség és 50A jelentéslap egy Excel-munkafüzetben, beépített ERA/STEFI generátorral.",
     intro: [
       "Az ingatlanalapot kezelő alapkezelőknek negyedévenként számot kell adniuk az alap ingatlankitettségének változásáról (51M jelentés), valamint rendszeresen meg kell állapítaniuk és jelenteniük az alap nettó eszközértékét (50A jelentés). A két jelentés tartalmilag összefügg: az ingatlanok értékének negyedéves változása közvetlenül befolyásolja a NEÉ-t – ezt a kapcsolatot kézzel követni időigényes és hibalehetőségekkel teli.",
       "Az Ingatlanalap MNB Jelentés-előkészítő egyetlen Excel-munkafüzetben köti össze az ingatlannyilvántartást, a NEÉ-számítást és a beküldhető jelentésfájl előállítását: az 51M táblában rögzített ingatlanadatok automatikusan gurulnak át a NEÉ-számolóba, onnan pedig a beépített generátor állítja elő az MNB felé beküldhető fájlt.",
@@ -1633,8 +1775,7 @@ export const products: Product[] = [
     ],
     download: {
       fileName: "Ingatlanalap_MNB_jelentesek_NEE.xlsm",
-      storagePath:
-        "ingatlanalap-mnb-jelentes-elokeszito/Ingatlanalap_MNB_jelentesek_NEE.xlsm",
+      storagePath: "ingatlanalap-mnb-jelentes-elokeszito/Ingatlanalap_MNB_jelentesek_NEE.xlsm",
     },
   },
   {
@@ -1649,7 +1790,7 @@ export const products: Product[] = [
     image: kapcsoltsagEllenorzoImg,
     metaTitle: "XLNT Kapcsoltság-ellenőrző Excel | XLNTBI",
     metaDescription:
-      "Kapcsolt, kapcsolódó és partnervállalkozás vizsgálata a Tao. tv., a számviteli tv. és a KKV tv. szerint, külön eredménysorokban. Egyetlen licenc, 5 990 Ft AAM.",
+      "Kapcsolt, kapcsolódó és partnervállalkozás vizsgálata a Tao. tv., a számviteli tv. és a KKV tv. szerint, külön eredménysorokban.",
     intro: [
       "A kapcsoltság vizsgálatánál gyakori nehézség, hogy a Tao. törvény, a számviteli törvény és a KKV törvény eltérő fogalmakat és küszöböket használ ugyanarra a tulajdonosi vagy irányítási helyzetre. A Kapcsoltság-ellenőrző a megadott adatok alapján elkülönítve mutatja meg, hogy a vállalkozások kapcsoltak vagy kapcsolódók-e a három törvény logikája szerint.",
       "A munkafüzetben a sárga mezők jelzik a kitöltendő adatokat: tulajdoni részesedés, szavazati jog, többségi befolyás és a KKV-kapcsolat. Az eredményblokk külön sorokban, rövid automatikus indoklással segíti az első értékelést – így a minősítés, a dokumentálás vagy egy belső ellenőrzés gyorsabban és rendezettebben készíthető elő.",
@@ -1697,15 +1838,14 @@ export const products: Product[] = [
     slug: "vallalkozas-meret-besorolo",
     priceId: "vallalkozas_meret_besorolo_licenc",
     name: "XLNT Vállalkozásméret-besoroló",
-    tagline:
-      "Átlátható segítség a mikro-, kis-, közép- és nagyvállalati besoroláshoz",
+    tagline: "Átlátható segítség a mikro-, kis-, közép- és nagyvállalati besoroláshoz",
     status: "available",
     price: 4990,
     currency: "HUF",
     image: vallalkozasMeretBesoroloImg,
     metaTitle: "XLNT Vállalkozásméret-besoroló Excel | XLNTBI",
     metaDescription:
-      "Excel kalkulátor a KKV-besoroláshoz: létszám, árbevétel és mérlegfőösszeg alapján mikro-, kis-, közép- vagy nagyvállalat. Év végi és év eleji lap, 4 990 Ft AAM.",
+      "Excel kalkulátor a KKV-besoroláshoz: létszám, árbevétel és mérlegfőösszeg alapján mikro-, kis-, közép- vagy nagyvállalat. Év végi és év eleji lap.",
     intro: [
       "A Vállalkozásméret-besoroló Excel kalkulátor abban segít, hogy a megadott létszám-, árbevétel- és mérlegfőösszeg-adatok alapján gyorsan áttekinthető legyen a vállalkozás várható KKV-besorolása. A munkafüzet külön kezeli az év végi és az év eleji nézőpontot, így praktikus kiindulópont lehet az innovációs járulék, egyes TAO-kedvezmények és a KKV-minősítés vizsgálatához.",
       "A kitöltendő mezők sárga háttérrel vannak kiemelve, a munkafüzet pedig automatikusan kiszámítja az összesített mutatókat, a forintosított küszöbértékeket, majd kiírja a várható kategóriát: mikro-, kis-, közép- vagy nagyvállalat.",
@@ -1783,7 +1923,6 @@ export function getProduct(slug: string): Product | undefined {
   const canonical = resolveProductSlug(slug);
   return products.find((p) => p.slug === canonical);
 }
-
 
 export function getTier(product: Product, tierId?: string | null): ProductTier {
   return product.tiers.find((t) => t.id === tierId) ?? product.tiers[0]!;

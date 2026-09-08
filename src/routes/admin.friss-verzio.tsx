@@ -5,6 +5,7 @@ import {
   ProductDescriptionPanel,
   ProductPricePanel,
 } from "@/components/admin-product-panels";
+import { CategoryPanel, NewProductPanel } from "@/components/admin-new-product-panels";
 import {
   CalculatorVersionPanel,
   ProductOrderPanel,
@@ -45,6 +46,8 @@ function AdminNewVersionPage() {
           számít. A termékfájloknál a korábbi letöltő linkek érvényesek maradnak,
           és mostantól az új verziót szolgálják ki.
         </p>
+        <NewProductPanel />
+        <CategoryPanel />
         <ProductVersionPanel />
         <ProductDescriptionPanel />
         <ProductPricePanel />

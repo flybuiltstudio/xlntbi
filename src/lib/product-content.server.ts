@@ -49,7 +49,7 @@ const EN_SYSTEM = `You translate a Hungarian software product description into E
 STRICT RULES:
 - Translate faithfully; do not add, remove or embellish anything.
 - Keep official Hungarian abbreviations understandable: NAV (Hungarian Tax Authority), ÁNYK, ÁFA (VAT), SZJA (personal income tax), MNB (Hungarian central bank), KIVA, TAO.
-- Keep "Ft" as the currency unit. Never mention prices that are not in the source.
+- Never write any amount, price or discount in the text (no "Ft", no numbers with currency).
 - Natural business English, direct tone, no marketing fluff.
 
 OUTPUT: a single JSON object only, no markdown, with the same keys as the input:

@@ -126,10 +126,12 @@ import { Route as EnCalculatorsFlatRateTaxRouteImport } from './routes/en.calcul
 import { Route as EnCalculatorsIncomeTaxRouteImport } from './routes/en.calculators.income-tax'
 import { Route as EnCalculatorsInvoiceDatesRouteImport } from './routes/en.calculators.invoice-dates'
 import { Route as EnCalculatorsSalaryTestRouteImport } from './routes/en.calculators.salary-test'
+import { Route as EnProductSlugRouteImport } from './routes/en.product.$slug'
 import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
 import { Route as ApiPublicKatalogusAuditCronRouteImport } from './routes/api/public/katalogus-audit/cron'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicTermekKepSlugRouteImport } from './routes/api/public/termek-kep.$slug'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -753,6 +755,11 @@ const EnCalculatorsSalaryTestRoute = EnCalculatorsSalaryTestRouteImport.update({
   path: '/calculators/salary-test',
   getParentRoute: () => EnRoute,
 } as any)
+const EnProductSlugRoute = EnProductSlugRouteImport.update({
+  id: '/product/$slug',
+  path: '/product/$slug',
+  getParentRoute: () => EnRoute,
+} as any)
 const ApiPublicBillingoWebhookRoute =
   ApiPublicBillingoWebhookRouteImport.update({
     id: '/api/public/billingo/webhook',
@@ -776,6 +783,11 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicTermekKepSlugRoute = ApiPublicTermekKepSlugRouteImport.update({
+  id: '/api/public/termek-kep/$slug',
+  path: '/api/public/termek-kep/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/lovable/email/auth/preview',
   path: '/lovable/email/auth/preview',
@@ -910,11 +922,13 @@ export interface FileRoutesByFullPath {
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
   '/en/calculators/salary-test': typeof EnCalculatorsSalaryTestRoute
+  '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/termek-kep/$slug': typeof ApiPublicTermekKepSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -1034,11 +1048,13 @@ export interface FileRoutesByTo {
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
   '/en/calculators/salary-test': typeof EnCalculatorsSalaryTestRoute
+  '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/termek-kep/$slug': typeof ApiPublicTermekKepSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -1161,11 +1177,13 @@ export interface FileRoutesById {
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
   '/en/calculators/salary-test': typeof EnCalculatorsSalaryTestRoute
+  '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/termek-kep/$slug': typeof ApiPublicTermekKepSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -1289,11 +1307,13 @@ export interface FileRouteTypes {
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
     | '/en/calculators/salary-test'
+    | '/en/product/$slug'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
+    | '/api/public/termek-kep/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -1413,11 +1433,13 @@ export interface FileRouteTypes {
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
     | '/en/calculators/salary-test'
+    | '/en/product/$slug'
     | '/en/calculators'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
+    | '/api/public/termek-kep/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -1539,11 +1561,13 @@ export interface FileRouteTypes {
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
     | '/en/calculators/salary-test'
+    | '/en/product/$slug'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
+    | '/api/public/termek-kep/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -1630,6 +1654,7 @@ export interface RootRouteChildren {
   ApiPublicKatalogusAuditCronRoute: typeof ApiPublicKatalogusAuditCronRoute
   ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicTermekKepSlugRoute: typeof ApiPublicTermekKepSlugRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
@@ -2456,6 +2481,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnCalculatorsSalaryTestRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/product/$slug': {
+      id: '/en/product/$slug'
+      path: '/product/$slug'
+      fullPath: '/en/product/$slug'
+      preLoaderRoute: typeof EnProductSlugRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/api/public/billingo/webhook': {
       id: '/api/public/billingo/webhook'
       path: '/api/public/billingo/webhook'
@@ -2482,6 +2514,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/payments/webhook'
       fullPath: '/api/public/payments/webhook'
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/termek-kep/$slug': {
+      id: '/api/public/termek-kep/$slug'
+      path: '/api/public/termek-kep/$slug'
+      fullPath: '/api/public/termek-kep/$slug'
+      preLoaderRoute: typeof ApiPublicTermekKepSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable/email/auth/preview': {
@@ -2570,6 +2609,7 @@ interface EnRouteChildren {
   EnCalculatorsIncomeTaxRoute: typeof EnCalculatorsIncomeTaxRoute
   EnCalculatorsInvoiceDatesRoute: typeof EnCalculatorsInvoiceDatesRoute
   EnCalculatorsSalaryTestRoute: typeof EnCalculatorsSalaryTestRoute
+  EnProductSlugRoute: typeof EnProductSlugRoute
   EnCalculatorsIndexRoute: typeof EnCalculatorsIndexRoute
 }
 
@@ -2601,6 +2641,7 @@ const EnRouteChildren: EnRouteChildren = {
   EnCalculatorsIncomeTaxRoute: EnCalculatorsIncomeTaxRoute,
   EnCalculatorsInvoiceDatesRoute: EnCalculatorsInvoiceDatesRoute,
   EnCalculatorsSalaryTestRoute: EnCalculatorsSalaryTestRoute,
+  EnProductSlugRoute: EnProductSlugRoute,
   EnCalculatorsIndexRoute: EnCalculatorsIndexRoute,
 }
 
@@ -2693,6 +2734,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicKatalogusAuditCronRoute: ApiPublicKatalogusAuditCronRoute,
   ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicTermekKepSlugRoute: ApiPublicTermekKepSlugRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,

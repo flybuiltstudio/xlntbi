@@ -203,8 +203,9 @@ function EnglishProducts() {
                     ) : null}
                     <div className="mt-5 flex flex-wrap gap-3">
                       <Link
-                        to="/termek/$slug"
+                        to="/en/product/$slug"
                         params={{ slug: product.slug }}
+
                         className="inline-flex items-center rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
                       >
                         Details

@@ -8,7 +8,7 @@ import {
 
 const TITLE_BASE = "XLNT Vállalkozásméret-besoroló Excel | XLNTBI";
 const DESCRIPTION_BASE =
-  "Excel kalkulátor a KKV-besoroláshoz: létszám, árbevétel és mérlegfőösszeg alapján mikro-, kis-, közép- vagy nagyvállalat. Év végi és év eleji lap, 4 990 Ft AAM.";
+  "Excel kalkulátor a KKV-besoroláshoz: létszám, árbevétel és mérlegfőösszeg alapján mikro-, kis-, közép- vagy nagyvállalat. Év végi és év eleji lap.";
 const H1 = "XLNT Vállalkozásméret-besoroló";
 const CANONICAL = "https://xlntbi.hu/termek/vallalkozas-meret-besorolo";
 const SLUG = "vallalkozas-meret-besorolo";

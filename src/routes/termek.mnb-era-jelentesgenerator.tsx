@@ -8,7 +8,7 @@ import {
 
 const TITLE_BASE = "XLNT MNB ERA Jelentésgenerátor R09 és R12 | XLNTBI";
 const DESCRIPTION_BASE =
-  "R09 és R12 jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből. Egyetlen licenc, 29 900 Ft AAM.";
+  "R09 és R12 jegybanki adatszolgáltatások beküldhető XML/CSV fájljának elkészítése Excelből. Egyetlen licenc.";
 const H1 = "XLNT MNB ERA Jelentésgenerátor (R09 és R12)";
 const CANONICAL = "https://xlntbi.hu/termek/mnb-era-jelentesgenerator";
 const SLUG = "mnb-era-jelentesgenerator";
