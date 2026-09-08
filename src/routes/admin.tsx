@@ -292,11 +292,7 @@ function AdminLayout() {
               >
                 Friss verzió
               </Link>
-              <div
-                className="relative"
-                onMouseEnter={() => setChecksOpen(true)}
-                onMouseLeave={() => setChecksOpen(false)}
-              >
+              <div className="relative" ref={checksRef}>
                 <button
                   type="button"
                   onClick={() => setChecksOpen((v) => !v)}
@@ -304,18 +300,24 @@ function AdminLayout() {
                     checksLinks.some((l) => pathname.startsWith(l.to)) ? `${tabBase} ${tabActive}` : ""
                   }`}
                   aria-expanded={checksOpen}
+                  aria-haspopup="menu"
                 >
                   Ellenőrzések
-                  <ChevronDown className="h-3.5 w-3.5" />
+                  <ChevronDown className={`h-3.5 w-3.5 transition-transform ${checksOpen ? "rotate-180" : ""}`} />
                 </button>
                 {checksOpen ? (
-                  <div className="absolute left-0 top-full z-40 mt-1 min-w-44 overflow-hidden rounded-md border border-border bg-popover py-1 shadow-md">
+                  <div
+                    role="menu"
+                    className="absolute left-0 top-full z-50 mt-1 min-w-64 overflow-hidden rounded-md border border-border bg-popover py-1 shadow-lg"
+                  >
                     {checksLinks.map((l) => (
                       <Link
                         key={l.to}
                         to={l.to}
-                        className="block px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                        activeProps={{ className: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" }}
+                        role="menuitem"
+                        onClick={() => setChecksOpen(false)}
+                        className="block px-4 py-3 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                        activeProps={{ className: "block px-4 py-3 text-sm bg-primary text-primary-foreground" }}
                       >
                         {l.label}
                       </Link>
