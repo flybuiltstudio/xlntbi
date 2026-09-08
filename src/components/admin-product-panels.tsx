@@ -229,7 +229,12 @@ export function ProductDescriptionPanel() {
     reset();
     try {
       const result = await publish({
-        data: { slug, fileName: file?.name ?? "kézi szerkesztés", hu, en },
+        data: {
+          slug,
+          fileName: file?.name ?? "kézi szerkesztés",
+          hu: cleanDraft(hu),
+          en: en ? cleanDraft(en) : null,
+        },
       });
       if (!result.ok) throw new Error(result.error);
       setMessage(
@@ -249,7 +254,7 @@ export function ProductDescriptionPanel() {
     setSaveBusy(true);
     reset();
     try {
-      const result = await saveEn({ data: { slug, en } });
+      const result = await saveEn({ data: { slug, en: cleanDraft(en) } });
       if (!result.ok) throw new Error(result.error);
       setMessage(`${productName}: csak az angol leírás frissült.`);
       await refresh();
