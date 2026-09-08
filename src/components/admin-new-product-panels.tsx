@@ -30,13 +30,14 @@ const BUCKET = "termekfajlok";
 const inputClass =
   "w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground";
 
-const linesOf = (value: string): string[] =>
-  value
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
+// Raw lines while typing (empty lines kept), cleaned only on save — otherwise
+// the controlled textarea would swallow a pressed Enter.
+const linesOf = (value: string): string[] => value.split("\n");
 
 const textOf = (values: string[]): string => values.join("\n");
+
+const cleanLines = (values: string[]): string[] =>
+  values.map((line) => line.trim()).filter((line) => line.length > 0);
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
