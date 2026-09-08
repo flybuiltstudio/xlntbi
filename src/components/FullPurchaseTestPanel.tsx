@@ -6,25 +6,19 @@ import {
   Eraser,
   Loader2,
   PlayCircle,
-  ShieldCheck,
-  TicketX,
   XCircle,
 } from "lucide-react";
 
 import {
   adminCleanupTestOrder,
-  adminCouponGuardState,
   adminRunPurchaseTest,
-  adminSweepLiveCoupons,
 } from "@/lib/admin.functions";
 import { PaymentEnvironmentNotice } from "@/components/PaymentEnvironmentNotice";
 import { getStripeEnvironmentSafe } from "@/lib/stripe";
 import { getTier, products } from "@/lib/products";
-import { ALLOWED_LIVE_PROMOTION_CODES, TEST_PROMOTION_CODES } from "@/lib/coupons";
 
 type TestResult = Awaited<ReturnType<typeof adminRunPurchaseTest>>;
 type CleanupResult = Awaited<ReturnType<typeof adminCleanupTestOrder>>;
-type GuardState = Awaited<ReturnType<typeof adminCouponGuardState>>;
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-ring/40";
@@ -40,8 +34,6 @@ function StepIcon({ status }: { status: TestResult["steps"][number]["status"] })
 export function FullPurchaseTestPanel() {
   const runTest = useServerFn(adminRunPurchaseTest);
   const cleanupTest = useServerFn(adminCleanupTestOrder);
-  const guardState = useServerFn(adminCouponGuardState);
-  const sweepCoupons = useServerFn(adminSweepLiveCoupons);
 
   const orderable = products.filter((p) => p.status === "available");
   const [slug, setSlug] = useState(orderable[0]!.slug);
@@ -61,27 +53,12 @@ export function FullPurchaseTestPanel() {
   const [cleaning, setCleaning] = useState(false);
   const [cleanupError, setCleanupError] = useState("");
 
-  const [guard, setGuard] = useState<GuardState | null>(null);
-  const [sweeping, setSweeping] = useState(false);
-  const [sweepMessage, setSweepMessage] = useState("");
-
   /** True when the latest test run skipped cleanup (checkbox unchecked). */
   const cleanupAvailable = Boolean(
     result?.orderNumber &&
       String(result.orderNumber).startsWith("TESZT-") &&
       result.steps.some((s) => s.key === "cleanup" && s.status === "skipped"),
   );
-
-  const loadGuard = useCallback(() => {
-    guardState()
-      .then(setGuard)
-      .catch(() => setGuard(null));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    loadGuard();
-  }, [loadGuard]);
 
   async function onRun() {
     setRunning(true);
@@ -122,26 +99,6 @@ export function FullPurchaseTestPanel() {
       setCleanupError("A takarítás nem sikerült. Nézd meg a szerver naplót.");
     } finally {
       setCleaning(false);
-    }
-  }
-
-  async function onSweep() {
-    setSweeping(true);
-    setSweepMessage("");
-    try {
-      const res = await sweepCoupons();
-      setSweepMessage(
-        res.ok
-          ? `Ellenőrizve ${res.checked} kuponkód. Kikapcsolva: ${
-              res.deactivated.length ? res.deactivated.join(", ") : "nincs"
-            }. Aktívan hagyva: ${res.kept.length ? res.kept.join(", ") : "nincs"}.`
-          : `Hiba: ${res.error}`,
-      );
-      loadGuard();
-    } catch {
-      setSweepMessage("A kuponellenőrzés nem sikerült.");
-    } finally {
-      setSweeping(false);
     }
   }
 
