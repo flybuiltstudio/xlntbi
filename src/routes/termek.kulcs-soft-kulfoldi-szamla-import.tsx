@@ -1,27 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
+import {
+  productMetaDescription,
+  productMetaTitle,
+  productTierPrice,
+} from "@/lib/product-overrides";
 
-const TITLE = "XLNT Kulcs-Soft Bejövő Külföldi Számla Import | EXCELlent Business Intelligence";
-const DESCRIPTION =
+const TITLE_BASE = "XLNT Kulcs-Soft Bejövő Külföldi Számla Import | EXCELlent Business Intelligence";
+const DESCRIPTION_BASE =
   "Excel-alapú importáló eszköz könyvelőirodáknak: EU-s és harmadik országbeli bejövő számlák Kulcs-Soft CSV importja, kézi rögzítés nélkül.";
 const H1 = "XLNT Kulcs-Soft Bejövő Külföldi Számla Import";
 const CANONICAL = "https://xlntbi.hu/termek/kulcs-soft-kulfoldi-szamla-import";
+const SLUG = "kulcs-soft-kulfoldi-szamla-import";
+// Admin-managed description overrides take precedence over the bundled text.
+const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
+const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
 const OG_IMAGE = "https://xlntbi.hu/og/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
 
 export const Route = createFileRoute("/termek/kulcs-soft-kulfoldi-szamla-import")({
   head: () => ({
     meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { title: TITLE() },
+      { name: "description", content: DESCRIPTION() },
+      { property: "og:title", content: TITLE() },
+      { property: "og:description", content: DESCRIPTION() },
       { property: "og:type", content: "product" },
       { property: "og:url", content: CANONICAL },
       { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:title", content: TITLE() },
+      { name: "twitter:description", content: DESCRIPTION() },
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
@@ -32,7 +41,7 @@ export const Route = createFileRoute("/termek/kulcs-soft-kulfoldi-szamla-import"
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
           name: H1,
-          description: DESCRIPTION,
+          description: DESCRIPTION(),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Windows",
           url: CANONICAL,
@@ -41,7 +50,7 @@ export const Route = createFileRoute("/termek/kulcs-soft-kulfoldi-szamla-import"
           brand: { "@type": "Brand", name: "EXCELlent Business Intelligence" },
           offers: {
             "@type": "Offer",
-            price: "12900",
+            price: String(productTierPrice(SLUG, null, 12900)),
             priceCurrency: "HUF",
             availability: "https://schema.org/InStock",
             url: CANONICAL,

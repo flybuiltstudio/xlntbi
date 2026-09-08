@@ -1,26 +1,35 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
+import {
+  productMetaDescription,
+  productMetaTitle,
+  productTierPrice,
+} from "@/lib/product-overrides";
 
-const TITLE = "XLNT Telefonszámla könyvelő program | EXCELlent Business Intelligence";
-const DESCRIPTION = "Telefonszámlából könyvelés percek alatt: Telekom (mobil és vezetékes), Yettel és One számlák hívószámonkénti bontása, magán/céges áfabontással, RLB, Kulcs-Soft, Novitax és Pénzszám exporttal.";
+const TITLE_BASE = "XLNT Telefonszámla könyvelő program | EXCELlent Business Intelligence";
+const DESCRIPTION_BASE = "Telefonszámlából könyvelés percek alatt: Telekom (mobil és vezetékes), Yettel és One számlák hívószámonkénti bontása, magán/céges áfabontással, RLB, Kulcs-Soft, Novitax és Pénzszám exporttal.";
 const H1 = "XLNT Telefonszámla könyvelő";
 const CANONICAL = "https://xlntbi.hu/termek/telefonszamla-konyvelo";
+const SLUG = "telefonszamla-konyvelo";
+// Admin-managed description overrides take precedence over the bundled text.
+const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
+const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
 const OG_IMAGE = "https://xlntbi.hu/og/termekek.jpg";
 
 export const Route = createFileRoute("/termek/telefonszamla-konyvelo")({
   head: () => ({
     meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { title: TITLE() },
+      { name: "description", content: DESCRIPTION() },
+      { property: "og:title", content: TITLE() },
+      { property: "og:description", content: DESCRIPTION() },
       { property: "og:type", content: "product" },
       { property: "og:url", content: CANONICAL },
       { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:title", content: TITLE() },
+      { name: "twitter:description", content: DESCRIPTION() },
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [

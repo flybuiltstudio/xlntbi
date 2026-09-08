@@ -1,27 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
+import {
+  productMetaDescription,
+  productMetaTitle,
+  productTierPrice,
+} from "@/lib/product-overrides";
 
-const TITLE = "XLNT DEVIZABANK – devizás bankszámla nyilvántartó Excel | EXCELlent Business Intelligence";
-const DESCRIPTION =
+const TITLE_BASE = "XLNT DEVIZABANK – devizás bankszámla nyilvántartó Excel | EXCELlent Business Intelligence";
+const DESCRIPTION_BASE =
   "Devizaszámla nyilvántartás átlagáras és FIFO elszámolással, automatikus MNB árfolyam-lekérdezéssel. EUR, USD, GBP, JPY változat, 19 900 Ft-tól.";
 const H1 = "XLNT DEVIZABANK – devizás bankszámla nyilvántartó és árfolyam-elszámoló";
 const CANONICAL = "https://xlntbi.hu/termek/devizabank";
+const SLUG = "devizabank";
+// Admin-managed description overrides take precedence over the bundled text.
+const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
+const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
 const OG_IMAGE = "https://xlntbi.hu/og/devizabank.jpg";
 
 export const Route = createFileRoute("/termek/devizabank")({
   head: () => ({
     meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { title: TITLE() },
+      { name: "description", content: DESCRIPTION() },
+      { property: "og:title", content: TITLE() },
+      { property: "og:description", content: DESCRIPTION() },
       { property: "og:type", content: "product" },
       { property: "og:url", content: CANONICAL },
       { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:title", content: TITLE() },
+      { name: "twitter:description", content: DESCRIPTION() },
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
@@ -32,7 +41,7 @@ export const Route = createFileRoute("/termek/devizabank")({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
           name: "XLNT DEVIZABANK",
-          description: DESCRIPTION,
+          description: DESCRIPTION(),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Windows, Microsoft Excel",
           url: CANONICAL,
@@ -41,7 +50,7 @@ export const Route = createFileRoute("/termek/devizabank")({
           brand: { "@type": "Brand", name: "EXCELlent Business Intelligence" },
           offers: {
             "@type": "Offer",
-            price: "19900",
+            price: String(productTierPrice(SLUG, null, 19900)),
             priceCurrency: "HUF",
             availability: "https://schema.org/InStock",
             url: CANONICAL,
