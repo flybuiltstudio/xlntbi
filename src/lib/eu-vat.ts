@@ -20,14 +20,18 @@ export type VatTreatment = "aam" | "eufad37";
 /**
  * Billingo VAT key + entitlement pair for a treatment.
  *
- * The invoicing API has no literal "EUFAD37" key: an Áfa tv. 37. § B2B service
- * to another member state is booked as "ÁKK" (áfa tárgyi hatályán kívüli) with
- * the "ATK" entitlement, together with the Reverse charge note below.
+ * An Áfa tv. 37. § B2B service to another member state is booked with the
+ * "ÁTHK" VAT key (áfa törvény hatályán kívüli, közösségi) and the predefined
+ * "EUFAD37" entitlement (Áfa tv. 37. §), together with the Reverse charge note
+ * below. Verified against the live invoicing API: entitlement must be one of
+ * EUFAD37, EUFADE, EUE, HO, and the partner must be a FOREIGN partner with a
+ * valid EU VAT number.
  */
 export const VAT_KEYS: Record<VatTreatment, { vat: string; entitlement: string }> = {
   aam: { vat: "AAM", entitlement: "AAM" },
-  eufad37: { vat: "ÁKK", entitlement: "ATK" },
+  eufad37: { vat: "ÁTHK", entitlement: "EUFAD37" },
 };
+
 
 /** Mandatory note on a reverse-charge invoice. */
 export const REVERSE_CHARGE_NOTE =
