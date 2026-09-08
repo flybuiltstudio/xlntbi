@@ -40,18 +40,27 @@ Közzétételkor:
 
 A blokk alatt lista a felvett termékekről, szerkesztés (név, alcím, kategória, sorszám, státusz) és törlés lehetőséggel. A törlés csak akkor engedett, ha még nem volt rá rendelés.
 
+## 4. Önálló angol termékoldal
+
+Minden terméknek lesz saját angol aloldala (`/en/product/…`), a magyar oldal felépítésével: bevezető, funkciólista, „Why it helps", licenc-blokk árakkal, megrendelés-hivatkozás. Ide kerül a **teljes** angol AI-fordítás (nem csak a rövid összefoglaló) — mind az új terméknél, mind a leírásfrissítőnél. Az angol Termékek oldal kártyái erre az oldalra mutatnak, a magyar és angol oldal `hreflang`-gel hivatkozik egymásra, saját angol oldalcímmel, meta leírással és sitemap-bejegyzéssel. Azoknál a régi termékeknél, ahol még nincs feltöltött angol leírás, egy gombbal legenerálható az admin panelből (a jelenlegi magyar szövegből), addig az összefoglaló látszik.
+
+## 5. Kategória létrehozása és átnevezése
+
+Új blokk (vagy a rendezés melletti kiegészítés) az adminban: új kategória felvétele (magyar és angol név, kategóriakép AI-val vagy a semleges „Egyebek" kép), meglévő kategória átnevezése magyarul és angolul, sorrendjének módosítása. Az URL-kulcs a névből képződik, és később nem változik, hogy a linkek ne törjenek. Kategória csak akkor törölhető, ha nincs benne termék.
+
 ## Technikai részletek
 
-- **Migráció:** `custom_products` tábla (`slug` PK, `name`, `tagline`, `status`, `category_key`, `position`, `image_path`, `meta_title`/`meta_description` + `_en`, `intro`, `features`, `why`, `summary` + `_en` párok, `tiers` jsonb: `{id,label,price,priceId}`, `download_file_name`, `download_storage_path`, `stripe_product_id_sandbox/live`, `stripe_error`, `created_by`, timestamps). RLS: `SELECT` `anon`/`authenticated`, írás csak service role; GRANT-ok a migrációban. Termékkép a meglévő privát bucketben, publikus kiszolgálás a meglévő aláírt-URL mintával (`/api/public/…`).
-- **Runtime katalógus:** a `product-overrides.ts` réteg kiegészül a DB-ből jövő termékek beszúrásával a `products` tömbbe és a kategórialistába (`productCategories`), így a `getProduct`, `getTier`, `priceFrom`, `ProductDetail`, `termekeim.tsx`, `en.products.tsx`, a megrendelés és a letöltés változtatás nélkül látja őket, SSR-ben is (a gyökér betöltő tölti be).
-- **Új szerverfájlok:** `custom-products.server.ts` (validálás, kép- és fájlfeltöltés, Stripe `products.create` + `prices.create` lookup key-jel mindkét környezetben, upsert/törlés), `custom-products.functions.ts` (admin-kapus szerverfüggvények), kép AI-generálás a Lovable AI Gateway `google/gemini-3-pro-image` modelljével.
+- **Migráció:** `custom_products` tábla (`slug` PK, `name`, `tagline`, `status`, `category_key`, `position`, `image_path`, `meta_title`/`meta_description` + `_en`, `intro`, `features`, `why`, `summary` + `_en` párok, `tiers` jsonb: `{id,label,price,priceId}`, `download_file_name`, `download_storage_path`, `stripe_product_id_sandbox/live`, `stripe_error`, `created_by`, timestamps) és `custom_categories` tábla (`key` PK, `title`, `title_en`, `image_path`, `sort_order`, `bundled` jelző az átnevezett beépített kategóriákhoz). RLS: `SELECT` `anon`/`authenticated`, írás csak service role; GRANT-ok a migrációban.
+- **Runtime katalógus:** a `product-overrides.ts` réteg kiegészül a DB-ből jövő termékek beszúrásával a `products` tömbbe, valamint a kategórianevek/új kategóriák alkalmazásával a `product-categories.ts` listájára, így a `getProduct`, `getTier`, `priceFrom`, `ProductDetail`, `termekeim.tsx`, `en.products.tsx`, a megrendelés és a letöltés változtatás nélkül látja őket, SSR-ben is (a gyökér betöltő tölti be).
+- **Angol termékoldal:** új `src/routes/en.product.$slug.tsx` route, az angol tartalmat a `product_content_overrides` `_en` mezőiből (`englishProductContent`) és a `custom_products` `_en` mezőiből olvassa, a `ProductDetail` komponens nyelvi paraméterrel újrahasznosítva; a magyar route `hreflang` linket kap.
+- **Új szerverfájlok:** `custom-products.server.ts` (validálás, kép- és fájlfeltöltés, Stripe `products.create` + `prices.create` lookup key-jel mindkét környezetben, upsert/törlés), `custom-categories.server.ts`, a hozzá tartozó admin-kapus `*.functions.ts` fájlok, kép AI-generálás a Lovable AI Gateway `google/gemini-3-pro-image` modelljével.
 - **Ár-logika:** a `product-prices.server.ts` `saveProductPrice`/`resetProductPrice` sorrendje Stripe → adatbázis lesz, éles hiba esetén rollbackkel; a mentés visszaadja a Stripe-ból visszaolvasott összeget.
-- **Leírásoknál:** a `products.ts` és `products-en.ts` szövegeiből az árak törlése, valamint a `product-content.server.ts` promptjának szigorítása.
-- **Admin UI:** `admin-product-panels.tsx` bővül a `NewProductPanel`-lel, a `admin.friss-verzio.tsx` a kért sorrendben rendereli.
-- **Ellenőrzés:** típusellenőrzés, majd élő próba: egy valós Word + fájl feltöltés, kép, licencárak, Stripe teszt/éles ellenőrzés, SSR-ben a termékoldal és a kategórialista, végül a hibás éles ár esetének kipróbálása.
+- **Leírásoknál:** a `products.ts` és `products-en.ts` szövegeiből az árak törlése, valamint a `product-content.server.ts` promptjának szigorítása (összeg tilos).
+- **Admin UI:** `admin-product-panels.tsx` bővül a `NewProductPanel`-lel és a kategóriakezelővel, a `admin.friss-verzio.tsx` a kért sorrendben rendereli.
+- **Ellenőrzés:** típusellenőrzés, majd élő próba: egy valós Word + fájl feltöltés, kép, licencárak, Stripe teszt/éles ellenőrzés, SSR-ben a magyar és angol termékoldal, a kategórialista, végül a hibás éles ár esetének kipróbálása.
 
 ## Amit ez nem tartalmaz
 
-- Angol önálló termék-aloldal (ma sincs; az angol oldalon listakártya + összefoglaló jelenik meg).
 - Korábbi rendelések, számlák árának módosítása.
-- Kategória létrehozása vagy átnevezése — csak a meglévők közül választható.
+- Beépített kategóriák URL-kulcsának megváltoztatása (átnevezés igen, kulcscsere nem — a linkek és a keresőhelyezések miatt).
+
