@@ -444,7 +444,7 @@ export function NewProductPanel() {
           />
         </label>
         <label className="block text-xs font-semibold text-foreground">
-          Termékkép (nem kötelező: jpg / png / webp)
+          Termékkép (nem kötelező: jpg / png / webp – ha üresen hagyod, AI generál egyet)
           <input
             key={`img-${inputKey}`}
             type="file"

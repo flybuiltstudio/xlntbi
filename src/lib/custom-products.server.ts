@@ -340,6 +340,24 @@ export async function publishCustomProduct(input: {
     }
   }
 
+  // Ha nem töltött fel képet az admin, AI-val generálunk saját terméképet.
+  // Szándékosan nem a kategória képét használjuk.
+  if (!imagePath) {
+    const { generateProductImage } = await import("./product-image.server");
+    const generated = await generateProductImage({
+      slug,
+      name,
+      summary: input.hu.summary || input.hu.intro[0] || "",
+      folder,
+    });
+    if (generated) {
+      await supabaseAdmin
+        .from("custom_products")
+        .update({ image_path: generated })
+        .eq("slug", slug);
+    }
+  }
+
   const { ensureProductOverrides } = await import("./product-overrides.server");
   await ensureProductOverrides(true);
 
