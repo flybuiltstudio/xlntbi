@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -112,6 +112,29 @@ function AdminLayout() {
   }, [session?.id, attempt]);
 
   const [checksOpen, setChecksOpen] = useState(false);
+  const checksRef = useRef<HTMLDivElement | null>(null);
+
+  // Kattintásra nyílik/záródik: kívülre kattintás vagy Escape zárja.
+  useEffect(() => {
+    if (!checksOpen) return;
+    const onPointer = (e: PointerEvent) => {
+      if (!checksRef.current?.contains(e.target as Node)) setChecksOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setChecksOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [checksOpen]);
+
+  // Oldalváltáskor csukjuk be.
+  useEffect(() => {
+    setChecksOpen(false);
+  }, [pathname]);
 
   const allowed = role ? canAccessAdminRoute(role, pathname) : false;
 
@@ -269,11 +292,7 @@ function AdminLayout() {
               >
                 Friss verzió
               </Link>
-              <div
-                className="relative"
-                onMouseEnter={() => setChecksOpen(true)}
-                onMouseLeave={() => setChecksOpen(false)}
-              >
+              <div className="relative" ref={checksRef}>
                 <button
                   type="button"
                   onClick={() => setChecksOpen((v) => !v)}
@@ -281,18 +300,24 @@ function AdminLayout() {
                     checksLinks.some((l) => pathname.startsWith(l.to)) ? `${tabBase} ${tabActive}` : ""
                   }`}
                   aria-expanded={checksOpen}
+                  aria-haspopup="menu"
                 >
                   Ellenőrzések
-                  <ChevronDown className="h-3.5 w-3.5" />
+                  <ChevronDown className={`h-3.5 w-3.5 transition-transform ${checksOpen ? "rotate-180" : ""}`} />
                 </button>
                 {checksOpen ? (
-                  <div className="absolute left-0 top-full z-40 mt-1 min-w-44 overflow-hidden rounded-md border border-border bg-popover py-1 shadow-md">
+                  <div
+                    role="menu"
+                    className="absolute left-0 top-full z-50 mt-1 min-w-64 overflow-hidden rounded-md border border-border bg-popover py-1 shadow-lg"
+                  >
                     {checksLinks.map((l) => (
                       <Link
                         key={l.to}
                         to={l.to}
-                        className="block px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                        activeProps={{ className: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" }}
+                        role="menuitem"
+                        onClick={() => setChecksOpen(false)}
+                        className="block px-4 py-3 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                        activeProps={{ className: "block px-4 py-3 text-sm bg-primary text-primary-foreground" }}
                       >
                         {l.label}
                       </Link>
