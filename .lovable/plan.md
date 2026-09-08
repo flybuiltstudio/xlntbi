@@ -1,9 +1,9 @@
 # Admin „Friss verzió” oldal: termékleírás-frissítő Word-ből és ár-frissítő Stripe-szinkronnal
 
-Két új blokk kerül az admin **Friss verzió feltöltés** oldalra, a „Kalkulátor frissítése” blokk **fölé** és **alá**:
+Két új blokk kerül az admin **Friss verzió feltöltés** oldalra, mindkettő a „Kalkulátor frissítése” blokk **fölé**, ebben a sorrendben:
 
-1. **Termékleírás frissítése Word dokumentumból** (a Kalkulátor blokk fölött)
-2. **Termékárak frissítése** licencszintenként, Stripe-szinkronnal (a Kalkulátor blokk alatt)
+1. **Termékleírás frissítése Word dokumentumból**
+2. **Termékárak frissítése** licencszintenként, Stripe-szinkronnal
 
 Mindkettő csak `admin` szerepkörrel érhető el, a meglévő admin-kapun keresztül.
 
