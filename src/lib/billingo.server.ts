@@ -517,6 +517,26 @@ export async function cancelInvoiceForOrder(
   const source: InvoiceAttemptSource = options.source ?? "stripe_cancel";
   if (!order.billingo_invoice_id) return { ok: true, skipped: true };
 
+  // Sztornót csak akkor készítünk, ha az eredeti számla valóban létezik a
+  // Billingóban. Ha nincs meg (sosem készült el, vagy már törölték), csak a
+  // helyi hivatkozást ürítjük — nem hozunk létre alap nélküli sztornót.
+  try {
+    await billingo(`/documents/${order.billingo_invoice_id}`, { method: "GET" });
+  } catch (e: any) {
+    const message = String(e?.message ?? "");
+    if (/\b404\b|not found|Not Found/i.test(message)) {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await (supabaseAdmin as any)
+        .from("orders")
+        .update({ billingo_invoice_id: null, billingo_invoice_number: null })
+        .eq("id", order.id);
+      console.log(
+        `Billingo sztornó kihagyva (${order.order_number}): az eredeti számla nem létezik.`,
+      );
+      return { ok: true, skipped: true };
+    }
+  }
+
   try {
     // Billingo v3: POST /documents/{id}/cancel creates the storno document.
     const result = await billingo(`/documents/${order.billingo_invoice_id}/cancel`, {
