@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { History, ShieldCheck } from "lucide-react";
+
+import { AdminBlock } from "@/components/AdminBlock";
 import { CouponAdminPanel } from "@/components/CouponAdminPanel";
+import { LiveCouponGuardPanel } from "@/components/LiveCouponGuardPanel";
 import { CouponAttemptsPanel } from "@/components/CouponAttemptsPanel";
 import { CouponUsagePanel } from "@/components/CouponUsagePanel";
 import { PageHero } from "@/components/PageHero";
@@ -36,19 +40,28 @@ function AdminCouponsPage() {
           Kuponok
         </h1>
       </PageHero>
-      <div className="mx-auto max-w-6xl px-4 py-14">
+      <div className="mx-auto max-w-6xl space-y-14 px-4 py-14">
         {isAdmin ? <CouponAdminPanel /> : null}
 
-        <div className={isAdmin ? "mt-14" : undefined}>
-          <h2 className="text-xl font-bold text-foreground">Kupon előzmények</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Itt látod, melyik kuponkódot mikor váltották be, mennyi kedvezményt adott, és melyik
-            rendeléshez tartozik. Így egy hibás vagy lejárt kupon miatti ügyféligényt azonnal
-            ellenőrizhetsz.
-          </p>
+        <AdminBlock
+          icon={History}
+          title="Kupon előzmények"
+          description="Itt látod, melyik kuponkódot mikor váltották be, mennyi kedvezményt adott, és melyik rendeléshez tartozik. Így egy hibás vagy lejárt kupon miatti ügyféligényt azonnal ellenőrizhetsz."
+        >
           <CouponUsagePanel />
-          <CouponAttemptsPanel />
-        </div>
+        </AdminBlock>
+
+        <CouponAttemptsPanel />
+
+        {isAdmin ? (
+          <AdminBlock
+            icon={ShieldCheck}
+            title="Kuponvédelem éles környezetben"
+            description="Ellenőrzi, hogy az éles Stripe-fiókban ne maradjon bekapcsolva tesztkupon, és egy kattintással ki is kapcsolja azokat."
+          >
+            <LiveCouponGuardPanel />
+          </AdminBlock>
+        ) : null}
       </div>
     </>
   );
