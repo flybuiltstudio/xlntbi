@@ -87,7 +87,23 @@ async function billingo(path: string, init: RequestInit = {}): Promise<any> {
   if (!res.ok) {
     const msg =
       body?.error?.message ?? body?.message ?? `Billingo HTTP ${res.status}`;
-    throw new BillingoError(`Billingo ${path}: ${msg}`, `HTTP_${res.status}`);
+    // A bare "Validation Failed" is not diagnosable, so keep the provider's
+    // field-level errors in the message (trimmed, no secrets involved).
+    const details =
+      body?.error?.errors ??
+      body?.error?.details ??
+      body?.errors ??
+      body?.details ??
+      null;
+    const detailText = details
+      ? ` — ${JSON.stringify(details).slice(0, 800)}`
+      : text
+        ? ` — ${text.slice(0, 800)}`
+        : "";
+    throw new BillingoError(
+      `Billingo ${path}: ${msg}${detailText}`,
+      `HTTP_${res.status}`,
+    );
   }
   return body;
 }

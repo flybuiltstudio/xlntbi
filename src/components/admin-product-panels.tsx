@@ -27,13 +27,25 @@ type Draft = {
 
 const MAX_DOCX_BYTES = 10 * 1024 * 1024;
 
-const linesOf = (value: string): string[] =>
-  value
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
+// While typing we keep the raw lines (including empty ones), otherwise a
+// pressed Enter would be swallowed by the controlled textarea. Empty lines and
+// stray whitespace are cleaned only when the draft is saved.
+const linesOf = (value: string): string[] => value.split("\n");
 
 const textOf = (values: string[]): string => values.join("\n");
+
+const cleanLines = (values: string[]): string[] =>
+  values.map((line) => line.trim()).filter((line) => line.length > 0);
+
+const cleanDraft = (draft: Draft): Draft => ({
+  ...draft,
+  intro: cleanLines(draft.intro),
+  features: cleanLines(draft.features),
+  why: draft.why.trim(),
+  summary: draft.summary.trim(),
+  metaTitle: draft.metaTitle.trim(),
+  metaDescription: draft.metaDescription.trim(),
+});
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -217,7 +229,12 @@ export function ProductDescriptionPanel() {
     reset();
     try {
       const result = await publish({
-        data: { slug, fileName: file?.name ?? "kézi szerkesztés", hu, en },
+        data: {
+          slug,
+          fileName: file?.name ?? "kézi szerkesztés",
+          hu: cleanDraft(hu),
+          en: en ? cleanDraft(en) : null,
+        },
       });
       if (!result.ok) throw new Error(result.error);
       setMessage(
@@ -237,7 +254,7 @@ export function ProductDescriptionPanel() {
     setSaveBusy(true);
     reset();
     try {
-      const result = await saveEn({ data: { slug, en } });
+      const result = await saveEn({ data: { slug, en: cleanDraft(en) } });
       if (!result.ok) throw new Error(result.error);
       setMessage(`${productName}: csak az angol leírás frissült.`);
       await refresh();

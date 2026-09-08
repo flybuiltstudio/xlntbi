@@ -30,13 +30,24 @@ const BUCKET = "termekfajlok";
 const inputClass =
   "w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground";
 
-const linesOf = (value: string): string[] =>
-  value
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
+// Raw lines while typing (empty lines kept), cleaned only on save — otherwise
+// the controlled textarea would swallow a pressed Enter.
+const linesOf = (value: string): string[] => value.split("\n");
 
 const textOf = (values: string[]): string => values.join("\n");
+
+const cleanLines = (values: string[]): string[] =>
+  values.map((line) => line.trim()).filter((line) => line.length > 0);
+
+const cleanDraft = (draft: Draft): Draft => ({
+  ...draft,
+  intro: cleanLines(draft.intro),
+  features: cleanLines(draft.features),
+  why: draft.why.trim(),
+  summary: draft.summary.trim(),
+  metaTitle: draft.metaTitle.trim(),
+  metaDescription: draft.metaDescription.trim(),
+});
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -259,8 +270,8 @@ export function NewProductPanel() {
           categoryKey,
           position: Math.max(0, Number.parseInt(position, 10) - 1 || 0),
           tiers: parsedTiers,
-          hu,
-          en,
+          hu: cleanDraft(hu),
+          en: en ? cleanDraft(en) : null,
           fileName: productFile.name,
           fileSize: productFile.size,
           imageName: image?.name ?? null,
