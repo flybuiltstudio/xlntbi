@@ -22,7 +22,8 @@ export type PriceTierRow = {
   catalogPrice: number;
   currentPrice: number;
   overridden: boolean;
-  stripeSyncedAt: string | null;
+  syncedSandboxAt: string | null;
+  syncedLiveAt: string | null;
   stripeError: string | null;
 };
 
@@ -41,17 +42,23 @@ export async function listProductPrices(): Promise<PriceTierRow[]> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data } = await supabaseAdmin
     .from("product_price_overrides")
-    .select("slug, tier_id, price, stripe_synced_at, stripe_error");
+    .select("slug, tier_id, price, synced_sandbox_at, synced_live_at, sync_error");
 
   const overrides = new Map<
     string,
-    { price: number; syncedAt: string | null; error: string | null }
+    {
+      price: number;
+      sandboxAt: string | null;
+      liveAt: string | null;
+      error: string | null;
+    }
   >();
   for (const row of data ?? []) {
     overrides.set(`${row.slug}::${row.tier_id}`, {
       price: row.price,
-      syncedAt: row.stripe_synced_at,
-      error: row.stripe_error,
+      sandboxAt: row.synced_sandbox_at,
+      liveAt: row.synced_live_at,
+      error: row.sync_error,
     });
   }
 
@@ -69,13 +76,15 @@ export async function listProductPrices(): Promise<PriceTierRow[]> {
         catalogPrice,
         currentPrice: override?.price ?? catalogPrice,
         overridden: Boolean(override),
-        stripeSyncedAt: override?.syncedAt ?? null,
+        syncedSandboxAt: override?.sandboxAt ?? null,
+        syncedLiveAt: override?.liveAt ?? null,
         stripeError: override?.error ?? null,
       });
     }
   }
   return rows;
 }
+
 
 function validate(input: { slug: string; tierId: string; price: number }): string | null {
   const product = getProduct(input.slug);
