@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   CheckCircle2,
   CircleDashed,
@@ -103,9 +103,9 @@ export function FullPurchaseTestPanel() {
   }
 
   return (
-    <div className="mt-10 space-y-8">
+    <>
       <section className="rounded-xl border border-border bg-card p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-foreground">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <PlayCircle className="h-5 w-5 text-primary" />
           Teljes vásárlási teszt
         </h2>
@@ -267,6 +267,6 @@ export function FullPurchaseTestPanel() {
           </div>
         ) : null}
       </section>
-    </div>
+    </>
   );
 }
