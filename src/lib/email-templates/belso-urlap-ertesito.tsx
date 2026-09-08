@@ -37,8 +37,12 @@ const Email = ({ label, senderName, senderEmail, rows }: Props) => (
 
 export const template = {
   component: Email,
-  subject: (data: Record<string, any>) =>
-    `Új ${data['label'] || 'űrlapbeküldés'}: ${data['senderName'] || 'névtelen'}`,
+  subject: (data: Record<string, any>) => {
+    const rows = (data['rows'] as Row[] | undefined) ?? []
+    const services = rows.find(([key]) => key === 'Szolgáltatás')?.[1]
+    const prefix = services ? `${services} – ` : ''
+    return `${prefix}Új ${data['label'] || 'űrlapbeküldés'}: ${data['senderName'] || 'névtelen'}`
+  },
   displayName: 'Belső értesítő – űrlapbeküldés',
   previewData: {
     label: 'kapcsolatfelvétel',
