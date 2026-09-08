@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLocation } from "@tanstack/react-router";
-import { Check, ChevronDown, Languages } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { usePageView } from "@/lib/use-page-view";
 import heroImage from "@/assets/ev-konyveles-poster.jpg";
@@ -120,13 +120,6 @@ function SeBookkeepingPage() {
         <h1 className="text-3xl font-bold leading-tight text-primary-foreground md:text-4xl">
           Self-employed bookkeeping
         </h1>
-        <Link
-          to="/ev-konyveles"
-          className="mt-4 inline-flex items-center gap-2 rounded-md bg-white/10 px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-white/20"
-        >
-          <Languages className="h-3.5 w-3.5" aria-hidden="true" />
-          Magyarul
-        </Link>
       </PageHero>
 
       {/* Intro + image */}
