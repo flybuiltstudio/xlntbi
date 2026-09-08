@@ -1385,9 +1385,13 @@ function isDeveloperTestEmail(email: unknown): boolean {
   return base ? DEVELOPER_TEST_EMAILS.has(base) : false;
 }
 
+/** Kézzel teszt-nek jelölt rendelésszámok (a tulajdonos jelezte, hogy próba volt). */
+const MANUAL_TEST_ORDER_NUMBERS = new Set(["XLNT-20260908-7797"]);
+
 function testOrderReason(order: any): string | null {
   if (order.payment_provider === "test") return "Teszt fizetési mód";
   if (String(order.order_number).startsWith("TESZT-")) return "TESZT- előtagú rendelésszám";
+  if (MANUAL_TEST_ORDER_NUMBERS.has(String(order.order_number))) return "Kézzel teszt-nek jelölve";
   if (isInternalTestEmail(order.email)) return "Belső teszt e-mail cím";
   if (isDeveloperTestEmail(order.email)) return "Fejlesztői próbarendelés";
   return null;
