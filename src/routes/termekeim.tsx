@@ -240,7 +240,7 @@ function TermekeimPage() {
                   <div className="flex flex-1 flex-col p-6">
                     <h4 className="text-lg font-semibold text-foreground">{product.name}</h4>
                     <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-                      {aamText(product.intro[0] ?? "")}
+                      {aamText(productSummaryHu(product))}
                     </p>
                     <p className="mt-4 text-xl font-bold text-foreground">
                       {product.tiers.length > 1
