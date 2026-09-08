@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { History, ShieldCheck } from "lucide-react";
+import { History } from "lucide-react";
 
 import { AdminBlock } from "@/components/AdminBlock";
 import { CouponAdminPanel } from "@/components/CouponAdminPanel";
@@ -53,15 +53,7 @@ function AdminCouponsPage() {
 
         <CouponAttemptsPanel />
 
-        {isAdmin ? (
-          <AdminBlock
-            icon={ShieldCheck}
-            title="Kuponvédelem éles környezetben"
-            description="Ellenőrzi, hogy az éles Stripe-fiókban ne maradjon bekapcsolva tesztkupon, és egy kattintással ki is kapcsolja azokat."
-          >
-            <LiveCouponGuardPanel />
-          </AdminBlock>
-        ) : null}
+        {isAdmin ? <LiveCouponGuardPanel /> : null}
       </div>
     </>
   );

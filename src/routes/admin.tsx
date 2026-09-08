@@ -215,11 +215,8 @@ function AdminLayout() {
   const tabActive = "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground";
 
   const checksLinks = [
-    { to: "/admin/szamlazas", label: "Számlázás" },
-    { to: "/admin/billingo-ellenorzes", label: "Billingo ellenőrzés" },
+    { to: "/admin/szamlazas", label: "Számlázás és számlaellenőrzés" },
     { to: "/admin/katalogus-ellenorzes", label: "Katalógus ellenőrzés" },
-    { to: "/admin/rendelesi-audit", label: "Rendelési audit" },
-    { to: "/admin/nav-ellenorzes", label: "NAV ellenőrzés" },
     { to: "/admin/fizetes-teszt", label: "Fizetés teszt" },
   ] as const;
 
