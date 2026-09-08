@@ -1,9 +1,9 @@
 # Admin „Friss verzió” oldal: termékleírás-frissítő Word-ből és ár-frissítő Stripe-szinkronnal
 
-Két új blokk kerül az admin **Friss verzió feltöltés** oldalra, a „Kalkulátor frissítése” blokk **fölé** és **alá**:
+Két új blokk kerül az admin **Friss verzió feltöltés** oldalra, mindkettő a „Kalkulátor frissítése” blokk **fölé**, ebben a sorrendben:
 
-1. **Termékleírás frissítése Word dokumentumból** (a Kalkulátor blokk fölött)
-2. **Termékárak frissítése** licencszintenként, Stripe-szinkronnal (a Kalkulátor blokk alatt)
+1. **Termékleírás frissítése Word dokumentumból**
+2. **Termékárak frissítése** licencszintenként, Stripe-szinkronnal
 
 Mindkettő csak `admin` szerepkörrel érhető el, a meglévő admin-kapun keresztül.
 
@@ -19,7 +19,7 @@ Mindkettő csak `admin` szerepkörrel érhető el, a meglévő admin-kapun keres
   - oldalcím (max 60 karakter) és meta leírás (max 160 karakter).
 - Ezután **automatikusan elkészül az angol változat is** (ugyanezek a mezők), és azonnal élesbe kerül. Ha a fordítás nem sikerül, a magyar akkor is mentődik, és a panel hibát jelez.
 - Külön gomb: **„Angol leírás újragenerálása”** — a már mentett magyar leírásból újrafordít, Word-feltöltés nélkül.
-- Mentés előtt **előnézet**: a panel megmutatja a generált magyar (és angol) szöveget, és csak a „Közzététel” gombra kerül élesbe. Így egy félresikerült átfogalmazás nem jelenik meg a nyilvános oldalon.
+- Mentés előtt **szerkeszthető előnézet**: a generált magyar és angol szöveg minden mezője (bevezető, funkciók soronként, „Miért jó”, összefoglaló, oldalcím, meta leírás) beviteli mezőben jelenik meg, ahol kézzel bele tudsz javítani, sorokat törölni vagy hozzáadni. Csak a „Közzététel” gombra kerül élesbe — pontosan az, ami az előnézetben szerepel. Van „Újragenerálás” gomb is, ha inkább újat kérnél az AI-tól.
 - A panel mutatja, melyik termék fut felülírt leírásról (fájlnév + dátum), és **„Eredeti visszaállítása”** gombbal törölhető a felülírás — ekkor újra a kódban lévő szöveg jelenik meg.
 
 ## 2. Termékárak frissítése
