@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { PageHero } from "@/components/PageHero";
 import {
+  ProductDescriptionPanel,
+  ProductPricePanel,
+} from "@/components/admin-product-panels";
+import {
   CalculatorVersionPanel,
   ProductOrderPanel,
   ProductVersionPanel,
