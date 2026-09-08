@@ -249,9 +249,9 @@ export function CatalogAuditPanel() {
         </div>
       ) : null}
 
-      <h2 className="mt-8 text-xl font-semibold text-foreground">
+      <h3 className="mt-8 text-base font-semibold text-foreground">
         Stripe lookup key és ár – licenszverziónként
-      </h2>
+      </h3>
       <div className="mt-3 overflow-x-auto rounded-md border border-border">
         <table className="w-full min-w-[900px] text-left text-sm">
           <thead className="bg-muted/50 text-muted-foreground">
@@ -306,9 +306,9 @@ export function CatalogAuditPanel() {
         </table>
       </div>
 
-      <h2 className="mt-10 text-xl font-semibold text-foreground">
+      <h3 className="mt-10 text-base font-semibold text-foreground">
         Letöltési fájl és tokenek – termékenként
-      </h2>
+      </h3>
       <div className="mt-3 overflow-x-auto rounded-md border border-border">
         <table className="w-full min-w-[900px] text-left text-sm">
           <thead className="bg-muted/50 text-muted-foreground">

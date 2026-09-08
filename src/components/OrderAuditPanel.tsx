@@ -111,7 +111,7 @@ export function OrderAuditPanel() {
   });
 
   return (
-    <section className="mt-8">
+    <section className="mt-4">
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="button"

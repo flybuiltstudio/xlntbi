@@ -101,7 +101,7 @@ export function CouponAttemptsPanel() {
   }
 
   return (
-    <section className="mt-12">
+    <section>
       <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
         <AlertTriangle className="h-5 w-5 text-destructive" aria-hidden="true" />
         Sikertelen kuponkísérletek

@@ -73,7 +73,7 @@ export function NavStatusPanel() {
     report?.rows.filter((r) => (onlyProblems ? r.state !== "ok" : true)) ?? [];
 
   return (
-    <section className="mt-8">
+    <section className="mt-4">
       <div className="rounded-lg border border-border bg-card p-5">
         <div className="flex flex-wrap items-end gap-3">
           <label className="text-sm">

@@ -182,7 +182,7 @@ function TestPanel() {
 
       {/* 1. lépés – teszt megrendelés rögzítése */}
       <section className="mt-8 rounded-xl border border-border bg-card p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-foreground">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <FlaskConical className="h-5 w-5 text-primary" />
           1. lépés – Teszt megrendelés rögzítése
         </h2>

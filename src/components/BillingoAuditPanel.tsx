@@ -1,3 +1,4 @@
+import { ScanSearch, Webhook } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 
@@ -222,9 +223,12 @@ export function BillingoAuditPanel() {
   ).length;
 
   return (
-    <div className="mt-8 space-y-8">
-      <section className="rounded-lg border border-border bg-card p-5">
-        <h2 className="text-lg font-semibold text-foreground">Billingo webhook végpont</h2>
+    <div className="space-y-14">
+      <section>
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+          <Webhook className="h-5 w-5 text-primary" aria-hidden="true" />
+          Billingo webhook végpont
+        </h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Ha be van kapcsolva, a Billingóból érkező értesítéseket a rendszer feldolgozza
           (fizetett állapot és számlaszám átvétele). Kikapcsolva minden hívás
@@ -252,10 +256,11 @@ export function BillingoAuditPanel() {
         </div>
       </section>
 
-      <section className="rounded-lg border border-border bg-card p-5">
+      <section>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">
+            <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+              <ScanSearch className="h-5 w-5 text-primary" aria-hidden="true" />
               Stripe azonosítók ↔ Billingo megjegyzések
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">

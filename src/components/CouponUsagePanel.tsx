@@ -129,7 +129,7 @@ export function CouponUsagePanel() {
   }
 
   return (
-    <section className="mt-8">
+    <section className="mt-4">
       <div className="flex flex-wrap items-end gap-3">
         <label className="text-sm">
           <span className="block text-xs font-medium text-muted-foreground">Környezet</span>
