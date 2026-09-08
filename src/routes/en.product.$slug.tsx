@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 
-import { AAM_PRICE_NOTE, aamText } from "@/lib/aam";
+import { aamText } from "@/lib/aam";
 import { formatPrice, getProduct, priceFrom, resolveProductSlug } from "@/lib/products";
 import { productSummaryEn } from "@/lib/products-en";
 import { englishProductContent, englishProductMeta } from "@/lib/product-overrides";
@@ -161,7 +161,7 @@ function EnglishProductPage() {
                 : formatPrice(data.price)}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
-              {AAM_PRICE_NOTE} Digital product, delivered by download.
+              VAT exempt (AAM) – no VAT is added. Digital product, delivered by download.
             </p>
 
             {data.tiers.length > 1 ? (
