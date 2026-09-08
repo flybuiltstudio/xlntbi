@@ -39,6 +39,7 @@ import { Route as OktatasRouteImport } from './routes/oktatas'
 import { Route as RolamRouteImport } from './routes/rolam'
 import { Route as SeRouteImport } from './routes/se'
 import { Route as SeBookkeepingRouteImport } from './routes/se-bookkeeping'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
 import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -285,6 +286,11 @@ const SeRoute = SeRouteImport.update({
 const SeBookkeepingRoute = SeBookkeepingRouteImport.update({
   id: '/se-bookkeeping',
   path: '/se-bookkeeping',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SzolgaltatasaimRoute = SzolgaltatasaimRouteImport.update({
@@ -836,6 +842,7 @@ export interface FileRoutesByFullPath {
   '/rolam': typeof RolamRoute
   '/se': typeof SeRoute
   '/se-bookkeeping': typeof SeBookkeepingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
@@ -962,6 +969,7 @@ export interface FileRoutesByTo {
   '/rolam': typeof RolamRoute
   '/se': typeof SeRoute
   '/se-bookkeeping': typeof SeBookkeepingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
@@ -1091,6 +1099,7 @@ export interface FileRoutesById {
   '/rolam': typeof RolamRoute
   '/se': typeof SeRoute
   '/se-bookkeeping': typeof SeBookkeepingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
@@ -1221,6 +1230,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/se'
     | '/se-bookkeeping'
+    | '/sitemap.xml'
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/admin/billingo-ellenorzes'
@@ -1347,6 +1357,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/se'
     | '/se-bookkeeping'
+    | '/sitemap.xml'
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/admin/billingo-ellenorzes'
@@ -1475,6 +1486,7 @@ export interface FileRouteTypes {
     | '/rolam'
     | '/se'
     | '/se-bookkeeping'
+    | '/sitemap.xml'
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/admin/billingo-ellenorzes'
@@ -1604,6 +1616,7 @@ export interface RootRouteChildren {
   RolamRoute: typeof RolamRoute
   SeRoute: typeof SeRoute
   SeBookkeepingRoute: typeof SeBookkeepingRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
   TermekeimRoute: typeof TermekeimRoute
   KalkulatorokAtalanyadoRoute: typeof KalkulatorokAtalanyadoRoute
@@ -1870,6 +1883,13 @@ declare module '@tanstack/react-router' {
       path: '/se-bookkeeping'
       fullPath: '/se-bookkeeping'
       preLoaderRoute: typeof SeBookkeepingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/szolgaltatasaim': {
@@ -2678,6 +2698,7 @@ const rootRouteChildren: RootRouteChildren = {
   RolamRoute: RolamRoute,
   SeRoute: SeRoute,
   SeBookkeepingRoute: SeBookkeepingRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
   TermekeimRoute: TermekeimRoute,
   KalkulatorokAtalanyadoRoute: KalkulatorokAtalanyadoRoute,
