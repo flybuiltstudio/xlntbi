@@ -182,8 +182,13 @@ export async function saveProductPrice(input: {
       tier_id: input.tierId,
       price: input.price,
       stripe_price_id: tier.priceId,
-      stripe_synced_at: failed.length === 0 ? new Date().toISOString() : null,
-      stripe_error: failed.length
+      synced_sandbox_at: sync.find((row) => row.environment === "sandbox")?.ok
+        ? new Date().toISOString()
+        : null,
+      synced_live_at: sync.find((row) => row.environment === "live")?.ok
+        ? new Date().toISOString()
+        : null,
+      sync_error: failed.length
         ? failed.map((row) => `${row.environment}: ${row.message}`).join(" · ")
         : null,
       updated_by: input.updatedBy,
