@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import { aamText } from "@/lib/aam";
 import { priceFrom, formatPrice } from "@/lib/products";
+import { productSummaryHu } from "@/lib/product-overrides";
 import {
   applyPlacements,
   categoryProducts,
