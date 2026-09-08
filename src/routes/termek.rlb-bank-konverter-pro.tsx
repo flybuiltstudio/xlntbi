@@ -1,26 +1,35 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
+import {
+  productMetaDescription,
+  productMetaTitle,
+  productTierPrice,
+} from "@/lib/product-overrides";
 
-const TITLE = "XLNT RLB bank konverter Pro – bővített, automatizált banki import | EXCELlent Business Intelligence";
-const DESCRIPTION = "Az RLB bank konverter PRO kiadása: több bankformátum, kötegelt feldolgozás, automatikus partner- és főkönyvi felismerés, gyorsabb, hibamentes import.";
+const TITLE_BASE = "XLNT RLB bank konverter Pro – bővített, automatizált banki import | EXCELlent Business Intelligence";
+const DESCRIPTION_BASE = "Az RLB bank konverter PRO kiadása: több bankformátum, kötegelt feldolgozás, automatikus partner- és főkönyvi felismerés, gyorsabb, hibamentes import.";
 const H1 = "XLNT RLB bank konverter Pro";
 const CANONICAL = "https://xlntbi.hu/termek/rlb-bank-konverter-pro";
+const SLUG = "rlb-bank-konverter-pro";
+// Admin-managed description overrides take precedence over the bundled text.
+const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
+const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
 const OG_IMAGE = "https://xlntbi.hu/og/konyveloiroda-audit.jpg";
 
 export const Route = createFileRoute("/termek/rlb-bank-konverter-pro")({
   head: () => ({
     meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { title: TITLE() },
+      { name: "description", content: DESCRIPTION() },
+      { property: "og:title", content: TITLE() },
+      { property: "og:description", content: DESCRIPTION() },
       { property: "og:type", content: "product" },
       { property: "og:url", content: CANONICAL },
       { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:title", content: TITLE() },
+      { name: "twitter:description", content: DESCRIPTION() },
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [

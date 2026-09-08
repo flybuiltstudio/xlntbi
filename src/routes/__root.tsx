@@ -18,6 +18,8 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { initAnalytics } from "@/lib/analytics";
 import { langFromPath, useLanguagePersistence } from "@/lib/i18n";
 import { translate } from "@/lib/i18n/dictionary";
+import { getProductOverrides } from "@/lib/product-overrides.functions";
+import { applyProductOverrides } from "@/lib/product-overrides";
 
 
 
@@ -93,6 +95,14 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  // Layers the admin-managed product descriptions and license prices onto the
+  // catalog before anything renders, so SSR output already carries them.
+  loader: async () => {
+    const data = await getProductOverrides();
+    applyProductOverrides(data);
+    return { productOverrides: data };
+  },
+  staleTime: 60_000,
   head: () => ({
     meta: [
       { charSet: "utf-8" },

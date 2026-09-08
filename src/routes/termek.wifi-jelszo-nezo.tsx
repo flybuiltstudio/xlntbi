@@ -1,26 +1,35 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
+import {
+  productMetaDescription,
+  productMetaTitle,
+  productTierPrice,
+} from "@/lib/product-overrides";
 
-const TITLE = "XLNT WiFi jelszó néző program | EXCELlent Business Intelligence";
-const DESCRIPTION = "Nézd meg egyszerűen a számítógépeden korábban mentett WiFi hálózatok jelszavait egy kattintással.";
+const TITLE_BASE = "XLNT WiFi jelszó néző program | EXCELlent Business Intelligence";
+const DESCRIPTION_BASE = "Nézd meg egyszerűen a számítógépeden korábban mentett WiFi hálózatok jelszavait egy kattintással.";
 const H1 = "XLNT WiFi jelszó néző";
 const CANONICAL = "https://xlntbi.hu/termek/wifi-jelszo-nezo";
+const SLUG = "wifi-jelszo-nezo";
+// Admin-managed description overrides take precedence over the bundled text.
+const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
+const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
 const OG_IMAGE = "https://xlntbi.hu/og/wifi-jelszo-nezo.jpg";
 
 export const Route = createFileRoute("/termek/wifi-jelszo-nezo")({
   head: () => ({
     meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { title: TITLE() },
+      { name: "description", content: DESCRIPTION() },
+      { property: "og:title", content: TITLE() },
+      { property: "og:description", content: DESCRIPTION() },
       { property: "og:type", content: "product" },
       { property: "og:url", content: CANONICAL },
       { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:title", content: TITLE() },
+      { name: "twitter:description", content: DESCRIPTION() },
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [

@@ -1,27 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
+import {
+  productMetaDescription,
+  productMetaTitle,
+  productTierPrice,
+} from "@/lib/product-overrides";
 
-const TITLE = "XLNT Vállalkozásméret-besoroló Excel | XLNTBI";
-const DESCRIPTION =
+const TITLE_BASE = "XLNT Vállalkozásméret-besoroló Excel | XLNTBI";
+const DESCRIPTION_BASE =
   "Excel kalkulátor a KKV-besoroláshoz: létszám, árbevétel és mérlegfőösszeg alapján mikro-, kis-, közép- vagy nagyvállalat. Év végi és év eleji lap, 4 990 Ft AAM.";
 const H1 = "XLNT Vállalkozásméret-besoroló";
 const CANONICAL = "https://xlntbi.hu/termek/vallalkozas-meret-besorolo";
+const SLUG = "vallalkozas-meret-besorolo";
+// Admin-managed description overrides take precedence over the bundled text.
+const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
+const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
 const OG_IMAGE = "https://xlntbi.hu/og/vallalkozas-meret-besorolo.jpg";
 
 export const Route = createFileRoute("/termek/vallalkozas-meret-besorolo")({
   head: () => ({
     meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { title: TITLE() },
+      { name: "description", content: DESCRIPTION() },
+      { property: "og:title", content: TITLE() },
+      { property: "og:description", content: DESCRIPTION() },
       { property: "og:type", content: "product" },
       { property: "og:url", content: CANONICAL },
       { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:title", content: TITLE() },
+      { name: "twitter:description", content: DESCRIPTION() },
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
@@ -32,7 +41,7 @@ export const Route = createFileRoute("/termek/vallalkozas-meret-besorolo")({
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
           name: H1,
-          description: DESCRIPTION,
+          description: DESCRIPTION(),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Windows, Microsoft Excel",
           url: CANONICAL,
@@ -41,7 +50,7 @@ export const Route = createFileRoute("/termek/vallalkozas-meret-besorolo")({
           brand: { "@type": "Brand", name: "EXCELlent Business Intelligence" },
           offers: {
             "@type": "Offer",
-            price: "4990",
+            price: String(productTierPrice(SLUG, null, 4990)),
             priceCurrency: "HUF",
             availability: "https://schema.org/InStock",
             url: CANONICAL,

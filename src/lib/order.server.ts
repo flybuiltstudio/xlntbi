@@ -45,6 +45,10 @@ function orderNumber() {
 
 
 export async function handleOrder(data: Order) {
+  // Make sure the admin-managed license prices are in effect before totals.
+  const { ensureProductOverrides } = await import("./product-overrides.server");
+  await ensureProductOverrides();
+
   // Honeypot: silently accept but drop.
   if (data.website) {
     return { ok: true as const, orderNumber: orderNumber() };

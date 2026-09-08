@@ -1,27 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
+import {
+  productMetaDescription,
+  productMetaTitle,
+  productTierPrice,
+} from "@/lib/product-overrides";
 
-const TITLE = "XLNT Ingatlanalap MNB Jelentés-előkészítő (NEÉ, 50A, 51M) | XLNTBI";
-const DESCRIPTION =
+const TITLE_BASE = "XLNT Ingatlanalap MNB Jelentés-előkészítő (NEÉ, 50A, 51M) | XLNTBI";
+const DESCRIPTION_BASE =
   "NEÉ-számoló, 51M ingatlankitettség és 50A jelentéslap egy Excel-munkafüzetben, beépített ERA/STEFI generátorral. Egyetlen licenc, 39 900 Ft AAM.";
 const H1 = "XLNT Ingatlanalap MNB Jelentés-előkészítő – NEÉ Számoló és ERA/STEFI Generátor";
 const CANONICAL = "https://xlntbi.hu/termek/ingatlanalap-mnb-jelentes-elokeszito";
+const SLUG = "ingatlanalap-mnb-jelentes-elokeszito";
+// Admin-managed description overrides take precedence over the bundled text.
+const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
+const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
 const OG_IMAGE = "https://xlntbi.hu/og/ingatlanalap-mnb-jelentes-elokeszito.jpg";
 
 export const Route = createFileRoute("/termek/ingatlanalap-mnb-jelentes-elokeszito")({
   head: () => ({
     meta: [
-      { title: TITLE },
-      { name: "description", content: DESCRIPTION },
-      { property: "og:title", content: TITLE },
-      { property: "og:description", content: DESCRIPTION },
+      { title: TITLE() },
+      { name: "description", content: DESCRIPTION() },
+      { property: "og:title", content: TITLE() },
+      { property: "og:description", content: DESCRIPTION() },
       { property: "og:type", content: "product" },
       { property: "og:url", content: CANONICAL },
       { property: "og:locale", content: "hu_HU" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: TITLE },
-      { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:title", content: TITLE() },
+      { name: "twitter:description", content: DESCRIPTION() },
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: CANONICAL }],
@@ -32,7 +41,7 @@ export const Route = createFileRoute("/termek/ingatlanalap-mnb-jelentes-elokeszi
           "@context": "https://schema.org",
           "@type": "SoftwareApplication",
           name: H1,
-          description: DESCRIPTION,
+          description: DESCRIPTION(),
           applicationCategory: "BusinessApplication",
           operatingSystem: "Windows, Microsoft Excel",
           url: CANONICAL,
@@ -41,7 +50,7 @@ export const Route = createFileRoute("/termek/ingatlanalap-mnb-jelentes-elokeszi
           brand: { "@type": "Brand", name: "EXCELlent Business Intelligence" },
           offers: {
             "@type": "Offer",
-            price: "39900",
+            price: String(productTierPrice(SLUG, null, 39900)),
             priceCurrency: "HUF",
             availability: "https://schema.org/InStock",
             url: CANONICAL,

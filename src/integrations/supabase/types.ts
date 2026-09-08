@@ -680,6 +680,63 @@ export type Database = {
         }
         Relationships: []
       }
+      product_content_overrides: {
+        Row: {
+          features: string[]
+          features_en: string[]
+          intro: string[]
+          intro_en: string[]
+          meta_description: string | null
+          meta_description_en: string | null
+          meta_title: string | null
+          meta_title_en: string | null
+          slug: string
+          source_file_name: string
+          summary: string | null
+          summary_en: string | null
+          updated_at: string
+          updated_by: string | null
+          why: string | null
+          why_en: string | null
+        }
+        Insert: {
+          features?: string[]
+          features_en?: string[]
+          intro?: string[]
+          intro_en?: string[]
+          meta_description?: string | null
+          meta_description_en?: string | null
+          meta_title?: string | null
+          meta_title_en?: string | null
+          slug: string
+          source_file_name?: string
+          summary?: string | null
+          summary_en?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          why?: string | null
+          why_en?: string | null
+        }
+        Update: {
+          features?: string[]
+          features_en?: string[]
+          intro?: string[]
+          intro_en?: string[]
+          meta_description?: string | null
+          meta_description_en?: string | null
+          meta_title?: string | null
+          meta_title_en?: string | null
+          slug?: string
+          source_file_name?: string
+          summary?: string | null
+          summary_en?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          why?: string | null
+          why_en?: string | null
+        }
+        Relationships: []
+      }
       product_file_versions: {
         Row: {
           file_name: string
@@ -723,6 +780,42 @@ export type Database = {
           category?: string
           slug?: string
           sort_order?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      product_price_overrides: {
+        Row: {
+          price: number
+          slug: string
+          stripe_price_id: string | null
+          sync_error: string | null
+          synced_live_at: string | null
+          synced_sandbox_at: string | null
+          tier_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          price: number
+          slug: string
+          stripe_price_id?: string | null
+          sync_error?: string | null
+          synced_live_at?: string | null
+          synced_sandbox_at?: string | null
+          tier_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          price?: number
+          slug?: string
+          stripe_price_id?: string | null
+          sync_error?: string | null
+          synced_live_at?: string | null
+          synced_sandbox_at?: string | null
+          tier_id?: string
           updated_at?: string
           updated_by?: string | null
         }
