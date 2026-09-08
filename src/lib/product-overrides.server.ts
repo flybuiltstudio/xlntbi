@@ -139,3 +139,26 @@ export async function ensureProductOverrides(force = false): Promise<void> {
   lastLoad = now;
   applyProductOverrides(await readProductOverrides());
 }
+
+/**
+ * Slugs of the admin-created products, for the sitemap. Paginated and ordered
+ * by slug so every row is listed; throws on a query error so the sitemap never
+ * serves a silently partial list.
+ */
+export async function listCustomProductSlugs(): Promise<string[]> {
+  const supabase = publicClient();
+  const pageSize = 1000;
+  const slugs: string[] = [];
+  for (let offset = 0; ; ) {
+    const { data, error } = await supabase
+      .from("custom_products")
+      .select("slug")
+      .order("slug")
+      .range(offset, offset + pageSize - 1);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+    for (const row of data) slugs.push(row.slug);
+    offset += data.length;
+  }
+  return slugs;
+}
