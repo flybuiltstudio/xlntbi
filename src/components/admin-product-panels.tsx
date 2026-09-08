@@ -27,13 +27,25 @@ type Draft = {
 
 const MAX_DOCX_BYTES = 10 * 1024 * 1024;
 
-const linesOf = (value: string): string[] =>
-  value
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0);
+// While typing we keep the raw lines (including empty ones), otherwise a
+// pressed Enter would be swallowed by the controlled textarea. Empty lines and
+// stray whitespace are cleaned only when the draft is saved.
+const linesOf = (value: string): string[] => value.split("\n");
 
 const textOf = (values: string[]): string => values.join("\n");
+
+const cleanLines = (values: string[]): string[] =>
+  values.map((line) => line.trim()).filter((line) => line.length > 0);
+
+const cleanDraft = (draft: Draft): Draft => ({
+  ...draft,
+  intro: cleanLines(draft.intro),
+  features: cleanLines(draft.features),
+  why: draft.why.trim(),
+  summary: draft.summary.trim(),
+  metaTitle: draft.metaTitle.trim(),
+  metaDescription: draft.metaDescription.trim(),
+});
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
