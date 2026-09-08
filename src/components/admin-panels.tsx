@@ -1506,7 +1506,7 @@ export function InvoiceLogsPanel() {
   const errorCount = (logs ?? []).filter((log) => log.status === "error").length;
 
   return (
-    <section className="mt-8">
+    <section className="mt-4">
       <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
         <span>
           {logs ? `${logs.length} naplóbejegyzés` : "Betöltés…"}

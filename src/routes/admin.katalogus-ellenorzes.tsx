@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PackageSearch } from "lucide-react";
 
+import { AdminBlock } from "@/components/AdminBlock";
 import { PageHero } from "@/components/PageHero";
 import { CatalogAuditPanel } from "@/components/CatalogAuditPanel";
+import { StripeProductNamePanel } from "@/components/StripeProductNamePanel";
 
 export const Route = createFileRoute("/admin/katalogus-ellenorzes")({
   head: () => ({
@@ -10,7 +13,7 @@ export const Route = createFileRoute("/admin/katalogus-ellenorzes")({
       {
         name: "description",
         content:
-          "Belső felület a Stripe lookup key-ek, aktív árak és a letöltési fájlok automatikus ellenőrzésére.",
+          "Belső felület a Stripe lookup key-ek, aktív árak, terméknevek és a letöltési fájlok automatikus ellenőrzésére.",
       },
       { property: "og:title", content: "Admin – Katalógus ellenőrzés" },
       { property: "og:description", content: "Belső adminisztrációs felület." },
@@ -30,15 +33,16 @@ function AdminCatalogAuditPage() {
           Katalógus ellenőrzés
         </h1>
       </PageHero>
-      <div className="mx-auto max-w-6xl px-4 py-14">
-        <p className="text-sm text-muted-foreground">
-          Egy kattintással végigfut minden terméken és minden licenszverzión: megvan-e a
-          Stripe lookup key a választott környezetben, aktív-e az ár, egyezik-e a forint
-          összeg a katalógussal, és a tárolóban ott van-e a letölthető fájl. Ellenőrzi a már
-          kiadott letöltési tokeneket is, hogy átnevezés után se törjön el egyetlen link sem.
-          Az ellenőrzés csak olvas, semmit nem módosít.
-        </p>
-        <CatalogAuditPanel />
+      <div className="mx-auto max-w-6xl space-y-14 px-4 py-14">
+        <AdminBlock
+          icon={PackageSearch}
+          title="Árak, lookup key-ek és letöltések"
+          description="Egy kattintással végigfut minden terméken és minden licenszverzión: megvan-e a Stripe lookup key a választott környezetben, aktív-e az ár, egyezik-e a forint összeg a katalógussal, és a tárolóban ott van-e a letölthető fájl. Ellenőrzi a már kiadott letöltési tokeneket is, hogy átnevezés után se törjön el egyetlen link sem. Az ellenőrzés csak olvas, semmit nem módosít."
+        >
+          <CatalogAuditPanel />
+        </AdminBlock>
+
+        <StripeProductNamePanel />
       </div>
     </>
   );

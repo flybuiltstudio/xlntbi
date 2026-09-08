@@ -1,3 +1,4 @@
+import { Tags } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useState } from "react";
 
@@ -93,8 +94,11 @@ export function StripeProductNamePanel() {
   const rows = report?.rows ?? [];
 
   return (
-    <section className="mt-10">
-      <h2 className="text-xl font-semibold text-foreground">Stripe terméknevek</h2>
+    <section>
+      <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+        <Tags className="h-5 w-5 text-primary" aria-hidden="true" />
+        Stripe terméknevek
+      </h2>
       <p className="mt-2 text-sm text-muted-foreground">
         A fizetőűrlap tétel-sorában és a Stripe visszaigazolásokon a Stripe-ban tárolt
         terméknév látszik. Itt ellenőrizhető, hogy mindegyik „XLNT ” előtaggal kezdődik-e,

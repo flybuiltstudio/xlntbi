@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useState } from "react";
-import { CreditCard, FlaskConical, Loader2, RefreshCw, Trash2 } from "lucide-react";
+import { ClipboardList, CreditCard, FlaskConical, Loader2, RefreshCw, Trash2 } from "lucide-react";
 
 import {
   adminCreateTestOrder,
@@ -182,7 +182,7 @@ function TestPanel() {
 
       {/* 1. lépés – teszt megrendelés rögzítése */}
       <section className="mt-8 rounded-xl border border-border bg-card p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-foreground">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <FlaskConical className="h-5 w-5 text-primary" />
           1. lépés – Teszt megrendelés rögzítése
         </h2>
@@ -311,7 +311,7 @@ function TestPanel() {
 
       {/* 2. lépés – Stripe teszt fizetés */}
       <section className="mt-8 rounded-xl border border-border bg-card p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-foreground">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <CreditCard className="h-5 w-5 text-primary" />
           2. lépés – Bankkártyás fizetés tesztelése (sandbox)
         </h2>
@@ -362,7 +362,10 @@ function TestPanel() {
       {/* Korábbi teszt megrendelések */}
       <section className="mt-8 rounded-xl border border-border bg-card p-5 sm:p-6">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-lg font-bold text-foreground">Korábbi teszt megrendelések</h2>
+          <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+            <ClipboardList className="h-5 w-5 text-primary" aria-hidden="true" />
+            Korábbi teszt megrendelések
+          </h2>
           <button
             type="button"
             onClick={refreshList}

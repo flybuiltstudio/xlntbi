@@ -1,30 +1,24 @@
 import { useServerFn } from "@tanstack/react-start";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   CheckCircle2,
   CircleDashed,
   Eraser,
   Loader2,
   PlayCircle,
-  ShieldCheck,
-  TicketX,
   XCircle,
 } from "lucide-react";
 
 import {
   adminCleanupTestOrder,
-  adminCouponGuardState,
   adminRunPurchaseTest,
-  adminSweepLiveCoupons,
 } from "@/lib/admin.functions";
 import { PaymentEnvironmentNotice } from "@/components/PaymentEnvironmentNotice";
 import { getStripeEnvironmentSafe } from "@/lib/stripe";
 import { getTier, products } from "@/lib/products";
-import { ALLOWED_LIVE_PROMOTION_CODES, TEST_PROMOTION_CODES } from "@/lib/coupons";
 
 type TestResult = Awaited<ReturnType<typeof adminRunPurchaseTest>>;
 type CleanupResult = Awaited<ReturnType<typeof adminCleanupTestOrder>>;
-type GuardState = Awaited<ReturnType<typeof adminCouponGuardState>>;
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-ring/40";
@@ -40,8 +34,6 @@ function StepIcon({ status }: { status: TestResult["steps"][number]["status"] })
 export function FullPurchaseTestPanel() {
   const runTest = useServerFn(adminRunPurchaseTest);
   const cleanupTest = useServerFn(adminCleanupTestOrder);
-  const guardState = useServerFn(adminCouponGuardState);
-  const sweepCoupons = useServerFn(adminSweepLiveCoupons);
 
   const orderable = products.filter((p) => p.status === "available");
   const [slug, setSlug] = useState(orderable[0]!.slug);
@@ -61,27 +53,12 @@ export function FullPurchaseTestPanel() {
   const [cleaning, setCleaning] = useState(false);
   const [cleanupError, setCleanupError] = useState("");
 
-  const [guard, setGuard] = useState<GuardState | null>(null);
-  const [sweeping, setSweeping] = useState(false);
-  const [sweepMessage, setSweepMessage] = useState("");
-
   /** True when the latest test run skipped cleanup (checkbox unchecked). */
   const cleanupAvailable = Boolean(
     result?.orderNumber &&
       String(result.orderNumber).startsWith("TESZT-") &&
       result.steps.some((s) => s.key === "cleanup" && s.status === "skipped"),
   );
-
-  const loadGuard = useCallback(() => {
-    guardState()
-      .then(setGuard)
-      .catch(() => setGuard(null));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    loadGuard();
-  }, [loadGuard]);
 
   async function onRun() {
     setRunning(true);
@@ -125,30 +102,10 @@ export function FullPurchaseTestPanel() {
     }
   }
 
-  async function onSweep() {
-    setSweeping(true);
-    setSweepMessage("");
-    try {
-      const res = await sweepCoupons();
-      setSweepMessage(
-        res.ok
-          ? `Ellenőrizve ${res.checked} kuponkód. Kikapcsolva: ${
-              res.deactivated.length ? res.deactivated.join(", ") : "nincs"
-            }. Aktívan hagyva: ${res.kept.length ? res.kept.join(", ") : "nincs"}.`
-          : `Hiba: ${res.error}`,
-      );
-      loadGuard();
-    } catch {
-      setSweepMessage("A kuponellenőrzés nem sikerült.");
-    } finally {
-      setSweeping(false);
-    }
-  }
-
   return (
-    <div className="mt-10 space-y-8">
+    <>
       <section className="rounded-xl border border-border bg-card p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-foreground">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <PlayCircle className="h-5 w-5 text-primary" />
           Teljes vásárlási teszt
         </h2>
@@ -310,60 +267,6 @@ export function FullPurchaseTestPanel() {
           </div>
         ) : null}
       </section>
-
-      <section className="rounded-xl border border-border bg-card p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-bold text-foreground">
-          <ShieldCheck className="h-5 w-5 text-primary" />
-          Kuponvédelem éles környezetben
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Éles fizetésnél csak a kifejezetten engedélyezett kuponkódok maradhatnak aktívak; minden
-          más kód (köztük a teszt kódok, pl. {TEST_PROMOTION_CODES.join(", ")}) automatikusan
-          kikapcsolódik. Jelenleg engedélyezett éles kódok:{" "}
-          <strong className="text-foreground">
-            {ALLOWED_LIVE_PROMOTION_CODES.length
-              ? ALLOWED_LIVE_PROMOTION_CODES.map((g) => {
-                  const expired = Date.parse(g.expiresAt) <= Date.now();
-                  return `${g.code} (${expired ? "lejárt" : "érvényes"}: ${new Date(g.expiresAt).toLocaleString("hu-HU")}-ig)`;
-                }).join(", ")
-              : "nincs"}
-          </strong>
-          .
-        </p>
-
-        {guard ? (
-          <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-            <div>
-              <dt className="inline font-medium text-foreground">Utolsó ellenőrzés: </dt>
-              <dd className="inline text-muted-foreground">
-                {guard.lastRunAt
-                  ? new Date(guard.lastRunAt).toLocaleString("hu-HU")
-                  : "még nem futott"}
-              </dd>
-            </div>
-            <div>
-              <dt className="inline font-medium text-foreground">Legutóbb kikapcsolva: </dt>
-              <dd className="inline text-muted-foreground">
-                {guard.deactivated.length ? guard.deactivated.join(", ") : "nincs"}
-              </dd>
-            </div>
-          </dl>
-        ) : null}
-
-        <button
-          type="button"
-          onClick={() => void onSweep()}
-          disabled={sweeping}
-          className="mt-5 inline-flex items-center gap-2 rounded-md border border-input px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent disabled:opacity-60"
-        >
-          {sweeping ? <Loader2 className="h-4 w-4 animate-spin" /> : <TicketX className="h-4 w-4" />}
-          Éles kuponkódok ellenőrzése most
-        </button>
-
-        {sweepMessage ? (
-          <p className="mt-3 text-sm text-muted-foreground">{sweepMessage}</p>
-        ) : null}
-      </section>
-    </div>
+    </>
   );
 }
