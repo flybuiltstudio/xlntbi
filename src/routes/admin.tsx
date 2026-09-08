@@ -112,6 +112,29 @@ function AdminLayout() {
   }, [session?.id, attempt]);
 
   const [checksOpen, setChecksOpen] = useState(false);
+  const checksRef = useRef<HTMLDivElement | null>(null);
+
+  // Kattintásra nyílik/záródik: kívülre kattintás vagy Escape zárja.
+  useEffect(() => {
+    if (!checksOpen) return;
+    const onPointer = (e: PointerEvent) => {
+      if (!checksRef.current?.contains(e.target as Node)) setChecksOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setChecksOpen(false);
+    };
+    document.addEventListener("pointerdown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("pointerdown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [checksOpen]);
+
+  // Oldalváltáskor csukjuk be.
+  useEffect(() => {
+    setChecksOpen(false);
+  }, [pathname]);
 
   const allowed = role ? canAccessAdminRoute(role, pathname) : false;
 
