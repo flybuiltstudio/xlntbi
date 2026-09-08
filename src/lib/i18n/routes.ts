@@ -68,11 +68,17 @@ export function counterpartPath(pathname: string, target: Lang): string {
   const p = normalise(pathname);
   const pair = ROUTE_PAIRS.find((r) => r.hu === p || r.en === p);
   if (pair) return target === "en" ? pair.en : pair.hu;
-  // No counterpart (product, order, newsletter pages): staying on the
+  // Product detail pages: every product has both a Hungarian and an English page.
+  const huProduct = /^\/termek\/([^/]+)$/.exec(p);
+  if (huProduct) return target === "en" ? `/en/product/${huProduct[1]}` : p;
+  const enProduct = /^\/en\/product\/([^/]+)$/.exec(p);
+  if (enProduct) return target === "hu" ? `/termek/${enProduct[1]}` : p;
+  // No counterpart (order, newsletter pages): staying on the
   // current page beats dropping the visitor on the home page.
   if (langFromPath(p) === target) return pathname || "/";
   return target === "en" ? "/en" : "/";
 }
+
 
 export function pairFor(pathname: string): RoutePair | undefined {
   const p = normalise(pathname);

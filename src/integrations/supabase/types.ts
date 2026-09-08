@@ -354,6 +354,138 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_categories: {
+        Row: {
+          bundled: boolean
+          created_at: string
+          image_path: string | null
+          key: string
+          sort_order: number
+          title: string
+          title_en: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          bundled?: boolean
+          created_at?: string
+          image_path?: string | null
+          key: string
+          sort_order?: number
+          title: string
+          title_en: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          bundled?: boolean
+          created_at?: string
+          image_path?: string | null
+          key?: string
+          sort_order?: number
+          title?: string
+          title_en?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      custom_products: {
+        Row: {
+          category_key: string
+          created_at: string
+          created_by: string | null
+          download_file_name: string | null
+          download_storage_path: string | null
+          features: string[]
+          features_en: string[]
+          image_path: string | null
+          intro: string[]
+          intro_en: string[]
+          meta_description: string | null
+          meta_description_en: string | null
+          meta_title: string | null
+          meta_title_en: string | null
+          name: string
+          position: number
+          slug: string
+          source_file_name: string
+          status: string
+          stripe_error: string | null
+          stripe_product_live: string | null
+          stripe_product_sandbox: string | null
+          summary: string | null
+          summary_en: string | null
+          tagline: string | null
+          tiers: Json
+          updated_at: string
+          why: string | null
+          why_en: string | null
+        }
+        Insert: {
+          category_key: string
+          created_at?: string
+          created_by?: string | null
+          download_file_name?: string | null
+          download_storage_path?: string | null
+          features?: string[]
+          features_en?: string[]
+          image_path?: string | null
+          intro?: string[]
+          intro_en?: string[]
+          meta_description?: string | null
+          meta_description_en?: string | null
+          meta_title?: string | null
+          meta_title_en?: string | null
+          name: string
+          position?: number
+          slug: string
+          source_file_name?: string
+          status?: string
+          stripe_error?: string | null
+          stripe_product_live?: string | null
+          stripe_product_sandbox?: string | null
+          summary?: string | null
+          summary_en?: string | null
+          tagline?: string | null
+          tiers?: Json
+          updated_at?: string
+          why?: string | null
+          why_en?: string | null
+        }
+        Update: {
+          category_key?: string
+          created_at?: string
+          created_by?: string | null
+          download_file_name?: string | null
+          download_storage_path?: string | null
+          features?: string[]
+          features_en?: string[]
+          image_path?: string | null
+          intro?: string[]
+          intro_en?: string[]
+          meta_description?: string | null
+          meta_description_en?: string | null
+          meta_title?: string | null
+          meta_title_en?: string | null
+          name?: string
+          position?: number
+          slug?: string
+          source_file_name?: string
+          status?: string
+          stripe_error?: string | null
+          stripe_product_live?: string | null
+          stripe_product_sandbox?: string | null
+          summary?: string | null
+          summary_en?: string | null
+          tagline?: string | null
+          tiers?: Json
+          updated_at?: string
+          why?: string | null
+          why_en?: string | null
+        }
+        Relationships: []
+      }
       newsletter_campaigns: {
         Row: {
           body_html: string

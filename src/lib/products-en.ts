@@ -18,11 +18,11 @@ export const PRODUCT_SUMMARY_EN: Record<string, string> = {
     "One of the recurring, time-consuming closing tasks is reconciling the tax current account with the general ledger. This tool reads in the NAV statement, collects the ledger balances, and shows by tax type where the two differ – all in a single Excel workbook, with no installation and no cloud.",
   "nav-torzsszam-partnerellenorzo":
     "If you check business partners daily as an accountant or entrepreneur, you normally do this by clicking through three different websites. This workbook brings all three into one Excel table: the official tax-number check from the NAV (Hungarian Tax Authority) Online Invoice system, the European Commission's VIES service, and, optionally, a company-name search.",
-  "berszamfejto":
+  berszamfejto:
     "The same routine every month: calculate gross pay, allowances and contributions, then manually retype the numbers into the ÁNYK 08 return. XLNT Payroll takes both steps off your hands: it does the payroll calculation in a familiar Excel workbook, then produces the ÁNYK-importable XML with a single click.",
   "utalasi-csomag-keszito":
     "If you transfer money to several partners every month, you know the tedious task of typing each item into online banking one by one. This Excel tool takes that off your hands: you list the items in a clear table, and the program creates a ready bank import file that you just load into your online banking, check and sign.",
-  "beszamolo":
+  beszamolo:
     "During closing season, most of the time is spent moving data between the ledger, the balance sheet, the tax calculation, the tax returns and the notes to the accounts. This file connects that whole chain: you upload the trial balance once, and the financial statements, notes, the OBR file, the corporate tax or KIVA return and the local business tax return are all produced from the same data set.",
   "cegkivonat-excel-konverter":
     "If you have ever manually copied a Hungarian company extract's data into Excel, you know how long it takes. This program automatically extracts all the data from the PDF and turns it into a clear, ready-to-use Excel file.",
@@ -66,7 +66,7 @@ export const PRODUCT_SUMMARY_EN: Record<string, string> = {
     "New phone, new laptop, a guest at the office – and the Wi-Fi password has long been forgotten. The XLNT Wi-Fi Password Viewer collects and displays, in a clear list, all the Wi-Fi passwords this computer has previously saved. No registration, no complicated installation: just run it and see.",
   "auditxml-ellenorzo-javito":
     "A small, standalone Windows helper tool that quickly checks AuditXML and NAV (Hungarian Tax Authority) invoice data-export files, and – after separate confirmation – fixes the most common, mechanically fixable errors: broken accented characters, wrong encoding, fields that are too long, comma decimal separators, and incorrect date formats. Anything that cannot be safely fixed is simply flagged.",
-  "devizabank":
+  devizabank:
     "Under Hungarian accounting law, decreasing items of a foreign-currency bank account may only be accounted for using the FIFO or average-price method – a rule confirmed by the 2022 Chamber of Auditors' presentations on 'Assets' and 'Liabilities'. In practice, few programs, and even fewer Excel templates, handle correctly the situation when a foreign-currency account balance crosses zero or goes negative; this tool was built by a developer experienced with most Hungarian and international accounting programs.",
   "mnb-era-jelentesgenerator":
     "Submitting the R09 and R12 reports required by the MNB (Hungarian central bank) via the ERA/STEFI system is bound by strict format rules: a prescribed file name, XML schema or row-coded CSV structure, and exact date and number formats. Manual assembly is slow and error-prone – a single misplaced comma or date code can cause the whole report to be rejected. The MNB ERA Report Generator is two Excel templates with matching VBA macros that turn data entered in a familiar spreadsheet into a submittable report following the official STEFI user manual.",

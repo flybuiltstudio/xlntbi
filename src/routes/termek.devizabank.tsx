@@ -8,7 +8,7 @@ import {
 
 const TITLE_BASE = "XLNT DEVIZABANK – devizás bankszámla nyilvántartó Excel | EXCELlent Business Intelligence";
 const DESCRIPTION_BASE =
-  "Devizaszámla nyilvántartás átlagáras és FIFO elszámolással, automatikus MNB árfolyam-lekérdezéssel. EUR, USD, GBP, JPY változat, 19 900 Ft-tól.";
+  "Devizaszámla nyilvántartás átlagáras és FIFO elszámolással, automatikus MNB árfolyam-lekérdezéssel. EUR, USD, GBP, JPY változat.";
 const H1 = "XLNT DEVIZABANK – devizás bankszámla nyilvántartó és árfolyam-elszámoló";
 const CANONICAL = "https://xlntbi.hu/termek/devizabank";
 const SLUG = "devizabank";
