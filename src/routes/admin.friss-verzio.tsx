@@ -46,6 +46,8 @@ function AdminNewVersionPage() {
           és mostantól az új verziót szolgálják ki.
         </p>
         <ProductVersionPanel />
+        <ProductDescriptionPanel />
+        <ProductPricePanel />
         <CalculatorVersionPanel />
         <ProductOrderPanel />
       </div>
