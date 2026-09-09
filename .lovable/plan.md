@@ -40,8 +40,26 @@ Alatta a pCloud logó, link a `https://partner.pcloud.com/r/157443` URL-re.
 
 Új importok: `NewsletterSignup` a `@/components/NewsletterSignup`-ból, pCloud logó asset.
 
-### 4. Angol oldalak (kérdés — lásd lent)
-Az `en.products.tsx`-en "Why are they good?" blokk, az `en.consultation.tsx`-en szintén van űrlap. A projekt kétnyelvű. Ha a felhasználó kéri, az angol oldalakra is kerülhet pCloud blokk (angolra fordított szöveggel).
+### 4. Angol Termékeim oldal (`src/routes/en.products.tsx`)
+A jobb oszlop "Why are they good?" blokkja alá ugyanaz a pCloud blokk, angol szöveggel:
+```text
+💰 The best cloud storage investment: a one-time fee for lifetime storage!
+pCloud pays for itself in a few years compared to Google Drive, iCloud and OneDrive.
+Swiss security, strict GDPR compliance. I use it exclusively — highly recommended:
+```
+Logó link: `https://partner.pcloud.com/r/157444`
+
+### 5. Angol Konzultációt kérek oldal (`src/routes/en.consultation.tsx`)
+Ugyanaz a kétoszlopos átalakítás: bal oldalon hírlevél blokk + pCloud blokk, jobb oldalon a meglévő űrlap. pCloud szöveg angolul:
+```text
+🔐 Forget about monthly subscriptions! pCloud's lifetime storage pays for itself in
+just 2–3 years — far better value than Google Drive, iCloud or OneDrive. Swiss data
+protection, 100% GDPR compliance and maximum security. I use it exclusively — highly
+recommended:
+```
+Logó link: `https://partner.pcloud.com/r/157443`
+
+Megjegyzés: az `en.consultation.tsx` jelenleg `buildHead`-et használ a head-hez, a `konzultacio.tsx` viszont inline meta-t. Ez nem érinti a komponenst, csak a head blokkot — nem változik.
 
 ## Technikai részletek
 - pCloud logó: `import pcloudLogo from "@/assets/pcloud-logo.jpg.asset.json"` → `pcloudLogo.url`
