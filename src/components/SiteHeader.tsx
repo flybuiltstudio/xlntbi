@@ -77,7 +77,7 @@ export function SiteHeader() {
         >
           <Link
             to={asPath(lp("/"))}
-            className="rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+            className="rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             activeProps={{ className: "bg-accent" }}
             activeOptions={{ exact: true }}
           >
@@ -87,7 +87,7 @@ export function SiteHeader() {
           <div className="group relative">
             <Link
               to={asPath(lp("/szolgaltatasaim"))}
-              className="flex items-center gap-1 rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+              className="flex items-center gap-1 rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             >
               {t("nav.services")}
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
@@ -108,7 +108,7 @@ export function SiteHeader() {
           <div className="group relative">
             <Link
               to={asPath(lp("/kalkulatorok"))}
-              className="flex items-center gap-1 rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+              className="flex items-center gap-1 rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             >
               {t("nav.calculators")}
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
@@ -128,7 +128,7 @@ export function SiteHeader() {
 
           <Link
             to={asPath(lp("/termekeim"))}
-            className="rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+            className="rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             activeProps={{ className: "bg-accent" }}
           >
             {t("nav.products")}
@@ -138,7 +138,7 @@ export function SiteHeader() {
             <Link
               key={l.hu}
               to={asPath(lp(l.hu))}
-              className="rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+              className="rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
               activeProps={{ className: "bg-accent" }}
             >
               {t(l.key)}
@@ -149,7 +149,7 @@ export function SiteHeader() {
 
           <Link
             to={asPath(lp("/konzultacio"))}
-            className="ml-1 inline-flex items-center whitespace-nowrap rounded-md bg-primary px-3 py-2 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-brand-dark lg:ml-2 lg:px-4 lg:text-sm"
+            className="ml-1 inline-flex items-center whitespace-nowrap rounded-md bg-primary px-2.5 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-brand-dark lg:ml-2 lg:px-4 lg:text-sm"
           >
             {t("nav.consultation")}
           </Link>
