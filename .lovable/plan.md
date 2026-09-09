@@ -29,7 +29,11 @@ Amit látsz, az méret-küszöb kérdése:
 ## Technikai részletek
 
 - `src/routes/konzultacio.tsx` és `src/routes/en.consultation.tsx`:
-  a külső rács `lg:grid-cols-[1fr_1.4fr]` helyett `min-[900px]:grid-cols-[1fr_1.4fr]`.
+  a külső rács `lg:grid-cols-[1fr_1.4fr]` helyett `md:grid-cols-[1fr_1.4fr]` (768 px).
   Minden meglévő tartalom, szöveg és `ContactForm` prop változatlan.
+- `src/components/SiteHeader.tsx`: az összes `min-[900px]:flex` / `min-[900px]:hidden`
+  váltás `md:flex` / `md:hidden` lesz (768 px), az asztali menü megjelenítésével és a
+  hamburger + lenyíló panel eltüntetésével együtt. A kompakt betűméretek (`text-[13px]`,
+  szűkebb paddingok) 768–1023 px között maradnak, `lg:` felett a meglévő nagyobb méretek.
 - Ellenőrzés: typecheck, majd 890 px és 1280 px szélességű böngészős képernyőkép
-  mindkét konzultációs oldalról.
+  a konzultációs oldalról és a fejlécről (menü túlcsordulás-ellenőrzéssel).
