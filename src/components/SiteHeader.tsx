@@ -56,7 +56,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
-      <div className="relative z-10 mx-auto flex h-20 max-w-6xl items-center gap-5 px-4 lg:gap-7">
+      <div className="relative z-10 mx-auto flex h-20 max-w-6xl items-center gap-4 px-4 lg:gap-7">
         <Link
           to={asPath(lp("/"))}
           className="flex shrink-0 items-center"
@@ -65,19 +65,19 @@ export function SiteHeader() {
           <img
             src={logoAsset.url}
             alt={t("nav.logoAlt")}
-            className="h-14 w-auto object-contain lg:h-20"
+            className="h-11 w-auto object-contain lg:h-20"
             width={240}
             height={160}
           />
         </Link>
 
         <nav
-          className="hidden items-center gap-0.5 min-[900px]:flex lg:gap-1"
+          className="hidden items-center gap-0.5 md:flex lg:gap-1"
           aria-label={t("nav.mainMenu")}
         >
           <Link
             to={asPath(lp("/"))}
-            className="rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+            className="rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             activeProps={{ className: "bg-accent" }}
             activeOptions={{ exact: true }}
           >
@@ -87,7 +87,7 @@ export function SiteHeader() {
           <div className="group relative">
             <Link
               to={asPath(lp("/szolgaltatasaim"))}
-              className="flex items-center gap-1 rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+              className="flex items-center gap-1 rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             >
               {t("nav.services")}
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
@@ -108,7 +108,7 @@ export function SiteHeader() {
           <div className="group relative">
             <Link
               to={asPath(lp("/kalkulatorok"))}
-              className="flex items-center gap-1 rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+              className="flex items-center gap-1 rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             >
               {t("nav.calculators")}
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
@@ -128,7 +128,7 @@ export function SiteHeader() {
 
           <Link
             to={asPath(lp("/termekeim"))}
-            className="rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+            className="rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
             activeProps={{ className: "bg-accent" }}
           >
             {t("nav.products")}
@@ -138,7 +138,7 @@ export function SiteHeader() {
             <Link
               key={l.hu}
               to={asPath(lp(l.hu))}
-              className="rounded-md px-2 py-2 text-[13px] font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+              className="rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
               activeProps={{ className: "bg-accent" }}
             >
               {t(l.key)}
@@ -149,13 +149,13 @@ export function SiteHeader() {
 
           <Link
             to={asPath(lp("/konzultacio"))}
-            className="ml-1 inline-flex items-center whitespace-nowrap rounded-md bg-primary px-3 py-2 text-[13px] font-semibold text-primary-foreground transition-colors hover:bg-brand-dark lg:ml-2 lg:px-4 lg:text-sm"
+            className="ml-1 inline-flex items-center whitespace-nowrap rounded-md bg-primary px-2.5 py-2 text-xs font-semibold text-primary-foreground transition-colors hover:bg-brand-dark lg:ml-2 lg:px-4 lg:text-sm"
           >
             {t("nav.consultation")}
           </Link>
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 min-[900px]:hidden">
+        <div className="ml-auto flex items-center gap-1 md:hidden">
           <LanguageSwitcher />
           <button
             type="button"
@@ -170,7 +170,7 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <div className="absolute inset-x-0 top-full z-10 max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg min-[900px]:hidden">
+        <div className="absolute inset-x-0 top-full z-10 max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg md:hidden">
           <nav className="mx-auto max-w-6xl px-4 py-4" aria-label={t("nav.mainMenu")}>
             <div className="flex items-center justify-between pb-2">
               <span className="text-sm font-semibold text-muted-foreground">
