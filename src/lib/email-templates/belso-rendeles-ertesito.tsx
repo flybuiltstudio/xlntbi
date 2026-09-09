@@ -40,8 +40,10 @@ const Email = ({ orderNumber, productName, total, customerEmail, paymentStatus, 
 
 export const template = {
   component: Email,
-  subject: (data: Record<string, any>) =>
-    `Új megrendelés (${data['orderNumber'] || 'xlntbi.hu'}): ${data['productName'] || ''}`,
+  subject: (data: Record<string, any>) => {
+    const status = data['paymentStatus'] === 'paid' ? 'kifizetve' : 'fizetésre vár'
+    return `Új megrendelés (${data['orderNumber'] || 'xlntbi.hu'}): ${data['productName'] || ''} – ${status}`
+  },
   displayName: 'Belső értesítő – megrendelés',
   previewData: {
     orderNumber: 'XLNT-20260819-1234',
