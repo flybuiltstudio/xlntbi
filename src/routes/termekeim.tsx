@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
+import { handleHwidDownload } from "@/lib/hwid-download";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import { aamText } from "@/lib/aam";
 import { priceFrom, formatPrice } from "@/lib/products";
@@ -141,6 +142,7 @@ function TermekeimPage() {
               azonosítóját. És{' '}
               <a
                 href="/api/public/hwid-download"
+                onClick={(e) => { e.preventDefault(); handleHwidDownload("hu"); }}
                 className="font-bold text-red-600 underline italic hover:text-red-600 focus:text-red-600 dark:text-red-500 dark:hover:text-red-500"
               >
                 ezt az azonosítót
@@ -151,6 +153,7 @@ function TermekeimPage() {
             </p>
             <a
               href="/api/public/hwid-download"
+              onClick={(e) => { e.preventDefault(); handleHwidDownload("hu"); }}
               className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
               HWID letöltése

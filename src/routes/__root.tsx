@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/SiteHeader";
+import { Toaster } from "@/components/ui/sonner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CookieConsent } from "@/components/CookieConsent";
 import { initAnalytics } from "@/lib/analytics";
@@ -180,7 +181,7 @@ function RootComponent() {
         <SiteFooter />
         <CookieConsent />
       </div>
-
+      <Toaster position="top-center" />
     </QueryClientProvider>
   );
 }
