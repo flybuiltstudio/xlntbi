@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check } from "lucide-react";
+import { handleHwidDownload } from "@/lib/hwid-download";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import { aamText } from "@/lib/aam";
 import { priceFrom, formatPrice } from "@/lib/products";
