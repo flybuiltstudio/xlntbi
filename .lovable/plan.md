@@ -16,20 +16,24 @@ Amit látsz, az méret-küszöb kérdése:
 
 ## Mit csinálok
 
-1. A Konzultáció oldal (magyar és angol) két oszlopa a menüvel azonos küszöbnél,
-   **900 pixel** felett váltson kétoszlopos elrendezésre, hogy a hírlevél és a pCloud blokk
-   valóban a szöveg és az űrlap **bal oldalán** legyen, ne fölötte.
-   Alatta (telefonon) továbbra is egymás alá kerülnek.
-2. A Termékeim / Products oldalon nem változtatok semmit — ott a pCloud blokk már
+1. A Konzultáció oldal (magyar és angol) két oszlopa **768 pixel** felett váltson
+   kétoszlopos elrendezésre, hogy a hírlevél és a pCloud blokk valóban a szöveg
+   és az űrlap **bal oldalán** legyen, ne fölötte. Alatta (telefonon) továbbra is
+   egymás alá kerülnek.
+2. A vízszintes menü küszöbét **900 pixelről 768 pixelre** visszük: a fejléc
+   minden tételének betű- és távolságmérete 768–1023 pixel között kompakt marad,
+   így nem fér el túlcsordulással. A hamburger menü 768 pixel alatt marad.
+3. A Termékeim / Products oldalon nem változtatok semmit — ott a pCloud blokk már
    a kért helyen, a "Miért jók ezek?" alatt, a jobb hasábban van.
-3. A menü küszöbén nem nyúlok hozzá semmihez, mert azt nem én állítottam el.
-   Ha szeretnéd, hogy a vízszintes menü kisebb ablakban is látszódjon, szólj,
-   és lejjebb vesszük a küszöböt.
 
 ## Technikai részletek
 
 - `src/routes/konzultacio.tsx` és `src/routes/en.consultation.tsx`:
-  a külső rács `lg:grid-cols-[1fr_1.4fr]` helyett `min-[900px]:grid-cols-[1fr_1.4fr]`.
+  a külső rács `lg:grid-cols-[1fr_1.4fr]` helyett `md:grid-cols-[1fr_1.4fr]` (768 px).
   Minden meglévő tartalom, szöveg és `ContactForm` prop változatlan.
+- `src/components/SiteHeader.tsx`: az összes `min-[900px]:flex` / `min-[900px]:hidden`
+  váltás `md:flex` / `md:hidden` lesz (768 px), az asztali menü megjelenítésével és a
+  hamburger + lenyíló panel eltüntetésével együtt. A kompakt betűméretek (`text-[13px]`,
+  szűkebb paddingok) 768–1023 px között maradnak, `lg:` felett a meglévő nagyobb méretek.
 - Ellenőrzés: typecheck, majd 890 px és 1280 px szélességű böngészős képernyőkép
-  mindkét konzultációs oldalról.
+  a konzultációs oldalról és a fejlécről (menü túlcsordulás-ellenőrzéssel).
