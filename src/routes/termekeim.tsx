@@ -13,6 +13,7 @@ import {
 import { getProductPlacements } from "@/lib/product-placements.functions";
 import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
 import { PageHero } from "@/components/PageHero";
+import pcloudLogo from "@/assets/pcloud-logo.jpg.asset.json";
 
 
 
@@ -186,6 +187,24 @@ function TermekeimPage() {
                 Mert időt spórolnak, csökkentik a hibákat, és gyorsabban juttatnak el a végső
                 eredményhez.
               </p>
+            </div>
+            <div className="mt-8 rounded-2xl border border-border/60 bg-muted/40 p-5">
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                💰 A legjobb felhőalapú tárhely befektetés: Egyszeri díj, élethosszig tartó tárhely! A pCloud pár év alatt behozza az árát a GDrive-val, az iCloud-dal és a OneDrive-val szemben. Svájci biztonság, szigorú GDPR-védelem. Én már csak ezt használom, szívből ajánlom:
+              </p>
+              <a
+                href="https://partner.pcloud.com/r/157444"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-block"
+              >
+                <img
+                  src={pcloudLogo.url}
+                  alt="pCloud – Svájci felhőalapú tárhely"
+                  loading="lazy"
+                  className="h-auto w-48"
+                />
+              </a>
             </div>
           </div>
         </div>
