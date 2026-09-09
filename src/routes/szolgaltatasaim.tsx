@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
-import { serviceItems as items } from "@/lib/services";
+import { serviceItems } from "@/lib/services";
+
+const items = serviceItems.filter((item) => !item.to.startsWith("/en/"));
 
 
 const TITLE = "Szolgáltatásaim: könyveléstől a BI tanácsadásig | EXCELlent Business Intelligence";
