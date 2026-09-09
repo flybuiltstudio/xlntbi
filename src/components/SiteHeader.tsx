@@ -56,7 +56,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
-      <div className="relative z-10 mx-auto flex h-20 max-w-6xl items-center gap-5 px-4 lg:gap-7">
+      <div className="relative z-10 mx-auto flex h-20 max-w-6xl items-center gap-4 px-4 lg:gap-7">
         <Link
           to={asPath(lp("/"))}
           className="flex shrink-0 items-center"
@@ -65,7 +65,7 @@ export function SiteHeader() {
           <img
             src={logoAsset.url}
             alt={t("nav.logoAlt")}
-            className="h-14 w-auto object-contain lg:h-20"
+            className="h-11 w-auto object-contain lg:h-20"
             width={240}
             height={160}
           />
