@@ -72,7 +72,7 @@ export function SiteHeader() {
         </Link>
 
         <nav
-          className="hidden items-center gap-0.5 min-[900px]:flex lg:gap-1"
+          className="hidden items-center gap-0.5 md:flex lg:gap-1"
           aria-label={t("nav.mainMenu")}
         >
           <Link
@@ -155,7 +155,7 @@ export function SiteHeader() {
           </Link>
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 min-[900px]:hidden">
+        <div className="ml-auto flex items-center gap-1 md:hidden">
           <LanguageSwitcher />
           <button
             type="button"
@@ -170,7 +170,7 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <div className="absolute inset-x-0 top-full z-10 max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg min-[900px]:hidden">
+        <div className="absolute inset-x-0 top-full z-10 max-h-[calc(100dvh-5rem)] overflow-y-auto border-b border-t border-border bg-background shadow-lg md:hidden">
           <nav className="mx-auto max-w-6xl px-4 py-4" aria-label={t("nav.mainMenu")}>
             <div className="flex items-center justify-between pb-2">
               <span className="text-sm font-semibold text-muted-foreground">
