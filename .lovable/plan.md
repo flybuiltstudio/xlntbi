@@ -16,15 +16,15 @@ Amit látsz, az méret-küszöb kérdése:
 
 ## Mit csinálok
 
-1. A Konzultáció oldal (magyar és angol) két oszlopa a menüvel azonos küszöbnél,
-   **900 pixel** felett váltson kétoszlopos elrendezésre, hogy a hírlevél és a pCloud blokk
-   valóban a szöveg és az űrlap **bal oldalán** legyen, ne fölötte.
-   Alatta (telefonon) továbbra is egymás alá kerülnek.
-2. A Termékeim / Products oldalon nem változtatok semmit — ott a pCloud blokk már
+1. A Konzultáció oldal (magyar és angol) két oszlopa **768 pixel** felett váltson
+   kétoszlopos elrendezésre, hogy a hírlevél és a pCloud blokk valóban a szöveg
+   és az űrlap **bal oldalán** legyen, ne fölötte. Alatta (telefonon) továbbra is
+   egymás alá kerülnek.
+2. A vízszintes menü küszöbét **900 pixelről 768 pixelre** visszük: a fejléc
+   minden tételének betű- és távolságmérete 768–1023 pixel között kompakt marad,
+   így nem fér el túlcsordulással. A hamburger menü 768 pixel alatt marad.
+3. A Termékeim / Products oldalon nem változtatok semmit — ott a pCloud blokk már
    a kért helyen, a "Miért jók ezek?" alatt, a jobb hasábban van.
-3. A menü küszöbén nem nyúlok hozzá semmihez, mert azt nem én állítottam el.
-   Ha szeretnéd, hogy a vízszintes menü kisebb ablakban is látszódjon, szólj,
-   és lejjebb vesszük a küszöböt.
 
 ## Technikai részletek
 
