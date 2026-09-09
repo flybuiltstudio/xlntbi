@@ -101,8 +101,11 @@ const Email = ({
           ) : null}
         </Section>
         <Text style={notice}>
-          A letöltés után indítsd el / nyisd meg a megvásárolt terméket, és a megjelenő HWID-t küldd
-          el a megvásárolt termék nevével és licensz típusával együtt az info@xlntbi.hu emailcímre.
+          A letöltés után indítsd el / nyisd meg a megvásárolt terméket, és a megjelenő{' '}
+          <span style={{ color: '#DC2626', fontWeight: 700, textDecoration: 'underline', fontStyle: 'italic' }}>
+            HWID-t küldd el
+          </span>{' '}
+          a megvásárolt termék nevével és licensz típusával együtt az info@xlntbi.hu emailcímre.
         </Text>
         <Section style={{ margin: '0 0 20px' }}>
           <Button href={buildMailto(name, productName, tierLabel)} style={button}>
