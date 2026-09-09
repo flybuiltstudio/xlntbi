@@ -142,6 +142,7 @@ function TermekeimPage() {
               azonosítóját. És{' '}
               <a
                 href="/api/public/hwid-download"
+                onClick={(e) => { e.preventDefault(); handleHwidDownload("hu"); }}
                 className="font-bold text-red-600 underline italic hover:text-red-600 focus:text-red-600 dark:text-red-500 dark:hover:text-red-500"
               >
                 ezt az azonosítót
@@ -152,6 +153,7 @@ function TermekeimPage() {
             </p>
             <a
               href="/api/public/hwid-download"
+              onClick={(e) => { e.preventDefault(); handleHwidDownload("hu"); }}
               className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
               HWID letöltése
