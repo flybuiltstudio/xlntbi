@@ -42,7 +42,7 @@ function EnglishContact() {
                 Changes in legislation, deadlines and new Excel tools – a few e-mails a month.
               </p>
               <div className="mt-4">
-                <NewsletterSignup />
+                <NewsletterSignup lang="en" />
               </div>
             </div>
 

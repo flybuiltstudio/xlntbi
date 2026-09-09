@@ -57,7 +57,7 @@ function EnglishConsultation() {
                 Regulatory changes, deadlines and new Excel tools — a few emails per month.
               </p>
               <div className="mt-4">
-                <NewsletterSignup />
+                <NewsletterSignup lang="en" />
               </div>
             </div>
             <div className="rounded-2xl border border-border/60 bg-muted/40 p-5">
