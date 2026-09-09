@@ -118,6 +118,12 @@ export async function runCatalogAudit(
 ): Promise<CatalogAuditReport> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+  // Admin price/description overrides and admin-created products are layered on
+  // top of the bundled catalog at runtime. Without this the audit would compare
+  // Stripe against the bundled prices and report false "Összeg eltérés" rows.
+  const { ensureProductOverrides } = await import("./product-overrides.server");
+  await ensureProductOverrides(true);
+
   const lookupKeys = Array.from(
     new Set(products.flatMap((p) => p.tiers.map((t) => t.priceId))),
   );
