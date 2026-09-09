@@ -93,6 +93,7 @@ function EnglishProducts() {
               identifier. Then send me{' '}
               <a
                 href="/api/public/hwid-download"
+                onClick={(e) => { e.preventDefault(); handleHwidDownload("en"); }}
                 className="font-bold text-red-600 underline italic hover:text-red-600 focus:text-red-600 dark:text-red-500 dark:hover:text-red-500"
               >
                 this identifier
@@ -103,6 +104,7 @@ function EnglishProducts() {
             </p>
             <a
               href="/api/public/hwid-download"
+              onClick={(e) => { e.preventDefault(); handleHwidDownload("en"); }}
               className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
               Download HWID
