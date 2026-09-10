@@ -121,7 +121,7 @@ function EnglishProducts() {
             </a>
             <div className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
               <p>I also develop custom products.</p>
-              <p className="mt-3">Get in touch with me through the consultation page.</p>
+              <p>Get in touch with me through the consultation page.</p>
             </div>
             <Link
               to="/en/consultation"
