@@ -11,6 +11,7 @@
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "./stripe.server";
 import { products } from "./products";
 import { minorToHuf } from "./coupon-amount";
+import { resolvePromotionCoupon } from "./stripe-coupon";
 
 export type DiscountType = "percent" | "amount";
 
@@ -130,7 +131,10 @@ export async function listAdminCoupons(environment: StripeEnv): Promise<AdminCou
     const list = await stripe.promotionCodes.list(params);
 
     for (const promo of list.data) {
-      const coupon = (promo as any).coupon ?? null;
+      const coupon = await resolvePromotionCoupon(
+        promo,
+        async (id) => stripe.coupons.retrieve(id),
+      );
       const meta = metaByCode.get(String(promo.code).toUpperCase());
       const expiresAt =
         typeof promo.expires_at === "number" ? promo.expires_at : null;
@@ -423,12 +427,20 @@ export async function couponSyncStatus(environment: StripeEnv): Promise<CouponSy
     }
 
     const diffs: string[] = [];
-    const localDisabled = Boolean(r.disabled_at);
-    if (localDisabled && remote.active) diffs.push("nálunk letiltva, a Stripe-ban még aktív");
-    if (!localDisabled && !remote.active) diffs.push("a Stripe-ban inaktív, nálunk aktívként szerepel");
-
     const localExpiry = r.expires_at ? Date.parse(r.expires_at) : null;
     const remoteExpiry = remote.expiresAt ? Date.parse(remote.expiresAt) : null;
+    const localDisabled = Boolean(r.disabled_at);
+    const locallyExpired = Boolean(localExpiry && localExpiry <= Date.now());
+    const locallyUsedUp = Boolean(
+      r.max_redemptions && Number(r.times_redeemed ?? 0) >= Number(r.max_redemptions),
+    );
+    const shouldBeActive = !localDisabled && !locallyExpired && !locallyUsedUp;
+    if (!shouldBeActive && remote.active) {
+      diffs.push("a lejárt, elfogyott vagy letiltott kupon a Stripe-ban még aktív");
+    }
+    if (shouldBeActive && !remote.active) {
+      diffs.push("a Stripe-ban inaktív, pedig a helyi beállítások szerint aktívnak kellene lennie");
+    }
     if ((localExpiry ?? 0) !== (remoteExpiry ?? 0)) {
       const tolerated =
         localExpiry && remoteExpiry && Math.abs(localExpiry - remoteExpiry) < 120_000;

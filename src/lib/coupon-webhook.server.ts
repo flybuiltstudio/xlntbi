@@ -14,6 +14,7 @@
  */
 
 import type { StripeEnv } from "./stripe.server";
+import { resolvePromotionCoupon } from "./stripe-coupon";
 
 const COUPON_EVENT_PREFIXES = ["promotion_code.", "coupon."];
 
@@ -45,10 +46,13 @@ type PromoRow = {
   last_synced_at: string;
 };
 
-function rowFromPromo(promo: any, environment: StripeEnv): PromoRow | null {
+async function rowFromPromo(promo: any, environment: StripeEnv): Promise<PromoRow | null> {
   const code = typeof promo?.code === "string" ? promo.code.trim().toUpperCase() : "";
   if (!code) return null;
-  const coupon = promo.coupon ?? {};
+  const { createStripeClient } = await import("./stripe.server");
+  const stripe = createStripeClient(environment);
+  const coupon =
+    (await resolvePromotionCoupon(promo, async (id) => stripe.coupons.retrieve(id))) ?? {};
   const percentOff = typeof coupon.percent_off === "number" ? coupon.percent_off : null;
   const amountOff = typeof coupon.amount_off === "number" ? coupon.amount_off : null;
   const active = Boolean(promo.active) && coupon.valid !== false;
@@ -83,7 +87,7 @@ async function db() {
 }
 
 async function upsertPromo(promo: any, environment: StripeEnv): Promise<string> {
-  const row = rowFromPromo(promo, environment);
+  const row = await rowFromPromo(promo, environment);
   if (!row) return "ignored_no_code";
   const client = await db();
 
