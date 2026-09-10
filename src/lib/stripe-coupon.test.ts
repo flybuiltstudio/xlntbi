@@ -19,4 +19,17 @@ describe("Stripe promotion coupon normalization", () => {
     await expect(resolvePromotionCoupon(promo, retrieve)).resolves.toMatchObject({ percent_off: 25 });
     expect(retrieve).not.toHaveBeenCalled();
   });
+
+  it("does not break the coupon list when an old backing coupon was deleted", async () => {
+    const retrieve = vi.fn(async () => {
+      throw new Error("No such coupon");
+    });
+
+    await expect(
+      resolvePromotionCoupon(
+        { promotion: { type: "coupon", coupon: "deleted_coupon" } },
+        retrieve,
+      ),
+    ).resolves.toBeNull();
+  });
 });

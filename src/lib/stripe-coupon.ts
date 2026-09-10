@@ -37,6 +37,12 @@ export async function resolvePromotionCoupon(
 
   const id = promotionCouponId(promo);
   if (!id) return embedded;
-  const retrieved = await retrieve(id);
-  return retrieved && typeof retrieved === "object" ? retrieved : embedded;
+  try {
+    const retrieved = await retrieve(id);
+    return retrieved && typeof retrieved === "object" ? retrieved : embedded;
+  } catch {
+    // Stripe keeps inactive promotion codes after their backing coupon was
+    // deleted. The caller can still show its locally persisted history.
+    return embedded;
+  }
 }
