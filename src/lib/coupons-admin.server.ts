@@ -150,15 +150,27 @@ export async function listAdminCoupons(environment: StripeEnv): Promise<AdminCou
       const createdAt = meta?.created_at ?? null;
       const disabledAt = meta?.disabled_at ?? null;
 
+      const hasPercent = typeof coupon?.percent_off === "number";
+      const hasAmount = typeof coupon?.amount_off === "number";
+      const discountType: DiscountType =
+        hasPercent || hasAmount
+          ? discountTypeOf(coupon ?? {})
+          : meta?.discount_type === "percent"
+            ? "percent"
+            : "amount";
+
       out.push({
         code: promo.code,
         environment,
         active: Boolean(promo.active),
         expiresAt: expiresAt ? new Date(expiresAt * 1000).toISOString() : null,
-        discountType: discountTypeOf(coupon ?? {}),
-        percentOff: coupon?.percent_off ?? null,
-        amountOff: coupon?.amount_off ?? null,
-        currency: String(coupon?.currency ?? "huf").toUpperCase(),
+        discountType,
+        // Stripe's current promotion-code response only contains a coupon id.
+        // If that immutable coupon can no longer be expanded (for example after
+        // deletion), retain the historical terms stored at creation time.
+        percentOff: hasPercent ? coupon?.percent_off ?? null : meta?.percent_off ?? null,
+        amountOff: hasAmount ? coupon?.amount_off ?? null : meta?.amount_off ?? null,
+        currency: String(coupon?.currency ?? meta?.currency ?? "huf").toUpperCase(),
         maxRedemptions,
         timesRedeemed: promo.times_redeemed ?? 0,
         minAmount,

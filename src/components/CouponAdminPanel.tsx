@@ -234,7 +234,10 @@ export function CouponAdminPanel() {
             </div>
             <button
               type="button"
-              onClick={() => void runSync(env)}
+              onClick={() => {
+                void runSync(env);
+                void refresh(env);
+              }}
               disabled={syncLoading}
               className="inline-flex items-center gap-2 rounded-md border border-input px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent disabled:opacity-60"
             >
