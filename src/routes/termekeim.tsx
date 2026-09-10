@@ -166,12 +166,12 @@ function TermekeimPage() {
               onClick={(e) => { e.preventDefault(); handleHwidDownload("hu"); }}
               className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
-              Gépazonosító letöltése
+              Gépazonosító mutató letöltése
             </a>
-            <p className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
-              Egyedi termékek fejlesztését is vállalom.
-              Vedd fel velem a kapcsolatot a Konzultációt kérek oldal segítségével.
-            </p>
+            <div className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
+              <p>Egyedi termékek fejlesztését is vállalom.</p>
+              <p className="mt-3">Vedd fel velem a kapcsolatot a Konzultációt kérek oldal segítségével.</p>
+            </div>
             <Link
               to="/konzultacio"
               className="mt-4 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
