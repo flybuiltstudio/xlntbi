@@ -91,7 +91,7 @@ function EnglishProducts() {
             </Link>
             <div className="mt-6 text-sm font-semibold leading-relaxed text-orange-600 dark:text-orange-500">
               <p>Would you like to try a DEMO version?</p>
-              <p className="mt-3">
+              <p>
                 To issue the DEMO license code I need the{' '}
                 <a
                   href="/api/public/hwid-download"
@@ -102,26 +102,27 @@ function EnglishProducts() {
                 </a>{' '}
                 of the computer you want to run the program on.
               </p>
-              <p className="mt-3">
-                Click the „Download machine identifier” button, run the downloaded small program,
+              <p>
+                Click the „Download machine identifier viewer” button, run the downloaded small program,
                 then copy the identifier it shows.
               </p>
-              <p className="mt-3">
+              <p>
                 Send me the identifier via the Request a consultation page, together with the name
-                of the product you would like to try and how many days you need for testing. The
-                DEMO contains the full program; only its usage period is limited.
+                of the product you would like to try and how many days you need for testing.
               </p>
+              <p>The DEMO contains the full program; only its usage period is limited.</p>
             </div>
             <a
               href="/api/public/hwid-download"
               onClick={(e) => { e.preventDefault(); handleHwidDownload("en"); }}
               className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
-              Download machine identifier
+              Download machine identifier viewer
             </a>
-            <p className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
-              I also develop custom products. Get in touch with me through the consultation page.
-            </p>
+            <div className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
+              <p>I also develop custom products.</p>
+              <p className="mt-3">Get in touch with me through the consultation page.</p>
+            </div>
             <Link
               to="/en/consultation"
               className="mt-4 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"

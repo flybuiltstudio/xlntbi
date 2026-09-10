@@ -140,7 +140,7 @@ function TermekeimPage() {
             </Link>
             <div className="mt-6 text-sm font-semibold leading-relaxed text-orange-600 dark:text-orange-500">
               <p>Szeretnél DEMO verziót kipróbálni?</p>
-              <p className="mt-3">
+              <p>
                 A DEMO licenc kód megadásához szükségem van annak a számítógépnek az{' '}
                 <a
                   href="/api/public/hwid-download"
@@ -151,27 +151,27 @@ function TermekeimPage() {
                 </a>
                 , amelyen a programot használni szeretnéd.
               </p>
-              <p className="mt-3">
-                Kattints a „Gépazonosító letöltése” gombra, indítsd el a letöltött kis programot,
+              <p>
+                Kattints a „Gépazonosító mutató letöltése” gombra, indítsd el a letöltött kis programot,
                 majd másold ki a megjelenő azonosítót.
               </p>
-              <p className="mt-3">
+              <p>
                 A Konzultációt kérek oldal segítségével küldd el nekem az azonosítót, a kipróbálni
-                kívánt termék nevével és azzal, hogy hány napra van szükséged a teszteléshez. A DEMO
-                a teljes programot tartalmazza, csak a használati ideje korlátozott.
+                kívánt termék nevével és azzal, hogy hány napra van szükséged a teszteléshez.
               </p>
+              <p>A DEMO a teljes programot tartalmazza, csak a használati ideje korlátozott.</p>
             </div>
             <a
               href="/api/public/hwid-download"
               onClick={(e) => { e.preventDefault(); handleHwidDownload("hu"); }}
               className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
-              Gépazonosító letöltése
+              Gépazonosító mutató letöltése
             </a>
-            <p className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
-              Egyedi termékek fejlesztését is vállalom.
-              Vedd fel velem a kapcsolatot a Konzultációt kérek oldal segítségével.
-            </p>
+            <div className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
+              <p>Egyedi termékek fejlesztését is vállalom.</p>
+              <p className="mt-3">Vedd fel velem a kapcsolatot a Konzultációt kérek oldal segítségével.</p>
+            </div>
             <Link
               to="/konzultacio"
               className="mt-4 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
