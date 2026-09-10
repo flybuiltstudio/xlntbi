@@ -157,7 +157,7 @@ function TermekeimPage() {
               </p>
               <p>
                 A Konzultációt kérek oldal segítségével küldd el nekem az azonosítót, a kipróbálni
-                kívánt termék nevével és azzal, hogy hány napra van szükséged a teszteléshez.
+                kívánt termék nevével, és azzal, hogy hány napra van szükséged a teszteléshez.
               </p>
               <p>A DEMO a teljes programot tartalmazza, csak a használati ideje korlátozott.</p>
             </div>
@@ -170,7 +170,7 @@ function TermekeimPage() {
             </a>
             <div className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
               <p>Egyedi termékek fejlesztését is vállalom.</p>
-              <p className="mt-3">Vedd fel velem a kapcsolatot a Konzultációt kérek oldal segítségével.</p>
+              <p>Vedd fel velem a kapcsolatot a Konzultációt kérek oldal segítségével.</p>
             </div>
             <Link
               to="/konzultacio"
