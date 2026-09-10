@@ -89,26 +89,35 @@ function EnglishProducts() {
             >
               View the products
             </Link>
-            <p className="mt-6 text-sm font-semibold leading-relaxed text-orange-600 dark:text-orange-500">
-              A DEMO can be requested for any product. Use the program below to find your machine's
-              identifier. Then send me{' '}
-              <a
-                href="/api/public/hwid-download"
-                onClick={(e) => { e.preventDefault(); handleHwidDownload("en"); }}
-                className="font-bold text-red-600 underline italic hover:text-red-600 focus:text-red-600 dark:text-red-500 dark:hover:text-red-500"
-              >
-                this identifier
-              </a>
-              , the name of the product you would like to try,
-              and how many days you need for testing via the Request a consultation page. DEMOs are
-              full versions; only the usage period is limited.
-            </p>
+            <div className="mt-6 text-sm font-semibold leading-relaxed text-orange-600 dark:text-orange-500">
+              <p>Would you like to try a DEMO version?</p>
+              <p className="mt-3">
+                To issue the DEMO license code I need the{' '}
+                <a
+                  href="/api/public/hwid-download"
+                  onClick={(e) => { e.preventDefault(); handleHwidDownload("en"); }}
+                  className="font-bold text-red-600 underline italic hover:text-red-600 focus:text-red-600 dark:text-red-500 dark:hover:text-red-500"
+                >
+                  unique machine identifier (HWID)
+                </a>{' '}
+                of the computer you want to run the program on.
+              </p>
+              <p className="mt-3">
+                Click the „Download machine identifier” button, run the downloaded small program,
+                then copy the identifier it shows.
+              </p>
+              <p className="mt-3">
+                Send me the identifier via the Request a consultation page, together with the name
+                of the product you would like to try and how many days you need for testing. The
+                DEMO contains the full program; only its usage period is limited.
+              </p>
+            </div>
             <a
               href="/api/public/hwid-download"
               onClick={(e) => { e.preventDefault(); handleHwidDownload("en"); }}
               className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
-              Download HWID
+              Download machine identifier
             </a>
             <p className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
               I also develop custom products. Get in touch with me through the consultation page.

@@ -138,26 +138,35 @@ function TermekeimPage() {
             >
               Termékek megtekintése
             </Link>
-            <p className="mt-6 text-sm font-semibold leading-relaxed text-orange-600 dark:text-orange-500">
-              Bármelyik termékből kérhető DEMO. Ehhez nézd meg az alábbi programmal a géped
-              azonosítóját. És{' '}
-              <a
-                href="/api/public/hwid-download"
-                onClick={(e) => { e.preventDefault(); handleHwidDownload("hu"); }}
-                className="font-bold text-red-600 underline italic hover:text-red-600 focus:text-red-600 dark:text-red-500 dark:hover:text-red-500"
-              >
-                ezt az azonosítót
-              </a>
-              , a kipróbálni vágyott termék nevét, valamint hogy
-              hány napra van szükséged a teszteléshez, írd meg nekem a Konzultációt kérek oldal
-              segítségével. A DEMO-k teljes verziók, csak a használati idő van lekorlátozva.
-            </p>
+            <div className="mt-6 text-sm font-semibold leading-relaxed text-orange-600 dark:text-orange-500">
+              <p>Szeretnél DEMO verziót kipróbálni?</p>
+              <p className="mt-3">
+                A DEMO licenc kód megadásához szükségem van annak a számítógépnek az{' '}
+                <a
+                  href="/api/public/hwid-download"
+                  onClick={(e) => { e.preventDefault(); handleHwidDownload("hu"); }}
+                  className="font-bold text-red-600 underline italic hover:text-red-600 focus:text-red-600 dark:text-red-500 dark:hover:text-red-500"
+                >
+                  egyedi gépazonosítójára (HWID)
+                </a>
+                , amelyen a programot használni szeretnéd.
+              </p>
+              <p className="mt-3">
+                Kattints a „Gépazonosító letöltése” gombra, indítsd el a letöltött kis programot,
+                majd másold ki a megjelenő azonosítót.
+              </p>
+              <p className="mt-3">
+                A Konzultációt kérek oldal segítségével küldd el nekem az azonosítót, a kipróbálni
+                kívánt termék nevével és azzal, hogy hány napra van szükséged a teszteléshez. A DEMO
+                a teljes programot tartalmazza, csak a használati ideje korlátozott.
+              </p>
+            </div>
             <a
               href="/api/public/hwid-download"
               onClick={(e) => { e.preventDefault(); handleHwidDownload("hu"); }}
               className="mt-4 inline-flex items-center rounded-md border border-input px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
             >
-              HWID letöltése
+              Gépazonosító letöltése
             </a>
             <p className="mt-6 text-sm font-semibold text-red-600 dark:text-red-500">
               Egyedi termékek fejlesztését is vállalom.

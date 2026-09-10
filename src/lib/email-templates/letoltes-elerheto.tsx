@@ -59,7 +59,9 @@ function buildMailto(name?: string, productName?: string, tierLabel?: string): s
     `Vásárló neve:  ${buyer}`,
     `Termék:        ${product}`,
     `Licenc csomag: ${tier}`,
-    `>> HWID: ${hwidBlank}  (KITÖLTENDŐ!) <<`,
+    `>>  Gépazonosító (HWID):  ${hwidBlank}  (KITÖLTENDŐ!) <<`,
+    '',
+    'Indítsd el a megvásárolt programot. A licencaktiváló ablakban megtalálod a „Gépazonosító (HWID)” értéket. Kattints a „HWID vágólapra másolás” gombra, majd illeszd be ide az emailbe, a fenti vonalak helyére ezt az azonosítót, és küldd el ezt a levelet.',
   ].join('\n')
   return `mailto:info@xlntbi.hu?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 }
