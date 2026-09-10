@@ -106,15 +106,38 @@ export async function sweepLivePromotionCodes(): Promise<CouponGuardResult> {
     activated = await ensureAllowedCodes(stripe, activeGrants(now));
 
     // Then sweep: anything active that is not currently allowed goes off.
-    const codes = await stripe.promotionCodes.list({ active: true, limit: 100 });
-    for (const promo of codes.data) {
-      checked += 1;
-      if (isAllowedLiveCode(promo.code, now) || adminCodes.has(promo.code.toUpperCase())) {
-        kept.push(promo.code);
-        continue;
+    let hasMore = true;
+    let startingAfter: string | undefined;
+    while (hasMore) {
+      const page = await stripe.promotionCodes.list({
+        active: true,
+        limit: 100,
+        ...(startingAfter ? { starting_after: startingAfter } : {}),
+      });
+      for (const promo of page.data) {
+        checked += 1;
+        if (isAllowedLiveCode(promo.code, now) || adminCodes.has(promo.code.toUpperCase())) {
+          kept.push(promo.code);
+          continue;
+        }
+        await stripe.promotionCodes.update(promo.id, { active: false });
+        deactivated.push(promo.code);
+
+        // Do not depend solely on webhook delivery: record the safety action
+        // immediately so the admin list and allowlist cannot drift.
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        await supabaseAdmin
+          .from("admin_coupons")
+          .update({
+            stripe_active: false,
+            disabled_at: now.toISOString(),
+            last_synced_at: now.toISOString(),
+          })
+          .eq("environment", "live")
+          .eq("stripe_promotion_code_id", promo.id);
       }
-      await stripe.promotionCodes.update(promo.id, { active: false });
-      deactivated.push(promo.code);
+      hasMore = page.has_more;
+      startingAfter = page.data[page.data.length - 1]?.id;
     }
 
     const { setSetting } = await import("./app-settings.server");

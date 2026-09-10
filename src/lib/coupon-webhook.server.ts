@@ -14,6 +14,7 @@
  */
 
 import type { StripeEnv } from "./stripe.server";
+import { resolvePromotionCoupon } from "./stripe-coupon";
 
 const COUPON_EVENT_PREFIXES = ["promotion_code.", "coupon."];
 
@@ -31,10 +32,10 @@ type PromoRow = {
   code: string;
   environment: StripeEnv;
   expires_at: string | null;
-  discount_type: "percent" | "amount";
-  percent_off: number | null;
-  amount_off: number | null;
-  currency: string;
+  discount_type?: "percent" | "amount";
+  percent_off?: number | null;
+  amount_off?: number | null;
+  currency?: string;
   max_redemptions: number | null;
   min_amount: number | null;
   stripe_coupon_id: string;
@@ -45,29 +46,39 @@ type PromoRow = {
   last_synced_at: string;
 };
 
-function rowFromPromo(promo: any, environment: StripeEnv): PromoRow | null {
+async function rowFromPromo(promo: any, environment: StripeEnv): Promise<PromoRow | null> {
   const code = typeof promo?.code === "string" ? promo.code.trim().toUpperCase() : "";
   if (!code) return null;
-  const coupon = promo.coupon ?? {};
+  const { createStripeClient } = await import("./stripe.server");
+  const stripe = createStripeClient(environment);
+  const coupon =
+    (await resolvePromotionCoupon(promo, async (id) => stripe.coupons.retrieve(id))) ?? {};
   const percentOff = typeof coupon.percent_off === "number" ? coupon.percent_off : null;
   const amountOff = typeof coupon.amount_off === "number" ? coupon.amount_off : null;
   const active = Boolean(promo.active) && coupon.valid !== false;
+
+  const couponFields =
+    percentOff != null || amountOff != null
+      ? {
+          discount_type: percentOff != null ? ("percent" as const) : ("amount" as const),
+          percent_off: percentOff,
+          amount_off: amountOff,
+          currency: String(coupon.currency ?? "huf").toLowerCase(),
+        }
+      : {};
 
   return {
     code,
     environment,
     expires_at: isoFromUnix(promo.expires_at),
-    discount_type: percentOff ? "percent" : "amount",
-    percent_off: percentOff,
-    amount_off: amountOff,
-    currency: String(coupon.currency ?? "huf").toLowerCase(),
+    ...couponFields,
     max_redemptions:
       typeof promo.max_redemptions === "number" ? promo.max_redemptions : null,
     min_amount:
       typeof promo.restrictions?.minimum_amount === "number"
         ? promo.restrictions.minimum_amount
         : null,
-    stripe_coupon_id: String(coupon.id ?? ""),
+    stripe_coupon_id: String(coupon.id ?? promo?.promotion?.coupon ?? ""),
     stripe_promotion_code_id: String(promo.id ?? ""),
     stripe_active: active,
     times_redeemed: typeof promo.times_redeemed === "number" ? promo.times_redeemed : 0,
@@ -83,7 +94,7 @@ async function db() {
 }
 
 async function upsertPromo(promo: any, environment: StripeEnv): Promise<string> {
-  const row = rowFromPromo(promo, environment);
+  const row = await rowFromPromo(promo, environment);
   if (!row) return "ignored_no_code";
   const client = await db();
 
@@ -99,6 +110,8 @@ async function upsertPromo(promo: any, environment: StripeEnv): Promise<string> 
     if (error) throw new Error(error.message);
     return "updated";
   }
+
+  if (!row.discount_type) return "ignored_missing_coupon_details";
 
   const { error } = await client
     .from("admin_coupons")
