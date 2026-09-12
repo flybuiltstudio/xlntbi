@@ -7,7 +7,7 @@ import {
 } from "@/lib/product-overrides";
 
 const TITLE_BASE = "XLNT Számviteli konszolidáló program | EXCELlent Business Intelligence";
-const DESCRIPTION_BASE = "Készíts konszolidált beszámolót cégcsoportodnak gyorsan és átláthatóan, magyar számviteli szabályok szerint.";
+const DESCRIPTION_BASE = "Konszolidált éves beszámoló Excelben, mérleggel, eredménykimutatással, cash flow-val, OBR-fájllal és beépített ellenőrzésekkel.";
 const H1 = "XLNT Számviteli konszolidáló";
 const CANONICAL = "https://xlntbi.hu/termek/szamviteli-konszolidalo";
 const SLUG = "szamviteli-konszolidalo";
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/termek/szamviteli-konszolidalo")({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
                   "name": "XLNT Számviteli konszolidáló",
-                  "description": "Készíts konszolidált beszámolót cégcsoportodnak gyorsan és átláthatóan, magyar számviteli szabályok szerint.",
+                  "description": "Konszolidált éves beszámoló Excelben, mérleggel, eredménykimutatással, cash flow-val, OBR-fájllal és beépített ellenőrzésekkel.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/szamviteli-konszolidalo",
