@@ -1904,7 +1904,7 @@ export const products: Product[] = [
     metaDescription:
       "Főkönyvi kivonatból gombnyomásra IFRS 18 szerinti mérleg, eredménykimutatás, OCI, saját tőke és cash flow – magyarul és angolul, OBR-beadvánnyal.",
     intro: [
-      "Főkönyvi kivonatból, gombnyomásra: mérleg, eredménykimutatás, egyéb átfogó jövedelem, saját tőke változásai és cash flow – az IFRS 18 szerinti szerkezetben, magyarul és angolul. A beadványhoz szükséges PDF-eket és az OBR .obr állományt is elkészíti.",
+      "Főkönyvi kivonatból, gombnyomásra: mérleg, eredménykimutatás, egyéb átfogó jövedelem, saját tőke változásai és cash flow – az IFRS 18 szerinti szerkezetben, magyarul és angolul. A beadványhoz szükséges PDF-eket és az OBR állományt is elkészíti.",
       "Az IASB 2024 áprilisában kiadta az IFRS 18 „Bemutatás és közzététel a pénzügyi kimutatásokban” standardot, amely leváltja az IAS 1-et. A standard a 2027. január 1-jén vagy azt követően kezdődő éves időszakokra kötelező, korábbi alkalmazás megengedett. Mivel az áttérés visszamenőleges, a 2026-os összehasonlító adatokat is az új szerkezetben kell bemutatni.",
     ],
     features: [
