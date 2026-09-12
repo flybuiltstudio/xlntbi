@@ -6,9 +6,9 @@ import {
   productTierPrice,
 } from "@/lib/product-overrides";
 
-const TITLE_BASE = "XLNT IFRS konszolidáló program | EXCELlent Business Intelligence";
+const TITLE_BASE = "XLNT IFRS Konszolidáló | EXCELlent Business Intelligence";
 const DESCRIPTION_BASE = "Konszolidált IFRS pénzügyi kimutatások Excelben, IFRS 18 részösszegekkel, goodwill-, deviza-, equity- és cash flow-számítással.";
-const H1 = "XLNT IFRS konszolidáló";
+const H1 = "XLNT IFRS Konszolidáló";
 const CANONICAL = "https://xlntbi.hu/termek/ifrs-konszolidalo";
 const SLUG = "ifrs-konszolidalo";
 // Admin-managed description overrides take precedence over the bundled text.
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/termek/ifrs-konszolidalo")({
         children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
-                  "name": "XLNT IFRS konszolidáló",
+                  "name": H1,
                   "description": DESCRIPTION(),
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
@@ -82,7 +82,7 @@ export const Route = createFileRoute("/termek/ifrs-konszolidalo")({
                             {
                                       "@type": "ListItem",
                                       "position": 3,
-                                      "name": "XLNT IFRS konszolidáló",
+                                      "name": H1,
                                       "item": "https://xlntbi.hu/termek/ifrs-konszolidalo"
                             }
                   ]

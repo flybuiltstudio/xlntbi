@@ -941,7 +941,7 @@ export const products: Product[] = [
       "Szerkeszthető kétnyelvű séma: a magyar és angol megnevezések szabadon módosíthatók, a kimutatások nyelve pedig a beállításoknál választható.",
       "OBR e-beszámoló-fájl: a pénzügyi helyzet és az átfogó jövedelem kimutatásának PDF-exportja, majd a kötelező mellékletekkel összeállított, validált .obr fájl.",
     ],
-    why: "Egyszeri megvásárlás, időbeli korlát nélkül. A program a bevitt adatokból számol. A séma az IAS 1.54 minimumára és az IFRS 18 kategóriáira épül – mivel az IFRS-ben nincs kötelező formátum, ez szabadon szerkeszthető keret. Makrós Excel-munkafüzet: Windows + asztali Excel 2010 vagy újabb szükséges, engedélyezett makrókkal.",
+    why: "A program a bevitt adatokból számol. Az egyedi beszámolók IFRS-re való átdolgozása, a közzétételi megjegyzések, az IFRS 12 közzétételei és az MPM-bemutatás nem részei a munkafüzetnek. A szakmai megítélést igénylő döntéseket egyeztesd könyvvizsgálóval. A séma az IAS 1.54 minimumára és az IFRS 18 kategóriáira épül, szabadon szerkeszthető keret, nem hivatalos minta. A makrós munkafüzethez Windows és asztali Excel 2010 vagy újabb szükséges; a webes és a Mac Excel a VBA-gombokat nem támogatja teljeskörűen.",
     steps: [
       {
         title: "1. Alapbeállítások",
