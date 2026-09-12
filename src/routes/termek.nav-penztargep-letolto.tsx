@@ -14,7 +14,7 @@ const SLUG = "nav-penztargep-letolto";
 // Admin-managed description overrides take precedence over the bundled text.
 const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
 const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
-const OG_IMAGE = "https://xlntbi.hu/og/close-up-busy-businesswoman.jpg";
+const OG_IMAGE = "https://xlntbi.hu/og/nav-penztargep-letolto-photo.jpg";
 
 export const Route = createFileRoute("/termek/nav-penztargep-letolto")({
   head: () => ({
@@ -46,7 +46,7 @@ export const Route = createFileRoute("/termek/nav-penztargep-letolto")({
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/nav-penztargep-letolto",
-                  "image": "https://xlntbi.hu/og/close-up-busy-businesswoman.jpg",
+                  "image": OG_IMAGE,
                   "inLanguage": "hu",
                   "brand": {
                             "@type": "Brand",

@@ -14,7 +14,7 @@ const SLUG = "cegkivonat-excel-konverter";
 // Admin-managed description overrides take precedence over the bundled text.
 const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
 const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
-const OG_IMAGE = "https://xlntbi.hu/og/termekek.jpg";
+const OG_IMAGE = "https://xlntbi.hu/og/cegkivonat-excel-konverter-photo.jpg";
 
 export const Route = createFileRoute("/termek/cegkivonat-excel-konverter")({
   head: () => ({
@@ -46,7 +46,7 @@ export const Route = createFileRoute("/termek/cegkivonat-excel-konverter")({
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/cegkivonat-excel-konverter",
-                  "image": "https://xlntbi.hu/og/termekek.jpg",
+                  "image": OG_IMAGE,
                   "inLanguage": "hu",
                   "brand": {
                             "@type": "Brand",
