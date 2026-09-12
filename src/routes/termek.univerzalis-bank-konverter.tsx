@@ -14,7 +14,7 @@ const SLUG = "univerzalis-bank-konverter";
 // Admin-managed description overrides take precedence over the bundled text.
 const TITLE = () => productMetaTitle(SLUG, TITLE_BASE);
 const DESCRIPTION = () => productMetaDescription(SLUG, DESCRIPTION_BASE);
-const OG_IMAGE = "https://xlntbi.hu/og/online-kalkulator.jpg";
+const OG_IMAGE = "https://xlntbi.hu/og/univerzalis-bankkonverter-photo.jpg";
 
 export const Route = createFileRoute("/termek/univerzalis-bank-konverter")({
   head: () => ({
@@ -46,7 +46,7 @@ export const Route = createFileRoute("/termek/univerzalis-bank-konverter")({
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/univerzalis-bank-konverter",
-                  "image": "https://xlntbi.hu/og/online-kalkulator.jpg",
+                  "image": OG_IMAGE,
                   "inLanguage": "hu",
                   "brand": {
                             "@type": "Brand",

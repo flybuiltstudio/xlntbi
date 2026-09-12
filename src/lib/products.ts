@@ -1,5 +1,5 @@
 import szamlaImg from "@/assets/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
-import penztargepImg from "@/assets/close-up-busy-businesswoman.jpg";
+import penztargepImg from "@/assets/nav-penztargep-letolto-photo.jpg";
 import accountImg from "@/assets/account-assets-audit-bank-bookkeeping-finance-concept.jpg";
 import businessImg from "@/assets/135731.jpg";
 import controllingImg from "@/assets/controlling.jpg";
@@ -28,6 +28,9 @@ import vallalkozasMeretBesoroloImg from "@/assets/vallalkozas-meret-besorolo.jpg
 import kulcsSoftImportImg from "@/assets/kulcs-soft-kulfoldi-import.jpg";
 import novitaxImportImg from "@/assets/novitax-kulfoldi-import.jpg";
 import ifrsPenzugyiKimutatasokImg from "@/assets/ifrs-penzugyi-kimutatasok.jpg";
+import beszamoloImg from "@/assets/beszamolo-photo.jpg";
+import cegkivonatExcelImg from "@/assets/cegkivonat-excel-konverter-photo.jpg";
+import univerzalisBankkonverterImg from "@/assets/univerzalis-bankkonverter-photo.jpg";
 
 import { hasXlntPrefix, withXlntPrefix } from "@/lib/product-name";
 
@@ -485,7 +488,7 @@ export const products: Product[] = [
     priceId: "beszamolo_egy_ceg",
     price: 24900,
     currency: "HUF",
-    image: closeupImg,
+    image: beszamoloImg,
     metaTitle: "XLNT Beszámoló | EXCELlent",
     metaDescription:
       "Éves beszámoló, kiegészítő melléklet, OBR-fájl és adóbevallások — egyetlen Excel-fájlban.",
@@ -532,7 +535,7 @@ export const products: Product[] = [
     priceId: "cegkivonat_excel_konverter_orokos_licenc",
     price: 12900,
     currency: "HUF",
-    image: termekekImg,
+    image: cegkivonatExcelImg,
     metaTitle: "XLNT Cégkivonat → Excel konverter | EXCELlent",
     metaDescription:
       "Magyar cégkivonatok és NAV adatlapok – egy kattintással, tiszta Excel táblázatban.",
@@ -569,7 +572,7 @@ export const products: Product[] = [
     priceId: "havi_riport_egyszeri_licenc",
     price: 49900,
     currency: "HUF",
-    image: calcImg,
+    image: univerzalisBankkonverterImg,
     metaTitle: "XLNT Havi Riport | EXCELlent",
     metaDescription: "Teljes havi pénzügyi riportcsomag könyvelőknek – egyetlen Excelben.",
     intro: [

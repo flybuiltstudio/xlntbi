@@ -7,3 +7,4 @@
 - [kész] KONITESZT90 éles állapotának ellenőrzése és regressziós tesztek
 - [kész] XLNT IFRS Konszolidáló: programfájl, magyar és angol leírás frissítése a csatolmányokból
 - [kész] XLNT IFRS Beszámoló: fotószerű generált termékkép a magyar és angol oldalon, frissített közösségi megosztási képpel
+- [kész] NAV Pénztárgép letöltő, Univerzális bankkivonat-konverter, Beszámoló és Cégkivonat-konverter: új fotószerű képek HU/EN oldalakon
