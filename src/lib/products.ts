@@ -921,11 +921,12 @@ export const products: Product[] = [
     image: ifrsImg,
     metaTitle: "XLNT IFRS Konszolidáló | EXCELlent",
     metaDescription:
-      "Konszolidált IFRS pénzügyi kimutatások Excelben – IFRS 18 részösszegekkel, goodwill- és devizaszámítással, magyarul és angolul.",
+      "Konszolidált IFRS pénzügyi kimutatások Excelben, IFRS 18 részösszegekkel, goodwill-, deviza-, equity- és cash flow-számítással.",
     intro: [
       "Összevont (konszolidált) IFRS pénzügyi kimutatások Excelben – az IFRS 18 kötelező részösszegeivel, magyarul és angolul. IFRS 10 · IFRS 3 · IAS 28 · IAS 21 · IAS 36 · IAS 7 · IFRS 18.",
       "A munkafüzet az IFRS 18 (Presentation and Disclosure in Financial Statements) szerinti bemutatásra épül. Az IFRS 18 a 2027. január 1-jén vagy azt követően kezdődő időszakokra hatályos (korábbi alkalmazás megengedett), felváltja az IAS 1-et, és az EU 2026 februárjában befogadta. Mivel az áttérés visszamenőleges, a 2026-os összehasonlító adatokat is az új szerkezetben kell bemutatni.",
       "Az eredménykimutatás az IFRS 18 öt kategóriájában és a két kötelező részösszeggel áll elő: üzemi eredmény, valamint finanszírozás és nyereségadók előtti eredmény.",
+      "A konszolidációs korrekciók egyetlen tartozik–követel naplóba kerülnek, amely automatikusan vezeti át az értékeket a munkatáblába és a konszolidált kimutatásokba.",
     ],
     features: [
       "IFRS 18 – Öt kategória, két részösszeg: az eredménykimutatás működési, befektetési, finanszírozási, nyereségadó és megszűnt tevékenység kategóriákban, üzemi eredmény és finanszírozás előtti eredmény részösszegekkel; az eredmény anyavállalatra és NCI-re bontva.",
@@ -936,8 +937,11 @@ export const products: Product[] = [
       "IAS 7 – Cash flow (IFRS 18 után): indirekt módszer az üzemi eredményből kiindulva, „működési cash flow a nyereségadók előtt” részösszeggel; az osztalékfizetés mindig finanszírozási.",
       "IAS 1 – Saját tőke változása: tőkeelemenkénti levezetés nyitótól záróig, a nem ellenőrző részesedésekkel – IFRS szerint kötelező kimutatás.",
       "Ellenőrzés – Nyolc egyezőségi próba: mérlegfőösszeg, napló T=K, tőkekimutatás, cash flow, eredménymegbontás, goodwill-egyeztetés – egy helyen, a kezdőlapon is.",
+      "IAS 12 – Halasztott adó: a konszolidációs korrekciók átmeneti különbözeteire jutó halasztott adó kezelése.",
+      "Szerkeszthető kétnyelvű séma: a magyar és angol megnevezések szabadon módosíthatók, a kimutatások nyelve pedig a beállításoknál választható.",
+      "OBR e-beszámoló-fájl: a pénzügyi helyzet és az átfogó jövedelem kimutatásának PDF-exportja, majd a kötelező mellékletekkel összeállított, validált .obr fájl.",
     ],
-    why: "Egyszeri megvásárlás, időbeli korlát nélkül. A program a bevitt adatokból számol. A séma az IAS 1.54 minimumára és az IFRS 18 kategóriáira épül – mivel az IFRS-ben nincs kötelező formátum, ez szabadon szerkeszthető keret. Makrós Excel-munkafüzet: Windows + asztali Excel 2010 vagy újabb szükséges, engedélyezett makrókkal.",
+    why: "A program a bevitt adatokból számol. Az egyedi beszámolók IFRS-re való átdolgozása, a közzétételi megjegyzések, az IFRS 12 közzétételei és az MPM-bemutatás nem részei a munkafüzetnek. A szakmai megítélést igénylő döntéseket egyeztesd könyvvizsgálóval. A séma az IAS 1.54 minimumára és az IFRS 18 kategóriáira épül, szabadon szerkeszthető keret, nem hivatalos minta. A makrós munkafüzethez Windows és asztali Excel 2010 vagy újabb szükséges; a webes és a Mac Excel a VBA-gombokat nem támogatja teljeskörűen.",
     steps: [
       {
         title: "1. Alapbeállítások",

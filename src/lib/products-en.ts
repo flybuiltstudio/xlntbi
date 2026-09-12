@@ -37,7 +37,7 @@ export const PRODUCT_SUMMARY_EN: Record<string, string> = {
   "szamviteli-konszolidalo":
     "Consolidated annual financial statements in Excel under the Hungarian Accounting Act — step by step, with built-in reconciliation checks, in Hungarian and English. The workbook includes both balance-sheet formats, income statements by nature and by function, a cash flow statement, journal-based consolidation, multicurrency conversion, editable bilingual labels and an OBR e-reporting file generator.",
   "ifrs-konszolidalo":
-    "Consolidated IFRS financial statements in Excel – with the mandatory subtotals of IFRS 18, in both Hungarian and English (IFRS 10, IFRS 3, IAS 28, IAS 21, IAS 36, IAS 7, IFRS 18). The workbook is built on presentation under IFRS 18 (Presentation and Disclosure in Financial Statements), effective from periods beginning on or after 1 January 2027, replacing IAS 1.",
+    "Consolidated IFRS financial statements in Excel, in Hungarian and English. The workbook guides the full process through 20 structured steps, covering the consolidation scope, IFRS 3 acquisition accounting and goodwill, intragroup eliminations, IAS 28 equity accounting, IAS 12 deferred tax, IAS 21 currency translation, IFRS 18 presentation, the statement of changes in equity, IAS 7 cash flow, reconciliation checks and generation of the OBR e-reporting file.",
   "kulcs-soft-kulfoldi-szamla-import":
     "If you regularly book incoming invoices from the EU or third countries in the Kulcs-Soft accounting system, this tool can simplify your work: you record the data in Excel, and one click produces a ready importable CSV file.",
   "novitax-kulfoldi-szamla-import":
