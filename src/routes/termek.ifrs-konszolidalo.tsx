@@ -7,7 +7,7 @@ import {
 } from "@/lib/product-overrides";
 
 const TITLE_BASE = "XLNT IFRS konszolidáló program | EXCELlent Business Intelligence";
-const DESCRIPTION_BASE = "Állítsd össze cégcsoportod IFRS szerinti konszolidált beszámolóját gyorsan, egységes Excel alapú munkafolyamattal.";
+const DESCRIPTION_BASE = "Konszolidált IFRS pénzügyi kimutatások Excelben, IFRS 18 részösszegekkel, goodwill-, deviza-, equity- és cash flow-számítással.";
 const H1 = "XLNT IFRS konszolidáló";
 const CANONICAL = "https://xlntbi.hu/termek/ifrs-konszolidalo";
 const SLUG = "ifrs-konszolidalo";
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/termek/ifrs-konszolidalo")({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
                   "name": "XLNT IFRS konszolidáló",
-                  "description": "Állítsd össze cégcsoportod IFRS szerinti konszolidált beszámolóját gyorsan, egységes Excel alapú munkafolyamattal.",
+                  "description": DESCRIPTION(),
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/ifrs-konszolidalo",
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/termek/ifrs-konszolidalo")({
                   },
                   "offers": {
                             "@type": "Offer",
-                            "price": "149900",
+                            "price": String(productTierPrice(SLUG, null, 149900)),
                             "priceCurrency": "HUF",
                             "availability": "https://schema.org/InStock",
                             "url": "https://xlntbi.hu/termek/ifrs-konszolidalo"
