@@ -572,7 +572,7 @@ export const products: Product[] = [
     priceId: "havi_riport_egyszeri_licenc",
     price: 49900,
     currency: "HUF",
-    image: univerzalisBankkonverterImg,
+    image: calcImg,
     metaTitle: "XLNT Havi Riport | EXCELlent",
     metaDescription: "Teljes havi pénzügyi riportcsomag könyvelőknek – egyetlen Excelben.",
     intro: [
@@ -1536,7 +1536,7 @@ export const products: Product[] = [
     priceId: "univerzalis_bank_konverter_egyszeri_licenc_1_pc",
     price: 19900,
     currency: "HUF",
-    image: calcImg,
+    image: univerzalisBankkonverterImg,
     metaTitle: "XLNT Univerzális bankkivonat-konverter | EXCELlent",
     metaDescription: "Automatikus bankkivonat-konverter könyvelőknek és vállalkozásoknak.",
     intro: [
