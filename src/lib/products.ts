@@ -1893,7 +1893,7 @@ export const products: Product[] = [
   {
     slug: "ifrs-penzugyi-kimutatasok",
     priceId: "ifrs_fs_egy_tarsasag",
-    name: "XLNT IFRS Financial Statements",
+    name: "XLNT IFRS Beszámoló",
     tagline:
       "Kétnyelvű IFRS 18 pénzügyi kimutatás-sablon Excelben – mérleg, eredménykimutatás, OCI, saját tőke és cash flow, OBR-beadvánnyal",
     status: "available",
