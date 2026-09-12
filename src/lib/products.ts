@@ -1900,7 +1900,7 @@ export const products: Product[] = [
     price: 149000,
     currency: "HUF",
     image: ifrsPenzugyiKimutatasokImg,
-    metaTitle: "XLNT IFRS Financial Statements – kétnyelvű IFRS 18 sablon Excelben | XLNTBI",
+    metaTitle: "XLNT IFRS Beszámoló – kétnyelvű IFRS 18 sablon Excelben | XLNTBI",
     metaDescription:
       "Főkönyvi kivonatból gombnyomásra IFRS 18 szerinti mérleg, eredménykimutatás, OCI, saját tőke és cash flow – magyarul és angolul, OBR-beadvánnyal.",
     intro: [

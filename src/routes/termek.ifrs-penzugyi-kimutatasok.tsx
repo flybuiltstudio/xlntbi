@@ -6,10 +6,10 @@ import {
   productTierPrice,
 } from "@/lib/product-overrides";
 
-const TITLE_BASE = "XLNT IFRS Financial Statements – kétnyelvű IFRS 18 sablon Excelben | XLNTBI";
+const TITLE_BASE = "XLNT IFRS Beszámoló – kétnyelvű IFRS 18 sablon Excelben | XLNTBI";
 const DESCRIPTION_BASE =
   "Főkönyvi kivonatból gombnyomásra IFRS 18 szerinti mérleg, eredménykimutatás, OCI, saját tőke és cash flow – magyarul és angolul, OBR-beadvánnyal.";
-const H1 = "XLNT IFRS Financial Statements";
+const H1 = "XLNT IFRS Beszámoló";
 const CANONICAL = "https://xlntbi.hu/termek/ifrs-penzugyi-kimutatasok";
 const SLUG = "ifrs-penzugyi-kimutatasok";
 // Admin-managed description overrides take precedence over the bundled text.
