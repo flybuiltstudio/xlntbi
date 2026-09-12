@@ -782,22 +782,24 @@ export const products: Product[] = [
     image: controllingImg,
     metaTitle: "XLNT Számviteli Konszolidáló | EXCELlent",
     metaDescription:
-      "Összevont (konszolidált) éves beszámoló Excelben, a magyar számviteli törvény szerint — lépésről lépésre, ellenőrzött egyezőségekkel.",
+      "Konszolidált éves beszámoló Excelben, mérleggel, eredménykimutatással, cash flow-val, OBR-fájllal és beépített ellenőrzésekkel.",
     intro: [
       "Összevont (konszolidált) éves beszámoló Excelben — lépésről lépésre, ellenőrzött egyezőségekkel, magyarul és angolul.",
       "Eszközök = Források ✓ · Napló: Tartozik = Követel ✓ · Eredmény = Mérleg szerinti eredmény ✓ · Cash flow = Pénzeszközök változása ✓.",
-      "A konszolidálás nehéz része a szerkezet és az egyezőség. Ezt veszi le a válláról a program: a mérleg, az eredménykimutatás és a cash flow a törvényi mellékletek szerint, készen áll; a korrekciók egyetlen naplóba kerülnek, ahonnan a beszámoló automatikusan összeáll, beépített egyezőség-ellenőrzésekkel.",
+      "A magyar számviteli törvény szerinti mérleg, eredménykimutatás és cash flow szerkezete készen áll. A korrekciók egyetlen naplóba kerülnek, ahonnan a konszolidált munkatábla és a beszámoló automatikusan összeáll.",
     ],
     features: [
       "Törvényi séma: Teljes mérleg, eredmény, cash flow — Mérleg „A” és „B” változat, összköltség és forgalmi költség eljárású eredménykimutatás, cash flow a 7. sz. melléklet szerint – az 1., 2., 3., 6. és 7. melléklet alapján.",
       "Motor: Napló-alapú konszolidáció — A korrekciók egy naplóban, tartozik/követel bontásban. A munkatábla soronként számol: egyedi összeg + kvóta × árfolyam + korrekció = konszolidált érték.",
       "Lépések: Konszolidációs generátorok — Tőkekonszolidáció, adósság-, közbenső eredmény-, bevétel/ráfordítás-konszolidálás, equity (társult) és adókülönbözet – gombnyomásra naplózva.",
-      "Deviza: Több pénznem kezelése — Cégenkénti záró- és átlagárfolyam, automatikus átszámítás; az árfolyam-különbözet a saját tőkében jelenik meg (Szt. 22.§).",
+      "Deviza: Több pénznem kezelése — Cégenkénti záró- és átlagárfolyam, automatikus átszámítás; az árfolyamkülönbözetet a program az eredménykimutatásban, önálló soron mutatja ki a Szt. 123. § szerint.",
       "Évváltás: Előző évi adatok átvétele — A tárgyévi konszolidált adatok átfordíthatók előző évvé; a kimutatások tárgyév/előző év bontásban állnak.",
       "Ellenőrzés: Beépített egyezőségi próbák — Eszközök = források, napló T = K, eredmény = mérleg szerinti eredmény, cash flow = pénzeszköz-változás – egy helyen, a kezdőlapon is.",
       "Kétnyelvű: Magyar / angol — Egy szerkeszthető szótár hajtja az egész munkafüzetet; a nyelv váltása minden feliratot – a gombokét is – átállít.",
       "Márka: Saját arculat — A könyvelőiroda logója minden fő lapra kerülhet, a saját weboldalára mutató hivatkozással.",
-      "OBR: e-beszámoló-fájl generátor — Egy gombnyomással elkészíti a hivatalos OBR-portálra feltölthető .obr fájlt a kész konszolidált mérlegből és eredménykimutatásból, a kötelező mellékletekkel (PDF) becsomagolva.",
+      "OBR: e-beszámoló-fájl generátor — Egy gombnyomással elkészíti a hivatalos OBR-portálra feltölthető .obr fájlt; támogatja a mérleg „A” és „B”, valamint az összköltség és forgalmi költség eljárás mind a négy kombinációját.",
+      "Jogszabály: Devizás átszámítás — A külföldi leányvállalatok átszámításából eredő különbözetet a program önálló eredménysoron mutatja ki a Szt. 123. § szerint.",
+      "Védelem: Jelszavas lapvédelem — A kitöltendő cellák szerkeszthetők maradnak, miközben a képletek és a munkafüzet szerkezete zárolható.",
     ],
     why: "A konszolidálás nehéz része a szerkezet és az egyezőség. Ezt veszi le a válláról a program: a mérleg, az eredménykimutatás és a cash flow a törvényi mellékletek szerint, készen áll; a korrekciók egyetlen naplóba kerülnek, ahonnan a beszámoló automatikusan összeáll, beépített egyezőség-ellenőrzésekkel.",
     steps: [
@@ -903,7 +905,7 @@ export const products: Product[] = [
       },
     ],
     download: {
-      fileName: "XLNT_Konszolidalo_v1.5.xlsm",
+      fileName: "XLNT_Konszolidalo_v2.0.xlsm",
       storagePath: "szamviteli-konszolidalo/XLNT_Konszolidalo_v1.5.xlsm",
     },
   },
