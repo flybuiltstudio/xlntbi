@@ -76,6 +76,8 @@ export const PRODUCT_SUMMARY_EN: Record<string, string> = {
     "The Business Size Classification Excel calculator helps you see at a glance the likely SME category of a business based on headcount, net revenue and balance sheet total. The workbook handles the year-end and the first-day-of-the-year perspective on separate sheets, so it is a practical starting point for reviewing the innovation contribution, certain corporate tax reliefs and SME status. Yellow input cells, automatic HUF thresholds from the MNB EUR/HUF rate, and Hungarian and English background notes are included.",
   "kapcsoltsag-ellenorzo":
     "Assessing related-party status is often difficult because the Corporate Tax Act, the Accounting Act and the SME Act use different definitions and thresholds for the same ownership or control situation. The Related-Party Checker uses the data you enter to show, separately, whether businesses are related or affiliated according to the logic of each of the three laws.",
+  "ifrs-penzugyi-kimutatasok":
+    "A bilingual IFRS 18 financial statements template in Excel: from a single trial-balance import, one click produces the balance sheet, income statement, other comprehensive income, changes in equity and cash flow in the IFRS 18 structure, in Hungarian and English. IFRS 18 (Presentation and Disclosures in Financial Statements) is mandatory for periods beginning on or after 1 January 2027 and replaces IAS 1; because the transition is retrospective, 2026 comparatives already need the new layout. Ten built-in reconciliation checks, management-defined performance measures (MPMs), and a one-click OBR submission package with PDF exports are included. One-off price, not a subscription.",
 };
 
 /**

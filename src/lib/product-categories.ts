@@ -82,6 +82,7 @@ export const productCategories: ProductCategory[] = [
       "kapcsoltsag-ellenorzo",
       "vallalkozas-meret-besorolo",
       "beszamolo",
+      "ifrs-penzugyi-kimutatasok",
       "szamviteli-konszolidalo",
       "ifrs-konszolidalo",
     ],

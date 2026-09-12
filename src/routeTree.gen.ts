@@ -97,6 +97,7 @@ import { Route as TermekDevizabankRouteImport } from './routes/termek.devizabank
 import { Route as TermekHaviRiportRouteImport } from './routes/termek.havi-riport'
 import { Route as TermekHaviRiportEnRouteImport } from './routes/termek.havi-riport-en'
 import { Route as TermekIfrsKonszolidaloRouteImport } from './routes/termek.ifrs-konszolidalo'
+import { Route as TermekIfrsPenzugyiKimutatasokRouteImport } from './routes/termek.ifrs-penzugyi-kimutatasok'
 import { Route as TermekIngatlanalapMnbJelentesElokeszitoRouteImport } from './routes/termek.ingatlanalap-mnb-jelentes-elokeszito'
 import { Route as TermekKamatlekerdezoPotlekszamitoRouteImport } from './routes/termek.kamatlekerdezo-potlekszamito'
 import { Route as TermekKapcsoltsagEllenorzoRouteImport } from './routes/termek.kapcsoltsag-ellenorzo'
@@ -588,6 +589,12 @@ const TermekIfrsKonszolidaloRoute = TermekIfrsKonszolidaloRouteImport.update({
   path: '/termek/ifrs-konszolidalo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermekIfrsPenzugyiKimutatasokRoute =
+  TermekIfrsPenzugyiKimutatasokRouteImport.update({
+    id: '/termek/ifrs-penzugyi-kimutatasok',
+    path: '/termek/ifrs-penzugyi-kimutatasok',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const TermekIngatlanalapMnbJelentesElokeszitoRoute =
   TermekIngatlanalapMnbJelentesElokeszitoRouteImport.update({
     id: '/termek/ingatlanalap-mnb-jelentes-elokeszito',
@@ -897,6 +904,7 @@ export interface FileRoutesByFullPath {
   '/termek/havi-riport': typeof TermekHaviRiportRoute
   '/termek/havi-riport-en': typeof TermekHaviRiportEnRoute
   '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
+  '/termek/ifrs-penzugyi-kimutatasok': typeof TermekIfrsPenzugyiKimutatasokRoute
   '/termek/ingatlanalap-mnb-jelentes-elokeszito': typeof TermekIngatlanalapMnbJelentesElokeszitoRoute
   '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
   '/termek/kapcsoltsag-ellenorzo': typeof TermekKapcsoltsagEllenorzoRoute
@@ -1024,6 +1032,7 @@ export interface FileRoutesByTo {
   '/termek/havi-riport': typeof TermekHaviRiportRoute
   '/termek/havi-riport-en': typeof TermekHaviRiportEnRoute
   '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
+  '/termek/ifrs-penzugyi-kimutatasok': typeof TermekIfrsPenzugyiKimutatasokRoute
   '/termek/ingatlanalap-mnb-jelentes-elokeszito': typeof TermekIngatlanalapMnbJelentesElokeszitoRoute
   '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
   '/termek/kapcsoltsag-ellenorzo': typeof TermekKapcsoltsagEllenorzoRoute
@@ -1154,6 +1163,7 @@ export interface FileRoutesById {
   '/termek/havi-riport': typeof TermekHaviRiportRoute
   '/termek/havi-riport-en': typeof TermekHaviRiportEnRoute
   '/termek/ifrs-konszolidalo': typeof TermekIfrsKonszolidaloRoute
+  '/termek/ifrs-penzugyi-kimutatasok': typeof TermekIfrsPenzugyiKimutatasokRoute
   '/termek/ingatlanalap-mnb-jelentes-elokeszito': typeof TermekIngatlanalapMnbJelentesElokeszitoRoute
   '/termek/kamatlekerdezo-potlekszamito': typeof TermekKamatlekerdezoPotlekszamitoRoute
   '/termek/kapcsoltsag-ellenorzo': typeof TermekKapcsoltsagEllenorzoRoute
@@ -1285,6 +1295,7 @@ export interface FileRouteTypes {
     | '/termek/havi-riport'
     | '/termek/havi-riport-en'
     | '/termek/ifrs-konszolidalo'
+    | '/termek/ifrs-penzugyi-kimutatasok'
     | '/termek/ingatlanalap-mnb-jelentes-elokeszito'
     | '/termek/kamatlekerdezo-potlekszamito'
     | '/termek/kapcsoltsag-ellenorzo'
@@ -1412,6 +1423,7 @@ export interface FileRouteTypes {
     | '/termek/havi-riport'
     | '/termek/havi-riport-en'
     | '/termek/ifrs-konszolidalo'
+    | '/termek/ifrs-penzugyi-kimutatasok'
     | '/termek/ingatlanalap-mnb-jelentes-elokeszito'
     | '/termek/kamatlekerdezo-potlekszamito'
     | '/termek/kapcsoltsag-ellenorzo'
@@ -1541,6 +1553,7 @@ export interface FileRouteTypes {
     | '/termek/havi-riport'
     | '/termek/havi-riport-en'
     | '/termek/ifrs-konszolidalo'
+    | '/termek/ifrs-penzugyi-kimutatasok'
     | '/termek/ingatlanalap-mnb-jelentes-elokeszito'
     | '/termek/kamatlekerdezo-potlekszamito'
     | '/termek/kapcsoltsag-ellenorzo'
@@ -1637,6 +1650,7 @@ export interface RootRouteChildren {
   TermekHaviRiportRoute: typeof TermekHaviRiportRoute
   TermekHaviRiportEnRoute: typeof TermekHaviRiportEnRoute
   TermekIfrsKonszolidaloRoute: typeof TermekIfrsKonszolidaloRoute
+  TermekIfrsPenzugyiKimutatasokRoute: typeof TermekIfrsPenzugyiKimutatasokRoute
   TermekIngatlanalapMnbJelentesElokeszitoRoute: typeof TermekIngatlanalapMnbJelentesElokeszitoRoute
   TermekKamatlekerdezoPotlekszamitoRoute: typeof TermekKamatlekerdezoPotlekszamitoRoute
   TermekKapcsoltsagEllenorzoRoute: typeof TermekKapcsoltsagEllenorzoRoute
@@ -2291,6 +2305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermekIfrsKonszolidaloRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/termek/ifrs-penzugyi-kimutatasok': {
+      id: '/termek/ifrs-penzugyi-kimutatasok'
+      path: '/termek/ifrs-penzugyi-kimutatasok'
+      fullPath: '/termek/ifrs-penzugyi-kimutatasok'
+      preLoaderRoute: typeof TermekIfrsPenzugyiKimutatasokRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/termek/ingatlanalap-mnb-jelentes-elokeszito': {
       id: '/termek/ingatlanalap-mnb-jelentes-elokeszito'
       path: '/termek/ingatlanalap-mnb-jelentes-elokeszito'
@@ -2719,6 +2740,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermekHaviRiportRoute: TermekHaviRiportRoute,
   TermekHaviRiportEnRoute: TermekHaviRiportEnRoute,
   TermekIfrsKonszolidaloRoute: TermekIfrsKonszolidaloRoute,
+  TermekIfrsPenzugyiKimutatasokRoute: TermekIfrsPenzugyiKimutatasokRoute,
   TermekIngatlanalapMnbJelentesElokeszitoRoute:
     TermekIngatlanalapMnbJelentesElokeszitoRoute,
   TermekKamatlekerdezoPotlekszamitoRoute:
