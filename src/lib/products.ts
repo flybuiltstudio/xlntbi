@@ -27,6 +27,7 @@ import kapcsoltsagEllenorzoImg from "@/assets/kapcsoltsag-ellenorzo.jpg";
 import vallalkozasMeretBesoroloImg from "@/assets/vallalkozas-meret-besorolo.jpg";
 import kulcsSoftImportImg from "@/assets/kulcs-soft-kulfoldi-import.jpg";
 import novitaxImportImg from "@/assets/novitax-kulfoldi-import.jpg";
+import ifrsPenzugyiKimutatasokImg from "@/assets/ifrs-penzugyi-kimutatasok.jpg";
 
 import { hasXlntPrefix, withXlntPrefix } from "@/lib/product-name";
 
@@ -1887,6 +1888,73 @@ export const products: Product[] = [
     download: {
       fileName: "Vallalkozas_meret_besorolo.zip",
       storagePath: "vallalkozas-meret-besorolo/Vallalkozas_meret_besorolo.zip",
+    },
+  },
+  {
+    slug: "ifrs-penzugyi-kimutatasok",
+    priceId: "ifrs_fs_egy_tarsasag",
+    name: "XLNT IFRS Financial Statements",
+    tagline:
+      "Kétnyelvű IFRS 18 pénzügyi kimutatás-sablon Excelben – mérleg, eredménykimutatás, OCI, saját tőke és cash flow, OBR-beadvánnyal",
+    status: "available",
+    price: 149000,
+    currency: "HUF",
+    image: ifrsPenzugyiKimutatasokImg,
+    metaTitle: "XLNT IFRS Financial Statements – kétnyelvű IFRS 18 sablon Excelben | XLNTBI",
+    metaDescription:
+      "Főkönyvi kivonatból gombnyomásra IFRS 18 szerinti mérleg, eredménykimutatás, OCI, saját tőke és cash flow – magyarul és angolul, OBR-beadvánnyal.",
+    intro: [
+      "Főkönyvi kivonatból, gombnyomásra: mérleg, eredménykimutatás, egyéb átfogó jövedelem, saját tőke változásai és cash flow – az IFRS 18 szerinti szerkezetben, magyarul és angolul. A beadványhoz szükséges PDF-eket és az OBR .obr állományt is elkészíti.",
+      "Az IASB 2024 áprilisában kiadta az IFRS 18 „Bemutatás és közzététel a pénzügyi kimutatásokban” standardot, amely leváltja az IAS 1-et. A standard a 2027. január 1-jén vagy azt követően kezdődő éves időszakokra kötelező, korábbi alkalmazás megengedett. Mivel az áttérés visszamenőleges, a 2026-os összehasonlító adatokat is az új szerkezetben kell bemutatni.",
+    ],
+    features: [
+      "Egy adatbevitel, öt kimutatás: a főkönyvi kivonat három oszlopban (tárgyév, előző év, nyitó), a számlatükörhöz rendelt sorkód és IFRS 18 kategória alapján a kimutatások automatikusan elkészülnek.",
+      "IFRS 18 szerkezet: az eredménykimutatás az öt kategóriával (működési, befektetési, finanszírozási, nyereségadók, megszűnt tevékenységek) és a három kötelező részösszeggel.",
+      "Összköltség és forgalmi költség eljárás között egy legördülővel váltható; opcionális EBITDA-szerű részösszeg.",
+      "Cash flow az IFRS 18-cal módosított IAS 7 szerint, indirekt módszerrel, a működési eredményből kiindulva.",
+      "Vezetés által meghatározott teljesítménymutatók (MPM-ek) az IFRS 18 szabályai szerint, adó- és NCI-hatással.",
+      "OBR-beadvány: fedőlap adatai, a mérleg és eredménykimutatás PDF-exportja, az öt csatolmány bekérése és a 20 MB-os méretkorlát ellenőrzése; .obr állomány készítése.",
+      "Tíz beépített egyezőségi ellenőrzés: mérlegegyezés, T=K, hozzárendelés teljessége, záró pénzeszköz és egyebek.",
+      "Kétnyelvű (magyar/angol) szótár 427 kulccsal, szabadon átírható megnevezésekkel.",
+    ],
+    why: "Egyszeri díj, nem előfizetés: a megvásárolt verzió korlátlan ideig használható. Rendszerkövetelmény: Windows és asztali Excel 2010 vagy újabb, engedélyezett makrókkal (a négy .bas modult Alt+F11 importálással kell betölteni; a webes és Mac Excel nem támogatja a VBA-gombokat). A program a bevitt adatokból számol, egyedi beszámolóra készült: az IFRS-re átdolgozást (IFRS 1, 9, 15, 16, IAS 12), a konszolidációt és az EPS-számítást nem végzi.",
+    steps: [
+      {
+        title: "1. Beállítások",
+        text: "Nyelv, beszámolási időszak, pénznem, kerekítés és IFRS 18 bemutatási választások egyetlen lapon.",
+      },
+      {
+        title: "2. Számlatükör és főkönyvi kivonat",
+        text: "Sorkód- és IFRS 18 kategóriahozzárendelés a számlákhoz, majd a háromoszlopos kivonat bevitele.",
+      },
+      {
+        title: "3. Kimutatások",
+        text: "Mérleg, eredménykimutatás, OCI, saját tőke változásai és cash flow automatikusan, a beépített ellenőrzésekkel.",
+      },
+      {
+        title: "4. Beadvány",
+        text: "A mérleg és eredménykimutatás PDF-exportja és az OBR .obr állomány elkészítése gombnyomásra.",
+      },
+    ],
+    tiers: [
+      {
+        id: "egy_tarsasag",
+        label: "Egygépes / egy társaság",
+        price: 149000,
+        note: "Egyszeri díj, egy gépen, egy társasághoz.",
+        priceId: "ifrs_fs_egy_tarsasag",
+      },
+      {
+        id: "irodai_korlatlan",
+        label: "Irodai / korlátlan társaság",
+        price: 349000,
+        note: "Egyszeri díj, korlátlan számú társasághoz.",
+        priceId: "ifrs_fs_irodai_korlatlan",
+      },
+    ],
+    download: {
+      fileName: "XLNT_IFRS_FS_v1_1.xlsm",
+      storagePath: "ifrs-penzugyi-kimutatasok/XLNT_IFRS_FS_v1_1.xlsm",
     },
   },
 ];
