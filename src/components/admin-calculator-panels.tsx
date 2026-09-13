@@ -451,17 +451,19 @@ export function CalculatorUploadPanel() {
 }
 
 /** Kalkulátorok sorrendje: fel/le gombokkal átrendezhető egyedi kalkulátorlista. */
+type OrderRow = Awaited<ReturnType<typeof adminListCalculatorOrder>>["rows"][number];
+
 export function CalculatorOrderPanel() {
-  const list = useServerFn(adminListCustomCalculators);
+  const list = useServerFn(adminListCalculatorOrder);
   const saveOrder = useServerFn(adminSaveCalculatorOrder);
 
-  const [rows, setRows] = useState<AdminRow[]>([]);
+  const [rows, setRows] = useState<OrderRow[]>([]);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    void (async () => setRows((await list()).calculators))().catch(() => setRows([]));
+    void (async () => setRows((await list()).rows))().catch(() => setRows([]));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -482,10 +484,10 @@ export function CalculatorOrderPanel() {
     setError(null);
     setMessage(null);
     try {
-      const order = rows.map((row, i) => ({ slug: row.slug, position: i }));
-      const result = await saveOrder({ data: { order } });
+      const ids = rows.map((row) => row.id);
+      const result = await saveOrder({ data: { ids } });
       if (!result.ok) throw new Error(result.error);
-      setMessage("A kalkulátorok sorrendje mentve.");
+      setMessage("A kalkulátorok sorrendje mentve (magyar és angol oldalon egyaránt).");
       await refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Hiba történt.");
@@ -494,7 +496,7 @@ export function CalculatorOrderPanel() {
   }
 
   async function refresh() {
-    setRows((await list()).calculators);
+    setRows((await list()).rows);
   }
 
   return (
