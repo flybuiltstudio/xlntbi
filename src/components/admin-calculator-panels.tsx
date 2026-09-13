@@ -449,3 +449,123 @@ export function CalculatorUploadPanel() {
     </section>
   );
 }
+
+/** Kalkulátorok sorrendje: fel/le gombokkal átrendezhető egyedi kalkulátorlista. */
+export function CalculatorOrderPanel() {
+  const list = useServerFn(adminListCustomCalculators);
+  const saveOrder = useServerFn(adminSaveCalculatorOrder);
+
+  const [rows, setRows] = useState<AdminRow[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    void (async () => setRows((await list()).calculators))().catch(() => setRows([]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function move(index: number, delta: number) {
+    const target = index + delta;
+    if (target < 0 || target >= rows.length || busy) return;
+    const next = [...rows];
+    const [item] = next.splice(index, 1);
+    next.splice(target, 0, item!);
+    setRows(next);
+    setMessage(null);
+    setError(null);
+  }
+
+  async function save() {
+    if (busy) return;
+    setBusy(true);
+    setError(null);
+    setMessage(null);
+    try {
+      const order = rows.map((row, i) => ({ slug: row.slug, position: i }));
+      const result = await saveOrder({ data: { order } });
+      if (!result.ok) throw new Error(result.error);
+      setMessage("A kalkulátorok sorrendje mentve.");
+      await refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(false);
+  }
+
+  async function refresh() {
+    setRows((await list()).calculators);
+  }
+
+  return (
+    <section
+      id="kalkulator-sorrend"
+      className="mt-10 scroll-mt-24 rounded-xl border border-border bg-secondary/40 p-6"
+    >
+      <h2 className="text-xl font-bold text-foreground">Kalkulátorok sorrendje</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        A feltöltött egyedi kalkulátorok sorrendje a Kalkulátorok oldalon. A fel/le
+        gombokkal rendezd át, majd mentsd el.
+      </p>
+
+      {rows.length === 0 ? (
+        <p className="mt-4 text-sm text-muted-foreground">
+          Még nincs feltöltött egyedi kalkulátor.
+        </p>
+      ) : (
+        <ol className="mt-4 space-y-2">
+          {rows.map((row, index) => (
+            <li
+              key={row.slug}
+              className="flex items-center justify-between gap-3 rounded-md border border-border bg-background px-4 py-3 text-sm"
+            >
+              <span className="flex items-center gap-3">
+                <span className="text-muted-foreground tabular-nums">{index + 1}.</span>
+                <strong className="text-foreground">{row.nameHu}</strong>
+                <span className="text-muted-foreground">/ {row.nameEn}</span>
+              </span>
+              <span className="flex gap-1">
+                <button
+                  type="button"
+                  disabled={busy || index === 0}
+                  onClick={() => void move(index, -1)}
+                  className="rounded-md border border-border px-2 py-1 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-40"
+                  aria-label="Fel"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  disabled={busy || index === rows.length - 1}
+                  onClick={() => void move(index, 1)}
+                  className="rounded-md border border-border px-2 py-1 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-40"
+                  aria-label="Le"
+                >
+                  ↓
+                </button>
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      {rows.length > 0 ? (
+        <div className="mt-5">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => void save()}
+            className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+          >
+            {busy ? "Mentés…" : "Sorrend mentése"}
+          </button>
+        </div>
+      ) : null}
+
+      {error ? <p className="mt-3 text-sm font-semibold text-destructive">{error}</p> : null}
+      {message ? <p className="mt-3 text-sm text-foreground">{message}</p> : null}
+
+      <BackToTop />
+    </section>
+  );
+}
