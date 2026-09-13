@@ -550,6 +550,7 @@ export function NewProductPanel() {
           </ul>
         </div>
       ) : null}
+      <BackToTop />
     </section>
   );
 }
@@ -657,6 +658,7 @@ export function CategoryPanel() {
           />
         ))}
       </ul>
+      <BackToTop />
     </section>
   );
 }
