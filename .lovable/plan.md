@@ -33,6 +33,8 @@ Az admin `/admin/friss-verzio` oldala áttekinthető, oldalon belül navigálhat
 - A terméknév minden ponton egységesen normalizálódik: ha az admin már beírta az „XLNT” előtagot, nem kerül elé még egyszer; kis- és nagybetűs, valamint többszörös szóközös változatnál is pontosan egy „XLNT” marad.
 - Ez a név kerül az oldalra, az adatbázisba, az angol változathoz, az URL-képzéshez és a Stripe-termékhez is.
 - A „Termékkép…” mező felirata és fájlválasztója a másik két fájlmezővel azonos függőleges helyzetbe kerül; a hosszú súgószöveg nem tolja le a vezérlőt.
+- A „Termék új verziója” blokk legördülő menüjében a termékek ABC sorrendben jelennek meg (a magyar ábécé szabályai szerint).
+- A Felhasználók oldal leírásában a régi „Friss verzió” hivatkozás az új „Termékek és Kalkulátorok” névre frissül.
 
 ## 4. Új kalkulátor feltöltése
 
