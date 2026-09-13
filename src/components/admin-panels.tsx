@@ -1,6 +1,7 @@
 import { useServerFn } from "@tanstack/react-start";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Eye, EyeOff, KeyRound } from "lucide-react";
+import { BackToTop } from "@/components/admin-toc";
 
 import {
   adminApproveTransfer,
@@ -1895,7 +1896,7 @@ export function ProductVersionPanel() {
   }
 
   return (
-    <section className="mt-10 rounded-xl border border-border bg-card p-6">
+    <section id="termek-verzio" className="mt-10 scroll-mt-24 rounded-xl border border-border bg-card p-6">
       <h2 className="text-xl font-bold text-foreground">Termék új verziója</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         A kiválasztott <strong>termék</strong> határozza meg, melyik fájl
@@ -1989,6 +1990,7 @@ export function ProductVersionPanel() {
           </p>
         ) : null}
       </div>
+      <BackToTop />
     </section>
   );
 }
