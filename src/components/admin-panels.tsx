@@ -2112,7 +2112,7 @@ export function CalculatorVersionPanel() {
   const pairKey = englishCounterpart(calcKey);
 
   return (
-    <section className="mt-10 rounded-xl border border-border bg-card p-6">
+    <section id="kalkulator-frissites" className="mt-10 scroll-mt-24 rounded-xl border border-border bg-card p-6">
       <h2 className="text-xl font-bold text-foreground">Kalkulátor frissítése</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         A magyar és az angol kalkulátorok külön elemek: a magyar feltöltés nem
@@ -2268,6 +2268,7 @@ export function CalculatorVersionPanel() {
           </p>
         )}
       </div>
+      <BackToTop />
     </section>
   );
 }
@@ -2575,7 +2576,7 @@ export function ProductOrderPanel() {
 
 
   return (
-    <section className="mt-12 rounded-xl border border-border bg-card p-6">
+    <section id="sorrend" className="mt-12 scroll-mt-24 rounded-xl border border-border bg-card p-6">
       <h2 className="text-xl font-bold text-foreground">Termékek sorrendje és kategóriája</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         A kategóriákat a kártya fejlécénél megfogva, húzással sorba rendezheted — ez a sorrend
@@ -2757,6 +2758,7 @@ export function ProductOrderPanel() {
           })}
         </div>
       )}
+      <BackToTop />
     </section>
   );
 }
