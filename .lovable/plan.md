@@ -40,7 +40,6 @@ Az új blokk a „Kalkulátor frissítése” előtt jelenik meg, és az alábbi
 
 - magyar kalkulátornév,
 - magyar HTML-fájl,
-- magyar URL-részlet automatikus képzéssel,
 - sorrend a Kalkulátorok oldalon.
 
 Feltöltéskor:
