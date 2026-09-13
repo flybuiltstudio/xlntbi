@@ -56,6 +56,7 @@ function AdminNewVersionPage() {
         <ProductOrderPanel />
         <CalculatorUploadPanel />
         <CalculatorVersionPanel />
+        <CalculatorOrderPanel />
       </div>
     </>
   );
