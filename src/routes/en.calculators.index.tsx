@@ -48,6 +48,7 @@ const items = [
 ] as const;
 
 function EnglishCalculators() {
+  const { cards } = Route.useLoaderData();
   return (
     <>
       <PageHero>
@@ -76,6 +77,22 @@ function EnglishCalculators() {
                 className="h-56 w-full object-cover"
               />
               <h2 className="p-6 text-xl font-semibold text-card-foreground">{item.label}</h2>
+            </Link>
+          ))}
+          {cards.map((card) => (
+            <Link
+              key={card.slug}
+              to="/en/calculators/$slug"
+              params={{ slug: card.slug }}
+              className="group overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary"
+            >
+              <img
+                src={customCalculatorImageUrl(card.slug, "en")}
+                alt={`${card.name} calculator`}
+                loading="lazy"
+                className="h-56 w-full object-cover"
+              />
+              <h2 className="p-6 text-xl font-semibold text-card-foreground">{card.name}</h2>
             </Link>
           ))}
         </div>
