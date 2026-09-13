@@ -40,13 +40,13 @@ Az új blokk a „Kalkulátor frissítése” előtt jelenik meg, és az alábbi
 
 - magyar kalkulátornév,
 - magyar HTML-fájl,
-- magyar URL-részlet automatikus képzéssel,
 - sorrend a Kalkulátorok oldalon.
 
 Feltöltéskor:
 
 - a HTML méretét és típusát a böngésző és a szerver is ellenőrzi;
 - az AI elkészíti a kalkulátor angol változatát, az angol nevet és a keresőkhöz szükséges magyar–angol rövid adatokat;
+- az URL-részlet a kalkulátor nevéből automatikusan képződik;
 - mentés előtt szerkeszthető előnézet jelenik meg a magyar és angol névvel, URL-lel és szövegekkel;
 - az admin javíthat az előnézeten, majd egyetlen közzététellel létrejön mindkét nyelvi oldal;
 - a magyar oldal a `/kalkulatorok/<slug>`, az angol a `/en/calculators/<slug>` címen lesz elérhető;
