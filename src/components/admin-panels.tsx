@@ -1907,10 +1907,10 @@ export function ProductVersionPanel() {
       </p>
 
       <div className="mt-6 flex flex-col gap-4">
-        <label className="block text-sm font-medium text-foreground">
-          Termék
+        <div className="flex items-center gap-4">
+          <label className="shrink-0 text-sm font-medium text-foreground">Termék</label>
           <select
-            className={`${selectClass} mt-4 block w-full max-w-md`}
+            className={`${selectClass} block w-full max-w-md`}
             value={slug}
             disabled={busy}
             onChange={(e) => {
@@ -1929,7 +1929,7 @@ export function ProductVersionPanel() {
               );
             })}
           </select>
-        </label>
+        </div>
 
         {selected ? (
           <div className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm">
