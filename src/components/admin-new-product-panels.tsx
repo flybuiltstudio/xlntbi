@@ -14,6 +14,7 @@ import {
 import type { CategoryAdminRow } from "@/lib/custom-categories.server";
 import type { CustomProductInfo } from "@/lib/custom-products.server";
 import { formatPrice } from "@/lib/products";
+import { BackToTop } from "@/components/admin-toc";
 
 type Draft = {
   intro: string[];
@@ -307,7 +308,7 @@ export function NewProductPanel() {
   };
 
   return (
-    <section className="mt-10 rounded-xl border border-border bg-secondary/40 p-6">
+    <section id="uj-termek" className="mt-10 scroll-mt-24 rounded-xl border border-border bg-secondary/40 p-6">
       <h2 className="text-xl font-bold text-foreground">Új termék feltöltése</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         A termékfájl (xlsm, exe, zip vagy pdf) és a Word leírás feltöltése után az AI
@@ -611,7 +612,7 @@ export function CategoryPanel() {
   };
 
   return (
-    <section className="mt-10 rounded-xl border border-border bg-secondary/40 p-6">
+    <section id="kategoriak" className="mt-10 scroll-mt-24 rounded-xl border border-border bg-secondary/40 p-6">
       <h2 className="text-xl font-bold text-foreground">Termékkategóriák</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Új kategória létrehozása és a meglévők átnevezése. Átnevezésnél az URL-kulcs nem
