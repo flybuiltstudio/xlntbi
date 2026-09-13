@@ -5,7 +5,7 @@ import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
 import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
 import { customCalculatorImageUrl } from "@/lib/custom-calculators";
-import { getCustomCalculatorCards } from "@/lib/custom-calculators.functions";
+import { getCalculatorCards } from "@/lib/custom-calculators.functions";
 
 
 const TITLE = "Kalkulátorok: adó, bér és számla dátum számítás | EXCELlent Business Intelligence";
@@ -14,7 +14,7 @@ const CANONICAL = "https://xlntbi.hu/kalkulatorok";
 const OG_IMAGE = "https://xlntbi.hu/og/online-kalkulator.jpg";
 
 export const Route = createFileRoute("/kalkulatorok/")({
-  loader: () => getCustomCalculatorCards({ data: { lang: "hu" } }),
+  loader: () => getCalculatorCards({ data: { lang: "hu" } }),
   head: () => ({
     meta: [
       { title: TITLE },
