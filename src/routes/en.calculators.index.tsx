@@ -14,38 +14,18 @@ const DESCRIPTION =
   "Free online calculators for invoice dates, salary, personal income tax and flat-rate taxation, based on the rules in force in Hungary.";
 
 export const Route = createFileRoute("/en/calculators/")({
-  loader: () => getCustomCalculatorCards({ data: { lang: "en" } }),
+  loader: () => getCalculatorCards({ data: { lang: "en" } }),
   head: () =>
     buildHead({ huPath: "/kalkulatorok", lang: "en", title: TITLE, description: DESCRIPTION }),
   component: EnglishCalculators,
 });
 
-const items = [
-  {
-    to: "/en/calculators/invoice-dates",
-    label: "Invoice dates",
-    image: invoiceDatesImg,
-    alt: "Invoice dates calculator",
-  },
-  {
-    to: "/en/calculators/salary-test",
-    label: "Salary test",
-    image: salaryTestImg,
-    alt: "Salary test calculator",
-  },
-  {
-    to: "/en/calculators/flat-rate-tax",
-    label: "Flat-rate tax",
-    image: flatRateTaxImg,
-    alt: "Flat-rate tax calculator",
-  },
-  {
-    to: "/en/calculators/income-tax",
-    label: "Personal income tax",
-    image: incomeTaxImg,
-    alt: "Personal income tax calculator",
-  },
-] as const;
+const staticImages: Record<string, string> = {
+  "szamla-datumok": invoiceDatesImg,
+  berteszt: salaryTestImg,
+  atalanyado: flatRateTaxImg,
+  jovedelemado: incomeTaxImg,
+};
 
 function EnglishCalculators() {
   const { cards } = Route.useLoaderData();
@@ -57,15 +37,19 @@ function EnglishCalculators() {
 
       <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
         <div className="mt-2 grid gap-6 sm:grid-cols-2">
-          {items.map((item) => (
+          {cards.map((card) => (
             <Link
-              key={item.to}
-              to={item.to}
+              key={card.id}
+              to={card.path}
               className="group overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary"
             >
               <img
-                src={item.image}
-                alt={item.alt}
+                src={
+                  card.kind === "static"
+                    ? staticImages[card.key]
+                    : customCalculatorImageUrl(card.key, "en")
+                }
+                alt={`${card.name} calculator`}
                 loading="lazy"
                 onError={(e) => {
                   // Missing asset: fall back to a neutral placeholder instead of a broken image.
@@ -74,22 +58,6 @@ function EnglishCalculators() {
                   img.dataset['fallback'] = "1";
                   img.src = fallbackImg;
                 }}
-                className="h-56 w-full object-cover"
-              />
-              <h2 className="p-6 text-xl font-semibold text-card-foreground">{item.label}</h2>
-            </Link>
-          ))}
-          {cards.map((card) => (
-            <Link
-              key={card.slug}
-              to="/en/calculators/$slug"
-              params={{ slug: card.slug }}
-              className="group overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary"
-            >
-              <img
-                src={customCalculatorImageUrl(card.slug, "en")}
-                alt={`${card.name} calculator`}
-                loading="lazy"
                 className="h-56 w-full object-cover"
               />
               <h2 className="p-6 text-xl font-semibold text-card-foreground">{card.name}</h2>
