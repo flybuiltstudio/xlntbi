@@ -290,7 +290,7 @@ function AdminLayout() {
                 className={tabBase}
                 activeProps={{ className: `${tabBase} ${tabActive}` }}
               >
-                Friss verzió
+                Termékek és Kalkulátorok
               </Link>
               <div className="relative" ref={checksRef}>
                 <button

@@ -1261,7 +1261,7 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
         <p>
           <strong>Admin:</strong> teljes hozzáférés az admin felülethez –
           Megrendelések, Kuponok (létrehozás és módosítás), Statisztika,
-          Friss verzió feltöltés, Ellenőrzések (Számlázás, Billingo ellenőrzés,
+          Termékek és Kalkulátorok, Ellenőrzések (Számlázás, Billingo ellenőrzés,
           Katalógus ellenőrzés, Rendelési audit, Fizetés teszt), Hírlevél
           (feliratkozók, exportok és levélküldés), Felhasználók kezelése és
           Jelszó módosítása.
@@ -1269,8 +1269,9 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
         <p className="mt-2">
           <strong>Felhasználó:</strong> be tud jelentkezni az admin felületre,
           ahol a Statisztika oldalt, a Kuponok listát (csak megtekintés) és a
-          Jelszó módosítása oldalt éri el – a Megrendeléseket, a Friss verziót,
-          az Ellenőrzéseket, a Hírlevelet és a Felhasználók kezelését nem.
+          Jelszó módosítása oldalt éri el – a Megrendeléseket, a Termékek és
+          Kalkulátorok oldalt, az Ellenőrzéseket, a Hírlevelet és a Felhasználók
+          kezelését nem.
         </p>
         <p className="mt-2">
           <strong>Szuper admin</strong> (xllentac@gmail.com): a rendszer
@@ -1810,7 +1811,11 @@ export function ProductVersionPanel() {
   const recordVersion = useServerFn(adminRecordProductFileVersion);
 
   const downloadable = useMemo(
-    () => products.filter((p) => p.status === "available" && p.download),
+    () =>
+      products
+        .filter((p) => p.status === "available" && p.download)
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name, "hu")),
     [],
   );
   const [slug, setSlug] = useState(downloadable[0]?.slug ?? "");
