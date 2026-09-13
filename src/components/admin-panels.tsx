@@ -2123,10 +2123,10 @@ export function CalculatorVersionPanel() {
       </p>
 
       <div className="mt-6 flex flex-col gap-4">
-        <label className="block text-sm font-medium text-foreground">
-          Kalkulátor
+        <div className="flex items-center gap-4">
+          <label className="shrink-0 text-sm font-medium text-foreground">Kalkulátor</label>
           <select
-            className={`${selectClass} mt-4 block w-full max-w-md`}
+            className={`${selectClass} block w-full max-w-md`}
             value={calcKey}
             disabled={busy || enBusy}
             onChange={(e) => {
@@ -2153,7 +2153,7 @@ export function CalculatorVersionPanel() {
               ))}
             </optgroup>
           </select>
-        </label>
+        </div>
 
         {selectedIsHu && pairKey ? (
           <p className="text-xs text-muted-foreground">
