@@ -18,6 +18,7 @@ const productLinks = [
 const calculatorLinks = [
   ["uj-kalkulator", "Új kalkulátor feltöltése"],
   ["kalkulator-frissites", "Kalkulátor frissítése"],
+  ["kalkulator-sorrend", "Kalkulátorok sorrendje"],
 ] as const;
 
 const buttonClass =
