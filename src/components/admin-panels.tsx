@@ -1907,10 +1907,10 @@ export function ProductVersionPanel() {
       </p>
 
       <div className="mt-6 flex flex-col gap-4">
-        <label className="text-sm font-medium text-foreground">
+        <label className="block text-sm font-medium text-foreground">
           Termék
           <select
-            className={`${selectClass} mt-3 w-full max-w-md`}
+            className={`${selectClass} mt-3 block w-full max-w-md`}
             value={slug}
             disabled={busy}
             onChange={(e) => {
