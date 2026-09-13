@@ -75,20 +75,25 @@ export const adminDeleteCustomCalculator = createServerFn({ method: "POST" })
     return deleteCustomCalculator(data.slug);
   });
 
+export const adminListCalculatorOrder = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { listCalculatorOrderRows } = await import("./custom-calculators.server");
+    return { rows: await listCalculatorOrderRows() };
+  });
+
 export const adminSaveCalculatorOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
-    z
-      .object({
-        order: z.array(z.object({ slug: z.string().min(1), position: z.number().int().min(0) })),
-      })
-      .parse(data),
+    z.object({ ids: z.array(z.string().min(1)) }).parse(data),
   )
   .handler(async ({ context, data }) => {
     const { gate } = await import("./admin-gate.server");
     await gate(context as any);
     const { saveCalculatorOrder } = await import("./custom-calculators.server");
-    return saveCalculatorOrder(data.order);
+    return saveCalculatorOrder(data.ids, context.userId);
   });
 
 /* ----------------------------------------------------------------- public */
@@ -101,6 +106,14 @@ export const getCustomCalculatorCards = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const { listCustomCalculatorCards } = await import("./custom-calculators.server");
     return { cards: await listCustomCalculatorCards(data.lang) };
+  });
+
+/** Full ordered calculator card list (static + custom) for the index pages. */
+export const getCalculatorCards = createServerFn({ method: "GET" })
+  .inputValidator((data) => z.object({ lang: z.enum(["hu", "en"]) }).parse(data))
+  .handler(async ({ data }) => {
+    const { listCalculatorCards } = await import("./custom-calculators.server");
+    return { cards: await listCalculatorCards(data.lang) };
   });
 
 /** Public full read of one custom calculator page (SSR). */

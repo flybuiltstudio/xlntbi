@@ -9,6 +9,15 @@ import {
   slugifyCalculator,
   type CustomCalculatorDraft,
 } from "./custom-calculators";
+import {
+  CALCULATOR_ORDER_KEY,
+  STATIC_CALCULATORS,
+  applyCalculatorOrder,
+  customCalculatorId,
+  staticCalculatorId,
+  type CalculatorCard,
+  type CalculatorOrderRow,
+} from "./calculators/order";
 
 const BUCKET = "termekfajlok";
 const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
@@ -336,17 +345,83 @@ export async function deleteCustomCalculator(
   return { ok: true };
 }
 
-/** Persists a new position order for the custom calculators. */
+/** Full ordered calculator list (static + custom) for one language. */
+export async function listCalculatorCards(lang: "hu" | "en"): Promise<CalculatorCard[]> {
+  const custom = await listCustomCalculatorCards(lang);
+  const items: CalculatorCard[] = [
+    ...STATIC_CALCULATORS.map((entry) => ({
+      id: staticCalculatorId(entry.key),
+      kind: "static" as const,
+      key: entry.key,
+      name: lang === "en" ? entry.nameEn : entry.nameHu,
+      path: lang === "en" ? entry.enPath : entry.huPath,
+    })),
+    ...custom.map((row) => ({
+      id: customCalculatorId(row.slug),
+      kind: "custom" as const,
+      key: row.slug,
+      name: row.name,
+      path:
+        lang === "en" ? `/en/calculators/${row.slug}` : `/kalkulatorok/${row.slug}`,
+    })),
+  ];
+  const { getSetting } = await import("./app-settings.server");
+  const saved = await getSetting(CALCULATOR_ORDER_KEY);
+  const ids: string[] = Array.isArray(saved["ids"]) ? saved["ids"] : [];
+  return applyCalculatorOrder(items, ids);
+}
+
+/** Admin view of the ordered calculator list, with both language names. */
+export async function listCalculatorOrderRows(): Promise<CalculatorOrderRow[]> {
+  const custom = await listCustomCalculators();
+  const items: CalculatorOrderRow[] = [
+    ...STATIC_CALCULATORS.map((entry) => ({
+      id: staticCalculatorId(entry.key),
+      kind: "static" as const,
+      key: entry.key,
+      nameHu: entry.nameHu,
+      nameEn: entry.nameEn,
+    })),
+    ...custom.map((row) => ({
+      id: customCalculatorId(row.slug),
+      kind: "custom" as const,
+      key: row.slug,
+      nameHu: row.nameHu,
+      nameEn: row.nameEn,
+    })),
+  ];
+  const { getSetting } = await import("./app-settings.server");
+  const saved = await getSetting(CALCULATOR_ORDER_KEY);
+  const ids: string[] = Array.isArray(saved["ids"]) ? saved["ids"] : [];
+  return applyCalculatorOrder(items, ids);
+}
+
+/**
+ * Persists the calculator order (static + custom in one list). Custom rows
+ * also get their relative `position` refreshed so any legacy read stays sane.
+ */
 export async function saveCalculatorOrder(
-  order: { slug: string; position: number }[],
+  ids: string[],
+  updatedBy?: string,
 ): Promise<{ ok: boolean; error?: string }> {
+  const { setSetting } = await import("./app-settings.server");
+  try {
+    await setSetting(CALCULATOR_ORDER_KEY, { ids }, updatedBy);
+  } catch {
+    return { ok: false, error: "A sorrend mentése nem sikerült." };
+  }
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  for (const item of order) {
+  let position = 0;
+  for (const id of ids) {
+    if (!id.startsWith("custom:")) continue;
+    const slug = id.slice("custom:".length);
     const { error } = await supabaseAdmin
       .from("custom_calculators")
-      .update({ position: item.position })
-      .eq("slug", item.slug);
+      .update({ position })
+      .eq("slug", slug);
     if (error) return { ok: false, error: "A sorrend mentése nem sikerült." };
+    position += 1;
   }
   return { ok: true };
 }
+

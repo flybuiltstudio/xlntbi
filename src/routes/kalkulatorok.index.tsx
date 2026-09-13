@@ -5,7 +5,7 @@ import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
 import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
 import { customCalculatorImageUrl } from "@/lib/custom-calculators";
-import { getCustomCalculatorCards } from "@/lib/custom-calculators.functions";
+import { getCalculatorCards } from "@/lib/custom-calculators.functions";
 
 
 const TITLE = "Kalkulátorok: adó, bér és számla dátum számítás | EXCELlent Business Intelligence";
@@ -14,7 +14,7 @@ const CANONICAL = "https://xlntbi.hu/kalkulatorok";
 const OG_IMAGE = "https://xlntbi.hu/og/online-kalkulator.jpg";
 
 export const Route = createFileRoute("/kalkulatorok/")({
-  loader: () => getCustomCalculatorCards({ data: { lang: "hu" } }),
+  loader: () => getCalculatorCards({ data: { lang: "hu" } }),
   head: () => ({
     meta: [
       { title: TITLE },
@@ -63,32 +63,12 @@ export const Route = createFileRoute("/kalkulatorok/")({
   component: KalkulatorokPage,
 });
 
-const items = [
-  {
-    to: "/kalkulatorok/szamla-datumok",
-    label: "Számla dátumok",
-    image: szamlaDatumokImg,
-    alt: "Számla dátumok kalkulátor",
-  },
-  {
-    to: "/kalkulatorok/berteszt",
-    label: "Bérteszt",
-    image: bertesztImg,
-    alt: "Bérteszt kalkulátor",
-  },
-  {
-    to: "/kalkulatorok/atalanyado",
-    label: "Átalányadó",
-    image: atalanyadoImg,
-    alt: "Átalányadó kalkulátor",
-  },
-  {
-    to: "/kalkulatorok/jovedelemado",
-    label: "Jövedelemadó",
-    image: jovedelemadoImg,
-    alt: "Jövedelemadó kalkulátor",
-  },
-] as const;
+const staticImages: Record<string, string> = {
+  "szamla-datumok": szamlaDatumokImg,
+  berteszt: bertesztImg,
+  atalanyado: atalanyadoImg,
+  jovedelemado: jovedelemadoImg,
+};
 
 function KalkulatorokPage() {
   const { cards } = Route.useLoaderData();
@@ -102,37 +82,25 @@ function KalkulatorokPage() {
 
       <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
         <div className="mt-2 grid gap-6 sm:grid-cols-2">
-        {items.map((item) => (
-          <Link
-            key={item.to}
-            to={item.to}
-            className="group overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary"
-          >
-            <img
-              src={item.image}
-              alt={item.alt}
-              loading="lazy"
-              className="h-56 w-full object-cover"
-            />
-            <h2 className="p-6 text-xl font-semibold text-card-foreground">{item.label}</h2>
-          </Link>
-        ))}
-        {cards.map((card) => (
-          <Link
-            key={card.slug}
-            to="/kalkulatorok/$slug"
-            params={{ slug: card.slug }}
-            className="group overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary"
-          >
-            <img
-              src={customCalculatorImageUrl(card.slug, "hu")}
-              alt={`${card.name} kalkulátor`}
-              loading="lazy"
-              className="h-56 w-full object-cover"
-            />
-            <h2 className="p-6 text-xl font-semibold text-card-foreground">{card.name}</h2>
-          </Link>
-        ))}
+          {cards.map((card) => (
+            <Link
+              key={card.id}
+              to={card.path}
+              className="group overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary"
+            >
+              <img
+                src={
+                  card.kind === "static"
+                    ? staticImages[card.key]
+                    : customCalculatorImageUrl(card.key, "hu")
+                }
+                alt={`${card.name} kalkulátor`}
+                loading="lazy"
+                className="h-56 w-full object-cover"
+              />
+              <h2 className="p-6 text-xl font-semibold text-card-foreground">{card.name}</h2>
+            </Link>
+          ))}
         </div>
       </div>
     </>

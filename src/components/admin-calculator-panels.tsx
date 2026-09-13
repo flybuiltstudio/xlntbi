@@ -9,6 +9,7 @@ import {
 } from "@/lib/custom-calculators";
 import {
   adminDeleteCustomCalculator,
+  adminListCalculatorOrder,
   adminListCustomCalculators,
   adminPrepareCustomCalculator,
   adminPublishCustomCalculator,
@@ -451,17 +452,19 @@ export function CalculatorUploadPanel() {
 }
 
 /** Kalkulátorok sorrendje: fel/le gombokkal átrendezhető egyedi kalkulátorlista. */
+type OrderRow = Awaited<ReturnType<typeof adminListCalculatorOrder>>["rows"][number];
+
 export function CalculatorOrderPanel() {
-  const list = useServerFn(adminListCustomCalculators);
+  const list = useServerFn(adminListCalculatorOrder);
   const saveOrder = useServerFn(adminSaveCalculatorOrder);
 
-  const [rows, setRows] = useState<AdminRow[]>([]);
+  const [rows, setRows] = useState<OrderRow[]>([]);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    void (async () => setRows((await list()).calculators))().catch(() => setRows([]));
+    void (async () => setRows((await list()).rows))().catch(() => setRows([]));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -482,10 +485,10 @@ export function CalculatorOrderPanel() {
     setError(null);
     setMessage(null);
     try {
-      const order = rows.map((row, i) => ({ slug: row.slug, position: i }));
-      const result = await saveOrder({ data: { order } });
+      const ids = rows.map((row) => row.id);
+      const result = await saveOrder({ data: { ids } });
       if (!result.ok) throw new Error(result.error);
-      setMessage("A kalkulátorok sorrendje mentve.");
+      setMessage("A kalkulátorok sorrendje mentve (magyar és angol oldalon egyaránt).");
       await refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Hiba történt.");
@@ -494,7 +497,7 @@ export function CalculatorOrderPanel() {
   }
 
   async function refresh() {
-    setRows((await list()).calculators);
+    setRows((await list()).rows);
   }
 
   return (
@@ -504,19 +507,18 @@ export function CalculatorOrderPanel() {
     >
       <h2 className="text-xl font-bold text-foreground">Kalkulátorok sorrendje</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        A feltöltött egyedi kalkulátorok sorrendje a Kalkulátorok oldalon. A fel/le
-        gombokkal rendezd át, majd mentsd el.
+        Az összes kalkulátor sorrendje a Kalkulátorok oldalon – a meglévők és a
+        feltöltött egyediek együtt. A fel/le gombokkal rendezd át, majd mentsd el; a
+        magyar és az angol oldal sorrendje együtt változik.
       </p>
 
       {rows.length === 0 ? (
-        <p className="mt-4 text-sm text-muted-foreground">
-          Még nincs feltöltött egyedi kalkulátor.
-        </p>
+        <p className="mt-4 text-sm text-muted-foreground">Nincs megjeleníthető kalkulátor.</p>
       ) : (
         <ol className="mt-4 space-y-2">
           {rows.map((row, index) => (
             <li
-              key={row.slug}
+              key={row.id}
               className="flex items-center justify-between gap-3 rounded-md border border-border bg-background px-4 py-3 text-sm"
             >
               <span className="flex items-center gap-3">
