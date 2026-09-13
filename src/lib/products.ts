@@ -1493,7 +1493,7 @@ export const products: Product[] = [
     metaDescription: "Telefonszámlából könyvelés – percek alatt, hívószámonként, hibátlan áfával.",
     intro: [
       "A többtelefonszámos céges számlák könyvelése hónapról hónapra ugyanaz a fárasztó, hibalehetőségekkel teli kézi munka. A Telefonszámla Könyvelő beolvassa a PDF-számlát, hívószámonként szétbontja a tételeket, és egyetlen kattintással a könyvelőprogramjába importálható fájlt készít – helyes áfakulcsokkal és a telefonszolgáltatás magán/céges áfabontásával együtt. A Magyar Telekom (mobil és vezetékes), a Yettel és a One üzleti számláit automatikusan felismeri.",
-      "Könyvelőirodáknak és cégeknek, amelyek több hívószámos, üzleti mobilszámlákat könyvelnek (Magyar Telekom – mobil és vezetékes –, Yettel, One), és RLB, Kulcs-Soft, Novitax vagy Pénzszám rendszert használnak.",
+      "Könyvelőirodáknak és cégeknek, amelyek több hívószámos, üzleti mobilszámlákat könyvelnek (Magyar Telekom – mobil és vezetékes –, Yettel, One), és RLB, Kulcs-Soft, Novitax, Pénzszám vagy MS Dynamics NAV (Navision) rendszert használnak.",
     ],
     features: [
       "Időt spórol: a havi telefonszámla-könyvelés kézi munkája perces feladattá zsugorodik.",
@@ -1504,7 +1504,7 @@ export const products: Product[] = [
       "Bontás: hívószámhoz munkaszám rendelhető; a telefontétel bruttójából automatikus magán / céges nem-levonható / céges levonható + áfa sorok (szabadon állítható százalékok és főkönyvi számok).",
       "Kontírozás: kész könyvelési leképezés (költség- és szállító-főkönyvek, áfakódok); a szállító törzsben a Magyar Telekom, a Yettel és a One előre felvéve (adószám, cím, Követel-főkönyv).",
       "SZJA + SZOCHO: a magáncélú 20%-ra – igény szerint, a fő lapon kapcsolható – kiszámolja az SZJA-t és a szochót (egyes meghatározott juttatás), külön vegyes tételként. A kulcsok a hatályos értékek, de átírhatók.",
-      "Export: RLB, Kulcs-Soft, Novitax, Pénzszám – plusz általános CSV. A formátumok a hivatalos importmakrókkal egyeznek.",
+      "Export: RLB, Kulcs-Soft, Novitax, Pénzszám, MS Dynamics NAV (Navision) – plusz általános CSV. A formátumok a hivatalos importmakrókkal, illetve a Navision esetén a kapott Purchase Header/Line mintával egyeznek.",
     ],
     why: "Szöveges PDF-ből a beolvasás és a hívószámonkénti bontás pontos – a tesztelt hét szövegréteges Telekom- (mobil és vezetékes), Yettel- és One-számlán minden szekció fillérre egyezett a számla végösszegével. Régi, szkennelt (kép-alapú) számlánál a program tűrő mintával olvassa ki a hívószámonkénti végösszegeket, de tételt csak akkor képez, ha azok pontosan kiadják a számla végösszegét: a három tesztelt szkennelt számlából egynél sikerült, kettőnél a program kiírja, mit olvasott ki, és Te viszed fel az összegeket (a magyar OCR-hez a Tesseract magyar nyelvi csomag ajánlott). A telefon-áfabontás százalékai, az SZJA/szocho kulcsai és minden főkönyvi szám a saját számlatükrödhöz, illetve a mindenkori jogszabályhoz igazíthatók a programon belül.",
     tiers: [
