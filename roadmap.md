@@ -1,13 +1,12 @@
-# Roadmap — Termékek és Kalkulátorok adminoldal
+# Teendők
 
-- [ ] Menü + H1 + meta átnevezés „Termékek és Kalkulátorok”-ra (admin.tsx, admin.friss-verzio.tsx)
-- [ ] Blokksorrend: ProductOrderPanel a CalculatorVersionPanel elé
-- [ ] Tartalomjegyzék (2 hasáb, cím nélkül) + minden blokk alatt „Tetejére” gomb
-- [ ] XLNT előtag normalizáció ellenőrzése/javítása (product-name.ts, NewProductPanel)
-- [ ] „Termékkép…” mező függőleges igazítása
-- [ ] ProductVersionPanel legördülő ABC sorrend (magyar ábécé)
-- [ ] Felhasználók oldal szövegének frissítése az új menünévvel
-- [ ] Új kalkulátor feltöltés: custom_calculators tábla (GRANT+RLS), szerverfüggvények, admin blokk
-- [ ] Dinamikus oldalak: /kalkulatorok/$slug, /en/calculators/$slug + listaoldalak + sitemap + nyelvváltás
-- [ ] Automatikus kártyaméretű képernyőkép magyarból és angolból (böngészős render)
-- [ ] Ellenőrzés: typecheck, TOC/anchor teszt, próbafeltöltés, SSR ellenőrzés
+- [x] Admin menüpont és oldalfejléc átnevezése „Termékek és Kalkulátorok”-ra
+- [x] Blokkok sorrendje az admin oldalon + tartalomjegyzék + „Tetejére” gombok
+- [x] XLNT-előtag duplikáció javítása új terméknél
+- [x] Fájlválasztók egy sorba igazítása az Új termék blokkban
+- [x] `custom_calculators` tábla + RLS
+- [x] Új kalkulátor feltöltő (AI fordítás, szerkeszthető előnézet, kártyakép-képernyőkép)
+- [x] `/kalkulatorok/<slug>` és `/en/calculators/<slug>` oldalak
+- [x] Listaoldalak, nyelvváltás, sitemap, képkiszolgáló végpont
+- [x] Typecheck
+- [ ] Böngészős próba: admin oldal megnyitása, tartalomjegyzék, próba-kalkulátor feltöltés
