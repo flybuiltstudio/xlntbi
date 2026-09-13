@@ -1910,7 +1910,7 @@ export function ProductVersionPanel() {
         <label className="block text-sm font-medium text-foreground">
           Termék
           <select
-            className={`${selectClass} mt-3 block w-full max-w-md`}
+            className={`${selectClass} mt-4 block w-full max-w-md`}
             value={slug}
             disabled={busy}
             onChange={(e) => {
@@ -2126,7 +2126,7 @@ export function CalculatorVersionPanel() {
         <label className="block text-sm font-medium text-foreground">
           Kalkulátor
           <select
-            className={`${selectClass} mt-3 block w-full max-w-md`}
+            className={`${selectClass} mt-4 block w-full max-w-md`}
             value={calcKey}
             disabled={busy || enBusy}
             onChange={(e) => {
