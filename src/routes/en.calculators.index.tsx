@@ -7,7 +7,7 @@ import fallbackImg from "@/assets/kalkulator-invoice-dates.jpg";
 import { PageHero } from "@/components/PageHero";
 import { buildHead } from "@/lib/i18n/head";
 import { customCalculatorImageUrl } from "@/lib/custom-calculators";
-import { getCustomCalculatorCards } from "@/lib/custom-calculators.functions";
+import { getCalculatorCards } from "@/lib/custom-calculators.functions";
 
 const TITLE = "Calculators: invoice dates, salary, tax | EXCELlent Business Intelligence";
 const DESCRIPTION =
