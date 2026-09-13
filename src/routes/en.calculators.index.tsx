@@ -6,12 +6,15 @@ import flatRateTaxImg from "@/assets/kalkulator-flat-rate-tax.jpg";
 import fallbackImg from "@/assets/kalkulator-invoice-dates.jpg";
 import { PageHero } from "@/components/PageHero";
 import { buildHead } from "@/lib/i18n/head";
+import { customCalculatorImageUrl } from "@/lib/custom-calculators";
+import { getCustomCalculatorCards } from "@/lib/custom-calculators.functions";
 
 const TITLE = "Calculators: invoice dates, salary, tax | EXCELlent Business Intelligence";
 const DESCRIPTION =
   "Free online calculators for invoice dates, salary, personal income tax and flat-rate taxation, based on the rules in force in Hungary.";
 
 export const Route = createFileRoute("/en/calculators/")({
+  loader: () => getCustomCalculatorCards({ data: { lang: "en" } }),
   head: () =>
     buildHead({ huPath: "/kalkulatorok", lang: "en", title: TITLE, description: DESCRIPTION }),
   component: EnglishCalculators,
