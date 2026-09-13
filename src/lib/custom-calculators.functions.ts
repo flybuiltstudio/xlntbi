@@ -75,6 +75,22 @@ export const adminDeleteCustomCalculator = createServerFn({ method: "POST" })
     return deleteCustomCalculator(data.slug);
   });
 
+export const adminSaveCalculatorOrder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        order: z.array(z.object({ slug: z.string().min(1), position: z.number().int().min(0) })),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { saveCalculatorOrder } = await import("./custom-calculators.server");
+    return saveCalculatorOrder(data.order);
+  });
+
 /* ----------------------------------------------------------------- public */
 
 /** Public card list for the calculator index pages (SSR). */

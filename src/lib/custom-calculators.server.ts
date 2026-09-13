@@ -335,3 +335,18 @@ export async function deleteCustomCalculator(
     .remove([`${folder}/kartya-hu.jpg`, `${folder}/kartya-en.jpg`]);
   return { ok: true };
 }
+
+/** Persists a new position order for the custom calculators. */
+export async function saveCalculatorOrder(
+  order: { slug: string; position: number }[],
+): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  for (const item of order) {
+    const { error } = await supabaseAdmin
+      .from("custom_calculators")
+      .update({ position: item.position })
+      .eq("slug", item.slug);
+    if (error) return { ok: false, error: "A sorrend mentése nem sikerült." };
+  }
+  return { ok: true };
+}

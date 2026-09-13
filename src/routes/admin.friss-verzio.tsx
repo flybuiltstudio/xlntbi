@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { PageHero } from "@/components/PageHero";
 import { AdminToc } from "@/components/admin-toc";
-import { CalculatorUploadPanel } from "@/components/admin-calculator-panels";
+import { CalculatorOrderPanel, CalculatorUploadPanel } from "@/components/admin-calculator-panels";
 import {
   ProductDescriptionPanel,
   ProductPricePanel,
@@ -56,6 +56,7 @@ function AdminNewVersionPage() {
         <ProductOrderPanel />
         <CalculatorUploadPanel />
         <CalculatorVersionPanel />
+        <CalculatorOrderPanel />
       </div>
     </>
   );
