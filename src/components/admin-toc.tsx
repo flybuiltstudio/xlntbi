@@ -48,12 +48,13 @@ export function AdminToc() {
 export function BackToTop() {
   return (
     <div className="mt-6 text-right">
-      <a
-        href={`#${TOC_ANCHOR}`}
-        className="text-xs font-semibold text-muted-foreground underline-offset-2 transition-colors hover:text-foreground hover:underline"
+      <button
+        type="button"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="rounded-md border border-border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-primary hover:bg-accent hover:text-foreground"
       >
         ↑ Tetejére
-      </a>
+      </button>
     </div>
   );
 }
