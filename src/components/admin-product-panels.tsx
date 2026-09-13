@@ -1,5 +1,6 @@
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
+import { BackToTop } from "@/components/admin-toc";
 
 import {
   adminDeleteProductDescription,
@@ -300,7 +301,7 @@ export function ProductDescriptionPanel() {
   }
 
   return (
-    <section className="mt-10 rounded-xl border border-border bg-card p-6">
+    <section id="termek-leiras" className="mt-10 scroll-mt-24 rounded-xl border border-border bg-card p-6">
       <h2 className="text-xl font-bold text-foreground">Termékleírás frissítése Wordből</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         Töltsd fel a termékről szóló Word dokumentumot. Az AI átnézi és a
@@ -460,6 +461,7 @@ export function ProductDescriptionPanel() {
           </ul>
         )}
       </div>
+      <BackToTop />
     </section>
   );
 }
@@ -553,7 +555,7 @@ export function ProductPricePanel() {
   }
 
   return (
-    <section className="mt-10 rounded-xl border border-border bg-card p-6">
+    <section id="termek-arak" className="mt-10 scroll-mt-24 rounded-xl border border-border bg-card p-6">
       <h2 className="text-xl font-bold text-foreground">Termékárak frissítése</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         Licenccsomagonként állíthatod az árat. A mentés az oldalra, a
@@ -651,6 +653,7 @@ export function ProductPricePanel() {
           ))}
         </div>
       )}
+      <BackToTop />
     </section>
   );
 }

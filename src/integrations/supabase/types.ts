@@ -354,6 +354,72 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_calculators: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          html_en: string
+          html_hu: string
+          image_en_path: string | null
+          image_hu_path: string | null
+          intro_en: string
+          intro_hu: string
+          meta_description_en: string
+          meta_description_hu: string
+          meta_title_en: string
+          meta_title_hu: string
+          name_en: string
+          name_hu: string
+          position: number
+          script_en: string
+          script_hu: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          html_en: string
+          html_hu: string
+          image_en_path?: string | null
+          image_hu_path?: string | null
+          intro_en?: string
+          intro_hu?: string
+          meta_description_en?: string
+          meta_description_hu?: string
+          meta_title_en?: string
+          meta_title_hu?: string
+          name_en: string
+          name_hu: string
+          position?: number
+          script_en?: string
+          script_hu?: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          html_en?: string
+          html_hu?: string
+          image_en_path?: string | null
+          image_hu_path?: string | null
+          intro_en?: string
+          intro_hu?: string
+          meta_description_en?: string
+          meta_description_hu?: string
+          meta_title_en?: string
+          meta_title_hu?: string
+          name_en?: string
+          name_hu?: string
+          position?: number
+          script_en?: string
+          script_hu?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       custom_categories: {
         Row: {
           bundled: boolean

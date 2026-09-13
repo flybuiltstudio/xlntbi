@@ -73,6 +73,12 @@ export function counterpartPath(pathname: string, target: Lang): string {
   if (huProduct) return target === "en" ? `/en/product/${huProduct[1]}` : p;
   const enProduct = /^\/en\/product\/([^/]+)$/.exec(p);
   if (enProduct) return target === "hu" ? `/termek/${enProduct[1]}` : p;
+  // Admin-uploaded calculators keep the same slug on both languages.
+  // (The built-in calculators are paired above with distinct English slugs.)
+  const huCalc = /^\/kalkulatorok\/([^/]+)$/.exec(p);
+  if (huCalc) return target === "en" ? `/en/calculators/${huCalc[1]}` : p;
+  const enCalc = /^\/en\/calculators\/([^/]+)$/.exec(p);
+  if (enCalc) return target === "hu" ? `/kalkulatorok/${enCalc[1]}` : p;
   // No counterpart (order, newsletter pages): staying on the
   // current page beats dropping the visitor on the home page.
   if (langFromPath(p) === target) return pathname || "/";

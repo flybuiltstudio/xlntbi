@@ -1,10 +1,12 @@
-# Roadmap
+# Teendők
 
-- [kész] Konzultáció oldal (HU/EN): kétoszlopos elrendezés már 768 px felett — hírlevél + pCloud blokk a szöveg/űrlap bal oldalán
-- [kész] Vízszintes menü küszöbe 900 px → 768 px, kompakt méretekkel 768–1023 px között (túlcsordulás nélkül)
-- [kész] Ellenőrzés: 890 / 1280 / 767 px képernyőképek rendben, típusellenőrzés sikeres
-- [kész] Kuponok: új Stripe-adatformátum kezelése, lejárt/inaktív kuponok helyes kijelzése és védőszinkron
-- [kész] KONITESZT90 éles állapotának ellenőrzése és regressziós tesztek
-- [kész] XLNT IFRS Konszolidáló: programfájl, magyar és angol leírás frissítése a csatolmányokból
-- [kész] XLNT IFRS Beszámoló: fotószerű generált termékkép a magyar és angol oldalon, frissített közösségi megosztási képpel
-- [kész] NAV Pénztárgép letöltő, Univerzális bankkivonat-konverter, Beszámoló és Cégkivonat-konverter: új fotószerű képek HU/EN oldalakon
+- [x] Admin menüpont és oldalfejléc átnevezése „Termékek és Kalkulátorok”-ra
+- [x] Blokkok sorrendje az admin oldalon + tartalomjegyzék + „Tetejére” gombok
+- [x] XLNT-előtag duplikáció javítása új terméknél
+- [x] Fájlválasztók egy sorba igazítása az Új termék blokkban
+- [x] `custom_calculators` tábla + RLS
+- [x] Új kalkulátor feltöltő (AI fordítás, szerkeszthető előnézet, kártyakép-képernyőkép)
+- [x] `/kalkulatorok/<slug>` és `/en/calculators/<slug>` oldalak
+- [x] Listaoldalak, nyelvváltás, sitemap, képkiszolgáló végpont
+- [x] Typecheck
+- [ ] Böngészős próba: admin oldal megnyitása, tartalomjegyzék, próba-kalkulátor feltöltés

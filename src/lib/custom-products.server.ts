@@ -231,7 +231,7 @@ export async function publishCustomProduct(input: {
     }
   | { ok: false; error: string }
 > {
-  const name = input.name.trim();
+  const name = withXlntPrefix(input.name);
   const slug = slugifyName(input.slug || name);
   if (!slug) return { ok: false, error: "Hibás URL-részlet." };
   if (getProduct(slug)) {

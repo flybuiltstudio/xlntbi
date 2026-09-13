@@ -24,6 +24,15 @@ export const Route = createFileRoute("/sitemap.xml")({
             entries.push({ path: `/en/product/${slug}` });
           }
 
+          // Admin-uploaded custom calculators (same slug on both languages).
+          const { listCustomCalculatorCards } = await import(
+            "@/lib/custom-calculators.server"
+          );
+          for (const card of await listCustomCalculatorCards("hu")) {
+            entries.push({ path: `/kalkulatorok/${card.slug}` });
+            entries.push({ path: `/en/calculators/${card.slug}` });
+          }
+
           return new Response(sitemapXML(BASE_URL, entries), {
             headers: {
               "Content-Type": "application/xml",

@@ -4,6 +4,8 @@ import bertesztImg from "@/assets/berteszt.jpg";
 import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
 import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
+import { customCalculatorImageUrl } from "@/lib/custom-calculators";
+import { getCustomCalculatorCards } from "@/lib/custom-calculators.functions";
 
 
 const TITLE = "Kalkulátorok: adó, bér és számla dátum számítás | EXCELlent Business Intelligence";
@@ -12,6 +14,7 @@ const CANONICAL = "https://xlntbi.hu/kalkulatorok";
 const OG_IMAGE = "https://xlntbi.hu/og/online-kalkulator.jpg";
 
 export const Route = createFileRoute("/kalkulatorok/")({
+  loader: () => getCustomCalculatorCards({ data: { lang: "hu" } }),
   head: () => ({
     meta: [
       { title: TITLE },
@@ -88,6 +91,7 @@ const items = [
 ] as const;
 
 function KalkulatorokPage() {
+  const { cards } = Route.useLoaderData();
   return (
     <>
       <PageHero>
@@ -111,6 +115,22 @@ function KalkulatorokPage() {
               className="h-56 w-full object-cover"
             />
             <h2 className="p-6 text-xl font-semibold text-card-foreground">{item.label}</h2>
+          </Link>
+        ))}
+        {cards.map((card) => (
+          <Link
+            key={card.slug}
+            to="/kalkulatorok/$slug"
+            params={{ slug: card.slug }}
+            className="group overflow-hidden rounded-xl border border-border bg-card transition-colors hover:border-primary"
+          >
+            <img
+              src={customCalculatorImageUrl(card.slug, "hu")}
+              alt={`${card.name} kalkulátor`}
+              loading="lazy"
+              className="h-56 w-full object-cover"
+            />
+            <h2 className="p-6 text-xl font-semibold text-card-foreground">{card.name}</h2>
           </Link>
         ))}
         </div>

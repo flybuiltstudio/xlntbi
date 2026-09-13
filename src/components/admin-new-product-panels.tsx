@@ -14,6 +14,7 @@ import {
 import type { CategoryAdminRow } from "@/lib/custom-categories.server";
 import type { CustomProductInfo } from "@/lib/custom-products.server";
 import { formatPrice } from "@/lib/products";
+import { BackToTop } from "@/components/admin-toc";
 
 type Draft = {
   intro: string[];
@@ -307,7 +308,7 @@ export function NewProductPanel() {
   };
 
   return (
-    <section className="mt-10 rounded-xl border border-border bg-secondary/40 p-6">
+    <section id="uj-termek" className="mt-10 scroll-mt-24 rounded-xl border border-border bg-secondary/40 p-6">
       <h2 className="text-xl font-bold text-foreground">Új termék feltöltése</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         A termékfájl (xlsm, exe, zip vagy pdf) és a Word leírás feltöltése után az AI
@@ -434,8 +435,8 @@ export function NewProductPanel() {
       </div>
 
       <div className="mt-5 grid gap-4 md:grid-cols-3">
-        <label className="block text-xs font-semibold text-foreground">
-          Termékfájl (xlsm / exe / zip / pdf, max. 300 MB)
+        <label className="flex flex-col text-xs font-semibold text-foreground">
+          <span className="flex-1">Termékfájl (xlsm / exe / zip / pdf, max. 300 MB)</span>
           <input
             key={`file-${inputKey}`}
             type="file"
@@ -444,8 +445,8 @@ export function NewProductPanel() {
             onChange={(e) => setProductFile(e.target.files?.[0] ?? null)}
           />
         </label>
-        <label className="block text-xs font-semibold text-foreground">
-          Leírás (Word .docx)
+        <label className="flex flex-col text-xs font-semibold text-foreground">
+          <span className="flex-1">Leírás (Word .docx)</span>
           <input
             key={`docx-${inputKey}`}
             type="file"
@@ -454,8 +455,10 @@ export function NewProductPanel() {
             onChange={(e) => setDocx(e.target.files?.[0] ?? null)}
           />
         </label>
-        <label className="block text-xs font-semibold text-foreground">
-          Termékkép (nem kötelező: jpg / png / webp – ha üresen hagyod, AI generál egyet)
+        <label className="flex flex-col text-xs font-semibold text-foreground">
+          <span className="flex-1">
+            Termékkép (nem kötelező: jpg / png / webp – ha üresen hagyod, AI generál egyet)
+          </span>
           <input
             key={`img-${inputKey}`}
             type="file"
@@ -547,6 +550,7 @@ export function NewProductPanel() {
           </ul>
         </div>
       ) : null}
+      <BackToTop />
     </section>
   );
 }
@@ -609,7 +613,7 @@ export function CategoryPanel() {
   };
 
   return (
-    <section className="mt-10 rounded-xl border border-border bg-secondary/40 p-6">
+    <section id="kategoriak" className="mt-10 scroll-mt-24 rounded-xl border border-border bg-secondary/40 p-6">
       <h2 className="text-xl font-bold text-foreground">Termékkategóriák</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Új kategória létrehozása és a meglévők átnevezése. Átnevezésnél az URL-kulcs nem
@@ -654,6 +658,7 @@ export function CategoryPanel() {
           />
         ))}
       </ul>
+      <BackToTop />
     </section>
   );
 }
