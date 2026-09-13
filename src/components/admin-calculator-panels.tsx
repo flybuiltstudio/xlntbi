@@ -507,19 +507,18 @@ export function CalculatorOrderPanel() {
     >
       <h2 className="text-xl font-bold text-foreground">Kalkulátorok sorrendje</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        A feltöltött egyedi kalkulátorok sorrendje a Kalkulátorok oldalon. A fel/le
-        gombokkal rendezd át, majd mentsd el.
+        Az összes kalkulátor sorrendje a Kalkulátorok oldalon – a meglévők és a
+        feltöltött egyediek együtt. A fel/le gombokkal rendezd át, majd mentsd el; a
+        magyar és az angol oldal sorrendje együtt változik.
       </p>
 
       {rows.length === 0 ? (
-        <p className="mt-4 text-sm text-muted-foreground">
-          Még nincs feltöltött egyedi kalkulátor.
-        </p>
+        <p className="mt-4 text-sm text-muted-foreground">Nincs megjeleníthető kalkulátor.</p>
       ) : (
         <ol className="mt-4 space-y-2">
           {rows.map((row, index) => (
             <li
-              key={row.slug}
+              key={row.id}
               className="flex items-center justify-between gap-3 rounded-md border border-border bg-background px-4 py-3 text-sm"
             >
               <span className="flex items-center gap-3">
