@@ -10,7 +10,7 @@ Az admin `/admin/friss-verzio` oldala áttekinthető, oldalon belül navigálhat
 - Az oldal H1 címe, böngészőcíme és admin metaadatai ugyanezt az elnevezést kapják.
 - A blokkok sorrendje:
   1. Új termék feltöltése
-  2. Kategóriák kezelése
+  2. Termék kategóriák kezelése
   3. Termék új verziója
   4. Termékleírás frissítése
   5. Termékárak frissítése
