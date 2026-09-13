@@ -79,6 +79,7 @@ import { Route as EnTaxAdvisoryRouteImport } from './routes/en.tax-advisory'
 import { Route as EnTermsRouteImport } from './routes/en.terms'
 import { Route as EnTrainingRouteImport } from './routes/en.training'
 import { Route as KalkulatorokIndexRouteImport } from './routes/kalkulatorok.index'
+import { Route as KalkulatorokSlugRouteImport } from './routes/kalkulatorok.$slug'
 import { Route as KalkulatorokAtalanyadoRouteImport } from './routes/kalkulatorok.atalanyado'
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
 import { Route as KalkulatorokInvoiceDatesRouteImport } from './routes/kalkulatorok.invoice-dates'
@@ -124,12 +125,14 @@ import { Route as TermekVallalkozasMeretBesoroloRouteImport } from './routes/ter
 import { Route as TermekWifiJelszoNezoRouteImport } from './routes/termek.wifi-jelszo-nezo'
 import { Route as ApiPublicHwidDownloadRouteImport } from './routes/api/public/hwid-download'
 import { Route as EnCalculatorsIndexRouteImport } from './routes/en.calculators.index'
+import { Route as EnCalculatorsSlugRouteImport } from './routes/en.calculators.$slug'
 import { Route as EnCalculatorsFlatRateTaxRouteImport } from './routes/en.calculators.flat-rate-tax'
 import { Route as EnCalculatorsIncomeTaxRouteImport } from './routes/en.calculators.income-tax'
 import { Route as EnCalculatorsInvoiceDatesRouteImport } from './routes/en.calculators.invoice-dates'
 import { Route as EnCalculatorsSalaryTestRouteImport } from './routes/en.calculators.salary-test'
 import { Route as EnProductSlugRouteImport } from './routes/en.product.$slug'
 import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
+import { Route as ApiPublicKalkulatorKepSlugRouteImport } from './routes/api/public/kalkulator-kep.$slug'
 import { Route as ApiPublicKatalogusAuditCronRouteImport } from './routes/api/public/katalogus-audit/cron'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
@@ -491,6 +494,11 @@ const KalkulatorokIndexRoute = KalkulatorokIndexRouteImport.update({
   path: '/kalkulatorok/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KalkulatorokSlugRoute = KalkulatorokSlugRouteImport.update({
+  id: '/kalkulatorok/$slug',
+  path: '/kalkulatorok/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KalkulatorokAtalanyadoRoute = KalkulatorokAtalanyadoRouteImport.update({
   id: '/kalkulatorok/atalanyado',
   path: '/kalkulatorok/atalanyado',
@@ -746,6 +754,11 @@ const EnCalculatorsIndexRoute = EnCalculatorsIndexRouteImport.update({
   path: '/calculators/',
   getParentRoute: () => EnRoute,
 } as any)
+const EnCalculatorsSlugRoute = EnCalculatorsSlugRouteImport.update({
+  id: '/calculators/$slug',
+  path: '/calculators/$slug',
+  getParentRoute: () => EnRoute,
+} as any)
 const EnCalculatorsFlatRateTaxRoute =
   EnCalculatorsFlatRateTaxRouteImport.update({
     id: '/calculators/flat-rate-tax',
@@ -777,6 +790,12 @@ const ApiPublicBillingoWebhookRoute =
   ApiPublicBillingoWebhookRouteImport.update({
     id: '/api/public/billingo/webhook',
     path: '/api/public/billingo/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicKalkulatorKepSlugRoute =
+  ApiPublicKalkulatorKepSlugRouteImport.update({
+    id: '/api/public/kalkulator-kep/$slug',
+    path: '/api/public/kalkulator-kep/$slug',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicKatalogusAuditCronRoute =
@@ -886,6 +905,7 @@ export interface FileRoutesByFullPath {
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
   '/en/terms': typeof EnTermsRoute
   '/en/training': typeof EnTrainingRoute
+  '/kalkulatorok/$slug': typeof KalkulatorokSlugRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -933,6 +953,7 @@ export interface FileRoutesByFullPath {
   '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/hwid-download': typeof ApiPublicHwidDownloadRoute
+  '/en/calculators/$slug': typeof EnCalculatorsSlugRoute
   '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
@@ -940,6 +961,7 @@ export interface FileRoutesByFullPath {
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/kalkulator-kep/$slug': typeof ApiPublicKalkulatorKepSlugRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -1014,6 +1036,7 @@ export interface FileRoutesByTo {
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
   '/en/terms': typeof EnTermsRoute
   '/en/training': typeof EnTrainingRoute
+  '/kalkulatorok/$slug': typeof KalkulatorokSlugRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -1061,6 +1084,7 @@ export interface FileRoutesByTo {
   '/en': typeof EnIndexRoute
   '/kalkulatorok': typeof KalkulatorokIndexRoute
   '/api/public/hwid-download': typeof ApiPublicHwidDownloadRoute
+  '/en/calculators/$slug': typeof EnCalculatorsSlugRoute
   '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
@@ -1068,6 +1092,7 @@ export interface FileRoutesByTo {
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/kalkulator-kep/$slug': typeof ApiPublicKalkulatorKepSlugRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -1145,6 +1170,7 @@ export interface FileRoutesById {
   '/en/tax-advisory': typeof EnTaxAdvisoryRoute
   '/en/terms': typeof EnTermsRoute
   '/en/training': typeof EnTrainingRoute
+  '/kalkulatorok/$slug': typeof KalkulatorokSlugRoute
   '/kalkulatorok/atalanyado': typeof KalkulatorokAtalanyadoRoute
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
@@ -1192,6 +1218,7 @@ export interface FileRoutesById {
   '/en/': typeof EnIndexRoute
   '/kalkulatorok/': typeof KalkulatorokIndexRoute
   '/api/public/hwid-download': typeof ApiPublicHwidDownloadRoute
+  '/en/calculators/$slug': typeof EnCalculatorsSlugRoute
   '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
@@ -1199,6 +1226,7 @@ export interface FileRoutesById {
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/kalkulator-kep/$slug': typeof ApiPublicKalkulatorKepSlugRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -1277,6 +1305,7 @@ export interface FileRouteTypes {
     | '/en/tax-advisory'
     | '/en/terms'
     | '/en/training'
+    | '/kalkulatorok/$slug'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -1324,6 +1353,7 @@ export interface FileRouteTypes {
     | '/en/'
     | '/kalkulatorok/'
     | '/api/public/hwid-download'
+    | '/en/calculators/$slug'
     | '/en/calculators/flat-rate-tax'
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
@@ -1331,6 +1361,7 @@ export interface FileRouteTypes {
     | '/en/product/$slug'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
+    | '/api/public/kalkulator-kep/$slug'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
@@ -1405,6 +1436,7 @@ export interface FileRouteTypes {
     | '/en/tax-advisory'
     | '/en/terms'
     | '/en/training'
+    | '/kalkulatorok/$slug'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -1452,6 +1484,7 @@ export interface FileRouteTypes {
     | '/en'
     | '/kalkulatorok'
     | '/api/public/hwid-download'
+    | '/en/calculators/$slug'
     | '/en/calculators/flat-rate-tax'
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
@@ -1459,6 +1492,7 @@ export interface FileRouteTypes {
     | '/en/product/$slug'
     | '/en/calculators'
     | '/api/public/billingo/webhook'
+    | '/api/public/kalkulator-kep/$slug'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
@@ -1535,6 +1569,7 @@ export interface FileRouteTypes {
     | '/en/tax-advisory'
     | '/en/terms'
     | '/en/training'
+    | '/kalkulatorok/$slug'
     | '/kalkulatorok/atalanyado'
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
@@ -1582,6 +1617,7 @@ export interface FileRouteTypes {
     | '/en/'
     | '/kalkulatorok/'
     | '/api/public/hwid-download'
+    | '/en/calculators/$slug'
     | '/en/calculators/flat-rate-tax'
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
@@ -1589,6 +1625,7 @@ export interface FileRouteTypes {
     | '/en/product/$slug'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
+    | '/api/public/kalkulator-kep/$slug'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
@@ -1632,6 +1669,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SzolgaltatasaimRoute: typeof SzolgaltatasaimRoute
   TermekeimRoute: typeof TermekeimRoute
+  KalkulatorokSlugRoute: typeof KalkulatorokSlugRoute
   KalkulatorokAtalanyadoRoute: typeof KalkulatorokAtalanyadoRoute
   KalkulatorokBertesztRoute: typeof KalkulatorokBertesztRoute
   KalkulatorokInvoiceDatesRoute: typeof KalkulatorokInvoiceDatesRoute
@@ -1678,6 +1716,7 @@ export interface RootRouteChildren {
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
   ApiPublicHwidDownloadRoute: typeof ApiPublicHwidDownloadRoute
   ApiPublicBillingoWebhookRoute: typeof ApiPublicBillingoWebhookRoute
+  ApiPublicKalkulatorKepSlugRoute: typeof ApiPublicKalkulatorKepSlugRoute
   ApiPublicKatalogusAuditCronRoute: typeof ApiPublicKatalogusAuditCronRoute
   ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -2179,6 +2218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KalkulatorokIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kalkulatorok/$slug': {
+      id: '/kalkulatorok/$slug'
+      path: '/kalkulatorok/$slug'
+      fullPath: '/kalkulatorok/$slug'
+      preLoaderRoute: typeof KalkulatorokSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kalkulatorok/atalanyado': {
       id: '/kalkulatorok/atalanyado'
       path: '/kalkulatorok/atalanyado'
@@ -2494,6 +2540,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnCalculatorsIndexRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/calculators/$slug': {
+      id: '/en/calculators/$slug'
+      path: '/calculators/$slug'
+      fullPath: '/en/calculators/$slug'
+      preLoaderRoute: typeof EnCalculatorsSlugRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/en/calculators/flat-rate-tax': {
       id: '/en/calculators/flat-rate-tax'
       path: '/calculators/flat-rate-tax'
@@ -2534,6 +2587,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/billingo/webhook'
       fullPath: '/api/public/billingo/webhook'
       preLoaderRoute: typeof ApiPublicBillingoWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/kalkulator-kep/$slug': {
+      id: '/api/public/kalkulator-kep/$slug'
+      path: '/api/public/kalkulator-kep/$slug'
+      fullPath: '/api/public/kalkulator-kep/$slug'
+      preLoaderRoute: typeof ApiPublicKalkulatorKepSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/katalogus-audit/cron': {
@@ -2646,6 +2706,7 @@ interface EnRouteChildren {
   EnTermsRoute: typeof EnTermsRoute
   EnTrainingRoute: typeof EnTrainingRoute
   EnIndexRoute: typeof EnIndexRoute
+  EnCalculatorsSlugRoute: typeof EnCalculatorsSlugRoute
   EnCalculatorsFlatRateTaxRoute: typeof EnCalculatorsFlatRateTaxRoute
   EnCalculatorsIncomeTaxRoute: typeof EnCalculatorsIncomeTaxRoute
   EnCalculatorsInvoiceDatesRoute: typeof EnCalculatorsInvoiceDatesRoute
@@ -2678,6 +2739,7 @@ const EnRouteChildren: EnRouteChildren = {
   EnTermsRoute: EnTermsRoute,
   EnTrainingRoute: EnTrainingRoute,
   EnIndexRoute: EnIndexRoute,
+  EnCalculatorsSlugRoute: EnCalculatorsSlugRoute,
   EnCalculatorsFlatRateTaxRoute: EnCalculatorsFlatRateTaxRoute,
   EnCalculatorsIncomeTaxRoute: EnCalculatorsIncomeTaxRoute,
   EnCalculatorsInvoiceDatesRoute: EnCalculatorsInvoiceDatesRoute,
@@ -2722,6 +2784,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SzolgaltatasaimRoute: SzolgaltatasaimRoute,
   TermekeimRoute: TermekeimRoute,
+  KalkulatorokSlugRoute: KalkulatorokSlugRoute,
   KalkulatorokAtalanyadoRoute: KalkulatorokAtalanyadoRoute,
   KalkulatorokBertesztRoute: KalkulatorokBertesztRoute,
   KalkulatorokInvoiceDatesRoute: KalkulatorokInvoiceDatesRoute,
@@ -2774,6 +2837,7 @@ const rootRouteChildren: RootRouteChildren = {
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
   ApiPublicHwidDownloadRoute: ApiPublicHwidDownloadRoute,
   ApiPublicBillingoWebhookRoute: ApiPublicBillingoWebhookRoute,
+  ApiPublicKalkulatorKepSlugRoute: ApiPublicKalkulatorKepSlugRoute,
   ApiPublicKatalogusAuditCronRoute: ApiPublicKatalogusAuditCronRoute,
   ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
