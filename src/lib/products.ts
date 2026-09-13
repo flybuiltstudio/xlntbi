@@ -909,7 +909,7 @@ export const products: Product[] = [
     ],
     download: {
       fileName: "XLNT_Konszolidalo_v2.0.xlsm",
-      storagePath: "szamviteli-konszolidalo/XLNT_Konszolidalo_v1.5.xlsm",
+      storagePath: "szamviteli-konszolidalo/XLNT_Konszolidalo_v2.0.xlsm",
     },
   },
   {
