@@ -108,6 +108,14 @@ export const getCustomCalculatorCards = createServerFn({ method: "GET" })
     return { cards: await listCustomCalculatorCards(data.lang) };
   });
 
+/** Full ordered calculator card list (static + custom) for the index pages. */
+export const getCalculatorCards = createServerFn({ method: "GET" })
+  .inputValidator((data) => z.object({ lang: z.enum(["hu", "en"]) }).parse(data))
+  .handler(async ({ data }) => {
+    const { listCalculatorCards } = await import("./custom-calculators.server");
+    return { cards: await listCalculatorCards(data.lang) };
+  });
+
 /** Public full read of one custom calculator page (SSR). */
 export const getCustomCalculator = createServerFn({ method: "GET" })
   .inputValidator((data) =>
