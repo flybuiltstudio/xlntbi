@@ -231,9 +231,10 @@ function EnglishProducts() {
                 search={isOpen ? {} : { category: category.key }}
                 hash={isOpen ? "products" : "category-product-list"}
                 aria-current={isOpen ? "true" : undefined}
+                style={flashed ? { animationDelay: `${catIndex * 0.12}s` } : undefined}
                 className={`group flex flex-col overflow-hidden rounded-lg border bg-card transition-colors ${
-                  isOpen ? "border-primary ring-2 ring-primary" : "border-border hover:border-primary"
-                }`}
+                  flashed ? "category-flash " : ""
+                }${isOpen ? "border-primary ring-2 ring-primary" : "border-border hover:border-primary"}`}
               >
                 <img
                   src={category.image}
