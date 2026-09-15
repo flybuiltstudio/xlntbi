@@ -106,7 +106,7 @@ function TermekeimPage() {
   const categories = applyPlacements(placements, categoryOrder);
   const open = getCategory(openKey, categories);
 
-  /** Scroll to the first row of actual products after a category opens. */
+  /** Scroll to the opened category's heading after a category opens. */
   useEffect(() => {
     if (!openKey) return;
     const target = document.getElementById("kategoria-termekek");
