@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Check } from "lucide-react";
 import { handleHwidDownload } from "@/lib/hwid-download";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
@@ -104,6 +105,15 @@ function TermekeimPage() {
   const { placements, categoryOrder } = Route.useLoaderData();
   const categories = applyPlacements(placements, categoryOrder);
   const open = getCategory(openKey, categories);
+
+  /** Scroll the opened category's product list into view (mobile feedback). */
+  useEffect(() => {
+    if (!openKey) return;
+    const target = document.getElementById("kategoria-termekek");
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [openKey]);
+
   return (
 
     <div>
@@ -271,7 +281,7 @@ function TermekeimPage() {
         </div>
 
         {open ? (
-          <div className="mt-10">
+          <div id="kategoria-termekek" className="mt-10 scroll-mt-24">
             <h3 className="text-xl font-bold text-foreground">{open.title}</h3>
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               {categoryProducts(open).map((product) => (
