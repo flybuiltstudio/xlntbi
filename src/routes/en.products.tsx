@@ -57,6 +57,15 @@ function EnglishProducts() {
   const { placements, categoryOrder } = Route.useLoaderData();
   const categories = applyPlacements(placements, categoryOrder);
   const open = getCategory(openKey, categories);
+
+  /** Scroll the opened category's product list into view (mobile feedback). */
+  useEffect(() => {
+    if (!openKey) return;
+    const target = document.getElementById("category-products");
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [openKey]);
+
   return (
     <div>
       <PageHero>
