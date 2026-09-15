@@ -142,7 +142,8 @@ function TermekeimPage() {
             <Link
               to="/termekeim"
               hash="megrendelheto-termekek"
-              className="mt-6 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              onClick={(e) => scrollToSection(e, "megrendelheto-termekek")}
+              className="attention-pulse mt-6 inline-flex items-center rounded-md px-6 py-3 text-sm font-semibold"
             >
               Termékek megtekintése
             </Link>
