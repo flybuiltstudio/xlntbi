@@ -153,8 +153,8 @@ function TermekeimPage() {
 
             <Link
               to="/termekeim"
-              hash="megrendelheto-termekek"
-              onClick={(e) => scrollToSection(e, "megrendelheto-termekek")}
+              hash="products-top"
+              onClick={(e) => scrollToSection(e, "products-top")}
               className="attention-pulse mt-6 inline-flex items-center rounded-md px-6 py-3 text-sm font-semibold"
             >
               Termékek megtekintése
