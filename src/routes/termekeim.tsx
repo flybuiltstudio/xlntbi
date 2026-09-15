@@ -266,8 +266,11 @@ function TermekeimPage() {
           Válassz kategóriát, és megnyílnak az oda tartozó termékek.
         </p>
 
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-          {categories.map((category) => {
+        <div
+          ref={gridRef}
+          className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7"
+        >
+          {categories.map((category, catIndex) => {
             const isOpen = category.key === openKey;
             const count = categoryProducts(category).length;
             return (
