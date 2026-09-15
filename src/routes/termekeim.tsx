@@ -83,13 +83,21 @@ export const Route = createFileRoute("/termekeim")({
 
 
 const features = [
-  "Könyvelési segédeszközöket",
-  "Beszámolókészítő digitális megoldásokat, akár komplex makrókkal is",
-  "Adókalkulációs segédprogramokat",
-  "Iparűzési adóhoz kapcsolódó eszközöket",
-  "Utaláshoz kapcsolódó segédeszközöket",
+  "Bérszámfejtési és könyvelési segédeszközöket",
   "Riportkészítési segédeszközöket",
+  "Beszámolókészítő digitális megoldásokat, akár komplex makrókkal is",
+  "Adókalkulációs és iparűzési adóhoz kapcsolódó segédprogramokat",
+  "Bank feldolgozás és utaláshoz kapcsolódó segédeszközöket",
 ];
+
+/** Smooth in-page scroll for the same-route anchor buttons. */
+function scrollToSection(event: { preventDefault: () => void }, id: string) {
+  event.preventDefault();
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+  window.history.replaceState(null, "", `${window.location.pathname}#${id}`);
+}
 
 function TermekeimPage() {
   const { kategoria: openKey } = Route.useSearch();
