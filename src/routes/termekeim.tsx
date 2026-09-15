@@ -241,6 +241,7 @@ function TermekeimPage() {
       </section>
 
       <section id="megrendelheto-termekek" className="mx-auto max-w-6xl px-4 pb-16 pt-8">
+        <div id="products-top" className="h-[15vh] scroll-mt-24 md:h-[18vh]" aria-hidden="true" />
         <h2 className="text-2xl font-bold text-foreground">Megrendelhető termékek</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Válassz kategóriát, és megnyílnak az oda tartozó termékek.
