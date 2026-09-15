@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 import { handleHwidDownload } from "@/lib/hwid-download";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
@@ -116,6 +116,25 @@ function TermekeimPage() {
     });
   }, [openKey]);
 
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const [flashed, setFlashed] = useState(false);
+  useEffect(() => {
+    if (flashed) return;
+    const node = gridRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setFlashed(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [flashed]);
+
   return (
 
     <div>
@@ -153,8 +172,8 @@ function TermekeimPage() {
 
             <Link
               to="/termekeim"
-              hash="megrendelheto-termekek"
-              onClick={(e) => scrollToSection(e, "megrendelheto-termekek")}
+              hash="products-top"
+              onClick={(e) => scrollToSection(e, "products-top")}
               className="attention-pulse mt-6 inline-flex items-center rounded-md px-6 py-3 text-sm font-semibold"
             >
               Termékek megtekintése
@@ -241,13 +260,17 @@ function TermekeimPage() {
       </section>
 
       <section id="megrendelheto-termekek" className="mx-auto max-w-6xl px-4 pb-16 pt-8">
+        <div id="products-top" className="h-[15vh] scroll-mt-24 md:h-[18vh]" aria-hidden="true" />
         <h2 className="text-2xl font-bold text-foreground">Megrendelhető termékek</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Válassz kategóriát, és megnyílnak az oda tartozó termékek.
         </p>
 
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-          {categories.map((category) => {
+        <div
+          ref={gridRef}
+          className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7"
+        >
+          {categories.map((category, catIndex) => {
             const isOpen = category.key === openKey;
             const count = categoryProducts(category).length;
             return (
@@ -257,7 +280,10 @@ function TermekeimPage() {
                 search={isOpen ? {} : { kategoria: category.key }}
                 hash={isOpen ? "megrendelheto-termekek" : "kategoria-termeklista"}
                 aria-current={isOpen ? "true" : undefined}
+                style={flashed ? { animationDelay: `${catIndex * 0.12}s` } : undefined}
                 className={`group flex flex-col overflow-hidden rounded-lg border bg-card transition-colors ${
+                  flashed ? "category-flash " : ""
+                }${
                   isOpen
                     ? "border-primary ring-2 ring-primary"
                     : "border-border hover:border-primary"
