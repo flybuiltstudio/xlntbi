@@ -68,6 +68,25 @@ function EnglishProducts() {
     });
   }, [openKey]);
 
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const [flashed, setFlashed] = useState(false);
+  useEffect(() => {
+    if (flashed) return;
+    const node = gridRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setFlashed(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [flashed]);
+
   return (
     <div>
       <PageHero>
