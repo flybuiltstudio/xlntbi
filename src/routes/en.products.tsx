@@ -230,7 +230,7 @@ function EnglishProducts() {
         </div>
 
         {open ? (
-          <div className="mt-10">
+          <div id="category-products" className="mt-10 scroll-mt-24">
             <h3 className="text-xl font-bold text-foreground">{open.titleEn}</h3>
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               {categoryProducts(open).map((product) => (
