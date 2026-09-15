@@ -313,6 +313,15 @@ export async function publishCustomCalculator(input: {
   );
   if (error) return { ok: false, error: `A mentés nem sikerült: ${error.message}` };
 
+  // Honour the requested position in the shared (static + custom) order list.
+  const rows = await listCalculatorOrderRows();
+  const newId = customCalculatorId(slug);
+  const ids = rows.map((row) => row.id).filter((id) => id !== newId);
+  const index = Math.min(Math.max(0, input.position), ids.length);
+  ids.splice(index, 0, newId);
+  await saveCalculatorOrder(ids, input.updatedBy);
+
+
   const urlHu = await supabaseAdmin.storage
     .from(BUCKET)
     .createSignedUploadUrl(imageHuPath, { upsert: true });
