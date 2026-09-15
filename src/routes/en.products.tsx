@@ -191,6 +191,7 @@ function EnglishProducts() {
       </section>
 
       <section id="products" className="mx-auto max-w-6xl px-4 pb-16 pt-8">
+        <div id="products-top" className="h-[15vh] scroll-mt-24 md:h-[18vh]" aria-hidden="true" />
         <h2 className="text-2xl font-bold text-foreground">Products available to order</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Choose a category to open the products it contains. Product names and the order process
