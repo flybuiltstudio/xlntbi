@@ -83,13 +83,21 @@ export const Route = createFileRoute("/termekeim")({
 
 
 const features = [
-  "Könyvelési segédeszközöket",
-  "Beszámolókészítő digitális megoldásokat, akár komplex makrókkal is",
-  "Adókalkulációs segédprogramokat",
-  "Iparűzési adóhoz kapcsolódó eszközöket",
-  "Utaláshoz kapcsolódó segédeszközöket",
+  "Bérszámfejtési és könyvelési segédeszközöket",
   "Riportkészítési segédeszközöket",
+  "Beszámolókészítő digitális megoldásokat, akár komplex makrókkal is",
+  "Adókalkulációs és iparűzési adóhoz kapcsolódó segédprogramokat",
+  "Bank feldolgozás és utaláshoz kapcsolódó segédeszközöket",
 ];
+
+/** Smooth in-page scroll for the same-route anchor buttons. */
+function scrollToSection(event: { preventDefault: () => void }, id: string) {
+  event.preventDefault();
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+  window.history.replaceState(null, "", `${window.location.pathname}#${id}`);
+}
 
 function TermekeimPage() {
   const { kategoria: openKey } = Route.useSearch();
@@ -134,7 +142,8 @@ function TermekeimPage() {
             <Link
               to="/termekeim"
               hash="megrendelheto-termekek"
-              className="mt-6 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              onClick={(e) => scrollToSection(e, "megrendelheto-termekek")}
+              className="attention-pulse mt-6 inline-flex items-center rounded-md px-6 py-3 text-sm font-semibold"
             >
               Termékek megtekintése
             </Link>
@@ -219,7 +228,7 @@ function TermekeimPage() {
         </div>
       </section>
 
-      <section id="megrendelheto-termekek" className="mx-auto max-w-6xl px-4 py-16">
+      <section id="megrendelheto-termekek" className="mx-auto max-w-6xl px-4 pb-16 pt-8">
         <h2 className="text-2xl font-bold text-foreground">Megrendelhető termékek</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Válassz kategóriát, és megnyílnak az oda tartozó termékek.

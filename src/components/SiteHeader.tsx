@@ -126,13 +126,54 @@ export function SiteHeader() {
             </div>
           </div>
 
-          <Link
-            to={asPath(lp("/termekeim"))}
-            className="rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
-            activeProps={{ className: "bg-accent" }}
-          >
-            {t("nav.products")}
-          </Link>
+          <div className="group relative">
+            <Link
+              to={asPath(lp("/termekeim"))}
+              className="flex items-center gap-1 rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
+              activeProps={{ className: "bg-accent" }}
+            >
+              {t("nav.products")}
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <div className="invisible absolute left-0 top-full w-72 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+              <Link
+                to={asPath(lp("/termekeim"))}
+                className="block rounded-md px-3 py-2 text-sm font-semibold text-popover-foreground transition-colors hover:bg-accent"
+              >
+                {lang === "en" ? "All products" : "Összes termék"}
+              </Link>
+              {productCategories.map((cat) => {
+                const items = categoryProducts(cat);
+                return (
+                  <div key={cat.key} className="group/cat relative">
+                    <Link
+                      to={asPath(lp("/termekeim"))}
+                      search={lang === "en" ? { category: cat.key } : { kategoria: cat.key }}
+                      className="flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm text-popover-foreground transition-colors hover:bg-accent"
+                    >
+                      {lang === "en" ? cat.titleEn : cat.title}
+                      <ChevronDown className="h-4 w-4 -rotate-90 shrink-0" aria-hidden="true" />
+                    </Link>
+                    {items.length ? (
+                      <div className="invisible absolute left-full top-0 ml-1 w-80 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within/cat:visible group-focus-within/cat:opacity-100 group-hover/cat:visible group-hover/cat:opacity-100">
+                        {items.map((p) => (
+                          <Link
+                            key={p.slug}
+                            to={asPath(
+                              lang === "en" ? `/en/product/${p.slug}` : `/termek/${p.slug}`,
+                            )}
+                            className="block rounded-md px-3 py-2 text-sm text-popover-foreground transition-colors hover:bg-accent"
+                          >
+                            {p.name}
+                          </Link>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           {mainLinks.map((l) => (
             <Link

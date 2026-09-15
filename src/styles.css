@@ -193,3 +193,29 @@
     transform: scaleY(1);
   }
 }
+
+/* Discreet attention pulse: green->white->green inversion, brand tokens only */
+@keyframes attention-pulse {
+  0%,
+  100% {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  50% {
+    background-color: var(--background);
+    color: var(--primary);
+  }
+}
+
+.attention-pulse {
+  border: 1px solid var(--primary);
+  animation: attention-pulse 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .attention-pulse {
+    animation: none;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+}

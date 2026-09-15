@@ -35,13 +35,21 @@ export const Route = createFileRoute("/en/products")({
 });
 
 const features = [
-  "Bookkeeping helper tools",
-  "Digital solutions for preparing financial statements, including complex macros",
-  "Tax calculation helper programs",
-  "Tools related to local business tax",
-  "Helper tools for bank transfers",
+  "Payroll and bookkeeping helper tools",
   "Reporting helper tools",
+  "Digital solutions for preparing financial statements, including complex macros",
+  "Tax calculation and local business tax helper programs",
+  "Bank statement processing and transfer helper tools",
 ];
+
+/** Smooth in-page scroll for the same-route anchor buttons. */
+function scrollToSection(event: { preventDefault: () => void }, id: string) {
+  event.preventDefault();
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+  window.history.replaceState(null, "", `${window.location.pathname}#${id}`);
+}
 
 function EnglishProducts() {
   const { category: openKey } = Route.useSearch();
@@ -85,7 +93,8 @@ function EnglishProducts() {
             <Link
               to="/en/products"
               hash="products"
-              className="mt-6 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              onClick={(e) => scrollToSection(e, "products")}
+              className="attention-pulse mt-6 inline-flex items-center rounded-md px-6 py-3 text-sm font-semibold"
             >
               View the products
             </Link>
@@ -169,7 +178,7 @@ function EnglishProducts() {
         </div>
       </section>
 
-      <section id="products" className="mx-auto max-w-6xl px-4 py-16">
+      <section id="products" className="mx-auto max-w-6xl px-4 pb-16 pt-8">
         <h2 className="text-2xl font-bold text-foreground">Products available to order</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Choose a category to open the products it contains. Product names and the order process
