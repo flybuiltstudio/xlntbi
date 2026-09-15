@@ -219,3 +219,33 @@
     color: var(--primary-foreground);
   }
 }
+
+/* One-time sequential highlight for category cards when they enter the viewport */
+@keyframes category-flash {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  40% {
+    box-shadow: 0 0 0 3px var(--primary);
+    transform: scale(1.04);
+    filter: brightness(1.12);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+.category-flash {
+  animation: category-flash 0.6s ease-out 1;
+  will-change: transform, box-shadow;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-flash {
+    animation: none;
+  }
+}
