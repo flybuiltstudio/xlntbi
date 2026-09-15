@@ -58,12 +58,14 @@ function EnglishProducts() {
   const categories = applyPlacements(placements, categoryOrder);
   const open = getCategory(openKey, categories);
 
-  /** Scroll the opened category's product list into view (mobile feedback). */
+  /** Scroll to the first row of actual products after a category opens. */
   useEffect(() => {
     if (!openKey) return;
-    const target = document.getElementById("category-products");
+    const target = document.getElementById("category-product-list");
     if (!target) return;
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }, [openKey]);
 
   return (
@@ -204,7 +206,7 @@ function EnglishProducts() {
                 key={category.key}
                 to="/en/products"
                 search={isOpen ? {} : { category: category.key }}
-                hash="products"
+                hash={isOpen ? "products" : "category-product-list"}
                 aria-current={isOpen ? "true" : undefined}
                 className={`group flex flex-col overflow-hidden rounded-lg border bg-card transition-colors ${
                   isOpen ? "border-primary ring-2 ring-primary" : "border-border hover:border-primary"
@@ -232,7 +234,7 @@ function EnglishProducts() {
         {open ? (
           <div id="category-products" className="mt-10 scroll-mt-24">
             <h3 className="text-xl font-bold text-foreground">{open.titleEn}</h3>
-            <div className="mt-6 grid gap-6 md:grid-cols-2">
+            <div id="category-product-list" className="mt-6 grid scroll-mt-24 gap-6 md:grid-cols-2">
               {categoryProducts(open).map((product) => (
                 <article
                   key={product.slug}

@@ -106,12 +106,14 @@ function TermekeimPage() {
   const categories = applyPlacements(placements, categoryOrder);
   const open = getCategory(openKey, categories);
 
-  /** Scroll the opened category's product list into view (mobile feedback). */
+  /** Scroll to the first row of actual products after a category opens. */
   useEffect(() => {
     if (!openKey) return;
-    const target = document.getElementById("kategoria-termekek");
+    const target = document.getElementById("kategoria-termeklista");
     if (!target) return;
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }, [openKey]);
 
   return (
@@ -253,7 +255,7 @@ function TermekeimPage() {
                 key={category.key}
                 to="/termekeim"
                 search={isOpen ? {} : { kategoria: category.key }}
-                hash="megrendelheto-termekek"
+                hash={isOpen ? "megrendelheto-termekek" : "kategoria-termeklista"}
                 aria-current={isOpen ? "true" : undefined}
                 className={`group flex flex-col overflow-hidden rounded-lg border bg-card transition-colors ${
                   isOpen
@@ -283,7 +285,7 @@ function TermekeimPage() {
         {open ? (
           <div id="kategoria-termekek" className="mt-10 scroll-mt-24">
             <h3 className="text-xl font-bold text-foreground">{open.title}</h3>
-            <div className="mt-6 grid gap-6 md:grid-cols-2">
+            <div id="kategoria-termeklista" className="mt-6 grid scroll-mt-24 gap-6 md:grid-cols-2">
               {categoryProducts(open).map((product) => (
                 <article
                   key={product.slug}
