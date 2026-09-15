@@ -106,10 +106,10 @@ function TermekeimPage() {
   const categories = applyPlacements(placements, categoryOrder);
   const open = getCategory(openKey, categories);
 
-  /** Scroll to the first row of actual products after a category opens. */
+  /** Scroll to the opened category's heading after a category opens. */
   useEffect(() => {
     if (!openKey) return;
-    const target = document.getElementById("kategoria-termeklista");
+    const target = document.getElementById("kategoria-termekek");
     if (!target) return;
     window.requestAnimationFrame(() => {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -260,7 +260,7 @@ function TermekeimPage() {
       </section>
 
       <section id="megrendelheto-termekek" className="mx-auto max-w-6xl px-4 pb-16 pt-8">
-        <div id="products-top" className="h-[15vh] scroll-mt-24 md:h-[18vh]" aria-hidden="true" />
+        <div id="products-top" className="h-6 scroll-mt-24 md:h-10" aria-hidden="true" />
         <h2 className="text-2xl font-bold text-foreground">Megrendelhető termékek</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Válassz kategóriát, és megnyílnak az oda tartozó termékek.
@@ -278,7 +278,7 @@ function TermekeimPage() {
                 key={category.key}
                 to="/termekeim"
                 search={isOpen ? {} : { kategoria: category.key }}
-                hash={isOpen ? "megrendelheto-termekek" : "kategoria-termeklista"}
+                hash={isOpen ? "megrendelheto-termekek" : "kategoria-termekek"}
                 aria-current={isOpen ? "true" : undefined}
                 style={flashed ? { animationDelay: `${catIndex * 0.12}s` } : undefined}
                 className={`group flex flex-col overflow-hidden rounded-lg border bg-card transition-colors ${

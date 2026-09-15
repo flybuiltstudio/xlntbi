@@ -61,7 +61,7 @@ function EnglishProducts() {
   /** Scroll to the first row of actual products after a category opens. */
   useEffect(() => {
     if (!openKey) return;
-    const target = document.getElementById("category-product-list");
+    const target = document.getElementById("category-products");
     if (!target) return;
     window.requestAnimationFrame(() => {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -210,7 +210,7 @@ function EnglishProducts() {
       </section>
 
       <section id="products" className="mx-auto max-w-6xl px-4 pb-16 pt-8">
-        <div id="products-top" className="h-[15vh] scroll-mt-24 md:h-[18vh]" aria-hidden="true" />
+        <div id="products-top" className="h-6 scroll-mt-24 md:h-10" aria-hidden="true" />
         <h2 className="text-2xl font-bold text-foreground">Products available to order</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Choose a category to open the products it contains. Product names and the order process
@@ -229,7 +229,7 @@ function EnglishProducts() {
                 key={category.key}
                 to="/en/products"
                 search={isOpen ? {} : { category: category.key }}
-                hash={isOpen ? "products" : "category-product-list"}
+                hash={isOpen ? "products" : "category-products"}
                 aria-current={isOpen ? "true" : undefined}
                 style={flashed ? { animationDelay: `${catIndex * 0.12}s` } : undefined}
                 className={`group flex flex-col overflow-hidden rounded-lg border bg-card transition-colors ${
