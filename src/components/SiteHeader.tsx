@@ -148,7 +148,7 @@ export function SiteHeader() {
                   <div key={cat.key} className="group/cat relative">
                     <Link
                       to={asPath(lp("/termekeim"))}
-                      search={{ kategoria: cat.key }}
+                      search={lang === "en" ? { category: cat.key } : { kategoria: cat.key }}
                       className="flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm text-popover-foreground transition-colors hover:bg-accent"
                     >
                       {lang === "en" ? cat.titleEn : cat.title}
@@ -159,8 +159,9 @@ export function SiteHeader() {
                         {items.map((p) => (
                           <Link
                             key={p.slug}
-                            to="/termek/$slug"
-                            params={{ slug: p.slug }}
+                            to={asPath(
+                              lang === "en" ? `/en/product/${p.slug}` : `/termek/${p.slug}`,
+                            )}
                             className="block rounded-md px-3 py-2 text-sm text-popover-foreground transition-colors hover:bg-accent"
                           >
                             {p.name}
