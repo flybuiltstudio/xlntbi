@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Check } from "lucide-react";
 import { handleHwidDownload } from "@/lib/hwid-download";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
