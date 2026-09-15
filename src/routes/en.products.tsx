@@ -178,7 +178,7 @@ function EnglishProducts() {
         </div>
       </section>
 
-      <section id="products" className="mx-auto max-w-6xl px-4 py-16">
+      <section id="products" className="mx-auto max-w-6xl px-4 pb-16 pt-8">
         <h2 className="text-2xl font-bold text-foreground">Products available to order</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Choose a category to open the products it contains. Product names and the order process
