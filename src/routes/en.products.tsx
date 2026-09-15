@@ -35,13 +35,21 @@ export const Route = createFileRoute("/en/products")({
 });
 
 const features = [
-  "Bookkeeping helper tools",
-  "Digital solutions for preparing financial statements, including complex macros",
-  "Tax calculation helper programs",
-  "Tools related to local business tax",
-  "Helper tools for bank transfers",
+  "Payroll and bookkeeping helper tools",
   "Reporting helper tools",
+  "Digital solutions for preparing financial statements, including complex macros",
+  "Tax calculation and local business tax helper programs",
+  "Bank statement processing and transfer helper tools",
 ];
+
+/** Smooth in-page scroll for the same-route anchor buttons. */
+function scrollToSection(event: { preventDefault: () => void }, id: string) {
+  event.preventDefault();
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+  window.history.replaceState(null, "", `${window.location.pathname}#${id}`);
+}
 
 function EnglishProducts() {
   const { category: openKey } = Route.useSearch();
