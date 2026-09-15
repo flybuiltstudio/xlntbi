@@ -104,8 +104,8 @@ function EnglishProducts() {
 
             <Link
               to="/en/products"
-              hash="products"
-              onClick={(e) => scrollToSection(e, "products")}
+              hash="products-top"
+              onClick={(e) => scrollToSection(e, "products-top")}
               className="attention-pulse mt-6 inline-flex items-center rounded-md px-6 py-3 text-sm font-semibold"
             >
               View the products
