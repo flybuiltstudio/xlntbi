@@ -93,7 +93,8 @@ function EnglishProducts() {
             <Link
               to="/en/products"
               hash="products"
-              className="mt-6 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              onClick={(e) => scrollToSection(e, "products")}
+              className="attention-pulse mt-6 inline-flex items-center rounded-md px-6 py-3 text-sm font-semibold"
             >
               View the products
             </Link>
