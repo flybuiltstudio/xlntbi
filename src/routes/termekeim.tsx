@@ -280,7 +280,10 @@ function TermekeimPage() {
                 search={isOpen ? {} : { kategoria: category.key }}
                 hash={isOpen ? "megrendelheto-termekek" : "kategoria-termeklista"}
                 aria-current={isOpen ? "true" : undefined}
+                style={flashed ? { animationDelay: `${catIndex * 0.12}s` } : undefined}
                 className={`group flex flex-col overflow-hidden rounded-lg border bg-card transition-colors ${
+                  flashed ? "category-flash " : ""
+                }${
                   isOpen
                     ? "border-primary ring-2 ring-primary"
                     : "border-border hover:border-primary"
