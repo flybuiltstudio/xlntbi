@@ -219,7 +219,7 @@ function EnglishProducts() {
 
         <div
           ref={gridRef}
-          className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7"
+          className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8"
         >
           {categories.map((category, catIndex) => {
             const isOpen = category.key === openKey;
@@ -258,6 +258,12 @@ function EnglishProducts() {
         {open ? (
           <div id="category-products" className="mt-10 scroll-mt-24">
             <h3 className="text-xl font-bold text-foreground">{open.titleEn}</h3>
+            {categoryProducts(open).length === 0 ? (
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                Bookkeeping materials, tax guides and practical advice for accountants and
+                accounting firms will be published here in PDF format.
+              </p>
+            ) : null}
             <div id="category-product-list" className="mt-6 grid scroll-mt-24 gap-6 md:grid-cols-2">
               {categoryProducts(open).map((product) => (
                 <article
