@@ -5,6 +5,7 @@ import bankImg from "@/assets/kategoriak/bank.jpg";
 import vegyesImg from "@/assets/kategoriak/vegyes-konyveles.jpg";
 import riportokImg from "@/assets/kategoriak/riportok.jpg";
 import egyebekImg from "@/assets/kategoriak/egyebek.jpg";
+import tudastarImg from "@/assets/kategoriak/tudastar.jpg";
 import { products, type Product } from "@/lib/products";
 
 export type ProductCategory = {
@@ -111,6 +112,13 @@ export const productCategories: ProductCategory[] = [
       "wifi-jelszo-nezo",
       "auditxml-ellenorzo-javito",
     ],
+  },
+  {
+    key: "tudastar",
+    title: "Tudástár",
+    titleEn: "Knowledge base",
+    image: tudastarImg,
+    slugs: [],
   },
 ];
 
