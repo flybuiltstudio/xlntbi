@@ -23,6 +23,7 @@ Igen, megoldható. A biztonságos kialakítás egy külön **DEMO** licenctípus
 5. A DEMO-letöltés és a gépazonosító/licenckérés a jelenlegi védett letöltési és e-mail-folyamat külön ágát használhatja.
 6. Honeypot, gyakorisági korlát és e-mail-címenkénti/gépenkénti korlátozás védené a visszaéléstől.
 7. Az admin **Statisztika** oldalon az éles vásárlások blokkja alatt külön **DEMO letöltések** blokk jelenhet meg, hasonló termék-, időszak- és darabszám-összesítéssel. Ez kizárólag a DEMO-nyilvántartásból számolna, így a vásárlási bevételt, rendelésdarabszámot és exportokat nem módosítaná.
+8. A tulajdonosnak érkező licenckérő e-mail tárgya hangsúlyosan a **CSAK DEMO** jelöléssel kezdődne. Az e-mail törzsének legelső sora szintén jól látható, piros figyelmeztetés lenne: **CSAK DEMO LICENCET KAPHAT!** Így a DEMO-kérés nem téveszthető össze fizetett licenccel.
 
 A DEMO-részhez ebben a munkában nem módosítok sem oldalt, sem adatbázist, sem fizetési vagy számlázási folyamatot.
 
