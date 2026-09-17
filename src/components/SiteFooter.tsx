@@ -23,6 +23,7 @@ const pages: FooterLink[] = [
 
 const services: FooterLink[] = [
   { to: "/konyveles", key: "service.bookkeeping" },
+  { to: "/ev-konyveles", key: "service.soleTrader" },
   { to: "/adotanacsadas", key: "service.taxAdvisory" },
   { to: "/fintech-es-bi", key: "service.fintechBi" },
   { to: "/kontrolling", key: "service.controlling" },
@@ -30,6 +31,7 @@ const services: FooterLink[] = [
   { to: "/konyvvizsgalat", key: "service.statutoryAudit" },
   { to: "/konyveloiroda-audit", key: "service.firmAudit" },
   { to: "/digitalis-idomegtakaritasi-audit", key: "service.timeAudit" },
+  { to: "/oktatas", key: "nav.training" },
 ];
 
 const legal: FooterLink[] = [
