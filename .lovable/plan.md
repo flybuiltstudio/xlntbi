@@ -6,9 +6,11 @@
 - A képet determinisztikus színkorrekcióval igazítom az Adózás kategóriakép pontos háttér- és világoszöld vonalszíneihez, nem új, bizonytalan árnyalatú generálással.
 - Ellenőrzöm a kép sarkainak, domináns hátterének és ikonvonalainak színét, valamint a megjelenést a Termékek oldalon.
 
-## 2. EV Könyvelés a lábléc Szolgáltatások listájában
+## 2. EV Könyvelés és Oktatás a lábléc Szolgáltatások listájában
 - Az **EV Könyvelés** link bekerül a láblécbe közvetlenül a **Könyvelési szolgáltatások** után, ugyanoda, ahol a felső menüben szerepel.
+- Az **Oktatás** is bekerül ugyanebbe a láblécoszlopba, a szolgáltatási aloldalak után.
 - A meglévő fordítást használom, ezért az angol láblécben **Sole trader bookkeeping** néven, a megfelelő angol oldallal jelenik meg.
+- Az Oktatás az angol láblécben a meglévő angol felirattal és angol céloldallal jelenik meg.
 - A többi lábléclink sorrendje és megjelenése nem változik.
 
 ## 3. DEMO licenc – csak megvalósíthatósági javaslat, most nem készül el
@@ -26,5 +28,5 @@ A DEMO-részhez ebben a munkában nem módosítok sem oldalt, sem adatbázist, s
 
 ## Ellenőrzés
 - Tudástár és Adózás referencia-kép színértékeinek összehasonlítása.
-- Magyar és angol lábléc linkjének, sorrendjének és céloldalának ellenőrzése asztali és mobil nézetben.
+- Az EV Könyvelés és az Oktatás magyar és angol lábléclinkjének, sorrendjének és céloldalának ellenőrzése asztali és mobil nézetben.
 - A DEMO-folyamat változatlan marad; csak a megvalósíthatóságát dokumentálom.
