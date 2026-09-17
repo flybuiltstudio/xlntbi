@@ -10,3 +10,6 @@
 - [x] Listaoldalak, nyelvváltás, sitemap, képkiszolgáló végpont
 - [x] Typecheck
 - [ ] Böngészős próba: admin oldal megnyitása, tartalomjegyzék, próba-kalkulátor feltöltés
+- [x] Tudástár kategóriakép színének egységesítése a többi kategóriaképpel
+- [x] EV Könyvelés és Oktatás hozzáadása a lábléc Szolgáltatások listájához
+- [ ] DEMO licencfolyamat későbbi megvalósítása külön statisztikával és DEMO-jelölt e-mailekkel
