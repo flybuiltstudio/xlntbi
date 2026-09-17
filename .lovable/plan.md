@@ -20,7 +20,7 @@ Igen, megoldható. A biztonságos kialakítás egy külön **DEMO** licenctípus
 2. A rendszer nem hoz létre Stripe-fizetést és nem hívja a Billingót.
 3. A DEMO-igény nem kerül a normál vásárlások közé, ezért az admin vásárlási statisztikát sem növeli.
 4. Külön DEMO-azonosítóval és külön, RLS-védett nyilvántartással kezelhető, így ellenőrizhető és korlátozható marad anélkül, hogy valódi rendelésnek számítana.
-5. A DEMO-letöltés és a gépazonosító/licenckérés a jelenlegi védett letöltési és e-mail-folyamat külön ágát használhatja.
+5. Sikeres DEMO-igénylés után a folyamat fizetés nélkül azonnal továbblép: létrehoz egy korlátozott, lejáró, védett letöltőlinket, és elküldi a kitöltő e-mail-címére. A letöltéshez nem kell Stripe-munkamenet vagy Billingo-számla. A gépazonosító/licenckérés ezután a jelenlegi védett e-mail-folyamat külön DEMO-ágát használja.
 6. Honeypot, gyakorisági korlát és e-mail-címenkénti/gépenkénti korlátozás védené a visszaéléstől.
 7. Az admin **Statisztika** oldalon az éles vásárlások blokkja alatt külön **DEMO letöltések** blokk jelenhet meg, hasonló termék-, időszak- és darabszám-összesítéssel. Ez kizárólag a DEMO-nyilvántartásból számolna, így a vásárlási bevételt, rendelésdarabszámot és exportokat nem módosítaná.
 8. A tulajdonosnak érkező licenckérő e-mail tárgya hangsúlyosan a **CSAK DEMO** jelöléssel kezdődne. Az e-mail törzsének legelső sora szintén jól látható, piros figyelmeztetés lenne: **CSAK DEMO LICENCET KAPHAT!** Így a DEMO-kérés nem téveszthető össze fizetett licenccel.
