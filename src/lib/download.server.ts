@@ -179,7 +179,29 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
     console.error("Download lookup failed:", error.message);
     return { ok: false, reason: "error" };
   }
-  if (!row) return { ok: false, reason: "not_found" };
+  if (!row) {
+    const { data: freeRow, error: freeError } = await supabaseAdmin
+      .from("free_download_requests")
+      .select("id, storage_path, file_name, download_count, max_downloads, expires_at")
+      .eq("token", token)
+      .maybeSingle();
+    if (freeError) {
+      console.error("Free download lookup failed:", freeError.message);
+      return { ok: false, reason: "error" };
+    }
+    if (!freeRow) return { ok: false, reason: "not_found" };
+    if (new Date(freeRow.expires_at).getTime() < Date.now()) return { ok: false, reason: "expired" };
+    if (freeRow.download_count >= freeRow.max_downloads) return { ok: false, reason: "limit" };
+    const { data: freeSigned, error: freeSignError } = await supabaseAdmin.storage
+      .from(BUCKET)
+      .createSignedUrl(freeRow.storage_path, 300, { download: freeRow.file_name });
+    if (freeSignError || !freeSigned?.signedUrl) return { ok: false, reason: "error" };
+    await supabaseAdmin.from("free_download_requests").update({
+      download_count: freeRow.download_count + 1,
+      last_downloaded_at: new Date().toISOString(),
+    }).eq("id", freeRow.id);
+    return { ok: true, url: freeSigned.signedUrl };
+  }
   if (new Date(row.expires_at as string).getTime() < Date.now()) {
     return { ok: false, reason: "expired" };
   }
