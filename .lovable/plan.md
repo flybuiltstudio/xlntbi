@@ -4,7 +4,7 @@
 
 **„Számlázás” vs. „Billingo számla újraküldése”:** technikailag ugyanaz a művelet (mindkettő ugyanazt a számlakiállítást indítja). Csak a megjelenés más: a „Számlázás” akkor látszik, ha a rendelés rendezett; ha már van számla, felirata „Számlázva ✓” és nem nyomható. A „Billingo számla újraküldése” csak akkor jelenik meg, ha egy korábbi számlakiállítás hibára futott — lényegében ugyanaz a gomb, piros, hibajelző kiadásban.
 
-**Hónapra szűrés:** a hónap-gombok szándékosan csak akkor élnek, ha előtte kiválasztasz egy konkrét évet. „Összes év” esetén szürkék. Ha ez zavaró, kétféle megoldás lehet (kérdés alább).
+**Hónapra szűrés:** ma a hónap-gombok csak akkor élnek, ha előtte kiválasztasz egy konkrét évet. Ezt megszüntetem: a hónap év kiválasztása nélkül is szűrni fog (pl. az összes év szeptembere), évet választva pedig az adott év hónapjára.
 
 **Számla megnyitása / Számla letöltése:** valóban ugyanaz a hivatkozás; a letöltés a külső számlaszolgáltató címe miatt nem tud igazi mentést indítani, ezért ugyanúgy megnyitja. Ezért az egyiket törlöm.
 
@@ -35,3 +35,4 @@ Csak a megjelenítés és a sorrend változik, a gombok működése nem.
 - Érintett fájl: `src/components/admin-panels.tsx`, az `OrdersPanel` rendeléskártyájának gombsora (kb. 955–1072. sor).
 - A „Letöltési link újraküldése” ma a jóváhagyó gombbal egy `else` ágban van; kiemelem külön, `paymentStatus === "paid"` feltétellel, a sorrendben hátrébb.
 - Az `onInvoicePdf(order, "download")` ág és a `mode` paraméter `"download"` értéke használaton kívül marad, ezért a függvény egyszerűsödik `open`-re.
+- Hónap szűrés: az `activeMonth` már nem nullázódik `activeYear === null` esetén, a hónap-gombok `disabled` feltétele megszűnik, a szűrő pedig az évtől függetlenül alkalmazza a `date.getMonth()` egyezést.
