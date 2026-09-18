@@ -17,3 +17,5 @@
 - [x] Tudástár-specifikus letöltési e-mail licenc- és HWID-szöveg nélkül
 - [x] 0 Ft-os E-nyugta útmutató adatbekéréses, védett letöltési folyamata
 - [x] DEMO-terv kiegészítése: minden jelenlegi és jövőbeli termék, kivéve a Tudástár termékeit
+- [x] Admin Megrendelések: gombok átnevezése/sorrendje, rendelésenkénti Tetejére gomb
+- [x] Megrendelések és Statisztika: hónap-szűrés év kiválasztása nélkül
