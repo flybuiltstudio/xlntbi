@@ -35,3 +35,4 @@ Csak a megjelenítés és a sorrend változik, a gombok működése nem.
 - Érintett fájl: `src/components/admin-panels.tsx`, az `OrdersPanel` rendeléskártyájának gombsora (kb. 955–1072. sor).
 - A „Letöltési link újraküldése” ma a jóváhagyó gombbal egy `else` ágban van; kiemelem külön, `paymentStatus === "paid"` feltétellel, a sorrendben hátrébb.
 - Az `onInvoicePdf(order, "download")` ág és a `mode` paraméter `"download"` értéke használaton kívül marad, ezért a függvény egyszerűsödik `open`-re.
+- Hónap szűrés: az `activeMonth` már nem nullázódik `activeYear === null` esetén, a hónap-gombok `disabled` feltétele megszűnik, a szűrő pedig az évtől függetlenül alkalmazza a `date.getMonth()` egyezést.
