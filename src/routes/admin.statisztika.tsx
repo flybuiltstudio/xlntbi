@@ -178,7 +178,7 @@ function StatsPanel() {
   }, [rows, payFilter]);
 
   const activeYear = yearSel === "all" ? null : yearSel;
-  const activeMonth = activeYear === null ? "all" : monthSel;
+  const activeMonth = monthSel;
 
   /** Rows for the KPI cards and the product table (payment + period filter). */
   const periodRows = useMemo(
@@ -207,7 +207,9 @@ function StatsPanel() {
 
   const periodLabel =
     activeYear === null
-      ? "Összes év"
+      ? activeMonth === "all"
+        ? "Összes év"
+        : `Összes év – ${MONTHS[activeMonth]}`
       : activeMonth === "all"
         ? `${activeYear} egész éve`
         : `${activeYear}. ${MONTHS[activeMonth]}`;
@@ -281,7 +283,6 @@ function StatsPanel() {
 
   const selectYear = (y: YearSel) => {
     setYearSel(y);
-    if (y === "all") setMonthSel("all");
   };
 
   return (
@@ -360,8 +361,7 @@ function StatsPanel() {
               </span>
               <button
                 type="button"
-                disabled={activeYear === null}
-                className={filterChip(activeMonth === "all") + " disabled:cursor-not-allowed disabled:opacity-50"}
+                className={filterChip(activeMonth === "all")}
                 onClick={() => setMonthSel("all")}
               >
                 Összes
@@ -370,8 +370,7 @@ function StatsPanel() {
                 <button
                   key={label}
                   type="button"
-                  disabled={activeYear === null}
-                  className={filterChip(activeMonth === i) + " disabled:cursor-not-allowed disabled:opacity-50"}
+                  className={filterChip(activeMonth === i)}
                   onClick={() => setMonthSel(i)}
                   title={MONTHS[i]}
                 >

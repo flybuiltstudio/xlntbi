@@ -338,7 +338,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   }, [orders]);
 
   const activeYear = yearSel === "all" ? null : yearSel;
-  const activeMonth = activeYear === null ? "all" : monthSel;
+  const activeMonth = monthSel;
 
   const filteredOrders = useMemo(
     () =>
@@ -359,7 +359,6 @@ export function OrdersPanel({ email }: { email: string | null }) {
 
   const selectYear = (y: number | "all") => {
     setYearSel(y);
-    if (y === "all") setMonthSel("all");
   };
 
   async function refresh() {
@@ -517,24 +516,16 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
-  /** Opens or downloads the Billingo invoice PDF via its public URL. */
-  async function onInvoicePdf(order: Order, mode: "open" | "download") {
+  /** Opens the Billingo invoice PDF in a new tab, where it can also be downloaded. */
+  async function onInvoicePdf(order: Order) {
     setBusy(order.id);
     setMessage("");
     try {
       const result = await invoiceUrl({ data: { orderId: order.id } });
       if (!result.ok) {
         setMessage(result.error ?? "A számla nem érhető el.");
-      } else if (mode === "open") {
-        window.open(result.url, "_blank", "noopener");
       } else {
-        const link = document.createElement("a");
-        link.href = result.url;
-        link.download = `${result.invoiceNumber || order.orderNumber}.pdf`;
-        link.rel = "noopener";
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+        window.open(result.url, "_blank", "noopener");
       }
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Hiba történt.");
@@ -728,7 +719,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
       ) : null}
 
       {orders !== null && orders.length > 0 ? (
-        <div className="mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
+        <div id="rendeles-szurok" className="scroll-mt-24 mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
           <div className="flex flex-wrap items-center gap-2">
             <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Fizetés
@@ -820,8 +811,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
             </span>
             <button
               type="button"
-              disabled={activeYear === null}
-              className={filterChip(activeMonth === "all") + " disabled:cursor-not-allowed disabled:opacity-50"}
+              className={filterChip(activeMonth === "all")}
               onClick={() => setMonthSel("all")}
             >
               Összes
@@ -830,8 +820,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
               <button
                 key={label}
                 type="button"
-                disabled={activeYear === null}
-                className={filterChip(activeMonth === i) + " disabled:cursor-not-allowed disabled:opacity-50"}
+                className={filterChip(activeMonth === i)}
                 onClick={() => setMonthSel(i)}
                 title={MONTHS[i]}
               >
@@ -962,26 +951,23 @@ export function OrdersPanel({ email }: { email: string | null }) {
                   >
                     {busy === order.id ? "Feldolgozás…" : "Beérkezett az utalás – jóváhagyom"}
                   </button>
-                ) : (
-                  <button
-                    type="button"
-                    disabled={busy === order.id}
-                    onClick={() => void onResend(order)}
-                    className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
-                  >
-                    {busy === order.id ? "Küldés…" : "Letöltési link újraküldése"}
-                  </button>
-                )}
+                ) : null}
                 {order.paymentStatus === "paid" ? (
                   <button
                     type="button"
                     disabled={busy === order.id || !!order.billingoInvoiceNumber}
                     onClick={() => void onRetryInvoice(order)}
-                    className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                    className={
+                      order.invoiceFailed
+                        ? "rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
+                        : "rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                    }
                     title={
                       order.billingoInvoiceNumber
                         ? "Már ki van állítva számla"
-                        : "Billingo számla kiállítása / újrakísérlet"
+                        : order.invoiceErrorMessage
+                          ? `Korábbi hiba: ${order.invoiceErrorMessage}`
+                          : "Billingo számla kiállítása / újrakísérlet"
                     }
                   >
                     {busy === order.id
@@ -989,36 +975,6 @@ export function OrdersPanel({ email }: { email: string | null }) {
                       : order.billingoInvoiceNumber
                         ? "Számlázva ✓"
                         : "Számlázás"}
-                  </button>
-                ) : null}
-                {order.paymentStatus === "paid" ? (
-                  <button
-                    type="button"
-                    disabled={busy === order.id}
-                    onClick={() => {
-                      setLicenseFor(licenseFor?.id === order.id ? null : order);
-                      setLicenseKey("");
-                      setMessage("");
-                    }}
-                    className="rounded-md border border-primary/40 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 disabled:opacity-60"
-                    title="Licenszkód kiküldése a vevőnek e-mailben"
-                  >
-                    {licenseFor?.id === order.id ? "Licensz küldése – mégsem" : "Licensz küldése"}
-                  </button>
-                ) : null}
-                {order.invoiceFailed ? (
-                  <button
-                    type="button"
-                    disabled={busy === order.id}
-                    onClick={() => void onRetryInvoice(order)}
-                    className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
-                    title={
-                      order.invoiceErrorMessage
-                        ? `Korábbi hiba: ${order.invoiceErrorMessage}`
-                        : "A korábbi számlakiállítás hibára futott"
-                    }
-                  >
-                    {busy === order.id ? "Feldolgozás…" : "Billingo számla újraküldése"}
                   </button>
                 ) : null}
                 {cancelFailedIds.has(order.id) ? (
@@ -1037,31 +993,47 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     <button
                       type="button"
                       disabled={busy === order.id}
-                      onClick={() => void onInvoicePdf(order, "open")}
-                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
-                      title={`Számla megnyitása új lapon (${order.billingoInvoiceNumber})`}
-                    >
-                      Számla megnyitása
-                    </button>
-                    <button
-                      type="button"
-                      disabled={busy === order.id}
-                      onClick={() => void onInvoicePdf(order, "download")}
-                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
-                      title={`Számla PDF letöltése (${order.billingoInvoiceNumber})`}
-                    >
-                      Számla letöltése
-                    </button>
-                    <button
-                      type="button"
-                      disabled={busy === order.id}
                       onClick={() => void onShowInvoiceData(order, false)}
                       className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
                       title="A Billingo számla adatai (AAM, nettó/bruttó, sorszám)"
                     >
                       {snapshots[order.id] ? "Számla adatai elrejtése" : "Számla adatai"}
                     </button>
+                    <button
+                      type="button"
+                      disabled={busy === order.id}
+                      onClick={() => void onInvoicePdf(order)}
+                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                      title={`Számla megnyitása új lapon, ahol le is tölthető (${order.billingoInvoiceNumber})`}
+                    >
+                      Számla megnyitása/letöltése
+                    </button>
                   </>
+                ) : null}
+                {order.paymentStatus === "paid" ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => void onResend(order)}
+                    className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                  >
+                    {busy === order.id ? "Küldés…" : "Letöltési link újraküldése"}
+                  </button>
+                ) : null}
+                {order.paymentStatus === "paid" ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => {
+                      setLicenseFor(licenseFor?.id === order.id ? null : order);
+                      setLicenseKey("");
+                      setMessage("");
+                    }}
+                    className="rounded-md border border-primary/40 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 disabled:opacity-60"
+                    title="Licenckód kiküldése a vevőnek e-mailben"
+                  >
+                    {licenseFor?.id === order.id ? "Licenc küldése – mégsem" : "Licenc küldése"}
+                  </button>
                 ) : null}
                 <a
                   href={`mailto:${order.email}?subject=${encodeURIComponent(order.orderNumber)}`}
@@ -1130,6 +1102,15 @@ export function OrdersPanel({ email }: { email: string | null }) {
                   onRefresh={() => void onShowInvoiceData(order, true)}
                 />
               ) : null}
+              <div className="mt-4 text-right">
+                <button
+                  type="button"
+                  onClick={() => document.getElementById("rendeles-szurok")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="rounded-md border border-border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-primary hover:bg-accent hover:text-foreground"
+                >
+                  ↑ Tetejére
+                </button>
+              </div>
             </article>
           ))}
         </div>
