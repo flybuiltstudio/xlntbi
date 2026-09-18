@@ -199,11 +199,11 @@ function EnglishProductPage() {
 
             {data.status === "available" ? (
               <Link
-                to="/megrendeles"
-                search={{ termek: data.slug }}
+                to={data.price === 0 ? "/ingyenes-letoltes" : "/megrendeles"}
+                search={data.price === 0 ? { termek: data.slug, lang: "en" as const } : { termek: data.slug }}
                 className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
               >
-                Order
+                {data.price === 0 ? "Free download" : "Order"}
               </Link>
             ) : (
               <p className="mt-6 rounded-md border border-border bg-secondary/60 px-4 py-3 text-sm font-semibold text-foreground">

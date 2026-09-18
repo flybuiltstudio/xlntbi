@@ -201,11 +201,11 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
 
             {product.status === "available" ? (
               <Link
-                to="/megrendeles"
+                to={product.price === 0 ? "/ingyenes-letoltes" : "/megrendeles"}
                 search={{ termek: product.slug }}
                 className="mt-6 inline-flex w-full items-center justify-center rounded-md bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
               >
-                Megrendelem
+                {product.price === 0 ? "Ingyenes letöltés" : "Megrendelem"}
               </Link>
             ) : (
               <p className="mt-6 rounded-md border border-border bg-secondary/60 px-4 py-3 text-sm font-semibold text-foreground">
@@ -213,8 +213,9 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
               </p>
             )}
             <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-              A megrendelés leadása után e-mailben visszaigazolást kapsz, és felvesszük veled a
-              kapcsolatot a számlázás és a letöltés részleteivel. Bankkártyás fizetés hamarosan.
+              {product.price === 0
+                ? "Az igénylés után e-mailben küldjük a védett, 14 napig használható letöltési linket."
+                : "A megrendelés leadása után e-mailben visszaigazolást kapsz, és felvesszük veled a kapcsolatot a számlázás és a letöltés részleteivel. Bankkártyás fizetés hamarosan."}
             </p>
 
             <div className="mt-8 rounded-xl border border-border p-5">

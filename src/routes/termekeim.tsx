@@ -355,11 +355,11 @@ function TermekeimPage() {
                       </Link>
                       {product.status === "available" ? (
                         <Link
-                          to="/megrendeles"
-                          search={{ termek: product.slug }}
+                          to={product.price === 0 ? "/ingyenes-letoltes" : "/megrendeles"}
+                          search={product.price === 0 ? { termek: product.slug } : { termek: product.slug }}
                           className="inline-flex items-center rounded-md border border-input px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
                         >
-                          Megrendelem
+                          {product.price === 0 ? "Ingyenes letöltés" : "Megrendelem"}
                         </Link>
                       ) : null}
                     </div>

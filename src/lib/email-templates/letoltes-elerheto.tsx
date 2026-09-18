@@ -130,10 +130,10 @@ const Email = ({
           a saját gépedre. Ha lejárt vagy elveszett a link, válaszolj erre a levélre, és küldök
           újat.
         </Text> : null}
-        <Text style={paragraph}>
+        {!isKnowledge ? <Text style={paragraph}>
           A licenc a megrendelésben szereplő csomagra érvényes, továbbadása nem engedélyezett.
           Ha bármiben elakadsz a telepítéssel vagy a használattal, írj bátran.
-        </Text>
+        </Text> : null}
         <Footer />
       </Container>
     </Body>
