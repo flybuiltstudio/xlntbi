@@ -186,7 +186,7 @@ export function CatalogAuditPanel() {
 
       {cron ? (
         <p className="mt-3 rounded-md border border-border bg-card p-3 text-sm text-muted-foreground">
-          <strong className="text-foreground">Heti automatikus audit</strong> — minden hétfőn
+          <strong className="text-foreground">Heti automatikus audit</strong> — minden vasárnap
           3:00-kor fut az éles környezetre, hiba esetén e-mail értesítéssel. Utolsó futás:{" "}
           {new Date(cron.lastRunAt ?? "").toLocaleString("hu-HU")} ({cron.environment}):{" "}
           {cron.errorCount} hiba, {cron.warnCount} figyelmeztetés
@@ -195,7 +195,7 @@ export function CatalogAuditPanel() {
         </p>
       ) : (
         <p className="mt-3 rounded-md border border-border bg-card p-3 text-sm text-muted-foreground">
-          <strong className="text-foreground">Heti automatikus audit</strong> — minden hétfőn
+          <strong className="text-foreground">Heti automatikus audit</strong> — minden vasárnap
           3:00-kor fut az éles környezetre; hiba esetén e-mail értesítés megy. Még nem volt
           ütemezett futás.
         </p>

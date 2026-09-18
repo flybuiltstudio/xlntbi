@@ -26,6 +26,8 @@ export type NavStatusReport = {
   checked: number;
   counts: Record<NavState, number>;
   rows: NavInvoiceStatus[];
+  /** Orders in the inspected window that have no Billingo invoice yet. */
+  withoutInvoice?: number;
 };
 
 export const NAV_STATE_LABEL: Record<NavState, string> = {
