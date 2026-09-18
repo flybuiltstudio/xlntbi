@@ -552,6 +552,63 @@ export type Database = {
         }
         Relationships: []
       }
+      free_download_requests: {
+        Row: {
+          created_at: string
+          download_count: number
+          email: string
+          expires_at: string
+          file_name: string
+          id: string
+          ip_address: string | null
+          last_downloaded_at: string | null
+          max_downloads: number
+          name: string
+          phone: string | null
+          product_name: string
+          product_slug: string
+          storage_path: string
+          token: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          download_count?: number
+          email: string
+          expires_at: string
+          file_name: string
+          id?: string
+          ip_address?: string | null
+          last_downloaded_at?: string | null
+          max_downloads?: number
+          name: string
+          phone?: string | null
+          product_name: string
+          product_slug: string
+          storage_path: string
+          token: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          download_count?: number
+          email?: string
+          expires_at?: string
+          file_name?: string
+          id?: string
+          ip_address?: string | null
+          last_downloaded_at?: string | null
+          max_downloads?: number
+          name?: string
+          phone?: string | null
+          product_name?: string
+          product_slug?: string
+          storage_path?: string
+          token?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       newsletter_campaigns: {
         Row: {
           body_html: string
