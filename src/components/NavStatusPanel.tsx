@@ -189,6 +189,16 @@ export function NavStatusPanel() {
                 </tbody>
               </table>
             </div>
+
+            <p className="mt-3 text-xs text-muted-foreground">
+              {report.checked} számla az ellenőrzött rendelésekből
+              {report.withoutInvoice
+                ? ` · ${report.withoutInvoice} rendeléshez még nincs Billingo számla, ezek nem szerepelnek a listában`
+                : ""}
+              {onlyProblems && report.counts.ok > 0
+                ? ` · ${report.counts.ok} rendben lévő számla a szűrő miatt nem látszik`
+                : ""}
+            </p>
           </>
         ) : null}
       </div>
