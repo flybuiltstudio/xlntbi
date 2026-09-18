@@ -118,7 +118,12 @@ export const productCategories: ProductCategory[] = [
     title: "Tudástár",
     titleEn: "Knowledge base",
     image: tudastarImg,
-    slugs: [],
+    slugs: [
+      "ugyvezetoi-dijazas-cegkoltsegek",
+      "e-nyugta-e-penztargep-utmutato",
+      "nemet-osztrak-adovisszaterites",
+      "nemet-munkanelkuli-segely",
+    ],
   },
 ];
 
@@ -136,6 +141,11 @@ export function categoryProducts(category: ProductCategory): Product[] {
   return category.slugs
     .map((slug) => products.find((p) => p.slug === slug))
     .filter((p): p is Product => Boolean(p));
+}
+
+/** True for products placed in the Knowledge base category. */
+export function isKnowledgeProduct(slug: string): boolean {
+  return productCategories.find((category) => category.key === "tudastar")?.slugs.includes(slug) ?? false;
 }
 
 /** Admin-managed override of a product's category and position. */

@@ -13,7 +13,7 @@
 - [x] Tudástár kategóriakép színének egységesítése a többi kategóriaképpel
 - [x] EV Könyvelés és Oktatás hozzáadása a lábléc Szolgáltatások listájához
 - [ ] DEMO licencfolyamat későbbi megvalósítása külön statisztikával és DEMO-jelölt e-mailekkel
-- [ ] Négy új Tudástár-termék feltöltése a jóváhagyott sorrendben és árakon
-- [ ] Tudástár-specifikus letöltési e-mail licenc- és HWID-szöveg nélkül
-- [ ] 0 Ft-os E-nyugta útmutató adatbekéréses, védett letöltési folyamata
-- [ ] DEMO-terv kiegészítése: minden jelenlegi és jövőbeli termék, kivéve a Tudástár termékeit
+- [x] Négy új Tudástár-termék feltöltése a jóváhagyott sorrendben és árakon
+- [x] Tudástár-specifikus letöltési e-mail licenc- és HWID-szöveg nélkül
+- [x] 0 Ft-os E-nyugta útmutató adatbekéréses, védett letöltési folyamata
+- [x] DEMO-terv kiegészítése: minden jelenlegi és jövőbeli termék, kivéve a Tudástár termékeit

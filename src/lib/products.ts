@@ -31,6 +31,10 @@ import ifrsPenzugyiKimutatasokImg from "@/assets/ifrs-penzugyi-kimutatasok.jpg";
 import beszamoloImg from "@/assets/beszamolo-photo.jpg";
 import cegkivonatExcelImg from "@/assets/cegkivonat-excel-konverter-photo.jpg";
 import univerzalisBankkonverterImg from "@/assets/univerzalis-bankkonverter-photo.jpg";
+import knowledgeExecutiveImg from "@/assets/knowledge-executive-expenses.jpg";
+import knowledgeReceiptImg from "@/assets/knowledge-e-receipt.jpg";
+import knowledgeTaxRefundImg from "@/assets/knowledge-tax-refund.jpg";
+import knowledgeUnemploymentImg from "@/assets/knowledge-unemployment.jpg";
 
 import { hasXlntPrefix, withXlntPrefix } from "@/lib/product-name";
 
@@ -1965,6 +1969,98 @@ export const products: Product[] = [
       fileName: "XLNT_IFRS_FS_v1_1.xlsm",
       storagePath: "ifrs-penzugyi-kimutatasok/XLNT_IFRS_FS_v1_1.xlsm",
     },
+  },
+  {
+    slug: "ugyvezetoi-dijazas-cegkoltsegek",
+    priceId: "ugyvezetoi_dijazas_cegkoltsegek_dokumentum",
+    name: "XLNT Ügyvezetői díjazás és cégköltségek",
+    status: "available", price: 8990, currency: "HUF", image: knowledgeExecutiveImg,
+    metaTitle: "Ügyvezetői díjazás és cégköltségek adózási útmutató | XLNT BI",
+    metaDescription: "Kétnyelvű magyar–angol útmutató az ügyvezetői díjazás, járulékok, Wise-kártyás kiadások és céges költségek szabályos elszámolásához.",
+    intro: [
+      "Külföldi vagy magyar ügyvezető áll a céged élén? Ez a teljes egészében kétnyelvű, magyar–angol adózási útmutató választ ad a Kft. ügyvezetők díjazásának és a céges költségek elszámolásának lényeges kérdéseire.",
+      "Példákkal mutatja be az ügyvezetői megbízási díj adóterheit, a kötelező minimumalapokat, valamint a céges eszközök, utazások és Wise-kártyás kiadások elszámolását.",
+    ],
+    features: [
+      "Munkabér, megbízási díj és társas vállalkozói biztosítási státusz.",
+      "Külföldi ügyvezetők és a kettős adóztatás gyakorlati kérdései.",
+      "SZJA-, TB- és szocho-számítás gyakorlati példával.",
+      "Repülőjegy, szálloda, telefon, laptop, cégautó és reprezentáció elszámolása.",
+      "Wise-kártyás céges kiadások és az Expense Claim Form kötelező elemei.",
+      "Az ügyvezetői díj társaságiadó-alapra gyakorolt hatása.",
+    ],
+    why: "Kétnyelvű, azonnal használható segítség magyar tulajdonosoknak, külföldi cégvezetőknek és könyvelőknek, jogszabályi hivatkozásokkal és gyakorlati példákkal.",
+    tiers: [{ id: "dokumentum", label: "Digitális kiadvány", price: 8990, priceId: "ugyvezetoi_dijazas_cegkoltsegek_dokumentum" }],
+    download: { fileName: "Ügyvezetői_díjazás_és_cégköltségek.zip", storagePath: "tudastar/ugyvezetoi-dijazas-es-cegkoltsegek.zip" },
+  },
+  {
+    slug: "e-nyugta-e-penztargep-utmutato",
+    priceId: "ingyenes_e_nyugta_utmutato",
+    name: "XLNT E-nyugta és e-pénztárgép útmutató",
+    status: "available", price: 0, currency: "HUF", image: knowledgeReceiptImg,
+    metaTitle: "Ingyenes e-nyugta és e-pénztárgép útmutató 2026 | XLNT BI",
+    metaDescription: "Ingyenes, 12 oldalas gyakorlati útmutató a 2026-os e-nyugta, e-pénztárgép és adatszolgáltatási kötelezettségekről.",
+    intro: [
+      "A 12 oldalas, díjmentesen letölthető összefoglaló lépésről lépésre bemutatja a 2026. szeptember 1-jétől alkalmazandó nyugtaadási és adatszolgáltatási szabályokat.",
+      "Gyakorlati segítséget ad vállalkozóknak és könyvelőknek a NAV ePénztárgép alkalmazás, az e-nyugta átadása, a módosítás, a sztornó és az offline működés megértéséhez.",
+    ],
+    features: [
+      "Az új adatszolgáltatási kötelezettségek és a 3 napos határidő.",
+      "NAV ePénztárgép alkalmazás telefonon, táblagépen vagy laptopon.",
+      "E-nyugta átadása QR-kóddal és a papírmásolat kötelező esetei.",
+      "Sztornó, módosítás, számlára váltás és internetkimaradás kezelése.",
+      "Mulasztási bírságok, üzletlezárás és hatósági ellenőrzés.",
+      "Kézi nyugta és e-pénztárgép összehasonlítása, átállási lépésekkel.",
+    ],
+    why: "Tömör, ingyenes felkészítő anyag a zökkenőmentes átálláshoz és a költséges mulasztások elkerüléséhez.",
+    tiers: [{ id: "ingyenes", label: "Ingyenes digitális kiadvány", price: 0, priceId: "ingyenes_e_nyugta_utmutato" }],
+    download: { fileName: "E-nyugta_szabályok_Összefoglaló.pdf", storagePath: "tudastar/e-nyugta-es-e-penztargep-utmutato.pdf" },
+  },
+  {
+    slug: "nemet-osztrak-adovisszaterites",
+    priceId: "nemet_osztrak_adovisszaterites_dokumentum",
+    name: "XLNT Német és osztrák adóvisszatérítési útmutató",
+    status: "available", price: 8990, currency: "HUF", image: knowledgeTaxRefundImg,
+    metaTitle: "Német és osztrák adóvisszatérítési útmutató | XLNT BI",
+    metaDescription: "Gyakorlati digitális útmutató német és osztrák adólevonásokhoz, költségelszámoláshoz és adóvisszatérítéshez.",
+    intro: [
+      "Külföldön dolgozol vagy vállalkozol Németországban, illetve Ausztriában? A gyakorlati útmutató bemutatja a fontos adókedvezményeket, levonási jogcímeket és a visszatérítés igénylésének folyamatát.",
+      "Kifejezetten magyar érintetteknek készült, közérthető példákkal a bizonylatok, határidők és legális megtakarítási lehetőségek áttekintéséhez.",
+    ],
+    features: [
+      "Adóilletőség és kettős adóztatás elkerülése.",
+      "Utazási költségek, ingázás és hazautazás elszámolása.",
+      "Kettős háztartásvezetés és megélhetési többletköltségek.",
+      "Munkaruházat, szerszámok és szakmai kiadások levonása.",
+      "Családi kedvezmények és a szükséges igazolások.",
+      "A német és osztrák bevallási folyamat gyakorlati lépései.",
+    ],
+    why: "Segít rendszerezni az év közben gyűjtendő igazolásokat, és áttekinteni a Németországban vagy Ausztriában igénybe vehető törvényes levonásokat.",
+    tiers: [{ id: "dokumentum", label: "Digitális kiadvány", price: 8990, priceId: "nemet_osztrak_adovisszaterites_dokumentum" }],
+    download: { fileName: "Külföldi_munkavégzés_adózása.pdf", storagePath: "tudastar/nemet-osztrak-adovisszateritesi-utmutato.pdf" },
+  },
+  {
+    slug: "nemet-munkanelkuli-segely",
+    priceId: "nemet_munkanelkuli_segely_dokumentum",
+    name: "XLNT Német munkanélküli segély útmutató",
+    status: "available", price: 6990, currency: "HUF", image: knowledgeUnemploymentImg,
+    metaTitle: "Német munkanélküli segély (ALG I) útmutató magyaroknak | XLNT BI",
+    metaDescription: "Ötlépéses gyakorlati útmutató magyaroknak a német ALG I jogosultságához, összegéhez, határidejéhez és igényléséhez.",
+    intro: [
+      "Megszűnt vagy meg fog szűnni a munkaviszonyod Németországban? Ez az 5 oldalas útmutató bemutatja az Arbeitslosengeld I jogosultságát, kiszámítását, határidőit és igénylését.",
+      "A kiadvány külön kitér azokra az adminisztratív hibákra és késedelmekre, amelyek kizárási időt vagy alacsonyabb ellátást okozhatnak.",
+    ],
+    features: [
+      "Jogosultsági feltételek és a 30 hónapos keretidő.",
+      "Magyar biztosítási idők beszámítása és a PD U1 nyomtatvány.",
+      "Az ellátás összegének ötlépéses számítása, gyakorlati példával.",
+      "A folyósítás időtartama biztosítási idő és életkor szerint.",
+      "Bejelentkezés, regisztráció, dokumentumok és átutalás lépései.",
+      "Határidők, kizárási idők és akár 12 hetes szankciók.",
+    ],
+    why: "Közérthető, lépésről lépésre követhető segítség a német ügyintézéshez és a jogosultság elvesztését okozó hibák elkerüléséhez.",
+    tiers: [{ id: "dokumentum", label: "Digitális kiadvány", price: 6990, priceId: "nemet_munkanelkuli_segely_dokumentum" }],
+    download: { fileName: "Német_munkanélküli_segély.pdf", storagePath: "tudastar/nemet-munkanelkuli-segely-utmutato.pdf" },
   },
 ];
 

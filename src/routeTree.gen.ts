@@ -26,6 +26,7 @@ import { Route as FizetesEsTeljesitesRouteImport } from './routes/fizetes-es-tel
 import { Route as FogyasztovedelemRouteImport } from './routes/fogyasztovedelem'
 import { Route as HirlevelMegerositesRouteImport } from './routes/hirlevel-megerosites'
 import { Route as ImpresszumRouteImport } from './routes/impresszum'
+import { Route as IngyenesLetoltesRouteImport } from './routes/ingyenes-letoltes'
 import { Route as KapcsolatRouteImport } from './routes/kapcsolat'
 import { Route as KontrollingRouteImport } from './routes/kontrolling'
 import { Route as KonyvelesRouteImport } from './routes/konyveles'
@@ -225,6 +226,11 @@ const HirlevelMegerositesRoute = HirlevelMegerositesRouteImport.update({
 const ImpresszumRoute = ImpresszumRouteImport.update({
   id: '/impresszum',
   path: '/impresszum',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IngyenesLetoltesRoute = IngyenesLetoltesRouteImport.update({
+  id: '/ingyenes-letoltes',
+  path: '/ingyenes-letoltes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KapcsolatRoute = KapcsolatRouteImport.update({
@@ -855,6 +861,7 @@ export interface FileRoutesByFullPath {
   '/fogyasztovedelem': typeof FogyasztovedelemRoute
   '/hirlevel-megerosites': typeof HirlevelMegerositesRoute
   '/impresszum': typeof ImpresszumRoute
+  '/ingyenes-letoltes': typeof IngyenesLetoltesRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
   '/konyveles': typeof KonyvelesRoute
@@ -986,6 +993,7 @@ export interface FileRoutesByTo {
   '/fogyasztovedelem': typeof FogyasztovedelemRoute
   '/hirlevel-megerosites': typeof HirlevelMegerositesRoute
   '/impresszum': typeof ImpresszumRoute
+  '/ingyenes-letoltes': typeof IngyenesLetoltesRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
   '/konyveles': typeof KonyvelesRoute
@@ -1120,6 +1128,7 @@ export interface FileRoutesById {
   '/fogyasztovedelem': typeof FogyasztovedelemRoute
   '/hirlevel-megerosites': typeof HirlevelMegerositesRoute
   '/impresszum': typeof ImpresszumRoute
+  '/ingyenes-letoltes': typeof IngyenesLetoltesRoute
   '/kapcsolat': typeof KapcsolatRoute
   '/kontrolling': typeof KontrollingRoute
   '/konyveles': typeof KonyvelesRoute
@@ -1255,6 +1264,7 @@ export interface FileRouteTypes {
     | '/fogyasztovedelem'
     | '/hirlevel-megerosites'
     | '/impresszum'
+    | '/ingyenes-letoltes'
     | '/kapcsolat'
     | '/kontrolling'
     | '/konyveles'
@@ -1386,6 +1396,7 @@ export interface FileRouteTypes {
     | '/fogyasztovedelem'
     | '/hirlevel-megerosites'
     | '/impresszum'
+    | '/ingyenes-letoltes'
     | '/kapcsolat'
     | '/kontrolling'
     | '/konyveles'
@@ -1519,6 +1530,7 @@ export interface FileRouteTypes {
     | '/fogyasztovedelem'
     | '/hirlevel-megerosites'
     | '/impresszum'
+    | '/ingyenes-letoltes'
     | '/kapcsolat'
     | '/kontrolling'
     | '/konyveles'
@@ -1653,6 +1665,7 @@ export interface RootRouteChildren {
   FogyasztovedelemRoute: typeof FogyasztovedelemRoute
   HirlevelMegerositesRoute: typeof HirlevelMegerositesRoute
   ImpresszumRoute: typeof ImpresszumRoute
+  IngyenesLetoltesRoute: typeof IngyenesLetoltesRoute
   KapcsolatRoute: typeof KapcsolatRoute
   KontrollingRoute: typeof KontrollingRoute
   KonyvelesRoute: typeof KonyvelesRoute
@@ -1845,6 +1858,13 @@ declare module '@tanstack/react-router' {
       path: '/impresszum'
       fullPath: '/impresszum'
       preLoaderRoute: typeof ImpresszumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ingyenes-letoltes': {
+      id: '/ingyenes-letoltes'
+      path: '/ingyenes-letoltes'
+      fullPath: '/ingyenes-letoltes'
+      preLoaderRoute: typeof IngyenesLetoltesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/kapcsolat': {
@@ -2768,6 +2788,7 @@ const rootRouteChildren: RootRouteChildren = {
   FogyasztovedelemRoute: FogyasztovedelemRoute,
   HirlevelMegerositesRoute: HirlevelMegerositesRoute,
   ImpresszumRoute: ImpresszumRoute,
+  IngyenesLetoltesRoute: IngyenesLetoltesRoute,
   KapcsolatRoute: KapcsolatRoute,
   KontrollingRoute: KontrollingRoute,
   KonyvelesRoute: KonyvelesRoute,
