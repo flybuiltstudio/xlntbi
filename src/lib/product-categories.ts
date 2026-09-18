@@ -118,7 +118,12 @@ export const productCategories: ProductCategory[] = [
     title: "Tudástár",
     titleEn: "Knowledge base",
     image: tudastarImg,
-    slugs: [],
+    slugs: [
+      "ugyvezetoi-dijazas-cegkoltsegek",
+      "e-nyugta-e-penztargep-utmutato",
+      "nemet-osztrak-adovisszaterites",
+      "nemet-munkanelkuli-segely",
+    ],
   },
 ];
 
