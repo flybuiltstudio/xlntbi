@@ -15,6 +15,8 @@ interface Props {
   downloadUrl?: string
   expiresAt?: string
   maxDownloads?: number
+  isKnowledge?: boolean
+  isFree?: boolean
   rows?: Row[]
 }
 
@@ -76,18 +78,22 @@ const Email = ({
   downloadUrl,
   expiresAt,
   maxDownloads,
+  isKnowledge,
+  isFree,
   rows,
 }: Props) => (
   <Html lang="hu" dir="ltr">
     <Head />
-    <Preview>{`A megvásárolt szoftver letöltése – ${orderNumber || ''}`}</Preview>
+    <Preview>{`${isFree ? 'Az ingyenes kiadvány' : 'A megvásárolt termék'} letöltése – ${orderNumber || ''}`}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Header subtitle="Letöltés elérhető" />
         <Text style={h1}>Itt van a letöltési linked</Text>
         <Text style={paragraph}>Kedves {name || 'Vásárló'}!</Text>
         <Text style={paragraph}>
-          A megrendelésed rendezett, a szoftver letölthető az alábbi linkre kattintva.
+          {isFree
+            ? 'Az ingyenes kiadvány letölthető az alábbi linkre kattintva.'
+            : 'A megrendelésed rendezett, a termék letölthető az alábbi linkre kattintva.'}
         </Text>
         <Section style={box}>
           <Text style={{ ...paragraph, margin: '0 0 4px', fontWeight: 700 }}>
@@ -98,11 +104,11 @@ const Email = ({
           </Text>
           {downloadUrl ? (
             <Button href={downloadUrl} style={button}>
-              Szoftver letöltése
+              {isKnowledge ? 'Kiadvány letöltése' : 'Szoftver letöltése'}
             </Button>
           ) : null}
         </Section>
-        <Text style={notice}>
+        {!isKnowledge ? <><Text style={notice}>
           A letöltés után indítsd el / nyisd meg a megvásárolt terméket, és a megjelenő{' '}
           <a
             href="https://xlntbi.hu/api/public/hwid-download"
@@ -116,14 +122,14 @@ const Email = ({
           <Button href={buildMailto(name, productName, tierLabel)} style={button}>
             Licenszet kérek e-mailben
           </Button>
-        </Section>
+        </Section></> : null}
         {rows && rows.length > 0 ? <DataTable rows={rows} /> : null}
-        <Text style={paragraph}>
+        {!isKnowledge ? <Text style={paragraph}>
           <strong>Fontos:</strong> a link {expiresAt ? `${expiresAt}-ig` : '14 napig'} él, és
           legfeljebb {maxDownloads ?? 10} alkalommal használható fel. Kérlek, mentsd le a fájlt
           a saját gépedre. Ha lejárt vagy elveszett a link, válaszolj erre a levélre, és küldök
           újat.
-        </Text>
+        </Text> : null}
         <Text style={paragraph}>
           A licenc a megrendelésben szereplő csomagra érvényes, továbbadása nem engedélyezett.
           Ha bármiben elakadsz a telepítéssel vagy a használattal, írj bátran.

@@ -1,6 +1,7 @@
 import { sendEmails } from "./notify.server";
 import { getProduct } from "./products";
 import { withXlntPrefix } from "./product-name";
+import { isKnowledgeProduct } from "./product-categories";
 
 const OWNER_EMAIL = "xllentac@gmail.com";
 const BUCKET = "termekfajlok";
@@ -145,6 +146,7 @@ export async function issueDownload(order: OrderRow): Promise<void> {
         downloadUrl: `${siteOrigin()}/api/public/letoltes/${token}`,
         expiresAt: formatDate(expiresAt),
         maxDownloads: MAX_DOWNLOADS,
+        isKnowledge: isKnowledgeProduct(order.product_slug),
         rows: [
           ["Termék", productName],
           ...(order.tier_label ? [["Licenc csomag", order.tier_label] as [string, string]] : []),

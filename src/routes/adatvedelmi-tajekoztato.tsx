@@ -115,6 +115,16 @@ const sections: LegalSection[] = [
     ],
   },
   {
+    heading: "6/A. Ingyenes Tudástár-kiadvány igénylése",
+    list: [
+      "Kezelt adatok: név, e-mail cím, opcionálisan telefonszám, az igényelt kiadvány, az igénylés és a letöltések időpontja, IP-cím és böngészőazonosító.",
+      "Cél: a védett, lejáró letöltési link elkészítése és elküldése, valamint a visszaélések és automatizált igénylések megelőzése.",
+      "Jogalap: az érintett hozzájárulása (GDPR 6. cikk (1) a)), a visszaélésvédelem technikai adatainál az adatkezelő jogos érdeke (GDPR 6. cikk (1) f)).",
+      "Adattárolás: az igénylés a free_download_requests táblában, jogosultsághoz kötött védelemmel kerül tárolásra. Az adatok nem kerülnek a vásárlási és árbevételi statisztikába.",
+      "Megőrzési idő: az igénylést és a kapcsolódó letöltési adatokat az igényléstől számított 2 évig, a technikai naplóadatokat 90 napig kezeljük.",
+    ],
+  },
+  {
     heading: "7. Kalkulátorok",
     paragraphs: [
       "A weboldalon elérhető kalkulátorok (bérteszt, jövedelemadó) számításai a böngésződben futnak. A beírt értékeket nem továbbítjuk szerverre, és nem tároljuk.",

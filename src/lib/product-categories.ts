@@ -138,6 +138,11 @@ export function categoryProducts(category: ProductCategory): Product[] {
     .filter((p): p is Product => Boolean(p));
 }
 
+/** True for products placed in the Knowledge base category. */
+export function isKnowledgeProduct(slug: string): boolean {
+  return productCategories.find((category) => category.key === "tudastar")?.slugs.includes(slug) ?? false;
+}
+
 /** Admin-managed override of a product's category and position. */
 export type ProductPlacement = { slug: string; category: string; sortOrder: number };
 
