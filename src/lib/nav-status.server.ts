@@ -131,6 +131,7 @@ export async function runNavStatusCheck(
     checked: rows.length,
     counts,
     rows,
+    withoutInvoice: typeof noInvoiceCount === "number" ? noInvoiceCount : 0,
   };
 
   if (options.notify !== false) {

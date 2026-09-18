@@ -165,7 +165,7 @@ export function NavStatusPanel() {
                       <td colSpan={7} className="py-4 text-muted-foreground">
                         {report.checked === 0
                           ? "Nincs kiállított Billingo számla az ellenőrzött rendelések között."
-                          : "Nincs problémás számla — a NAV mindent befogadott."}
+                          : `Nincs problémás számla — a NAV mindent befogadott (${report.counts.ok} rendben lévő számla elrejtve).`}
                       </td>
                     </tr>
                   ) : (
