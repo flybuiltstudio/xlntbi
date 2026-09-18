@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { submitFreeDownload } from "@/lib/free-download.functions";
 import { getProduct } from "@/lib/products";
+import { Button } from "@/components/ui/button";
 
 const searchSchema = z.object({ termek: z.string(), lang: z.enum(["hu", "en"]).optional() });
 
@@ -64,7 +65,7 @@ function FreeDownloadPage() {
         <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden"><input name="website" tabIndex={-1} autoComplete="off" /></div>
         <label className="mt-6 flex items-start gap-2.5 text-sm text-muted-foreground"><input type="checkbox" required className="mt-0.5 h-4 w-4 accent-[var(--color-primary)]" /><span>{english ? "I have read the " : "Megismertem az "}<a href="/adatvedelmi-tajekoztato" className="underline hover:text-foreground">{english ? "privacy notice" : "Adatvédelmi tájékoztatót"}</a>. *</span></label>
         {state === "error" ? <p className="mt-5 text-sm font-semibold text-destructive">{error}</p> : null}
-        <button type="submit" disabled={state === "sending"} className="mt-7 inline-flex rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground disabled:opacity-60">{state === "sending" ? (english ? "Sending…" : "Küldés…") : (english ? "Send download link" : "Letöltési link kérése")}</button>
+        <Button type="submit" disabled={state === "sending"} className="mt-7 h-auto px-6 py-3">{state === "sending" ? (english ? "Sending…" : "Küldés…") : (english ? "Send download link" : "Letöltési link kérése")}</Button>
       </form>
     </div>
   );

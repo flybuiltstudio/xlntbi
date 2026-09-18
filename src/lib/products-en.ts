@@ -78,6 +78,14 @@ export const PRODUCT_SUMMARY_EN: Record<string, string> = {
     "Assessing related-party status is often difficult because the Corporate Tax Act, the Accounting Act and the SME Act use different definitions and thresholds for the same ownership or control situation. The Related-Party Checker uses the data you enter to show, separately, whether businesses are related or affiliated according to the logic of each of the three laws.",
   "ifrs-penzugyi-kimutatasok":
     "A bilingual IFRS 18 financial statements template in Excel: from a single trial-balance import, one click produces the balance sheet, income statement, other comprehensive income, changes in equity and cash flow in the IFRS 18 structure, in Hungarian and English. IFRS 18 (Presentation and Disclosures in Financial Statements) is mandatory for periods beginning on or after 1 January 2027 and replaces IAS 1; because the transition is retrospective, 2026 comparatives already need the new layout. Ten built-in reconciliation checks, management-defined performance measures (MPMs), and a one-click OBR submission package with PDF exports are included. One-off price, not a subscription.",
+  "ugyvezetoi-dijazas-cegkoltsegek":
+    "A bilingual Hungarian–English guide to managing director remuneration, payroll taxes, mandatory contribution bases, Wise card expenses, business travel and company costs, with practical examples and legal references.",
+  "e-nyugta-e-penztargep-utmutato":
+    "A free 12-page practical guide to Hungary's e-receipt, e-cash-register and data-reporting rules applicable from 1 September 2026, including QR delivery, corrections, cancellations and offline operation.",
+  "nemet-osztrak-adovisszaterites":
+    "A practical guide for Hungarians working or doing business in Germany or Austria, covering tax residence, deductible travel and accommodation costs, family allowances, required documents and the refund process.",
+  "nemet-munkanelkuli-segely":
+    "A concise five-page guide for Hungarians covering German unemployment benefit (ALG I) eligibility, calculation, deadlines, application steps, the PD U1 form and possible exclusion periods.",
 };
 
 /**

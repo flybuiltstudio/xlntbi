@@ -41,7 +41,7 @@ export const Route = createFileRoute("/en/product/$slug")({
         ? english.intro
         : [productSummaryEn(product.slug, product.intro[0] ?? "")],
       features: english?.features.length ? english.features : product.features,
-      why: english?.why ?? null,
+       why: english?.why ?? product.why ?? null,
       metaTitle: meta.title ?? `${product.name} | XLNTBI`,
       metaDescription:
         meta.description ?? productSummaryEn(product.slug, product.metaDescription).slice(0, 300),
