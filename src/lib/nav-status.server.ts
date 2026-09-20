@@ -85,11 +85,13 @@ export async function runNavStatusCheck(
   const rows: NavInvoiceStatus[] = [];
 
   // How many recent orders have no Billingo invoice at all — shown in the admin
-  // panel so a short list does not look like a filtering bug.
+  // panel so a short list does not look like a filtering bug. Free (0 Ft)
+  // orders never get an invoice, so they must not inflate this count.
   const { count: noInvoiceCount } = await (supabaseAdmin as any)
     .from("orders")
     .select("id", { count: "exact", head: true })
-    .is("billingo_invoice_id", null);
+    .is("billingo_invoice_id", null)
+    .gt("total_price", 0);
 
   // Small sequential batches keep us well inside Billingo's rate limits.
   for (let i = 0; i < orders.length; i += 3) {
