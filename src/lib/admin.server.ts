@@ -322,7 +322,7 @@ export async function orderStats(includeTests = false): Promise<{ rows: OrderSta
   let query = supabaseAdmin
     .from("orders")
     .select(
-      "product_name, tier_label, quantity, total_price, payment_status, created_at, order_number, billing_name, email",
+      "product_slug, product_name, tier_label, quantity, total_price, payment_status, created_at, order_number, billing_name, email",
     )
     .order("created_at", { ascending: true })
     .limit(5000);
