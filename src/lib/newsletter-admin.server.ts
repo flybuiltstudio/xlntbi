@@ -8,9 +8,19 @@
  */
 
 import { setSetting } from "./app-settings.server";
-import { sendTemplateEmail } from "./email-templates/send-email";
-import { newsletterPlainText, sanitizeNewsletterHtml } from "./newsletter-html";
-import { NEWSLETTER_MODES, type NewsletterMode } from "./newsletter-schema";
+import { sendRawEmail, sendTemplateEmail } from "./email-templates/send-email";
+import {
+  applyUnsubscribeLink,
+  documentPlainText,
+  newsletterPlainText,
+  sanitizeNewsletterDocument,
+  sanitizeNewsletterHtml,
+} from "./newsletter-html";
+import {
+  NEWSLETTER_MODES,
+  type NewsletterEditorMode,
+  type NewsletterMode,
+} from "./newsletter-schema";
 import {
   providerConfig,
   pushSubscriber,
@@ -204,14 +214,38 @@ const BATCH_SIZE = 8;
 export async function sendCampaign(input: {
   subject: string;
   html: string;
+  editorMode?: NewsletterEditorMode;
   testEmail: string;
   testOnly: boolean;
   userId: string;
   userEmail: string;
 }) {
-  const html = sanitizeNewsletterHtml(input.html);
-  if (newsletterPlainText(html).length < 5) {
+  const rawMode = input.editorMode === "html";
+  const html = rawMode ? sanitizeNewsletterDocument(input.html) : sanitizeNewsletterHtml(input.html);
+  const plain = rawMode ? documentPlainText(html) : newsletterPlainText(html);
+  if (plain.length < 5) {
     return { ok: false as const, error: "A levél szövege üres a tisztítás után." };
+  }
+
+  // Both modes go through the same managed email system; raw HTML keeps the
+  // admin's own markup, the visual editor keeps the branded template shell.
+  async function deliver(to: string, unsubUrl: string, idempotencyKey: string) {
+    if (!rawMode) {
+      const result = await sendTemplateEmail("hirlevel", to, {
+        templateData: { subject: input.subject, html, unsubscribeUrl: unsubUrl },
+        idempotencyKey,
+      });
+      return result.sent;
+    }
+    const result = await sendRawEmail({
+      to,
+      subject: input.subject,
+      html: applyUnsubscribeLink(html, unsubUrl),
+      text: `${plain}\n\nLeiratkozás: ${unsubUrl}`,
+      label: "hirlevel-html",
+      idempotencyKey,
+    });
+    return result.sent;
   }
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -221,14 +255,12 @@ export async function sendCampaign(input: {
     const to = input.testEmail || input.userEmail;
     if (!to) return { ok: false as const, error: "Adj meg egy teszt e-mail címet." };
     try {
-      await sendTemplateEmail("hirlevel", to, {
-        templateData: {
-          subject: input.subject,
-          html,
-          unsubscribeUrl: `${(await import("./newsletter.server")).siteOrigin()}/leiratkozas?token=teszt`,
-        },
-        idempotencyKey: `hirlevel-teszt-${crypto.randomUUID()}`,
-      });
+      const origin = (await import("./newsletter.server")).siteOrigin();
+      await deliver(
+        to,
+        `${origin}/leiratkozas?token=teszt`,
+        `hirlevel-teszt-${crypto.randomUUID()}`,
+      );
     } catch (error) {
       return {
         ok: false as const,
@@ -257,15 +289,11 @@ export async function sendCampaign(input: {
     const results = await Promise.all(
       batch.map(async (row: any) => {
         try {
-          const result = await sendTemplateEmail("hirlevel", row.email, {
-            templateData: {
-              subject: input.subject,
-              html,
-              unsubscribeUrl: unsubscribeUrl(row.confirm_token ?? ""),
-            },
-            idempotencyKey: `hirlevel-${campaignId}-${row.id}`,
-          });
-          return result.sent;
+          return await deliver(
+            row.email,
+            unsubscribeUrl(row.confirm_token ?? ""),
+            `hirlevel-${campaignId}-${row.id}`,
+          );
         } catch (sendError) {
           console.error(
             "Newsletter send failed:",

@@ -87,9 +87,14 @@ export const subscribeSchema = z.object({
 
 export type SubscribeInput = z.input<typeof subscribeSchema>;
 
+/** Which editor produced the body: the visual editor or pasted raw HTML. */
+export const NEWSLETTER_EDITOR_MODES = ["visual", "html"] as const;
+export type NewsletterEditorMode = (typeof NEWSLETTER_EDITOR_MODES)[number];
+
 export const campaignSchema = z.object({
   subject: z.string().trim().min(3, "A tárgy túl rövid.").max(160),
-  html: z.string().trim().min(10, "A levél szövege túl rövid.").max(200_000),
+  html: z.string().trim().min(10, "A levél szövege túl rövid.").max(800_000),
+  editorMode: z.enum(NEWSLETTER_EDITOR_MODES).default("visual"),
   testEmail: z.string().trim().email().max(160).optional().or(z.literal("")),
   testOnly: z.boolean().default(false),
 });

@@ -12,6 +12,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { NewsletterEditor } from "@/components/NewsletterEditor";
+import { NewsletterHtmlEditor } from "@/components/NewsletterHtmlEditor";
 import { inputClass } from "@/components/admin-panels";
 import {
   getNewsletterSettings,
@@ -23,7 +24,11 @@ import {
   syncNewsletterSubscribers,
   testNewsletterConnection,
 } from "@/lib/newsletter-admin.functions";
-import { NEWSLETTER_MODES, type NewsletterMode } from "@/lib/newsletter-schema";
+import {
+  NEWSLETTER_MODES,
+  type NewsletterEditorMode,
+  type NewsletterMode,
+} from "@/lib/newsletter-schema";
 import {
   PROVIDER_CSV,
   STATUS_LABEL,
@@ -80,6 +85,9 @@ export function NewsletterAdminPanel() {
 
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("<p>Kedves Olvasó!</p><p></p>");
+  // Both bodies are kept so switching editors never loses content.
+  const [rawHtml, setRawHtml] = useState("");
+  const [editorMode, setEditorMode] = useState<NewsletterEditorMode>("visual");
   const [testEmail, setTestEmail] = useState("");
   const [deliveryEmail, setDeliveryEmail] = useState("");
 
@@ -148,6 +156,7 @@ export function NewsletterAdminPanel() {
     [subscribers],
   );
 
+  const body = editorMode === "html" ? rawHtml : html;
   const modeEntry = NEWSLETTER_MODES.find((m) => m.id === mode)!;
   const stamp = new Date().toISOString().slice(0, 10);
 
@@ -347,7 +356,30 @@ export function NewsletterAdminPanel() {
 
         <div className="mt-4 text-sm">
           <span className="font-medium text-foreground">A levél szövege</span>
-          <NewsletterEditor value={html} onChange={setHtml} />
+          <div className="mt-2 flex flex-wrap gap-2">
+            {(
+              [
+                { id: "visual", label: "Vizuális szerkesztő" },
+                { id: "html", label: "HTML-kód beillesztése" },
+              ] as const
+            ).map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setEditorMode(item.id)}
+                className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
+                  editorMode === item.id ?
+                    "border-primary bg-primary/10 text-foreground"
+                  : "border-input bg-background text-muted-foreground hover:bg-muted"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+          {editorMode === "visual" ?
+            <NewsletterEditor value={html} onChange={setHtml} />
+          : <NewsletterHtmlEditor value={rawHtml} onChange={setRawHtml} />}
         </div>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -370,7 +402,7 @@ export function NewsletterAdminPanel() {
             onClick={() =>
               run("test-send", async () => {
                 const result = await sendCampaign({
-                  data: { subject, html, testEmail, testOnly: true },
+                  data: { subject, html: body, editorMode, testEmail, testOnly: true },
                 });
                 setMessage(
                   result.ok ?
@@ -399,7 +431,7 @@ export function NewsletterAdminPanel() {
                   return;
                 }
                 const result = await sendCampaign({
-                  data: { subject, html, testEmail, testOnly: false },
+                  data: { subject, html: body, editorMode, testEmail, testOnly: false },
                 });
                 if (!result.ok) {
                   setMessage({ kind: "err", text: result.error });

@@ -79,6 +79,7 @@ export const sendNewsletterCampaign = createServerFn({ method: "POST" })
     return sendCampaign({
       subject: data.subject,
       html: data.html,
+      editorMode: data.editorMode,
       testEmail: data.testEmail ?? "",
       testOnly: data.testOnly,
       userId: context.userId,
