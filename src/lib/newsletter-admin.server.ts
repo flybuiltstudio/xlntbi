@@ -360,7 +360,7 @@ export async function sendNewsletterTestEmail(input: {
               `<p>Ez egy <strong>kézbesítési teszt</strong> az xlntbi.hu hírlevél-rendszeréből.</p>` +
                 `<p>Küldés ideje: ${stamp}. Ha ez a levél a Levélszemét mappában landolt, jelöld „Nem spam”-ként.</p>`,
             ),
-            unsubscribeUrl: `${origin}/leiratkozas?token=teszt`,
+            unsubscribeUrl: (await unsubscribeUrlForEmail(to)) ?? `${origin}/kapcsolat`,
           },
           idempotencyKey: `hirlevel-kezbesites-teszt-${crypto.randomUUID()}`,
         });
