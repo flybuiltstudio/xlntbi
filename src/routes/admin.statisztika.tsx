@@ -1597,3 +1597,280 @@ function PageViewLegend({ items }: { items: { label: string; color: string }[] }
     </div>
   );
 }
+
+// ---------------- Termékenkénti konverziós arány ----------------
+
+/**
+ * Conversion per product: paid purchases divided by product detail page views
+ * for the same period. Views only exist with month granularity, so the period
+ * filter of the page (year + month) is applied to both sides identically.
+ */
+function ProductConversion({
+  rows,
+  activeYear,
+  activeMonth,
+  periodLabel,
+}: {
+  rows: StatRow[];
+  activeYear: number | null;
+  activeMonth: MonthSel;
+  periodLabel: string;
+}) {
+  const fetchPageViews = useServerFn(adminPageViewStats);
+  const [counts, setCounts] = useState<PageViewCount[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchPageViews()
+      .then((res) => {
+        if (cancelled) return;
+        setCounts((res.rows ?? []).filter((r) => r.pageType === "product"));
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        setError(err instanceof Error ? err.message : "Nem sikerült betölteni a megtekintéseket.");
+        setCounts([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchPageViews]);
+
+  const table = useMemo(() => {
+    const names = new Map(products.map((p) => [p.slug, p.name]));
+    const views = new Map<string, number>();
+    for (const row of counts ?? []) {
+      if (activeYear !== null && row.year !== activeYear) continue;
+      if (activeMonth !== "all" && row.month !== activeMonth + 1) continue;
+      views.set(row.pageKey, (views.get(row.pageKey) ?? 0) + row.views);
+    }
+    const paid = new Map<string, number>();
+    for (const row of rows) {
+      if (row.paymentStatus !== "paid") continue;
+      const date = new Date(row.createdAt);
+      if (activeYear !== null && date.getFullYear() !== activeYear) continue;
+      if (activeMonth !== "all" && date.getMonth() !== activeMonth) continue;
+      paid.set(row.productSlug, (paid.get(row.productSlug) ?? 0) + 1);
+    }
+    const keys = new Set<string>([...views.keys(), ...paid.keys()]);
+    return [...keys]
+      .map((key) => {
+        const v = views.get(key) ?? 0;
+        const p = paid.get(key) ?? 0;
+        return {
+          key,
+          label: names.get(key) ?? key,
+          views: v,
+          paid: p,
+          rate: v > 0 ? (p / v) * 100 : null,
+        };
+      })
+      .sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1) || b.views - a.views);
+  }, [counts, rows, activeYear, activeMonth]);
+
+  return (
+    <div className="mt-10">
+      <h3 className="text-base font-bold text-foreground">
+        Termékenkénti konverziós arány – {periodLabel}
+      </h3>
+      <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+        Konverzió = kifizetett megrendelések száma ÷ a termék Részletek oldalának megtekintései ×
+        100. A megtekintések a publikált oldalon mért, havi bontású adatok, tehát ugyanarra az
+        időszakra vonatkoznak, mint a megrendelések. Megtekintés nélkül a konverzió helyén „—” áll.
+      </p>
+
+      {error ? (
+        <p className="mt-4 text-sm text-destructive">{error}</p>
+      ) : counts === null ? (
+        <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" /> Megtekintések betöltése…
+        </p>
+      ) : table.length === 0 ? (
+        <p className="mt-4 rounded-xl border border-border bg-card px-4 py-5 text-sm text-muted-foreground">
+          Ehhez az időszakhoz nincs sem megtekintés, sem kifizetett megrendelés.
+        </p>
+      ) : (
+        <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
+          <table className="w-full min-w-[560px] text-sm">
+            <thead>
+              <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
+                <th className="px-4 py-3 font-semibold">Termék</th>
+                <th className="px-4 py-3 text-right font-semibold">Megtekintés</th>
+                <th className="px-4 py-3 text-right font-semibold">Kifizetett vásárlás</th>
+                <th className="px-4 py-3 text-right font-semibold">Konverzió</th>
+              </tr>
+            </thead>
+            <tbody>
+              {table.map((r) => (
+                <tr key={r.key} className="border-b border-border/60 last:border-0">
+                  <td className="px-4 py-3 font-medium text-foreground">{r.label}</td>
+                  <td className="px-4 py-3 text-right text-muted-foreground">{r.views} db</td>
+                  <td className="px-4 py-3 text-right text-muted-foreground">{r.paid} db</td>
+                  <td className="px-4 py-3 text-right font-semibold text-foreground">
+                    {r.rate === null ? "—" : `${r.rate.toFixed(2)} %`}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---------------- Megrendelések óránként ----------------
+
+const BUDAPEST_HOUR = new Intl.DateTimeFormat("hu-HU", {
+  timeZone: "Europe/Budapest",
+  hour: "2-digit",
+  hour12: false,
+});
+const BUDAPEST_PARTS = new Intl.DateTimeFormat("hu-HU", {
+  timeZone: "Europe/Budapest",
+  year: "numeric",
+  month: "2-digit",
+  hour: "2-digit",
+  hour12: false,
+});
+
+/** Year, month (0-based) and hour of a timestamp in Hungarian local time. */
+function budapestBuckets(iso: string) {
+  const parts = BUDAPEST_PARTS.formatToParts(new Date(iso));
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value ?? "0");
+  const hour = Number(BUDAPEST_HOUR.format(new Date(iso)).replace(/\D/g, ""));
+  return { year: get("year"), month: get("month") - 1, hour: hour % 24 };
+}
+
+/**
+ * Orders per hour of day (Europe/Budapest), all payment statuses, with its own
+ * year and month filter that does not affect the rest of the page.
+ */
+function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
+  const [yearSel, setYearSel] = useState<YearSel>("all");
+  const [monthSel, setMonthSel] = useState<MonthSel>("all");
+
+  const buckets = useMemo(() => rows.map((row) => budapestBuckets(row.createdAt)), [rows]);
+
+  const years = useMemo(() => {
+    const set = new Set<number>();
+    for (const b of buckets) set.add(b.year);
+    return [...set].sort((a, b) => b - a);
+  }, [buckets]);
+
+  const hours = useMemo(() => {
+    const counts = Array.from({ length: 24 }, () => 0);
+    for (const b of buckets) {
+      if (yearSel !== "all" && b.year !== yearSel) continue;
+      if (monthSel !== "all" && b.month !== monthSel) continue;
+      counts[b.hour] = (counts[b.hour] ?? 0) + 1;
+    }
+    return counts;
+  }, [buckets, yearSel, monthSel]);
+
+  const total = hours.reduce((a, b) => a + b, 0);
+  const max = Math.max(1, ...hours);
+  const periodLabel =
+    yearSel === "all"
+      ? monthSel === "all"
+        ? "Összes év"
+        : `Összes év – ${MONTHS[monthSel]}`
+      : monthSel === "all"
+        ? `${yearSel} egész éve`
+        : `${yearSel}. ${MONTHS[monthSel]}`;
+
+  return (
+    <section className="mt-14">
+      <h2 className="text-xl font-bold text-foreground">Megrendelések óránként</h2>
+      <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+        A megrendelés leadásának időpontja szerint, magyar idő (Europe/Budapest) alapján, a nyári és
+        téli időszámítást is helyesen kezelve. Minden leadott megrendelés beleszámít, fizetési
+        állapottól függetlenül. Ez a szűrő csak erre a grafikonra hat.
+      </p>
+
+      <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Év
+          </span>
+          <button
+            type="button"
+            className={filterChip(yearSel === "all")}
+            onClick={() => setYearSel("all")}
+          >
+            Összes év
+          </button>
+          {years.map((y) => (
+            <button
+              key={y}
+              type="button"
+              className={filterChip(yearSel === y)}
+              onClick={() => setYearSel(y)}
+            >
+              {y}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Hónap
+          </span>
+          <button
+            type="button"
+            className={filterChip(monthSel === "all")}
+            onClick={() => setMonthSel("all")}
+          >
+            Összes
+          </button>
+          {MONTHS_SHORT.map((label, i) => (
+            <button
+              key={label}
+              type="button"
+              className={filterChip(monthSel === i)}
+              onClick={() => setMonthSel(i)}
+              title={MONTHS[i]}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
+        <p className="text-sm text-muted-foreground">
+          <strong className="text-foreground">{periodLabel}</strong> – összesen {total} megrendelés
+        </p>
+        <div className="mt-6 flex h-60 items-end gap-0.5 sm:gap-1">
+          {hours.map((count, hour) => (
+            <div key={hour} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+              <span className="text-[11px] font-semibold text-foreground">
+                {count > 0 ? count : ""}
+              </span>
+              <div
+                className="flex h-44 w-full flex-col justify-end"
+                title={`${String(hour).padStart(2, "0")}:00–${String(hour).padStart(2, "0")}:59 – ${count} megrendelés`}
+              >
+                {count > 0 ? (
+                  <div
+                    className="w-full rounded-t-sm bg-primary"
+                    style={{ height: `${(count / max) * 100}%` }}
+                  />
+                ) : (
+                  <div className="w-full border-b-2 border-border/60" />
+                )}
+              </div>
+              <span className="text-[10px] text-muted-foreground sm:text-[11px]">
+                {String(hour).padStart(2, "0")}
+              </span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground">
+          A vízszintes tengelyen a nap 24 órája (00–23), a függőleges tengelyen a megrendelések
+          darabszáma. Az oszlopra húzva az egeret megjelenik az óraintervallum és a pontos darabszám.
+        </p>
+      </div>
+    </section>
+  );
+}
