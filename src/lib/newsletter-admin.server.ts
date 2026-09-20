@@ -28,9 +28,10 @@ import {
   type ProviderConfig,
 } from "./newsletter-providers.server";
 import {
+  ensureUnsubscribeUrl,
   NEWSLETTER_SETTINGS_KEY,
   newsletterSettings,
-  unsubscribeUrl,
+  unsubscribeUrlForEmail,
 } from "./newsletter.server";
 
 export type SubscriberRow = {
@@ -255,12 +256,11 @@ export async function sendCampaign(input: {
     const to = input.testEmail || input.userEmail;
     if (!to) return { ok: false as const, error: "Adj meg egy teszt e-mail címet." };
     try {
-      const origin = (await import("./newsletter.server")).siteOrigin();
-      await deliver(
-        to,
-        `${origin}/leiratkozas?token=teszt`,
-        `hirlevel-teszt-${crypto.randomUUID()}`,
-      );
+      const { siteOrigin, unsubscribeUrlForEmail } = await import("./newsletter.server");
+      // If the test address is a real subscriber, send its own working link;
+      // otherwise fall back to the newsletter page (no fake token).
+      const testUnsub = (await unsubscribeUrlForEmail(to)) ?? `${siteOrigin()}/kapcsolat`;
+      await deliver(to, testUnsub, `hirlevel-teszt-${crypto.randomUUID()}`);
     } catch (error) {
       return {
         ok: false as const,
@@ -291,7 +291,7 @@ export async function sendCampaign(input: {
         try {
           return await deliver(
             row.email,
-            unsubscribeUrl(row.confirm_token ?? ""),
+            await ensureUnsubscribeUrl(row.id, row.confirm_token),
             `hirlevel-${campaignId}-${row.id}`,
           );
         } catch (sendError) {
@@ -360,7 +360,7 @@ export async function sendNewsletterTestEmail(input: {
               `<p>Ez egy <strong>kézbesítési teszt</strong> az xlntbi.hu hírlevél-rendszeréből.</p>` +
                 `<p>Küldés ideje: ${stamp}. Ha ez a levél a Levélszemét mappában landolt, jelöld „Nem spam”-ként.</p>`,
             ),
-            unsubscribeUrl: `${origin}/leiratkozas?token=teszt`,
+            unsubscribeUrl: (await unsubscribeUrlForEmail(to)) ?? `${origin}/kapcsolat`,
           },
           idempotencyKey: `hirlevel-kezbesites-teszt-${crypto.randomUUID()}`,
         });
