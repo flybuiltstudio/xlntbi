@@ -290,7 +290,7 @@ export async function sendCampaign(input: {
         try {
           return await deliver(
             row.email,
-            unsubscribeUrl(row.confirm_token ?? ""),
+            await ensureUnsubscribeUrl(row.id, row.confirm_token),
             `hirlevel-${campaignId}-${row.id}`,
           );
         } catch (sendError) {
