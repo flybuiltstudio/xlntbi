@@ -300,6 +300,7 @@ export async function listOrders(): Promise<AdminOrder[]> {
 }
 
 export type OrderStatRow = {
+  productSlug: string;
   productName: string;
   tierLabel: string | null;
   quantity: number;
@@ -321,7 +322,7 @@ export async function orderStats(includeTests = false): Promise<{ rows: OrderSta
   let query = supabaseAdmin
     .from("orders")
     .select(
-      "product_name, tier_label, quantity, total_price, payment_status, created_at, order_number, billing_name, email",
+      "product_slug, product_name, tier_label, quantity, total_price, payment_status, created_at, order_number, billing_name, email",
     )
     .order("created_at", { ascending: true })
     .limit(5000);
@@ -337,6 +338,7 @@ export async function orderStats(includeTests = false): Promise<{ rows: OrderSta
 
   return {
     rows: (data ?? []).map((o: any) => ({
+      productSlug: o.product_slug,
       productName: o.product_name,
       tierLabel: o.tier_label ?? null,
       quantity: o.quantity,
