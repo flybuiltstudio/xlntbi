@@ -124,8 +124,12 @@ export async function runCatalogAudit(
   const { ensureProductOverrides } = await import("./product-overrides.server");
   await ensureProductOverrides(true);
 
+  // Free (0 Ft) tiers never reach Stripe — no price is created for them — so
+  // they are excluded from the lookup and from the per-tier Stripe checks.
   const lookupKeys = Array.from(
-    new Set(products.flatMap((p) => p.tiers.map((t) => t.priceId))),
+    new Set(
+      products.flatMap((p) => p.tiers.filter((t) => t.price > 0).map((t) => t.priceId)),
+    ),
   );
   const storagePaths = products
     .map((p) => p.download?.storagePath)
