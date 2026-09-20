@@ -163,6 +163,26 @@ export async function runCatalogAudit(
       const statuses: AuditStatus[] = [];
       const hit = found.get(tier.priceId);
 
+      if (tier.price === 0) {
+        // Free tier: intentionally no Stripe price — nothing to verify.
+        tiers.push({
+          slug: product.slug,
+          productName: desiredName,
+          tierId: tier.id,
+          tierLabel: tier.label,
+          priceId: tier.priceId,
+          expectedPrice: tier.price,
+          stripePrice: null,
+          stripePriceId: null,
+          stripeCurrency: null,
+          stripeActive: null,
+          stripeProductName: null,
+          status: "ok",
+          issues: ["Ingyenes csomag – Stripe-ellenőrzés kihagyva."],
+        });
+        continue;
+      }
+
       if (stripeError) {
         issues.push(`Stripe olvasási hiba: ${stripeError}`);
         statuses.push("error");
