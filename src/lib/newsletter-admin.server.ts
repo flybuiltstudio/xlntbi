@@ -8,9 +8,19 @@
  */
 
 import { setSetting } from "./app-settings.server";
-import { sendTemplateEmail } from "./email-templates/send-email";
-import { newsletterPlainText, sanitizeNewsletterHtml } from "./newsletter-html";
-import { NEWSLETTER_MODES, type NewsletterMode } from "./newsletter-schema";
+import { sendRawEmail, sendTemplateEmail } from "./email-templates/send-email";
+import {
+  applyUnsubscribeLink,
+  documentPlainText,
+  newsletterPlainText,
+  sanitizeNewsletterDocument,
+  sanitizeNewsletterHtml,
+} from "./newsletter-html";
+import {
+  NEWSLETTER_MODES,
+  type NewsletterEditorMode,
+  type NewsletterMode,
+} from "./newsletter-schema";
 import {
   providerConfig,
   pushSubscriber,
