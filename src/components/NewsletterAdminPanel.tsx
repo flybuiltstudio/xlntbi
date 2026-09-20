@@ -24,7 +24,11 @@ import {
   syncNewsletterSubscribers,
   testNewsletterConnection,
 } from "@/lib/newsletter-admin.functions";
-import { NEWSLETTER_MODES, type NewsletterMode } from "@/lib/newsletter-schema";
+import {
+  NEWSLETTER_MODES,
+  type NewsletterEditorMode,
+  type NewsletterMode,
+} from "@/lib/newsletter-schema";
 import {
   PROVIDER_CSV,
   STATUS_LABEL,
