@@ -156,6 +156,7 @@ export function NewsletterAdminPanel() {
     [subscribers],
   );
 
+  const body = editorMode === "html" ? rawHtml : html;
   const modeEntry = NEWSLETTER_MODES.find((m) => m.id === mode)!;
   const stamp = new Date().toISOString().slice(0, 10);
 
@@ -401,7 +402,7 @@ export function NewsletterAdminPanel() {
             onClick={() =>
               run("test-send", async () => {
                 const result = await sendCampaign({
-                  data: { subject, html, testEmail, testOnly: true },
+                  data: { subject, html: body, editorMode, testEmail, testOnly: true },
                 });
                 setMessage(
                   result.ok ?
@@ -430,7 +431,7 @@ export function NewsletterAdminPanel() {
                   return;
                 }
                 const result = await sendCampaign({
-                  data: { subject, html, testEmail, testOnly: false },
+                  data: { subject, html: body, editorMode, testEmail, testOnly: false },
                 });
                 if (!result.ok) {
                   setMessage({ kind: "err", text: result.error });
