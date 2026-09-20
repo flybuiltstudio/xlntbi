@@ -255,12 +255,11 @@ export async function sendCampaign(input: {
     const to = input.testEmail || input.userEmail;
     if (!to) return { ok: false as const, error: "Adj meg egy teszt e-mail címet." };
     try {
-      const origin = (await import("./newsletter.server")).siteOrigin();
-      await deliver(
-        to,
-        `${origin}/leiratkozas?token=teszt`,
-        `hirlevel-teszt-${crypto.randomUUID()}`,
-      );
+      const { siteOrigin, unsubscribeUrlForEmail } = await import("./newsletter.server");
+      // If the test address is a real subscriber, send its own working link;
+      // otherwise fall back to the newsletter page (no fake token).
+      const testUnsub = (await unsubscribeUrlForEmail(to)) ?? `${siteOrigin()}/hirlevel`;
+      await deliver(to, testUnsub, `hirlevel-teszt-${crypto.randomUUID()}`);
     } catch (error) {
       return {
         ok: false as const,
