@@ -12,6 +12,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { NewsletterEditor } from "@/components/NewsletterEditor";
+import { NewsletterHtmlEditor } from "@/components/NewsletterHtmlEditor";
 import { inputClass } from "@/components/admin-panels";
 import {
   getNewsletterSettings,
@@ -80,6 +81,9 @@ export function NewsletterAdminPanel() {
 
   const [subject, setSubject] = useState("");
   const [html, setHtml] = useState("<p>Kedves Olvasó!</p><p></p>");
+  // Both bodies are kept so switching editors never loses content.
+  const [rawHtml, setRawHtml] = useState("");
+  const [editorMode, setEditorMode] = useState<NewsletterEditorMode>("visual");
   const [testEmail, setTestEmail] = useState("");
   const [deliveryEmail, setDeliveryEmail] = useState("");
 
