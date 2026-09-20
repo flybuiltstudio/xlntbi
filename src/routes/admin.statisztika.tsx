@@ -520,7 +520,16 @@ function StatsPanel() {
                     </tfoot>
                   </table>
                 </div>
+
+                <ProductConversion
+                  rows={rows}
+                  activeYear={activeYear}
+                  activeMonth={activeMonth}
+                  periodLabel={periodLabel}
+                />
               </section>
+
+              <HourlyOrdersChart rows={rows} />
 
               {/* Megrendelői és terméklista – a kezdetektől, szűrőktől függetlenül */}
               <CustomerProductLists rows={rows} />
