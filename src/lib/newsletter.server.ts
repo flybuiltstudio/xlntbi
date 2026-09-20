@@ -60,6 +60,37 @@ export function unsubscribeUrl(token: string): string {
   return `${siteOrigin()}/leiratkozas?token=${token}`;
 }
 
+/**
+ * Returns a working unsubscribe link for a subscriber row. Older rows may have
+ * lost their confirm_token, so we mint and persist one on demand — without it
+ * the link in the email cannot be resolved back to the subscriber.
+ */
+export async function ensureUnsubscribeUrl(
+  id: string,
+  token: string | null | undefined,
+): Promise<string> {
+  if (token) return unsubscribeUrl(token);
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const fresh = newToken();
+  await (supabaseAdmin as any)
+    .from("newsletter_subscribers")
+    .update({ confirm_token: fresh })
+    .eq("id", id);
+  return unsubscribeUrl(fresh);
+}
+
+/** Unsubscribe link for a given email, or null when it is not a subscriber. */
+export async function unsubscribeUrlForEmail(email: string): Promise<string | null> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await (supabaseAdmin as any)
+    .from("newsletter_subscribers")
+    .select("id, confirm_token, status")
+    .ilike("email", email.trim().toLowerCase())
+    .maybeSingle();
+  if (!data) return null;
+  return ensureUnsubscribeUrl(data.id, data.confirm_token);
+}
+
 /** Public sign-up: stores the person as `pending` and sends the opt-in email. */
 export async function subscribe(data: SubscribeInput) {
   // Honeypot: silently accept but drop.
