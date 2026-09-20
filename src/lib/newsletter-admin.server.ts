@@ -28,9 +28,10 @@ import {
   type ProviderConfig,
 } from "./newsletter-providers.server";
 import {
+  ensureUnsubscribeUrl,
   NEWSLETTER_SETTINGS_KEY,
   newsletterSettings,
-  unsubscribeUrl,
+  unsubscribeUrlForEmail,
 } from "./newsletter.server";
 
 export type SubscriberRow = {
