@@ -347,7 +347,30 @@ export function NewsletterAdminPanel() {
 
         <div className="mt-4 text-sm">
           <span className="font-medium text-foreground">A levél szövege</span>
-          <NewsletterEditor value={html} onChange={setHtml} />
+          <div className="mt-2 flex flex-wrap gap-2">
+            {(
+              [
+                { id: "visual", label: "Vizuális szerkesztő" },
+                { id: "html", label: "HTML-kód beillesztése" },
+              ] as const
+            ).map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setEditorMode(item.id)}
+                className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
+                  editorMode === item.id ?
+                    "border-primary bg-primary/10 text-foreground"
+                  : "border-input bg-background text-muted-foreground hover:bg-muted"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+          {editorMode === "visual" ?
+            <NewsletterEditor value={html} onChange={setHtml} />
+          : <NewsletterHtmlEditor value={rawHtml} onChange={setRawHtml} />}
         </div>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
