@@ -12,7 +12,8 @@
 - [ ] Böngészős próba: admin oldal megnyitása, tartalomjegyzék, próba-kalkulátor feltöltés
 - [x] Tudástár kategóriakép színének egységesítése a többi kategóriaképpel
 - [x] EV Könyvelés és Oktatás hozzáadása a lábléc Szolgáltatások listájához
-- [ ] DEMO licencfolyamat későbbi megvalósítása külön statisztikával és DEMO-jelölt e-mailekkel
+- [ ] DEMO licencfolyamat későbbi megvalósítása: KÜLÖN tábla (nem orders), gyakorisági korlát e-mail-címenként/gépenként, külön statisztika, DEMO-jelölt e-mailek — jóváhagyva 2026-09-20, NE kezdjük el jelzés nélkül
+- [ ] Ingyenes (0 Ft) termékek: NE menjenek a normál megrendelés-flow-ba (Stripe/Billingo helyett a free_download_requests mintát követni)
 - [x] Négy új Tudástár-termék feltöltése a jóváhagyott sorrendben és árakon
 - [x] Tudástár-specifikus letöltési e-mail licenc- és HWID-szöveg nélkül
 - [x] 0 Ft-os E-nyugta útmutató adatbekéréses, védett letöltési folyamata
