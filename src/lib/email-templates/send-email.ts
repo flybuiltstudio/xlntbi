@@ -14,6 +14,49 @@ const SENDER_DOMAIN = "notify.xlntbi.hu"
 // Can be the root domain when display_from_root is enabled — this is cosmetic only.
 const FROM_DOMAIN = "notify.xlntbi.hu"
 
+/**
+ * Sends an already rendered HTML email through the same managed email API as
+ * the templates (same sender domain, suppression and retry handling). Used by
+ * the newsletter HTML mode, where the admin supplies the complete markup.
+ */
+export async function sendRawEmail(input: {
+  to: string
+  subject: string
+  html: string
+  text: string
+  label: string
+  idempotencyKey?: string
+  replyTo?: string
+}): Promise<SendTemplateEmailResult> {
+  const apiKey = process.env['LOVABLE_API_KEY']
+  if (!apiKey) {
+    throw new Error('LOVABLE_API_KEY is not configured')
+  }
+  try {
+    await sendLovableEmail(
+      {
+        to: input.to,
+        from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+        sender_domain: SENDER_DOMAIN,
+        subject: input.subject,
+        html: input.html,
+        text: input.text,
+        purpose: 'transactional',
+        label: input.label,
+        idempotency_key: input.idempotencyKey || crypto.randomUUID(),
+        ...(input.replyTo ? { reply_to: input.replyTo } : {}),
+      },
+      { apiKey, sendUrl: process.env['LOVABLE_SEND_URL'] }
+    )
+  } catch (error) {
+    if (error instanceof EmailAPIError && error.code === 'recipient_suppressed') {
+      return { sent: false, reason: 'recipient_suppressed' }
+    }
+    throw error
+  }
+  return { sent: true }
+}
+
 export type SendTemplateEmailResult =
   | { sent: true }
   | { sent: false; reason: 'recipient_suppressed' }
