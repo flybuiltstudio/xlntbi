@@ -300,6 +300,7 @@ export async function listOrders(): Promise<AdminOrder[]> {
 }
 
 export type OrderStatRow = {
+  productSlug: string;
   productName: string;
   tierLabel: string | null;
   quantity: number;
