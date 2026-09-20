@@ -338,6 +338,7 @@ export async function orderStats(includeTests = false): Promise<{ rows: OrderSta
 
   return {
     rows: (data ?? []).map((o: any) => ({
+      productSlug: o.product_slug,
       productName: o.product_name,
       tierLabel: o.tier_label ?? null,
       quantity: o.quantity,
