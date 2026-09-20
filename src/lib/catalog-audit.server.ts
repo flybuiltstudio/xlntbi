@@ -124,8 +124,12 @@ export async function runCatalogAudit(
   const { ensureProductOverrides } = await import("./product-overrides.server");
   await ensureProductOverrides(true);
 
+  // Free (0 Ft) tiers never reach Stripe — no price is created for them — so
+  // they are excluded from the lookup and from the per-tier Stripe checks.
   const lookupKeys = Array.from(
-    new Set(products.flatMap((p) => p.tiers.map((t) => t.priceId))),
+    new Set(
+      products.flatMap((p) => p.tiers.filter((t) => t.price > 0).map((t) => t.priceId)),
+    ),
   );
   const storagePaths = products
     .map((p) => p.download?.storagePath)
@@ -158,6 +162,26 @@ export async function runCatalogAudit(
       const issues: string[] = [];
       const statuses: AuditStatus[] = [];
       const hit = found.get(tier.priceId);
+
+      if (tier.price === 0) {
+        // Free tier: intentionally no Stripe price — nothing to verify.
+        tiers.push({
+          slug: product.slug,
+          productName: desiredName,
+          tierId: tier.id,
+          tierLabel: tier.label,
+          priceId: tier.priceId,
+          expectedPrice: tier.price,
+          stripePrice: null,
+          stripePriceId: null,
+          stripeCurrency: null,
+          stripeActive: null,
+          stripeProductName: null,
+          status: "ok",
+          issues: ["Ingyenes csomag – Stripe-ellenőrzés kihagyva."],
+        });
+        continue;
+      }
 
       if (stripeError) {
         issues.push(`Stripe olvasási hiba: ${stripeError}`);
