@@ -7,6 +7,8 @@ import {
   PlugZap,
   RefreshCw,
   Send,
+  ShieldBan,
+  Trash2,
   Users,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
