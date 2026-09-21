@@ -352,6 +352,55 @@ export async function orderStats(includeTests = false): Promise<{ rows: OrderSta
   };
 }
 
+export type DemoStatRow = {
+  id: string;
+  productName: string;
+  productSlug: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  hwid: string | null;
+  testUntil: string | null;
+  createdAt: string;
+  expiresAt: string;
+  downloadCount: number;
+  maxDownloads: number;
+  active: boolean;
+};
+
+export async function demoStats(): Promise<{ rows: DemoStatRow[] }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin
+    .from("demo_requests")
+    .select(
+      "id, product_slug, product_name, name, email, phone, hwid, test_until, created_at, expires_at, download_count, max_downloads",
+    )
+    .order("created_at", { ascending: false })
+    .limit(1000);
+  if (error) {
+    console.error("Demo stats failed:", error.message);
+    return { rows: [] };
+  }
+  const now = Date.now();
+  return {
+    rows: (data ?? []).map((r: any) => ({
+      id: r.id,
+      productName: r.product_name,
+      productSlug: r.product_slug,
+      name: r.name,
+      email: r.email,
+      phone: r.phone,
+      hwid: r.hwid,
+      testUntil: r.test_until,
+      createdAt: r.created_at,
+      expiresAt: r.expires_at,
+      downloadCount: r.download_count,
+      maxDownloads: r.max_downloads,
+      active: new Date(r.expires_at).getTime() > now,
+    })),
+  };
+}
+
 /** Marks a bank-transfer order as paid and emails the download link. */
 export async function approveTransfer(
   orderId: string,

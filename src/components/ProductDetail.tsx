@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { AAM_PRICE_NOTE, aamText } from "@/lib/aam";
 import { getProductFileName } from "@/lib/product-file.functions";
 import { priceFrom, formatPrice, getProduct, products } from "@/lib/products";
+import { isKnowledgeProduct } from "@/lib/product-categories";
 import icKulfoldi from "@/assets/icons/kulfoldi.png.asset.json";
 import icIroda from "@/assets/icons/iroda.png.asset.json";
 import icEgyeni from "@/assets/icons/egyeni.png.asset.json";
@@ -212,6 +213,17 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
                 Hamarosan elérhető – írj, és jelzem, amikor megvásárolható.
               </p>
             )}
+            {product.status === "available" &&
+            product.price > 0 &&
+            !isKnowledgeProduct(product.slug) ? (
+              <Link
+                to="/demo-igenyles"
+                search={{ termek: product.slug }}
+                className="mt-3 inline-flex w-full items-center justify-center rounded-md border border-border bg-secondary/40 px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+              >
+                DEMO verzió kipróbálása
+              </Link>
+            ) : null}
             <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
               {product.price === 0
                 ? "Az igénylés után e-mailben küldjük a védett, 14 napig használható letöltési linket."

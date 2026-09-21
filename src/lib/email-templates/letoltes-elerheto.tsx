@@ -17,6 +17,8 @@ interface Props {
   maxDownloads?: number
   isKnowledge?: boolean
   isFree?: boolean
+  isDemo?: boolean
+  demoHwid?: string
   rows?: Row[]
 }
 
@@ -46,22 +48,25 @@ const notice = {
   margin: '16px 0 12px',
 }
 
-function buildMailto(name?: string, productName?: string, tierLabel?: string): string {
+function buildMailto(name?: string, productName?: string, tierLabel?: string, isDemo?: boolean, demoHwid?: string): string {
   const buyer = name || 'Vásárló'
   const product = productName || 'Termék'
   const tier = tierLabel || '—'
-  const subject = `${buyer} – ${product} – ${tier} – LICENSZET KÉREK`
-  // 16-character HWID placeholder (sample: 13B9D1D807614D61)
-  const hwidBlank = '＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿'
+  const demoPrefix = isDemo ? 'CSAK DEMO – ' : ''
+  const subject = `${demoPrefix}${buyer} – ${product} – ${tier} – LICENSZET KÉREK`
+  const hwidValue = isDemo && demoHwid ? demoHwid : '＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿'
+  const hwidNote = isDemo && demoHwid
+    ? '(az igényléskor megadott azonosító)'
+    : '(KITÖLTENDŐ!)'
   const body = [
     'Tisztelt Sarinay Dávid!',
     '',
-    'Az alábbi termékre licenszkódot kérek:',
+    isDemo ? 'CSAK DEMO LICENCET KÉREK!' : 'Az alábbi termékre licenszkódot kérek:',
     '',
     `Vásárló neve:  ${buyer}`,
     `Termék:        ${product}`,
     `Licenc csomag: ${tier}`,
-    `>>  Gépazonosító (HWID):  ${hwidBlank}  (KITÖLTENDŐ!) <<`,
+    `>>  Gépazonosító (HWID):  ${hwidValue}  ${hwidNote} <<`,
     '',
     'Indítsd el a megvásárolt programot. A licencaktiváló ablakban megtalálod a „Gépazonosító (HWID)” értéket. Kattints a „HWID vágólapra másolás” gombra, majd illeszd be ide az emailbe, a fenti vonalak helyére ezt az azonosítót, és küldd el ezt a levelet.',
   ].join('\n')
@@ -80,6 +85,8 @@ const Email = ({
   maxDownloads,
   isKnowledge,
   isFree,
+  isDemo,
+  demoHwid,
   rows,
 }: Props) => (
   <Html lang="hu" dir="ltr">
@@ -109,18 +116,22 @@ const Email = ({
           ) : null}
         </Section>
         {!isKnowledge ? <><Text style={notice}>
-          A letöltés után indítsd el / nyisd meg a megvásárolt terméket, és a megjelenő{' '}
+          {isDemo
+            ? 'Ez egy DEMO licenc — korlátozott ideig használható. A letöltés után indítsd el a programot, és a megjelenő '
+            : 'A letöltés után indítsd el / nyisd meg a megvásárolt terméket, és a megjelenő '}
           <a
             href="https://xlntbi.hu/api/public/hwid-download"
             style={{ color: '#DC2626', fontWeight: 700, textDecoration: 'underline', fontStyle: 'italic' }}
           >
             HWID-t küldd el
           </a>{' '}
-          a megvásárolt termék nevével és licensz típusával együtt az info@xlntbi.hu emailcímre.
+          {isDemo
+            ? 'a termék nevével együtt az info@xlntbi.hu e-mail címre, és küldök egy DEMO licenszkódot.'
+            : 'a megvásárolt termék nevével és licensz típusával együtt az info@xlntbi.hu emailcímre.'}
         </Text>
         <Section style={{ margin: '0 0 20px' }}>
-          <Button href={buildMailto(name, productName, tierLabel)} style={button}>
-            Licenszet kérek e-mailben
+          <Button href={buildMailto(name, productName, tierLabel, isDemo, demoHwid)} style={button}>
+            {isDemo ? 'DEMO licenszet kérek e-mailben' : 'Licenszet kérek e-mailben'}
           </Button>
         </Section></> : null}
         {rows && rows.length > 0 ? <DataTable rows={rows} /> : null}

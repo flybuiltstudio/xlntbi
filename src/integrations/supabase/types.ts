@@ -552,6 +552,63 @@ export type Database = {
         }
         Relationships: []
       }
+      demo_requests: {
+        Row: {
+          created_at: string
+          download_count: number
+          email: string
+          expires_at: string
+          hwid: string | null
+          id: string
+          ip_address: string | null
+          last_downloaded_at: string | null
+          max_downloads: number
+          name: string
+          phone: string | null
+          product_name: string
+          product_slug: string
+          test_until: string | null
+          token: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          download_count?: number
+          email: string
+          expires_at: string
+          hwid?: string | null
+          id?: string
+          ip_address?: string | null
+          last_downloaded_at?: string | null
+          max_downloads?: number
+          name: string
+          phone?: string | null
+          product_name: string
+          product_slug: string
+          test_until?: string | null
+          token: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          download_count?: number
+          email?: string
+          expires_at?: string
+          hwid?: string | null
+          id?: string
+          ip_address?: string | null
+          last_downloaded_at?: string | null
+          max_downloads?: number
+          name?: string
+          phone?: string | null
+          product_name?: string
+          product_slug?: string
+          test_until?: string | null
+          token?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       free_download_requests: {
         Row: {
           created_at: string
@@ -781,6 +838,7 @@ export type Database = {
           currency: string
           discount_amount: number
           email: string
+          hwid: string | null
           id: string
           ip_address: string | null
           last_stripe_event_at: string | null
@@ -819,6 +877,7 @@ export type Database = {
           currency?: string
           discount_amount?: number
           email: string
+          hwid?: string | null
           id?: string
           ip_address?: string | null
           last_stripe_event_at?: string | null
@@ -857,6 +916,7 @@ export type Database = {
           currency?: string
           discount_amount?: number
           email?: string
+          hwid?: string | null
           id?: string
           ip_address?: string | null
           last_stripe_event_at?: string | null

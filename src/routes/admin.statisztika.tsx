@@ -15,7 +15,7 @@ import {
   Users,
 } from "lucide-react";
 
-import { adminOrderStats, adminPageViewStats } from "@/lib/admin.functions";
+import { adminOrderStats, adminPageViewStats, adminDemoStats } from "@/lib/admin.functions";
 import { formatPrice, products } from "@/lib/products";
 import { serviceItems } from "@/lib/services";
 import { PageHero } from "@/components/PageHero";
@@ -530,6 +530,9 @@ function StatsPanel() {
               </section>
 
               <HourlyOrdersChart rows={rows} />
+
+              {/* DEMO letöltések – fizetés nélküli DEMO igénylések */}
+              <DemoDownloads />
 
               {/* Megrendelői és terméklista – a kezdetektől, szűrőktől függetlenül */}
               <CustomerProductLists rows={rows} />
@@ -1871,6 +1874,107 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
           darabszáma. Az oszlopra húzva az egeret megjelenik az óraintervallum és a pontos darabszám.
         </p>
       </div>
+    </section>
+  );
+}
+
+function DemoDownloads() {
+  const load = useServerFn(adminDemoStats);
+  const [rows, setRows] = useState<any[] | null>(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    load()
+      .then((r) => setRows(r.rows))
+      .catch((e) => {
+        setError(e instanceof Error ? e.message : "A DEMO adatok betöltése nem sikerült.");
+        setRows([]);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (rows === null) {
+    return (
+      <section className="mt-14">
+        <h2 className="text-xl font-bold text-foreground">DEMO letöltések</h2>
+        <p className="mt-4 text-sm text-muted-foreground">Betöltés…</p>
+      </section>
+    );
+  }
+
+  const activeCount = rows.filter((r) => r.active).length;
+  const totalDownloads = rows.reduce((s, r) => s + r.downloadCount, 0);
+
+  return (
+    <section className="mt-14">
+      <h2 className="text-xl font-bold text-foreground">DEMO letöltések</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Fizetés nélküli DEMO licenc igénylések. Ezek nem jelennek meg a vásárlási statisztikában
+        és nem kerülnek számlázásra.
+      </p>
+
+      <div className="mt-4 flex flex-wrap gap-4 text-sm">
+        <span className="rounded-md border border-border bg-card px-3 py-2">
+          <strong className="text-foreground">{rows.length}</strong> db igénylés összesen
+        </span>
+        <span className="rounded-md border border-border bg-card px-3 py-2">
+          <strong className="text-foreground">{activeCount}</strong> db aktív (nem lejárt)
+        </span>
+        <span className="rounded-md border border-border bg-card px-3 py-2">
+          <strong className="text-foreground">{totalDownloads}</strong> db letöltés megtörtént
+        </span>
+      </div>
+
+      {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
+
+      {rows.length > 0 ? (
+        <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
+          <table className="w-full text-sm">
+            <thead className="border-b border-border bg-muted/40 text-left">
+              <tr>
+                <th className="px-4 py-3 font-semibold text-foreground">Dátum</th>
+                <th className="px-4 py-3 font-semibold text-foreground">Termék</th>
+                <th className="px-4 py-3 font-semibold text-foreground">Név</th>
+                <th className="px-4 py-3 font-semibold text-foreground">E-mail</th>
+                <th className="px-4 py-3 font-semibold text-foreground">HWID</th>
+                <th className="px-4 py-3 text-right font-semibold text-foreground">Letöltések</th>
+                <th className="px-4 py-3 font-semibold text-foreground">Állapot</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {rows.map((r) => (
+                <tr key={r.id}>
+                  <td className="px-4 py-2.5 text-muted-foreground">
+                    {formatDateHu(r.createdAt)}
+                  </td>
+                  <td className="px-4 py-2.5">{r.productName}</td>
+                  <td className="px-4 py-2.5">{r.name}</td>
+                  <td className="px-4 py-2.5 text-muted-foreground">{r.email}</td>
+                  <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
+                    {r.hwid ?? "—"}
+                  </td>
+                  <td className="px-4 py-2.5 text-right">
+                    {r.downloadCount}/{r.maxDownloads}
+                  </td>
+                  <td className="px-4 py-2.5">
+                    {r.active ? (
+                      <span className="inline-flex rounded-md bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-600">
+                        Aktív
+                      </span>
+                    ) : (
+                      <span className="inline-flex rounded-md bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+                        Lejárt
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p className="mt-6 text-sm text-muted-foreground">Még nincs DEMO igénylés.</p>
+      )}
     </section>
   );
 }

@@ -15,6 +15,16 @@ import { checkTaxNumber } from "@/lib/tax-number";
 import { euVatPrefix } from "@/lib/eu-vat";
 import { checkEuVat } from "@/lib/vies.functions";
 import { checkNavTax } from "@/lib/nav-taxpayer.functions";
+import { handleHwidDownload } from "@/lib/hwid-download";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
 
 const TITLE = "Megrendelés | EXCELlent digitális termékek";
 const DESC =
@@ -50,6 +60,7 @@ function OrderPage() {
   const submit = useServerFn(submitOrder);
   const verifyEuVat = useServerFn(checkEuVat);
   const verifyNavTax = useServerFn(checkNavTax);
+  const isMobile = useIsMobile();
 
   const orderable = products.filter((p) => p.status === "available");
   const initialSlug =
@@ -130,6 +141,7 @@ function OrderPage() {
           email: String(fd.get("email") ?? ""),
           phone: String(fd.get("phone") ?? ""),
           note: String(fd.get("note") ?? ""),
+          hwid: String(fd.get("hwid") ?? ""),
           paymentMethod,
           acceptTerms: true,
           acceptPrivacy: true,
@@ -432,6 +444,50 @@ function OrderPage() {
             Telefonszám *
             <input name="phone" type="tel" required minLength={6} maxLength={30} className={inputClass} />
           </label>
+        </div>
+
+        {/* Gépazonosító (HWID) — asztali kötelező, mobil opcionális */}
+        <div className="mt-6">
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm font-medium text-foreground">
+              Gépazonosító (HWID){isMobile ? "" : " *"}
+            </span>
+            <TooltipProvider delayDuration={200}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button type="button" className="text-muted-foreground hover:text-foreground">
+                    <Info className="h-4 w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  Töltsd le és futtasd a gépazonosító-mutató programot, majd a kapott azonosítót
+                  másold be ide. A program csak Windows asztali gépen futtatható.
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          <div className="mt-1.5 flex gap-2">
+            <input
+              name="hwid"
+              maxLength={100}
+              required={!isMobile}
+              placeholder="pl. 13B9D1D807614D61"
+              className={inputClass}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              className="h-auto shrink-0 px-4 py-2.5 text-sm"
+              onClick={() => handleHwidDownload("hu")}
+            >
+              Gépazonosító letöltése
+            </Button>
+          </div>
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            {isMobile
+              ? "Mobilon opcionális, de asztali gépen kötelező a licenszküldéshez."
+              : "Kötelező mező. Töltsd le a programot, futtasd, és másold be az azonosítót."}
+          </p>
         </div>
 
         <label className="mt-6 block text-sm font-medium text-foreground">

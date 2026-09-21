@@ -17,6 +17,7 @@ type Order = {
   email: string;
   phone: string;
   note: string;
+  hwid: string;
   website: string;
   paymentMethod: "card" | "transfer";
 };
@@ -135,8 +136,7 @@ export async function handleOrder(data: Order) {
     currency: product.currency,
     billing_name: data.billingName,
     company_name: data.companyName || null,
-    tax_number: data.taxNumber || null
-    ,
+    tax_number: data.taxNumber || null,
     country: data.country,
     postal_code: data.postalCode,
     city: data.city,
@@ -144,6 +144,7 @@ export async function handleOrder(data: Order) {
     email: data.email,
     phone: data.phone,
     note: data.note || null,
+    hwid: data.hwid || null,
     status: "new",
     payment_status: "unpaid",
     payment_provider: data.paymentMethod === "card" ? "stripe" : null,
@@ -174,6 +175,7 @@ export async function handleOrder(data: Order) {
     ["E-mail", data.email],
     ["Telefon", data.phone],
   );
+  if (data.hwid) rows.push(["Gépazonosító (HWID)", data.hwid]);
   if (data.note) rows.push(["Megjegyzés", data.note]);
   rows.push([
     "Fizetési mód",
