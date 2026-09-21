@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 
+import { template as belsoKarbantartas } from './belso-karbantartas'
 import { template as belsoKatalogusAudit } from './belso-katalogus-audit'
 import { template as belsoNavHiba } from './belso-nav-hiba'
 import { template as belsoRendelesErtesito } from './belso-rendeles-ertesito'
@@ -32,6 +33,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'megrendeles-visszaigazolas': megrendelesVisszaigazolas,
   'belso-rendeles-ertesito': belsoRendelesErtesito,
   'belso-katalogus-audit': belsoKatalogusAudit,
+  'belso-karbantartas': belsoKarbantartas,
   'belso-nav-hiba': belsoNavHiba,
   'letoltes-elerheto': letoltesElerheto,
   'licensz-kod': licenszKod,

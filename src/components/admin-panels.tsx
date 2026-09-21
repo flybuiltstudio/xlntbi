@@ -10,6 +10,7 @@ import {
   adminCreateUser,
   adminDeleteCalculatorOverride,
   adminDeleteUser,
+  adminDeleteUnpaidOrder,
   adminInvoiceSnapshot,
   adminInvoiceUrl,
   adminListCalculatorOverrides,
@@ -301,8 +302,20 @@ export function LoginPanel() {
   );
 }
 
+/** Orders unpaid for longer than this are highlighted as long-waiting. */
+const STALE_UNPAID_DAYS = 8;
+
+/** True when the order is still unpaid and older than STALE_UNPAID_DAYS. */
+function isStaleUnpaid(order: { paymentStatus: string; createdAt: string }): boolean {
+  if (order.paymentStatus === "paid") return false;
+  const stamp = Date.parse(order.createdAt);
+  if (Number.isNaN(stamp)) return false;
+  return stamp < Date.now() - STALE_UNPAID_DAYS * 24 * 60 * 60 * 1000;
+}
+
 export function OrdersPanel({ email }: { email: string | null }) {
   const load = useServerFn(adminListOrders);
+  const deleteUnpaid = useServerFn(adminDeleteUnpaidOrder);
   const approve = useServerFn(adminApproveTransfer);
   const resend = useServerFn(adminResendDownload);
   const retryInvoice = useServerFn(adminRetryInvoice);
@@ -320,7 +333,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
-  const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid">("all");
+  const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid" | "stale">("all");
   const [methodFilter, setMethodFilter] = useState<"all" | "stripe" | "transfer">("all");
   const [snapshots, setSnapshots] = useState<Record<string, InvoiceSnapshotState>>({});
   const [invoiceFilter, setInvoiceFilter] = useState<"all" | "invoiced" | "not-invoiced">("all");
@@ -345,6 +358,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
       (orders ?? []).filter((order) => {
         if (payFilter === "paid" && order.paymentStatus !== "paid") return false;
         if (payFilter === "unpaid" && order.paymentStatus === "paid") return false;
+        if (payFilter === "stale" && !isStaleUnpaid(order)) return false;
         if (methodFilter === "stripe" && order.paymentProvider !== "stripe") return false;
         if (methodFilter === "transfer" && order.paymentProvider === "stripe") return false;
         if (invoiceFilter === "invoiced" && !order.billingoInvoiceNumber) return false;
@@ -355,6 +369,12 @@ export function OrdersPanel({ email }: { email: string | null }) {
         return true;
       }),
     [orders, payFilter, methodFilter, invoiceFilter, activeYear, activeMonth],
+  );
+
+  /** Long-waiting unpaid orders, shown in their own block above the filters. */
+  const staleOrders = useMemo(
+    () => (orders ?? []).filter(isStaleUnpaid),
+    [orders],
   );
 
   const selectYear = (y: number | "all") => {
@@ -428,6 +448,30 @@ export function OrdersPanel({ email }: { email: string | null }) {
           : (result.error ?? "Hiba történt."),
       );
       await refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
+  /** Deletes a never-paid order everywhere, after an explicit confirmation. */
+  async function onDeleteUnpaid(order: Order) {
+    if (
+      !window.confirm(
+        `Biztosan véglegesen törlöd a ${order.orderNumber} megrendelést?\n\n${order.productName} – ${order.email}\n\nEz nem visszavonható: a megrendelés a listákból és a statisztikákból is eltűnik.`,
+      )
+    )
+      return;
+    setBusy(order.id);
+    setMessage("");
+    try {
+      const result = await deleteUnpaid({ data: { orderId: order.id } });
+      setMessage(
+        result.ok
+          ? `${order.orderNumber}: a megrendelés törölve.`
+          : (result.error ?? "Hiba történt."),
+      );
+      if (result.ok) await refresh();
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Hiba történt.");
     }
@@ -718,6 +762,35 @@ export function OrdersPanel({ email }: { email: string | null }) {
         </p>
       ) : null}
 
+      {staleOrders.length > 0 ? (
+        <div className="mt-6 rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-4">
+          <h3 className="text-sm font-semibold text-destructive">
+            Régóta fizetésre vár ({staleOrders.length})
+          </h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Ezek a megrendelések több mint {STALE_UNPAID_DAYS} napja nincsenek kifizetve. Ha a vevő
+            meggondolta magát, a megrendelés alább, a „Megrendelés törlése" gombbal véglegesen
+            törölhető.
+          </p>
+          <ul className="mt-3 space-y-1 text-xs text-foreground">
+            {staleOrders.slice(0, 10).map((order) => (
+              <li key={order.id}>
+                <span className="font-semibold">{order.orderNumber}</span> – {order.productName} –{" "}
+                {formatPrice(order.totalPrice)} – {order.email} –{" "}
+                {new Date(order.createdAt).toLocaleDateString("hu-HU")}
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={() => setPayFilter("stale")}
+            className="mt-3 rounded-md border border-destructive/40 bg-background px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10"
+          >
+            Csak ezeket mutasd
+          </button>
+        </div>
+      ) : null}
+
       {orders !== null && orders.length > 0 ? (
         <div id="rendeles-szurok" className="scroll-mt-24 mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
           <div className="flex flex-wrap items-center gap-2">
@@ -729,6 +802,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 { id: "all", label: "Összes" },
                 { id: "paid", label: "Rendezett" },
                 { id: "unpaid", label: "Fizetésre vár" },
+                { id: "stale", label: `Régóta vár (${STALE_UNPAID_DAYS}+ nap)` },
               ] as const
             ).map((opt) => (
               <button
@@ -1041,6 +1115,17 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 >
                   E-mail a vevőnek
                 </a>
+                {order.paymentStatus !== "paid" ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => void onDeleteUnpaid(order)}
+                    className="ml-auto rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
+                    title="A fizetésre váró megrendelés végleges törlése mindenhonnan"
+                  >
+                    {busy === order.id ? "Törlés…" : "Megrendelés törlése"}
+                  </button>
+                ) : null}
               </div>
 
               {licenseFor?.id === order.id ? (

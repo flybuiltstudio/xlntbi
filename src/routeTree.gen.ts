@@ -57,6 +57,7 @@ import { Route as AdminNavEllenorzesRouteImport } from './routes/admin.nav-ellen
 import { Route as AdminRendelesiAuditRouteImport } from './routes/admin.rendelesi-audit'
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as AdminSzamlazasRouteImport } from './routes/admin.szamlazas'
+import { Route as AdminTaroloTakaritasRouteImport } from './routes/admin.tarolo-takaritas'
 import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as EnAboutRouteImport } from './routes/en.about'
 import { Route as EnAccountingFirmAuditRouteImport } from './routes/en.accounting-firm-audit'
@@ -134,10 +135,14 @@ import { Route as EnCalculatorsInvoiceDatesRouteImport } from './routes/en.calcu
 import { Route as EnCalculatorsSalaryTestRouteImport } from './routes/en.calculators.salary-test'
 import { Route as EnProductSlugRouteImport } from './routes/en.product.$slug'
 import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
+import { Route as ApiPublicFizetesreVaroJelzesCronRouteImport } from './routes/api/public/fizetesre-varo-jelzes/cron'
+import { Route as ApiPublicHaviStatisztikaZarasCronRouteImport } from './routes/api/public/havi-statisztika-zaras/cron'
+import { Route as ApiPublicHetiTakaritasCronRouteImport } from './routes/api/public/heti-takaritas/cron'
 import { Route as ApiPublicKalkulatorKepSlugRouteImport } from './routes/api/public/kalkulator-kep.$slug'
 import { Route as ApiPublicKatalogusAuditCronRouteImport } from './routes/api/public/katalogus-audit/cron'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicSzamlaHianyJelzesCronRouteImport } from './routes/api/public/szamla-hiany-jelzes/cron'
 import { Route as ApiPublicTermekKepSlugRouteImport } from './routes/api/public/termek-kep.$slug'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
@@ -383,6 +388,11 @@ const AdminStatisztikaRoute = AdminStatisztikaRouteImport.update({
 const AdminSzamlazasRoute = AdminSzamlazasRouteImport.update({
   id: '/szamlazas',
   path: '/szamlazas',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTaroloTakaritasRoute = AdminTaroloTakaritasRouteImport.update({
+  id: '/tarolo-takaritas',
+  path: '/tarolo-takaritas',
   getParentRoute: () => AdminRoute,
 } as any)
 const EnIndexRoute = EnIndexRouteImport.update({
@@ -804,6 +814,24 @@ const ApiPublicBillingoWebhookRoute =
     path: '/api/public/billingo/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicFizetesreVaroJelzesCronRoute =
+  ApiPublicFizetesreVaroJelzesCronRouteImport.update({
+    id: '/api/public/fizetesre-varo-jelzes/cron',
+    path: '/api/public/fizetesre-varo-jelzes/cron',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHaviStatisztikaZarasCronRoute =
+  ApiPublicHaviStatisztikaZarasCronRouteImport.update({
+    id: '/api/public/havi-statisztika-zaras/cron',
+    path: '/api/public/havi-statisztika-zaras/cron',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHetiTakaritasCronRoute =
+  ApiPublicHetiTakaritasCronRouteImport.update({
+    id: '/api/public/heti-takaritas/cron',
+    path: '/api/public/heti-takaritas/cron',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicKalkulatorKepSlugRoute =
   ApiPublicKalkulatorKepSlugRouteImport.update({
     id: '/api/public/kalkulator-kep/$slug',
@@ -825,6 +853,12 @@ const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
     path: '/api/public/payments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicSzamlaHianyJelzesCronRoute =
+  ApiPublicSzamlaHianyJelzesCronRouteImport.update({
+    id: '/api/public/szamla-hiany-jelzes/cron',
+    path: '/api/public/szamla-hiany-jelzes/cron',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicTermekKepSlugRoute = ApiPublicTermekKepSlugRouteImport.update({
@@ -897,6 +931,7 @@ export interface FileRoutesByFullPath {
   '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
+  '/admin/tarolo-takaritas': typeof AdminTaroloTakaritasRoute
   '/en/about': typeof EnAboutRoute
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
@@ -975,10 +1010,14 @@ export interface FileRoutesByFullPath {
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/fizetesre-varo-jelzes/cron': typeof ApiPublicFizetesreVaroJelzesCronRoute
+  '/api/public/havi-statisztika-zaras/cron': typeof ApiPublicHaviStatisztikaZarasCronRoute
+  '/api/public/heti-takaritas/cron': typeof ApiPublicHetiTakaritasCronRoute
   '/api/public/kalkulator-kep/$slug': typeof ApiPublicKalkulatorKepSlugRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/szamla-hiany-jelzes/cron': typeof ApiPublicSzamlaHianyJelzesCronRoute
   '/api/public/termek-kep/$slug': typeof ApiPublicTermekKepSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1030,6 +1069,7 @@ export interface FileRoutesByTo {
   '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
+  '/admin/tarolo-takaritas': typeof AdminTaroloTakaritasRoute
   '/en/about': typeof EnAboutRoute
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
@@ -1108,10 +1148,14 @@ export interface FileRoutesByTo {
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/fizetesre-varo-jelzes/cron': typeof ApiPublicFizetesreVaroJelzesCronRoute
+  '/api/public/havi-statisztika-zaras/cron': typeof ApiPublicHaviStatisztikaZarasCronRoute
+  '/api/public/heti-takaritas/cron': typeof ApiPublicHetiTakaritasCronRoute
   '/api/public/kalkulator-kep/$slug': typeof ApiPublicKalkulatorKepSlugRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/szamla-hiany-jelzes/cron': typeof ApiPublicSzamlaHianyJelzesCronRoute
   '/api/public/termek-kep/$slug': typeof ApiPublicTermekKepSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1166,6 +1210,7 @@ export interface FileRoutesById {
   '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
+  '/admin/tarolo-takaritas': typeof AdminTaroloTakaritasRoute
   '/en/about': typeof EnAboutRoute
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
@@ -1244,10 +1289,14 @@ export interface FileRoutesById {
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/fizetesre-varo-jelzes/cron': typeof ApiPublicFizetesreVaroJelzesCronRoute
+  '/api/public/havi-statisztika-zaras/cron': typeof ApiPublicHaviStatisztikaZarasCronRoute
+  '/api/public/heti-takaritas/cron': typeof ApiPublicHetiTakaritasCronRoute
   '/api/public/kalkulator-kep/$slug': typeof ApiPublicKalkulatorKepSlugRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/szamla-hiany-jelzes/cron': typeof ApiPublicSzamlaHianyJelzesCronRoute
   '/api/public/termek-kep/$slug': typeof ApiPublicTermekKepSlugRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -1303,6 +1352,7 @@ export interface FileRouteTypes {
     | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
+    | '/admin/tarolo-takaritas'
     | '/en/about'
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
@@ -1381,10 +1431,14 @@ export interface FileRouteTypes {
     | '/en/product/$slug'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
+    | '/api/public/fizetesre-varo-jelzes/cron'
+    | '/api/public/havi-statisztika-zaras/cron'
+    | '/api/public/heti-takaritas/cron'
     | '/api/public/kalkulator-kep/$slug'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
+    | '/api/public/szamla-hiany-jelzes/cron'
     | '/api/public/termek-kep/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1436,6 +1490,7 @@ export interface FileRouteTypes {
     | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
+    | '/admin/tarolo-takaritas'
     | '/en/about'
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
@@ -1514,10 +1569,14 @@ export interface FileRouteTypes {
     | '/en/product/$slug'
     | '/en/calculators'
     | '/api/public/billingo/webhook'
+    | '/api/public/fizetesre-varo-jelzes/cron'
+    | '/api/public/havi-statisztika-zaras/cron'
+    | '/api/public/heti-takaritas/cron'
     | '/api/public/kalkulator-kep/$slug'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
+    | '/api/public/szamla-hiany-jelzes/cron'
     | '/api/public/termek-kep/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1571,6 +1630,7 @@ export interface FileRouteTypes {
     | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
+    | '/admin/tarolo-takaritas'
     | '/en/about'
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
@@ -1649,10 +1709,14 @@ export interface FileRouteTypes {
     | '/en/product/$slug'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
+    | '/api/public/fizetesre-varo-jelzes/cron'
+    | '/api/public/havi-statisztika-zaras/cron'
+    | '/api/public/heti-takaritas/cron'
     | '/api/public/kalkulator-kep/$slug'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
     | '/api/public/payments/webhook'
+    | '/api/public/szamla-hiany-jelzes/cron'
     | '/api/public/termek-kep/$slug'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -1742,10 +1806,14 @@ export interface RootRouteChildren {
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
   ApiPublicHwidDownloadRoute: typeof ApiPublicHwidDownloadRoute
   ApiPublicBillingoWebhookRoute: typeof ApiPublicBillingoWebhookRoute
+  ApiPublicFizetesreVaroJelzesCronRoute: typeof ApiPublicFizetesreVaroJelzesCronRoute
+  ApiPublicHaviStatisztikaZarasCronRoute: typeof ApiPublicHaviStatisztikaZarasCronRoute
+  ApiPublicHetiTakaritasCronRoute: typeof ApiPublicHetiTakaritasCronRoute
   ApiPublicKalkulatorKepSlugRoute: typeof ApiPublicKalkulatorKepSlugRoute
   ApiPublicKatalogusAuditCronRoute: typeof ApiPublicKatalogusAuditCronRoute
   ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicSzamlaHianyJelzesCronRoute: typeof ApiPublicSzamlaHianyJelzesCronRoute
   ApiPublicTermekKepSlugRoute: typeof ApiPublicTermekKepSlugRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -2088,6 +2156,13 @@ declare module '@tanstack/react-router' {
       path: '/szamlazas'
       fullPath: '/admin/szamlazas'
       preLoaderRoute: typeof AdminSzamlazasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tarolo-takaritas': {
+      id: '/admin/tarolo-takaritas'
+      path: '/tarolo-takaritas'
+      fullPath: '/admin/tarolo-takaritas'
+      preLoaderRoute: typeof AdminTaroloTakaritasRouteImport
       parentRoute: typeof AdminRoute
     }
     '/en/': {
@@ -2629,6 +2704,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicBillingoWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/fizetesre-varo-jelzes/cron': {
+      id: '/api/public/fizetesre-varo-jelzes/cron'
+      path: '/api/public/fizetesre-varo-jelzes/cron'
+      fullPath: '/api/public/fizetesre-varo-jelzes/cron'
+      preLoaderRoute: typeof ApiPublicFizetesreVaroJelzesCronRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/havi-statisztika-zaras/cron': {
+      id: '/api/public/havi-statisztika-zaras/cron'
+      path: '/api/public/havi-statisztika-zaras/cron'
+      fullPath: '/api/public/havi-statisztika-zaras/cron'
+      preLoaderRoute: typeof ApiPublicHaviStatisztikaZarasCronRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/heti-takaritas/cron': {
+      id: '/api/public/heti-takaritas/cron'
+      path: '/api/public/heti-takaritas/cron'
+      fullPath: '/api/public/heti-takaritas/cron'
+      preLoaderRoute: typeof ApiPublicHetiTakaritasCronRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/kalkulator-kep/$slug': {
       id: '/api/public/kalkulator-kep/$slug'
       path: '/api/public/kalkulator-kep/$slug'
@@ -2655,6 +2751,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/payments/webhook'
       fullPath: '/api/public/payments/webhook'
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/szamla-hiany-jelzes/cron': {
+      id: '/api/public/szamla-hiany-jelzes/cron'
+      path: '/api/public/szamla-hiany-jelzes/cron'
+      fullPath: '/api/public/szamla-hiany-jelzes/cron'
+      preLoaderRoute: typeof ApiPublicSzamlaHianyJelzesCronRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/termek-kep/$slug': {
@@ -2701,6 +2804,7 @@ interface AdminRouteChildren {
   AdminRendelesiAuditRoute: typeof AdminRendelesiAuditRoute
   AdminStatisztikaRoute: typeof AdminStatisztikaRoute
   AdminSzamlazasRoute: typeof AdminSzamlazasRoute
+  AdminTaroloTakaritasRoute: typeof AdminTaroloTakaritasRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -2717,6 +2821,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminRendelesiAuditRoute: AdminRendelesiAuditRoute,
   AdminStatisztikaRoute: AdminStatisztikaRoute,
   AdminSzamlazasRoute: AdminSzamlazasRoute,
+  AdminTaroloTakaritasRoute: AdminTaroloTakaritasRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -2879,10 +2984,15 @@ const rootRouteChildren: RootRouteChildren = {
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
   ApiPublicHwidDownloadRoute: ApiPublicHwidDownloadRoute,
   ApiPublicBillingoWebhookRoute: ApiPublicBillingoWebhookRoute,
+  ApiPublicFizetesreVaroJelzesCronRoute: ApiPublicFizetesreVaroJelzesCronRoute,
+  ApiPublicHaviStatisztikaZarasCronRoute:
+    ApiPublicHaviStatisztikaZarasCronRoute,
+  ApiPublicHetiTakaritasCronRoute: ApiPublicHetiTakaritasCronRoute,
   ApiPublicKalkulatorKepSlugRoute: ApiPublicKalkulatorKepSlugRoute,
   ApiPublicKatalogusAuditCronRoute: ApiPublicKatalogusAuditCronRoute,
   ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicSzamlaHianyJelzesCronRoute: ApiPublicSzamlaHianyJelzesCronRoute,
   ApiPublicTermekKepSlugRoute: ApiPublicTermekKepSlugRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,

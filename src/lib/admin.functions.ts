@@ -224,6 +224,21 @@ export const adminDeleteTestOrder = createServerFn({ method: "POST" })
     return deleteTestOrder(data.orderId);
   });
 
+/** Deletes a never-paid order completely (admin only, logged). */
+export const adminDeleteUnpaidOrder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ orderId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { gate, claimsEmail } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { deleteUnpaidOrder } = await import("./admin.server");
+    return deleteUnpaidOrder(data.orderId, {
+      userId: (context as any).userId ?? null,
+      email: claimsEmail(context as any) ?? null,
+    });
+  });
+
+
 // ---------------------------------------------------------------------------
 // "Friss verzió feltöltés" — product file swap + calculator overrides
 // ---------------------------------------------------------------------------
