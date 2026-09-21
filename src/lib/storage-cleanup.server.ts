@@ -98,12 +98,8 @@ async function collectReferencedPaths(): Promise<Set<string>> {
   for (const row of orderTokens.data ?? []) add(row.storage_path);
   for (const row of freeTokens.data ?? []) add(row.storage_path);
 
-  // Product and category images live in storage too.
-  const [images, categories] = await Promise.all([
-    supabaseAdmin.from("product_placements").select("slug"),
-    supabaseAdmin.from("custom_categories").select("image_path"),
-  ]);
-  void images;
+  // Category cover images live in storage too.
+  const categories = await supabaseAdmin.from("custom_categories").select("image_path");
   for (const row of categories.data ?? []) add(row.image_path);
 
   return refs;
