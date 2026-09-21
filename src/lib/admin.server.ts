@@ -778,7 +778,13 @@ export async function deleteUnpaidOrder(
     return { ok: false, error: "A törlés naplózása nem sikerült, ezért nem töröltem." };
   }
 
+  // Child rows that reference the order must go (or lose the reference) first.
   await supabaseAdmin.from("order_downloads").delete().eq("order_id", orderId);
+  await supabaseAdmin.from("billingo_invoice_snapshots").delete().eq("order_id", orderId);
+  await (supabaseAdmin as any)
+    .from("billingo_invoice_logs")
+    .update({ order_id: null })
+    .eq("order_id", orderId);
 
   const { error, data: deleted } = await supabaseAdmin
     .from("orders")
