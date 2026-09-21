@@ -359,6 +359,8 @@ export type DemoStatRow = {
   name: string;
   email: string;
   phone: string | null;
+  companyName: string | null;
+  taxNumber: string | null;
   hwid: string | null;
   testUntil: string | null;
   createdAt: string;
@@ -373,7 +375,7 @@ export async function demoStats(): Promise<{ rows: DemoStatRow[] }> {
   const { data, error } = await supabaseAdmin
     .from("demo_requests")
     .select(
-      "id, product_slug, product_name, name, email, phone, hwid, test_until, created_at, expires_at, download_count, max_downloads",
+      "id, product_slug, product_name, name, email, phone, company_name, tax_number, hwid, test_until, created_at, expires_at, download_count, max_downloads",
     )
     .order("created_at", { ascending: false })
     .limit(1000);
@@ -390,6 +392,8 @@ export async function demoStats(): Promise<{ rows: DemoStatRow[] }> {
       name: r.name,
       email: r.email,
       phone: r.phone,
+      companyName: r.company_name ?? null,
+      taxNumber: r.tax_number ?? null,
       hwid: r.hwid,
       testUntil: r.test_until,
       createdAt: r.created_at,

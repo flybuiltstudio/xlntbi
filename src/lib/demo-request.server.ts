@@ -30,6 +30,8 @@ export async function requestDemo(input: {
   name: string;
   email: string;
   phone: string;
+  companyName: string;
+  taxNumber: string;
   hwid: string;
   testUntil: string | null;
   website: string;
@@ -89,6 +91,8 @@ export async function requestDemo(input: {
     name: input.name,
     email: input.email,
     phone: input.phone || null,
+    company_name: input.companyName || null,
+    tax_number: input.taxNumber || null,
     hwid: input.hwid || null,
     test_until: input.testUntil || null,
     token,
@@ -151,6 +155,8 @@ export async function requestDemo(input: {
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Név</td><td style="padding:6px 8px;border:1px solid #ddd">${input.name}</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">E-mail</td><td style="padding:6px 8px;border:1px solid #ddd">${input.email}</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Telefon</td><td style="padding:6px 8px;border:1px solid #ddd">${input.phone || "nem megadott"}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Cégnév</td><td style="padding:6px 8px;border:1px solid #ddd">${input.companyName || "nem megadott"}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Adószám</td><td style="padding:6px 8px;border:1px solid #ddd">${input.taxNumber || "nem megadott"}</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Gépazonosító (HWID)</td><td style="padding:6px 8px;border:1px solid #ddd;font-family:monospace">${hwidValue}</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Tesztidő</td><td style="padding:6px 8px;border:1px solid #ddd">${testUntilText}</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Letöltőlink</td><td style="padding:6px 8px;border:1px solid #ddd"><a href="${downloadUrl}">${downloadUrl}</a></td></tr>
@@ -168,6 +174,8 @@ export async function requestDemo(input: {
     `Név:           ${input.name}`,
     `E-mail:        ${input.email}`,
     `Telefon:       ${input.phone || "nem megadott"}`,
+    `Cégnév:        ${input.companyName || "nem megadott"}`,
+    `Adószám:       ${input.taxNumber || "nem megadott"}`,
     `Gépazonosító:  ${hwidValue}`,
     `Tesztidő:      ${testUntilText}`,
     `Letöltőlink:   ${downloadUrl}`,

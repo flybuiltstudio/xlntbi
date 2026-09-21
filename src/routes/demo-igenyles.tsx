@@ -99,6 +99,8 @@ function DemoRequestPage() {
                 name: String(fd.get("name") ?? ""),
                 email: String(fd.get("email") ?? ""),
                 phone: String(fd.get("phone") ?? ""),
+                companyName: String(fd.get("companyName") ?? ""),
+                taxNumber: String(fd.get("taxNumber") ?? ""),
                 hwid: String(fd.get("hwid") ?? ""),
                 testUntil: String(fd.get("testUntil") ?? "") || null,
                 website: String(fd.get("website") ?? ""),
@@ -127,6 +129,14 @@ function DemoRequestPage() {
         <label className="mt-5 block text-sm font-medium text-foreground">
           Telefonszám *
           <input name="phone" type="tel" required minLength={6} maxLength={30} className={inputClass} />
+        </label>
+        <label className="mt-5 block text-sm font-medium text-foreground">
+          Cégnév (nem kötelező)
+          <input name="companyName" maxLength={160} className={inputClass} />
+        </label>
+        <label className="mt-5 block text-sm font-medium text-foreground">
+          Adószám (nem kötelező)
+          <input name="taxNumber" maxLength={30} className={inputClass} />
         </label>
 
         {/* Gépazonosító (HWID) — opcionális */}
