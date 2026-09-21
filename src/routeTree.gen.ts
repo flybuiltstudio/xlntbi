@@ -57,6 +57,7 @@ import { Route as AdminNavEllenorzesRouteImport } from './routes/admin.nav-ellen
 import { Route as AdminRendelesiAuditRouteImport } from './routes/admin.rendelesi-audit'
 import { Route as AdminStatisztikaRouteImport } from './routes/admin.statisztika'
 import { Route as AdminSzamlazasRouteImport } from './routes/admin.szamlazas'
+import { Route as AdminTaroloTakaritasRouteImport } from './routes/admin.tarolo-takaritas'
 import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as EnAboutRouteImport } from './routes/en.about'
 import { Route as EnAccountingFirmAuditRouteImport } from './routes/en.accounting-firm-audit'
@@ -387,6 +388,11 @@ const AdminStatisztikaRoute = AdminStatisztikaRouteImport.update({
 const AdminSzamlazasRoute = AdminSzamlazasRouteImport.update({
   id: '/szamlazas',
   path: '/szamlazas',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTaroloTakaritasRoute = AdminTaroloTakaritasRouteImport.update({
+  id: '/tarolo-takaritas',
+  path: '/tarolo-takaritas',
   getParentRoute: () => AdminRoute,
 } as any)
 const EnIndexRoute = EnIndexRouteImport.update({
@@ -925,6 +931,7 @@ export interface FileRoutesByFullPath {
   '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
+  '/admin/tarolo-takaritas': typeof AdminTaroloTakaritasRoute
   '/en/about': typeof EnAboutRoute
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
@@ -1062,6 +1069,7 @@ export interface FileRoutesByTo {
   '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
+  '/admin/tarolo-takaritas': typeof AdminTaroloTakaritasRoute
   '/en/about': typeof EnAboutRoute
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
@@ -1202,6 +1210,7 @@ export interface FileRoutesById {
   '/admin/rendelesi-audit': typeof AdminRendelesiAuditRoute
   '/admin/statisztika': typeof AdminStatisztikaRoute
   '/admin/szamlazas': typeof AdminSzamlazasRoute
+  '/admin/tarolo-takaritas': typeof AdminTaroloTakaritasRoute
   '/en/about': typeof EnAboutRoute
   '/en/accounting-firm-audit': typeof EnAccountingFirmAuditRoute
   '/en/bookkeeping': typeof EnBookkeepingRoute
@@ -1343,6 +1352,7 @@ export interface FileRouteTypes {
     | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
+    | '/admin/tarolo-takaritas'
     | '/en/about'
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
@@ -1480,6 +1490,7 @@ export interface FileRouteTypes {
     | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
+    | '/admin/tarolo-takaritas'
     | '/en/about'
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
@@ -1619,6 +1630,7 @@ export interface FileRouteTypes {
     | '/admin/rendelesi-audit'
     | '/admin/statisztika'
     | '/admin/szamlazas'
+    | '/admin/tarolo-takaritas'
     | '/en/about'
     | '/en/accounting-firm-audit'
     | '/en/bookkeeping'
@@ -2144,6 +2156,13 @@ declare module '@tanstack/react-router' {
       path: '/szamlazas'
       fullPath: '/admin/szamlazas'
       preLoaderRoute: typeof AdminSzamlazasRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/tarolo-takaritas': {
+      id: '/admin/tarolo-takaritas'
+      path: '/tarolo-takaritas'
+      fullPath: '/admin/tarolo-takaritas'
+      preLoaderRoute: typeof AdminTaroloTakaritasRouteImport
       parentRoute: typeof AdminRoute
     }
     '/en/': {
@@ -2785,6 +2804,7 @@ interface AdminRouteChildren {
   AdminRendelesiAuditRoute: typeof AdminRendelesiAuditRoute
   AdminStatisztikaRoute: typeof AdminStatisztikaRoute
   AdminSzamlazasRoute: typeof AdminSzamlazasRoute
+  AdminTaroloTakaritasRoute: typeof AdminTaroloTakaritasRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -2801,6 +2821,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminRendelesiAuditRoute: AdminRendelesiAuditRoute,
   AdminStatisztikaRoute: AdminStatisztikaRoute,
   AdminSzamlazasRoute: AdminSzamlazasRoute,
+  AdminTaroloTakaritasRoute: AdminTaroloTakaritasRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
