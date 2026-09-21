@@ -320,7 +320,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
-  const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid">("all");
+  const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid" | "stale">("all");
   const [methodFilter, setMethodFilter] = useState<"all" | "stripe" | "transfer">("all");
   const [snapshots, setSnapshots] = useState<Record<string, InvoiceSnapshotState>>({});
   const [invoiceFilter, setInvoiceFilter] = useState<"all" | "invoiced" | "not-invoiced">("all");
@@ -345,6 +345,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
       (orders ?? []).filter((order) => {
         if (payFilter === "paid" && order.paymentStatus !== "paid") return false;
         if (payFilter === "unpaid" && order.paymentStatus === "paid") return false;
+        if (payFilter === "stale" && !isStaleUnpaid(order)) return false;
         if (methodFilter === "stripe" && order.paymentProvider !== "stripe") return false;
         if (methodFilter === "transfer" && order.paymentProvider === "stripe") return false;
         if (invoiceFilter === "invoiced" && !order.billingoInvoiceNumber) return false;
@@ -729,6 +730,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 { id: "all", label: "Összes" },
                 { id: "paid", label: "Rendezett" },
                 { id: "unpaid", label: "Fizetésre vár" },
+                { id: "stale", label: `Régóta vár (${STALE_UNPAID_DAYS}+ nap)` },
               ] as const
             ).map((opt) => (
               <button
@@ -1041,6 +1043,17 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 >
                   E-mail a vevőnek
                 </a>
+                {order.paymentStatus !== "paid" ? (
+                  <button
+                    type="button"
+                    disabled={busy === order.id}
+                    onClick={() => void onDeleteUnpaid(order)}
+                    className="ml-auto rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
+                    title="A fizetésre váró megrendelés végleges törlése mindenhonnan"
+                  >
+                    {busy === order.id ? "Törlés…" : "Megrendelés törlése"}
+                  </button>
+                ) : null}
               </div>
 
               {licenseFor?.id === order.id ? (
