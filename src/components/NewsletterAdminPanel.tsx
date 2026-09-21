@@ -102,18 +102,24 @@ export function NewsletterAdminPanel() {
   const [testEmail, setTestEmail] = useState("");
   const [deliveryEmail, setDeliveryEmail] = useState("");
 
+  const [blocklist, setBlocklist] = useState<BlockEntry[]>([]);
+  const [blockEmail, setBlockEmail] = useState("");
+  const [blockNote, setBlockNote] = useState("");
+
   const reload = useCallback(async () => {
     setLoading(true);
     try {
-      const [subs, conf, camps] = await Promise.all([
+      const [subs, conf, camps, blocks] = await Promise.all([
         loadSubscribers(),
         loadSettings(),
         loadCampaigns(),
+        loadBlocklist(),
       ]);
       setSubscribers(subs);
       setSettings(conf);
       setMode(conf.mode);
       setCampaigns(camps);
+      setBlocklist(blocks);
     } catch (error) {
       setMessage({
         kind: "err",
@@ -122,7 +128,88 @@ export function NewsletterAdminPanel() {
     } finally {
       setLoading(false);
     }
-  }, [loadCampaigns, loadSettings, loadSubscribers]);
+  }, [loadBlocklist, loadCampaigns, loadSettings, loadSubscribers]);
+
+  async function onDeleteSubscriber(s: Subscriber) {
+    const label = `${s.lastName} ${s.firstName}`.trim() || s.email;
+    if (
+      !window.confirm(
+        `Biztosan véglegesen törlöd a következő feliratkozót?\n\n${label}\n${s.email}\n\nA cím kikerül a listából és az exportokból is.`,
+      )
+    ) {
+      return;
+    }
+    setBusy(`del-${s.id}`);
+    setMessage(null);
+    try {
+      const result = await removeSubscriber({ data: { id: s.id } });
+      if (!result.ok) {
+        setMessage({ kind: "err", text: result.error });
+        return;
+      }
+      setSubscribers((prev) => prev.filter((row) => row.id !== s.id));
+      setMessage({ kind: "ok", text: `Törölve: ${s.email}` });
+    } catch (error) {
+      setMessage({
+        kind: "err",
+        text: error instanceof Error ? error.message : "A törlés nem sikerült.",
+      });
+    } finally {
+      setBusy("");
+    }
+  }
+
+  async function onAddBlock() {
+    const email = blockEmail.trim().toLowerCase();
+    if (!email) {
+      setMessage({ kind: "err", text: "Adj meg egy e-mail címet." });
+      return;
+    }
+    setBusy("block-add");
+    setMessage(null);
+    try {
+      const result = await addBlock({ data: { email, note: blockNote.trim() } });
+      if (!result.ok) {
+        setMessage({ kind: "err", text: result.error });
+        return;
+      }
+      setBlockEmail("");
+      setBlockNote("");
+      const [blocks, subs] = await Promise.all([loadBlocklist(), loadSubscribers()]);
+      setBlocklist(blocks);
+      setSubscribers(subs);
+      setMessage({ kind: "ok", text: `Feketelistára került: ${email}` });
+    } catch (error) {
+      setMessage({
+        kind: "err",
+        text: error instanceof Error ? error.message : "A felvétel nem sikerült.",
+      });
+    } finally {
+      setBusy("");
+    }
+  }
+
+  async function onRemoveBlock(entry: BlockEntry) {
+    if (!window.confirm(`Töröljem a feketelistáról: ${entry.email}?`)) return;
+    setBusy(`block-${entry.id}`);
+    setMessage(null);
+    try {
+      const result = await removeBlock({ data: { id: entry.id } });
+      if (!result.ok) {
+        setMessage({ kind: "err", text: result.error });
+        return;
+      }
+      setBlocklist((prev) => prev.filter((row) => row.id !== entry.id));
+      setMessage({ kind: "ok", text: `Levettem a feketelistáról: ${entry.email}` });
+    } catch (error) {
+      setMessage({
+        kind: "err",
+        text: error instanceof Error ? error.message : "A törlés nem sikerült.",
+      });
+    } finally {
+      setBusy("");
+    }
+  }
 
   useEffect(() => {
     void reload();
