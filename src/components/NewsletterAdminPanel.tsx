@@ -735,6 +735,19 @@ export function NewsletterAdminPanel() {
                         `${s.providerName} · ${dateHu(s.providerSyncedAt)}`
                       : "—"}
                     </td>
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={() => void onDeleteSubscriber(s)}
+                        disabled={busy === `del-${s.id}`}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-destructive/40 bg-background px-2.5 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/10 disabled:opacity-50"
+                      >
+                        {busy === `del-${s.id}` ?
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        : <Trash2 className="h-3.5 w-3.5" />}
+                        Törlés
+                      </button>
+                    </td>
                   </tr>
                 ))
               }
@@ -742,6 +755,105 @@ export function NewsletterAdminPanel() {
           </table>
         </div>
       </section>
+
+      {/* ---------------- Blocklist (Feketelista) ---------------- */}
+      <section>
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+          <ShieldBan className="h-5 w-5 text-primary" /> Feketelista
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          Az itt szereplő címekről nem fogadok el feliratkozást, és hírlevelet sem küldök rájuk.
+        </p>
+
+        <div className="mt-4 flex flex-wrap items-end gap-3">
+          <div>
+            <label className="block text-sm font-medium text-foreground" htmlFor="block-email">
+              E-mail cím
+            </label>
+            <input
+              id="block-email"
+              type="email"
+              value={blockEmail}
+              onChange={(event) => setBlockEmail(event.target.value)}
+              className={`${inputClass} mt-1 w-72`}
+              placeholder="valaki@pelda.hu"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-foreground" htmlFor="block-note">
+              Megjegyzés (nem kötelező)
+            </label>
+            <input
+              id="block-note"
+              type="text"
+              value={blockNote}
+              onChange={(event) => setBlockNote(event.target.value)}
+              className={`${inputClass} mt-1 w-72`}
+              placeholder="pl. spam"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => void onAddBlock()}
+            disabled={busy === "block-add"}
+            className={actionBtn}
+          >
+            {busy === "block-add" ?
+              <Loader2 className="h-4 w-4 animate-spin" />
+            : <ShieldBan className="h-4 w-4" />}
+            Felvétel a feketelistára
+          </button>
+        </div>
+
+        <div className="mt-5 overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-sm">
+            <thead className="bg-muted/60 text-left">
+              <tr>
+                <th className="px-3 py-2 font-semibold">E-mail</th>
+                <th className="px-3 py-2 font-semibold">Megjegyzés</th>
+                <th className="px-3 py-2 font-semibold">Felvéve</th>
+                <th className="px-3 py-2 font-semibold">Művelet</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ?
+                <tr>
+                  <td className="px-3 py-6 text-muted-foreground" colSpan={4}>
+                    Betöltés…
+                  </td>
+                </tr>
+              : blocklist.length === 0 ?
+                <tr>
+                  <td className="px-3 py-6 text-muted-foreground" colSpan={4}>
+                    Még nincs feketelistás cím.
+                  </td>
+                </tr>
+              : blocklist.map((entry) => (
+                  <tr key={entry.id} className="border-t border-border">
+                    <td className="px-3 py-2">{entry.email}</td>
+                    <td className="px-3 py-2">{entry.note || "—"}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{dateHu(entry.createdAt)}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={() => void onRemoveBlock(entry)}
+                        disabled={busy === `block-${entry.id}`}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-destructive/40 bg-background px-2.5 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/10 disabled:opacity-50"
+                      >
+                        {busy === `block-${entry.id}` ?
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        : <Trash2 className="h-3.5 w-3.5" />}
+                        Törlés
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
 
       {/* ---------------- Sent campaigns (Elküldött hírlevelek) ---------------- */}
       <section>
