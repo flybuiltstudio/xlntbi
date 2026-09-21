@@ -227,7 +227,7 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
             <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
               {product.price === 0
                 ? "Az igénylés után e-mailben küldjük a védett, 14 napig használható letöltési linket."
-                : "A megrendelés leadása után e-mailben visszaigazolást kapsz, és felvesszük veled a kapcsolatot a számlázás és a letöltés részleteivel. Bankkártyás fizetés hamarosan."}
+                : "A megrendelés leadása után e-mailben visszaigazolást kapsz, és felvesszük veled a kapcsolatot a számlázás és a letöltés részleteivel."}
             </p>
 
             <div className="mt-8 rounded-xl border border-border p-5">
