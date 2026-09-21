@@ -135,6 +135,14 @@ export async function subscribe(data: SubscribeInput) {
   }
 
   const email = data.email.trim().toLowerCase();
+
+  if (await isBlockedEmail(email)) {
+    return {
+      ok: false as const,
+      error: "Ezt a címet nem tudom felvenni a hírlevél listára.",
+    };
+  }
+
   const token = newToken();
 
   const { data: existing } = await db
