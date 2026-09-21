@@ -10,6 +10,8 @@ A lejárt vagy kimerült DEMO-igénylések lezárása, hogy a nyilvántartás ne
 **Lejárt éles letöltési linkek takarítása**
 A megrendelésekhez tartozó, lejárt vagy kimerült letöltési linkek, valamint a lejárt ingyenes (Tudástár) letöltési linkek lezárása. A megrendelés adata és a bevételi statisztika érintetlen — csak a link veszti érvényét, ami egyébként is lejárt.
 
+A Tudástárban lehetnek lejárat nélküli ingyenes linkek: ezekhez a takarítás nem nyúl hozzá, örökre élnek. Csak azokat zárja le, amiknek valóban van lejárati dátuma és az már elmúlt, vagy elfogytak a letöltéseik.
+
 **Lejárt kuponok automatikus letiltása**
 Amelyik kupon lejárt, de a fizetési rendszerben még aktív, azt a feladat letiltja ott és a saját nyilvántartásban is, majd jelenti, melyeket tiltotta le.
 
