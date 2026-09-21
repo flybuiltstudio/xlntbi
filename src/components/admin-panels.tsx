@@ -371,6 +371,12 @@ export function OrdersPanel({ email }: { email: string | null }) {
     [orders, payFilter, methodFilter, invoiceFilter, activeYear, activeMonth],
   );
 
+  /** Long-waiting unpaid orders, shown in their own block above the filters. */
+  const staleOrders = useMemo(
+    () => (orders ?? []).filter(isStaleUnpaid),
+    [orders],
+  );
+
   const selectYear = (y: number | "all") => {
     setYearSel(y);
   };
@@ -754,6 +760,35 @@ export function OrdersPanel({ email }: { email: string | null }) {
         <p className="mt-6 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {error}
         </p>
+      ) : null}
+
+      {staleOrders.length > 0 ? (
+        <div className="mt-6 rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-4">
+          <h3 className="text-sm font-semibold text-destructive">
+            Régóta fizetésre vár ({staleOrders.length})
+          </h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Ezek a megrendelések több mint {STALE_UNPAID_DAYS} napja nincsenek kifizetve. Ha a vevő
+            meggondolta magát, a megrendelés alább, a „Megrendelés törlése" gombbal véglegesen
+            törölhető.
+          </p>
+          <ul className="mt-3 space-y-1 text-xs text-foreground">
+            {staleOrders.slice(0, 10).map((order) => (
+              <li key={order.id}>
+                <span className="font-semibold">{order.orderNumber}</span> – {order.productName} –{" "}
+                {formatPrice(order.totalPrice)} – {order.email} –{" "}
+                {new Date(order.createdAt).toLocaleDateString("hu-HU")}
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            onClick={() => setPayFilter("stale")}
+            className="mt-3 rounded-md border border-destructive/40 bg-background px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10"
+          >
+            Csak ezeket mutasd
+          </button>
+        </div>
       ) : null}
 
       {orders !== null && orders.length > 0 ? (
