@@ -1966,6 +1966,57 @@ function DemoDownloads() {
 
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
 
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground">
+          <Download className="h-3.5 w-3.5 text-primary" />
+          Exportálás:
+        </span>
+        <button
+          type="button"
+          className={listExportBtn}
+          disabled={!demoTable || exporting !== null}
+          onClick={() => runExport("xlsx")}
+        >
+          {exporting === "xlsx" ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <FileSpreadsheet className="h-3.5 w-3.5" />
+          )}
+          Excel
+        </button>
+        <button
+          type="button"
+          className={listExportBtn}
+          disabled={!demoTable || exporting !== null}
+          onClick={() => runExport("csv")}
+        >
+          <FileText className="h-3.5 w-3.5" />
+          CSV
+        </button>
+        <button
+          type="button"
+          className={listExportBtn}
+          disabled={!demoTable || exporting !== null}
+          onClick={() => runExport("xml")}
+        >
+          <FileCode2 className="h-3.5 w-3.5" />
+          XML
+        </button>
+        <button
+          type="button"
+          className={listExportBtn}
+          disabled={!demoTable || exporting !== null}
+          onClick={() => runExport("pdf")}
+        >
+          {exporting === "pdf" ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <FileDown className="h-3.5 w-3.5" />
+          )}
+          PDF
+        </button>
+      </div>
+
       {rows.length > 0 ? (
         <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
           <table className="w-full text-sm">
