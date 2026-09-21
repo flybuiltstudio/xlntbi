@@ -17,9 +17,13 @@ import { NewsletterEditor } from "@/components/NewsletterEditor";
 import { NewsletterHtmlEditor } from "@/components/NewsletterHtmlEditor";
 import { inputClass } from "@/components/admin-panels";
 import {
+  addNewsletterBlocklistEntry,
+  deleteNewsletterSubscriber,
   getNewsletterSettings,
+  listNewsletterBlocklist,
   listNewsletterCampaigns,
   listNewsletterSubscribers,
+  removeNewsletterBlocklistEntry,
   saveNewsletterSettings,
   sendNewsletterCampaign,
   sendNewsletterTestEmail,
