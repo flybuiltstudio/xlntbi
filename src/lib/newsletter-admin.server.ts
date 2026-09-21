@@ -314,9 +314,14 @@ export async function sendCampaign(input: {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const db = supabaseAdmin as any;
 
+  const { isBlockedEmail, blockedEmailSet } = await import("./newsletter.server");
+
   if (input.testOnly) {
     const to = input.testEmail || input.userEmail;
     if (!to) return { ok: false as const, error: "Adj meg egy teszt e-mail címet." };
+    if (await isBlockedEmail(to)) {
+      return { ok: false as const, error: "Ez a cím feketelistán van, ezért nem küldök rá levelet." };
+    }
     try {
       const { siteOrigin, unsubscribeUrlForEmail } = await import("./newsletter.server");
       // If the test address is a real subscriber, send its own working link;
