@@ -50,6 +50,7 @@ import {
 } from "@/lib/stats-export";
 
 type Subscriber = Awaited<ReturnType<typeof listNewsletterSubscribers>>[number];
+type BlockEntry = Awaited<ReturnType<typeof listNewsletterBlocklist>>[number];
 type Campaign = Awaited<ReturnType<typeof listNewsletterCampaigns>>[number];
 type Settings = Awaited<ReturnType<typeof getNewsletterSettings>>;
 
