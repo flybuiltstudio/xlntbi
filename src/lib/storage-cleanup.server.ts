@@ -91,9 +91,6 @@ async function collectReferencedPaths(): Promise<Set<string>> {
     add(row.image_hu_path);
     add(row.image_en_path);
   }
-  for (const row of versions.data ?? []) {
-    if (row.file_name) add(`termekek/${row.product_slug}/${row.file_name}`);
-  }
   for (const row of orderTokens.data ?? []) add(row.storage_path);
   for (const row of freeTokens.data ?? []) add(row.storage_path);
 
