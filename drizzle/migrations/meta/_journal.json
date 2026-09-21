@@ -15,6 +15,13 @@
       "when": 1789992394411,
       "tag": "0001_create_demo_requests_and_orders_hwid",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789994058865,
+      "tag": "0002_restrict_updated_by_and_export_bucket_policies",
+      "breakpoints": true
     }
   ]
 }
