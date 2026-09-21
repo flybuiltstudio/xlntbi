@@ -57,7 +57,11 @@ export async function readProductOverrides(): Promise<ProductOverrideData> {
   try {
     const supabase = publicClient();
     const [content, prices, custom, categories] = await Promise.all([
-      supabase.from("product_content_overrides").select("*"),
+      supabase
+        .from("product_content_overrides")
+        .select(
+          "slug, intro, features, why, summary, meta_title, meta_description, intro_en, features_en, why_en, summary_en, meta_title_en, meta_description_en, source_file_name, updated_at",
+        ),
       supabase.from("product_price_overrides").select("slug, tier_id, price"),
       supabase.from("custom_products").select("*"),
       supabase.from("custom_categories").select("*").order("sort_order"),
