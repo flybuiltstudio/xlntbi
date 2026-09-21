@@ -552,8 +552,66 @@ export type Database = {
         }
         Relationships: []
       }
+      deleted_orders: {
+        Row: {
+          billing_name: string | null
+          currency: string
+          deleted_at: string
+          deleted_by: string | null
+          deleted_by_email: string | null
+          email: string | null
+          id: string
+          order_created_at: string | null
+          order_number: string
+          payment_provider: string | null
+          payment_status: string | null
+          product_name: string
+          quantity: number
+          reason: string | null
+          tier_label: string | null
+          total_price: number
+        }
+        Insert: {
+          billing_name?: string | null
+          currency?: string
+          deleted_at?: string
+          deleted_by?: string | null
+          deleted_by_email?: string | null
+          email?: string | null
+          id?: string
+          order_created_at?: string | null
+          order_number: string
+          payment_provider?: string | null
+          payment_status?: string | null
+          product_name: string
+          quantity?: number
+          reason?: string | null
+          tier_label?: string | null
+          total_price?: number
+        }
+        Update: {
+          billing_name?: string | null
+          currency?: string
+          deleted_at?: string
+          deleted_by?: string | null
+          deleted_by_email?: string | null
+          email?: string | null
+          id?: string
+          order_created_at?: string | null
+          order_number?: string
+          payment_provider?: string | null
+          payment_status?: string | null
+          product_name?: string
+          quantity?: number
+          reason?: string | null
+          tier_label?: string | null
+          total_price?: number
+        }
+        Relationships: []
+      }
       demo_requests: {
         Row: {
+          closed_at: string | null
           company_name: string | null
           created_at: string
           download_count: number
@@ -574,6 +632,7 @@ export type Database = {
           user_agent: string | null
         }
         Insert: {
+          closed_at?: string | null
           company_name?: string | null
           created_at?: string
           download_count?: number
@@ -594,6 +653,7 @@ export type Database = {
           user_agent?: string | null
         }
         Update: {
+          closed_at?: string | null
           company_name?: string | null
           created_at?: string
           download_count?: number
@@ -617,6 +677,7 @@ export type Database = {
       }
       free_download_requests: {
         Row: {
+          closed_at: string | null
           created_at: string
           download_count: number
           email: string
@@ -635,6 +696,7 @@ export type Database = {
           user_agent: string | null
         }
         Insert: {
+          closed_at?: string | null
           created_at?: string
           download_count?: number
           email: string
@@ -653,6 +715,7 @@ export type Database = {
           user_agent?: string | null
         }
         Update: {
+          closed_at?: string | null
           created_at?: string
           download_count?: number
           email?: string
@@ -669,6 +732,45 @@ export type Database = {
           storage_path?: string
           token?: string
           user_agent?: string | null
+        }
+        Relationships: []
+      }
+      monthly_stats_snapshots: {
+        Row: {
+          closed_at: string
+          id: string
+          month: number
+          orders_count: number
+          paid_count: number
+          product_name: string
+          product_slug: string
+          revenue: number
+          views: number
+          year: number
+        }
+        Insert: {
+          closed_at?: string
+          id?: string
+          month: number
+          orders_count?: number
+          paid_count?: number
+          product_name?: string
+          product_slug: string
+          revenue?: number
+          views?: number
+          year: number
+        }
+        Update: {
+          closed_at?: string
+          id?: string
+          month?: number
+          orders_count?: number
+          paid_count?: number
+          product_name?: string
+          product_slug?: string
+          revenue?: number
+          views?: number
+          year?: number
         }
         Relationships: []
       }
@@ -776,6 +878,7 @@ export type Database = {
       }
       order_downloads: {
         Row: {
+          closed_at: string | null
           created_at: string
           download_count: number
           email: string
@@ -791,6 +894,7 @@ export type Database = {
           token: string
         }
         Insert: {
+          closed_at?: string | null
           created_at?: string
           download_count?: number
           email: string
@@ -806,6 +910,7 @@ export type Database = {
           token: string
         }
         Update: {
+          closed_at?: string | null
           created_at?: string
           download_count?: number
           email?: string
