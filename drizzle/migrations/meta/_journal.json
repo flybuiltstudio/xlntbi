@@ -29,6 +29,13 @@
       "when": 1790002215203,
       "tag": "0003_maintenance_cleanup_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790003941382,
+      "tag": "0004_harden_calculator_overrides_and_free_downloads",
+      "breakpoints": true
     }
   ]
 }
