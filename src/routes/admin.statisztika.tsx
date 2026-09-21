@@ -1882,6 +1882,7 @@ function DemoDownloads() {
   const load = useServerFn(adminDemoStats);
   const [rows, setRows] = useState<any[] | null>(null);
   const [error, setError] = useState("");
+  const [exporting, setExporting] = useState<string | null>(null);
 
   useEffect(() => {
     load()
@@ -1905,6 +1906,44 @@ function DemoDownloads() {
   const activeCount = rows.filter((r) => r.active).length;
   const totalDownloads = rows.reduce((s, r) => s + r.downloadCount, 0);
 
+  const demoTable: ListTable | null = rows.length
+    ? {
+        title: "DEMO letöltések",
+        subtitle: "Fizetés nélküli DEMO licenc igénylések – nem szerepelnek a vásárlási statisztikában.",
+        head: ["Dátum", "Termék", "Név", "E-mail", "Cégnév", "Adószám", "HWID", "Letöltések", "Állapot"],
+        body: rows.map((r) => [
+          formatDateHu(r.createdAt),
+          r.productName,
+          r.name,
+          r.email,
+          r.companyName ?? "",
+          r.taxNumber ?? "",
+          r.hwid ?? "",
+          `${r.downloadCount}/${r.maxDownloads}`,
+          r.active ? "Aktív" : "Lejárt",
+        ]),
+        foot: ["Összesen", "", `${rows.length} igénylés`, "", "", "", "", `${totalDownloads} letöltés`, `${activeCount} aktív`],
+        rightCols: [7],
+      }
+    : null;
+
+  const runExport = async (kind: string) => {
+    if (!demoTable || exporting) return;
+    setError("");
+    setExporting(kind);
+    const base = "xlntbi-demo-letoltesek";
+    try {
+      if (kind === "csv") exportTableCsv(`${base}.csv`, demoTable);
+      else if (kind === "xml") exportTableXml(`${base}.xml`, demoTable);
+      else if (kind === "xlsx") await exportTableXlsx(`${base}.xlsx`, demoTable.title, demoTable);
+      else await exportTablePdf(`${base}.pdf`, demoTable);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Az exportálás nem sikerült.");
+    } finally {
+      setExporting(null);
+    }
+  };
+
   return (
     <section className="mt-14">
       <h2 className="text-xl font-bold text-foreground">DEMO letöltések</h2>
@@ -1927,6 +1966,57 @@ function DemoDownloads() {
 
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
 
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground">
+          <Download className="h-3.5 w-3.5 text-primary" />
+          Exportálás:
+        </span>
+        <button
+          type="button"
+          className={listExportBtn}
+          disabled={!demoTable || exporting !== null}
+          onClick={() => runExport("xlsx")}
+        >
+          {exporting === "xlsx" ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <FileSpreadsheet className="h-3.5 w-3.5" />
+          )}
+          Excel
+        </button>
+        <button
+          type="button"
+          className={listExportBtn}
+          disabled={!demoTable || exporting !== null}
+          onClick={() => runExport("csv")}
+        >
+          <FileText className="h-3.5 w-3.5" />
+          CSV
+        </button>
+        <button
+          type="button"
+          className={listExportBtn}
+          disabled={!demoTable || exporting !== null}
+          onClick={() => runExport("xml")}
+        >
+          <FileCode2 className="h-3.5 w-3.5" />
+          XML
+        </button>
+        <button
+          type="button"
+          className={listExportBtn}
+          disabled={!demoTable || exporting !== null}
+          onClick={() => runExport("pdf")}
+        >
+          {exporting === "pdf" ? (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <FileDown className="h-3.5 w-3.5" />
+          )}
+          PDF
+        </button>
+      </div>
+
       {rows.length > 0 ? (
         <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
           <table className="w-full text-sm">
@@ -1936,6 +2026,8 @@ function DemoDownloads() {
                 <th className="px-4 py-3 font-semibold text-foreground">Termék</th>
                 <th className="px-4 py-3 font-semibold text-foreground">Név</th>
                 <th className="px-4 py-3 font-semibold text-foreground">E-mail</th>
+                <th className="px-4 py-3 font-semibold text-foreground">Cégnév</th>
+                <th className="px-4 py-3 font-semibold text-foreground">Adószám</th>
                 <th className="px-4 py-3 font-semibold text-foreground">HWID</th>
                 <th className="px-4 py-3 text-right font-semibold text-foreground">Letöltések</th>
                 <th className="px-4 py-3 font-semibold text-foreground">Állapot</th>
@@ -1950,6 +2042,8 @@ function DemoDownloads() {
                   <td className="px-4 py-2.5">{r.productName}</td>
                   <td className="px-4 py-2.5">{r.name}</td>
                   <td className="px-4 py-2.5 text-muted-foreground">{r.email}</td>
+                  <td className="px-4 py-2.5 text-muted-foreground">{r.companyName ?? "—"}</td>
+                  <td className="px-4 py-2.5 text-muted-foreground">{r.taxNumber ?? "—"}</td>
                   <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
                     {r.hwid ?? "—"}
                   </td>

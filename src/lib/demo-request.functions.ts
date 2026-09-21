@@ -7,6 +7,8 @@ const schema = z.object({
   name: z.string().trim().min(2).max(160),
   email: z.string().trim().email().max(160),
   phone: z.string().trim().max(30).optional().default(""),
+  companyName: z.string().trim().max(160).optional().default(""),
+  taxNumber: z.string().trim().max(30).optional().default(""),
   hwid: z.string().trim().max(100).optional().default(""),
   testUntil: z.string().trim().max(20).nullable().optional().default(null),
   website: z.string().max(0).optional().default(""),

@@ -554,6 +554,7 @@ export type Database = {
       }
       demo_requests: {
         Row: {
+          company_name: string | null
           created_at: string
           download_count: number
           email: string
@@ -567,11 +568,13 @@ export type Database = {
           phone: string | null
           product_name: string
           product_slug: string
+          tax_number: string | null
           test_until: string | null
           token: string
           user_agent: string | null
         }
         Insert: {
+          company_name?: string | null
           created_at?: string
           download_count?: number
           email: string
@@ -585,11 +588,13 @@ export type Database = {
           phone?: string | null
           product_name: string
           product_slug: string
+          tax_number?: string | null
           test_until?: string | null
           token: string
           user_agent?: string | null
         }
         Update: {
+          company_name?: string | null
           created_at?: string
           download_count?: number
           email?: string
@@ -603,6 +608,7 @@ export type Database = {
           phone?: string | null
           product_name?: string
           product_slug?: string
+          tax_number?: string | null
           test_until?: string | null
           token?: string
           user_agent?: string | null
