@@ -343,7 +343,10 @@ export async function sendCampaign(input: {
     .eq("status", "confirmed")
     .limit(5000);
   if (error) return { ok: false as const, error: error.message };
-  const recipients = rows ?? [];
+  const blocked = await blockedEmailSet();
+  const recipients = (rows ?? []).filter(
+    (row: any) => !blocked.has(String(row.email ?? "").trim().toLowerCase()),
+  );
   if (recipients.length === 0) {
     return { ok: false as const, error: "Nincs megerősített feliratkozó, akinek küldhetnék." };
   }
