@@ -4,9 +4,10 @@
  * the shared secret (`x-cron-secret` header or `?secret=`) itself.
  */
 export function cronAuthorized(request: Request): boolean {
-  const expected = process.env["MAINTENANCE_CRON_SECRET"];
+  const expected =
+    process.env["MAINTENANCE_CRON_TOKEN"] ?? process.env["MAINTENANCE_CRON_SECRET"];
   if (!expected) {
-    console.error("MAINTENANCE_CRON_SECRET nincs beállítva.");
+    console.error("MAINTENANCE_CRON_TOKEN nincs beállítva.");
     return false;
   }
   const url = new URL(request.url);
