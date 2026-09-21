@@ -16,6 +16,7 @@ import { Route as AdotanacsadasRouteImport } from './routes/adotanacsadas'
 import { Route as AszfRouteImport } from './routes/aszf'
 import { Route as CegauditRouteImport } from './routes/cegaudit'
 import { Route as CookieTajekoztatoRouteImport } from './routes/cookie-tajekoztato'
+import { Route as DemoIgenylesRouteImport } from './routes/demo-igenyles'
 import { Route as DigitalisIdomegtakaritasiAuditRouteImport } from './routes/digitalis-idomegtakaritasi-audit'
 import { Route as ElallasASzerzodestolRouteImport } from './routes/elallas-a-szerzodestol'
 import { Route as EnRouteImport } from './routes/en'
@@ -175,6 +176,11 @@ const CegauditRoute = CegauditRouteImport.update({
 const CookieTajekoztatoRoute = CookieTajekoztatoRouteImport.update({
   id: '/cookie-tajekoztato',
   path: '/cookie-tajekoztato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoIgenylesRoute = DemoIgenylesRouteImport.update({
+  id: '/demo-igenyles',
+  path: '/demo-igenyles',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DigitalisIdomegtakaritasiAuditRoute =
@@ -851,6 +857,7 @@ export interface FileRoutesByFullPath {
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
+  '/demo-igenyles': typeof DemoIgenylesRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
   '/en': typeof EnRouteWithChildren
@@ -984,6 +991,7 @@ export interface FileRoutesByTo {
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
+  '/demo-igenyles': typeof DemoIgenylesRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
   '/ev': typeof EvRoute
@@ -1118,6 +1126,7 @@ export interface FileRoutesById {
   '/aszf': typeof AszfRoute
   '/cegaudit': typeof CegauditRoute
   '/cookie-tajekoztato': typeof CookieTajekoztatoRoute
+  '/demo-igenyles': typeof DemoIgenylesRoute
   '/digitalis-idomegtakaritasi-audit': typeof DigitalisIdomegtakaritasiAuditRoute
   '/elallas-a-szerzodestol': typeof ElallasASzerzodestolRoute
   '/en': typeof EnRouteWithChildren
@@ -1254,6 +1263,7 @@ export interface FileRouteTypes {
     | '/aszf'
     | '/cegaudit'
     | '/cookie-tajekoztato'
+    | '/demo-igenyles'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
     | '/en'
@@ -1387,6 +1397,7 @@ export interface FileRouteTypes {
     | '/aszf'
     | '/cegaudit'
     | '/cookie-tajekoztato'
+    | '/demo-igenyles'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
     | '/ev'
@@ -1520,6 +1531,7 @@ export interface FileRouteTypes {
     | '/aszf'
     | '/cegaudit'
     | '/cookie-tajekoztato'
+    | '/demo-igenyles'
     | '/digitalis-idomegtakaritasi-audit'
     | '/elallas-a-szerzodestol'
     | '/en'
@@ -1655,6 +1667,7 @@ export interface RootRouteChildren {
   AszfRoute: typeof AszfRoute
   CegauditRoute: typeof CegauditRoute
   CookieTajekoztatoRoute: typeof CookieTajekoztatoRoute
+  DemoIgenylesRoute: typeof DemoIgenylesRoute
   DigitalisIdomegtakaritasiAuditRoute: typeof DigitalisIdomegtakaritasiAuditRoute
   ElallasASzerzodestolRoute: typeof ElallasASzerzodestolRoute
   EnRoute: typeof EnRouteWithChildren
@@ -1788,6 +1801,13 @@ declare module '@tanstack/react-router' {
       path: '/cookie-tajekoztato'
       fullPath: '/cookie-tajekoztato'
       preLoaderRoute: typeof CookieTajekoztatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo-igenyles': {
+      id: '/demo-igenyles'
+      path: '/demo-igenyles'
+      fullPath: '/demo-igenyles'
+      preLoaderRoute: typeof DemoIgenylesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/digitalis-idomegtakaritasi-audit': {
@@ -2778,6 +2798,7 @@ const rootRouteChildren: RootRouteChildren = {
   AszfRoute: AszfRoute,
   CegauditRoute: CegauditRoute,
   CookieTajekoztatoRoute: CookieTajekoztatoRoute,
+  DemoIgenylesRoute: DemoIgenylesRoute,
   DigitalisIdomegtakaritasiAuditRoute: DigitalisIdomegtakaritasiAuditRoute,
   ElallasASzerzodestolRoute: ElallasASzerzodestolRoute,
   EnRoute: EnRouteWithChildren,

@@ -5,6 +5,7 @@ import { aamText } from "@/lib/aam";
 import { formatPrice, getProduct, priceFrom, resolveProductSlug } from "@/lib/products";
 import { productSummaryEn } from "@/lib/products-en";
 import { englishProductContent, englishProductMeta } from "@/lib/product-overrides";
+import { isKnowledgeProduct } from "@/lib/product-categories";
 import { SITE_ORIGIN } from "@/lib/i18n/routes";
 import { usePageView } from "@/lib/use-page-view";
 
@@ -210,6 +211,17 @@ function EnglishProductPage() {
                 Coming soon – get in touch and I will let you know when it is available.
               </p>
             )}
+            {data.status === "available" &&
+            data.price > 0 &&
+            !isKnowledgeProduct(data.slug) ? (
+              <Link
+                to="/demo-igenyles"
+                search={{ termek: data.slug }}
+                className="mt-3 inline-flex w-full items-center justify-center rounded-md border border-border bg-secondary/40 px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+              >
+                Try DEMO version
+              </Link>
+            ) : null}
 
             <div className="mt-8 rounded-xl border border-border p-5">
               <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">

@@ -189,7 +189,33 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
       console.error("Free download lookup failed:", freeError.message);
       return { ok: false, reason: "error" };
     }
-    if (!freeRow) return { ok: false, reason: "not_found" };
+    if (!freeRow) {
+      // Try DEMO requests table.
+      const { data: demoRow, error: demoError } = await supabaseAdmin
+        .from("demo_requests")
+        .select("id, product_slug, token, download_count, max_downloads, expires_at")
+        .eq("token", token)
+        .maybeSingle();
+      if (demoError) {
+        console.error("DEMO download lookup failed:", demoError.message);
+        return { ok: false, reason: "error" };
+      }
+      if (!demoRow) return { ok: false, reason: "not_found" };
+      if (new Date(demoRow.expires_at).getTime() < Date.now()) return { ok: false, reason: "expired" };
+      if (demoRow.download_count >= demoRow.max_downloads) return { ok: false, reason: "limit" };
+      const demoProduct = getProduct(demoRow.product_slug);
+      if (!demoProduct?.download) return { ok: false, reason: "error" };
+      const demoFileName = await downloadFileName(demoRow.product_slug, demoProduct.download.fileName);
+      const { data: demoSigned, error: demoSignError } = await supabaseAdmin.storage
+        .from(BUCKET)
+        .createSignedUrl(demoProduct.download.storagePath, 300, { download: demoFileName });
+      if (demoSignError || !demoSigned?.signedUrl) return { ok: false, reason: "error" };
+      await supabaseAdmin.from("demo_requests").update({
+        download_count: demoRow.download_count + 1,
+        last_downloaded_at: new Date().toISOString(),
+      }).eq("id", demoRow.id);
+      return { ok: true, url: demoSigned.signedUrl };
+    }
     if (new Date(freeRow.expires_at).getTime() < Date.now()) return { ok: false, reason: "expired" };
     if (freeRow.download_count >= freeRow.max_downloads) return { ok: false, reason: "limit" };
     const { data: freeSigned, error: freeSignError } = await supabaseAdmin.storage

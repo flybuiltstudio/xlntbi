@@ -36,6 +36,15 @@ export const adminOrderStats = createServerFn({ method: "GET" })
     return orderStats(role === "admin" ? data.includeTests : false);
   });
 
+export const adminDemoStats = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { gateStats } = await import("./admin-gate.server");
+    await gateStats(context as any);
+    const { demoStats } = await import("./admin.server");
+    return demoStats();
+  });
+
 export const adminApproveTransfer = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
