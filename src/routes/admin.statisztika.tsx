@@ -1906,6 +1906,44 @@ function DemoDownloads() {
   const activeCount = rows.filter((r) => r.active).length;
   const totalDownloads = rows.reduce((s, r) => s + r.downloadCount, 0);
 
+  const demoTable: ListTable | null = rows.length
+    ? {
+        title: "DEMO letöltések",
+        subtitle: "Fizetés nélküli DEMO licenc igénylések – nem szerepelnek a vásárlási statisztikában.",
+        head: ["Dátum", "Termék", "Név", "E-mail", "Cégnév", "Adószám", "HWID", "Letöltések", "Állapot"],
+        body: rows.map((r) => [
+          formatDateHu(r.createdAt),
+          r.productName,
+          r.name,
+          r.email,
+          r.companyName ?? "",
+          r.taxNumber ?? "",
+          r.hwid ?? "",
+          `${r.downloadCount}/${r.maxDownloads}`,
+          r.active ? "Aktív" : "Lejárt",
+        ]),
+        foot: ["Összesen", "", `${rows.length} igénylés`, "", "", "", "", `${totalDownloads} letöltés`, `${activeCount} aktív`],
+        rightCols: [7],
+      }
+    : null;
+
+  const runExport = async (kind: string) => {
+    if (!demoTable || exporting) return;
+    setError("");
+    setExporting(kind);
+    const base = "xlntbi-demo-letoltesek";
+    try {
+      if (kind === "csv") exportTableCsv(`${base}.csv`, demoTable);
+      else if (kind === "xml") exportTableXml(`${base}.xml`, demoTable);
+      else if (kind === "xlsx") await exportTableXlsx(`${base}.xlsx`, demoTable.title, demoTable);
+      else await exportTablePdf(`${base}.pdf`, demoTable);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Az exportálás nem sikerült.");
+    } finally {
+      setExporting(null);
+    }
+  };
+
   return (
     <section className="mt-14">
       <h2 className="text-xl font-bold text-foreground">DEMO letöltések</h2>
