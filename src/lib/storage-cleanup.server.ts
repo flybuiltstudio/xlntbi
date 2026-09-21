@@ -76,10 +76,9 @@ async function collectReferencedPaths(): Promise<Set<string>> {
   await ensureProductOverrides(true);
   for (const product of products) add(product.download?.storagePath);
 
-  const [custom, calculators, versions, orderTokens, freeTokens] = await Promise.all([
+  const [custom, calculators, orderTokens, freeTokens] = await Promise.all([
     supabaseAdmin.from("custom_products").select("download_storage_path, image_path"),
     supabaseAdmin.from("custom_calculators").select("image_hu_path, image_en_path"),
-    supabaseAdmin.from("product_file_versions").select("product_slug, file_name"),
     supabaseAdmin.from("order_downloads").select("storage_path"),
     supabaseAdmin.from("free_download_requests").select("storage_path"),
   ]);
