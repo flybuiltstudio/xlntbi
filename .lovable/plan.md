@@ -40,11 +40,11 @@ jóváhagyás. Honeypot és gyakorisági korlát véd.
 
 ### Tesztidő — opcionális dátum
 
-- A DEMO űrlapon van egy **„Meddig van szükséged a tesztelésre?"** dátummező,
+- A DEMO űrlapon van egy **„Mennyi időre van szükséged a tesztelésre?"** dátummező,
   nem kötelező.
 - Konkrét dátum választható (Shadcn Datepicker, magyar formátummal).
 - A kiválasztott dátum a DEMO-nyilvántartásba kerül mentésre (ha megadták);
-- a letöltőlink lejárati idejét ez nem befolyásolja (az fix, korlátozott
+  a letöltőlink lejárati idejét ez nem befolyásolja (az fix, korlátozott
   idejű).
 
 ### Mezők sorrendje a DEMO űrlapon
@@ -59,10 +59,19 @@ Ugyanez a gépazonosítós rész beépül az éles megrendelő űrlapra
 (`/megrendeles`) is, a **számlázási adatok** blokkba, az e-mail és telefonszám
 mezők után, a „Megjegyzés" mező előtt.
 
-- **„Gépazonosító (HWID)"** beviteli mező, nem kötelező.
-- Hover/tooltip súgó ugyanaz: letöltse a gépazonosító-mutató programot, futtassa,
-  másolja be az azonosítót.
-- A mező mellett **„Gépazonosító letöltése"** gomb (`/api/public/hwid-download`).
+- **„Gépazonosító (HWID)"** beviteli mező.
+- **Asztali gépen (768 px felett) kötelező**, **mobilon (768 px alatt)
+  opcionális** — a HWID program csak asztali Windows gépen futtatható, ezért
+  asztali vásárlónál elvárjuk a gépazonosítót, mobilon nem akadályozzuk a
+  rendelést.
+- A kötelezőség érvényesítése: a `required` attribútum az `useIsMobile()` hook
+  alapján dinamikusan kerül a mezőre (asztali = required, mobil = nem).
+  A szerveroldali validáció is asztali kötelezőséget vizsgál a User-Agent /
+  viewport alapján (fail-open: ha nem egyértelmű, opcionális marad).
+- Hover/tooltip súgó ugyanaz: letöltse a gépazonosító-mutató programot,
+  futtassa, másolja be az azonosítót.
+- A mező mellett **„Gépazonosító letöltése"** gomb
+  (`/api/public/hwid-download`), mobilon toast figyelmeztetéssel.
 - A mező értéke az `orders` táblába kerül mentésre (új, opcionális oszlop:
   `hwid text`), és megjelenik a tulajdonosnak küldött belső rendelés-értesítő
   e-mailben, ha megadták.
@@ -136,6 +145,9 @@ mezők után, a „Megjegyzés" mező előtt.
 - A tooltip a meglévő arculatban, a shadcn Tooltip komponenssel jelenik meg.
 - A dátummező a Shadcn Datepicker komponenst használja, `pointer-events-auto`
   wrapper-rel, magyar dátumformátummal.
+- Az éles űrlap asztali/mobil kötelezőségét a `useIsMobile()` hook
+  (`src/hooks/use-mobile.tsx`, 768 px breakpoint) vezérli; a szerveroldali
+  validáció a User-Agent alapján dönt, fail-open módon.
 - A meglévő fizetési, számlázási, kupon- és statisztikafolyamatok nem módosulnak.
 
 ## Állapot
