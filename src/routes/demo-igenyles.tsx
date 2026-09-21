@@ -168,7 +168,7 @@ function DemoRequestPage() {
 
         {/* Tesztidő — opcionális dátum */}
         <label className="mt-5 block text-sm font-medium text-foreground">
-          Meddig van szükséged a tesztelésre?
+          Mennyi időre van szükséged a tesztelésre?
           <input
             name="testUntil"
             type="date"
