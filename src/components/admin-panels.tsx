@@ -301,8 +301,20 @@ export function LoginPanel() {
   );
 }
 
+/** Orders unpaid for longer than this are highlighted as long-waiting. */
+const STALE_UNPAID_DAYS = 8;
+
+/** True when the order is still unpaid and older than STALE_UNPAID_DAYS. */
+function isStaleUnpaid(order: { paymentStatus: string; createdAt: string }): boolean {
+  if (order.paymentStatus === "paid") return false;
+  const stamp = Date.parse(order.createdAt);
+  if (Number.isNaN(stamp)) return false;
+  return stamp < Date.now() - STALE_UNPAID_DAYS * 24 * 60 * 60 * 1000;
+}
+
 export function OrdersPanel({ email }: { email: string | null }) {
   const load = useServerFn(adminListOrders);
+  const deleteUnpaid = useServerFn(adminDeleteUnpaidOrder);
   const approve = useServerFn(adminApproveTransfer);
   const resend = useServerFn(adminResendDownload);
   const retryInvoice = useServerFn(adminRetryInvoice);
@@ -429,6 +441,30 @@ export function OrdersPanel({ email }: { email: string | null }) {
           : (result.error ?? "Hiba történt."),
       );
       await refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "Hiba történt.");
+    }
+    setBusy(null);
+  }
+
+  /** Deletes a never-paid order everywhere, after an explicit confirmation. */
+  async function onDeleteUnpaid(order: Order) {
+    if (
+      !window.confirm(
+        `Biztosan véglegesen törlöd a ${order.orderNumber} megrendelést?\n\n${order.productName} – ${order.email}\n\nEz nem visszavonható: a megrendelés a listákból és a statisztikákból is eltűnik.`,
+      )
+    )
+      return;
+    setBusy(order.id);
+    setMessage("");
+    try {
+      const result = await deleteUnpaid({ data: { orderId: order.id } });
+      setMessage(
+        result.ok
+          ? `${order.orderNumber}: a megrendelés törölve.`
+          : (result.error ?? "Hiba történt."),
+      );
+      if (result.ok) await refresh();
     } catch (e) {
       setMessage(e instanceof Error ? e.message : "Hiba történt.");
     }
