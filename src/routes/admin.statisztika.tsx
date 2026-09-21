@@ -2026,6 +2026,8 @@ function DemoDownloads() {
                 <th className="px-4 py-3 font-semibold text-foreground">Termék</th>
                 <th className="px-4 py-3 font-semibold text-foreground">Név</th>
                 <th className="px-4 py-3 font-semibold text-foreground">E-mail</th>
+                <th className="px-4 py-3 font-semibold text-foreground">Cégnév</th>
+                <th className="px-4 py-3 font-semibold text-foreground">Adószám</th>
                 <th className="px-4 py-3 font-semibold text-foreground">HWID</th>
                 <th className="px-4 py-3 text-right font-semibold text-foreground">Letöltések</th>
                 <th className="px-4 py-3 font-semibold text-foreground">Állapot</th>
@@ -2040,6 +2042,8 @@ function DemoDownloads() {
                   <td className="px-4 py-2.5">{r.productName}</td>
                   <td className="px-4 py-2.5">{r.name}</td>
                   <td className="px-4 py-2.5 text-muted-foreground">{r.email}</td>
+                  <td className="px-4 py-2.5 text-muted-foreground">{r.companyName ?? "—"}</td>
+                  <td className="px-4 py-2.5 text-muted-foreground">{r.taxNumber ?? "—"}</td>
                   <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
                     {r.hwid ?? "—"}
                   </td>
