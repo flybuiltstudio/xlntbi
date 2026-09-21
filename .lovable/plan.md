@@ -16,13 +16,11 @@ Amelyik kupon lejárt, de a fizetési rendszerben még aktív, azt a feladat let
 **Tároló-takarítás — csak jelentés**
 Összegyűjti azokat a feltöltött fájlokat, amelyekre egyetlen termék, DEMO- vagy ingyenes letöltés sem hivatkozik. Semmit nem töröl. A lista bekerül az admin **Ellenőrzések** menü új **Tároló-takarítás** aloldalára, ahol fájlonként kijelölhető, mit akarsz törölni, és egy törlő gombbal törölhetők a kijelöltek (megerősítő kérdéssel). A termékekhez rendelt fájlok nem jelennek meg a listában.
 
-### Amit még ajánlok időzíteni
+## 1b. A három javasolt időzítés is elkészül
 
-- **Havi statisztika-zárás** (hónap első napján): a lezárt hónap termékmegtekintési és rendelési összesítőjének lefixálása, hogy a régi hónapok adatai később ne mozduljanak el.
-- **Napi „fizetésre vár túl régóta" jelzés**: ha egy átutalásos rendelés 8 napnál régebben vár fizetésre, e-mailben szól — ezekből lesz tipikusan a most kért kézi törlés.
-- **Napi Billingo-hiányjelzés**: ha van kifizetett rendelés számla nélkül, jelezze aznap (a heti auditra várás helyett).
-
-Ezeket nem építem be, csak ha kéred.
+- **Havi statisztika-zárás** — minden hónap első napján hajnali 2:30: a lezárt hónap termékmegtekintési és rendelési összesítőjének lefixálása, hogy a régi hónapok adatai később ne mozduljanak el.
+- **Napi „fizetésre vár túl régóta" jelzés** — hajnali 6:00: ha egy átutalásos rendelés 8 napnál régebben vár fizetésre, e-mailben szól.
+- **Napi Billingo-hiányjelzés** — hajnali 6:10: ha van kifizetett rendelés számla nélkül, aznap jelez, nem kell a heti auditra várni.
 
 ## 2. Megrendelés törlése (admin Megrendelések oldal)
 
