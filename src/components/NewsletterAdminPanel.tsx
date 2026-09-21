@@ -700,7 +700,7 @@ export function NewsletterAdminPanel() {
             <tbody>
               {loading ?
                 <tr>
-                  <td className="px-3 py-6 text-muted-foreground" colSpan={7}>
+                  <td className="px-3 py-6 text-muted-foreground" colSpan={8}>
                     Betöltés…
                   </td>
                 </tr>
