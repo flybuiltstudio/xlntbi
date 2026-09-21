@@ -706,7 +706,7 @@ export function NewsletterAdminPanel() {
                 </tr>
               : filtered.length === 0 ?
                 <tr>
-                  <td className="px-3 py-6 text-muted-foreground" colSpan={7}>
+                  <td className="px-3 py-6 text-muted-foreground" colSpan={8}>
                     Még nincs feliratkozó ebben az állapotban.
                   </td>
                 </tr>
