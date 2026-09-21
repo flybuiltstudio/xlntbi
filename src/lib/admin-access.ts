@@ -28,6 +28,7 @@ export const ADMIN_ROUTE_ACCESS: AdminRouteRule[] = [
   { prefix: "/admin/szamlazas", roles: ["admin"] },
   { prefix: "/admin/billingo-ellenorzes", roles: ["admin"] },
   { prefix: "/admin/katalogus-ellenorzes", roles: ["admin"] },
+  { prefix: "/admin/tarolo-takaritas", roles: ["admin"] },
   { prefix: "/admin/rendelesi-audit", roles: ["admin"] },
   { prefix: "/admin/nav-ellenorzes", roles: ["admin"] },
   { prefix: "/admin/fizetes-teszt", roles: ["admin"] },

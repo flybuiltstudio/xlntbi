@@ -240,6 +240,7 @@ function AdminLayout() {
   const checksLinks = [
     { to: "/admin/szamlazas", label: "Számlázás és számlaellenőrzés" },
     { to: "/admin/katalogus-ellenorzes", label: "Katalógus ellenőrzés" },
+    { to: "/admin/tarolo-takaritas", label: "Tároló-takarítás" },
     { to: "/admin/fizetes-teszt", label: "Fizetés teszt" },
   ] as const;
 
