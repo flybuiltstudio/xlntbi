@@ -7,6 +7,8 @@ import {
   PlugZap,
   RefreshCw,
   Send,
+  ShieldBan,
+  Trash2,
   Users,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -15,9 +17,13 @@ import { NewsletterEditor } from "@/components/NewsletterEditor";
 import { NewsletterHtmlEditor } from "@/components/NewsletterHtmlEditor";
 import { inputClass } from "@/components/admin-panels";
 import {
+  addNewsletterBlocklistEntry,
+  deleteNewsletterSubscriber,
   getNewsletterSettings,
+  listNewsletterBlocklist,
   listNewsletterCampaigns,
   listNewsletterSubscribers,
+  removeNewsletterBlocklistEntry,
   saveNewsletterSettings,
   sendNewsletterCampaign,
   sendNewsletterTestEmail,
@@ -44,6 +50,7 @@ import {
 } from "@/lib/stats-export";
 
 type Subscriber = Awaited<ReturnType<typeof listNewsletterSubscribers>>[number];
+type BlockEntry = Awaited<ReturnType<typeof listNewsletterBlocklist>>[number];
 type Campaign = Awaited<ReturnType<typeof listNewsletterCampaigns>>[number];
 type Settings = Awaited<ReturnType<typeof getNewsletterSettings>>;
 
@@ -72,6 +79,10 @@ export function NewsletterAdminPanel() {
   const syncNow = useServerFn(syncNewsletterSubscribers);
   const sendCampaign = useServerFn(sendNewsletterCampaign);
   const sendTestEmail = useServerFn(sendNewsletterTestEmail);
+  const removeSubscriber = useServerFn(deleteNewsletterSubscriber);
+  const loadBlocklist = useServerFn(listNewsletterBlocklist);
+  const addBlock = useServerFn(addNewsletterBlocklistEntry);
+  const removeBlock = useServerFn(removeNewsletterBlocklistEntry);
 
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -91,18 +102,24 @@ export function NewsletterAdminPanel() {
   const [testEmail, setTestEmail] = useState("");
   const [deliveryEmail, setDeliveryEmail] = useState("");
 
+  const [blocklist, setBlocklist] = useState<BlockEntry[]>([]);
+  const [blockEmail, setBlockEmail] = useState("");
+  const [blockNote, setBlockNote] = useState("");
+
   const reload = useCallback(async () => {
     setLoading(true);
     try {
-      const [subs, conf, camps] = await Promise.all([
+      const [subs, conf, camps, blocks] = await Promise.all([
         loadSubscribers(),
         loadSettings(),
         loadCampaigns(),
+        loadBlocklist(),
       ]);
       setSubscribers(subs);
       setSettings(conf);
       setMode(conf.mode);
       setCampaigns(camps);
+      setBlocklist(blocks);
     } catch (error) {
       setMessage({
         kind: "err",
@@ -111,7 +128,88 @@ export function NewsletterAdminPanel() {
     } finally {
       setLoading(false);
     }
-  }, [loadCampaigns, loadSettings, loadSubscribers]);
+  }, [loadBlocklist, loadCampaigns, loadSettings, loadSubscribers]);
+
+  async function onDeleteSubscriber(s: Subscriber) {
+    const label = `${s.lastName} ${s.firstName}`.trim() || s.email;
+    if (
+      !window.confirm(
+        `Biztosan véglegesen törlöd a következő feliratkozót?\n\n${label}\n${s.email}\n\nA cím kikerül a listából és az exportokból is.`,
+      )
+    ) {
+      return;
+    }
+    setBusy(`del-${s.id}`);
+    setMessage(null);
+    try {
+      const result = await removeSubscriber({ data: { id: s.id } });
+      if (!result.ok) {
+        setMessage({ kind: "err", text: result.error });
+        return;
+      }
+      setSubscribers((prev) => prev.filter((row) => row.id !== s.id));
+      setMessage({ kind: "ok", text: `Törölve: ${s.email}` });
+    } catch (error) {
+      setMessage({
+        kind: "err",
+        text: error instanceof Error ? error.message : "A törlés nem sikerült.",
+      });
+    } finally {
+      setBusy("");
+    }
+  }
+
+  async function onAddBlock() {
+    const email = blockEmail.trim().toLowerCase();
+    if (!email) {
+      setMessage({ kind: "err", text: "Adj meg egy e-mail címet." });
+      return;
+    }
+    setBusy("block-add");
+    setMessage(null);
+    try {
+      const result = await addBlock({ data: { email, note: blockNote.trim() } });
+      if (!result.ok) {
+        setMessage({ kind: "err", text: result.error });
+        return;
+      }
+      setBlockEmail("");
+      setBlockNote("");
+      const [blocks, subs] = await Promise.all([loadBlocklist(), loadSubscribers()]);
+      setBlocklist(blocks);
+      setSubscribers(subs);
+      setMessage({ kind: "ok", text: `Feketelistára került: ${email}` });
+    } catch (error) {
+      setMessage({
+        kind: "err",
+        text: error instanceof Error ? error.message : "A felvétel nem sikerült.",
+      });
+    } finally {
+      setBusy("");
+    }
+  }
+
+  async function onRemoveBlock(entry: BlockEntry) {
+    if (!window.confirm(`Töröljem a feketelistáról: ${entry.email}?`)) return;
+    setBusy(`block-${entry.id}`);
+    setMessage(null);
+    try {
+      const result = await removeBlock({ data: { id: entry.id } });
+      if (!result.ok) {
+        setMessage({ kind: "err", text: result.error });
+        return;
+      }
+      setBlocklist((prev) => prev.filter((row) => row.id !== entry.id));
+      setMessage({ kind: "ok", text: `Levettem a feketelistáról: ${entry.email}` });
+    } catch (error) {
+      setMessage({
+        kind: "err",
+        text: error instanceof Error ? error.message : "A törlés nem sikerült.",
+      });
+    } finally {
+      setBusy("");
+    }
+  }
 
   useEffect(() => {
     void reload();
@@ -596,18 +694,19 @@ export function NewsletterAdminPanel() {
                 <th className="px-3 py-2 font-semibold">Állapot</th>
                 <th className="px-3 py-2 font-semibold">Feliratkozás</th>
                 <th className="px-3 py-2 font-semibold">Külső rendszer</th>
+                <th className="px-3 py-2 font-semibold">Művelet</th>
               </tr>
             </thead>
             <tbody>
               {loading ?
                 <tr>
-                  <td className="px-3 py-6 text-muted-foreground" colSpan={7}>
+                  <td className="px-3 py-6 text-muted-foreground" colSpan={8}>
                     Betöltés…
                   </td>
                 </tr>
               : filtered.length === 0 ?
                 <tr>
-                  <td className="px-3 py-6 text-muted-foreground" colSpan={7}>
+                  <td className="px-3 py-6 text-muted-foreground" colSpan={8}>
                     Még nincs feliratkozó ebben az állapotban.
                   </td>
                 </tr>
@@ -636,6 +735,19 @@ export function NewsletterAdminPanel() {
                         `${s.providerName} · ${dateHu(s.providerSyncedAt)}`
                       : "—"}
                     </td>
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={() => void onDeleteSubscriber(s)}
+                        disabled={busy === `del-${s.id}`}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-destructive/40 bg-background px-2.5 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/10 disabled:opacity-50"
+                      >
+                        {busy === `del-${s.id}` ?
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        : <Trash2 className="h-3.5 w-3.5" />}
+                        Törlés
+                      </button>
+                    </td>
                   </tr>
                 ))
               }
@@ -643,6 +755,105 @@ export function NewsletterAdminPanel() {
           </table>
         </div>
       </section>
+
+      {/* ---------------- Blocklist (Feketelista) ---------------- */}
+      <section>
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+          <ShieldBan className="h-5 w-5 text-primary" /> Feketelista
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          Az itt szereplő címekről nem fogadok el feliratkozást, és hírlevelet sem küldök rájuk.
+        </p>
+
+        <div className="mt-4 flex flex-wrap items-end gap-3">
+          <div>
+            <label className="block text-sm font-medium text-foreground" htmlFor="block-email">
+              E-mail cím
+            </label>
+            <input
+              id="block-email"
+              type="email"
+              value={blockEmail}
+              onChange={(event) => setBlockEmail(event.target.value)}
+              className={`${inputClass} mt-1 w-72`}
+              placeholder="valaki@pelda.hu"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-foreground" htmlFor="block-note">
+              Megjegyzés (nem kötelező)
+            </label>
+            <input
+              id="block-note"
+              type="text"
+              value={blockNote}
+              onChange={(event) => setBlockNote(event.target.value)}
+              className={`${inputClass} mt-1 w-72`}
+              placeholder="pl. spam"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => void onAddBlock()}
+            disabled={busy === "block-add"}
+            className={actionBtn}
+          >
+            {busy === "block-add" ?
+              <Loader2 className="h-4 w-4 animate-spin" />
+            : <ShieldBan className="h-4 w-4" />}
+            Felvétel a feketelistára
+          </button>
+        </div>
+
+        <div className="mt-5 overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-sm">
+            <thead className="bg-muted/60 text-left">
+              <tr>
+                <th className="px-3 py-2 font-semibold">E-mail</th>
+                <th className="px-3 py-2 font-semibold">Megjegyzés</th>
+                <th className="px-3 py-2 font-semibold">Felvéve</th>
+                <th className="px-3 py-2 font-semibold">Művelet</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ?
+                <tr>
+                  <td className="px-3 py-6 text-muted-foreground" colSpan={4}>
+                    Betöltés…
+                  </td>
+                </tr>
+              : blocklist.length === 0 ?
+                <tr>
+                  <td className="px-3 py-6 text-muted-foreground" colSpan={4}>
+                    Még nincs feketelistás cím.
+                  </td>
+                </tr>
+              : blocklist.map((entry) => (
+                  <tr key={entry.id} className="border-t border-border">
+                    <td className="px-3 py-2">{entry.email}</td>
+                    <td className="px-3 py-2">{entry.note || "—"}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{dateHu(entry.createdAt)}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={() => void onRemoveBlock(entry)}
+                        disabled={busy === `block-${entry.id}`}
+                        className="inline-flex items-center gap-1.5 rounded-md border border-destructive/40 bg-background px-2.5 py-1.5 text-xs font-medium text-destructive transition hover:bg-destructive/10 disabled:opacity-50"
+                      >
+                        {busy === `block-${entry.id}` ?
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        : <Trash2 className="h-3.5 w-3.5" />}
+                        Törlés
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
 
       {/* ---------------- Sent campaigns (Elküldött hírlevelek) ---------------- */}
       <section>

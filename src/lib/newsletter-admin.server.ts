@@ -82,6 +82,68 @@ export async function listSubscribers(): Promise<SubscriberRow[]> {
   }));
 }
 
+/** Permanently removes a subscriber row. */
+export async function deleteSubscriber(id: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await (supabaseAdmin as any)
+    .from("newsletter_subscribers")
+    .delete()
+    .eq("id", id);
+  if (error) return { ok: false as const, error: error.message };
+  return { ok: true as const };
+}
+
+export type BlocklistRow = {
+  id: string;
+  email: string;
+  note: string;
+  createdAt: string;
+};
+
+export async function listBlocklist(): Promise<BlocklistRow[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await (supabaseAdmin as any)
+    .from("newsletter_blocklist")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(5000);
+  if (error) throw new Error(error.message);
+  return (data ?? []).map((r: any) => ({
+    id: r.id,
+    email: r.email ?? "",
+    note: r.note ?? "",
+    createdAt: r.created_at,
+  }));
+}
+
+/** Adds an address to the blocklist and unsubscribes any existing signup. */
+export async function addToBlocklist(email: string, note: string, userId: string) {
+  const normalized = email.trim().toLowerCase();
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const db = supabaseAdmin as any;
+  const { error } = await db
+    .from("newsletter_blocklist")
+    .upsert({ email: normalized, note: note.trim() || null, created_by: userId }, { onConflict: "email" });
+  if (error) return { ok: false as const, error: error.message };
+
+  await db
+    .from("newsletter_subscribers")
+    .update({ status: "unsubscribed", unsubscribed_at: new Date().toISOString() })
+    .ilike("email", normalized);
+
+  return { ok: true as const };
+}
+
+export async function removeFromBlocklist(id: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await (supabaseAdmin as any)
+    .from("newsletter_blocklist")
+    .delete()
+    .eq("id", id);
+  if (error) return { ok: false as const, error: error.message };
+  return { ok: true as const };
+}
+
 /** Mode + which provider fields are filled (secrets masked). */
 export async function getNewsletterConfig() {
   const { mode, providers } = await newsletterSettings();
@@ -252,9 +314,14 @@ export async function sendCampaign(input: {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const db = supabaseAdmin as any;
 
+  const { isBlockedEmail, blockedEmailSet } = await import("./newsletter.server");
+
   if (input.testOnly) {
     const to = input.testEmail || input.userEmail;
     if (!to) return { ok: false as const, error: "Adj meg egy teszt e-mail címet." };
+    if (await isBlockedEmail(to)) {
+      return { ok: false as const, error: "Ez a cím feketelistán van, ezért nem küldök rá levelet." };
+    }
     try {
       const { siteOrigin, unsubscribeUrlForEmail } = await import("./newsletter.server");
       // If the test address is a real subscriber, send its own working link;
@@ -276,7 +343,10 @@ export async function sendCampaign(input: {
     .eq("status", "confirmed")
     .limit(5000);
   if (error) return { ok: false as const, error: error.message };
-  const recipients = rows ?? [];
+  const blocked = await blockedEmailSet();
+  const recipients = (rows ?? []).filter(
+    (row: any) => !blocked.has(String(row.email ?? "").trim().toLowerCase()),
+  );
   if (recipients.length === 0) {
     return { ok: false as const, error: "Nincs megerősített feliratkozó, akinek küldhetnék." };
   }

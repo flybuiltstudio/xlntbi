@@ -22,6 +22,52 @@ export const listNewsletterSubscribers = createServerFn({ method: "GET" })
     return listSubscribers();
   });
 
+const idSchema = z.object({ id: z.string().uuid() });
+
+export const deleteNewsletterSubscriber = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => idSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context);
+    const { deleteSubscriber } = await import("./newsletter-admin.server");
+    return deleteSubscriber(data.id);
+  });
+
+export const listNewsletterBlocklist = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context);
+    const { listBlocklist } = await import("./newsletter-admin.server");
+    return listBlocklist();
+  });
+
+const blockSchema = z.object({
+  email: z.string().trim().email().max(200),
+  note: z.string().trim().max(300).default(""),
+});
+
+export const addNewsletterBlocklistEntry = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => blockSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context);
+    const { addToBlocklist } = await import("./newsletter-admin.server");
+    return addToBlocklist(data.email, data.note, context.userId);
+  });
+
+export const removeNewsletterBlocklistEntry = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => idSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context);
+    const { removeFromBlocklist } = await import("./newsletter-admin.server");
+    return removeFromBlocklist(data.id);
+  });
+
 export const getNewsletterSettings = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {

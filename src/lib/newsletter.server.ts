@@ -91,6 +91,27 @@ export async function unsubscribeUrlForEmail(email: string): Promise<string | nu
   return ensureUnsubscribeUrl(data.id, data.confirm_token);
 }
 
+/** True when the address was put on the admin blocklist. */
+export async function isBlockedEmail(email: string): Promise<boolean> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await (supabaseAdmin as any)
+    .from("newsletter_blocklist")
+    .select("id")
+    .ilike("email", email.trim().toLowerCase())
+    .maybeSingle();
+  return Boolean(data);
+}
+
+/** All blocklisted addresses, lowercased — used to filter send batches. */
+export async function blockedEmailSet(): Promise<Set<string>> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await (supabaseAdmin as any)
+    .from("newsletter_blocklist")
+    .select("email")
+    .limit(5000);
+  return new Set((data ?? []).map((r: any) => String(r.email ?? "").trim().toLowerCase()));
+}
+
 /** Public sign-up: stores the person as `pending` and sends the opt-in email. */
 export async function subscribe(data: SubscribeInput) {
   // Honeypot: silently accept but drop.
@@ -114,6 +135,14 @@ export async function subscribe(data: SubscribeInput) {
   }
 
   const email = data.email.trim().toLowerCase();
+
+  if (await isBlockedEmail(email)) {
+    return {
+      ok: false as const,
+      error: "Ezt a címet nem tudom felvenni a hírlevél listára.",
+    };
+  }
+
   const token = newToken();
 
   const { data: existing } = await db

@@ -36,6 +36,13 @@
       "when": 1790003941382,
       "tag": "0004_harden_calculator_overrides_and_free_downloads",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790021034679,
+      "tag": "0005_create_newsletter_blocklist",
+      "breakpoints": true
     }
   ]
 }
