@@ -732,6 +732,71 @@ export async function deleteTestOrder(orderId: string): Promise<{ ok: boolean; e
 }
 
 /**
+ * Deletes an order that was never paid — e.g. the customer changed their mind
+ * after placing a transfer order. Paid orders are refused. The order is logged
+ * into `deleted_orders` first, then its download tokens and the order row are
+ * removed, so it disappears from every list and from the statistics (which are
+ * always calculated live from `orders`).
+ */
+export async function deleteUnpaidOrder(
+  orderId: string,
+  deletedBy?: { userId?: string | null; email?: string | null },
+): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("*")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (!order) return { ok: false, error: "A megrendelés nem található." };
+  if (order.payment_status === "paid") {
+    return {
+      ok: false,
+      error: "Ez a megrendelés ki van fizetve, ezért nem törölhető.",
+    };
+  }
+
+  const { error: logError } = await (supabaseAdmin as any).from("deleted_orders").insert({
+    order_number: order.order_number,
+    product_name: order.product_name,
+    tier_label: order.tier_label ?? null,
+    quantity: order.quantity ?? 1,
+    total_price: order.total_price ?? 0,
+    currency: order.currency ?? "HUF",
+    email: order.email ?? null,
+    billing_name: order.billing_name ?? null,
+    payment_status: order.payment_status ?? null,
+    payment_provider: order.payment_provider ?? null,
+    order_created_at: order.created_at ?? null,
+    deleted_by: deletedBy?.userId ?? null,
+    deleted_by_email: deletedBy?.email ?? null,
+    reason: "Admin törlés – fizetésre váró megrendelés",
+  });
+  if (logError) {
+    console.error("Deleted order logging failed:", logError.message);
+    return { ok: false, error: "A törlés naplózása nem sikerült, ezért nem töröltem." };
+  }
+
+  await supabaseAdmin.from("order_downloads").delete().eq("order_id", orderId);
+
+  const { error, data: deleted } = await supabaseAdmin
+    .from("orders")
+    .delete()
+    .eq("id", orderId)
+    .select("id");
+
+  if (error) {
+    console.error("Unpaid order deletion failed:", error.message);
+    return { ok: false, error: "A megrendelés törlése nem sikerült." };
+  }
+  if (!deleted || deleted.length === 0) {
+    return { ok: false, error: "A megrendelés nem lett törölve." };
+  }
+  return { ok: true };
+}
+
+/**
  * Manually (re)issues a Billingo invoice for a paid order. Only allowed for
  * orders that are actually paid. If the order already has a Billingo invoice
  * id, it is left untouched (idempotent). Returns the invoice number on success.
