@@ -79,6 +79,10 @@ export function NewsletterAdminPanel() {
   const syncNow = useServerFn(syncNewsletterSubscribers);
   const sendCampaign = useServerFn(sendNewsletterCampaign);
   const sendTestEmail = useServerFn(sendNewsletterTestEmail);
+  const removeSubscriber = useServerFn(deleteNewsletterSubscriber);
+  const loadBlocklist = useServerFn(listNewsletterBlocklist);
+  const addBlock = useServerFn(addNewsletterBlocklistEntry);
+  const removeBlock = useServerFn(removeNewsletterBlocklistEntry);
 
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
