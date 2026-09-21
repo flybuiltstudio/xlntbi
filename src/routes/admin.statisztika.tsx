@@ -1882,6 +1882,7 @@ function DemoDownloads() {
   const load = useServerFn(adminDemoStats);
   const [rows, setRows] = useState<any[] | null>(null);
   const [error, setError] = useState("");
+  const [exporting, setExporting] = useState<string | null>(null);
 
   useEffect(() => {
     load()
