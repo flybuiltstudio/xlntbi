@@ -1123,17 +1123,19 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 >
                   E-mail a vevőnek
                 </a>
-                {order.paymentStatus !== "paid" ? (
-                  <button
-                    type="button"
-                    disabled={busy === order.id}
-                    onClick={() => void onDeleteUnpaid(order)}
-                    className="ml-auto rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
-                    title="A fizetésre váró megrendelés végleges törlése mindenhonnan"
-                  >
-                    {busy === order.id ? "Törlés…" : "Megrendelés törlése"}
-                  </button>
-                ) : null}
+                <button
+                  type="button"
+                  disabled={busy === order.id}
+                  onClick={() => void onDeleteUnpaid(order)}
+                  className="ml-auto rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
+                  title={
+                    order.paymentStatus === "paid"
+                      ? "A kifizetett megrendelés végleges törlése – a Billingo számla előbb sztornózódik"
+                      : "A fizetésre váró megrendelés végleges törlése mindenhonnan"
+                  }
+                >
+                  {busy === order.id ? "Törlés…" : "Megrendelés törlése"}
+                </button>
               </div>
 
               {licenseFor?.id === order.id ? (
