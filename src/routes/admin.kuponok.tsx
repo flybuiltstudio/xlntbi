@@ -9,6 +9,7 @@ import { CouponAttemptsPanel } from "@/components/CouponAttemptsPanel";
 import { CouponUsagePanel } from "@/components/CouponUsagePanel";
 import { PageHero } from "@/components/PageHero";
 import { useAdminSession } from "@/components/admin-panels";
+import { AdminSectionNav, BackToTop, type AdminNavLink } from "@/components/admin-toc";
 
 export const Route = createFileRoute("/admin/kuponok")({
   head: () => ({
@@ -33,6 +34,13 @@ function AdminCouponsPage() {
   const { role } = useAdminSession();
   const isAdmin = role === "admin";
 
+  const navLinks: AdminNavLink[] = [
+    ...(isAdmin ? ([["kuponok-listaja", "Kuponok és új kupon"]] as AdminNavLink[]) : []),
+    ["kupon-elozmenyek", "Kupon előzmények"],
+    ["sikertelen-kuponkiserletek", "Sikertelen kuponkísérletek"],
+    ...(isAdmin ? ([["kuponvedelem", "Kuponvédelem éles környezetben"]] as AdminNavLink[]) : []),
+  ];
+
   return (
     <>
       <PageHero>
@@ -40,20 +48,40 @@ function AdminCouponsPage() {
           Kuponok
         </h1>
       </PageHero>
-      <div className="mx-auto max-w-6xl space-y-14 px-4 py-14">
-        {isAdmin ? <CouponAdminPanel /> : null}
+      <div className="mx-auto max-w-6xl px-4 py-14">
+        <AdminSectionNav links={navLinks} />
 
-        <AdminBlock
-          icon={History}
-          title="Kupon előzmények"
-          description="Itt látod, melyik kuponkódot mikor váltották be, mennyi kedvezményt adott, és melyik rendeléshez tartozik. Így egy hibás vagy lejárt kupon miatti ügyféligényt azonnal ellenőrizhetsz."
-        >
-          <CouponUsagePanel />
-        </AdminBlock>
+        <div className="mt-10 space-y-14">
+          {isAdmin ? (
+            <div>
+              <CouponAdminPanel />
+              <BackToTop />
+            </div>
+          ) : null}
 
-        <CouponAttemptsPanel />
+          <div id="kupon-elozmenyek" className="scroll-mt-24">
+            <AdminBlock
+              icon={History}
+              title="Kupon előzmények"
+              description="Itt látod, melyik kuponkódot mikor váltották be, mennyi kedvezményt adott, és melyik rendeléshez tartozik. Így egy hibás vagy lejárt kupon miatti ügyféligényt azonnal ellenőrizhetsz."
+            >
+              <CouponUsagePanel />
+            </AdminBlock>
+            <BackToTop />
+          </div>
 
-        {isAdmin ? <LiveCouponGuardPanel /> : null}
+          <div>
+            <CouponAttemptsPanel />
+            <BackToTop />
+          </div>
+
+          {isAdmin ? (
+            <div>
+              <LiveCouponGuardPanel />
+              <BackToTop />
+            </div>
+          ) : null}
+        </div>
       </div>
     </>
   );
