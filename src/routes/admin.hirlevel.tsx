@@ -40,7 +40,10 @@ function AdminNewsletterPage() {
         </h1>
       </PageHero>
       <div className="mx-auto max-w-6xl px-4 py-14">
-        <NewsletterAdminPanel />
+        <AdminSectionNav links={NEWSLETTER_NAV} />
+        <div className="mt-10">
+          <NewsletterAdminPanel />
+        </div>
       </div>
     </>
   );
