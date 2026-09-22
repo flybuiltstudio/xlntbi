@@ -143,6 +143,24 @@ export async function requestDemo(input: {
     ? formatDate(new Date(input.testUntil))
     : "nem megadott";
 
+  const licenseSubject = `${productName} – DEMO – beírandó licenc`;
+  const licenseBody = [
+    "Tisztelt Vásárló!",
+    "",
+    "Küldöm a licencet az alábbi termékhez:",
+    "",
+    `Termék: ${productName}`,
+    "Típus: DEMO (korlátozott idejű)",
+    "",
+    "Licenszkód:",
+    "________________  (IDE ÍRD A LICENSZKÓDOT)",
+    "",
+    "Üdvözlettel:",
+    "Sarinay Dávid",
+    "XLNT BI",
+  ].join("\n");
+  const licenseMailto = `mailto:${input.email}?subject=${encodeURIComponent(licenseSubject)}&body=${encodeURIComponent(licenseBody)}`;
+
   const ownerHtml = `<!DOCTYPE html>
 <html lang="hu"><head><meta charset="utf-8"></head>
 <body style="margin:0;padding:0;background:#f4f5f4;font-family:Arial,Helvetica,sans-serif">
@@ -162,6 +180,7 @@ export async function requestDemo(input: {
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Letöltőlink</td><td style="padding:6px 8px;border:1px solid #ddd"><a href="${downloadUrl}">${downloadUrl}</a></td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Lejár</td><td style="padding:6px 8px;border:1px solid #ddd">${formatDate(expiresAt)}</td></tr>
 </table>
+<p style="margin:0 0 16px"><a href="${licenseMailto}" style="display:inline-block;background:#0d4a2a;color:#ffffff;border-radius:8px;padding:10px 18px;font-weight:700;font-size:14px;text-decoration:none">Licenc küldése az igénylőnek</a></p>
 <p style="font-size:12px;color:#888;margin:0">Ez a DEMO-igény nem jelenik meg a vásárlási statisztikában, és nem kerül számlázásra.</p>
 </div></body></html>`;
 
@@ -180,6 +199,8 @@ export async function requestDemo(input: {
     `Tesztidő:      ${testUntilText}`,
     `Letöltőlink:   ${downloadUrl}`,
     `Lejár:         ${formatDate(expiresAt)}`,
+    "",
+    `Licenc küldése az igénylőnek (előre kitöltött levél): ${licenseMailto}`,
     "",
     "Ez a DEMO-igény nem jelenik meg a vásárlási statisztikában.",
   ].join("\n");

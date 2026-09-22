@@ -140,6 +140,7 @@ export async function markOrderPaid(options: {
       data: {
         orderNumber: order.order_number,
         productName: productLabel,
+        tierLabel: (order.tier_label as string | null) ?? undefined,
         total: formatPrice((order.total_price as number) - discountAmount),
         customerEmail: order.email,
         paymentStatus: "paid",

@@ -191,6 +191,7 @@ export async function handleOrder(data: Order) {
       data: {
         orderNumber: number,
         productName: productLabel,
+        tierLabel: tier.label,
         total: formatPrice(total),
         customerEmail: data.email,
         paymentStatus: "unpaid",
