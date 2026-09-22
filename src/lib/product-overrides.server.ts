@@ -136,7 +136,7 @@ export async function ensureProductOverrides(force = false): Promise<void> {
  * serves a silently partial list.
  */
 export async function listCustomProductSlugs(): Promise<string[]> {
-  const supabase = publicClient();
+  const { supabaseAdmin: supabase } = await import("@/integrations/supabase/client.server");
   const pageSize = 1000;
   const slugs: string[] = [];
   for (let offset = 0; ; ) {
