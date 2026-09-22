@@ -1,4 +1,5 @@
 import { formatPrice } from "@/lib/products";
+import { safeCell, safeRow } from "@/lib/spreadsheet-safe";
 
 export interface StatExportRow {
   productName: string;
@@ -132,7 +133,8 @@ function downloadBlob(blob: Blob, filename: string) {
 // ---------------- CSV ----------------
 
 function csvCell(value: string | number) {
-  const s = String(value);
+  // safeCell keeps visitor-supplied text from being executed as a formula.
+  const s = String(safeCell(value));
   return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
@@ -563,7 +565,8 @@ export async function exportTableXlsx(filename: string, sheetName: string, table
     ...table.body,
     ...(table.foot ? [table.foot] : []),
   ] as (string | number)[][];
-  const sheet = XLSX.utils.aoa_to_sheet(allRows);
+  const safeRows: (string | number)[][] = allRows.map((row) => safeRow(row));
+  const sheet = XLSX.utils.aoa_to_sheet(safeRows);
   sheet["!cols"] = table.head.map((h, i) => {
     let w = h.length;
     for (const row of [...table.body, ...(table.foot ? [table.foot] : [])]) {
