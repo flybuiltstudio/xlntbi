@@ -288,7 +288,7 @@ export function NewsletterAdminPanel() {
       ) : null}
 
       {/* ---------------- Mode ---------------- */}
-      <section>
+      <section id="hirlevel-kezelese" className="scroll-mt-24">
         <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <PlugZap className="h-5 w-5 text-primary" /> Hírlevél kezelése
         </h2>
@@ -432,7 +432,7 @@ export function NewsletterAdminPanel() {
       </section>
 
       {/* ---------------- Campaign (Levélküldő) ---------------- */}
-      <section>
+      <section id="levelkuldo" className="scroll-mt-24">
         <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <Mail className="h-5 w-5 text-primary" /> Levélküldő
         </h2>
@@ -611,7 +611,7 @@ export function NewsletterAdminPanel() {
       </section>
 
       {/* ---------------- Subscribers (Feliratkozók) ---------------- */}
-      <section>
+      <section id="feliratkozok" className="scroll-mt-24">
         <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <Users className="h-5 w-5 text-primary" /> Feliratkozók
         </h2>
@@ -757,7 +757,7 @@ export function NewsletterAdminPanel() {
       </section>
 
       {/* ---------------- Blocklist (Feketelista) ---------------- */}
-      <section>
+      <section id="feketelista" className="scroll-mt-24">
         <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <ShieldBan className="h-5 w-5 text-primary" /> Feketelista
         </h2>
@@ -856,7 +856,7 @@ export function NewsletterAdminPanel() {
 
 
       {/* ---------------- Sent campaigns (Elküldött hírlevelek) ---------------- */}
-      <section>
+      <section id="elkuldott-hirlevelek" className="scroll-mt-24">
         <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <Send className="h-5 w-5 text-primary" /> Elküldött hírlevelek
         </h2>
