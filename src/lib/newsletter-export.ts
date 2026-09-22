@@ -100,7 +100,8 @@ export const PROVIDER_CSV: ProviderCsv[] = [
 ];
 
 function csvCell(value: string): string {
-  const text = value ?? "";
+  // safeCell keeps subscriber-supplied text from being executed as a formula.
+  const text = String(safeCell(value ?? ""));
   return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 

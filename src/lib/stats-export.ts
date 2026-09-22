@@ -132,7 +132,8 @@ function downloadBlob(blob: Blob, filename: string) {
 // ---------------- CSV ----------------
 
 function csvCell(value: string | number) {
-  const s = String(value);
+  // safeCell keeps visitor-supplied text from being executed as a formula.
+  const s = String(safeCell(value));
   return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
@@ -563,7 +564,7 @@ export async function exportTableXlsx(filename: string, sheetName: string, table
     ...table.body,
     ...(table.foot ? [table.foot] : []),
   ] as (string | number)[][];
-  const sheet = XLSX.utils.aoa_to_sheet(allRows);
+  const sheet = XLSX.utils.aoa_to_sheet(allRows.map(safeRow));
   sheet["!cols"] = table.head.map((h, i) => {
     let w = h.length;
     for (const row of [...table.body, ...(table.foot ? [table.foot] : [])]) {

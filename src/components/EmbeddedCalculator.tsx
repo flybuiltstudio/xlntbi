@@ -1,4 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
+
+import { sanitizeEmbeddedHtml } from "@/lib/sanitize-html";
 
 type Props = {
   html: string;
@@ -25,9 +27,14 @@ export function EmbeddedCalculator({ html, script }: Props) {
     };
   }, [script]);
 
+  // Stored markup is hardened before it reaches the DOM: no inline scripts,
+  // event handlers or script-ish URLs. The calculator engine itself is the
+  // separately loaded `script`, so behaviour is unchanged.
+  const safeHtml = useMemo(() => sanitizeEmbeddedHtml(html), [html]);
+
   return (
     <div ref={containerRef}>
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+      <div dangerouslySetInnerHTML={{ __html: safeHtml }} />
     </div>
   );
 }
