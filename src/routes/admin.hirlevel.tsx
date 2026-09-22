@@ -2,6 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { NewsletterAdminPanel } from "@/components/NewsletterAdminPanel";
 import { PageHero } from "@/components/PageHero";
+import { AdminSectionNav } from "@/components/admin-toc";
+
+const NEWSLETTER_NAV = [
+  ["hirlevel-kezelese", "Hírlevél kezelése"],
+  ["levelkuldo", "Levélküldő"],
+  ["feliratkozok", "Feliratkozók"],
+  ["feketelista", "Feketelista"],
+  ["elkuldott-hirlevelek", "Elküldött hírlevelek"],
+] as const;
 
 export const Route = createFileRoute("/admin/hirlevel")({
   head: () => ({
