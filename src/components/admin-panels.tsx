@@ -454,11 +454,19 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
-  /** Deletes a never-paid order everywhere, after an explicit confirmation. */
+  /** Deletes an order everywhere, after an explicit confirmation (paid: twice). */
   async function onDeleteUnpaid(order: Order) {
+    const paid = order.paymentStatus === "paid";
     if (
       !window.confirm(
         `Biztosan véglegesen törlöd a ${order.orderNumber} megrendelést?\n\n${order.productName} – ${order.email}\n\nEz nem visszavonható: a megrendelés a listákból és a statisztikákból is eltűnik.`,
+      )
+    )
+      return;
+    if (
+      paid &&
+      !window.confirm(
+        `FIGYELEM: ez egy KIFIZETETT megrendelés (${order.orderNumber}).\n\nHa van hozzá Billingo számla, a rendszer előbb sztornó bizonylatot készít róla, majd törli a megrendelést.\n\nBiztosan folytatod?`,
       )
     )
       return;
@@ -1115,17 +1123,19 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 >
                   E-mail a vevőnek
                 </a>
-                {order.paymentStatus !== "paid" ? (
-                  <button
-                    type="button"
-                    disabled={busy === order.id}
-                    onClick={() => void onDeleteUnpaid(order)}
-                    className="ml-auto rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
-                    title="A fizetésre váró megrendelés végleges törlése mindenhonnan"
-                  >
-                    {busy === order.id ? "Törlés…" : "Megrendelés törlése"}
-                  </button>
-                ) : null}
+                <button
+                  type="button"
+                  disabled={busy === order.id}
+                  onClick={() => void onDeleteUnpaid(order)}
+                  className="ml-auto rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
+                  title={
+                    order.paymentStatus === "paid"
+                      ? "A kifizetett megrendelés végleges törlése – a Billingo számla előbb sztornózódik"
+                      : "A fizetésre váró megrendelés végleges törlése mindenhonnan"
+                  }
+                >
+                  {busy === order.id ? "Törlés…" : "Megrendelés törlése"}
+                </button>
               </div>
 
               {licenseFor?.id === order.id ? (

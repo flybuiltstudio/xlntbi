@@ -309,8 +309,59 @@ export async function runMonthlyStatsClose(): Promise<{
 // Daily checks
 // ---------------------------------------------------------------------------
 
+type AlertType = "stale_unpaid" | "missing_invoice";
+
+type AlertOrder = {
+  order_number: string;
+  product_name: string;
+  total_price: number;
+  email: string;
+  created_at: string;
+};
+
+/**
+ * Splits the found orders into the ones never alerted about before and the ones
+ * already reported earlier. Only the new ones trigger an email, so a still
+ * broken order is never mailed twice.
+ */
+async function splitAlreadyAlerted(
+  alertType: AlertType,
+  rows: AlertOrder[],
+): Promise<{ fresh: AlertOrder[]; repeated: number }> {
+  if (rows.length === 0) return { fresh: [], repeated: 0 };
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await (supabaseAdmin as any)
+    .from("order_alerts_sent")
+    .select("order_number")
+    .eq("alert_type", alertType)
+    .in(
+      "order_number",
+      rows.map((row) => row.order_number),
+    );
+  const seen = new Set(
+    ((data ?? []) as Array<{ order_number: string }>).map((row) => row.order_number),
+  );
+  const fresh = rows.filter((row) => !seen.has(row.order_number));
+  return { fresh, repeated: rows.length - fresh.length };
+}
+
+/** Records the alerted order numbers so the next run stays quiet about them. */
+async function markAlerted(alertType: AlertType, rows: AlertOrder[]): Promise<void> {
+  if (rows.length === 0) return;
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await (supabaseAdmin as any).from("order_alerts_sent").upsert(
+    rows.map((row) => ({
+      order_number: row.order_number,
+      alert_type: alertType,
+      sent_at: new Date().toISOString(),
+    })),
+    { onConflict: "alert_type,order_number" },
+  );
+  if (error) console.error(`order_alerts_sent (${alertType}):`, error.message);
+}
+
 /** Orders still unpaid after STALE_UNPAID_DAYS days. */
-export async function runStaleUnpaidCheck(): Promise<{ count: number }> {
+export async function runStaleUnpaidCheck(): Promise<{ count: number; repeated?: number }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const cutoff = new Date(Date.now() - STALE_UNPAID_DAYS * 24 * 60 * 60 * 1000).toISOString();
 
@@ -322,33 +373,39 @@ export async function runStaleUnpaidCheck(): Promise<{ count: number }> {
     .order("created_at", { ascending: true })
     .limit(200);
 
-  const rows = (data ?? []) as Array<{
-    order_number: string;
-    product_name: string;
-    total_price: number;
-    email: string;
-    created_at: string;
-  }>;
-  if (rows.length === 0) return { count: 0 };
+  const rows = (data ?? []) as AlertOrder[];
+  const { fresh, repeated } = await splitAlreadyAlerted("stale_unpaid", rows);
+  if (fresh.length === 0) return { count: 0, repeated };
+
+  const issues = fresh.map(
+    (row) =>
+      `${row.order_number} – ${row.product_name} – ${row.total_price} Ft – ${row.email} – ${huTime(
+        new Date(row.created_at),
+      )}`,
+  );
+  if (repeated > 0) {
+    issues.push(`(${repeated} korábban már jelzett megrendelés továbbra is fizetésre vár.)`);
+  }
 
   await report({
     title: "Régóta fizetésre vár",
-    summary: `${rows.length} megrendelés több mint ${STALE_UNPAID_DAYS} napja nincs kifizetve.`,
-    rows: [["Érintett megrendelés", String(rows.length)]],
-    issues: rows.map(
-      (row) =>
-        `${row.order_number} – ${row.product_name} – ${row.total_price} Ft – ${row.email} – ${huTime(
-          new Date(row.created_at),
-        )}`,
-    ),
+    summary:
+      `${fresh.length} új megrendelés több mint ${STALE_UNPAID_DAYS} napja nincs kifizetve.` +
+      " Csak a korábban még nem jelzett tételek szerepelnek a levélben.",
+    rows: [
+      ["Új megrendelés", String(fresh.length)],
+      ["Korábban már jelzett", String(repeated)],
+    ],
+    issues,
     key: `stale-unpaid-${dayKey()}`,
   });
 
-  return { count: rows.length };
+  await markAlerted("stale_unpaid", fresh);
+  return { count: fresh.length, repeated };
 }
 
 /** Paid orders with no Billingo invoice yet (0 Ft / DEMO requests excluded). */
-export async function runMissingInvoiceCheck(): Promise<{ count: number }> {
+export async function runMissingInvoiceCheck(): Promise<{ count: number; repeated?: number }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
   const { data } = await (supabaseAdmin as any)
@@ -360,27 +417,33 @@ export async function runMissingInvoiceCheck(): Promise<{ count: number }> {
     .order("created_at", { ascending: true })
     .limit(200);
 
-  const rows = (data ?? []) as Array<{
-    order_number: string;
-    product_name: string;
-    total_price: number;
-    email: string;
-    created_at: string;
-  }>;
-  if (rows.length === 0) return { count: 0 };
+  const rows = (data ?? []) as AlertOrder[];
+  const { fresh, repeated } = await splitAlreadyAlerted("missing_invoice", rows);
+  if (fresh.length === 0) return { count: 0, repeated };
+
+  const issues = fresh.map(
+    (row) =>
+      `${row.order_number} – ${row.product_name} – ${row.total_price} Ft – ${huTime(
+        new Date(row.created_at),
+      )}`,
+  );
+  if (repeated > 0) {
+    issues.push(`(${repeated} korábban már jelzett megrendeléshez továbbra sincs számla.)`);
+  }
 
   await report({
     title: "Számla hiányzik",
-    summary: `${rows.length} kifizetett megrendeléshez még nincs Billingo számla.`,
-    rows: [["Érintett megrendelés", String(rows.length)]],
-    issues: rows.map(
-      (row) =>
-        `${row.order_number} – ${row.product_name} – ${row.total_price} Ft – ${huTime(
-          new Date(row.created_at),
-        )}`,
-    ),
+    summary:
+      `${fresh.length} új kifizetett megrendeléshez nincs Billingo számla.` +
+      " Csak a korábban még nem jelzett tételek szerepelnek a levélben.",
+    rows: [
+      ["Új megrendelés", String(fresh.length)],
+      ["Korábban már jelzett", String(repeated)],
+    ],
+    issues,
     key: `missing-invoice-${dayKey()}`,
   });
 
-  return { count: rows.length };
+  await markAlerted("missing_invoice", fresh);
+  return { count: fresh.length, repeated };
 }

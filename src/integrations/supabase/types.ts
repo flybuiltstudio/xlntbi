@@ -900,6 +900,27 @@ export type Database = {
         }
         Relationships: []
       }
+      order_alerts_sent: {
+        Row: {
+          alert_type: string
+          id: string
+          order_number: string
+          sent_at: string
+        }
+        Insert: {
+          alert_type: string
+          id?: string
+          order_number: string
+          sent_at?: string
+        }
+        Update: {
+          alert_type?: string
+          id?: string
+          order_number?: string
+          sent_at?: string
+        }
+        Relationships: []
+      }
       order_downloads: {
         Row: {
           closed_at: string | null
