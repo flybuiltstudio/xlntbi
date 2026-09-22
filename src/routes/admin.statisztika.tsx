@@ -20,6 +20,16 @@ import { formatPrice, products } from "@/lib/products";
 import { serviceItems } from "@/lib/services";
 import { PageHero } from "@/components/PageHero";
 import { useAdminSession } from "@/components/admin-panels";
+import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
+
+const STATS_NAV = [
+  ["megrendelt-termekek", "Megrendelt termékek"],
+  ["havi-bontas", "Havi bontás grafikonon"],
+  ["megrendeloi-lista", "Megrendelői és terméklista"],
+  ["oldalletoltesek", "Oldalletöltési statisztika"],
+  ["megrendelesek-orankent", "Megrendelések óránként"],
+  ["demo-letoltesek", "DEMO letöltések"],
+] as const;
 import {
   MONTHS,
   MONTHS_SHORT,
