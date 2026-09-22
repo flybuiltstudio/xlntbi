@@ -177,20 +177,20 @@ export async function requestDemo(input: {
 <div style="max-width:560px;margin:0 auto;padding:24px">
 <p style="font-size:18px;font-weight:800;color:#DC2626;margin:0 0 16px">CSAK DEMO LICENCET KAPHAT!</p>
 <h2 style="color:#0d4a2a;margin:0 0 8px">DEMO licenc igénylés</h2>
-<p style="color:#444;margin:0 0 16px">${productName} – fizetés nélküli DEMO igény</p>
+<p style="color:#444;margin:0 0 16px">${esc(productName)} – fizetés nélküli DEMO igény</p>
 <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:16px">
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Termék</td><td style="padding:6px 8px;border:1px solid #ddd;font-weight:600">${productName}</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Név</td><td style="padding:6px 8px;border:1px solid #ddd">${input.name}</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">E-mail</td><td style="padding:6px 8px;border:1px solid #ddd">${input.email}</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Telefon</td><td style="padding:6px 8px;border:1px solid #ddd">${input.phone || "nem megadott"}</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Cégnév</td><td style="padding:6px 8px;border:1px solid #ddd">${input.companyName || "nem megadott"}</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Adószám</td><td style="padding:6px 8px;border:1px solid #ddd">${input.taxNumber || "nem megadott"}</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Gépazonosító (HWID)</td><td style="padding:6px 8px;border:1px solid #ddd;font-family:monospace">${hwidValue}</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Tesztidő</td><td style="padding:6px 8px;border:1px solid #ddd">${testUntilText}</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Letöltőlink</td><td style="padding:6px 8px;border:1px solid #ddd"><a href="${downloadUrl}">${downloadUrl}</a></td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Lejár</td><td style="padding:6px 8px;border:1px solid #ddd">${formatDate(expiresAt)}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Termék</td><td style="padding:6px 8px;border:1px solid #ddd;font-weight:600">${esc(productName)}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Név</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(input.name)}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">E-mail</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(input.email)}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Telefon</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(input.phone || "nem megadott")}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Cégnév</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(input.companyName || "nem megadott")}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Adószám</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(input.taxNumber || "nem megadott")}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Gépazonosító (HWID)</td><td style="padding:6px 8px;border:1px solid #ddd;font-family:monospace">${esc(hwidValue)}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Tesztidő</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(testUntilText)}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Letöltőlink</td><td style="padding:6px 8px;border:1px solid #ddd"><a href="${esc(downloadUrl)}">${esc(downloadUrl)}</a></td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Lejár</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(formatDate(expiresAt))}</td></tr>
 </table>
-<p style="margin:0 0 16px"><a href="${licenseMailto}" style="display:inline-block;background:#0d4a2a;color:#ffffff;border-radius:8px;padding:10px 18px;font-weight:700;font-size:14px;text-decoration:none">Licenc küldése az igénylőnek</a></p>
+<p style="margin:0 0 16px"><a href="${esc(licenseMailto)}" style="display:inline-block;background:#0d4a2a;color:#ffffff;border-radius:8px;padding:10px 18px;font-weight:700;font-size:14px;text-decoration:none">Licenc küldése az igénylőnek</a></p>
 <p style="font-size:12px;color:#888;margin:0">Ez a DEMO-igény nem jelenik meg a vásárlási statisztikában, és nem kerül számlázásra.</p>
 </div></body></html>`;
 
