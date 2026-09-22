@@ -337,7 +337,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
-  const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid" | "stale">("all");
+  const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid" | "stale" | "demo">("all");
   const [methodFilter, setMethodFilter] = useState<"all" | "stripe" | "transfer">("all");
   const [snapshots, setSnapshots] = useState<Record<string, InvoiceSnapshotState>>({});
   const [invoiceFilter, setInvoiceFilter] = useState<"all" | "invoiced" | "not-invoiced">("all");
@@ -363,6 +363,8 @@ export function OrdersPanel({ email }: { email: string | null }) {
         if (payFilter === "paid" && order.paymentStatus !== "paid") return false;
         if (payFilter === "unpaid" && order.paymentStatus === "paid") return false;
         if (payFilter === "stale" && !isStaleUnpaid(order)) return false;
+        // DEMO requests are not orders: this filter hides every order.
+        if (payFilter === "demo") return false;
         if (methodFilter === "stripe" && order.paymentProvider !== "stripe") return false;
         if (methodFilter === "transfer" && order.paymentProvider === "stripe") return false;
         if (invoiceFilter === "invoiced" && !order.billingoInvoiceNumber) return false;
@@ -815,6 +817,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 { id: "paid", label: "Rendezett" },
                 { id: "unpaid", label: "Fizetésre vár" },
                 { id: "stale", label: `Régóta vár (${STALE_UNPAID_DAYS}+ nap)` },
+                { id: "demo", label: "DEMO igénylések" },
               ] as const
             ).map((opt) => (
               <button
