@@ -37,11 +37,11 @@ export function parseTiers(value: unknown): CustomTier[] {
 /** Reads every override table. Never throws — falls back to the catalog. */
 export async function readProductOverrides(): Promise<ProductOverrideData> {
   try {
-    const supabase = publicClient();
-    // Price overrides also carry sync bookkeeping, so the table is not exposed
-    // to anonymous readers: this server-side read uses the trusted client and
-    // projects only the public price columns.
+    // These tables carry sync/audit bookkeeping, so they are not exposed to
+    // anonymous readers: this server-side read uses the trusted client and
+    // projects only the public columns.
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const supabase = supabaseAdmin;
     const [content, prices, custom, categories] = await Promise.all([
       supabase
         .from("product_content_overrides")
