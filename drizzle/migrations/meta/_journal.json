@@ -43,6 +43,13 @@
       "when": 1790021034679,
       "tag": "0005_create_newsletter_blocklist",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790059633012,
+      "tag": "0006_create_order_alerts_sent",
+      "breakpoints": true
     }
   ]
 }
