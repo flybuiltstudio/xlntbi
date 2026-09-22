@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 
+import { sanitizeEmbeddedHtml } from "@/lib/sanitize-html";
+
 const TEXT_COLORS = [
   { label: "Arculati zöld", value: "#217346" },
   { label: "Sötét szöveg", value: "#16231d" },
@@ -43,7 +45,10 @@ export function NewsletterEditor({
 
   useEffect(() => {
     const el = ref.current;
-    if (el && el.innerHTML !== value) el.innerHTML = value;
+    // The incoming HTML (also pasted raw in the HTML mode) is hardened before
+    // it is written into the editable area, so it cannot execute here.
+    const safe = sanitizeEmbeddedHtml(value);
+    if (el && el.innerHTML !== safe) el.innerHTML = safe;
   }, [value]);
 
   function exec(command: string, arg?: string) {

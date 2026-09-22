@@ -7,6 +7,7 @@ import {
   MAX_CALCULATOR_HTML_BYTES,
   type CustomCalculatorDraft,
 } from "@/lib/custom-calculators";
+import { sanitizeEmbeddedHtml } from "@/lib/sanitize-html";
 import {
   adminDeleteCustomCalculator,
   adminListCalculatorOrder,
@@ -34,7 +35,8 @@ async function captureCardImage(html: string, script: string): Promise<Blob> {
   const host = document.createElement("div");
   host.style.cssText = `position:fixed;left:-20000px;top:0;width:${CARD_WIDTH}px;background:#ffffff;z-index:-1;`;
   const inner = document.createElement("div");
-  inner.innerHTML = html;
+  // Uploaded markup is hardened before it touches the admin DOM.
+  inner.innerHTML = sanitizeEmbeddedHtml(html);
   host.appendChild(inner);
   document.body.appendChild(host);
   if (script) {
