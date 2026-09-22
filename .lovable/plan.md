@@ -1,34 +1,40 @@
-# Napi jelzések – csak új tételekről levél
+# Napi jelzések egyszeri levele + teszt rendelések törlése
 
-## Cél
-A „Régóta fizetésre vár" (napi 6:00) és a „Számla hiányzik" (napi 6:10) ellenőrzés ugyanarról a megrendelésről csak egyszer küldjön e-mailt. Ha egy rendelés másnap sem javul meg, arról nem megy ismétlő levél — csak azokról, amelyekről korábban még nem küldött a rendszer.
+## 1. Napi jelzések: ugyanarról csak egyszer levél
 
-## Megvalósítás
+A „Régóta fizetésre vár" (6:00) és a „Számla hiányzik" (6:10) ellenőrzés ugyanarról a megrendelésről csak egyszer küldjön e-mailt. Ha másnap sem javult meg, arról nincs újabb levél — csak a korábban még nem jelzett tételekről.
 
-1. **Új tábla: `order_alerts_sent`**
-   - Oszlopok: `id`, `order_number` (text), `alert_type` (text: `stale_unpaid` / `missing_invoice`), `sent_at`.
-   - Egyedi megszorítás: (`alert_type`, `order_number`) — ugyanarról a rendelésről ugyanolyan típusú jelzés csak egyszer rögzíthető.
-   - GRANT: csak `service_role` (a cron szerveroldalon fut); RLS bekapcsolva, policy nélkül — az admin felületen nem jelenik meg.
+- Új tábla `order_alerts_sent`: `id`, `order_number`, `alert_type` (`stale_unpaid` / `missing_invoice`), `sent_at`; egyedi (típus, rendelésszám) párosítás. Csak szerveroldali hozzáférés, RLS bekapcsolva, policy nélkül.
+- `src/lib/maintenance.server.ts`: a két napi ellenőrzés kiszűri a már jelzett rendelésszámokat. Ha nincs új tétel, nem megy e-mail. Küldés után az új rendelésszámok bekerülnek a táblába.
+- A levél végén tájékoztató sor: hány korábban jelzett tétel van még nyitva (levél nélkül).
+- Az admin Megrendelések oldali „Régóta vár (8+ nap)" blokk és szűrő változatlan.
 
-2. **`src/lib/maintenance.server.ts` – a két napi ellenőrzés módosítása**
-   - `runStaleUnpaidCheck()` és `runMissingInvoiceCheck()`: a találatokat összeveti az `order_alerts_sent` táblával az adott `alert_type`-ra, és csak a még nem jelzett rendelésszámok maradnak a levélben.
-   - Ha nincs új tétel, nem megy e-mail (a mai napi „0 új" levél sem).
-   - Levélküldés után az új rendelésszámok beíródnak a táblába (a levél `key`-je továbbra is napi egyediséget garantál).
-   - A levél szövege jelzi, hogy csak új tételeket tartalmaz; a korábban jelzett, de még mindig nyitott tételek száma a levél végén tájékoztató sorban szerepelhet.
+## 2. Augusztusi statisztika-zárás feloldása
 
-3. **Viselkedés élettartamon át**
-   - Ha a rendelés kifizetődik / számla készül, természetesen lekerül a listáról; a rögzített jelzés marad, így ha egy későbbi rendelésnél ugyanaz a rendelésszám újra előfordulna (nem reális), akkor sem megy dupla levél.
-   - Az admin Megrendelések oldali „Régóta vár (8+ nap)" szűrő és piros blokk változatlan marad (az élő lista, nem e-mail).
+- A 2026. augusztusi zárt statisztika-pillanatképek (11 sor) törlése, hogy az augusztus újra nyitott legyen és a rendelések törlése után helyes adatot adjon.
+- A zárás később bármikor újra lefuttatható.
+
+## 3. Teszt rendelések törlése az admin Megrendelések oldalról
+
+Jelenleg 4 rendelés van (1 fizetésre vár, 1 sikertelen, 2 kifizetett) — mind teszt.
+
+- A „Megrendelés törlése" gomb a kifizetett rendelésekhez is megjelenik, **két lépésben megerősítve** (első kattintás figyelmeztet, hogy kifizetett rendelést törölsz, második hajtja végre). A fizetésre váróknál marad az eddigi egyszeres megerősítés.
+- Kifizetett rendelés törlésekor, ha van hozzá Billingo számla (itt: SDB-2026-36), a rendszer először **sztornó bizonylatot készít a Billingóban** a már meglévő sztornó funkcióval. Ha a sztornó nem sikerül, a törlés leáll, és a hibát kiírja — nem törlünk számlázatlan nyomot maga után.
+- A törlés továbbra is naplózódik (`deleted_orders`), a letöltési linkek és számla-pillanatképek is törlődnek, a rendelés eltűnik a listákból és a statisztikákból.
 
 ## Érintett fájlok
-- Új migráció (`order_alerts_sent` tábla + grantek + RLS)
-- `src/lib/maintenance.server.ts` (a két napi ellenőrzés)
+- Új migráció: `order_alerts_sent` tábla
+- `src/lib/maintenance.server.ts` — napi jelzések szűrése
+- `src/lib/admin.server.ts` — törlés kifizetett rendelésre + Billingo sztornó
+- `src/lib/admin.functions.ts`, `src/components/admin-panels.tsx` — gomb a kifizetetteknél, dupla megerősítés
+- Augusztusi statisztika-pillanatképek törlése adatműveletként
 
 ## Nem változik
-- A cron ütemezés (6:00 / 6:10), a levél formátuma, a címzett
-- A heti takarítás, havi zárás, katalógus-audit
-- Az admin felület bármely része
+- Cron ütemezések, levélformátum, címzett
+- Heti takarítás, katalógus-audit, kuponok, hírlevél, fizetés
+- A statisztika oldal felépítése
 
 ## Ellenőrzés
-- Migráció lefut, tábla létezik.
-- Helyben meghívom a két ellenőrzést: első futásra elküldi a meglévőket és rögzíti őket; második futásra (ugyanazon adatokkal) nem küld levelet, mert nincs új tétel.
+- A napi ellenőrzés kétszeri lefuttatása: másodszorra nem küld levelet.
+- Augusztus után újra nyitott időszakként jelenik meg a statisztikában.
+- A törlés gomb kifizetett rendelésnél is működik, a Billingo sztornó naplózva.
