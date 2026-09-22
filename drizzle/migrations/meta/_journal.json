@@ -50,6 +50,13 @@
       "when": 1790059633012,
       "tag": "0006_create_order_alerts_sent",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790112856924,
+      "tag": "0007_restrict_override_table_reads",
+      "breakpoints": true
     }
   ]
 }
