@@ -1,11 +1,10 @@
 /**
  * Server-side reader for the product description / price / custom-product
- * overrides. Uses the publishable key (public read-only policy), never the
- * admin client.
+ * overrides. These tables carry admin bookkeeping columns, so they are not
+ * readable by anonymous clients: every read happens here on the server and
+ * only public columns reach the page.
  */
 
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
 import {
   applyProductOverrides,
   type ProductOverrideData,
@@ -13,23 +12,6 @@ import {
 import type { CustomProductRow, CustomTier } from "./custom-products";
 
 const EMPTY: ProductOverrideData = { content: [], prices: [], custom: [], categories: [] };
-
-function publicClient() {
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-  return createClient<Database>(process.env["SUPABASE_URL"]!, key, {
-    auth: { persistSession: false },
-    global: {
-      fetch: (input, init) => {
-        const h = new Headers(init?.headers);
-        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) {
-          h.delete("Authorization");
-        }
-        h.set("apikey", key);
-        return fetch(input, { ...init, headers: h });
-      },
-    },
-  });
-}
 
 /** Parses the stored licence tiers, dropping anything malformed. */
 export function parseTiers(value: unknown): CustomTier[] {
