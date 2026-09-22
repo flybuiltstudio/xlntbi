@@ -1,29 +1,17 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
 import type { ProductPlacement } from "@/lib/product-categories";
 
 /**
  * Public read of the admin-managed product category/order overrides.
+ * The tables carry admin bookkeeping columns and are not readable by
+ * anonymous clients, so the read happens here with the trusted server client
+ * and only the public columns are returned.
  * Falls back to an empty list, in which case the bundled order applies.
  */
 export const getProductPlacements = createServerFn({ method: "GET" }).handler(
   async (): Promise<{ placements: ProductPlacement[]; categoryOrder: string[] }> => {
     try {
-      const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-      const supabase = createClient<Database>(process.env["SUPABASE_URL"]!, key, {
-        auth: { persistSession: false },
-        global: {
-          fetch: (input, init) => {
-            const h = new Headers(init?.headers);
-            if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) {
-              h.delete("Authorization");
-            }
-            h.set("apikey", key);
-            return fetch(input, { ...init, headers: h });
-          },
-        },
-      });
+      const { supabaseAdmin: supabase } = await import("@/integrations/supabase/client.server");
       const [placementsResult, orderResult] = await Promise.all([
         supabase.from("product_placements").select("slug, category, sort_order"),
         supabase
