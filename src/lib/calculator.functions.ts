@@ -1,7 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
 import { isCalculatorKey } from "@/lib/calculators/registry";
 
 export type CalculatorOverride = {
@@ -14,27 +12,19 @@ export type CalculatorOverride = {
 /**
  * Public read of a calculator override (if an admin uploaded a newer version).
  * Returns null when the calculator still runs the bundled version.
+ *
+ * The table itself is not readable by anonymous clients (it also stores
+ * bookkeeping columns), so the read happens server-side with the trusted
+ * client and only the public markup/script columns are returned. The key is
+ * validated against the calculator registry first.
  */
 export const getCalculatorOverride = createServerFn({ method: "GET" })
   .inputValidator((data) => z.object({ key: z.string() }).parse(data))
   .handler(async ({ data }): Promise<CalculatorOverride | null> => {
     if (!isCalculatorKey(data.key)) return null;
     try {
-      const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-      const supabase = createClient<Database>(process.env["SUPABASE_URL"]!, key, {
-        auth: { persistSession: false },
-        global: {
-          fetch: (input, init) => {
-            const h = new Headers(init?.headers);
-            if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) {
-              h.delete("Authorization");
-            }
-            h.set("apikey", key);
-            return fetch(input, { ...init, headers: h });
-          },
-        },
-      });
-      const { data: row, error } = await supabase
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: row, error } = await supabaseAdmin
         .from("calculator_overrides")
         .select("key, html, script, updated_at")
         .eq("key", data.key)

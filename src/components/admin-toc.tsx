@@ -24,25 +24,44 @@ const calculatorLinks = [
 const buttonClass =
   "block rounded-md border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-primary hover:bg-accent";
 
-export function AdminToc() {
+export type AdminNavLink = readonly [anchor: string, label: string];
+
+/**
+ * Generic button menu for long admin pages: the links are split into two
+ * columns and jump to the matching section anchor on the same page.
+ */
+export function AdminSectionNav({
+  links,
+  columns,
+}: {
+  links?: readonly AdminNavLink[];
+  columns?: readonly (readonly AdminNavLink[])[];
+}) {
+  const groups =
+    columns ??
+    (() => {
+      const all = links ?? [];
+      const half = Math.ceil(all.length / 2);
+      return [all.slice(0, half), all.slice(half)];
+    })();
+
   return (
     <nav id={TOC_ANCHOR} className="mt-6 grid gap-2 sm:grid-cols-2" aria-label="Tartalomjegyzék">
-      <div className="grid gap-2 content-start">
-        {productLinks.map(([id, label]) => (
-          <a key={id} href={`#${id}`} className={buttonClass}>
-            {label}
-          </a>
-        ))}
-      </div>
-      <div className="grid gap-2 content-start">
-        {calculatorLinks.map(([id, label]) => (
-          <a key={id} href={`#${id}`} className={buttonClass}>
-            {label}
-          </a>
-        ))}
-      </div>
+      {groups.map((group, index) => (
+        <div key={index} className="grid gap-2 content-start">
+          {group.map(([id, label]) => (
+            <a key={id} href={`#${id}`} className={buttonClass}>
+              {label}
+            </a>
+          ))}
+        </div>
+      ))}
     </nav>
   );
+}
+
+export function AdminToc() {
+  return <AdminSectionNav columns={[productLinks, calculatorLinks]} />;
 }
 
 export function BackToTop() {

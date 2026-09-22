@@ -50,8 +50,12 @@ export function LiveCouponGuardPanel() {
     }
   }
 
+  const now = Date.now();
+  const validCodes = ALLOWED_LIVE_PROMOTION_CODES.filter((g) => Date.parse(g.expiresAt) > now);
+  const expiredCodes = ALLOWED_LIVE_PROMOTION_CODES.filter((g) => Date.parse(g.expiresAt) <= now);
+
   return (
-    <section className="rounded-xl border border-border bg-card p-5 sm:p-6">
+    <section id="kuponvedelem" className="scroll-mt-24 rounded-xl border border-border bg-card p-5 sm:p-6">
       <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
         <ShieldCheck className="h-5 w-5 text-primary" aria-hidden="true" />
         Kuponvédelem éles környezetben
@@ -59,16 +63,37 @@ export function LiveCouponGuardPanel() {
       <p className="mt-2 text-sm text-muted-foreground">
         Éles fizetésnél csak a kifejezetten engedélyezett kuponkódok maradhatnak aktívak; minden
         más kód (köztük a teszt kódok, pl. {TEST_PROMOTION_CODES.join(", ")}) automatikusan
-        kikapcsolódik. Jelenleg engedélyezett éles kódok:{" "}
-        <strong className="text-foreground">
-          {ALLOWED_LIVE_PROMOTION_CODES.length
-            ? ALLOWED_LIVE_PROMOTION_CODES.map((g) => {
-                const expired = Date.parse(g.expiresAt) <= Date.now();
-                return `${g.code} (${expired ? "lejárt" : "érvényes"}: ${new Date(g.expiresAt).toLocaleString("hu-HU")}-ig)`;
-              }).join(", ")
-            : "nincs"}
-        </strong>
-        .
+        kikapcsolódik.{" "}
+        {validCodes.length ? (
+          <>
+            Jelenleg engedélyezett éles kódok:{" "}
+            <strong className="text-foreground">
+              {validCodes
+                .map(
+                  (g) =>
+                    `${g.code} (érvényes ${new Date(g.expiresAt).toLocaleString("hu-HU")}-ig)`,
+                )
+                .join(", ")}
+            </strong>
+            .
+          </>
+        ) : (
+          "Jelenleg nincs engedélyezett éles kuponkód."
+        )}
+        {expiredCodes.length ? (
+          <>
+            {" "}
+            Lejárt, már nem engedélyezett kódok:{" "}
+            {expiredCodes
+              .map((g) => `${g.code} (lejárt: ${new Date(g.expiresAt).toLocaleString("hu-HU")})`)
+              .join(", ")}
+            .
+          </>
+        ) : null}
+      </p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Az ellenőrzés automatikusan fut: minden vasárnap 2:00-kor a heti karbantartással, és éles
+        fizetés indításakor is (legfeljebb 6 óránként). Az alábbi gombbal bármikor elindíthatod.
       </p>
 
       {guard ? (

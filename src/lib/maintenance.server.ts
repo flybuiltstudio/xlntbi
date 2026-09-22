@@ -161,6 +161,23 @@ export async function runWeeklyCleanup(): Promise<CleanupCounts & { issues: stri
   const coupons = await disableExpiredCoupons();
   issues.push(...demo.notes, ...orderLinks.notes, ...freeLinks.notes, ...coupons.notes);
 
+  // Live coupon guard: keeps only allowlisted / admin-created codes active.
+  let guardDeactivated = 0;
+  try {
+    const { sweepLivePromotionCodes } = await import("./coupon-guard.server");
+    const guard = await sweepLivePromotionCodes();
+    guardDeactivated = guard.deactivated.length;
+    if (!guard.ok) {
+      issues.push(`Éles kuponvédelem hiba: ${guard.error ?? "ismeretlen hiba"}`);
+    } else if (guardDeactivated > 0) {
+      issues.push(`Éles kuponvédelem kikapcsolta: ${guard.deactivated.join(", ")}`);
+    }
+  } catch (error) {
+    issues.push(
+      `Éles kuponvédelem hiba: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+
   let orphanFiles = 0;
   try {
     const scan = await scanStorageOrphans();
@@ -196,6 +213,7 @@ export async function runWeeklyCleanup(): Promise<CleanupCounts & { issues: stri
         ["Lezárt éles letöltési linkek", String(counts.orderLinksClosed)],
         ["Lezárt ingyenes letöltési linkek", String(counts.freeLinksClosed)],
         ["Letiltott lejárt kuponok", String(counts.couponsDisabled)],
+        ["Éles kuponvédelem – kikapcsolt kódok", String(guardDeactivated)],
         ["Hivatkozás nélküli fájlok", String(orphanFiles)],
       ],
       issues,

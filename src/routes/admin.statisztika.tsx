@@ -20,6 +20,16 @@ import { formatPrice, products } from "@/lib/products";
 import { serviceItems } from "@/lib/services";
 import { PageHero } from "@/components/PageHero";
 import { useAdminSession } from "@/components/admin-panels";
+import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
+
+const STATS_NAV = [
+  ["megrendelt-termekek", "Megrendelt termékek"],
+  ["havi-bontas", "Havi bontás grafikonon"],
+  ["megrendeloi-lista", "Megrendelői és terméklista"],
+  ["oldalletoltesek", "Oldalletöltési statisztika"],
+  ["megrendelesek-orankent", "Megrendelések óránként"],
+  ["demo-letoltesek", "DEMO letöltések"],
+] as const;
 import {
   MONTHS,
   MONTHS_SHORT,
@@ -88,6 +98,7 @@ function AdminStatsPage() {
           exportokban
           {role === "admin" ? " – a lenti kapcsolóval jeleníthetők meg." : "."}
         </p>
+        <AdminSectionNav links={STATS_NAV} />
         <MeasurementLegend />
         <StatsPanel />
       </div>
@@ -482,7 +493,7 @@ function StatsPanel() {
               </div>
 
               {/* Termék-összesítő táblázat, csökkenő sorrendben */}
-              <section>
+              <section id="megrendelt-termekek" className="scroll-mt-24">
                 <h2 className="text-xl font-bold text-foreground">
                   Megrendelt termékek – {periodLabel}
                 </h2>
@@ -527,6 +538,7 @@ function StatsPanel() {
                   activeMonth={activeMonth}
                   periodLabel={periodLabel}
                 />
+                <BackToTop />
               </section>
 
               <HourlyOrdersChart rows={rows} />
@@ -541,7 +553,7 @@ function StatsPanel() {
 
               {/* Grafikon – csak konkrét évre */}
               {activeYear !== null ? (
-                <section className="mt-14">
+                <section id="havi-bontas" className="mt-14 scroll-mt-24">
                   <h2 className="text-xl font-bold text-foreground">Havi bontás grafikonon</h2>
 
                   <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
@@ -654,6 +666,7 @@ function StatsPanel() {
                       </tfoot>
                     </table>
                   </div>
+                  <BackToTop />
                 </section>
               ) : null}
 
@@ -987,7 +1000,7 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
       : `${productSel.size} termék kiválasztva`;
 
   return (
-    <section className="mt-14">
+    <section id="megrendeloi-lista" className="mt-14 scroll-mt-24">
       <h2 className="text-xl font-bold text-foreground">Megrendelői és terméklista</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Ezek a listák mindig a kezdetektől számított, teljes megrendelési előzményt mutatják – a
@@ -1153,6 +1166,7 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
           )}
         </div>
       </div>
+      <BackToTop />
     </section>
   );
 }
@@ -1216,7 +1230,7 @@ function PageViewStats() {
   }
 
   return (
-    <section className="mt-14 space-y-14">
+    <section id="oldalletoltesek" className="mt-14 space-y-14 scroll-mt-24">
       <PageViewBlock
         titleBase="Termék Részletek oldalak letöltései"
         note="Csak a publikált (éles) oldalon mért megnyitások. Minden termék szerepel, akkor is, ha nulla."
@@ -1238,6 +1252,7 @@ function PageViewStats() {
         fileBase="szolgaltatas-oldalletoltesek"
         topN={3}
       />
+      <BackToTop />
     </section>
   );
 }
@@ -1784,7 +1799,7 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
         : `${yearSel}. ${MONTHS[monthSel]}`;
 
   return (
-    <section className="mt-14">
+    <section id="megrendelesek-orankent" className="mt-14 scroll-mt-24">
       <h2 className="text-xl font-bold text-foreground">Megrendelések óránként</h2>
       <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
         A megrendelés leadásának időpontja szerint, magyar idő (Europe/Budapest) alapján, a nyári és
@@ -1874,6 +1889,7 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
           darabszáma. Az oszlopra húzva az egeret megjelenik az óraintervallum és a pontos darabszám.
         </p>
       </div>
+      <BackToTop />
     </section>
   );
 }
@@ -1896,7 +1912,7 @@ function DemoDownloads() {
 
   if (rows === null) {
     return (
-      <section className="mt-14">
+      <section id="demo-letoltesek" className="mt-14 scroll-mt-24">
         <h2 className="text-xl font-bold text-foreground">DEMO letöltések</h2>
         <p className="mt-4 text-sm text-muted-foreground">Betöltés…</p>
       </section>
@@ -1945,7 +1961,7 @@ function DemoDownloads() {
   };
 
   return (
-    <section className="mt-14">
+    <section id="demo-letoltesek" className="mt-14 scroll-mt-24">
       <h2 className="text-xl font-bold text-foreground">DEMO letöltések</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Fizetés nélküli DEMO licenc igénylések. Ezek nem jelennek meg a vásárlási statisztikában
@@ -2069,6 +2085,7 @@ function DemoDownloads() {
       ) : (
         <p className="mt-6 text-sm text-muted-foreground">Még nincs DEMO igénylés.</p>
       )}
+      <BackToTop />
     </section>
   );
 }
