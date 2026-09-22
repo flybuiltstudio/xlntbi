@@ -19,6 +19,16 @@ function siteOrigin(): string {
   return process.env["PUBLIC_SITE_URL"] ?? "https://xlntbi.hu";
 }
 
+/** Escapes visitor-supplied values before they go into the owner's HTML mail. */
+function esc(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function formatDate(value: Date): string {
   return `${value.getFullYear()}. ${String(value.getMonth() + 1).padStart(2, "0")}. ${String(
     value.getDate(),
