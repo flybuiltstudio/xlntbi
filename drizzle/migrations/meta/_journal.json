@@ -57,6 +57,13 @@
       "when": 1790112856924,
       "tag": "0007_restrict_override_table_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790114548814,
+      "tag": "0008_restrict_catalog_override_reads_to_server",
+      "breakpoints": true
     }
   ]
 }

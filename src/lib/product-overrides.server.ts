@@ -1,11 +1,10 @@
 /**
  * Server-side reader for the product description / price / custom-product
- * overrides. Uses the publishable key (public read-only policy), never the
- * admin client.
+ * overrides. These tables carry admin bookkeeping columns, so they are not
+ * readable by anonymous clients: every read happens here on the server and
+ * only public columns reach the page.
  */
 
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
 import {
   applyProductOverrides,
   type ProductOverrideData,
@@ -13,23 +12,6 @@ import {
 import type { CustomProductRow, CustomTier } from "./custom-products";
 
 const EMPTY: ProductOverrideData = { content: [], prices: [], custom: [], categories: [] };
-
-function publicClient() {
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-  return createClient<Database>(process.env["SUPABASE_URL"]!, key, {
-    auth: { persistSession: false },
-    global: {
-      fetch: (input, init) => {
-        const h = new Headers(init?.headers);
-        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) {
-          h.delete("Authorization");
-        }
-        h.set("apikey", key);
-        return fetch(input, { ...init, headers: h });
-      },
-    },
-  });
-}
 
 /** Parses the stored licence tiers, dropping anything malformed. */
 export function parseTiers(value: unknown): CustomTier[] {
@@ -55,11 +37,11 @@ export function parseTiers(value: unknown): CustomTier[] {
 /** Reads every override table. Never throws — falls back to the catalog. */
 export async function readProductOverrides(): Promise<ProductOverrideData> {
   try {
-    const supabase = publicClient();
-    // Price overrides also carry sync bookkeeping, so the table is not exposed
-    // to anonymous readers: this server-side read uses the trusted client and
-    // projects only the public price columns.
+    // These tables carry sync/audit bookkeeping, so they are not exposed to
+    // anonymous readers: this server-side read uses the trusted client and
+    // projects only the public columns.
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const supabase = supabaseAdmin;
     const [content, prices, custom, categories] = await Promise.all([
       supabase
         .from("product_content_overrides")
@@ -154,7 +136,7 @@ export async function ensureProductOverrides(force = false): Promise<void> {
  * serves a silently partial list.
  */
 export async function listCustomProductSlugs(): Promise<string[]> {
-  const supabase = publicClient();
+  const { supabaseAdmin: supabase } = await import("@/integrations/supabase/client.server");
   const pageSize = 1000;
   const slugs: string[] = [];
   for (let offset = 0; ; ) {
