@@ -169,7 +169,7 @@ export async function requestDemo(input: {
     "Sarinay Dávid",
     "XLNT BI",
   ].join("\n");
-  const licenseMailto = `mailto:${input.email}?subject=${encodeURIComponent(licenseSubject)}&body=${encodeURIComponent(licenseBody)}`;
+  const licenseMailto = `mailto:${encodeURIComponent(input.email)}?subject=${encodeURIComponent(licenseSubject)}&body=${encodeURIComponent(licenseBody)}`;
 
   const ownerHtml = `<!DOCTYPE html>
 <html lang="hu"><head><meta charset="utf-8"></head>
