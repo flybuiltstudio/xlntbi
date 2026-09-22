@@ -454,11 +454,19 @@ export function OrdersPanel({ email }: { email: string | null }) {
     setBusy(null);
   }
 
-  /** Deletes a never-paid order everywhere, after an explicit confirmation. */
+  /** Deletes an order everywhere, after an explicit confirmation (paid: twice). */
   async function onDeleteUnpaid(order: Order) {
+    const paid = order.paymentStatus === "paid";
     if (
       !window.confirm(
         `Biztosan véglegesen törlöd a ${order.orderNumber} megrendelést?\n\n${order.productName} – ${order.email}\n\nEz nem visszavonható: a megrendelés a listákból és a statisztikákból is eltűnik.`,
+      )
+    )
+      return;
+    if (
+      paid &&
+      !window.confirm(
+        `FIGYELEM: ez egy KIFIZETETT megrendelés (${order.orderNumber}).\n\nHa van hozzá Billingo számla, a rendszer előbb sztornó bizonylatot készít róla, majd törli a megrendelést.\n\nBiztosan folytatod?`,
       )
     )
       return;
