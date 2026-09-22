@@ -429,6 +429,7 @@ export function NewsletterAdminPanel() {
             ) : null}
           </div>
         </div>
+        <BackToTop />
       </section>
 
       {/* ---------------- Campaign (Levélküldő) ---------------- */}
@@ -608,6 +609,7 @@ export function NewsletterAdminPanel() {
             ))}
           </div>
         </div>
+        <BackToTop />
       </section>
 
       {/* ---------------- Subscribers (Feliratkozók) ---------------- */}
@@ -754,6 +756,7 @@ export function NewsletterAdminPanel() {
             </tbody>
           </table>
         </div>
+        <BackToTop />
       </section>
 
       {/* ---------------- Blocklist (Feketelista) ---------------- */}
@@ -852,6 +855,7 @@ export function NewsletterAdminPanel() {
             </tbody>
           </table>
         </div>
+        <BackToTop />
       </section>
 
 
@@ -893,6 +897,7 @@ export function NewsletterAdminPanel() {
             </tbody>
           </table>
         </div>
+        <BackToTop />
       </section>
     </div>
   );
