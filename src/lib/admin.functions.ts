@@ -635,3 +635,55 @@ export const adminCouponSyncStatus = createServerFn({ method: "POST" })
     const { couponSyncStatus } = await import("./coupons-admin.server");
     return { report: await couponSyncStatus(data.environment) };
   });
+
+// --- DEMO requests (separate flow, only surfaced on the orders page) ---------
+
+export const adminListDemoRequests = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { listDemoRequests } = await import("./admin.server");
+    return { demos: await listDemoRequests() };
+  });
+
+export const adminResendDemoDownload = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ demoId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { resendDemoDownload } = await import("./admin.server");
+    return resendDemoDownload(data.demoId);
+  });
+
+export const adminSendDemoLicense = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        demoId: z.string().uuid(),
+        licenseKey: z
+          .string()
+          .trim()
+          .min(8, "A licenszkód túl rövid.")
+          .max(200, "A licenszkód túl hosszú."),
+      })
+      .parse(data),
+  )
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { sendDemoLicense } = await import("./admin.server");
+    return sendDemoLicense(data.demoId, data.licenseKey);
+  });
+
+export const adminCloseDemoRequest = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ demoId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { closeDemoRequest } = await import("./admin.server");
+    return closeDemoRequest(data.demoId);
+  });
