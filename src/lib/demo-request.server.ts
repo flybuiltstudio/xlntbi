@@ -143,6 +143,24 @@ export async function requestDemo(input: {
     ? formatDate(new Date(input.testUntil))
     : "nem megadott";
 
+  const licenseSubject = `${productName} – DEMO – beírandó licenc`;
+  const licenseBody = [
+    "Tisztelt Vásárló!",
+    "",
+    "Küldöm a licencet az alábbi termékhez:",
+    "",
+    `Termék: ${productName}`,
+    "Típus: DEMO (korlátozott idejű)",
+    "",
+    "Licenszkód:",
+    "________________  (IDE ÍRD A LICENSZKÓDOT)",
+    "",
+    "Üdvözlettel:",
+    "Sarinay Dávid",
+    "XLNT BI",
+  ].join("\n");
+  const licenseMailto = `mailto:${input.email}?subject=${encodeURIComponent(licenseSubject)}&body=${encodeURIComponent(licenseBody)}`;
+
   const ownerHtml = `<!DOCTYPE html>
 <html lang="hu"><head><meta charset="utf-8"></head>
 <body style="margin:0;padding:0;background:#f4f5f4;font-family:Arial,Helvetica,sans-serif">
