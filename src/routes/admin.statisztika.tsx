@@ -98,6 +98,7 @@ function AdminStatsPage() {
           exportokban
           {role === "admin" ? " – a lenti kapcsolóval jeleníthetők meg." : "."}
         </p>
+        <AdminSectionNav links={STATS_NAV} />
         <MeasurementLegend />
         <StatsPanel />
       </div>
