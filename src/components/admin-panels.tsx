@@ -1217,6 +1217,10 @@ export function OrdersPanel({ email }: { email: string | null }) {
           ))}
         </div>
       )}
+
+      {payFilter === "all" || payFilter === "demo" ? (
+        <DemoRequestsBlock activeYear={activeYear} activeMonth={activeMonth} />
+      ) : null}
     </div>
   );
 }
