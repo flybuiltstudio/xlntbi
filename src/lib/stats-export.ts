@@ -1,4 +1,5 @@
 import { formatPrice } from "@/lib/products";
+import { safeCell, safeRow } from "@/lib/spreadsheet-safe";
 
 export interface StatExportRow {
   productName: string;

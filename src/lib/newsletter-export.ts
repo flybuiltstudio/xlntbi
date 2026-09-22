@@ -5,6 +5,7 @@
  */
 
 import type { ListTable } from "./stats-export";
+import { safeCell } from "./spreadsheet-safe";
 
 export type ExportSubscriber = {
   lastName: string;
