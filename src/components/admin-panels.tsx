@@ -2838,3 +2838,303 @@ export function ProductOrderPanel() {
     </section>
   );
 }
+
+// ---------------------------------------------------------------------------
+// DEMO requests on the orders page.
+// The DEMO flow stays completely separate (no invoicing, no Stripe, no orders
+// row); only the customer-facing actions are surfaced here.
+// ---------------------------------------------------------------------------
+
+type AdminDemo = Awaited<ReturnType<typeof adminListDemoRequests>>["demos"][number];
+
+export function DemoRequestsBlock({
+  activeYear,
+  activeMonth,
+}: {
+  activeYear: number | null;
+  activeMonth: number | "all";
+}) {
+  const load = useServerFn(adminListDemoRequests);
+  const resend = useServerFn(adminResendDemoDownload);
+  const sendLicense = useServerFn(adminSendDemoLicense);
+  const close = useServerFn(adminCloseDemoRequest);
+
+  const [demos, setDemos] = useState<AdminDemo[] | null>(null);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [licenseFor, setLicenseFor] = useState<string | null>(null);
+  const [licenseKey, setLicenseKey] = useState("");
+
+  const refresh = useCallback(async () => {
+    try {
+      const result = await load();
+      setDemos(result.demos);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "A DEMO igénylések betöltése nem sikerült.");
+      setDemos([]);
+    }
+  }, [load]);
+
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
+
+  const visible = useMemo(
+    () =>
+      (demos ?? []).filter((demo) => {
+        const date = new Date(demo.createdAt);
+        if (activeYear !== null && date.getFullYear() !== activeYear) return false;
+        if (activeMonth !== "all" && date.getMonth() !== activeMonth) return false;
+        return true;
+      }),
+    [demos, activeYear, activeMonth],
+  );
+
+  async function onResend(demo: AdminDemo) {
+    setBusy(demo.id);
+    setMessage("");
+    setError("");
+    try {
+      const result = await resend({ data: { demoId: demo.id } });
+      if (result.ok) {
+        setMessage(`Új DEMO letöltési link elküldve: ${demo.email}`);
+        await refresh();
+      } else {
+        setError(result.error ?? "A link újraküldése nem sikerült.");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "A link újraküldése nem sikerült.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function onSendLicense(demo: AdminDemo) {
+    setBusy(demo.id);
+    setMessage("");
+    setError("");
+    try {
+      const result = await sendLicense({ data: { demoId: demo.id, licenseKey } });
+      if (result.ok) {
+        setMessage(`DEMO licenc elküldve: ${demo.email}`);
+        setLicenseFor(null);
+        setLicenseKey("");
+      } else {
+        setError(result.error ?? "A licenc küldése nem sikerült.");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "A licenc küldése nem sikerült.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function onClose(demo: AdminDemo) {
+    if (
+      !window.confirm(
+        `Biztosan lezárod ${demo.name} (${demo.email}) DEMO igénylését? A letöltési linkje azonnal érvénytelen lesz.`,
+      )
+    ) {
+      return;
+    }
+    setBusy(demo.id);
+    setMessage("");
+    setError("");
+    try {
+      const result = await close({ data: { demoId: demo.id } });
+      if (result.ok) {
+        setMessage("A DEMO igénylés lezárva, a letöltési link érvénytelen.");
+        await refresh();
+      } else {
+        setError(result.error ?? "A lezárás nem sikerült.");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "A lezárás nem sikerült.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  if (demos === null) {
+    return <p className="mt-8 text-sm text-muted-foreground">DEMO igénylések betöltése…</p>;
+  }
+
+  return (
+    <div className="mt-8">
+      <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+        DEMO igénylések ({visible.length})
+      </h3>
+      <p className="mt-1 text-xs text-muted-foreground">
+        A DEMO teljesen külön folyamat: nincs fizetés és nincs számlázás. Itt csak a vevőnek szóló
+        műveletek érhetők el.
+      </p>
+
+      {message ? (
+        <p className="mt-4 rounded-md border border-border bg-muted px-4 py-3 text-sm text-foreground">
+          {message}
+        </p>
+      ) : null}
+      {error ? (
+        <p className="mt-4 rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </p>
+      ) : null}
+
+      {visible.length === 0 ? (
+        <p className="mt-4 text-sm text-muted-foreground">
+          A kiválasztott időszakban nincs DEMO igénylés.
+        </p>
+      ) : (
+        <div className="mt-4 space-y-4">
+          {visible.map((demo) => {
+            const expired = Date.parse(demo.expiresAt) < Date.now() || demo.closedAt !== null;
+            return (
+              <article
+                key={demo.id}
+                className="rounded-xl border border-amber-500/40 bg-amber-500/5 p-5 text-sm text-foreground"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-base font-semibold">{demo.productName}</h2>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      DEMO · {new Date(demo.createdAt).toLocaleString("hu-HU")}
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-amber-500/20 px-3 py-1 text-xs font-semibold text-amber-700 dark:text-amber-300">
+                    DEMO {expired ? "· lezárva" : "· aktív"}
+                  </span>
+                </div>
+
+                <dl className="mt-4 grid gap-x-6 gap-y-1 text-xs text-muted-foreground sm:grid-cols-2">
+                  <div>
+                    <dt className="inline font-semibold">Név: </dt>
+                    <dd className="inline">{demo.name}</dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold">E-mail: </dt>
+                    <dd className="inline">{demo.email}</dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold">Telefon: </dt>
+                    <dd className="inline">{demo.phone ?? "—"}</dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold">Cégnév: </dt>
+                    <dd className="inline">{demo.companyName ?? "—"}</dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold">Adószám: </dt>
+                    <dd className="inline">{demo.taxNumber ?? "—"}</dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold">Gépazonosító (HWID): </dt>
+                    <dd className="inline font-mono">{demo.hwid ?? "—"}</dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold">Tesztidő: </dt>
+                    <dd className="inline">
+                      {demo.testUntil
+                        ? new Date(demo.testUntil).toLocaleDateString("hu-HU")
+                        : "nem megadott"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold">Link lejárata: </dt>
+                    <dd className="inline">
+                      {new Date(demo.expiresAt).toLocaleString("hu-HU")}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="inline font-semibold">Letöltések: </dt>
+                    <dd className="inline">
+                      {demo.downloadCount} / {demo.maxDownloads}
+                    </dd>
+                  </div>
+                </dl>
+
+                <div className="mt-5 flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={busy === demo.id}
+                    onClick={() => void onResend(demo)}
+                    className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent disabled:opacity-60"
+                  >
+                    Letöltési link újraküldése
+                  </button>
+                  {licenseFor === demo.id ? (
+                    <>
+                      <input
+                        value={licenseKey}
+                        onChange={(e) => setLicenseKey(e.target.value)}
+                        placeholder="DEMO licenszkód"
+                        className="rounded-md border border-input bg-background px-3 py-2 text-xs text-foreground outline-none focus:border-ring"
+                      />
+                      <button
+                        type="button"
+                        disabled={busy === demo.id || licenseKey.trim().length < 8}
+                        onClick={() => void onSendLicense(demo)}
+                        className="rounded-md bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                      >
+                        DEMO licenc küldése
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLicenseFor(null);
+                          setLicenseKey("");
+                        }}
+                        className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-muted-foreground hover:bg-accent"
+                      >
+                        Mégsem
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLicenseFor(demo.id);
+                        setLicenseKey("");
+                      }}
+                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
+                    >
+                      Licenc küldése
+                    </button>
+                  )}
+                  <a
+                    href={`mailto:${demo.email}?subject=${encodeURIComponent(
+                      `DEMO – ${demo.productName}`,
+                    )}`}
+                    className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
+                  >
+                    E-mail a vevőnek
+                  </a>
+                  <button
+                    type="button"
+                    disabled={busy === demo.id || expired}
+                    onClick={() => void onClose(demo)}
+                    className="ml-auto rounded-md border border-destructive/40 bg-destructive/10 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/20 disabled:opacity-60"
+                    title="A DEMO igénylés lezárása: a letöltési link azonnal érvénytelen lesz"
+                  >
+                    DEMO lezárása
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      document
+                        .getElementById("rendeles-szurok")
+                        ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                    }
+                    className="rounded-md border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent"
+                  >
+                    ↑ Tetejére
+                  </button>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
