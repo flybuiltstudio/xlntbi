@@ -185,7 +185,7 @@ export function CouponAdminPanel() {
   }
 
   return (
-    <section>
+    <section id="kuponok-listaja" className="scroll-mt-24">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
