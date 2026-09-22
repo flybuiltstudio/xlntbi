@@ -213,6 +213,7 @@ export async function runWeeklyCleanup(): Promise<CleanupCounts & { issues: stri
         ["Lezárt éles letöltési linkek", String(counts.orderLinksClosed)],
         ["Lezárt ingyenes letöltési linkek", String(counts.freeLinksClosed)],
         ["Letiltott lejárt kuponok", String(counts.couponsDisabled)],
+        ["Éles kuponvédelem – kikapcsolt kódok", String(guardDeactivated)],
         ["Hivatkozás nélküli fájlok", String(orphanFiles)],
       ],
       issues,
