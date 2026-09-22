@@ -923,7 +923,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
         </div>
       ) : null}
 
-      {orders === null ? (
+      {payFilter === "demo" ? null : orders === null ? (
         <p className="mt-8 text-sm text-muted-foreground">Betöltés…</p>
       ) : orders.length === 0 ? (
         <p className="mt-8 text-sm text-muted-foreground">Még nincs megrendelés.</p>
