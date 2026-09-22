@@ -750,11 +750,23 @@ export async function deleteUnpaidOrder(
     .maybeSingle();
 
   if (!order) return { ok: false, error: "A megrendelés nem található." };
-  if (order.payment_status === "paid") {
-    return {
-      ok: false,
-      error: "Ez a megrendelés ki van fizetve, ezért nem törölhető.",
-    };
+
+  const wasPaid = order.payment_status === "paid";
+
+  // A paid order may already have a Billingo invoice: cancel (storno) it first,
+  // so we never delete an order that leaves a live invoice behind.
+  if (wasPaid && order.billingo_invoice_id) {
+    const { cancelInvoiceForOrder } = await import("./billingo.server");
+    const storno = await cancelInvoiceForOrder(order as any, {
+      reason: "Admin törlés – kifizetett megrendelés",
+      source: "admin_retry",
+    });
+    if (!storno.ok) {
+      return {
+        ok: false,
+        error: `A Billingo számla sztornózása nem sikerült, ezért nem töröltem: ${storno.error ?? "ismeretlen hiba"}`,
+      };
+    }
   }
 
   const { error: logError } = await (supabaseAdmin as any).from("deleted_orders").insert({
@@ -771,7 +783,9 @@ export async function deleteUnpaidOrder(
     order_created_at: order.created_at ?? null,
     deleted_by: deletedBy?.userId ?? null,
     deleted_by_email: deletedBy?.email ?? null,
-    reason: "Admin törlés – fizetésre váró megrendelés",
+    reason: wasPaid
+      ? `Admin törlés – kifizetett megrendelés${order.billingo_invoice_number ? ` (számla sztornózva: ${order.billingo_invoice_number})` : ""}`
+      : "Admin törlés – fizetésre váró megrendelés",
   });
   if (logError) {
     console.error("Deleted order logging failed:", logError.message);
