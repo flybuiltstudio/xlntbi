@@ -180,6 +180,7 @@ export async function requestDemo(input: {
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Letöltőlink</td><td style="padding:6px 8px;border:1px solid #ddd"><a href="${downloadUrl}">${downloadUrl}</a></td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Lejár</td><td style="padding:6px 8px;border:1px solid #ddd">${formatDate(expiresAt)}</td></tr>
 </table>
+<p style="margin:0 0 16px"><a href="${licenseMailto}" style="display:inline-block;background:#0d4a2a;color:#ffffff;border-radius:8px;padding:10px 18px;font-weight:700;font-size:14px;text-decoration:none">Licenc küldése az igénylőnek</a></p>
 <p style="font-size:12px;color:#888;margin:0">Ez a DEMO-igény nem jelenik meg a vásárlási statisztikában, és nem kerül számlázásra.</p>
 </div></body></html>`;
 
@@ -198,6 +199,8 @@ export async function requestDemo(input: {
     `Tesztidő:      ${testUntilText}`,
     `Letöltőlink:   ${downloadUrl}`,
     `Lejár:         ${formatDate(expiresAt)}`,
+    "",
+    `Licenc küldése az igénylőnek (előre kitöltött levél): ${licenseMailto}`,
     "",
     "Ez a DEMO-igény nem jelenik meg a vásárlási statisztikában.",
   ].join("\n");
