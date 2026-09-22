@@ -16,6 +16,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { NewsletterEditor } from "@/components/NewsletterEditor";
 import { NewsletterHtmlEditor } from "@/components/NewsletterHtmlEditor";
 import { inputClass } from "@/components/admin-panels";
+import { BackToTop } from "@/components/admin-toc";
 import {
   addNewsletterBlocklistEntry,
   deleteNewsletterSubscriber,
