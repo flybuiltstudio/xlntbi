@@ -565,7 +565,8 @@ export async function exportTableXlsx(filename: string, sheetName: string, table
     ...table.body,
     ...(table.foot ? [table.foot] : []),
   ] as (string | number)[][];
-  const sheet = XLSX.utils.aoa_to_sheet(allRows.map(safeRow));
+  const safeRows: (string | number)[][] = allRows.map((row) => safeRow(row));
+  const sheet = XLSX.utils.aoa_to_sheet(safeRows);
   sheet["!cols"] = table.head.map((h, i) => {
     let w = h.length;
     for (const row of [...table.body, ...(table.foot ? [table.foot] : [])]) {
