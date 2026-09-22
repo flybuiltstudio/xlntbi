@@ -1837,4 +1837,205 @@ export async function retryCancellation(
   return { ok: true };
 }
 
+// ---------------------------------------------------------------------------
+// DEMO requests — admin side of the separate DEMO flow (no invoicing, no Stripe)
+// ---------------------------------------------------------------------------
+
+export type AdminDemoRequest = {
+  id: string;
+  productSlug: string;
+  productName: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  companyName: string | null;
+  taxNumber: string | null;
+  hwid: string | null;
+  testUntil: string | null;
+  createdAt: string;
+  expiresAt: string;
+  downloadCount: number;
+  maxDownloads: number;
+  closedAt: string | null;
+  lastDownloadedAt: string | null;
+};
+
+const DEMO_EXPIRY_DAYS = 7;
+const DEMO_MAX_DOWNLOADS = 5;
+
+function demoToken(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function demoDate(value: Date): string {
+  return `${value.getFullYear()}. ${String(value.getMonth() + 1).padStart(2, "0")}. ${String(
+    value.getDate(),
+  ).padStart(2, "0")}.`;
+}
+
+/** Every DEMO request, newest first, for the admin orders page. */
+export async function listDemoRequests(): Promise<AdminDemoRequest[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await (supabaseAdmin as any)
+    .from("demo_requests")
+    .select(
+      "id, product_slug, product_name, name, email, phone, company_name, tax_number, hwid, test_until, created_at, expires_at, download_count, max_downloads, closed_at, last_downloaded_at",
+    )
+    .order("created_at", { ascending: false })
+    .limit(200);
+  if (error) {
+    console.error("Admin DEMO list failed:", error.message);
+    return [];
+  }
+  return ((data ?? []) as any[]).map((r) => ({
+    id: r.id,
+    productSlug: r.product_slug,
+    productName: r.product_name,
+    name: r.name,
+    email: r.email,
+    phone: r.phone ?? null,
+    companyName: r.company_name ?? null,
+    taxNumber: r.tax_number ?? null,
+    hwid: r.hwid ?? null,
+    testUntil: r.test_until ?? null,
+    createdAt: r.created_at,
+    expiresAt: r.expires_at,
+    downloadCount: r.download_count ?? 0,
+    maxDownloads: r.max_downloads ?? 0,
+    closedAt: r.closed_at ?? null,
+    lastDownloadedAt: r.last_downloaded_at ?? null,
+  }));
+}
+
+/**
+ * Issues a fresh DEMO download token (7 days / 5 downloads) and re-sends the
+ * same DEMO download e-mail the requester got originally.
+ */
+export async function resendDemoDownload(
+  id: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: row } = await (supabaseAdmin as any)
+    .from("demo_requests")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (!row) return { ok: false, error: "A DEMO igénylés nem található." };
+
+  const { getProduct } = await import("./products");
+  const product = getProduct(row.product_slug as string);
+  if (!product?.download) {
+    return { ok: false, error: "Ehhez a termékhez nincs letölthető fájl." };
+  }
+
+  const token = demoToken();
+  const expiresAt = new Date(Date.now() + DEMO_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
+  const { error: updateError } = await (supabaseAdmin as any)
+    .from("demo_requests")
+    .update({
+      token,
+      download_count: 0,
+      max_downloads: DEMO_MAX_DOWNLOADS,
+      expires_at: expiresAt.toISOString(),
+      closed_at: null,
+    })
+    .eq("id", id);
+  if (updateError) return { ok: false, error: "Az új DEMO link mentése nem sikerült." };
+
+  const { withXlntPrefix } = await import("./product-name");
+  const productName = withXlntPrefix(product.name);
+  const origin = process.env["PUBLIC_SITE_URL"] ?? "https://xlntbi.hu";
+  const { sendEmails } = await import("./notify.server");
+  const ok = await sendEmails([
+    {
+      template: "letoltes-elerheto",
+      to: row.email as string,
+      key: `demo-${token.slice(0, 12)}`,
+      data: {
+        name: row.name as string,
+        orderNumber: "DEMO",
+        productName,
+        productLabel: `${productName} – DEMO licenc`,
+        tierLabel: "DEMO",
+        fileName: product.download.fileName,
+        downloadUrl: `${origin}/api/public/letoltes/${token}`,
+        expiresAt: demoDate(expiresAt),
+        maxDownloads: DEMO_MAX_DOWNLOADS,
+        isDemo: true,
+        demoHwid: (row.hwid as string | null) || "nem megadott",
+        rows: [
+          ["Termék", productName],
+          ["Licenc", "DEMO (korlátozott idejű)"],
+          ["Fájl", product.download.fileName],
+          ["Elérhető eddig", demoDate(expiresAt)],
+        ] as Array<[string, string]>,
+      },
+      replyTo: "xllentac@gmail.com",
+    },
+  ]);
+  if (!ok) return { ok: false, error: "A DEMO letöltési levél kiküldése nem sikerült." };
+  return { ok: true };
+}
+
+/** Sends a DEMO license key to the requester, with a copy to the internal address. */
+export async function sendDemoLicense(
+  id: string,
+  licenseKey: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: row } = await (supabaseAdmin as any)
+    .from("demo_requests")
+    .select("id, name, email, product_name")
+    .eq("id", id)
+    .maybeSingle();
+  if (!row) return { ok: false, error: "A DEMO igénylés nem található." };
+
+  const { withXlntPrefix } = await import("./product-name");
+  const data = {
+    name: row.name as string,
+    orderNumber: "DEMO",
+    productName: withXlntPrefix(row.product_name as string),
+    tierLabel: "DEMO",
+    licenseKey,
+  };
+
+  const { sendEmails } = await import("./notify.server");
+  const stamp = Date.now();
+  const ok = await sendEmails([
+    {
+      template: "licensz-kod",
+      to: row.email as string,
+      key: `demo-licensz-${id}-${stamp}`,
+      data,
+      replyTo: "info@xlntbi.hu",
+    },
+    {
+      template: "licensz-kod",
+      to: LICENSE_BCC,
+      key: `demo-licensz-${id}-${stamp}-copy`,
+      data,
+      replyTo: "info@xlntbi.hu",
+    },
+  ]);
+  if (!ok) return { ok: false, error: "A DEMO licenszkód kiküldése nem sikerült." };
+  return { ok: true };
+}
+
+/**
+ * Closes a DEMO request: the download link becomes invalid immediately, but the
+ * record stays in the DEMO statistics (same behaviour as the weekly cleanup).
+ */
+export async function closeDemoRequest(id: string): Promise<{ ok: boolean; error?: string }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const nowIso = new Date().toISOString();
+  const { error } = await (supabaseAdmin as any)
+    .from("demo_requests")
+    .update({ closed_at: nowIso, expires_at: new Date(Date.now() - 1000).toISOString() })
+    .eq("id", id);
+  if (error) return { ok: false, error: "A DEMO lezárása nem sikerült." };
+  return { ok: true };
+}
+
 
