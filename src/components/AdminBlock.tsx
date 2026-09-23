@@ -11,15 +11,17 @@ export function AdminBlock({
   title,
   description,
   children,
+  anchorId,
 }: {
   icon: LucideIcon;
   title: string;
   description: ReactNode;
   children: ReactNode;
+  anchorId?: string;
 }) {
   return (
     <section>
-      <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+      <h2 id={anchorId} className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
         <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
         {title}
       </h2>

@@ -59,8 +59,9 @@ function AdminCouponsPage() {
             </div>
           ) : null}
 
-          <div id="kupon-elozmenyek" className="scroll-mt-24">
+          <div>
             <AdminBlock
+              anchorId="kupon-elozmenyek"
               icon={History}
               title="Kupon előzmények"
               description="Itt látod, melyik kuponkódot mikor váltották be, mennyi kedvezményt adott, és melyik rendeléshez tartozik. Így egy hibás vagy lejárt kupon miatti ügyféligényt azonnal ellenőrizhetsz."
