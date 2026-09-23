@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import { adminListCouponUsage } from "@/lib/admin.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
-import { safeCell } from "@/lib/spreadsheet-safe";
+import { AdminDatePicker } from "@/components/AdminDatePicker";
+import { TableExportButtons } from "@/components/TableExportButtons";
+import type { ListTable } from "@/lib/stats-export";
 
 type Row = Awaited<ReturnType<typeof adminListCouponUsage>>["rows"][number];
 type Env = "sandbox" | "live";
@@ -85,23 +87,15 @@ export function CouponUsagePanel() {
 
   const totalDiscount = visible.reduce((sum, r) => sum + r.discountAmount, 0);
 
-  function exportCsv() {
-    const header = [
-      "Dátum",
-      "Kuponkód",
-      "Kedvezmény szabály",
-      "Kedvezmény",
-      "Fizetett",
-      "Eredeti",
-      "Fizetési státusz",
-      "Rendelésszám",
-      "Termék",
-      "Vevő",
-      "E-mail",
-      "Számlaszám",
-    ];
-    const lines = visible.map((r) =>
-      [
+  const exportTable: ListTable | null = visible.length
+    ? {
+        title: "Kupon előzmények",
+        subtitle: `${env === "live" ? "Éles" : "Teszt"} környezet – az aktuális szűrés eredménye`,
+        head: [
+          "Dátum", "Kuponkód", "Kedvezmény szabály", "Kedvezmény (Ft)", "Fizetett (Ft)",
+          "Eredeti (Ft)", "Fizetési státusz", "Rendelésszám", "Termék", "Vevő", "E-mail", "Számlaszám",
+        ],
+        body: visible.map((r) => [
         dateHu(r.createdAt),
         r.code ?? "",
         r.rule ?? "",
@@ -114,20 +108,11 @@ export function CouponUsagePanel() {
         r.order?.billingName ?? "",
         r.customerEmail ?? r.order?.email ?? "",
         r.order?.billingoInvoiceNumber ?? "",
-      ]
-        .map((v) => `"${String(safeCell(v as string | number | null)).replace(/"/g, '""')}"`)
-        .join(";"),
-    );
-    const blob = new Blob([`\uFEFF${[header.join(";"), ...lines].join("\r\n")}`], {
-      type: "text/csv;charset=utf-8",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `kupon-felhasznalas-${env}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+        ]),
+        foot: ["Összesen", "", "", totalDiscount, "", "", "", `${visible.length} beváltás`, "", "", "", ""],
+        rightCols: [3, 4, 5],
+      }
+    : null;
 
   return (
     <section className="mt-4">
@@ -155,24 +140,8 @@ export function CouponUsagePanel() {
             <option value="fixed">Fix összeg</option>
           </select>
         </label>
-        <label className="text-sm">
-          <span className="block text-xs font-medium text-muted-foreground">Ettől</span>
-          <input
-            type="date"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-            className="mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
-          />
-        </label>
-        <label className="text-sm">
-          <span className="block text-xs font-medium text-muted-foreground">Eddig</span>
-          <input
-            type="date"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-            className="mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
-          />
-        </label>
+        <AdminDatePicker label="Ettől" value={from} onChange={setFrom} />
+        <AdminDatePicker label="Eddig" value={to} onChange={setTo} />
         <label className="text-sm">
           <span className="block text-xs font-medium text-muted-foreground">Keresés</span>
           <input
@@ -194,14 +163,7 @@ export function CouponUsagePanel() {
           )}
           Frissítés
         </button>
-        <button
-          type="button"
-          onClick={exportCsv}
-          disabled={visible.length === 0}
-          className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:opacity-60"
-        >
-          CSV export
-        </button>
+        <TableExportButtons baseName={`kupon-elozmenyek-${env}`} sheetName="Kupon előzmények" table={exportTable} />
         {from || to || type !== "all" || filter ? (
           <button
             type="button"

@@ -21,14 +21,15 @@ import { serviceItems } from "@/lib/services";
 import { PageHero } from "@/components/PageHero";
 import { useAdminSession } from "@/components/admin-panels";
 import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
+import { TableExportButtons } from "@/components/TableExportButtons";
 
 const STATS_NAV = [
   ["megrendelt-termekek", "Megrendelt termékek"],
   ["havi-bontas", "Havi bontás grafikonon"],
-  ["megrendeloi-lista", "Megrendelői és terméklista"],
-  ["oldalletoltesek", "Oldalletöltési statisztika"],
   ["megrendelesek-orankent", "Megrendelések óránként"],
+  ["megrendeloi-lista", "Megrendelői és terméklista"],
   ["demo-letoltesek", "DEMO letöltések"],
+  ["oldalletoltesek", "Oldalletöltési statisztika"],
 ] as const;
 import {
   MONTHS,
@@ -493,8 +494,8 @@ function StatsPanel() {
               </div>
 
               {/* Termék-összesítő táblázat, csökkenő sorrendben */}
-              <section id="megrendelt-termekek" className="scroll-mt-24">
-                <h2 className="text-xl font-bold text-foreground">
+              <section>
+                <h2 id="megrendelt-termekek" className="scroll-mt-24 text-xl font-bold text-foreground">
                   Megrendelt termékek – {periodLabel}
                 </h2>
                 <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
@@ -544,17 +545,18 @@ function StatsPanel() {
               <HourlyOrdersChart rows={rows} />
 
               {/* DEMO letöltések – fizetés nélküli DEMO igénylések */}
-              <DemoDownloads />
-
               {/* Megrendelői és terméklista – a kezdetektől, szűrőktől függetlenül */}
               <CustomerProductLists rows={rows} />
+
+              {/* DEMO letöltések – fizetés nélküli DEMO igénylések */}
+              <DemoDownloads />
 
               <PageViewStats />
 
               {/* Grafikon – csak konkrét évre */}
               {activeYear !== null ? (
-                <section id="havi-bontas" className="mt-14 scroll-mt-24">
-                  <h2 className="text-xl font-bold text-foreground">Havi bontás grafikonon</h2>
+                <section className="mt-14">
+                  <h2 id="havi-bontas" className="scroll-mt-24 text-xl font-bold text-foreground">Havi bontás grafikonon</h2>
 
                   <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
                     <p className="text-sm text-muted-foreground">
@@ -1000,8 +1002,8 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
       : `${productSel.size} termék kiválasztva`;
 
   return (
-    <section id="megrendeloi-lista" className="mt-14 scroll-mt-24">
-      <h2 className="text-xl font-bold text-foreground">Megrendelői és terméklista</h2>
+    <section className="mt-14">
+      <h2 id="megrendeloi-lista" className="scroll-mt-24 text-xl font-bold text-foreground">Megrendelői és terméklista</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Ezek a listák mindig a kezdetektől számított, teljes megrendelési előzményt mutatják – a
         fenti szűrők ezekre nem vonatkoznak. Több megrendelőt vagy terméket is ki lehet választani,
@@ -1230,8 +1232,9 @@ function PageViewStats() {
   }
 
   return (
-    <section id="oldalletoltesek" className="mt-14 space-y-14 scroll-mt-24">
+    <section className="mt-14 space-y-14">
       <PageViewBlock
+        anchorId="oldalletoltesek"
         titleBase="Termék Részletek oldalak letöltései"
         note="Csak a publikált (éles) oldalon mért megnyitások. Minden termék szerepel, akkor is, ha nulla."
         firstColumn="Termék"
@@ -1258,6 +1261,7 @@ function PageViewStats() {
 }
 
 function PageViewBlock({
+  anchorId,
   titleBase,
   note,
   firstColumn,
@@ -1267,6 +1271,7 @@ function PageViewBlock({
   fileBase,
   topN,
 }: {
+  anchorId?: string;
   titleBase: string;
   note: string;
   firstColumn: string;
@@ -1304,7 +1309,7 @@ function PageViewBlock({
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-foreground">{title}</h2>
+      <h2 id={anchorId} className="scroll-mt-24 text-xl font-bold text-foreground">{title}</h2>
       <p className="mt-2 text-sm text-muted-foreground">{note}</p>
 
       <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
@@ -1687,6 +1692,22 @@ function ProductConversion({
       .sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1) || b.views - a.views);
   }, [counts, rows, activeYear, activeMonth]);
 
+  const exportTable: ListTable | null = table.length
+    ? {
+        title: `Termékenkénti konverziós arány – ${periodLabel}`,
+        subtitle: "Konverzió = kifizetett vásárlások / termékmegtekintések × 100",
+        head: ["Termék", "Megtekintés (db)", "Kifizetett vásárlás (db)", "Konverzió"],
+        body: table.map((row) => [
+          row.label,
+          row.views,
+          row.paid,
+          row.rate === null ? "—" : `${row.rate.toFixed(2)} %`,
+        ]),
+        rightCols: [1, 2, 3],
+      }
+    : null;
+  const exportBase = `xlntbi-termek-konverzio-${slugify(periodLabel)}`;
+
   return (
     <div className="mt-10">
       <h3 className="text-base font-bold text-foreground">
@@ -1697,6 +1718,13 @@ function ProductConversion({
         100. A megtekintések a publikált oldalon mért, havi bontású adatok, tehát ugyanarra az
         időszakra vonatkoznak, mint a megrendelések. Megtekintés nélkül a konverzió helyén „—” áll.
       </p>
+      <div className="mt-4">
+        <TableExportButtons
+          baseName={exportBase}
+          sheetName="Termék konverzió"
+          table={exportTable}
+        />
+      </div>
 
       {error ? (
         <p className="mt-4 text-sm text-destructive">{error}</p>
@@ -1799,8 +1827,8 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
         : `${yearSel}. ${MONTHS[monthSel]}`;
 
   return (
-    <section id="megrendelesek-orankent" className="mt-14 scroll-mt-24">
-      <h2 className="text-xl font-bold text-foreground">Megrendelések óránként</h2>
+    <section className="mt-14">
+      <h2 id="megrendelesek-orankent" className="scroll-mt-24 text-xl font-bold text-foreground">Megrendelések óránként</h2>
       <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
         A megrendelés leadásának időpontja szerint, magyar idő (Europe/Budapest) alapján, a nyári és
         téli időszámítást is helyesen kezelve. Minden leadott megrendelés beleszámít, fizetési
@@ -1912,8 +1940,8 @@ function DemoDownloads() {
 
   if (rows === null) {
     return (
-      <section id="demo-letoltesek" className="mt-14 scroll-mt-24">
-        <h2 className="text-xl font-bold text-foreground">DEMO letöltések</h2>
+      <section className="mt-14">
+        <h2 id="demo-letoltesek" className="scroll-mt-24 text-xl font-bold text-foreground">DEMO letöltések</h2>
         <p className="mt-4 text-sm text-muted-foreground">Betöltés…</p>
       </section>
     );
@@ -1961,8 +1989,8 @@ function DemoDownloads() {
   };
 
   return (
-    <section id="demo-letoltesek" className="mt-14 scroll-mt-24">
-      <h2 className="text-xl font-bold text-foreground">DEMO letöltések</h2>
+    <section className="mt-14">
+      <h2 id="demo-letoltesek" className="scroll-mt-24 text-xl font-bold text-foreground">DEMO letöltések</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Fizetés nélküli DEMO licenc igénylések. Ezek nem jelennek meg a vásárlási statisztikában
         és nem kerülnek számlázásra.

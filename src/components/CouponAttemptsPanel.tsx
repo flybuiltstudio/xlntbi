@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import { adminListCouponAttempts } from "@/lib/admin.functions";
 import { COUPON_REASON_LABEL } from "@/lib/coupon-reasons";
-import { safeCell } from "@/lib/spreadsheet-safe";
+import { AdminDatePicker } from "@/components/AdminDatePicker";
+import { TableExportButtons } from "@/components/TableExportButtons";
+import type { ListTable } from "@/lib/stats-export";
 
 type Row = Awaited<ReturnType<typeof adminListCouponAttempts>>["rows"][number];
 
@@ -63,22 +65,14 @@ export function CouponAttemptsPanel() {
 
   const reasons = [...new Set(rows.map((r) => r.reason))];
 
-  function exportCsv() {
-    const header = [
-      "Dátum",
-      "Környezet",
-      "Kuponkód",
-      "Hibakód",
-      "Hiba",
-      "Részletek",
-      "Felhasználó (e-mail)",
-      "Rendelésszám",
-      "Összeg",
-    ];
-    const lines = visible.map((r) =>
-      [
+  const exportTable: ListTable | null = visible.length
+    ? {
+        title: "Sikertelen kuponkísérletek",
+        subtitle: "Az aktuális szűrés eredménye",
+        head: ["Dátum", "Környezet", "Kuponkód", "Hibakód", "Hiba", "Részletek", "Felhasználó (e-mail)", "Rendelésszám", "Összeg (Ft)"],
+        body: visible.map((r) => [
         dateHu(r.createdAt),
-        r.environment,
+        r.environment === "live" ? "Éles" : "Teszt",
         r.code,
         r.reason,
         r.message,
@@ -86,24 +80,14 @@ export function CouponAttemptsPanel() {
         r.email ?? "",
         r.orderNumber ?? "",
         r.amount ?? "",
-      ]
-        .map((v) => `"${String(safeCell(v as string | number | null)).replace(/"/g, '""')}"`)
-        .join(";"),
-    );
-    const blob = new Blob([`\uFEFF${[header.join(";"), ...lines].join("\r\n")}`], {
-      type: "text/csv;charset=utf-8",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "sikertelen-kuponkiserletek.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+        ]),
+        rightCols: [8],
+      }
+    : null;
 
   return (
-    <section id="sikertelen-kuponkiserletek" className="scroll-mt-24">
-      <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+    <section>
+      <h2 id="sikertelen-kuponkiserletek" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
         <AlertTriangle className="h-5 w-5 text-destructive" aria-hidden="true" />
         Sikertelen kuponkísérletek
       </h2>
@@ -140,24 +124,8 @@ export function CouponAttemptsPanel() {
             ))}
           </select>
         </label>
-        <label className="text-sm">
-          <span className="block text-xs font-medium text-muted-foreground">Ettől</span>
-          <input
-            type="date"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-            className="mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
-          />
-        </label>
-        <label className="text-sm">
-          <span className="block text-xs font-medium text-muted-foreground">Eddig</span>
-          <input
-            type="date"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-            className="mt-1 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
-          />
-        </label>
+        <AdminDatePicker label="Ettől" value={from} onChange={setFrom} />
+        <AdminDatePicker label="Eddig" value={to} onChange={setTo} />
         <label className="text-sm">
           <span className="block text-xs font-medium text-muted-foreground">Keresés</span>
           <input
@@ -179,14 +147,7 @@ export function CouponAttemptsPanel() {
           )}
           Frissítés
         </button>
-        <button
-          type="button"
-          onClick={exportCsv}
-          disabled={visible.length === 0}
-          className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:opacity-60"
-        >
-          CSV export
-        </button>
+        <TableExportButtons baseName="sikertelen-kuponkiserletek" sheetName="Sikertelen kísérletek" table={exportTable} />
       </div>
 
       {error ? (
