@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { adminListCouponUsage } from "@/lib/admin.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
+import { safeCell } from "@/lib/spreadsheet-safe";
 
 type Row = Awaited<ReturnType<typeof adminListCouponUsage>>["rows"][number];
 type Env = "sandbox" | "live";
@@ -114,7 +115,7 @@ export function CouponUsagePanel() {
         r.customerEmail ?? r.order?.email ?? "",
         r.order?.billingoInvoiceNumber ?? "",
       ]
-        .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+        .map((v) => `"${String(safeCell(v as string | number | null)).replace(/"/g, '""')}"`)
         .join(";"),
     );
     const blob = new Blob([`\uFEFF${[header.join(";"), ...lines].join("\r\n")}`], {

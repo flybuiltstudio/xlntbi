@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { adminListCouponAttempts } from "@/lib/admin.functions";
 import { COUPON_REASON_LABEL } from "@/lib/coupon-reasons";
+import { safeCell } from "@/lib/spreadsheet-safe";
 
 type Row = Awaited<ReturnType<typeof adminListCouponAttempts>>["rows"][number];
 
@@ -86,7 +87,7 @@ export function CouponAttemptsPanel() {
         r.orderNumber ?? "",
         r.amount ?? "",
       ]
-        .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+        .map((v) => `"${String(safeCell(v as string | number | null)).replace(/"/g, '""')}"`)
         .join(";"),
     );
     const blob = new Blob([`\uFEFF${[header.join(";"), ...lines].join("\r\n")}`], {
