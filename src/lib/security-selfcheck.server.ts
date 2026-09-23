@@ -60,7 +60,12 @@ export async function runSecuritySelfCheck(): Promise<SelfCheckResult> {
     knownRows.filter((row) => row.resolved_at === null).map((row) => row.finding_key),
   );
 
+  // Findings the admin already decided about never alert again.
+  const decided = await listDecidedKeys();
+  for (const key of decided) silent.add(key);
+
   const fresh = findings.filter((row) => !silent.has(row.finding_key));
+
   const now = new Date().toISOString();
 
   if (findings.length > 0) {
