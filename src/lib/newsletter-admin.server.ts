@@ -174,7 +174,12 @@ export async function saveNewsletterConfig(
   const next: Record<string, ProviderConfig> = { ...providers };
   if (mode !== "own") {
     const current = { ...(next[mode] ?? {}) };
+    // Only the fields declared for the selected provider may be stored.
+    const allowed = new Set(
+      (NEWSLETTER_MODES.find((m) => m.id === mode)?.fields ?? []).map((f) => f.key),
+    );
     for (const [key, value] of Object.entries(fields)) {
+      if (!allowed.has(key)) continue;
       const trimmed = value.trim();
       // Empty secret field = keep the previously stored value.
       if (!trimmed && secretKeys(mode).includes(key)) continue;
