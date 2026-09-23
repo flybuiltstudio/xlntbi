@@ -36,9 +36,10 @@ neve, és ezek közül választhatsz:
   - Nyilvános olvasás megszüntetése — kívülről, a weboldal használata nélkül
     senki nem tud belenézni; az oldal és az Admin felület továbbra is olvassa
 - **Bejelentkezés nélkül írható tábla**
-  - Maradjon így (alapértelmezett)
-  - Írás megszüntetése — kívülről nem lehet közvetlenül adatot beírni; az
-    űrlapok és az Admin műveletek változatlanul működnek (ez a javasolt)
+  - **Írás megszüntetése (alapértelmezett, javasolt)** — kívülről nem lehet
+    közvetlenül adatot beírni; az űrlapok és az Admin műveletek változatlanul
+    működnek
+  - Maradjon így
 - **Időzített feladat hitelesítő fejléc nélkül**
   - Maradjon így (alapértelmezett)
   - Hitelesítés bekapcsolása — a feladat hívása a biztonságos tárolóból olvasott
@@ -47,6 +48,17 @@ neve, és ezek közül választhatsz:
 Fontos: a „megszüntetés" a közvetlen, oldalon kívüli hozzáférést zárja be. Az
 oldal működése, az Admin felület és a fejlesztői felület mindkét esetben végig
 elérhető marad, mert azok a kérések a weboldal háttérfolyamatain futnak.
+
+## Döntéseid megjegyzése
+
+Amint egy táblánál döntesz (akár „maradjon így", akár „megszüntetés"), a
+rendszer eltárolja. A következő futtatásoknál az a tábla **nem kérdez rá újra**:
+a nyitott hibák közül kimarad, és lekerül az oldal legaljára egy
+**„Elfogadott döntések"** listába (tábla, mit döntöttél, mikor). Ott bármikor
+visszavonhatod egy „Döntés visszavonása" gombbal — akkor a következő
+ellenőrzésnél újra rákérdez. A napi e-mailes jelzés is kihagyja az eldöntött
+tételeket.
+
 
 
 Választás után a gomb felirata megmutatja, hány tételt fog javítani, és a
