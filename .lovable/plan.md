@@ -12,9 +12,10 @@ Az oldalon:
    a hajnali futásra várni), és frissül a lista.
 3. **„Javítsd mindet" gomb** — egy kattintással elvégzi a biztonságosan
    automatizálható javításokat, majd újraellenőriz, és kiírja, mit javított.
-4. Ami **nem javítható automatikusan**, az a lista alján külön blokkban marad,
-   mellette egy mondat arról, mi a döntés, amit embernek kell meghoznia.
-   Kitalált „kész" állapotot nem mutat.
+4. Ami **nem javítható automatikusan**, ott minden sornál **választható
+   lehetőségek** vannak (rádiógombok). Alapértelmezés mindig a „Maradjon így
+   (nem javítom)". Amint választasz valamit, a „Javítsd mindet" gomb ezeket is
+   elvégzi a választásod szerint. Kitalált „kész" állapotot nem mutat.
 
 ## Mit javít a gomb magától
 
@@ -24,16 +25,29 @@ Az oldalon:
 | Kiemelt jogú adatbázis-függvény fixált útvonal nélkül | beállítja a fix útvonalat |
 | Nyilvános tároló | priváttá teszi |
 
-## Amit szándékosan nem nyúl hozzá automatikusan
+## Ahol te választasz
 
-- **Bejelentkezés nélkül olvasható/írható tábla** — egy szabály törlése
-  kiütheti a nyilvános oldal működését (pl. termékkatalógus). Itt a lista
-  megmutatja a tábla és a szabály nevét, és rám kell szólnod, hogy javítsam.
-- **Időzített feladat hitelesítő fejléc nélkül** — a titkot tárolóból kell
-  olvasni, ezt kézzel, ellenőrzéssel tesszük.
+Ezeknél egy szabály törlése kiütheti a nyilvános oldal működését (pl.
+termékkatalógus), ezért döntés kell hozzá. Minden sornál ott a tábla/szabály
+neve, és ezek közül választhatsz:
 
-Ezeknél a gomb nem tűnik el, csak ezeket a sorokat kihagyja, és a
-visszajelzésben leírja, hogy mi maradt emberi döntésre.
+- **Bejelentkezés nélkül olvasható tábla**
+  - Maradjon így — szándékosan nyilvános (alapértelmezett)
+  - Nyilvános olvasás megszüntetése — a szabály törlődik, a tábla csak
+    bejelentkezve vagy szerveroldalról olvasható
+- **Bejelentkezés nélkül írható tábla**
+  - Maradjon így (alapértelmezett)
+  - Írás megszüntetése — az írási szabály törlődik, írni csak szerveroldalról
+    lehet (űrlapoknál ez a javasolt)
+- **Időzített feladat hitelesítő fejléc nélkül**
+  - Maradjon így (alapértelmezett)
+  - Hitelesítés bekapcsolása — a feladat hívása a biztonságos tárolóból olvasott
+    titokkal, `x-cron-secret` fejléccel fut tovább
+
+Választás után a gomb felirata megmutatja, hány tételt fog javítani, és a
+futás után tételesen kiírja, mit javított és mit hagyott érintetlenül. Minden
+ilyen javítás előtt még egy megerősítő kérdés jön.
+
 
 ## Technikai részletek
 
