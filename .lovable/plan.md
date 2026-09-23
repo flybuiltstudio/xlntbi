@@ -32,3 +32,36 @@ A platform saját **mély kódelemzését** nem tudom időzítve elindítani —
 ## Amit nem érint
 
 Megrendelések, Fizetés, Számlázás, Kuponok, Statisztika, Hírlevél oldalak és a meglévő öt időzített feladat változatlan.
+
+## A meglévő időzített feladatok (pontos idők)
+
+Az időzítés UTC szerint tárolódik, ezért magyar idő = +2 óra.
+
+| Feladat | Beírt idő (UTC) | Magyar idő | Gyakoriság |
+|---|---|---|---|
+| Heti takarítás (lejárt DEMO/letöltő linkek, lejárt kuponok, tároló-jelentés) | `0 2 * * 0` | vasárnap 4:00 | heti |
+| Heti katalógus-audit | `0 3 * * 0` | vasárnap 5:00 | heti |
+| Havi statisztika-zárás | `30 2 1 * *` | 1-jén 4:30 | havi |
+| Napi jelzés: régóta fizetésre vár | `0 6 * * *` | naponta 8:00 | napi |
+| Napi jelzés: kifizetve, de nincs számla | `10 6 * * *` | naponta 8:10 | napi |
+
+Vagyis a korábban „hajnali 2 / 3 / 6 óra"-ként említett idők valójában magyar idő szerint 4 / 5 / 8 órakor futnak.
+
+## Javasolt csoportosítás, sorrend, gyakoriság
+
+Három csoport, mindig ebben a logikai sorrendben: **takarítás → ellenőrzés → jelzés**. Így az ellenőrzés már a megtisztított állapotot látja, és a levél a végleges helyzetet jelenti.
+
+**1. Napi műszaki blokk — hajnal**
+- 04:20 magyar (02:20 UTC): biztonsági önellenőrzés (új). Korán fut, hogy egy éles hiba még a nap kezdete előtt jelzésre kerüljön.
+
+**2. Napi üzleti blokk — reggel, egy levélben**
+- 08:00 magyar (06:00 UTC): a „régóta fizetésre vár" és a „kifizetve, de nincs számla" ellenőrzés **egy futásba és egy e-mailbe** vonva, két szakasszal. Így nem kapsz két külön levelet ugyanazon reggel, és a 8:10-es külön futás megszűnik. Gyakoriság marad napi — mindkettő pénzügyi következményű.
+
+**3. Heti blokk — vasárnap**
+- 04:00 magyar: heti takarítás (marad)
+- 05:00 magyar: katalógus-audit (marad) — a takarítás után helyes, mert a törölt/lezárt linkek után ellenőriz
+
+**4. Havi blokk**
+- Hónap 1-je 04:30 magyar: statisztika-zárás (marad). Vasárnapra eső 1-jén sincs ütközés, mert a takarítás 4:00-kor már lefutott.
+
+Ha a napi két üzleti jelzés egyesítését nem szeretnéd, hagyhatjuk két külön futásnak; ez a terv további részét nem befolyásolja.
