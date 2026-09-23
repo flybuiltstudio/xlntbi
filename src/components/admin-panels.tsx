@@ -795,13 +795,22 @@ export function OrdersPanel({ email }: { email: string | null }) {
               </li>
             ))}
           </ul>
-          <button
-            type="button"
-            onClick={() => setPayFilter("stale")}
-            className="mt-3 rounded-md border border-destructive/40 bg-background px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10"
-          >
-            Csak ezeket mutasd
-          </button>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setPayFilter("stale")}
+              className="rounded-md border border-destructive/40 bg-background px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10"
+            >
+              Csak ezeket mutasd
+            </button>
+            <button
+              type="button"
+              onClick={() => setPayFilter("all")}
+              className="rounded-md border border-input bg-background px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-accent"
+            >
+              Összes mutatása
+            </button>
+          </div>
         </div>
       ) : null}
 
@@ -1125,7 +1134,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
                   </button>
                 ) : null}
                 <a
-                  href={`mailto:${order.email}?subject=${encodeURIComponent(order.orderNumber)}`}
+                  href={`mailto:${order.email}?subject=${encodeURIComponent(`${order.productName} – ${order.orderNumber}`)}`}
                   className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
                 >
                   E-mail a vevőnek

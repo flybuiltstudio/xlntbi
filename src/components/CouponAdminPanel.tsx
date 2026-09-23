@@ -13,6 +13,8 @@ import { productCategories } from "@/lib/product-categories";
 import { products } from "@/lib/products";
 import { formatMinorAsHuf, parseHufInput } from "@/lib/coupon-amount";
 import { getStripeEnvironment } from "@/lib/stripe";
+import { TableExportButtons } from "@/components/TableExportButtons";
+import type { ListTable } from "@/lib/stats-export";
 
 type Env = "sandbox" | "live";
 type Coupon = Awaited<ReturnType<typeof adminListCoupons>>["coupons"][number];
@@ -131,22 +133,15 @@ export function CouponAdminPanel() {
     });
   }, [coupons, search, statusFilter]);
 
-  function exportCsv() {
-    const header = [
-      "Kuponkód",
-      "Környezet",
-      "Kedvezmény",
-      "Állapot",
-      "Lejárat",
-      "Beváltások",
-      "Limit",
-      "Minimum",
-      "Termékek",
-      "Létrehozva",
-      "Létrehozó",
-    ];
-    const lines = visible.map((c) =>
-      [
+  const exportTable: ListTable | null = visible.length
+    ? {
+        title: "Kuponok",
+        subtitle: `${env === "live" ? "Éles" : "Teszt"} környezet – az aktuális szűrés eredménye`,
+        head: [
+          "Kuponkód", "Környezet", "Kedvezmény", "Állapot", "Lejárat", "Beváltások",
+          "Limit", "Minimum", "Termékek", "Létrehozva", "Létrehozó",
+        ],
+        body: visible.map((c) => [
         c.code,
         c.environment === "live" ? "Éles" : "Teszt",
         discountLabel(c),
@@ -158,20 +153,10 @@ export function CouponAdminPanel() {
         c.allProducts ? "Minden termék" : c.productNames.join(", "),
         c.createdAt ? dateHu(c.createdAt) : "—",
         c.createdBy ?? "—",
-      ]
-        .map((v) => `"${String(v).replace(/"/g, '""')}"`)
-        .join(";"),
-    );
-    const blob = new Blob([`\uFEFF${[header.join(";"), ...lines].join("\r\n")}`], {
-      type: "text/csv;charset=utf-8",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `kuponok-${env}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+        ]),
+        rightCols: [5, 6, 7],
+      }
+    : null;
 
   async function handleDisable(code: string) {
     if (!confirm(`Biztosan kikapcsolod a(z) ${code} kupont?`)) return;
@@ -185,10 +170,10 @@ export function CouponAdminPanel() {
   }
 
   return (
-    <section id="kuponok-listaja" className="scroll-mt-24">
+    <section>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
+          <h2 id="kuponok-listaja" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
             <TicketPercent className="h-5 w-5 text-primary" aria-hidden="true" />
             Kuponok
           </h2>
@@ -352,14 +337,7 @@ export function CouponAdminPanel() {
           )}
           Frissítés
         </button>
-        <button
-          type="button"
-          onClick={exportCsv}
-          disabled={visible.length === 0}
-          className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:opacity-60"
-        >
-          CSV export
-        </button>
+        <TableExportButtons baseName={`kuponok-${env}`} sheetName="Kuponok" table={exportTable} />
       </div>
 
       {error ? (
