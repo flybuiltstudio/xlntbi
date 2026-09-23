@@ -1292,6 +1292,36 @@ export type Database = {
         }
         Relationships: []
       }
+      security_alerts_sent: {
+        Row: {
+          detail: string | null
+          finding_key: string
+          finding_type: string
+          first_seen_at: string
+          id: string
+          last_seen_at: string
+          resolved_at: string | null
+        }
+        Insert: {
+          detail?: string | null
+          finding_key: string
+          finding_type: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          resolved_at?: string | null
+        }
+        Update: {
+          detail?: string | null
+          finding_key?: string
+          finding_type?: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          resolved_at?: string | null
+        }
+        Relationships: []
+      }
       stripe_webhook_events: {
         Row: {
           environment: string
@@ -1364,6 +1394,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      security_selfcheck: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"
