@@ -71,6 +71,13 @@
       "when": 1790164559102,
       "tag": "0009_security_selfcheck",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790164810304,
+      "tag": "0010_security_selfcheck_tune",
+      "breakpoints": true
     }
   ]
 }
