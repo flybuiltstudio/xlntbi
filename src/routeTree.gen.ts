@@ -135,6 +135,7 @@ import { Route as EnCalculatorsInvoiceDatesRouteImport } from './routes/en.calcu
 import { Route as EnCalculatorsSalaryTestRouteImport } from './routes/en.calculators.salary-test'
 import { Route as EnProductSlugRouteImport } from './routes/en.product.$slug'
 import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
+import { Route as ApiPublicBiztonsagiEllenorzesCronRouteImport } from './routes/api/public/biztonsagi-ellenorzes/cron'
 import { Route as ApiPublicFizetesreVaroJelzesCronRouteImport } from './routes/api/public/fizetesre-varo-jelzes/cron'
 import { Route as ApiPublicHaviStatisztikaZarasCronRouteImport } from './routes/api/public/havi-statisztika-zaras/cron'
 import { Route as ApiPublicHetiTakaritasCronRouteImport } from './routes/api/public/heti-takaritas/cron'
@@ -814,6 +815,12 @@ const ApiPublicBillingoWebhookRoute =
     path: '/api/public/billingo/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicBiztonsagiEllenorzesCronRoute =
+  ApiPublicBiztonsagiEllenorzesCronRouteImport.update({
+    id: '/api/public/biztonsagi-ellenorzes/cron',
+    path: '/api/public/biztonsagi-ellenorzes/cron',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicFizetesreVaroJelzesCronRoute =
   ApiPublicFizetesreVaroJelzesCronRouteImport.update({
     id: '/api/public/fizetesre-varo-jelzes/cron',
@@ -1010,6 +1017,7 @@ export interface FileRoutesByFullPath {
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/biztonsagi-ellenorzes/cron': typeof ApiPublicBiztonsagiEllenorzesCronRoute
   '/api/public/fizetesre-varo-jelzes/cron': typeof ApiPublicFizetesreVaroJelzesCronRoute
   '/api/public/havi-statisztika-zaras/cron': typeof ApiPublicHaviStatisztikaZarasCronRoute
   '/api/public/heti-takaritas/cron': typeof ApiPublicHetiTakaritasCronRoute
@@ -1148,6 +1156,7 @@ export interface FileRoutesByTo {
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/biztonsagi-ellenorzes/cron': typeof ApiPublicBiztonsagiEllenorzesCronRoute
   '/api/public/fizetesre-varo-jelzes/cron': typeof ApiPublicFizetesreVaroJelzesCronRoute
   '/api/public/havi-statisztika-zaras/cron': typeof ApiPublicHaviStatisztikaZarasCronRoute
   '/api/public/heti-takaritas/cron': typeof ApiPublicHetiTakaritasCronRoute
@@ -1289,6 +1298,7 @@ export interface FileRoutesById {
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
   '/api/public/billingo/webhook': typeof ApiPublicBillingoWebhookRoute
+  '/api/public/biztonsagi-ellenorzes/cron': typeof ApiPublicBiztonsagiEllenorzesCronRoute
   '/api/public/fizetesre-varo-jelzes/cron': typeof ApiPublicFizetesreVaroJelzesCronRoute
   '/api/public/havi-statisztika-zaras/cron': typeof ApiPublicHaviStatisztikaZarasCronRoute
   '/api/public/heti-takaritas/cron': typeof ApiPublicHetiTakaritasCronRoute
@@ -1431,6 +1441,7 @@ export interface FileRouteTypes {
     | '/en/product/$slug'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
+    | '/api/public/biztonsagi-ellenorzes/cron'
     | '/api/public/fizetesre-varo-jelzes/cron'
     | '/api/public/havi-statisztika-zaras/cron'
     | '/api/public/heti-takaritas/cron'
@@ -1569,6 +1580,7 @@ export interface FileRouteTypes {
     | '/en/product/$slug'
     | '/en/calculators'
     | '/api/public/billingo/webhook'
+    | '/api/public/biztonsagi-ellenorzes/cron'
     | '/api/public/fizetesre-varo-jelzes/cron'
     | '/api/public/havi-statisztika-zaras/cron'
     | '/api/public/heti-takaritas/cron'
@@ -1709,6 +1721,7 @@ export interface FileRouteTypes {
     | '/en/product/$slug'
     | '/en/calculators/'
     | '/api/public/billingo/webhook'
+    | '/api/public/biztonsagi-ellenorzes/cron'
     | '/api/public/fizetesre-varo-jelzes/cron'
     | '/api/public/havi-statisztika-zaras/cron'
     | '/api/public/heti-takaritas/cron'
@@ -1806,6 +1819,7 @@ export interface RootRouteChildren {
   KalkulatorokIndexRoute: typeof KalkulatorokIndexRoute
   ApiPublicHwidDownloadRoute: typeof ApiPublicHwidDownloadRoute
   ApiPublicBillingoWebhookRoute: typeof ApiPublicBillingoWebhookRoute
+  ApiPublicBiztonsagiEllenorzesCronRoute: typeof ApiPublicBiztonsagiEllenorzesCronRoute
   ApiPublicFizetesreVaroJelzesCronRoute: typeof ApiPublicFizetesreVaroJelzesCronRoute
   ApiPublicHaviStatisztikaZarasCronRoute: typeof ApiPublicHaviStatisztikaZarasCronRoute
   ApiPublicHetiTakaritasCronRoute: typeof ApiPublicHetiTakaritasCronRoute
@@ -2704,6 +2718,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicBillingoWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/biztonsagi-ellenorzes/cron': {
+      id: '/api/public/biztonsagi-ellenorzes/cron'
+      path: '/api/public/biztonsagi-ellenorzes/cron'
+      fullPath: '/api/public/biztonsagi-ellenorzes/cron'
+      preLoaderRoute: typeof ApiPublicBiztonsagiEllenorzesCronRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/fizetesre-varo-jelzes/cron': {
       id: '/api/public/fizetesre-varo-jelzes/cron'
       path: '/api/public/fizetesre-varo-jelzes/cron'
@@ -2984,6 +3005,8 @@ const rootRouteChildren: RootRouteChildren = {
   KalkulatorokIndexRoute: KalkulatorokIndexRoute,
   ApiPublicHwidDownloadRoute: ApiPublicHwidDownloadRoute,
   ApiPublicBillingoWebhookRoute: ApiPublicBillingoWebhookRoute,
+  ApiPublicBiztonsagiEllenorzesCronRoute:
+    ApiPublicBiztonsagiEllenorzesCronRoute,
   ApiPublicFizetesreVaroJelzesCronRoute: ApiPublicFizetesreVaroJelzesCronRoute,
   ApiPublicHaviStatisztikaZarasCronRoute:
     ApiPublicHaviStatisztikaZarasCronRoute,
