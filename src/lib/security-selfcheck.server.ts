@@ -126,3 +126,146 @@ export async function runSecuritySelfCheck(): Promise<SelfCheckResult> {
     findings,
   };
 }
+
+/* ------------------------------------------------------------------ *
+ * Admin surface: open findings, remembered decisions, one-click fix
+ * ------------------------------------------------------------------ */
+
+export type DecisionValue = "keep" | "fix";
+
+export type SecurityDecision = {
+  finding_key: string;
+  finding_type: string;
+  decision: DecisionValue;
+  detail: string | null;
+  decided_at: string;
+};
+
+/** Finding types that need an explicit admin decision before being fixed. */
+export const DECISION_TYPES = ["anon_policy", "anon_write", "cron_no_secret"] as const;
+
+async function listDecidedKeys(): Promise<Set<string>> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await (supabaseAdmin as any)
+    .from("security_decisions")
+    .select("finding_key");
+  if (error) {
+    console.error("security_decisions read:", error.message);
+    return new Set();
+  }
+  return new Set(((data ?? []) as Array<{ finding_key: string }>).map((row) => row.finding_key));
+}
+
+export async function listDecisions(): Promise<SecurityDecision[]> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await (supabaseAdmin as any)
+    .from("security_decisions")
+    .select("finding_key, finding_type, decision, detail, decided_at")
+    .order("decided_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  return (data ?? []) as SecurityDecision[];
+}
+
+/** Live scan result for the admin page: only findings that still need action. */
+export async function listOpenFindings(): Promise<{
+  findings: SecurityFinding[];
+  decisions: SecurityDecision[];
+  ranAt: string;
+}> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await (supabaseAdmin as any).rpc("security_selfcheck");
+  if (error) throw new Error(`security_selfcheck: ${error.message}`);
+
+  const decided = await listDecidedKeys();
+  const findings = ((data ?? []) as SecurityFinding[]).filter(
+    (row) => row && typeof row.finding_key === "string" && !decided.has(row.finding_key),
+  );
+  return { findings, decisions: await listDecisions(), ranAt: huTime() };
+}
+
+export async function clearDecision(findingKey: string): Promise<void> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await (supabaseAdmin as any)
+    .from("security_decisions")
+    .delete()
+    .eq("finding_key", findingKey);
+  if (error) throw new Error(error.message);
+}
+
+export type AutofixResult = {
+  fixed: string[];
+  skipped: string[];
+  errors: string[];
+  remaining: number;
+};
+
+/**
+ * Runs the database-side autofix plus the storage-bucket fix, remembers every
+ * decision the admin made, then re-runs the self-check so fixed findings are
+ * marked resolved.
+ */
+export async function runSecurityAutofix(
+  decisions: Record<string, DecisionValue>,
+  decidedBy?: string | null,
+): Promise<AutofixResult> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  // Snapshot before fixing: needed for bucket fixes and for storing decisions.
+  const before = await listOpenFindings();
+
+  const { data, error } = await (supabaseAdmin as any).rpc("security_autofix", {
+    _decisions: decisions,
+    _cron_token: process.env["MAINTENANCE_CRON_TOKEN"] ?? null,
+  });
+  if (error) throw new Error(`security_autofix: ${error.message}`);
+
+  const payload = (data ?? {}) as {
+    fixed?: Array<{ action?: string }>;
+    skipped?: Array<{ reason?: string; finding_key?: string }>;
+    errors?: Array<{ error?: string; finding_key?: string }>;
+  };
+  const fixed = (payload.fixed ?? []).map((row) => row.action ?? "").filter(Boolean);
+  const errors = (payload.errors ?? [])
+    .map((row) => `${row.finding_key ?? ""}: ${row.error ?? ""}`)
+    .filter((row) => row.trim().length > 2);
+  const skipped = (payload.skipped ?? [])
+    .map((row) => `${row.finding_key ?? ""} — ${row.reason ?? ""}`)
+    .filter(Boolean);
+
+  // Public buckets are handled through the Storage API, not SQL.
+  for (const finding of before.findings) {
+    if (finding.finding_type !== "public_bucket") continue;
+    const bucket = finding.finding_key.split(":")[1] ?? "";
+    if (!bucket) continue;
+    const { error: bucketError } = await supabaseAdmin.storage.updateBucket(bucket, {
+      public: false,
+    });
+    if (bucketError) errors.push(`${finding.finding_key}: ${bucketError.message}`);
+    else fixed.push(`Tároló priváttá téve: ${bucket}`);
+  }
+
+  // Remember every decision the admin made, so we never ask again.
+  const rows = before.findings
+    .filter((finding) => decisions[finding.finding_key] !== undefined)
+    .map((finding) => ({
+      finding_key: finding.finding_key,
+      finding_type: finding.finding_type,
+      decision: decisions[finding.finding_key] as DecisionValue,
+      detail: finding.detail,
+      decided_by: decidedBy ?? null,
+      decided_at: new Date().toISOString(),
+    }));
+  if (rows.length > 0) {
+    const { error: saveError } = await (supabaseAdmin as any)
+      .from("security_decisions")
+      .upsert(rows, { onConflict: "finding_key" });
+    if (saveError) errors.push(`döntés mentése: ${saveError.message}`);
+  }
+
+  // Re-run so fixed findings get resolved_at and the list stays honest.
+  await runSecuritySelfCheck();
+  const after = await listOpenFindings();
+
+  return { fixed, skipped, errors, remaining: after.findings.length };
+}
+
