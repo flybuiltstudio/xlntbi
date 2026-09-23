@@ -62,16 +62,44 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
         await sweepLivePromotionCodesThrottled();
       }
 
+      // Bind the session to the stored order: the price and quantity must
+      // match what the order was created with, never the request alone.
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: order, error: orderError } = await supabaseAdmin
+        .from("orders")
+        .select("email, quantity, unit_price, total_price, currency, payment_status")
+        .eq("order_number", data.orderNumber)
+        .maybeSingle();
+      if (orderError || !order) return { error: "A megrendelés nem található." };
+      if (order.payment_status === "paid") return { error: "Ez a megrendelés már ki van fizetve." };
+      if (order.email.trim().toLowerCase() !== data.customerEmail.trim().toLowerCase()) {
+        return { error: "A megrendelés adatai nem egyeznek." };
+      }
+      if (order.quantity !== data.quantity) {
+        return { error: "A megrendelés adatai nem egyeznek." };
+      }
+
       const prices = await stripe.prices.list({ lookup_keys: [data.priceId] });
       const stripePrice = prices.data[0];
       if (!stripePrice) return { error: "A termék árazása nem található a fizetési rendszerben." };
+
+      // Stripe HUF amounts are in minor units (fillér).
+      const stripeUnit = Math.round((stripePrice.unit_amount ?? -1) / 100);
+      if (
+        stripePrice.currency.toLowerCase() !== String(order.currency ?? "huf").toLowerCase() ||
+        stripeUnit !== Math.round(Number(order.unit_price)) ||
+        stripeUnit * order.quantity !== Math.round(Number(order.total_price))
+      ) {
+        console.error("Checkout price mismatch for order", data.orderNumber);
+        return { error: "A megrendelés összege nem egyezik a termék árával." };
+      }
 
       const productId =
         typeof stripePrice.product === "string" ? stripePrice.product : stripePrice.product.id;
       const product = await stripe.products.retrieve(productId);
 
       const session = await stripe.checkout.sessions.create({
-        line_items: [{ price: stripePrice.id, quantity: data.quantity }],
+        line_items: [{ price: stripePrice.id, quantity: order.quantity }],
         mode: "payment",
         ui_mode: "embedded_page",
         return_url: data.returnUrl,
