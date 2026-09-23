@@ -52,6 +52,20 @@ export async function readProductOverrides(): Promise<ProductOverrideData> {
       supabase.from("custom_products").select("*"),
       supabase.from("custom_categories").select("*").order("sort_order"),
     ]);
+    // A failed query silently falls back to the bundled catalog (stale prices,
+    // missing admin products), so make every failure visible in the logs.
+    for (const [table, result] of [
+      ["product_content_overrides", content],
+      ["product_price_overrides", prices],
+      ["custom_products", custom],
+      ["custom_categories", categories],
+    ] as const) {
+      if (result.error) {
+        console.error(
+          `[product-overrides] read failed for ${table}: ${result.error.message}`,
+        );
+      }
+    }
     return {
       content: (content.data ?? []).map((row) => ({
         slug: row.slug,
