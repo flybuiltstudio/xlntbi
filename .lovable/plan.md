@@ -51,30 +51,42 @@ ilyen javítás előtt még egy megerősítő kérdés jön.
 
 ## Technikai részletek
 
-- Új SQL függvény `public.security_autofix()` (SECURITY DEFINER, fix
-  `search_path`, csak `service_role`-nak GRANT-olva). Végignézi a
-  `security_selfcheck()` találatait, és csak a fenti három típusra futtat
-  `ALTER TABLE ... ENABLE ROW LEVEL SECURITY`, `ALTER FUNCTION ... SET
-  search_path = public`, illetve `UPDATE storage.buckets SET public = false`
-  parancsot. Minden mást érintetlenül hagy, és jsonb-ben adja vissza, mit
-  javított és mit hagyott ki.
+- Új SQL függvény `public.security_autofix(_decisions jsonb DEFAULT '{}')`
+  (SECURITY DEFINER, fix `search_path`, csak `service_role`-nak GRANT-olva).
+  Végignézi a `security_selfcheck()` találatait:
+  - automatikus típusok: `ALTER TABLE ... ENABLE ROW LEVEL SECURITY`,
+    `ALTER FUNCTION ... SET search_path = public`,
+    `UPDATE storage.buckets SET public = false`;
+  - döntéses típusok (`anon_policy`, `anon_write`, `cron_no_secret`) csak akkor,
+    ha a `_decisions` objektumban az adott `finding_key`-hez `"fix"` érték
+    tartozik — `anon_policy`/`anon_write`: a konkrét policy `DROP POLICY`-ja
+    (dinamikus SQL, `quote_ident`-tel, kizárólag az adott policy nevére);
+    `cron_no_secret`: a job command újraírása `cron.alter_job`-bal, a vault-ból
+    olvasott `maintenance_cron_token` titokkal, `x-cron-secret` fejléccel.
+  Minden mást érintetlenül hagy, és jsonb-ben adja vissza, mit javított, mit
+  hagyott ki, és hol hibázott.
 - `src/lib/security-selfcheck.server.ts`: új `listOpenFindings()` (a
   `security_alerts_sent` `resolved_at IS NULL` sorai), és
-  `runSecurityAutofix()` — `security_autofix()` hívás, majd
+  `runSecurityAutofix(decisions)` — `security_autofix()` hívás, majd
   `runSecuritySelfCheck()` újrafutás, hogy a megjavított sorok `resolved_at`-et
   kapjanak. Az e-mail logika változatlan: egy találatról csak egyszer megy
   levél.
 - Új `src/lib/security-admin.functions.ts`: `adminSecurityFindings`,
-  `adminRunSecurityCheck`, `adminSecurityAutofix` — a `storage-cleanup`
-  szerverfunkciók admin-ellenőrzési mintája szerint, `supabaseAdmin` csak a
-  handler belsejében importálva.
+  `adminRunSecurityCheck`, `adminSecurityAutofix` (bemenet: `finding_key` →
+  `"keep" | "fix"` map, zod-validálva) — a `storage-cleanup` szerverfunkciók
+  admin-ellenőrzési mintája szerint, `supabaseAdmin` csak a handler belsejében
+  importálva.
 - Új `src/components/SecurityCheckPanel.tsx` + új route
   `src/routes/admin.biztonsagi-ellenorzes.tsx` a `admin.tarolo-takaritas.tsx`
   mintájára (`PageHero`, `AdminBlock`, noindex meta, egyedi title/description).
+  A panel a döntéseket helyi állapotban tartja (alapérték mindenhol `keep`),
+  a gomb feliratában mutatja a javítandó tételszámot, és `window.confirm`
+  megerősítést kér, ha döntéses javítás is van.
 - `src/routes/admin.tsx`: a `checksLinks` listába bekerül az új pont.
 - A hibatípus-kódokhoz (`no_rls`, `anon_policy`, `anon_write`,
   `public_bucket`, `func_search_path`, `cron_no_secret`) magyar magyarázat és
-  „javítható / emberi döntés" jelölés a panelben.
+  „automatikus / választható" jelölés a panelben.
+
 
 ## Amihez nem nyúlok
 
