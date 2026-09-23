@@ -5,7 +5,7 @@
  */
 
 import type { ListTable } from "./stats-export";
-import { safeCell } from "./spreadsheet-safe";
+import { safeCellKeepPhones } from "./spreadsheet-safe";
 
 export type ExportSubscriber = {
   lastName: string;
@@ -102,7 +102,7 @@ export const PROVIDER_CSV: ProviderCsv[] = [
 
 function csvCell(value: string): string {
   // safeCell keeps subscriber-supplied text from being executed as a formula.
-  const text = String(safeCell(value ?? ""));
+  const text = String(safeCellKeepPhones(value ?? ""));
   return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
