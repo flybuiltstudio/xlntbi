@@ -82,23 +82,31 @@ ilyen javítás előtt még egy megerősítő kérdés jön.
     olvasott `maintenance_cron_token` titokkal, `x-cron-secret` fejléccel.
   Minden mást érintetlenül hagy, és jsonb-ben adja vissza, mit javított, mit
   hagyott ki, és hol hibázott.
+- Új tábla `public.security_decisions` (`finding_key` PK, `finding_type`,
+  `decision` `keep`/`fix`, `decided_at`, `decided_by`), RLS be, csak
+  `service_role` GRANT — ez tárolja a döntéseidet.
 - `src/lib/security-selfcheck.server.ts`: új `listOpenFindings()` (a
-  `security_alerts_sent` `resolved_at IS NULL` sorai), és
-  `runSecurityAutofix(decisions)` — `security_autofix()` hívás, majd
-  `runSecuritySelfCheck()` újrafutás, hogy a megjavított sorok `resolved_at`-et
-  kapjanak. Az e-mail logika változatlan: egy találatról csak egyszer megy
-  levél.
-- Új `src/lib/security-admin.functions.ts`: `adminSecurityFindings`,
-  `adminRunSecurityCheck`, `adminSecurityAutofix` (bemenet: `finding_key` →
-  `"keep" | "fix"` map, zod-validálva) — a `storage-cleanup` szerverfunkciók
+  `security_alerts_sent` `resolved_at IS NULL` sorai, a
+  `security_decisions`-ben szereplő kulcsok kiszűrve), `listDecisions()`,
+  `clearDecision(key)`, és `runSecurityAutofix(decisions)` —
+  `security_autofix()` hívás, a döntések mentése, majd `runSecuritySelfCheck()`
+  újrafutás, hogy a megjavított sorok `resolved_at`-et kapjanak. A napi e-mail
+  is kihagyja az eldöntött kulcsokat; egy találatról továbbra is csak egyszer
+  megy levél.
+- Új `src/lib/security-admin.functions.ts`: `adminSecurityFindings` (nyitott
+  hibák + eldöntött lista), `adminRunSecurityCheck`, `adminSecurityAutofix`
+  (bemenet: `finding_key` → `"keep" | "fix"` map, zod-validálva),
+  `adminClearSecurityDecision` — a `storage-cleanup` szerverfunkciók
   admin-ellenőrzési mintája szerint, `supabaseAdmin` csak a handler belsejében
   importálva.
 - Új `src/components/SecurityCheckPanel.tsx` + új route
   `src/routes/admin.biztonsagi-ellenorzes.tsx` a `admin.tarolo-takaritas.tsx`
   mintájára (`PageHero`, `AdminBlock`, noindex meta, egyedi title/description).
-  A panel a döntéseket helyi állapotban tartja (alapérték mindenhol `keep`),
-  a gomb feliratában mutatja a javítandó tételszámot, és `window.confirm`
-  megerősítést kér, ha döntéses javítás is van.
+  A panel a döntéseket helyi állapotban tartja (alapérték: `anon_write` →
+  `fix`, minden más → `keep`), a gomb feliratában mutatja a javítandó
+  tételszámot, `window.confirm` megerősítést kér, ha döntéses javítás is van,
+  és legalul kilistázza az „Elfogadott döntések"-et visszavonó gombbal.
+
 - `src/routes/admin.tsx`: a `checksLinks` listába bekerül az új pont.
 - A hibatípus-kódokhoz (`no_rls`, `anon_policy`, `anon_write`,
   `public_bucket`, `func_search_path`, `cron_no_secret`) magyar magyarázat és
