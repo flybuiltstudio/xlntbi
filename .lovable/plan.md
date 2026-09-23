@@ -1,0 +1,70 @@
+# Biztonsági jelzések javítása az admin felületről
+
+## Mit kapsz
+
+Az Admin → **Ellenőrzések** menübe új pont kerül: **Biztonsági ellenőrzés**.
+Az oldalon:
+
+1. **Nyitott hibák listája** — csak azok, amik még nincsenek kijavítva. Minden
+   sornál magyar leírás: mi a probléma, mi a következménye, és hogy gépileg
+   javítható-e.
+2. **„Ellenőrzés futtatása most"** gomb — azonnal újrafut a vizsgálat (nem kell
+   a hajnali futásra várni), és frissül a lista.
+3. **„Javítsd mindet" gomb** — egy kattintással elvégzi a biztonságosan
+   automatizálható javításokat, majd újraellenőriz, és kiírja, mit javított.
+4. Ami **nem javítható automatikusan**, az a lista alján külön blokkban marad,
+   mellette egy mondat arról, mi a döntés, amit embernek kell meghoznia.
+   Kitalált „kész" állapotot nem mutat.
+
+## Mit javít a gomb magától
+
+| Hibatípus | Automatikus javítás |
+| --- | --- |
+| Táblán nincs bekapcsolva a soralapú védelem (RLS) | bekapcsolja |
+| Kiemelt jogú adatbázis-függvény fixált útvonal nélkül | beállítja a fix útvonalat |
+| Nyilvános tároló | priváttá teszi |
+
+## Amit szándékosan nem nyúl hozzá automatikusan
+
+- **Bejelentkezés nélkül olvasható/írható tábla** — egy szabály törlése
+  kiütheti a nyilvános oldal működését (pl. termékkatalógus). Itt a lista
+  megmutatja a tábla és a szabály nevét, és rám kell szólnod, hogy javítsam.
+- **Időzített feladat hitelesítő fejléc nélkül** — a titkot tárolóból kell
+  olvasni, ezt kézzel, ellenőrzéssel tesszük.
+
+Ezeknél a gomb nem tűnik el, csak ezeket a sorokat kihagyja, és a
+visszajelzésben leírja, hogy mi maradt emberi döntésre.
+
+## Technikai részletek
+
+- Új SQL függvény `public.security_autofix()` (SECURITY DEFINER, fix
+  `search_path`, csak `service_role`-nak GRANT-olva). Végignézi a
+  `security_selfcheck()` találatait, és csak a fenti három típusra futtat
+  `ALTER TABLE ... ENABLE ROW LEVEL SECURITY`, `ALTER FUNCTION ... SET
+  search_path = public`, illetve `UPDATE storage.buckets SET public = false`
+  parancsot. Minden mást érintetlenül hagy, és jsonb-ben adja vissza, mit
+  javított és mit hagyott ki.
+- `src/lib/security-selfcheck.server.ts`: új `listOpenFindings()` (a
+  `security_alerts_sent` `resolved_at IS NULL` sorai), és
+  `runSecurityAutofix()` — `security_autofix()` hívás, majd
+  `runSecuritySelfCheck()` újrafutás, hogy a megjavított sorok `resolved_at`-et
+  kapjanak. Az e-mail logika változatlan: egy találatról csak egyszer megy
+  levél.
+- Új `src/lib/security-admin.functions.ts`: `adminSecurityFindings`,
+  `adminRunSecurityCheck`, `adminSecurityAutofix` — a `storage-cleanup`
+  szerverfunkciók admin-ellenőrzési mintája szerint, `supabaseAdmin` csak a
+  handler belsejében importálva.
+- Új `src/components/SecurityCheckPanel.tsx` + új route
+  `src/routes/admin.biztonsagi-ellenorzes.tsx` a `admin.tarolo-takaritas.tsx`
+  mintájára (`PageHero`, `AdminBlock`, noindex meta, egyedi title/description).
+- `src/routes/admin.tsx`: a `checksLinks` listába bekerül az új pont.
+- A hibatípus-kódokhoz (`no_rls`, `anon_policy`, `anon_write`,
+  `public_bucket`, `func_search_path`, `cron_no_secret`) magyar magyarázat és
+  „javítható / emberi döntés" jelölés a panelben.
+
+## Amihez nem nyúlok
+
+Megrendelések, Fizetés, Számlázás, Kuponok, Statisztika, Hírlevél oldalak, a
+napi cron ütemezések és az e-mail sablonok változatlanok. A platform saját mély
+kódelemzését továbbra sem lehet innen indítani — ez az oldal az adatbázis- és
+beállításoldali találatokat kezeli.
