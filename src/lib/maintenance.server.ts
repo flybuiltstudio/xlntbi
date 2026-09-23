@@ -465,3 +465,95 @@ export async function runMissingInvoiceCheck(): Promise<{ count: number; repeate
   await markAlerted("missing_invoice", fresh);
   return { count: fresh.length, repeated };
 }
+
+// ---------------------------------------------------------------------------
+// Combined daily order alerts (one run, one email)
+// ---------------------------------------------------------------------------
+
+async function collectStaleUnpaid(): Promise<{ fresh: AlertOrder[]; repeated: number }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const cutoff = new Date(Date.now() - STALE_UNPAID_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const { data } = await (supabaseAdmin as any)
+    .from("orders")
+    .select("order_number, product_name, total_price, email, created_at, payment_status")
+    .neq("payment_status", "paid")
+    .lt("created_at", cutoff)
+    .order("created_at", { ascending: true })
+    .limit(200);
+  return splitAlreadyAlerted("stale_unpaid", (data ?? []) as AlertOrder[]);
+}
+
+async function collectMissingInvoice(): Promise<{ fresh: AlertOrder[]; repeated: number }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await (supabaseAdmin as any)
+    .from("orders")
+    .select("order_number, product_name, total_price, email, created_at")
+    .eq("payment_status", "paid")
+    .is("billingo_invoice_id", null)
+    .gt("total_price", 0)
+    .order("created_at", { ascending: true })
+    .limit(200);
+  return splitAlreadyAlerted("missing_invoice", (data ?? []) as AlertOrder[]);
+}
+
+function alertLine(row: AlertOrder): string {
+  return `${row.order_number} – ${row.product_name} – ${row.total_price} Ft – ${row.email} – ${huTime(
+    new Date(row.created_at),
+  )}`;
+}
+
+/**
+ * Runs both daily order checks and sends a single email with two sections.
+ * Orders already reported earlier stay out of the email.
+ */
+export async function runDailyOrderAlerts(): Promise<{
+  staleUnpaid: number;
+  missingInvoice: number;
+  repeated: number;
+  emailed: boolean;
+}> {
+  const stale = await collectStaleUnpaid();
+  const invoice = await collectMissingInvoice();
+  const repeated = stale.repeated + invoice.repeated;
+
+  if (stale.fresh.length === 0 && invoice.fresh.length === 0) {
+    return { staleUnpaid: 0, missingInvoice: 0, repeated, emailed: false };
+  }
+
+  const issues: string[] = [];
+  if (stale.fresh.length > 0) {
+    issues.push(`Régóta fizetésre vár (${STALE_UNPAID_DAYS}+ nap):`);
+    issues.push(...stale.fresh.map(alertLine));
+  }
+  if (invoice.fresh.length > 0) {
+    issues.push("Kifizetve, de nincs számla:");
+    issues.push(...invoice.fresh.map(alertLine));
+  }
+  if (repeated > 0) {
+    issues.push(`(${repeated} korábban már jelzett megrendelés továbbra is nyitott.)`);
+  }
+
+  await report({
+    title: "Napi megrendelés-jelzések",
+    summary:
+      `${stale.fresh.length} új fizetésre váró és ${invoice.fresh.length} új számla nélküli` +
+      " megrendelés. Csak a korábban még nem jelzett tételek szerepelnek a levélben.",
+    rows: [
+      ["Régóta fizetésre vár", String(stale.fresh.length)],
+      ["Számla hiányzik", String(invoice.fresh.length)],
+      ["Korábban már jelzett", String(repeated)],
+    ],
+    issues,
+    key: `daily-order-alerts-${dayKey()}`,
+  });
+
+  await markAlerted("stale_unpaid", stale.fresh);
+  await markAlerted("missing_invoice", invoice.fresh);
+
+  return {
+    staleUnpaid: stale.fresh.length,
+    missingInvoice: invoice.fresh.length,
+    repeated,
+    emailed: true,
+  };
+}

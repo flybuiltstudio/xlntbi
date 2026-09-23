@@ -64,6 +64,13 @@
       "when": 1790114548814,
       "tag": "0008_restrict_catalog_override_reads_to_server",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790164559102,
+      "tag": "0009_security_selfcheck",
+      "breakpoints": true
     }
   ]
 }
