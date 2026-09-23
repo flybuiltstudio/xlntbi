@@ -53,7 +53,7 @@ function buildMailto(name?: string, productName?: string, tierLabel?: string, is
   const product = productName || 'Termék'
   const tier = tierLabel || '—'
   const demoPrefix = isDemo ? 'CSAK DEMO – ' : ''
-  const subject = `${demoPrefix}${buyer} – ${product} – ${tier} – LICENSZET KÉREK`
+  const subject = `${demoPrefix}${buyer} – ${product} – ${tier} – LICENCET KÉREK`
   const hwidValue = isDemo && demoHwid ? demoHwid : '＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿'
   const hwidNote = isDemo && demoHwid
     ? '(az igényléskor megadott azonosító)'
@@ -61,7 +61,7 @@ function buildMailto(name?: string, productName?: string, tierLabel?: string, is
   const body = [
     'Tisztelt Sarinay Dávid!',
     '',
-    isDemo ? 'CSAK DEMO LICENCET KÉREK!' : 'Az alábbi termékre licenszkódot kérek:',
+    isDemo ? 'CSAK DEMO LICENCET KÉREK!' : 'Az alábbi termékre licenckódot kérek:',
     '',
     `Vásárló neve:  ${buyer}`,
     `Termék:        ${product}`,
@@ -126,12 +126,12 @@ const Email = ({
             HWID-t küldd el
           </a>{' '}
           {isDemo
-            ? 'a termék nevével együtt az info@xlntbi.hu e-mail címre, és küldök egy DEMO licenszkódot.'
-            : 'a megvásárolt termék nevével és licensz típusával együtt az info@xlntbi.hu emailcímre.'}
+            ? 'a termék nevével együtt az info@xlntbi.hu e-mail címre, és küldök egy DEMO licenckódot.'
+            : 'a megvásárolt termék nevével és licenc típusával együtt az info@xlntbi.hu emailcímre.'}
         </Text>
         <Section style={{ margin: '0 0 20px' }}>
           <Button href={buildMailto(name, productName, tierLabel, isDemo, demoHwid)} style={button}>
-            {isDemo ? 'DEMO licenszet kérek e-mailben' : 'Licenszet kérek e-mailben'}
+            {isDemo ? 'DEMO licencet kérek e-mailben' : 'Licencet kérek e-mailben'}
           </Button>
         </Section></> : null}
         {rows && rows.length > 0 ? <DataTable rows={rows} /> : null}

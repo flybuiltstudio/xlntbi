@@ -111,7 +111,7 @@ export function FullPurchaseTestPanel() {
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Egy kattintással végigfut egy teljes megrendelés a választott fizetési móddal, majd a
-          rendszer ellenőrzi a Billingo számlát, a letöltő linket és a licensz kiküldést. A teszt
+          rendszer ellenőrzi a Billingo számlát, a letöltő linket és a licenc kiküldést. A teszt
           megrendelés <strong className="text-foreground">TESZT-</strong> előtagot kap és nem
           kerül a statisztikába.
         </p>
@@ -170,7 +170,7 @@ export function FullPurchaseTestPanel() {
                 checked={sendLicenseEmail}
                 onChange={(e) => setSendLicenseEmail(e.target.checked)}
               />
-              Licensz e-mail kiküldése is (teszt kóddal)
+              Licenc e-mail kiküldése is (teszt kóddal)
             </label>
             <label className="flex items-center gap-2">
               <input

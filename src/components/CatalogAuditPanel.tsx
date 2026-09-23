@@ -238,7 +238,7 @@ export function CatalogAuditPanel() {
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <p className="rounded-md border border-border bg-card p-3 text-sm text-muted-foreground">
             <strong className="text-foreground">Stripe árak</strong> — összesen{" "}
-            {report.summary.tierCount} licenszverzió: rendben {report.summary.tierOk},
+            {report.summary.tierCount} licencverzió: rendben {report.summary.tierOk},
             figyelmeztetés {report.summary.tierWarn}, hiba {report.summary.tierError}.
           </p>
           <p className="rounded-md border border-border bg-card p-3 text-sm text-muted-foreground">
@@ -250,14 +250,14 @@ export function CatalogAuditPanel() {
       ) : null}
 
       <h3 className="mt-8 text-base font-semibold text-foreground">
-        Stripe lookup key és ár – licenszverziónként
+        Stripe lookup key és ár – licencverziónként
       </h3>
       <div className="mt-3 overflow-x-auto rounded-md border border-border">
         <table className="w-full min-w-[900px] text-left text-sm">
           <thead className="bg-muted/50 text-muted-foreground">
             <tr>
               <th className="px-3 py-2 font-medium">Termék</th>
-              <th className="px-3 py-2 font-medium">Licensz</th>
+              <th className="px-3 py-2 font-medium">Licenc</th>
               <th className="px-3 py-2 font-medium">Lookup key</th>
               <th className="px-3 py-2 font-medium">Katalógus</th>
               <th className="px-3 py-2 font-medium">Stripe</th>

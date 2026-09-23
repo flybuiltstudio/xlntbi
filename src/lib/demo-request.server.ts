@@ -155,15 +155,15 @@ export async function requestDemo(input: {
 
   const licenseSubject = `${productName} – DEMO – beírandó licenc`;
   const licenseBody = [
-    "Tisztelt Vásárló!",
+    "Tisztelt DEMO-igénylő!",
     "",
     "Küldöm a licencet az alábbi termékhez:",
     "",
     `Termék: ${productName}`,
     "Típus: DEMO (korlátozott idejű)",
     "",
-    "Licenszkód:",
-    "________________  (IDE ÍRD A LICENSZKÓDOT)",
+    "Licenckód:",
+    "________________  (IDE ÍRD A LICENCKÓDOT)",
     "",
     "Üdvözlettel:",
     "Sarinay Dávid",
@@ -185,7 +185,7 @@ export async function requestDemo(input: {
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Telefon</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(input.phone || "nem megadott")}</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Cégnév</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(input.companyName || "nem megadott")}</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Adószám</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(input.taxNumber || "nem megadott")}</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Gépazonosító (HWID)</td><td style="padding:6px 8px;border:1px solid #ddd;font-family:monospace">${esc(hwidValue)}</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Gépazonosító (HWID)</td><td style="padding:6px 8px;border:1px solid #ddd${input.hwid ? ";font-family:monospace" : ""}">${esc(hwidValue)}</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Tesztidő</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(testUntilText)}</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Letöltőlink</td><td style="padding:6px 8px;border:1px solid #ddd"><a href="${esc(downloadUrl)}">${esc(downloadUrl)}</a></td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #ddd;color:#888">Lejár</td><td style="padding:6px 8px;border:1px solid #ddd">${esc(formatDate(expiresAt))}</td></tr>

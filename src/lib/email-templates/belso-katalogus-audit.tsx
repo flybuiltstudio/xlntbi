@@ -59,8 +59,8 @@ export const template = {
     warnCount: 1,
     rows: [
       ['Környezet', 'live'],
-      ['Licenszverziók', '58'],
-      ['Hibás licenszverzió', '2'],
+      ['Licencverziók', '58'],
+      ['Hibás licencverzió', '2'],
       ['Hibás termékfájl', '0'],
     ] as Row[],
     issues: ['XLNT Devizabank – teljes csomag: Nincs ilyen lookup key a Stripe-ban.'],

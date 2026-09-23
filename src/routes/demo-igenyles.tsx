@@ -64,7 +64,7 @@ function DemoRequestPage() {
         <p className="mt-4 text-base leading-relaxed text-muted-foreground">
           Nézd meg a postafiókodat. A védett letöltési link 7 napig érvényes, és legfeljebb 5
           alkalommal használható. A letöltés után indítsd el a programot, küldd el a gépazonosítót,
-          és küldök egy DEMO licenszkódot.
+          és küldök egy DEMO licenckódot.
         </p>
         <Link
           to="/termekeim"

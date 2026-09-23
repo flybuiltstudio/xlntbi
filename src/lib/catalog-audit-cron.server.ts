@@ -84,8 +84,8 @@ export async function runScheduledCatalogAudit(
             warnCount,
             rows: [
               ["Környezet", environment],
-              ["Licenszverziók", String(report.summary.tierCount)],
-              ["Hibás licenszverzió", String(report.summary.tierError)],
+              ["Licencverziók", String(report.summary.tierCount)],
+              ["Hibás licencverzió", String(report.summary.tierError)],
               ["Termékek", String(report.summary.productCount)],
               ["Hibás termékfájl", String(report.summary.downloadError)],
               ...(report.stripeError ? [["Stripe hiba", report.stripeError]] : []),

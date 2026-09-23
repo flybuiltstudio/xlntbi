@@ -514,7 +514,7 @@ export async function sendLicense(
 
   if (!order) return { ok: false, error: "A megrendelés nem található." };
   if (order.payment_status !== "paid") {
-    return { ok: false, error: "Licenszkód csak rendezett megrendeléshez küldhető." };
+    return { ok: false, error: "Licenckód csak rendezett megrendeléshez küldhető." };
   }
 
   const data = {
@@ -544,7 +544,7 @@ export async function sendLicense(
     },
   ]);
 
-  if (!ok) return { ok: false, error: "A licenszkód kiküldése nem sikerült." };
+  if (!ok) return { ok: false, error: "A licenckód kiküldése nem sikerült." };
 
   const sentAt = new Date().toISOString();
   const { error: updateError } = await (supabaseAdmin as any)
@@ -2019,7 +2019,7 @@ export async function sendDemoLicense(
       replyTo: "info@xlntbi.hu",
     },
   ]);
-  if (!ok) return { ok: false, error: "A DEMO licenszkód kiküldése nem sikerült." };
+  if (!ok) return { ok: false, error: "A DEMO licenckód kiküldése nem sikerült." };
   return { ok: true };
 }
 
