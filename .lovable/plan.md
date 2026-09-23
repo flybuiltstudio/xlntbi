@@ -36,9 +36,10 @@ neve, és ezek közül választhatsz:
   - Nyilvános olvasás megszüntetése — kívülről, a weboldal használata nélkül
     senki nem tud belenézni; az oldal és az Admin felület továbbra is olvassa
 - **Bejelentkezés nélkül írható tábla**
-  - Maradjon így (alapértelmezett)
-  - Írás megszüntetése — kívülről nem lehet közvetlenül adatot beírni; az
-    űrlapok és az Admin műveletek változatlanul működnek (ez a javasolt)
+  - **Írás megszüntetése (alapértelmezett, javasolt)** — kívülről nem lehet
+    közvetlenül adatot beírni; az űrlapok és az Admin műveletek változatlanul
+    működnek
+  - Maradjon így
 - **Időzített feladat hitelesítő fejléc nélkül**
   - Maradjon így (alapértelmezett)
   - Hitelesítés bekapcsolása — a feladat hívása a biztonságos tárolóból olvasott
@@ -47,6 +48,17 @@ neve, és ezek közül választhatsz:
 Fontos: a „megszüntetés" a közvetlen, oldalon kívüli hozzáférést zárja be. Az
 oldal működése, az Admin felület és a fejlesztői felület mindkét esetben végig
 elérhető marad, mert azok a kérések a weboldal háttérfolyamatain futnak.
+
+## Döntéseid megjegyzése
+
+Amint egy táblánál döntesz (akár „maradjon így", akár „megszüntetés"), a
+rendszer eltárolja. A következő futtatásoknál az a tábla **nem kérdez rá újra**:
+a nyitott hibák közül kimarad, és lekerül az oldal legaljára egy
+**„Elfogadott döntések"** listába (tábla, mit döntöttél, mikor). Ott bármikor
+visszavonhatod egy „Döntés visszavonása" gombbal — akkor a következő
+ellenőrzésnél újra rákérdez. A napi e-mailes jelzés is kihagyja az eldöntött
+tételeket.
+
 
 
 Választás után a gomb felirata megmutatja, hány tételt fog javítani, és a
@@ -70,23 +82,31 @@ ilyen javítás előtt még egy megerősítő kérdés jön.
     olvasott `maintenance_cron_token` titokkal, `x-cron-secret` fejléccel.
   Minden mást érintetlenül hagy, és jsonb-ben adja vissza, mit javított, mit
   hagyott ki, és hol hibázott.
+- Új tábla `public.security_decisions` (`finding_key` PK, `finding_type`,
+  `decision` `keep`/`fix`, `decided_at`, `decided_by`), RLS be, csak
+  `service_role` GRANT — ez tárolja a döntéseidet.
 - `src/lib/security-selfcheck.server.ts`: új `listOpenFindings()` (a
-  `security_alerts_sent` `resolved_at IS NULL` sorai), és
-  `runSecurityAutofix(decisions)` — `security_autofix()` hívás, majd
-  `runSecuritySelfCheck()` újrafutás, hogy a megjavított sorok `resolved_at`-et
-  kapjanak. Az e-mail logika változatlan: egy találatról csak egyszer megy
-  levél.
-- Új `src/lib/security-admin.functions.ts`: `adminSecurityFindings`,
-  `adminRunSecurityCheck`, `adminSecurityAutofix` (bemenet: `finding_key` →
-  `"keep" | "fix"` map, zod-validálva) — a `storage-cleanup` szerverfunkciók
+  `security_alerts_sent` `resolved_at IS NULL` sorai, a
+  `security_decisions`-ben szereplő kulcsok kiszűrve), `listDecisions()`,
+  `clearDecision(key)`, és `runSecurityAutofix(decisions)` —
+  `security_autofix()` hívás, a döntések mentése, majd `runSecuritySelfCheck()`
+  újrafutás, hogy a megjavított sorok `resolved_at`-et kapjanak. A napi e-mail
+  is kihagyja az eldöntött kulcsokat; egy találatról továbbra is csak egyszer
+  megy levél.
+- Új `src/lib/security-admin.functions.ts`: `adminSecurityFindings` (nyitott
+  hibák + eldöntött lista), `adminRunSecurityCheck`, `adminSecurityAutofix`
+  (bemenet: `finding_key` → `"keep" | "fix"` map, zod-validálva),
+  `adminClearSecurityDecision` — a `storage-cleanup` szerverfunkciók
   admin-ellenőrzési mintája szerint, `supabaseAdmin` csak a handler belsejében
   importálva.
 - Új `src/components/SecurityCheckPanel.tsx` + új route
   `src/routes/admin.biztonsagi-ellenorzes.tsx` a `admin.tarolo-takaritas.tsx`
   mintájára (`PageHero`, `AdminBlock`, noindex meta, egyedi title/description).
-  A panel a döntéseket helyi állapotban tartja (alapérték mindenhol `keep`),
-  a gomb feliratában mutatja a javítandó tételszámot, és `window.confirm`
-  megerősítést kér, ha döntéses javítás is van.
+  A panel a döntéseket helyi állapotban tartja (alapérték: `anon_write` →
+  `fix`, minden más → `keep`), a gomb feliratában mutatja a javítandó
+  tételszámot, `window.confirm` megerősítést kér, ha döntéses javítás is van,
+  és legalul kilistázza az „Elfogadott döntések"-et visszavonó gombbal.
+
 - `src/routes/admin.tsx`: a `checksLinks` listába bekerül az új pont.
 - A hibatípus-kódokhoz (`no_rls`, `anon_policy`, `anon_write`,
   `public_bucket`, `func_search_path`, `cron_no_secret`) magyar magyarázat és
