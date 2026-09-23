@@ -485,7 +485,7 @@ function OrderPage() {
           </div>
           <p className="mt-1.5 text-xs text-muted-foreground">
             {isMobile
-              ? "Mobilon opcionális, de asztali gépen kötelező a licenszküldéshez."
+              ? "Mobilon opcionális, de asztali gépen kötelező a licencküldéshez."
               : "Kötelező mező. Töltsd le a programot, futtasd, és másold be az azonosítót."}
           </p>
         </div>

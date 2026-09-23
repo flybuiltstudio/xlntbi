@@ -194,21 +194,21 @@ export async function runFullPurchaseTest(
   // 5. License email
   if (input.sendLicenseEmail) {
     const { sendLicense } = await import("./admin.server");
-    const result = await sendLicense(orderId, `TESZT-LICENSZ-${Date.now()}`);
+    const result = await sendLicense(orderId, `TESZT-LICENC-${Date.now()}`);
     push({
       key: "license",
-      label: "Licensz e-mail",
+      label: "Licenc e-mail",
       status: result.ok ? "ok" : "error",
       detail: result.ok
         ? `Kiküldve: ${new Date(result.sentAt!).toLocaleString("hu-HU")}`
-        : (result.error ?? "A licensz kiküldése nem sikerült."),
+        : (result.error ?? "A licenc kiküldése nem sikerült."),
     });
   } else {
     push({
       key: "license",
-      label: "Licensz e-mail",
+      label: "Licenc e-mail",
       status: "skipped",
-      detail: "Nem kértél licensz kiküldést ehhez a teszthez.",
+      detail: "Nem kértél licenc kiküldést ehhez a teszthez.",
     });
   }
 

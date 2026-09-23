@@ -513,7 +513,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
     if (!order) return;
     const key = licenseKey.trim();
     if (key.length < 8) {
-      setMessage("Add meg a licenszkódot.");
+      setMessage("Add meg a licenckódot.");
       return;
     }
     setBusy(order.id);
@@ -522,7 +522,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
       const result = await sendLicense({ data: { orderId: order.id, licenseKey: key } });
       setMessage(
         result.ok
-          ? `${order.orderNumber}: licenszkód kiküldve a vevőnek (másolat: xllentac@gmail.com).`
+          ? `${order.orderNumber}: licenckód kiküldve a vevőnek (másolat: xllentac@gmail.com).`
           : (result.error ?? "Hiba történt."),
       );
       if (result.ok) {
@@ -1008,7 +1008,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
                 ) : null}
                 {order.paymentStatus === "paid" ? (
                   <div className="sm:col-span-2">
-                    <dt className="inline font-semibold">Licensz: </dt>
+                    <dt className="inline font-semibold">Licenc: </dt>
                     <dd className="inline">
                       {order.licenseSentAt ? (
                         <>
@@ -1151,7 +1151,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
                     htmlFor={`license-${order.id}`}
                     className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                   >
-                    Licenszkód
+                    Licenckód
                   </label>
                   <input
                     id={`license-${order.id}`}
@@ -1181,7 +1181,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
                       onClick={() => void onSendLicense()}
                       className="rounded-md bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-brand-dark disabled:opacity-60"
                     >
-                      {busy === order.id ? "Küldés…" : "Licenszkód elküldése"}
+                      {busy === order.id ? "Küldés…" : "Licenckód elküldése"}
                     </button>
                     <button
                       type="button"
@@ -2922,11 +2922,16 @@ export function DemoRequestsBlock({
   }
 
   async function onSendLicense(demo: AdminDemo) {
+    const key = licenseKey.trim();
+    if (key.length < 8) {
+      setError("Add meg a licenckódot.");
+      return;
+    }
     setBusy(demo.id);
     setMessage("");
     setError("");
     try {
-      const result = await sendLicense({ data: { demoId: demo.id, licenseKey } });
+      const result = await sendLicense({ data: { demoId: demo.id, licenseKey: key } });
       if (result.ok) {
         setMessage(`DEMO licenc elküldve: ${demo.email}`);
         setLicenseFor(null);
@@ -3073,45 +3078,20 @@ export function DemoRequestsBlock({
                   >
                     Letöltési link újraküldése
                   </button>
-                  {licenseFor === demo.id ? (
-                    <>
-                      <input
-                        value={licenseKey}
-                        onChange={(e) => setLicenseKey(e.target.value)}
-                        placeholder="DEMO licenszkód"
-                        className="rounded-md border border-input bg-background px-3 py-2 text-xs text-foreground outline-none focus:border-ring"
-                      />
-                      <button
-                        type="button"
-                        disabled={busy === demo.id || licenseKey.trim().length < 8}
-                        onClick={() => void onSendLicense(demo)}
-                        className="rounded-md bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
-                      >
-                        DEMO licenc küldése
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setLicenseFor(null);
-                          setLicenseKey("");
-                        }}
-                        className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-muted-foreground hover:bg-accent"
-                      >
-                        Mégsem
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setLicenseFor(demo.id);
-                        setLicenseKey("");
-                      }}
-                      className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
-                    >
-                      Licenc küldése
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    disabled={busy === demo.id}
+                    onClick={() => {
+                      setLicenseFor(licenseFor === demo.id ? null : demo.id);
+                      setLicenseKey("");
+                      setMessage("");
+                      setError("");
+                    }}
+                    className="rounded-md border border-primary/40 bg-primary/10 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/20 disabled:opacity-60"
+                    title="DEMO licenckód kiküldése az igénylőnek e-mailben"
+                  >
+                    {licenseFor === demo.id ? "Licenc küldése – mégsem" : "Licenc küldése"}
+                  </button>
                   <a
                     href={`mailto:${demo.email}?subject=${encodeURIComponent(
                       `DEMO – ${demo.productName}`,
@@ -3141,6 +3121,58 @@ export function DemoRequestsBlock({
                     ↑ Tetejére
                   </button>
                 </div>
+
+                {licenseFor === demo.id ? (
+                  <div className="mt-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
+                    <label
+                      htmlFor={`demo-license-${demo.id}`}
+                      className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                    >
+                      Licenckód
+                    </label>
+                    <input
+                      id={`demo-license-${demo.id}`}
+                      type="text"
+                      autoFocus
+                      spellCheck={false}
+                      autoComplete="off"
+                      value={licenseKey}
+                      onChange={(e) => setLicenseKey(e.target.value.trim())}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          void onSendLicense(demo);
+                        }
+                      }}
+                      placeholder="X000-0000-0000-0000-0202-6083-1000-0000-0202-6081-1689-B92F-E556-1813-8C18-79F6-C"
+                      className="mt-2 w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-xs tracking-tight text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none"
+                    />
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      A kód egyben beilleszthető a vágólapról. A levél a DEMO-igénylőnek megy,
+                      másolatban az xllentac@gmail.com címre, feladó: noreply@notify.xlntbi.hu.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        disabled={busy === demo.id || licenseKey.trim().length < 8}
+                        onClick={() => void onSendLicense(demo)}
+                        className="rounded-md bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:bg-brand-dark disabled:opacity-60"
+                      >
+                        {busy === demo.id ? "Küldés…" : "Licenckód elküldése"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLicenseFor(null);
+                          setLicenseKey("");
+                        }}
+                        className="rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
+                      >
+                        Mégsem
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
               </article>
             );
           })}

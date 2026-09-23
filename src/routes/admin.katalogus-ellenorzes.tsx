@@ -37,7 +37,7 @@ function AdminCatalogAuditPage() {
         <AdminBlock
           icon={PackageSearch}
           title="Árak, lookup key-ek és letöltések"
-          description="Egy kattintással végigfut minden terméken és minden licenszverzión: megvan-e a Stripe lookup key a választott környezetben, aktív-e az ár, egyezik-e a forint összeg a katalógussal, és a tárolóban ott van-e a letölthető fájl. Ellenőrzi a már kiadott letöltési tokeneket is, hogy átnevezés után se törjön el egyetlen link sem. Az ellenőrzés csak olvas, semmit nem módosít."
+          description="Egy kattintással végigfut minden terméken és minden licencverzión: megvan-e a Stripe lookup key a választott környezetben, aktív-e az ár, egyezik-e a forint összeg a katalógussal, és a tárolóban ott van-e a letölthető fájl. Ellenőrzi a már kiadott letöltési tokeneket is, hogy átnevezés után se törjön el egyetlen link sem. Az ellenőrzés csak olvas, semmit nem módosít."
         >
           <CatalogAuditPanel />
         </AdminBlock>

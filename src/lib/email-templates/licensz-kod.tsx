@@ -23,11 +23,11 @@ const box = {
 
 const code = {
   fontFamily: 'Consolas, Menlo, Monaco, "Courier New", monospace',
-  fontSize: '13px',
+  fontSize: '10px',
   lineHeight: '22px',
   color: BRAND.green,
   fontWeight: 700,
-  wordBreak: 'break-all' as const,
+  whiteSpace: 'nowrap' as const,
   backgroundColor: '#ffffff',
   border: `1px solid ${BRAND.line}`,
   borderRadius: '8px',
@@ -38,26 +38,29 @@ const code = {
 const Email = ({ name, orderNumber, productName, tierLabel, licenseKey }: Props) => (
   <Html lang="hu" dir="ltr">
     <Head />
-    <Preview>{`Licenszkód – ${productName || 'xlntbi.hu'}`}</Preview>
+    <Preview>{`Licenckód – ${productName || 'xlntbi.hu'}`}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Header subtitle="Licenszkód" />
-        <Text style={h1}>Itt van a licenszkódod</Text>
+        <Header subtitle="Licenckód" />
+        <Text style={h1}>Itt van a licenckódod</Text>
         <Text style={paragraph}>Kedves {name || 'Vásárló'}!</Text>
         <Text style={paragraph}>
           Köszönöm a vásárlást! Az alábbiakban megtalálod a megvásárolt termékhez tartozó
-          licenszkódot.
+          licenckódot.
         </Text>
         <Section style={box}>
           <Text style={{ ...paragraph, margin: '0 0 4px', fontWeight: 700 }}>
             {productName || 'Termék'}
           </Text>
           <Text style={{ ...small, margin: '0 0 12px' }}>
-            Licensz típusa: {tierLabel || '—'}
+            Licenc típusa: {tierLabel || '—'}
             {orderNumber ? ` · Rendelésszám: ${orderNumber}` : ''}
           </Text>
-          <Text style={{ ...small, margin: '0 0 6px', fontWeight: 700 }}>Licenszkód:</Text>
+          <Text style={{ ...small, margin: '0 0 6px', fontWeight: 700 }}>Licenckód:</Text>
           <Text style={code}>{licenseKey || '—'}</Text>
+          <Text style={{ ...small, margin: '10px 0 0' }}>
+            A licenckódot egyben másold be a programba.
+          </Text>
         </Section>
         <Text style={paragraph}>
           Ha bármi kérdésed van, írj bátran az <strong>info@xlntbi.hu</strong> e-mail címre.
@@ -71,8 +74,8 @@ const Email = ({ name, orderNumber, productName, tierLabel, licenseKey }: Props)
 export const template = {
   component: Email,
   subject: (data: Record<string, any>) =>
-    `Licenszkód – ${data['productName'] || 'xlntbi.hu'}`,
-  displayName: 'Licenszkód',
+    `Licenckód – ${data['productName'] || 'xlntbi.hu'}`,
+  displayName: 'Licenckód',
   previewData: {
     name: 'Kovács Anna',
     orderNumber: 'XLNT-20260819-1234',

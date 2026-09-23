@@ -81,8 +81,8 @@ export const adminSendLicense = createServerFn({ method: "POST" })
         licenseKey: z
           .string()
           .trim()
-          .min(8, "A licenszkód túl rövid.")
-          .max(200, "A licenszkód túl hosszú."),
+          .min(8, "A licenckód túl rövid.")
+          .max(200, "A licenckód túl hosszú."),
       })
       .parse(data),
   )
@@ -666,8 +666,8 @@ export const adminSendDemoLicense = createServerFn({ method: "POST" })
         licenseKey: z
           .string()
           .trim()
-          .min(8, "A licenszkód túl rövid.")
-          .max(200, "A licenszkód túl hosszú."),
+          .min(8, "A licenckód túl rövid.")
+          .max(200, "A licenckód túl hosszú."),
       })
       .parse(data),
   )
