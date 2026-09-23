@@ -33,16 +33,21 @@ neve, és ezek közül választhatsz:
 
 - **Bejelentkezés nélkül olvasható tábla**
   - Maradjon így — szándékosan nyilvános (alapértelmezett)
-  - Nyilvános olvasás megszüntetése — a szabály törlődik, a tábla csak
-    bejelentkezve vagy szerveroldalról olvasható
+  - Nyilvános olvasás megszüntetése — kívülről, a weboldal használata nélkül
+    senki nem tud belenézni; az oldal és az Admin felület továbbra is olvassa
 - **Bejelentkezés nélkül írható tábla**
   - Maradjon így (alapértelmezett)
-  - Írás megszüntetése — az írási szabály törlődik, írni csak szerveroldalról
-    lehet (űrlapoknál ez a javasolt)
+  - Írás megszüntetése — kívülről nem lehet közvetlenül adatot beírni; az
+    űrlapok és az Admin műveletek változatlanul működnek (ez a javasolt)
 - **Időzített feladat hitelesítő fejléc nélkül**
   - Maradjon így (alapértelmezett)
   - Hitelesítés bekapcsolása — a feladat hívása a biztonságos tárolóból olvasott
     titokkal, `x-cron-secret` fejléccel fut tovább
+
+Fontos: a „megszüntetés" a közvetlen, oldalon kívüli hozzáférést zárja be. Az
+oldal működése, az Admin felület és a fejlesztői felület mindkét esetben végig
+elérhető marad, mert azok a kérések a weboldal háttérfolyamatain futnak.
+
 
 Választás után a gomb felirata megmutatja, hány tételt fog javítani, és a
 futás után tételesen kiírja, mit javított és mit hagyott érintetlenül. Minden
