@@ -1322,6 +1322,33 @@ export type Database = {
         }
         Relationships: []
       }
+      security_decisions: {
+        Row: {
+          decided_at: string
+          decided_by: string | null
+          decision: string
+          detail: string | null
+          finding_key: string
+          finding_type: string
+        }
+        Insert: {
+          decided_at?: string
+          decided_by?: string | null
+          decision: string
+          detail?: string | null
+          finding_key: string
+          finding_type: string
+        }
+        Update: {
+          decided_at?: string
+          decided_by?: string | null
+          decision?: string
+          detail?: string | null
+          finding_key?: string
+          finding_type?: string
+        }
+        Relationships: []
+      }
       stripe_webhook_events: {
         Row: {
           environment: string
@@ -1393,6 +1420,10 @@ export type Database = {
           _year: number
         }
         Returns: undefined
+      }
+      security_autofix: {
+        Args: { _cron_token?: string; _decisions?: Json }
+        Returns: Json
       }
       security_selfcheck: { Args: never; Returns: Json }
     }

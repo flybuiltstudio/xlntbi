@@ -46,6 +46,7 @@ import { Route as SzolgaltatasaimRouteImport } from './routes/szolgaltatasaim'
 import { Route as TermekeimRouteImport } from './routes/termekeim'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBillingoEllenorzesRouteImport } from './routes/admin.billingo-ellenorzes'
+import { Route as AdminBiztonsagiEllenorzesRouteImport } from './routes/admin.biztonsagi-ellenorzes'
 import { Route as AdminFelhasznalokRouteImport } from './routes/admin.felhasznalok'
 import { Route as AdminFizetesTesztRouteImport } from './routes/admin.fizetes-teszt'
 import { Route as AdminFrissVerzioRouteImport } from './routes/admin.friss-verzio'
@@ -336,6 +337,12 @@ const AdminBillingoEllenorzesRoute = AdminBillingoEllenorzesRouteImport.update({
   path: '/billingo-ellenorzes',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBiztonsagiEllenorzesRoute =
+  AdminBiztonsagiEllenorzesRouteImport.update({
+    id: '/biztonsagi-ellenorzes',
+    path: '/biztonsagi-ellenorzes',
+    getParentRoute: () => AdminRoute,
+  } as any)
 const AdminFelhasznalokRoute = AdminFelhasznalokRouteImport.update({
   id: '/felhasznalok',
   path: '/felhasznalok',
@@ -934,6 +941,7 @@ export interface FileRoutesByFullPath {
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
+  '/admin/biztonsagi-ellenorzes': typeof AdminBiztonsagiEllenorzesRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/friss-verzio': typeof AdminFrissVerzioRoute
@@ -1074,6 +1082,7 @@ export interface FileRoutesByTo {
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
+  '/admin/biztonsagi-ellenorzes': typeof AdminBiztonsagiEllenorzesRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/friss-verzio': typeof AdminFrissVerzioRoute
@@ -1217,6 +1226,7 @@ export interface FileRoutesById {
   '/szolgaltatasaim': typeof SzolgaltatasaimRoute
   '/termekeim': typeof TermekeimRoute
   '/admin/billingo-ellenorzes': typeof AdminBillingoEllenorzesRoute
+  '/admin/biztonsagi-ellenorzes': typeof AdminBiztonsagiEllenorzesRoute
   '/admin/felhasznalok': typeof AdminFelhasznalokRoute
   '/admin/fizetes-teszt': typeof AdminFizetesTesztRoute
   '/admin/friss-verzio': typeof AdminFrissVerzioRoute
@@ -1361,6 +1371,7 @@ export interface FileRouteTypes {
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/admin/billingo-ellenorzes'
+    | '/admin/biztonsagi-ellenorzes'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/friss-verzio'
@@ -1501,6 +1512,7 @@ export interface FileRouteTypes {
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/admin/billingo-ellenorzes'
+    | '/admin/biztonsagi-ellenorzes'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/friss-verzio'
@@ -1643,6 +1655,7 @@ export interface FileRouteTypes {
     | '/szolgaltatasaim'
     | '/termekeim'
     | '/admin/billingo-ellenorzes'
+    | '/admin/biztonsagi-ellenorzes'
     | '/admin/felhasznalok'
     | '/admin/fizetes-teszt'
     | '/admin/friss-verzio'
@@ -2107,6 +2120,13 @@ declare module '@tanstack/react-router' {
       path: '/billingo-ellenorzes'
       fullPath: '/admin/billingo-ellenorzes'
       preLoaderRoute: typeof AdminBillingoEllenorzesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/biztonsagi-ellenorzes': {
+      id: '/admin/biztonsagi-ellenorzes'
+      path: '/biztonsagi-ellenorzes'
+      fullPath: '/admin/biztonsagi-ellenorzes'
+      preLoaderRoute: typeof AdminBiztonsagiEllenorzesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/felhasznalok': {
@@ -2835,6 +2855,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminBillingoEllenorzesRoute: typeof AdminBillingoEllenorzesRoute
+  AdminBiztonsagiEllenorzesRoute: typeof AdminBiztonsagiEllenorzesRoute
   AdminFelhasznalokRoute: typeof AdminFelhasznalokRoute
   AdminFizetesTesztRoute: typeof AdminFizetesTesztRoute
   AdminFrissVerzioRoute: typeof AdminFrissVerzioRoute
@@ -2852,6 +2873,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBillingoEllenorzesRoute: AdminBillingoEllenorzesRoute,
+  AdminBiztonsagiEllenorzesRoute: AdminBiztonsagiEllenorzesRoute,
   AdminFelhasznalokRoute: AdminFelhasznalokRoute,
   AdminFizetesTesztRoute: AdminFizetesTesztRoute,
   AdminFrissVerzioRoute: AdminFrissVerzioRoute,
