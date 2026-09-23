@@ -10,6 +10,13 @@
 
 const FORMULA_START = /^[=+\-@\t\r]/;
 
+/**
+ * Phone numbers and signed numbers start with + or - but can never be a
+ * formula call, so they stay untouched: a leading quote would break provider
+ * imports (e.g. "+36301234567" arriving as text in Mailchimp / Brevo).
+ */
+const PHONE_OR_NUMBER = /^[+-][\d\s()./-]+$/;
+
 /** Returns the value as a cell that can never be read as a formula. */
 export function safeCell<T extends string | number | null | undefined>(
   value: T,
@@ -17,6 +24,7 @@ export function safeCell<T extends string | number | null | undefined>(
   if (value == null) return "";
   if (typeof value === "number") return value;
   const text = String(value);
+  if (PHONE_OR_NUMBER.test(text)) return text;
   return FORMULA_START.test(text) ? `'${text}` : text;
 }
 
