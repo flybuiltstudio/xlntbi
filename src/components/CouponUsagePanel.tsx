@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { adminListCouponUsage } from "@/lib/admin.functions";
 import { getStripeEnvironment } from "@/lib/stripe";
+import { safeCell } from "@/lib/spreadsheet-safe";
 
 type Row = Awaited<ReturnType<typeof adminListCouponUsage>>["rows"][number];
 type Env = "sandbox" | "live";

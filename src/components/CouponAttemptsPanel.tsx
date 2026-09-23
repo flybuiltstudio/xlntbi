@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { adminListCouponAttempts } from "@/lib/admin.functions";
 import { COUPON_REASON_LABEL } from "@/lib/coupon-reasons";
+import { safeCell } from "@/lib/spreadsheet-safe";
 
 type Row = Awaited<ReturnType<typeof adminListCouponAttempts>>["rows"][number];
 
