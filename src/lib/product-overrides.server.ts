@@ -124,7 +124,8 @@ export async function readProductOverrides(): Promise<ProductOverrideData> {
         sortOrder: row.sort_order,
       })),
     };
-  } catch {
+  } catch (error) {
+    console.error("[product-overrides] read failed, falling back to catalog", error);
     return EMPTY;
   }
 }
