@@ -142,6 +142,7 @@ import { Route as ApiPublicHetiTakaritasCronRouteImport } from './routes/api/pub
 import { Route as ApiPublicKalkulatorKepSlugRouteImport } from './routes/api/public/kalkulator-kep.$slug'
 import { Route as ApiPublicKatalogusAuditCronRouteImport } from './routes/api/public/katalogus-audit/cron'
 import { Route as ApiPublicLetoltesTokenRouteImport } from './routes/api/public/letoltes/$token'
+import { Route as ApiPublicNapiJelzesekCronRouteImport } from './routes/api/public/napi-jelzesek/cron'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as ApiPublicSzamlaHianyJelzesCronRouteImport } from './routes/api/public/szamla-hiany-jelzes/cron'
 import { Route as ApiPublicTermekKepSlugRouteImport } from './routes/api/public/termek-kep.$slug'
@@ -856,6 +857,12 @@ const ApiPublicLetoltesTokenRoute = ApiPublicLetoltesTokenRouteImport.update({
   path: '/api/public/letoltes/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicNapiJelzesekCronRoute =
+  ApiPublicNapiJelzesekCronRouteImport.update({
+    id: '/api/public/napi-jelzesek/cron',
+    path: '/api/public/napi-jelzesek/cron',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -1024,6 +1031,7 @@ export interface FileRoutesByFullPath {
   '/api/public/kalkulator-kep/$slug': typeof ApiPublicKalkulatorKepSlugRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
+  '/api/public/napi-jelzesek/cron': typeof ApiPublicNapiJelzesekCronRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/szamla-hiany-jelzes/cron': typeof ApiPublicSzamlaHianyJelzesCronRoute
   '/api/public/termek-kep/$slug': typeof ApiPublicTermekKepSlugRoute
@@ -1163,6 +1171,7 @@ export interface FileRoutesByTo {
   '/api/public/kalkulator-kep/$slug': typeof ApiPublicKalkulatorKepSlugRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
+  '/api/public/napi-jelzesek/cron': typeof ApiPublicNapiJelzesekCronRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/szamla-hiany-jelzes/cron': typeof ApiPublicSzamlaHianyJelzesCronRoute
   '/api/public/termek-kep/$slug': typeof ApiPublicTermekKepSlugRoute
@@ -1305,6 +1314,7 @@ export interface FileRoutesById {
   '/api/public/kalkulator-kep/$slug': typeof ApiPublicKalkulatorKepSlugRoute
   '/api/public/katalogus-audit/cron': typeof ApiPublicKatalogusAuditCronRoute
   '/api/public/letoltes/$token': typeof ApiPublicLetoltesTokenRoute
+  '/api/public/napi-jelzesek/cron': typeof ApiPublicNapiJelzesekCronRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/api/public/szamla-hiany-jelzes/cron': typeof ApiPublicSzamlaHianyJelzesCronRoute
   '/api/public/termek-kep/$slug': typeof ApiPublicTermekKepSlugRoute
@@ -1448,6 +1458,7 @@ export interface FileRouteTypes {
     | '/api/public/kalkulator-kep/$slug'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
+    | '/api/public/napi-jelzesek/cron'
     | '/api/public/payments/webhook'
     | '/api/public/szamla-hiany-jelzes/cron'
     | '/api/public/termek-kep/$slug'
@@ -1587,6 +1598,7 @@ export interface FileRouteTypes {
     | '/api/public/kalkulator-kep/$slug'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
+    | '/api/public/napi-jelzesek/cron'
     | '/api/public/payments/webhook'
     | '/api/public/szamla-hiany-jelzes/cron'
     | '/api/public/termek-kep/$slug'
@@ -1728,6 +1740,7 @@ export interface FileRouteTypes {
     | '/api/public/kalkulator-kep/$slug'
     | '/api/public/katalogus-audit/cron'
     | '/api/public/letoltes/$token'
+    | '/api/public/napi-jelzesek/cron'
     | '/api/public/payments/webhook'
     | '/api/public/szamla-hiany-jelzes/cron'
     | '/api/public/termek-kep/$slug'
@@ -1826,6 +1839,7 @@ export interface RootRouteChildren {
   ApiPublicKalkulatorKepSlugRoute: typeof ApiPublicKalkulatorKepSlugRoute
   ApiPublicKatalogusAuditCronRoute: typeof ApiPublicKatalogusAuditCronRoute
   ApiPublicLetoltesTokenRoute: typeof ApiPublicLetoltesTokenRoute
+  ApiPublicNapiJelzesekCronRoute: typeof ApiPublicNapiJelzesekCronRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
   ApiPublicSzamlaHianyJelzesCronRoute: typeof ApiPublicSzamlaHianyJelzesCronRoute
   ApiPublicTermekKepSlugRoute: typeof ApiPublicTermekKepSlugRoute
@@ -2767,6 +2781,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicLetoltesTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/napi-jelzesek/cron': {
+      id: '/api/public/napi-jelzesek/cron'
+      path: '/api/public/napi-jelzesek/cron'
+      fullPath: '/api/public/napi-jelzesek/cron'
+      preLoaderRoute: typeof ApiPublicNapiJelzesekCronRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -3014,6 +3035,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicKalkulatorKepSlugRoute: ApiPublicKalkulatorKepSlugRoute,
   ApiPublicKatalogusAuditCronRoute: ApiPublicKatalogusAuditCronRoute,
   ApiPublicLetoltesTokenRoute: ApiPublicLetoltesTokenRoute,
+  ApiPublicNapiJelzesekCronRoute: ApiPublicNapiJelzesekCronRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
   ApiPublicSzamlaHianyJelzesCronRoute: ApiPublicSzamlaHianyJelzesCronRoute,
   ApiPublicTermekKepSlugRoute: ApiPublicTermekKepSlugRoute,
