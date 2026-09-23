@@ -21,4 +21,4 @@
 - [x] Admin Megrendelések: gombok átnevezése/sorrendje, rendelésenkénti Tetejére gomb
 - [x] Megrendelések és Statisztika: hónap-szűrés év kiválasztása nélkül
 
-- [ ] Admin e-mailek, szűrők, ugrópontok, kuponexportok és statisztikai exportok pontosítása
+- [x] Admin e-mailek, szűrők, ugrópontok, kuponexportok és statisztikai exportok pontosítása
