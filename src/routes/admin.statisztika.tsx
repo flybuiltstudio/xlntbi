@@ -25,6 +25,7 @@ import { TableExportButtons } from "@/components/TableExportButtons";
 
 const STATS_NAV = [
   ["megrendelt-termekek", "Megrendelt termékek"],
+  ["termek-konverzio", "Termékenkénti konverziós arány"],
   ["havi-bontas", "Havi bontás grafikonon"],
   ["megrendelesek-orankent", "Megrendelések óránként"],
   ["megrendeloi-lista", "Megrendelői és terméklista"],
@@ -704,7 +705,7 @@ function MultiSelect({
   buttonLabel,
 }: {
   items: { key: string; label: string }[];
-  selected: Set<string>;
+  selected: Set<string> | null;
   onToggle: (key: string) => void;
   onToggleAll: () => void;
   buttonLabel: string;
@@ -720,7 +721,7 @@ function MultiSelect({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const isAll = selected.size === 0;
+  const isAll = selected === null;
 
   return (
     <div ref={ref} className="relative mt-3">
@@ -765,9 +766,9 @@ function MultiSelect({
 
 /** Megrendelőnkénti és termékenkénti, a kezdetektől számított listák 4 formátumú exporttal. */
 function CustomerProductLists({ rows }: { rows: StatRow[] }) {
-  // Üres set = összes kiválasztva (alapértelmezett).
-  const [customerSel, setCustomerSel] = useState<Set<string>>(new Set());
-  const [productSel, setProductSel] = useState<Set<string>>(new Set());
+  // null = összes, üres halmaz = egyik sem.
+  const [customerSel, setCustomerSel] = useState<Set<string> | null>(null);
+  const [productSel, setProductSel] = useState<Set<string> | null>(null);
   const [exporting, setExporting] = useState<string | null>(null);
   const [error, setError] = useState("");
 
@@ -787,27 +788,27 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
     [rows],
   );
 
-  const isAllCustomers = customerSel.size === 0;
-  const isAllProducts = productSel.size === 0;
+  const isAllCustomers = customerSel === null;
+  const isAllProducts = productSel === null;
 
   const selectedCustomerEmails = useMemo(() => {
     if (isAllCustomers) return new Set(customers.map((c) => c.email.trim().toLowerCase()));
     return new Set(
       customers
-        .filter((c) => customerSel.has(c.email))
+        .filter((c) => customerSel?.has(c.email))
         .map((c) => c.email.trim().toLowerCase()),
     );
   }, [customers, customerSel, isAllCustomers]);
 
   const selectedProductSet = useMemo(() => {
     if (isAllProducts) return new Set(productLabels);
-    return new Set(productLabels.filter((l) => productSel.has(l)));
+    return new Set(productLabels.filter((l) => productSel?.has(l)));
   }, [productLabels, productSel, isAllProducts]);
 
   const toggleCustomer = (email: string) => {
     setCustomerSel((prev) => {
       // Ha épp "összes" módban vagyunk, indítsuk mindenki más kijelölésével.
-      if (prev.size === 0) {
+      if (prev === null) {
         const next = new Set(customers.map((c) => c.email));
         next.delete(email);
         return next;
@@ -816,16 +817,16 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
       if (next.has(email)) next.delete(email);
       else next.add(email);
       // Ha mind be van jelölve, térjünk vissza "összes" (üres set) módba.
-      if (next.size === customers.length) return new Set();
+      if (next.size === customers.length) return null;
       return next;
     });
   };
 
-  const toggleAllCustomers = () => setCustomerSel(new Set());
+  const toggleAllCustomers = () => setCustomerSel((prev) => (prev === null ? new Set() : null));
 
   const toggleProduct = (label: string) => {
     setProductSel((prev) => {
-      if (prev.size === 0) {
+      if (prev === null) {
         const next = new Set(productLabels);
         next.delete(label);
         return next;
@@ -833,12 +834,12 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
       const next = new Set(prev);
       if (next.has(label)) next.delete(label);
       else next.add(label);
-      if (next.size === productLabels.length) return new Set();
+      if (next.size === productLabels.length) return null;
       return next;
     });
   };
 
-  const toggleAllProducts = () => setProductSel(new Set());
+  const toggleAllProducts = () => setProductSel((prev) => (prev === null ? new Set() : null));
 
   const customerRows = useMemo(
     () => rows.filter((r) => selectedCustomerEmails.has((r.email ?? "").trim().toLowerCase())),
@@ -852,15 +853,15 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
 
   const customerTitle = isAllCustomers
     ? "Megrendelői lista – Összes megrendelő"
-    : customerSel.size === 1
+    : customerSel?.size === 1
       ? `Megrendelői lista – ${customers.find((c) => customerSel.has(c.email))?.name ?? ""}`
-      : `Megrendelői lista – ${customerSel.size} megrendelő`;
+      : `Megrendelői lista – ${customerSel?.size ?? 0} megrendelő`;
 
   const productTitle = isAllProducts
     ? "Termék megrendelői – Összes termék"
-    : productSel.size === 1
+    : productSel?.size === 1
       ? `Termék megrendelői – ${productSel.values().next().value ?? ""}`
-      : `Termék megrendelői – ${productSel.size} termék`;
+      : `Termék megrendelői – ${productSel?.size ?? 0} termék`;
 
   const customerTable: ListTable | null = customerRows.length
     ? {
@@ -991,15 +992,15 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
 
   const customerButtonLabel = isAllCustomers
     ? "Összes megrendelő"
-    : customerSel.size === 1
+    : customerSel?.size === 1
       ? customers.find((c) => customerSel.has(c.email))?.name ?? "1 megrendelő"
-      : `${customerSel.size} megrendelő kiválasztva`;
+      : `${customerSel?.size ?? 0} megrendelő kiválasztva`;
 
   const productButtonLabel = isAllProducts
     ? "Összes termék"
-    : productSel.size === 1
+    : productSel?.size === 1
       ? (productSel.values().next().value ?? "1 termék")
-      : `${productSel.size} termék kiválasztva`;
+      : `${productSel?.size ?? 0} termék kiválasztva`;
 
   return (
     <section className="mt-14">
@@ -1344,7 +1345,7 @@ function PageViewBlock({
           ) : (
             <FileSpreadsheet className="h-4 w-4" />
           )}
-          Excel (.xlsx)
+          Excel
         </button>
         <button
           type="button"
@@ -1701,7 +1702,7 @@ function ProductConversion({
           row.label,
           row.views,
           row.paid,
-          row.rate === null ? "—" : `${row.rate.toFixed(2)} %`,
+          row.rate === null ? "—" : `${row.rate.toFixed(2).replace(".", ",")} %`,
         ]),
         rightCols: [1, 2, 3],
       }
@@ -1709,10 +1710,10 @@ function ProductConversion({
   const exportBase = `xlntbi-termek-konverzio-${slugify(periodLabel)}`;
 
   return (
-    <div className="mt-10">
-      <h3 className="text-base font-bold text-foreground">
+    <section id="termek-konverzio" className="mt-10 scroll-mt-36">
+      <h2 className="text-xl font-bold text-foreground">
         Termékenkénti konverziós arány – {periodLabel}
-      </h3>
+      </h2>
       <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
         Konverzió = kifizetett megrendelések száma ÷ a termék Részletek oldalának megtekintései ×
         100. A megtekintések a publikált oldalon mért, havi bontású adatok, tehát ugyanarra az
@@ -1754,7 +1755,7 @@ function ProductConversion({
                   <td className="px-4 py-3 text-right text-muted-foreground">{r.views} db</td>
                   <td className="px-4 py-3 text-right text-muted-foreground">{r.paid} db</td>
                   <td className="px-4 py-3 text-right font-semibold text-foreground">
-                    {r.rate === null ? "—" : `${r.rate.toFixed(2)} %`}
+                    {r.rate === null ? "—" : `${r.rate.toFixed(2).replace(".", ",")} %`}
                   </td>
                 </tr>
               ))}
@@ -1762,7 +1763,7 @@ function ProductConversion({
           </table>
         </div>
       )}
-    </div>
+    </section>
   );
 }
 
