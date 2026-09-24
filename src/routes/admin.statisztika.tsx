@@ -1455,12 +1455,10 @@ function PageViewLegend({ items }: { items: { label: string; color: string }[] }
  * for the same period. Views only exist with month granularity, so the period
  * filter of the page (year + month) is applied to both sides identically.
  */
-function ProductConversion({ rows }: { rows: StatRow[] }) {
+function ProductConversion({ rows, yearSel, monthSel, years, onYearChange, onMonthChange }: { rows: StatRow[] } & SharedPeriodProps) {
   const fetchPageViews = useServerFn(adminPageViewStats);
   const [counts, setCounts] = useState<PageViewCount[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [yearSel, setYearSel] = useState<YearSel>("all");
-  const [monthSel, setMonthSel] = useState<MonthSel>("all");
 
   useEffect(() => {
     let cancelled = false;
@@ -1477,13 +1475,6 @@ function ProductConversion({ rows }: { rows: StatRow[] }) {
     return () => { cancelled = true; };
   }, [fetchPageViews]);
 
-  const years = useMemo(() => {
-    const values = new Set<number>();
-    for (const row of rows) values.add(new Date(row.createdAt).getFullYear());
-    for (const row of counts ?? []) values.add(row.year);
-    return [...values].sort((a, b) => b - a);
-  }, [rows, counts]);
-
   const periodLabel = yearSel === "all"
     ? monthSel === "all" ? "Összes év" : `Összes év – ${MONTHS[monthSel]}`
     : monthSel === "all" ? `${yearSel} egész éve` : `${yearSel}. ${MONTHS[monthSel]}`;
@@ -1494,7 +1485,8 @@ function ProductConversion({ rows }: { rows: StatRow[] }) {
     for (const row of counts ?? []) {
       if (yearSel !== "all" && row.year !== yearSel) continue;
       if (monthSel !== "all" && row.month !== monthSel + 1) continue;
-      views.set(row.pageKey, (views.get(row.pageKey) ?? 0) + row.views);
+      const key = resolveProductSlug(row.pageKey);
+      views.set(key, (views.get(key) ?? 0) + row.views);
     }
     const paid = new Map<string, number>();
     for (const row of rows) {
@@ -1502,7 +1494,8 @@ function ProductConversion({ rows }: { rows: StatRow[] }) {
       const date = new Date(row.createdAt);
       if (yearSel !== "all" && date.getFullYear() !== yearSel) continue;
       if (monthSel !== "all" && date.getMonth() !== monthSel) continue;
-      paid.set(row.productSlug, (paid.get(row.productSlug) ?? 0) + 1);
+      const key = resolveProductSlug(row.productSlug);
+      paid.set(key, (paid.get(key) ?? 0) + 1);
     }
     const keys = new Set<string>([...views.keys(), ...paid.keys()]);
     return [...keys].map((key) => {
@@ -1526,10 +1519,7 @@ function ProductConversion({ rows }: { rows: StatRow[] }) {
     <section id="termek-konverzio" className="mt-14 scroll-mt-36">
       <h2 className="text-xl font-bold text-foreground">Termékenkénti konverziós arány</h2>
       <p className="mt-2 max-w-3xl text-sm text-muted-foreground">Konverzió = kifizetett megrendelések száma ÷ a termék Részletek oldalának megtekintései × 100. Megtekintés nélkül a konverzió helyén „—” áll.</p>
-      <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
-        <div className="flex flex-wrap items-center gap-2"><span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Év</span><button type="button" className={filterChip(yearSel === "all")} onClick={() => setYearSel("all")}>Összes év</button>{years.map((y) => <button key={y} type="button" className={filterChip(yearSel === y)} onClick={() => setYearSel(y)}>{y}</button>)}</div>
-        <div className="flex flex-wrap items-center gap-1.5"><span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hónap</span><button type="button" className={filterChip(monthSel === "all")} onClick={() => setMonthSel("all")}>Összes</button>{MONTHS_SHORT.map((label, i) => <button key={label} type="button" className={filterChip(monthSel === i)} onClick={() => setMonthSel(i)} title={MONTHS[i]}>{label}</button>)}</div>
-      </div>
+      <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={onYearChange} onMonthChange={onMonthChange} />
       <div className="mt-4"><TableExportButtons baseName={`xlntbi-termek-konverzio-${slugify(periodLabel)}`} sheetName="Termék konverzió" table={exportTable} /></div>
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : counts === null ? <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Megtekintések betöltése…</p> : table.length === 0 ? <p className="mt-4 rounded-xl border border-border bg-card px-4 py-5 text-sm text-muted-foreground">Ehhez az időszakhoz nincs sem megtekintés, sem kifizetett megrendelés.</p> : <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card"><table className="w-full min-w-[560px] text-sm"><thead><tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground"><th className="px-4 py-3 font-semibold">Termék</th><th className="px-4 py-3 text-right font-semibold">Megtekintés</th><th className="px-4 py-3 text-right font-semibold">Kifizetett vásárlás</th><th className="px-4 py-3 text-right font-semibold">Konverzió</th></tr></thead><tbody>{table.map((r) => <tr key={r.key} className="border-b border-border/60 last:border-0"><td className="px-4 py-3 font-medium text-foreground">{r.label}</td><td className="px-4 py-3 text-right text-muted-foreground">{r.views} db</td><td className="px-4 py-3 text-right text-muted-foreground">{r.paid} db</td><td className="px-4 py-3 text-right font-semibold text-foreground">{r.rate === null ? "—" : `${r.rate.toFixed(2).replace(".", ",")} %`}</td></tr>)}</tbody></table></div>}
       <BackToTop />
@@ -1564,17 +1554,9 @@ function budapestBuckets(iso: string) {
  * Orders per hour of day (Europe/Budapest), all payment statuses, with its own
  * year and month filter that does not affect the rest of the page.
  */
-function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
-  const [yearSel, setYearSel] = useState<YearSel>("all");
-  const [monthSel, setMonthSel] = useState<MonthSel>("all");
+function HourlyOrdersChart({ rows, yearSel, monthSel, years, onYearChange, onMonthChange }: { rows: StatRow[] } & SharedPeriodProps) {
 
   const buckets = useMemo(() => rows.map((row) => budapestBuckets(row.createdAt)), [rows]);
-
-  const years = useMemo(() => {
-    const set = new Set<number>();
-    for (const b of buckets) set.add(b.year);
-    return [...set].sort((a, b) => b - a);
-  }, [buckets]);
 
   const hours = useMemo(() => {
     const counts = Array.from({ length: 24 }, () => 0);
@@ -1603,56 +1585,10 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
       <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
         A megrendelés leadásának időpontja szerint, magyar idő (Europe/Budapest) alapján, a nyári és
         téli időszámítást is helyesen kezelve. Minden leadott megrendelés beleszámít, fizetési
-        állapottól függetlenül. Ez a szűrő csak erre a grafikonra hat.
+        állapottól függetlenül.
       </p>
 
-      <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Év
-          </span>
-          <button
-            type="button"
-            className={filterChip(yearSel === "all")}
-            onClick={() => setYearSel("all")}
-          >
-            Összes év
-          </button>
-          {years.map((y) => (
-            <button
-              key={y}
-              type="button"
-              className={filterChip(yearSel === y)}
-              onClick={() => setYearSel(y)}
-            >
-              {y}
-            </button>
-          ))}
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Hónap
-          </span>
-          <button
-            type="button"
-            className={filterChip(monthSel === "all")}
-            onClick={() => setMonthSel("all")}
-          >
-            Összes
-          </button>
-          {MONTHS_SHORT.map((label, i) => (
-            <button
-              key={label}
-              type="button"
-              className={filterChip(monthSel === i)}
-              onClick={() => setMonthSel(i)}
-              title={MONTHS[i]}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={onYearChange} onMonthChange={onMonthChange} />
 
       <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
         <p className="text-sm text-muted-foreground">
@@ -1693,11 +1629,12 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
   );
 }
 
-function DemoDownloads() {
+function DemoDownloads({ yearSel, monthSel, years, onYearChange, onMonthChange }: SharedPeriodProps) {
   const load = useServerFn(adminDemoStats);
   const [rows, setRows] = useState<any[] | null>(null);
   const [error, setError] = useState("");
   const [exporting, setExporting] = useState<string | null>(null);
+  const [topMetric, setTopMetric] = useState<DemoTopMetric>("downloads");
 
   useEffect(() => {
     load()
@@ -1718,15 +1655,29 @@ function DemoDownloads() {
     );
   }
 
-  const activeCount = rows.filter((r) => r.active).length;
-  const totalDownloads = rows.reduce((s, r) => s + r.downloadCount, 0);
+  const filteredRows = rows.filter((row) => {
+    const date = new Date(row.createdAt);
+    return (yearSel === "all" || date.getFullYear() === yearSel) && (monthSel === "all" || date.getMonth() === monthSel);
+  });
+  const activeCount = filteredRows.filter((r) => r.active).length;
+  const totalDownloads = filteredRows.reduce((s, r) => s + r.downloadCount, 0);
+  const demoTop = [...filteredRows.reduce((map, row) => {
+    const entry = map.get(row.productName) ?? { label: row.productName, downloads: 0, requests: 0 };
+    entry.downloads += row.downloadCount;
+    entry.requests += 1;
+    map.set(row.productName, entry);
+    return map;
+  }, new Map<string, { label: string; downloads: number; requests: number }>()).values()]
+    .sort((a, b) => topMetric === "downloads" ? b.downloads - a.downloads : b.requests - a.requests)
+    .slice(0, 5);
+  const demoTopMax = Math.max(1, ...demoTop.map((item) => topMetric === "downloads" ? item.downloads : item.requests));
 
-  const demoTable: ListTable | null = rows.length
+  const demoTable: ListTable | null = filteredRows.length
     ? {
         title: "DEMO letöltések",
         subtitle: "Fizetés nélküli DEMO licenc igénylések – nem szerepelnek a vásárlási statisztikában.",
         head: ["Dátum", "Termék", "Név", "E-mail", "Cégnév", "Adószám", "HWID", "Letöltések", "Állapot"],
-        body: rows.map((r) => [
+        body: filteredRows.map((r) => [
           formatDateHu(r.createdAt),
           r.productName,
           r.name,
@@ -1737,7 +1688,7 @@ function DemoDownloads() {
           `${r.downloadCount}/${r.maxDownloads}`,
           r.active ? "Aktív" : "Lejárt",
         ]),
-        foot: ["Összesen", "", `${rows.length} igénylés`, "", "", "", "", `${totalDownloads} letöltés`, `${activeCount} aktív`],
+        foot: ["Összesen", "", `${filteredRows.length} igénylés`, "", "", "", "", `${totalDownloads} letöltés`, `${activeCount} aktív`],
         rightCols: [7],
       }
     : null;
@@ -1767,16 +1718,14 @@ function DemoDownloads() {
         és nem kerülnek számlázásra.
       </p>
 
-      <div className="mt-4 flex flex-wrap gap-4 text-sm">
-        <span className="rounded-md border border-border bg-card px-3 py-2">
-          <strong className="text-foreground">{rows.length}</strong> db igénylés összesen
-        </span>
-        <span className="rounded-md border border-border bg-card px-3 py-2">
-          <strong className="text-foreground">{activeCount}</strong> db aktív (nem lejárt)
-        </span>
-        <span className="rounded-md border border-border bg-card px-3 py-2">
-          <strong className="text-foreground">{totalDownloads}</strong> db letöltés megtörtént
-        </span>
+      <div className="mt-4 grid gap-4 sm:grid-cols-3">
+        {[{ label: "DEMO igénylések", value: `${filteredRows.length} db` }, { label: "Aktív igénylések", value: `${activeCount} db` }, { label: "Tényleges letöltések", value: `${totalDownloads} db` }].map((item) => <div key={item.label} className="rounded-xl border border-border bg-card p-5"><p className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</p><p className="mt-2 text-2xl font-bold text-foreground">{item.value}</p></div>)}
+      </div>
+
+      <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={onYearChange} onMonthChange={onMonthChange} />
+      <div className="mt-6 rounded-xl border border-border bg-card p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3"><h3 className="text-base font-bold text-foreground">Top 5 termék</h3><div className="flex gap-2"><Button type="button" size="sm" variant={topMetric === "downloads" ? "default" : "outline"} onClick={() => setTopMetric("downloads")}>Tényleges letöltések</Button><Button type="button" size="sm" variant={topMetric === "requests" ? "default" : "outline"} onClick={() => setTopMetric("requests")}>Igénylések</Button></div></div>
+        {demoTop.length === 0 ? <p className="mt-4 text-sm text-muted-foreground">A kiválasztott időszakhoz nincs rangsorolható adat.</p> : <ol className="mt-4 space-y-3">{demoTop.map((item, index) => { const value = topMetric === "downloads" ? item.downloads : item.requests; return <li key={item.label} className="grid grid-cols-[2rem_minmax(0,14rem)_1fr_auto] items-center gap-3 text-sm"><span className="font-bold">{index + 1}.</span><span className="truncate font-medium">{item.label}</span><div className="h-3 overflow-hidden rounded bg-muted"><div className="h-full rounded bg-primary" style={{ width: `${(value / demoTopMax) * 100}%` }} /></div><span className="font-semibold">{value} db</span></li>; })}</ol>}
       </div>
 
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
@@ -1832,7 +1781,7 @@ function DemoDownloads() {
         </button>
       </div>
 
-      {rows.length > 0 ? (
+      {filteredRows.length > 0 ? (
         <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
           <table className="w-full text-sm">
             <thead className="border-b border-border bg-muted/40 text-left">
@@ -1849,7 +1798,7 @@ function DemoDownloads() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {rows.map((r) => (
+              {filteredRows.map((r) => (
                 <tr key={r.id}>
                   <td className="px-4 py-2.5 text-muted-foreground">
                     {formatDateHu(r.createdAt)}
