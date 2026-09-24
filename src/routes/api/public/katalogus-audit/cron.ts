@@ -3,28 +3,30 @@ import { createFileRoute } from "@tanstack/react-router";
 /**
  * Scheduled catalog audit endpoint (weekly, called by pg_cron).
  *
- * Public prefix, so the caller is verified with a shared secret
- * (`x-cron-secret` header or `?secret=`). Read-only audit + owner notification;
- * nothing is modified in Stripe or storage.
+ * Public prefix, so the caller is verified with a one-time nonce: the cron job
+ * inserts a random nonce into `cron_call_nonces` (not reachable by anon or
+ * authenticated users) and sends it in `x-cron-nonce`. The nonce is consumed
+ * here and must be fresh, so no reusable credential exists in the source.
  */
-function authorized(request: Request): boolean {
-  const expected = process.env["CATALOG_AUDIT_CRON_SECRET"];
-  if (!expected) {
-    console.error("CATALOG_AUDIT_CRON_SECRET nincs beállítva.");
-    return false;
-  }
-  const url = new URL(request.url);
-  const provided = request.headers.get("x-cron-secret") ?? url.searchParams.get("secret") ?? "";
-  if (provided.length !== expected.length) return false;
-  let diff = 0;
-  for (let i = 0; i < expected.length; i++) {
-    diff |= provided.charCodeAt(i) ^ expected.charCodeAt(i);
-  }
-  return diff === 0;
+const NONCE_MAX_AGE_MS = 10 * 60 * 1000;
+
+async function authorized(request: Request): Promise<boolean> {
+  const nonce = request.headers.get("x-cron-nonce") ?? "";
+  if (!/^[a-f0-9]{64}$/.test(nonce)) return false;
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin
+    .from("cron_call_nonces")
+    .delete()
+    .eq("nonce", nonce)
+    .eq("job", "catalog-audit")
+    .select("created_at")
+    .maybeSingle();
+  if (error || !data) return false;
+  return Date.now() - new Date(data.created_at).getTime() <= NONCE_MAX_AGE_MS;
 }
 
 async function handle(request: Request): Promise<Response> {
-  if (!authorized(request)) {
+  if (!(await authorized(request))) {
     return new Response("Unauthorized", { status: 401 });
   }
   const url = new URL(request.url);
@@ -49,7 +51,6 @@ async function handle(request: Request): Promise<Response> {
 export const Route = createFileRoute("/api/public/katalogus-audit/cron")({
   server: {
     handlers: {
-      GET: ({ request }) => handle(request),
       POST: ({ request }) => handle(request),
     },
   },
