@@ -16,12 +16,13 @@ import {
 } from "lucide-react";
 
 import { adminOrderStats, adminPageViewStats, adminDemoStats } from "@/lib/admin.functions";
-import { formatPrice, products } from "@/lib/products";
+import { formatPrice, products, resolveProductSlug } from "@/lib/products";
 import { serviceItems } from "@/lib/services";
 import { PageHero } from "@/components/PageHero";
 import { useAdminSession } from "@/components/admin-panels";
 import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
 import { TableExportButtons } from "@/components/TableExportButtons";
+import { Button } from "@/components/ui/button";
 
 const STATS_NAV_LEFT = [
   ["megrendelt-termekek", "Megrendelt termékek"],
@@ -39,7 +40,6 @@ const STATS_NAV_RIGHT = [
 import {
   MONTHS,
   MONTHS_SHORT,
-  PALETTE,
   exportStatsCsv,
   exportStatsXlsx,
   exportStatsXml,
@@ -52,7 +52,6 @@ import {
   paymentLabel,
   productLabel,
   slugify,
-  pageViewTable,
   pivotPageViews,
   type ListTable,
   type PageViewCount,
@@ -81,6 +80,8 @@ type StatRow = Awaited<ReturnType<typeof adminOrderStats>>["rows"][number];
 type PayFilter = "all" | "paid" | "unpaid";
 type YearSel = number | "all";
 type MonthSel = number | "all";
+type TopMetric = "revenue" | "quantity";
+type DemoTopMetric = "downloads" | "requests";
 
 const PAY_OPTIONS: Array<{ id: PayFilter; label: string }> = [
   { id: "all", label: "Összes" },
@@ -150,12 +151,89 @@ function MeasurementLegend() {
   );
 }
 
-function filterChip(active: boolean) {
-  return `rounded-md px-3.5 py-1.5 text-sm font-semibold transition-colors ${
-    active
-      ? "bg-primary text-primary-foreground"
-      : "border border-input text-muted-foreground hover:bg-accent hover:text-foreground"
-  }`;
+const CONNECTED_FILTER_NOTE =
+  "Ez az év- és hónapszűrő a Megrendelt termékek, Havi bontás, Termékenkénti konverziós arány, Megrendelések óránként, DEMO letöltések és mindkét oldalletöltési blokk adatait együtt frissíti.";
+
+const DISTINCT_CHART_COLORS = [
+  "var(--chart-1)", "var(--chart-4)", "var(--chart-3)", "var(--chart-6)", "var(--chart-7)",
+  "var(--chart-2)", "var(--chart-8)", "var(--chart-9)", "var(--chart-10)", "var(--chart-5)",
+];
+
+function PeriodFilters({
+  years,
+  year,
+  month,
+  onYearChange,
+  onMonthChange,
+  payFilter,
+  onPayFilterChange,
+}: {
+  years: number[];
+  year: YearSel;
+  month: MonthSel;
+  onYearChange: (value: YearSel) => void;
+  onMonthChange: (value: MonthSel) => void;
+  payFilter?: PayFilter;
+  onPayFilterChange?: (value: PayFilter) => void;
+}) {
+  return (
+    <div className="mt-4 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
+      <p className="text-sm text-muted-foreground">{CONNECTED_FILTER_NOTE}</p>
+      {payFilter && onPayFilterChange ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="mr-1 w-32 text-xs font-semibold uppercase text-muted-foreground">Fizetés</span>
+          {PAY_OPTIONS.map((option) => (
+            <Button key={option.id} type="button" size="sm" variant={payFilter === option.id ? "default" : "outline"} onClick={() => onPayFilterChange(option.id)}>
+              {option.label}
+            </Button>
+          ))}
+          <span className="w-full text-xs text-muted-foreground">Csak a Megrendelt termékek és a Havi bontás blokkra hat.</span>
+        </div>
+      ) : null}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="mr-1 w-32 text-xs font-semibold uppercase text-muted-foreground">Év</span>
+        <Button type="button" size="sm" variant={year === "all" ? "default" : "outline"} onClick={() => onYearChange("all")}>Összes év</Button>
+        {years.map((value) => (
+          <Button key={value} type="button" size="sm" variant={year === value ? "default" : "outline"} onClick={() => onYearChange(value)}>{value}</Button>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="mr-1 w-32 text-xs font-semibold uppercase text-muted-foreground">Hónap</span>
+        <Button type="button" size="sm" variant={month === "all" ? "default" : "outline"} onClick={() => onMonthChange("all")}>Összes</Button>
+        {MONTHS_SHORT.map((label, index) => (
+          <Button key={label} type="button" size="sm" variant={month === index ? "default" : "outline"} onClick={() => onMonthChange(index)} title={MONTHS[index]}>{label}</Button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TopMetricSelector({ value, onChange }: { value: TopMetric; onChange: (value: TopMetric) => void }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button type="button" size="sm" variant={value === "revenue" ? "default" : "outline"} onClick={() => onChange("revenue")}>Árbevétel</Button>
+      <Button type="button" size="sm" variant={value === "quantity" ? "default" : "outline"} onClick={() => onChange("quantity")}>Mennyiség</Button>
+    </div>
+  );
+}
+
+function ProductTopFive({ items, metric }: { items: Array<{ label: string; qty: number; revenue: number }>; metric: TopMetric }) {
+  const ranked = [...items].sort((a, b) => metric === "revenue" ? b.revenue - a.revenue : b.qty - a.qty).slice(0, 5);
+  const max = Math.max(1, ...ranked.map((item) => metric === "revenue" ? item.revenue : item.qty));
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h3 className="text-base font-bold text-foreground">Top 5 termék</h3>
+        <span className="text-sm text-muted-foreground">{metric === "revenue" ? "Árbevétel alapján" : "Mennyiség alapján"}</span>
+      </div>
+      {ranked.length === 0 ? <p className="mt-4 text-sm text-muted-foreground">A kiválasztott időszakhoz nincs rangsorolható adat.</p> : (
+        <ol className="mt-4 space-y-3">{ranked.map((item, index) => {
+          const value = metric === "revenue" ? item.revenue : item.qty;
+          return <li key={item.label} className="grid grid-cols-[2rem_minmax(0,14rem)_1fr_auto] items-center gap-3 text-sm"><span className="font-bold">{index + 1}.</span><span className="truncate font-medium" title={item.label}>{item.label}</span><div className="h-3 overflow-hidden rounded bg-muted"><div className="h-full rounded bg-primary" style={{ width: `${(value / max) * 100}%` }} /></div><span className="font-semibold">{metric === "revenue" ? formatPrice(value) : `${value} db`}</span></li>;
+        })}</ol>
+      )}
+    </div>
+  );
 }
 
 function StatsPanel() {
@@ -167,8 +245,8 @@ function StatsPanel() {
   const [payFilter, setPayFilter] = useState<PayFilter>("all");
   const [yearSel, setYearSel] = useState<YearSel>("all");
   const [monthSel, setMonthSel] = useState<MonthSel>("all");
-  const [chartYearSel, setChartYearSel] = useState<YearSel>("all");
-  const [chartMonthSel, setChartMonthSel] = useState<MonthSel>("all");
+  const [productTopMetric, setProductTopMetric] = useState<TopMetric>("revenue");
+  const [monthlyTopMetric, setMonthlyTopMetric] = useState<TopMetric>("revenue");
   const [exporting, setExporting] = useState<string | null>(null);
 
   useEffect(() => {
@@ -183,7 +261,7 @@ function StatsPanel() {
   }, [includeTests]);
 
   const years = useMemo(() => {
-    const set = new Set<number>();
+    const set = new Set<number>([new Date().getFullYear()]);
     for (const row of rows ?? []) set.add(new Date(row.createdAt).getFullYear());
     return [...set].sort((a, b) => b - a);
   }, [rows]);
@@ -209,6 +287,14 @@ function StatsPanel() {
         return true;
       }),
     [payFiltered, activeYear, activeMonth],
+  );
+  const sharedPeriodRows = useMemo(
+    () =>
+      (rows ?? []).filter((row) => {
+        const date = new Date(row.createdAt);
+        return (yearSel === "all" || date.getFullYear() === yearSel) && (monthSel === "all" || date.getMonth() === monthSel);
+      }),
+    [rows, yearSel, monthSel],
   );
 
   const kpi = useMemo(
@@ -246,7 +332,7 @@ function StatsPanel() {
     return [...map.values()].sort((a, b) => b.qty - a.qty || b.revenue - a.revenue);
   }, [periodRows]);
 
-  /** Monthly buckets for the chart's selected year (payment-filtered, all months shown). */
+  /** Monthly buckets for the shared period (all years can be merged month by month). */
   const monthly = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, month) => ({
       month,
@@ -255,10 +341,10 @@ function StatsPanel() {
       revenue: 0,
       perProduct: new Map<string, number>(),
     }));
-    if (chartYearSel === "all") return { months, labels: [] as string[], yearTotals: { orders: 0, qty: 0, revenue: 0 } };
     for (const row of payFiltered) {
       const date = new Date(row.createdAt);
-      if (date.getFullYear() !== chartYearSel) continue;
+      if (yearSel !== "all" && date.getFullYear() !== yearSel) continue;
+      if (monthSel !== "all" && date.getMonth() !== monthSel) continue;
       const bucket = months[date.getMonth()];
       if (!bucket) continue;
       bucket.orders += 1;
@@ -279,7 +365,7 @@ function StatsPanel() {
       { orders: 0, qty: 0, revenue: 0 },
     );
     return { months, labels, yearTotals };
-  }, [payFiltered, chartYearSel]);
+  }, [payFiltered, yearSel, monthSel]);
 
   const maxMonthQty = Math.max(1, ...monthly.months.map((m) => m.qty));
 
@@ -297,11 +383,12 @@ function StatsPanel() {
     }
   };
 
-  const exportBtn =
-    "inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3.5 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50";
-
-  const selectYear = (y: YearSel) => {
-    setYearSel(y);
+  const monthlyTable: ListTable = {
+    title: `Havi bontás – ${periodLabel}`,
+    head: ["Hónap", "Megrendelés (db)", "Mennyiség (db)", "Árbevétel (Ft)"],
+    body: monthly.months.filter((item) => monthSel === "all" || item.month === monthSel).map((item) => [MONTHS[item.month] ?? "", item.orders, item.qty, item.revenue]),
+    foot: ["Összesen", monthly.yearTotals.orders, monthly.yearTotals.qty, monthly.yearTotals.revenue],
+    rightCols: [1, 2, 3],
   };
 
   return (
@@ -321,7 +408,7 @@ function StatsPanel() {
             onChange={(e) => setIncludeTests(e.target.checked)}
             className="h-4 w-4 accent-primary"
           />
-          Teszt megrendelések (TESZT- előtag) mutatása a statisztikában és az exportokban
+          TESZT-rendelések mutatása a Megrendelt termékek, Havi bontás, konverzió, óránkénti és megrendelői riportokban
         </label>
       ) : null}
 
@@ -362,24 +449,9 @@ function StatsPanel() {
               </div>
             </div>
 
-            <div className="mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Fizetés</span>
-                {PAY_OPTIONS.map((opt) => (
-                  <button key={opt.id} type="button" className={filterChip(payFilter === opt.id)} onClick={() => setPayFilter(opt.id)}>{opt.label}</button>
-                ))}
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Év</span>
-                <button type="button" className={filterChip(yearSel === "all")} onClick={() => selectYear("all")}>Összes év</button>
-                {years.map((y) => <button key={y} type="button" className={filterChip(yearSel === y)} onClick={() => selectYear(y)}>{y}</button>)}
-              </div>
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hónap</span>
-                <button type="button" className={filterChip(activeMonth === "all")} onClick={() => setMonthSel("all")}>Összes</button>
-                {MONTHS_SHORT.map((label, i) => <button key={label} type="button" className={filterChip(activeMonth === i)} onClick={() => setMonthSel(i)} title={MONTHS[i]}>{label}</button>)}
-              </div>
-            </div>
+            <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={setYearSel} onMonthChange={setMonthSel} payFilter={payFilter} onPayFilterChange={setPayFilter} />
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3"><h3 className="text-base font-bold text-foreground">Top 5 beállítása</h3><TopMetricSelector value={productTopMetric} onChange={setProductTopMetric} /></div>
+            <ProductTopFive items={products} metric={productTopMetric} />
 
             {periodRows.length === 0 ? (
               <p className="mt-6 rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">A kiválasztott szűréshez ({periodLabel}) nem tartozik megrendelés.</p>
@@ -387,10 +459,10 @@ function StatsPanel() {
               <>
                 <div className="mt-6 mb-6 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-4 py-3">
                   <span className="mr-1 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground"><Download className="h-4 w-4 text-primary" /> Exportálás:</span>
-                  <button type="button" className={exportBtn} disabled={exporting !== null} onClick={() => runExport("xlsx", () => exportStatsXlsx(periodRows))}>{exporting === "xlsx" ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSpreadsheet className="h-4 w-4" />} Excel (.xlsx)</button>
-                  <button type="button" className={exportBtn} disabled={exporting !== null} onClick={() => runExport("csv", () => exportStatsCsv(periodRows))}><FileText className="h-4 w-4" /> CSV</button>
-                  <button type="button" className={exportBtn} disabled={exporting !== null} onClick={() => runExport("xml", () => exportStatsXml(periodRows))}><FileCode2 className="h-4 w-4" /> XML</button>
-                  <button type="button" className={exportBtn} disabled={exporting !== null || activeYear === null} title={activeYear === null ? "A PDF exportálásához válassz ki egy évet." : undefined} onClick={() => activeYear !== null && runExport("pdf", () => exportYearPdf(payFiltered, activeYear))}>{exporting === "pdf" ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />} PDF{activeYear !== null ? ` – ${activeYear}` : ""}</button>
+                  <Button type="button" variant="outline" size="sm" disabled={exporting !== null} onClick={() => runExport("xlsx", () => exportStatsXlsx(periodRows))}>{exporting === "xlsx" ? <Loader2 className="animate-spin" /> : <FileSpreadsheet />} Excel</Button>
+                  <Button type="button" variant="outline" size="sm" disabled={exporting !== null} onClick={() => runExport("csv", () => exportStatsCsv(periodRows))}><FileText /> CSV</Button>
+                  <Button type="button" variant="outline" size="sm" disabled={exporting !== null} onClick={() => runExport("xml", () => exportStatsXml(periodRows))}><FileCode2 /> XML</Button>
+                  <Button type="button" variant="outline" size="sm" disabled={exporting !== null || activeYear === null} title={activeYear === null ? "A PDF exportálásához válassz ki egy évet." : undefined} onClick={() => activeYear !== null && runExport("pdf", () => exportYearPdf(payFiltered, activeYear))}>{exporting === "pdf" ? <Loader2 className="animate-spin" /> : <FileDown />} PDF</Button>
                   <span className="w-full text-xs text-muted-foreground">Az Excel / CSV / XML a szűrt időszak ({periodLabel}) adatait tartalmazza. A PDF-hez válassz konkrét évet.</span>
                 </div>
                 <div className="overflow-x-auto rounded-xl border border-border bg-card">
@@ -407,48 +479,31 @@ function StatsPanel() {
 
           <section id="havi-bontas" className="mt-14 scroll-mt-36">
             <h2 className="text-xl font-bold text-foreground">Havi bontás</h2>
-            <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Év</span>
-                <button type="button" className={filterChip(chartYearSel === "all")} onClick={() => setChartYearSel("all")}>Összes év</button>
-                {years.map((y) => <button key={y} type="button" className={filterChip(chartYearSel === y)} onClick={() => setChartYearSel(y)}>{y}</button>)}
-              </div>
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hónap</span>
-                <button type="button" className={filterChip(chartMonthSel === "all")} onClick={() => setChartMonthSel("all")}>Összes</button>
-                {MONTHS_SHORT.map((label, i) => <button key={label} type="button" className={filterChip(chartMonthSel === i)} onClick={() => setChartMonthSel(i)} title={MONTHS[i]}>{label}</button>)}
-              </div>
-            </div>
-            {chartYearSel === "all" ? (
-              <p className="mt-4 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">A havi grafikonhoz válassz ki egy konkrét évet.</p>
-            ) : (
-              <>
+            <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={setYearSel} onMonthChange={setMonthSel} payFilter={payFilter} onPayFilterChange={setPayFilter} />
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3"><h3 className="text-base font-bold text-foreground">Top 5 beállítása</h3><TopMetricSelector value={monthlyTopMetric} onChange={setMonthlyTopMetric} /></div>
+            <ProductTopFive items={products} metric={monthlyTopMetric} />
                 <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
-                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">{chartYearSel}</strong> – megrendelt mennyiség havonta (db)</p>
+                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">{periodLabel}</strong> – megrendelt mennyiség havonta (db)</p>
                   <div className="mt-6 flex h-60 items-end gap-1 sm:gap-2">
-                    {monthly.months.map((m) => <div key={m.month} className={`flex min-w-0 flex-1 flex-col items-center gap-2 ${chartMonthSel !== "all" && m.month !== chartMonthSel ? "opacity-40" : ""}`}><span className="text-xs font-semibold text-foreground">{m.qty > 0 ? m.qty : ""}</span><div className={`flex h-44 w-full max-w-12 flex-col justify-end overflow-hidden rounded-t-md ${m.qty > 0 ? "bg-muted/50" : "border-b-2 border-border/60"}`} title={`${MONTHS[m.month]}: ${m.qty} db, ${formatPrice(m.revenue)}`}>{monthly.labels.map((label, li) => { const q = m.perProduct.get(label) ?? 0; return q === 0 ? null : <div key={label} style={{ height: `${(q / maxMonthQty) * 100}%`, backgroundColor: PALETTE[li % PALETTE.length] }} title={`${label}: ${q} db`} />; })}</div><span className="text-[11px] text-muted-foreground">{MONTHS_SHORT[m.month]}</span></div>)}
+                    {monthly.months.map((m) => <div key={m.month} className={`flex min-w-0 flex-1 flex-col items-center gap-2 ${monthSel !== "all" && m.month !== monthSel ? "opacity-25" : ""}`}><span className="text-xs font-semibold text-foreground">{m.qty > 0 ? m.qty : ""}</span><div className={`flex h-44 w-full max-w-12 flex-col justify-end overflow-hidden rounded-t-md ${m.qty > 0 ? "bg-muted/50" : "border-b-2 border-border/60"}`} title={`${MONTHS[m.month]}: ${m.qty} db, ${formatPrice(m.revenue)}`}>{monthly.labels.map((label, li) => { const q = m.perProduct.get(label) ?? 0; return q === 0 ? null : <div key={label} style={{ height: `${(q / maxMonthQty) * 100}%`, backgroundColor: DISTINCT_CHART_COLORS[li % DISTINCT_CHART_COLORS.length] }} title={`${label}: ${q} db`} />; })}</div><span className="text-xs text-muted-foreground">{MONTHS_SHORT[m.month]}</span></div>)}
                   </div>
-                  {monthly.labels.length > 0 ? <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2">{monthly.labels.map((label, li) => <li key={label} className="inline-flex items-center gap-2 text-xs text-muted-foreground"><span className="h-3 w-3 shrink-0 rounded-sm" style={{ backgroundColor: PALETTE[li % PALETTE.length] }} />{label}</li>)}</ul> : <p className="mt-5 text-sm text-muted-foreground">Ebben az évben még nincs megrendelés.</p>}
+                  {monthly.labels.length > 0 ? <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2">{monthly.labels.map((label, li) => <li key={label} className="inline-flex items-center gap-2 text-sm text-muted-foreground"><span className="h-3 w-3 shrink-0 rounded-sm" style={{ backgroundColor: DISTINCT_CHART_COLORS[li % DISTINCT_CHART_COLORS.length] }} />{label}</li>)}</ul> : <p className="mt-5 text-sm text-muted-foreground">Ebben az időszakban még nincs megrendelés.</p>}
                 </div>
-                <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card"><table className="w-full min-w-[520px] text-sm"><thead><tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground"><th className="px-4 py-3 font-semibold">{chartYearSel}</th><th className="px-4 py-3 text-right font-semibold">Megrendelés</th><th className="px-4 py-3 text-right font-semibold">Mennyiség</th><th className="px-4 py-3 text-right font-semibold">Árbevétel</th></tr></thead><tbody>{monthly.months.filter((m) => chartMonthSel === "all" || m.month === chartMonthSel).map((m) => <tr key={m.month} className={`border-b border-border/60 last:border-0 ${m.qty === 0 ? "text-muted-foreground/60" : ""}`}><td className="px-4 py-2.5 font-medium text-foreground">{MONTHS[m.month]}</td><td className="px-4 py-2.5 text-right">{m.orders} db</td><td className="px-4 py-2.5 text-right">{m.qty} db</td><td className="px-4 py-2.5 text-right">{formatPrice(m.revenue)}</td></tr>)}</tbody></table></div>
-              </>
-            )}
+                <div className="mt-6"><TableExportButtons baseName={`xlntbi-havi-bontas-${slugify(periodLabel)}`} sheetName="Havi bontás" table={monthlyTable} /></div>
+                <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card"><table className="w-full min-w-[520px] text-sm"><thead><tr className="border-b border-border text-left text-xs uppercase text-muted-foreground"><th className="px-4 py-3 font-semibold">Hónap</th><th className="px-4 py-3 text-right font-semibold">Megrendelés</th><th className="px-4 py-3 text-right font-semibold">Mennyiség</th><th className="px-4 py-3 text-right font-semibold">Árbevétel</th></tr></thead><tbody>{monthly.months.filter((m) => monthSel === "all" || m.month === monthSel).map((m) => <tr key={m.month} className={`border-b border-border/60 last:border-0 ${m.qty === 0 ? "text-muted-foreground/60" : ""}`}><td className="px-4 py-2.5 font-medium text-foreground">{MONTHS[m.month]}</td><td className="px-4 py-2.5 text-right">{m.orders} db</td><td className="px-4 py-2.5 text-right">{m.qty} db</td><td className="px-4 py-2.5 text-right">{formatPrice(m.revenue)}</td></tr>)}</tbody></table></div>
             <BackToTop />
           </section>
 
-          <ProductConversion rows={rows} />
-          <HourlyOrdersChart rows={rows} />
-          <CustomerProductLists rows={rows} />
-          <DemoDownloads />
-          <PageViewStats />
+          <ProductConversion rows={rows} yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
+          <HourlyOrdersChart rows={rows} yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
+          <CustomerProductLists rows={sharedPeriodRows} />
+          <DemoDownloads yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
+          <PageViewStats yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
         </>
       )}
     </div>
   );
 }
-
-const listExportBtn =
-  "inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50";
 
 const listSelectBtn =
   "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 text-sm text-foreground transition-colors hover:bg-accent hover:text-foreground";
@@ -491,14 +546,15 @@ function MultiSelect({
 
   return (
     <div ref={ref} className="relative mt-3">
-      <button
+      <Button
         type="button"
+        variant="outline"
         className={listSelectBtn}
         onClick={() => setOpen((v) => !v)}
       >
         <span className="truncate">{buttonLabel}</span>
         <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
-      </button>
+      </Button>
       {open ? (
         <div className="absolute z-30 mt-1 max-h-80 w-full overflow-auto rounded-md border border-input bg-background shadow-lg">
           <label className="flex cursor-pointer items-center gap-2 border-b border-border px-3 py-2 text-sm font-semibold text-foreground">
@@ -709,9 +765,10 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
         <Download className="h-3.5 w-3.5 text-primary" />
         Exportálás:
       </span>
-      <button
+      <Button
         type="button"
-        className={listExportBtn}
+        variant="outline"
+        size="sm"
         disabled={!table || exporting !== null}
         onClick={() => runListExport(`${prefix}-xlsx`, base, table)}
       >
@@ -721,28 +778,31 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
           <FileSpreadsheet className="h-3.5 w-3.5" />
         )}
         Excel
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
-        className={listExportBtn}
+        variant="outline"
+        size="sm"
         disabled={!table || exporting !== null}
         onClick={() => runListExport(`${prefix}-csv`, base, table)}
       >
         <FileText className="h-3.5 w-3.5" />
         CSV
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
-        className={listExportBtn}
+        variant="outline"
+        size="sm"
         disabled={!table || exporting !== null}
         onClick={() => runListExport(`${prefix}-xml`, base, table)}
       >
         <FileCode2 className="h-3.5 w-3.5" />
         XML
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
-        className={listExportBtn}
+        variant="outline"
+        size="sm"
         disabled={!table || exporting !== null}
         onClick={() => runListExport(`${prefix}-pdf`, base, table)}
       >
@@ -752,7 +812,7 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
           <FileDown className="h-3.5 w-3.5" />
         )}
         PDF
-      </button>
+      </Button>
     </div>
   );
 
@@ -943,7 +1003,15 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
 
 // ---------------- Oldalletöltési statisztikák ----------------
 
-function PageViewStats() {
+type SharedPeriodProps = {
+  yearSel: YearSel;
+  monthSel: MonthSel;
+  years: number[];
+  onYearChange: (value: YearSel) => void;
+  onMonthChange: (value: MonthSel) => void;
+};
+
+function PageViewStats({ yearSel, monthSel, years: orderYears, onYearChange, onMonthChange }: SharedPeriodProps) {
   const fetchPageViews = useServerFn(adminPageViewStats);
   const [counts, setCounts] = useState<{ product: PageViewCount[]; service: PageViewCount[] }>({
     product: [],
@@ -974,9 +1042,10 @@ function PageViewStats() {
 
   const years = useMemo(() => {
     const set = new Set<number>([new Date().getFullYear()]);
+    for (const year of orderYears) set.add(year);
     for (const row of [...counts.product, ...counts.service]) set.add(row.year);
     return [...set].sort((a, b) => b - a);
-  }, [counts]);
+  }, [counts, orderYears]);
 
   const productEntries = useMemo(
     () => products.map((p) => ({ key: p.slug, label: p.name })),
@@ -1008,6 +1077,10 @@ function PageViewStats() {
         entries={productEntries}
         counts={counts.product}
         years={years}
+        yearSel={yearSel}
+        monthSel={monthSel}
+        onYearChange={onYearChange}
+        onMonthChange={onMonthChange}
         fileBase="termek-oldalletoltesek"
         topN={5}
       />
@@ -1020,6 +1093,10 @@ function PageViewStats() {
         entries={serviceEntries}
         counts={counts.service}
         years={years}
+        yearSel={yearSel}
+        monthSel={monthSel}
+        onYearChange={onYearChange}
+        onMonthChange={onMonthChange}
         fileBase="szolgaltatas-oldalletoltesek"
         topN={3}
       />
@@ -1036,6 +1113,10 @@ function PageViewBlock({
   entries,
   counts,
   years,
+  yearSel,
+  monthSel,
+  onYearChange,
+  onMonthChange,
   fileBase,
   topN,
 }: {
@@ -1046,21 +1127,39 @@ function PageViewBlock({
   entries: { key: string; label: string }[];
   counts: PageViewCount[];
   years: number[];
+  yearSel: YearSel;
+  monthSel: MonthSel;
+  onYearChange: (value: YearSel) => void;
+  onMonthChange: (value: MonthSel) => void;
   fileBase: string;
   topN: number;
 }) {
   const [exporting, setExporting] = useState<string | null>(null);
-  const [yearSel, setYearSel] = useState<number>(new Date().getFullYear());
-  const year = years.includes(yearSel) ? yearSel : (years[0] ?? new Date().getFullYear());
-  const month = "all" as const;
-
-  const rows = useMemo(() => pivotPageViews(entries, counts, year), [entries, counts, year]);
-  const periodLabel = month === "all" ? String(year) : `${year}. ${MONTHS[month] ?? ""}`;
+  const rows = useMemo(() => {
+    const selectedYears = yearSel === "all" ? years : [yearSel];
+    const merged = new Map(entries.map((entry) => [entry.key, { key: entry.key, label: entry.label, months: Array.from({ length: 12 }, () => 0), total: 0 }]));
+    for (const year of selectedYears) {
+      for (const row of pivotPageViews(entries, counts, year)) {
+        const target = merged.get(row.key);
+        if (!target) continue;
+        row.months.forEach((value, index) => { target.months[index] = (target.months[index] ?? 0) + value; });
+      }
+    }
+    for (const row of merged.values()) row.total = monthSel === "all" ? row.months.reduce((sum, value) => sum + value, 0) : (row.months[monthSel] ?? 0);
+    return [...merged.values()];
+  }, [entries, counts, years, yearSel, monthSel]);
+  const periodLabel = yearSel === "all" ? (monthSel === "all" ? "Összes év" : `Összes év – ${MONTHS[monthSel]}`) : (monthSel === "all" ? String(yearSel) : `${yearSel}. ${MONTHS[monthSel]}`);
   const title = titleBase;
-  const table = pageViewTable(title, firstColumn, rows, year, month);
-  const filename = `xlntbi-${fileBase}-${year}${month === "all" ? "" : `-${month + 1}`}`;
-  const btn =
-    "inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted disabled:opacity-60";
+  const monthIndexes = monthSel === "all" ? MONTHS_SHORT.map((_, index) => index) : [monthSel];
+  const table: ListTable = {
+    title,
+    subtitle: periodLabel,
+    head: [firstColumn, ...monthIndexes.map((index) => MONTHS_SHORT[index] ?? ""), ...(monthSel === "all" ? ["Összesen"] : [])],
+    body: rows.map((row) => [row.label, ...monthIndexes.map((index) => row.months[index] ?? 0), ...(monthSel === "all" ? [row.total] : [])]),
+    foot: ["Összesen", ...monthIndexes.map((index) => rows.reduce((sum, row) => sum + (row.months[index] ?? 0), 0)), ...(monthSel === "all" ? [rows.reduce((sum, row) => sum + row.total, 0)] : [])],
+    rightCols: Array.from({ length: monthIndexes.length + (monthSel === "all" ? 1 : 0) }, (_, index) => index + 1),
+  };
+  const filename = `xlntbi-${fileBase}-${slugify(periodLabel)}`;
 
 
   const run = async (id: string, fn: () => void | Promise<void>) => {
@@ -1072,40 +1171,20 @@ function PageViewBlock({
     }
   };
 
-  const monthIndexes = month === "all" ? MONTHS_SHORT.map((_, i) => i) : [month];
-  const showTotal = month === "all";
-
   return (
     <div>
       <h2 id={anchorId} className="scroll-mt-36 text-xl font-bold text-foreground">{title}</h2>
       <p className="mt-2 text-sm text-muted-foreground">{note}</p>
 
-      <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Év
-          </span>
-          {years.map((y) => (
-            <button
-              key={y}
-              type="button"
-              className={filterChip(y === year)}
-              onClick={() => setYearSel(y)}
-            >
-              {y}
-            </button>
-          ))}
-        </div>
-      </div>
-
-
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        <button
+      <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={onYearChange} onMonthChange={onMonthChange} />
+      <PageViewTopN rows={rows} month="all" year={yearSel === "all" ? "Összes év" : yearSel} firstColumn={firstColumn} topN={topN} />
+      <PageViewChart rows={rows} year={yearSel === "all" ? "Összes év" : yearSel} month={monthSel} firstColumn={firstColumn} />
+      <div className="mt-6 flex flex-wrap gap-2">
+        <Button
           type="button"
-          className={btn}
+          variant="outline" size="sm"
           disabled={exporting !== null}
-          onClick={() => run("xlsx", () => exportTableXlsx(`${filename}.xlsx`, String(year), table))}
+          onClick={() => run("xlsx", () => exportTableXlsx(`${filename}.xlsx`, title.slice(0, 31), table))}
         >
           {exporting === "xlsx" ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -1113,28 +1192,28 @@ function PageViewBlock({
             <FileSpreadsheet className="h-4 w-4" />
           )}
           Excel
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className={btn}
+          variant="outline" size="sm"
           disabled={exporting !== null}
           onClick={() => run("csv", () => exportTableCsv(`${filename}.csv`, table))}
         >
           <FileText className="h-4 w-4" />
           CSV
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className={btn}
+          variant="outline" size="sm"
           disabled={exporting !== null}
           onClick={() => run("xml", () => exportTableXml(`${filename}.xml`, table))}
         >
           <FileCode2 className="h-4 w-4" />
           XML
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className={btn}
+          variant="outline" size="sm"
           disabled={exporting !== null}
           onClick={() => run("pdf", () => exportTablePdf(`${filename}.pdf`, table))}
         >
@@ -1144,38 +1223,24 @@ function PageViewBlock({
             <FileDown className="h-4 w-4" />
           )}
           PDF
-        </button>
+        </Button>
       </div>
 
       <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
-        <table className={`w-full text-sm ${showTotal ? "min-w-[880px]" : "min-w-[420px]"}`}>
+        <table className={`w-full text-sm ${monthSel === "all" ? "min-w-[880px]" : "min-w-[420px]"}`}>
           <thead>
             <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
               <th className="px-4 py-3 font-semibold">{firstColumn}</th>
-              {monthIndexes.map((i) => (
-                <th key={i} className="px-2 py-3 text-right font-semibold">
-                  {MONTHS_SHORT[i]}
-                </th>
-              ))}
-              {showTotal ? (
-                <th className="px-4 py-3 text-right font-semibold">Összesen</th>
-              ) : null}
+              {monthIndexes.map((index) => <th key={index} className="px-2 py-3 text-right font-semibold">{MONTHS_SHORT[index]}</th>)}
+              {monthSel === "all" ? <th className="px-4 py-3 text-right font-semibold">Összesen</th> : null}
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
               <tr key={row.key} className="border-b border-border/60 last:border-0">
                 <td className="px-4 py-3 font-medium text-foreground">{row.label}</td>
-                {monthIndexes.map((i) => (
-                  <td key={i} className="px-2 py-3 text-right text-muted-foreground">
-                    {row.months[i] ?? 0}
-                  </td>
-                ))}
-                {showTotal ? (
-                  <td className="px-4 py-3 text-right font-semibold text-foreground">
-                    {row.total}
-                  </td>
-                ) : null}
+                {monthIndexes.map((index) => <td key={index} className="px-2 py-3 text-right text-muted-foreground">{row.months[index] ?? 0}</td>)}
+                {monthSel === "all" ? <td className="px-4 py-3 text-right font-semibold text-foreground">{row.total}</td> : null}
               </tr>
             ))}
           </tbody>
@@ -1191,9 +1256,6 @@ function PageViewBlock({
         </table>
       </div>
 
-      <PageViewChart rows={rows} year={year} month={month} firstColumn={firstColumn} />
-
-      <PageViewTopN rows={rows} month={month} year={year} firstColumn={firstColumn} topN={topN} />
     </div>
   );
 }
@@ -1208,7 +1270,7 @@ function PageViewTopN({
 }: {
   rows: PageViewPivotRow[];
   month: number | "all";
-  year: number;
+  year: number | string;
   firstColumn: string;
   topN: number;
 }) {
@@ -1223,7 +1285,7 @@ function PageViewTopN({
 
   const periodLabel = month === "all" ? String(year) : `${year}. ${MONTHS[month] ?? ""}`;
   const max = ranked.length > 0 ? (ranked[0]?.value ?? 1) : 1;
-  const colorOf = (index: number) => PALETTE[index % PALETTE.length] ?? "#14532d";
+  const colorOf = (index: number) => DISTINCT_CHART_COLORS[index % DISTINCT_CHART_COLORS.length] ?? "var(--chart-1)";
 
   return (
     <div className="mt-6 rounded-xl border border-border bg-card p-5">
@@ -1276,7 +1338,7 @@ function PageViewChart({
   firstColumn,
 }: {
   rows: ReturnType<typeof pivotPageViews>;
-  year: number;
+  year: number | string;
   month: number | "all";
   firstColumn: string;
 }) {
@@ -1293,7 +1355,7 @@ function PageViewChart({
     );
   }
 
-  const colorOf = (index: number) => PALETTE[index % PALETTE.length] ?? "#14532d";
+  const colorOf = (index: number) => DISTINCT_CHART_COLORS[index % DISTINCT_CHART_COLORS.length] ?? "var(--chart-1)";
 
   if (month === "all") {
     const monthTotals = MONTHS_SHORT.map((_, i) =>
@@ -1396,12 +1458,10 @@ function PageViewLegend({ items }: { items: { label: string; color: string }[] }
  * for the same period. Views only exist with month granularity, so the period
  * filter of the page (year + month) is applied to both sides identically.
  */
-function ProductConversion({ rows }: { rows: StatRow[] }) {
+function ProductConversion({ rows, yearSel, monthSel, years, onYearChange, onMonthChange }: { rows: StatRow[] } & SharedPeriodProps) {
   const fetchPageViews = useServerFn(adminPageViewStats);
   const [counts, setCounts] = useState<PageViewCount[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [yearSel, setYearSel] = useState<YearSel>("all");
-  const [monthSel, setMonthSel] = useState<MonthSel>("all");
 
   useEffect(() => {
     let cancelled = false;
@@ -1418,13 +1478,6 @@ function ProductConversion({ rows }: { rows: StatRow[] }) {
     return () => { cancelled = true; };
   }, [fetchPageViews]);
 
-  const years = useMemo(() => {
-    const values = new Set<number>();
-    for (const row of rows) values.add(new Date(row.createdAt).getFullYear());
-    for (const row of counts ?? []) values.add(row.year);
-    return [...values].sort((a, b) => b - a);
-  }, [rows, counts]);
-
   const periodLabel = yearSel === "all"
     ? monthSel === "all" ? "Összes év" : `Összes év – ${MONTHS[monthSel]}`
     : monthSel === "all" ? `${yearSel} egész éve` : `${yearSel}. ${MONTHS[monthSel]}`;
@@ -1435,7 +1488,8 @@ function ProductConversion({ rows }: { rows: StatRow[] }) {
     for (const row of counts ?? []) {
       if (yearSel !== "all" && row.year !== yearSel) continue;
       if (monthSel !== "all" && row.month !== monthSel + 1) continue;
-      views.set(row.pageKey, (views.get(row.pageKey) ?? 0) + row.views);
+      const key = resolveProductSlug(row.pageKey);
+      views.set(key, (views.get(key) ?? 0) + row.views);
     }
     const paid = new Map<string, number>();
     for (const row of rows) {
@@ -1443,7 +1497,8 @@ function ProductConversion({ rows }: { rows: StatRow[] }) {
       const date = new Date(row.createdAt);
       if (yearSel !== "all" && date.getFullYear() !== yearSel) continue;
       if (monthSel !== "all" && date.getMonth() !== monthSel) continue;
-      paid.set(row.productSlug, (paid.get(row.productSlug) ?? 0) + 1);
+      const key = resolveProductSlug(row.productSlug);
+      paid.set(key, (paid.get(key) ?? 0) + 1);
     }
     const keys = new Set<string>([...views.keys(), ...paid.keys()]);
     return [...keys].map((key) => {
@@ -1467,10 +1522,7 @@ function ProductConversion({ rows }: { rows: StatRow[] }) {
     <section id="termek-konverzio" className="mt-14 scroll-mt-36">
       <h2 className="text-xl font-bold text-foreground">Termékenkénti konverziós arány</h2>
       <p className="mt-2 max-w-3xl text-sm text-muted-foreground">Konverzió = kifizetett megrendelések száma ÷ a termék Részletek oldalának megtekintései × 100. Megtekintés nélkül a konverzió helyén „—” áll.</p>
-      <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
-        <div className="flex flex-wrap items-center gap-2"><span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Év</span><button type="button" className={filterChip(yearSel === "all")} onClick={() => setYearSel("all")}>Összes év</button>{years.map((y) => <button key={y} type="button" className={filterChip(yearSel === y)} onClick={() => setYearSel(y)}>{y}</button>)}</div>
-        <div className="flex flex-wrap items-center gap-1.5"><span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hónap</span><button type="button" className={filterChip(monthSel === "all")} onClick={() => setMonthSel("all")}>Összes</button>{MONTHS_SHORT.map((label, i) => <button key={label} type="button" className={filterChip(monthSel === i)} onClick={() => setMonthSel(i)} title={MONTHS[i]}>{label}</button>)}</div>
-      </div>
+      <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={onYearChange} onMonthChange={onMonthChange} />
       <div className="mt-4"><TableExportButtons baseName={`xlntbi-termek-konverzio-${slugify(periodLabel)}`} sheetName="Termék konverzió" table={exportTable} /></div>
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : counts === null ? <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Megtekintések betöltése…</p> : table.length === 0 ? <p className="mt-4 rounded-xl border border-border bg-card px-4 py-5 text-sm text-muted-foreground">Ehhez az időszakhoz nincs sem megtekintés, sem kifizetett megrendelés.</p> : <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card"><table className="w-full min-w-[560px] text-sm"><thead><tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground"><th className="px-4 py-3 font-semibold">Termék</th><th className="px-4 py-3 text-right font-semibold">Megtekintés</th><th className="px-4 py-3 text-right font-semibold">Kifizetett vásárlás</th><th className="px-4 py-3 text-right font-semibold">Konverzió</th></tr></thead><tbody>{table.map((r) => <tr key={r.key} className="border-b border-border/60 last:border-0"><td className="px-4 py-3 font-medium text-foreground">{r.label}</td><td className="px-4 py-3 text-right text-muted-foreground">{r.views} db</td><td className="px-4 py-3 text-right text-muted-foreground">{r.paid} db</td><td className="px-4 py-3 text-right font-semibold text-foreground">{r.rate === null ? "—" : `${r.rate.toFixed(2).replace(".", ",")} %`}</td></tr>)}</tbody></table></div>}
       <BackToTop />
@@ -1502,20 +1554,11 @@ function budapestBuckets(iso: string) {
 }
 
 /**
- * Orders per hour of day (Europe/Budapest), all payment statuses, with its own
- * year and month filter that does not affect the rest of the page.
+ * Orders per hour of day (Europe/Budapest), all payment statuses, using the shared period filter.
  */
-function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
-  const [yearSel, setYearSel] = useState<YearSel>("all");
-  const [monthSel, setMonthSel] = useState<MonthSel>("all");
+function HourlyOrdersChart({ rows, yearSel, monthSel, years, onYearChange, onMonthChange }: { rows: StatRow[] } & SharedPeriodProps) {
 
   const buckets = useMemo(() => rows.map((row) => budapestBuckets(row.createdAt)), [rows]);
-
-  const years = useMemo(() => {
-    const set = new Set<number>();
-    for (const b of buckets) set.add(b.year);
-    return [...set].sort((a, b) => b - a);
-  }, [buckets]);
 
   const hours = useMemo(() => {
     const counts = Array.from({ length: 24 }, () => 0);
@@ -1544,56 +1587,10 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
       <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
         A megrendelés leadásának időpontja szerint, magyar idő (Europe/Budapest) alapján, a nyári és
         téli időszámítást is helyesen kezelve. Minden leadott megrendelés beleszámít, fizetési
-        állapottól függetlenül. Ez a szűrő csak erre a grafikonra hat.
+        állapottól függetlenül.
       </p>
 
-      <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Év
-          </span>
-          <button
-            type="button"
-            className={filterChip(yearSel === "all")}
-            onClick={() => setYearSel("all")}
-          >
-            Összes év
-          </button>
-          {years.map((y) => (
-            <button
-              key={y}
-              type="button"
-              className={filterChip(yearSel === y)}
-              onClick={() => setYearSel(y)}
-            >
-              {y}
-            </button>
-          ))}
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Hónap
-          </span>
-          <button
-            type="button"
-            className={filterChip(monthSel === "all")}
-            onClick={() => setMonthSel("all")}
-          >
-            Összes
-          </button>
-          {MONTHS_SHORT.map((label, i) => (
-            <button
-              key={label}
-              type="button"
-              className={filterChip(monthSel === i)}
-              onClick={() => setMonthSel(i)}
-              title={MONTHS[i]}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={onYearChange} onMonthChange={onMonthChange} />
 
       <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
         <p className="text-sm text-muted-foreground">
@@ -1602,7 +1599,7 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
         <div className="mt-6 flex h-60 items-end gap-0.5 sm:gap-1">
           {hours.map((count, hour) => (
             <div key={hour} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-              <span className="text-[11px] font-semibold text-foreground">
+              <span className="text-xs font-semibold text-foreground">
                 {count > 0 ? count : ""}
               </span>
               <div
@@ -1618,7 +1615,7 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
                   <div className="w-full border-b-2 border-border/60" />
                 )}
               </div>
-              <span className="text-[10px] text-muted-foreground sm:text-[11px]">
+              <span className="text-xs text-muted-foreground">
                 {String(hour).padStart(2, "0")}
               </span>
             </div>
@@ -1634,11 +1631,11 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
   );
 }
 
-function DemoDownloads() {
+function DemoDownloads({ yearSel, monthSel, years, onYearChange, onMonthChange }: SharedPeriodProps) {
   const load = useServerFn(adminDemoStats);
   const [rows, setRows] = useState<any[] | null>(null);
   const [error, setError] = useState("");
-  const [exporting, setExporting] = useState<string | null>(null);
+  const [topMetric, setTopMetric] = useState<DemoTopMetric>("downloads");
 
   useEffect(() => {
     load()
@@ -1659,15 +1656,29 @@ function DemoDownloads() {
     );
   }
 
-  const activeCount = rows.filter((r) => r.active).length;
-  const totalDownloads = rows.reduce((s, r) => s + r.downloadCount, 0);
+  const filteredRows = rows.filter((row) => {
+    const date = new Date(row.createdAt);
+    return (yearSel === "all" || date.getFullYear() === yearSel) && (monthSel === "all" || date.getMonth() === monthSel);
+  });
+  const activeCount = filteredRows.filter((r) => r.active).length;
+  const totalDownloads = filteredRows.reduce((s, r) => s + r.downloadCount, 0);
+  const demoTop = [...filteredRows.reduce((map, row) => {
+    const entry = map.get(row.productName) ?? { label: row.productName, downloads: 0, requests: 0 };
+    entry.downloads += row.downloadCount;
+    entry.requests += 1;
+    map.set(row.productName, entry);
+    return map;
+  }, new Map<string, { label: string; downloads: number; requests: number }>()).values()]
+    .sort((a, b) => topMetric === "downloads" ? b.downloads - a.downloads : b.requests - a.requests)
+    .slice(0, 5);
+  const demoTopMax = Math.max(1, ...demoTop.map((item) => topMetric === "downloads" ? item.downloads : item.requests));
 
-  const demoTable: ListTable | null = rows.length
+  const demoTable: ListTable | null = filteredRows.length
     ? {
         title: "DEMO letöltések",
         subtitle: "Fizetés nélküli DEMO licenc igénylések – nem szerepelnek a vásárlási statisztikában.",
         head: ["Dátum", "Termék", "Név", "E-mail", "Cégnév", "Adószám", "HWID", "Letöltések", "Állapot"],
-        body: rows.map((r) => [
+        body: filteredRows.map((r) => [
           formatDateHu(r.createdAt),
           r.productName,
           r.name,
@@ -1678,27 +1689,11 @@ function DemoDownloads() {
           `${r.downloadCount}/${r.maxDownloads}`,
           r.active ? "Aktív" : "Lejárt",
         ]),
-        foot: ["Összesen", "", `${rows.length} igénylés`, "", "", "", "", `${totalDownloads} letöltés`, `${activeCount} aktív`],
+        foot: ["Összesen", "", `${filteredRows.length} igénylés`, "", "", "", "", `${totalDownloads} letöltés`, `${activeCount} aktív`],
         rightCols: [7],
       }
     : null;
-
-  const runExport = async (kind: string) => {
-    if (!demoTable || exporting) return;
-    setError("");
-    setExporting(kind);
-    const base = "xlntbi-demo-letoltesek";
-    try {
-      if (kind === "csv") exportTableCsv(`${base}.csv`, demoTable);
-      else if (kind === "xml") exportTableXml(`${base}.xml`, demoTable);
-      else if (kind === "xlsx") await exportTableXlsx(`${base}.xlsx`, demoTable.title, demoTable);
-      else await exportTablePdf(`${base}.pdf`, demoTable);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Az exportálás nem sikerült.");
-    } finally {
-      setExporting(null);
-    }
-  };
+  const base = `xlntbi-demo-letoltesek-${slugify(yearSel === "all" ? (monthSel === "all" ? "osszes-ev" : `osszes-ev-${MONTHS[monthSel]}`) : (monthSel === "all" ? String(yearSel) : `${yearSel}-${MONTHS[monthSel]}`))}`;
 
   return (
     <section className="mt-14">
@@ -1708,72 +1703,21 @@ function DemoDownloads() {
         és nem kerülnek számlázásra.
       </p>
 
-      <div className="mt-4 flex flex-wrap gap-4 text-sm">
-        <span className="rounded-md border border-border bg-card px-3 py-2">
-          <strong className="text-foreground">{rows.length}</strong> db igénylés összesen
-        </span>
-        <span className="rounded-md border border-border bg-card px-3 py-2">
-          <strong className="text-foreground">{activeCount}</strong> db aktív (nem lejárt)
-        </span>
-        <span className="rounded-md border border-border bg-card px-3 py-2">
-          <strong className="text-foreground">{totalDownloads}</strong> db letöltés megtörtént
-        </span>
+      <div className="mt-4 grid gap-4 sm:grid-cols-3">
+        {[{ label: "DEMO igénylések", value: `${filteredRows.length} db` }, { label: "Aktív igénylések", value: `${activeCount} db` }, { label: "Tényleges letöltések", value: `${totalDownloads} db` }].map((item) => <div key={item.label} className="rounded-xl border border-border bg-card p-5"><p className="text-xs font-semibold uppercase text-muted-foreground">{item.label}</p><p className="mt-2 text-2xl font-bold text-foreground">{item.value}</p></div>)}
+      </div>
+
+      <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={onYearChange} onMonthChange={onMonthChange} />
+      <div className="mt-6 rounded-xl border border-border bg-card p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3"><h3 className="text-base font-bold text-foreground">Top 5 termék</h3><div className="flex gap-2"><Button type="button" size="sm" variant={topMetric === "downloads" ? "default" : "outline"} onClick={() => setTopMetric("downloads")}>Tényleges letöltések</Button><Button type="button" size="sm" variant={topMetric === "requests" ? "default" : "outline"} onClick={() => setTopMetric("requests")}>Igénylések</Button></div></div>
+        {demoTop.length === 0 ? <p className="mt-4 text-sm text-muted-foreground">A kiválasztott időszakhoz nincs rangsorolható adat.</p> : <ol className="mt-4 space-y-3">{demoTop.map((item, index) => { const value = topMetric === "downloads" ? item.downloads : item.requests; return <li key={item.label} className="grid grid-cols-[2rem_minmax(0,14rem)_1fr_auto] items-center gap-3 text-sm"><span className="font-bold">{index + 1}.</span><span className="truncate font-medium">{item.label}</span><div className="h-3 overflow-hidden rounded bg-muted"><div className="h-full rounded bg-primary" style={{ width: `${(value / demoTopMax) * 100}%` }} /></div><span className="font-semibold">{value} db</span></li>; })}</ol>}
       </div>
 
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground">
-          <Download className="h-3.5 w-3.5 text-primary" />
-          Exportálás:
-        </span>
-        <button
-          type="button"
-          className={listExportBtn}
-          disabled={!demoTable || exporting !== null}
-          onClick={() => runExport("xlsx")}
-        >
-          {exporting === "xlsx" ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            <FileSpreadsheet className="h-3.5 w-3.5" />
-          )}
-          Excel
-        </button>
-        <button
-          type="button"
-          className={listExportBtn}
-          disabled={!demoTable || exporting !== null}
-          onClick={() => runExport("csv")}
-        >
-          <FileText className="h-3.5 w-3.5" />
-          CSV
-        </button>
-        <button
-          type="button"
-          className={listExportBtn}
-          disabled={!demoTable || exporting !== null}
-          onClick={() => runExport("xml")}
-        >
-          <FileCode2 className="h-3.5 w-3.5" />
-          XML
-        </button>
-        <button
-          type="button"
-          className={listExportBtn}
-          disabled={!demoTable || exporting !== null}
-          onClick={() => runExport("pdf")}
-        >
-          {exporting === "pdf" ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            <FileDown className="h-3.5 w-3.5" />
-          )}
-          PDF
-        </button>
-      </div>
+      <div className="mt-6"><TableExportButtons baseName={base} sheetName="DEMO letöltések" table={demoTable} /></div>
 
-      {rows.length > 0 ? (
+      {filteredRows.length > 0 ? (
         <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
           <table className="w-full text-sm">
             <thead className="border-b border-border bg-muted/40 text-left">
@@ -1790,7 +1734,7 @@ function DemoDownloads() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {rows.map((r) => (
+              {filteredRows.map((r) => (
                 <tr key={r.id}>
                   <td className="px-4 py-2.5 text-muted-foreground">
                     {formatDateHu(r.createdAt)}
