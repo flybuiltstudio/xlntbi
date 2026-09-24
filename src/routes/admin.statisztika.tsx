@@ -335,358 +335,112 @@ function StatsPanel() {
         </p>
       ) : (
         <>
-          {/* Szűrők */}
-          <div className="mb-8 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Fizetés
-              </span>
-              {PAY_OPTIONS.map((opt) => (
-                <button
-                  key={opt.id}
-                  type="button"
-                  className={filterChip(payFilter === opt.id)}
-                  onClick={() => setPayFilter(opt.id)}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Év
-              </span>
-              <button
-                type="button"
-                className={filterChip(yearSel === "all")}
-                onClick={() => selectYear("all")}
-              >
-                Összes év
-              </button>
-              {years.map((y) => (
-                <button
-                  key={y}
-                  type="button"
-                  className={filterChip(yearSel === y)}
-                  onClick={() => selectYear(y)}
-                >
-                  {y}
-                </button>
-              ))}
-            </div>
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Hónap
-              </span>
-              <button
-                type="button"
-                className={filterChip(activeMonth === "all")}
-                onClick={() => setMonthSel("all")}
-              >
-                Összes
-              </button>
-              {MONTHS_SHORT.map((label, i) => (
-                <button
-                  key={label}
-                  type="button"
-                  className={filterChip(activeMonth === i)}
-                  onClick={() => setMonthSel(i)}
-                  title={MONTHS[i]}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <section id="megrendelt-termekek" className="scroll-mt-36">
+            <h2 className="text-xl font-bold text-foreground">Megrendelt termékek – {periodLabel}</h2>
 
-          {/* KPI kártyák */}
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <Banknote className="h-4 w-4 text-primary" />
-                Árbevétel
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
+              <div className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <Banknote className="h-4 w-4 text-primary" /> Árbevétel
+                </div>
+                <p className="mt-2 text-2xl font-bold text-foreground">{formatPrice(kpi.revenue)}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{periodLabel}</p>
               </div>
-              <p className="mt-2 text-2xl font-bold text-foreground">{formatPrice(kpi.revenue)}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{periodLabel}</p>
-            </div>
-            <div className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <Package className="h-4 w-4 text-primary" />
-                Megrendelt mennyiség
+              <div className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <Package className="h-4 w-4 text-primary" /> Megrendelt mennyiség
+                </div>
+                <p className="mt-2 text-2xl font-bold text-foreground">{kpi.qty} db</p>
+                <p className="mt-1 text-xs text-muted-foreground">{periodLabel}</p>
               </div>
-              <p className="mt-2 text-2xl font-bold text-foreground">{kpi.qty} db</p>
-              <p className="mt-1 text-xs text-muted-foreground">{periodLabel}</p>
-            </div>
-            <div className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <ShoppingCart className="h-4 w-4 text-primary" />
-                Megrendelések száma
+              <div className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <ShoppingCart className="h-4 w-4 text-primary" /> Megrendelések száma
+                </div>
+                <p className="mt-2 text-2xl font-bold text-foreground">{kpi.orders} db</p>
+                <p className="mt-1 text-xs text-muted-foreground">{periodLabel}</p>
               </div>
-              <p className="mt-2 text-2xl font-bold text-foreground">{kpi.orders} db</p>
-              <p className="mt-1 text-xs text-muted-foreground">{periodLabel}</p>
             </div>
-          </div>
 
-          {periodRows.length === 0 ? (
-            <p className="mt-8 rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">
-              A kiválasztott szűréshez ({periodLabel}
-              {payFilter !== "all"
-                ? `, ${PAY_OPTIONS.find((o) => o.id === payFilter)?.label.toLowerCase()}`
-                : ""}
-              ) nem tartozik megrendelés.
-            </p>
-          ) : (
-            <>
-              {/* Exportálás */}
-              <div className="mt-10 mb-10 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-4 py-3">
-                <span className="mr-1 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
-                  <Download className="h-4 w-4 text-primary" />
-                  Exportálás:
-                </span>
-                <button
-                  type="button"
-                  className={exportBtn}
-                  disabled={exporting !== null}
-                  onClick={() => runExport("xlsx", () => exportStatsXlsx(periodRows))}
-                >
-                  {exporting === "xlsx" ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <FileSpreadsheet className="h-4 w-4" />
-                  )}
-                  Excel (.xlsx)
-                </button>
-                <button
-                  type="button"
-                  className={exportBtn}
-                  disabled={exporting !== null}
-                  onClick={() => runExport("csv", () => exportStatsCsv(periodRows))}
-                >
-                  <FileText className="h-4 w-4" />
-                  CSV
-                </button>
-                <button
-                  type="button"
-                  className={exportBtn}
-                  disabled={exporting !== null}
-                  onClick={() => runExport("xml", () => exportStatsXml(periodRows))}
-                >
-                  <FileCode2 className="h-4 w-4" />
-                  XML
-                </button>
-                <button
-                  type="button"
-                  className={exportBtn}
-                  disabled={exporting !== null || activeYear === null}
-                  title={
-                    activeYear === null ? "A PDF exportálásához válassz ki egy évet." : undefined
-                  }
-                  onClick={() =>
-                    activeYear !== null &&
-                    runExport("pdf", () => exportYearPdf(payFiltered, activeYear))
-                  }
-                >
-                  {exporting === "pdf" ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <FileDown className="h-4 w-4" />
-                  )}
-                  PDF{activeYear !== null ? ` – ${activeYear}` : ""}
-                </button>
-                <span className="w-full text-xs text-muted-foreground">
-                  Az Excel / CSV / XML a szűrt időszak ({periodLabel}) adatait tartalmazza. A PDF a
-                  kiválasztott év táblázatait és a grafikont tartalmazza, egyetlen oldalon – ehhez
-                  válassz konkrét évet.
-                </span>
+            <div className="mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Fizetés</span>
+                {PAY_OPTIONS.map((opt) => (
+                  <button key={opt.id} type="button" className={filterChip(payFilter === opt.id)} onClick={() => setPayFilter(opt.id)}>{opt.label}</button>
+                ))}
               </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Év</span>
+                <button type="button" className={filterChip(yearSel === "all")} onClick={() => selectYear("all")}>Összes év</button>
+                {years.map((y) => <button key={y} type="button" className={filterChip(yearSel === y)} onClick={() => selectYear(y)}>{y}</button>)}
+              </div>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hónap</span>
+                <button type="button" className={filterChip(activeMonth === "all")} onClick={() => setMonthSel("all")}>Összes</button>
+                {MONTHS_SHORT.map((label, i) => <button key={label} type="button" className={filterChip(activeMonth === i)} onClick={() => setMonthSel(i)} title={MONTHS[i]}>{label}</button>)}
+              </div>
+            </div>
 
-              {/* Termék-összesítő táblázat, csökkenő sorrendben */}
-              <section>
-                <h2 id="megrendelt-termekek" className="scroll-mt-36 text-xl font-bold text-foreground">
-                  Megrendelt termékek – {periodLabel}
-                </h2>
-                <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
+            {periodRows.length === 0 ? (
+              <p className="mt-6 rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">A kiválasztott szűréshez ({periodLabel}) nem tartozik megrendelés.</p>
+            ) : (
+              <>
+                <div className="mt-6 mb-6 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-4 py-3">
+                  <span className="mr-1 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground"><Download className="h-4 w-4 text-primary" /> Exportálás:</span>
+                  <button type="button" className={exportBtn} disabled={exporting !== null} onClick={() => runExport("xlsx", () => exportStatsXlsx(periodRows))}>{exporting === "xlsx" ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSpreadsheet className="h-4 w-4" />} Excel (.xlsx)</button>
+                  <button type="button" className={exportBtn} disabled={exporting !== null} onClick={() => runExport("csv", () => exportStatsCsv(periodRows))}><FileText className="h-4 w-4" /> CSV</button>
+                  <button type="button" className={exportBtn} disabled={exporting !== null} onClick={() => runExport("xml", () => exportStatsXml(periodRows))}><FileCode2 className="h-4 w-4" /> XML</button>
+                  <button type="button" className={exportBtn} disabled={exporting !== null || activeYear === null} title={activeYear === null ? "A PDF exportálásához válassz ki egy évet." : undefined} onClick={() => activeYear !== null && runExport("pdf", () => exportYearPdf(payFiltered, activeYear))}>{exporting === "pdf" ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />} PDF{activeYear !== null ? ` – ${activeYear}` : ""}</button>
+                  <span className="w-full text-xs text-muted-foreground">Az Excel / CSV / XML a szűrt időszak ({periodLabel}) adatait tartalmazza. A PDF-hez válassz konkrét évet.</span>
+                </div>
+                <div className="overflow-x-auto rounded-xl border border-border bg-card">
                   <table className="w-full min-w-[560px] text-sm">
-                    <thead>
-                      <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
-                        <th className="px-4 py-3 font-semibold">Termék</th>
-                        <th className="px-4 py-3 text-right font-semibold">Megrendelés</th>
-                        <th className="px-4 py-3 text-right font-semibold">Mennyiség</th>
-                        <th className="px-4 py-3 text-right font-semibold">Árbevétel</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {products.map((p) => (
-                        <tr key={p.label} className="border-b border-border/60 last:border-0">
-                          <td className="px-4 py-3 font-medium text-foreground">{p.label}</td>
-                          <td className="px-4 py-3 text-right text-muted-foreground">{p.orders} db</td>
-                          <td className="px-4 py-3 text-right font-semibold text-foreground">
-                            {p.qty} db
-                          </td>
-                          <td className="px-4 py-3 text-right text-muted-foreground">
-                            {formatPrice(p.revenue)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                    <tfoot>
-                      <tr className="border-t border-border bg-muted/50 text-sm font-semibold text-foreground">
-                        <td className="px-4 py-3">Összesen</td>
-                        <td className="px-4 py-3 text-right">{kpi.orders} db</td>
-                        <td className="px-4 py-3 text-right">{kpi.qty} db</td>
-                        <td className="px-4 py-3 text-right">{formatPrice(kpi.revenue)}</td>
-                      </tr>
-                    </tfoot>
+                    <thead><tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground"><th className="px-4 py-3 font-semibold">Termék</th><th className="px-4 py-3 text-right font-semibold">Megrendelés</th><th className="px-4 py-3 text-right font-semibold">Mennyiség</th><th className="px-4 py-3 text-right font-semibold">Árbevétel</th></tr></thead>
+                    <tbody>{products.map((p) => <tr key={p.label} className="border-b border-border/60 last:border-0"><td className="px-4 py-3 font-medium text-foreground">{p.label}</td><td className="px-4 py-3 text-right text-muted-foreground">{p.orders} db</td><td className="px-4 py-3 text-right font-semibold text-foreground">{p.qty} db</td><td className="px-4 py-3 text-right text-muted-foreground">{formatPrice(p.revenue)}</td></tr>)}</tbody>
+                    <tfoot><tr className="border-t border-border bg-muted/50 text-sm font-semibold text-foreground"><td className="px-4 py-3">Összesen</td><td className="px-4 py-3 text-right">{kpi.orders} db</td><td className="px-4 py-3 text-right">{kpi.qty} db</td><td className="px-4 py-3 text-right">{formatPrice(kpi.revenue)}</td></tr></tfoot>
                   </table>
                 </div>
+              </>
+            )}
+            <BackToTop />
+          </section>
 
-                <ProductConversion
-                  rows={rows}
-                  activeYear={activeYear}
-                  activeMonth={activeMonth}
-                  periodLabel={periodLabel}
-                />
-                <BackToTop />
-              </section>
-
-              <HourlyOrdersChart rows={rows} />
-
-              {/* DEMO letöltések – fizetés nélküli DEMO igénylések */}
-              {/* Megrendelői és terméklista – a kezdetektől, szűrőktől függetlenül */}
-              <CustomerProductLists rows={rows} />
-
-              {/* DEMO letöltések – fizetés nélküli DEMO igénylések */}
-              <DemoDownloads />
-
-              <PageViewStats />
-
-              {/* Grafikon – csak konkrét évre */}
-              <section id="havi-bontas" className="mt-14 scroll-mt-36">
-                <h2 className="text-xl font-bold text-foreground">Havi bontás grafikonon</h2>
-              {activeYear === null ? (
-                <p className="mt-4 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
-                  A havi grafikonhoz válassz ki egy konkrét évet.
-                </p>
-              ) : (
-                <>
-
-                  <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
-                    <p className="text-sm text-muted-foreground">
-                      <strong className="text-foreground">{activeYear}</strong> – megrendelt
-                      mennyiség havonta (db)
-                      {payFilter !== "all"
-                        ? ` – ${PAY_OPTIONS.find((o) => o.id === payFilter)?.label.toLowerCase()} megrendelések`
-                        : ""}
-                    </p>
-
-                    <div className="mt-6 flex h-60 items-end gap-1 sm:gap-2">
-                      {monthly.months.map((m) => (
-                        <div
-                          key={m.month}
-                          className={`flex min-w-0 flex-1 flex-col items-center gap-2 ${
-                            activeMonth !== "all" && m.month !== activeMonth ? "opacity-40" : ""
-                          }`}
-                        >
-                          <span className="text-xs font-semibold text-foreground">
-                            {m.qty > 0 ? m.qty : ""}
-                          </span>
-                          <div
-                            className={`flex h-44 w-full max-w-12 flex-col justify-end overflow-hidden rounded-t-md ${
-                              m.qty > 0 ? "bg-muted/50" : "border-b-2 border-border/60"
-                            }`}
-                            title={`${MONTHS[m.month]}: ${m.qty} db, ${formatPrice(m.revenue)}`}
-                          >
-                            {monthly.labels.map((label, li) => {
-                              const q = m.perProduct.get(label) ?? 0;
-                              if (q === 0) return null;
-                              return (
-                                <div
-                                  key={label}
-                                  style={{
-                                    height: `${(q / maxMonthQty) * 100}%`,
-                                    backgroundColor: PALETTE[li % PALETTE.length],
-                                  }}
-                                  title={`${label}: ${q} db`}
-                                />
-                              );
-                            })}
-                          </div>
-                          <span className="text-[11px] text-muted-foreground">
-                            {MONTHS_SHORT[m.month]}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {monthly.labels.length > 0 ? (
-                      <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
-                        {monthly.labels.map((label, li) => (
-                          <li
-                            key={label}
-                            className="inline-flex items-center gap-2 text-xs text-muted-foreground"
-                          >
-                            <span
-                              className="h-3 w-3 shrink-0 rounded-sm"
-                              style={{ backgroundColor: PALETTE[li % PALETTE.length] }}
-                            />
-                            {label}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="mt-5 text-sm text-muted-foreground">
-                        Ebben az évben még nincs megrendelés.
-                      </p>
-                    )}
+          <section id="havi-bontas" className="mt-14 scroll-mt-36">
+            <h2 className="text-xl font-bold text-foreground">Havi bontás</h2>
+            <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Év</span>
+                <button type="button" className={filterChip(chartYearSel === "all")} onClick={() => setChartYearSel("all")}>Összes év</button>
+                {years.map((y) => <button key={y} type="button" className={filterChip(chartYearSel === y)} onClick={() => setChartYearSel(y)}>{y}</button>)}
+              </div>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hónap</span>
+                <button type="button" className={filterChip(chartMonthSel === "all")} onClick={() => setChartMonthSel("all")}>Összes</button>
+                {MONTHS_SHORT.map((label, i) => <button key={label} type="button" className={filterChip(chartMonthSel === i)} onClick={() => setChartMonthSel(i)} title={MONTHS[i]}>{label}</button>)}
+              </div>
+            </div>
+            {chartYearSel === "all" ? (
+              <p className="mt-4 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">A havi grafikonhoz válassz ki egy konkrét évet.</p>
+            ) : (
+              <>
+                <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
+                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">{chartYearSel}</strong> – megrendelt mennyiség havonta (db)</p>
+                  <div className="mt-6 flex h-60 items-end gap-1 sm:gap-2">
+                    {monthly.months.map((m) => <div key={m.month} className={`flex min-w-0 flex-1 flex-col items-center gap-2 ${chartMonthSel !== "all" && m.month !== chartMonthSel ? "opacity-40" : ""}`}><span className="text-xs font-semibold text-foreground">{m.qty > 0 ? m.qty : ""}</span><div className={`flex h-44 w-full max-w-12 flex-col justify-end overflow-hidden rounded-t-md ${m.qty > 0 ? "bg-muted/50" : "border-b-2 border-border/60"}`} title={`${MONTHS[m.month]}: ${m.qty} db, ${formatPrice(m.revenue)}`}>{monthly.labels.map((label, li) => { const q = m.perProduct.get(label) ?? 0; return q === 0 ? null : <div key={label} style={{ height: `${(q / maxMonthQty) * 100}%`, backgroundColor: PALETTE[li % PALETTE.length] }} title={`${label}: ${q} db`} />; })}</div><span className="text-[11px] text-muted-foreground">{MONTHS_SHORT[m.month]}</span></div>)}
                   </div>
+                  {monthly.labels.length > 0 ? <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2">{monthly.labels.map((label, li) => <li key={label} className="inline-flex items-center gap-2 text-xs text-muted-foreground"><span className="h-3 w-3 shrink-0 rounded-sm" style={{ backgroundColor: PALETTE[li % PALETTE.length] }} />{label}</li>)}</ul> : <p className="mt-5 text-sm text-muted-foreground">Ebben az évben még nincs megrendelés.</p>}
+                </div>
+                <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card"><table className="w-full min-w-[520px] text-sm"><thead><tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground"><th className="px-4 py-3 font-semibold">{chartYearSel}</th><th className="px-4 py-3 text-right font-semibold">Megrendelés</th><th className="px-4 py-3 text-right font-semibold">Mennyiség</th><th className="px-4 py-3 text-right font-semibold">Árbevétel</th></tr></thead><tbody>{monthly.months.filter((m) => chartMonthSel === "all" || m.month === chartMonthSel).map((m) => <tr key={m.month} className={`border-b border-border/60 last:border-0 ${m.qty === 0 ? "text-muted-foreground/60" : ""}`}><td className="px-4 py-2.5 font-medium text-foreground">{MONTHS[m.month]}</td><td className="px-4 py-2.5 text-right">{m.orders} db</td><td className="px-4 py-2.5 text-right">{m.qty} db</td><td className="px-4 py-2.5 text-right">{formatPrice(m.revenue)}</td></tr>)}</tbody></table></div>
+              </>
+            )}
+            <BackToTop />
+          </section>
 
-                  {/* Havi táblázat */}
-                  <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
-                    <table className="w-full min-w-[520px] text-sm">
-                      <thead>
-                        <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
-                          <th className="px-4 py-3 font-semibold">{activeYear}</th>
-                          <th className="px-4 py-3 text-right font-semibold">Megrendelés</th>
-                          <th className="px-4 py-3 text-right font-semibold">Mennyiség</th>
-                          <th className="px-4 py-3 text-right font-semibold">Árbevétel</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {monthly.months
-                          .filter((m) => activeMonth === "all" || m.month === activeMonth)
-                          .map((m) => (
-                            <tr
-                              key={m.month}
-                              className={`border-b border-border/60 last:border-0 ${
-                                m.qty === 0 ? "text-muted-foreground/60" : ""
-                              }`}
-                            >
-                              <td className="px-4 py-2.5 font-medium text-foreground">
-                                {MONTHS[m.month]}
-                              </td>
-                              <td className="px-4 py-2.5 text-right">{m.orders} db</td>
-                              <td className="px-4 py-2.5 text-right">{m.qty} db</td>
-                              <td className="px-4 py-2.5 text-right">{formatPrice(m.revenue)}</td>
-                            </tr>
-                          ))}
-                      </tbody>
-                      <tfoot>
-                        <tr className="border-t border-border bg-muted/50 font-semibold text-foreground">
-                          <td className="px-4 py-3">Összesen ({periodLabel})</td>
-                          <td className="px-4 py-3 text-right">{kpi.orders} db</td>
-                          <td className="px-4 py-3 text-right">{kpi.qty} db</td>
-                          <td className="px-4 py-3 text-right">{formatPrice(kpi.revenue)}</td>
-                        </tr>
-                      </tfoot>
-                    </table>
-                  </div>
-                  <BackToTop />
-                </>
-              )}
-              </section>
-
-            </>
-          )}
+          <ProductConversion rows={rows} />
+          <HourlyOrdersChart rows={rows} />
+          <CustomerProductLists rows={rows} />
+          <DemoDownloads />
+          <PageViewStats />
         </>
       )}
     </div>
