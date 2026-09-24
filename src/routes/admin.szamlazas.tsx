@@ -7,6 +7,14 @@ import { InvoiceLogsPanel } from "@/components/admin-panels";
 import { BillingoAuditPanel } from "@/components/BillingoAuditPanel";
 import { OrderAuditPanel } from "@/components/OrderAuditPanel";
 import { NavStatusPanel } from "@/components/NavStatusPanel";
+import { AdminSectionNav } from "@/components/admin-toc";
+
+const INVOICE_NAV = [
+  ["szamlazasi-naplo", "Számlázási napló"],
+  ["billingo-ellenorzes", "Billingo-ellenőrzés"],
+  ["rendelesi-audit", "Rendelési audit"],
+  ["nav-online-szamla", "NAV Online Számla állapot"],
+] as const;
 
 export const Route = createFileRoute("/admin/szamlazas")({
   head: () => ({
@@ -35,8 +43,11 @@ function AdminInvoicesPage() {
           Számlázás és számlaellenőrzés
         </h1>
       </PageHero>
-      <div className="mx-auto max-w-6xl space-y-14 px-4 py-14">
+      <div className="mx-auto max-w-6xl px-4 py-14">
+        <AdminSectionNav links={INVOICE_NAV} />
+        <div className="mt-10 space-y-14">
         <AdminBlock
+          anchorId="szamlazasi-naplo"
           icon={ScrollText}
           title="Számlázási napló"
           description="A Billingo számlakiállítási próbálkozások részletes naplója: rendelésazonosító, a próbálkozás forrása (Stripe webhook, átutalás-jóváhagyás, kézi újrapróbálás), állapot, számlaszám, hibakód és hibaüzenet."
@@ -44,9 +55,10 @@ function AdminInvoicesPage() {
           <InvoiceLogsPanel />
         </AdminBlock>
 
-        <BillingoAuditPanel />
+        <div id="billingo-ellenorzes" className="scroll-mt-36"><BillingoAuditPanel /></div>
 
         <AdminBlock
+          anchorId="rendelesi-audit"
           icon={FileSearch}
           title="Rendelési audit"
           description="Rendelésenként összepárosítja a kiállított Billingo számlákat a sztornókkal, és kiemeli az eltéréseket: kifizetett rendelés számla nélkül, több élő számla ugyanahhoz a rendeléshez, sikertelen sztornó, visszatérített fizetés élő számlával, összeg- vagy számlaszám-eltérés. Csak olvas, semmit nem módosít."
@@ -55,6 +67,7 @@ function AdminInvoicesPage() {
         </AdminBlock>
 
         <AdminBlock
+          anchorId="nav-online-szamla"
           icon={Landmark}
           title="NAV Online Számla állapot"
           description="Végigolvassa a legutóbbi rendelések Billingo számláit, és megmutatja, melyiket fogadta be a NAV és melyiket utasította el – az elutasítás okával és a rendelés hivatkozásával. Új elutasításról belső e-mail értesítés is megy. Csak olvas, semmit nem módosít."
@@ -66,6 +79,7 @@ function AdminInvoicesPage() {
           <ClipboardList className="mr-1 inline h-3.5 w-3.5" aria-hidden="true" />
           A Stripe terméknevek ellenőrzése a Katalógus ellenőrzés lapra került.
         </p>
+        </div>
       </div>
     </>
   );

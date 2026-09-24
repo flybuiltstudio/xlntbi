@@ -14,6 +14,7 @@ import { products } from "@/lib/products";
 import { formatMinorAsHuf, parseHufInput } from "@/lib/coupon-amount";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { TableExportButtons } from "@/components/TableExportButtons";
+import { AdminDatePicker } from "@/components/AdminDatePicker";
 import type { ListTable } from "@/lib/stats-export";
 
 type Env = "sandbox" | "live";
@@ -445,6 +446,7 @@ function CouponCreateForm({
   const [percentOff, setPercentOff] = useState("10");
   const [amountOff, setAmountOff] = useState("");
   const [expiresAt, setExpiresAt] = useState("");
+  const [expiresTime, setExpiresTime] = useState("23:59");
   const [allProducts, setAllProducts] = useState(true);
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>([]);
   const [unlimited, setUnlimited] = useState(true);
@@ -504,7 +506,7 @@ function CouponCreateForm({
       const payload = {
         code: code.trim().toUpperCase(),
         environment: formEnv,
-        expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null,
+        expiresAt: expiresAt ? new Date(`${expiresAt}T${expiresTime || "23:59"}`).toISOString() : null,
         discountType,
         percentOff: discountType === "percent" ? Number(percentOff) || null : null,
         amountOff: parsedAmountOff,
@@ -556,18 +558,22 @@ function CouponCreateForm({
             <option value="live">Éles</option>
           </select>
         </label>
-        <label className="text-sm">
-          <span className="block text-xs font-medium text-muted-foreground">Érvényesség vége</span>
-          <input
-            type="datetime-local"
-            value={expiresAt}
-            onChange={(e) => setExpiresAt(e.target.value)}
-            className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
-          />
+        <div className="text-sm">
+          <AdminDatePicker label="Érvényesség vége" value={expiresAt} onChange={setExpiresAt} />
+          <label className="mt-2 block text-xs font-medium text-muted-foreground">
+            Időpont
+            <input
+              type="time"
+              value={expiresTime}
+              onChange={(e) => setExpiresTime(e.target.value)}
+              disabled={!expiresAt}
+              className="mt-1 block rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground disabled:opacity-50"
+            />
+          </label>
           <span className="mt-0.5 block text-xs text-muted-foreground">
             Üres = korlátlan (csak lejáratkor kapcsol ki).
           </span>
-        </label>
+        </div>
       </div>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

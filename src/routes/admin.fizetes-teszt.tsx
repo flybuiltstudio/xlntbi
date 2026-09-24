@@ -12,6 +12,7 @@ import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { FullPurchaseTestPanel } from "@/components/FullPurchaseTestPanel";
 import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
 import { PageHero } from "@/components/PageHero";
+import { AdminSectionNav } from "@/components/admin-toc";
 import { formatPrice, getProduct, getTier, products } from "@/lib/products";
 import { isCardPaymentAvailable } from "@/lib/stripe";
 
@@ -46,6 +47,11 @@ type CreatedOrder = {
 const inputClass =
   "mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-ring/40";
 
+const PAYMENT_TEST_NAV = [
+  ["teljes-vasarlasi-teszt", "Teljes vásárlási teszt"],
+  ["korabbi-teszt-megrendelesek", "Korábbi teszt megrendelések"],
+] as const;
+
 function PaymentTestPage() {
   return (
     <>
@@ -64,7 +70,8 @@ function PaymentTestPage() {
           fizetés után a rendszer az éles folyamathoz hasonlóan kiküldi a visszaigazolást és a
           letöltési linket a megadott e-mail címre.
         </p>
-        <FullPurchaseTestPanel />
+        <AdminSectionNav links={PAYMENT_TEST_NAV} />
+        <div id="teljes-vasarlasi-teszt" className="scroll-mt-36"><FullPurchaseTestPanel /></div>
         <TestPanel />
       </div>
     </>
@@ -181,7 +188,7 @@ function TestPanel() {
       ) : null}
 
       {/* 1. lépés – teszt megrendelés rögzítése */}
-      <section className="mt-8 rounded-xl border border-border bg-card p-5 sm:p-6">
+      <section id="korabbi-teszt-megrendelesek" className="mt-8 scroll-mt-36 rounded-xl border border-border bg-card p-5 sm:p-6">
         <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <FlaskConical className="h-5 w-5 text-primary" />
           1. lépés – Teszt megrendelés rögzítése

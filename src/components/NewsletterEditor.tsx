@@ -12,18 +12,17 @@ import { useEffect, useRef } from "react";
 
 import { sanitizeEmbeddedHtml } from "@/lib/sanitize-html";
 
-const TEXT_COLORS = [
-  { label: "Arculati zöld", value: "#217346" },
-  { label: "Sötét szöveg", value: "#16231d" },
-  { label: "Halvány szürke", value: "#5b6b63" },
-  { label: "Piros kiemelés", value: "#b42318" },
-];
-
-const BG_COLORS = [
-  { label: "Világos zöld", value: "#f4f8f6" },
-  { label: "Sárga kiemelés", value: "#fff3bf" },
-  { label: "Arculati zöld", value: "#217346" },
-  { label: "Nincs", value: "transparent" },
+const EXCEL_BASIC_COLORS = [
+  { label: "Fekete", value: "#000000" },
+  { label: "Fehér", value: "#ffffff" },
+  { label: "Piros", value: "#ff0000" },
+  { label: "Zöld", value: "#00b050" },
+  { label: "Kék", value: "#0070c0" },
+  { label: "Sárga", value: "#ffff00" },
+  { label: "Narancssárga", value: "#ffc000" },
+  { label: "Lila", value: "#7030a0" },
+  { label: "Világoskék", value: "#00b0f0" },
+  { label: "Szürke", value: "#808080" },
 ];
 
 const btn =
@@ -132,7 +131,7 @@ export function NewsletterEditor({
             onChange={(event) => exec("foreColor", event.target.value)}
           />
         </label>
-        {TEXT_COLORS.map((color) => (
+        {EXCEL_BASIC_COLORS.map((color) => (
           <button
             key={color.value}
             type="button"
@@ -154,15 +153,13 @@ export function NewsletterEditor({
             onChange={(event) => exec("hiliteColor", event.target.value)}
           />
         </label>
-        {BG_COLORS.map((color) => (
+        {EXCEL_BASIC_COLORS.map((color) => (
           <button
             key={color.value}
             type="button"
             title={`Háttérszín: ${color.label}`}
             className="h-7 w-7 rounded border border-input"
-            style={{
-              backgroundColor: color.value === "transparent" ? "#ffffff" : color.value,
-            }}
+            style={{ backgroundColor: color.value }}
             onClick={() => exec("hiliteColor", color.value)}
           />
         ))}
