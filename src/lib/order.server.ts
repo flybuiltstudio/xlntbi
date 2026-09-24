@@ -209,7 +209,8 @@ export async function handleOrder(data: Order) {
         productName: productLabel,
         total: formatPrice(total),
         paymentStatus: "unpaid",
-        rows: rows.filter(([key]) => key !== "Rendelésszám"),
+        // Free-text note is never echoed to the (unverified) buyer address.
+        rows: rows.filter(([key]) => key !== "Rendelésszám" && key !== "Megjegyzés"),
       },
       replyTo: OWNER_EMAIL,
     },
