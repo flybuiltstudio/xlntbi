@@ -675,8 +675,9 @@ function StatsPanel() {
                     </table>
                   </div>
                   <BackToTop />
-                </section>
-              ) : null}
+                </>
+              )}
+              </section>
 
             </>
           )}
