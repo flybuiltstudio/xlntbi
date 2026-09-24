@@ -22,5 +22,5 @@
 - [x] Megrendelések és Statisztika: hónap-szűrés év kiválasztása nélkül
 
 - [x] Admin e-mailek, szűrők, ugrópontok, kuponexportok és statisztikai exportok pontosítása
-- [ ] Admin navigációk, magyar mezők, statisztikai formátumok és biztonsági időpont pontosítása
-- [ ] Két régi, duplikált termékfájl törlése és tároló-ellenőrzése
+- [x] Admin navigációk, magyar mezők, statisztikai formátumok és biztonsági időpont pontosítása
+- [x] Két régi, duplikált termékfájl törlése és tároló-ellenőrzése
