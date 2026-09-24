@@ -5,6 +5,12 @@ import { AdminBlock } from "@/components/AdminBlock";
 import { PageHero } from "@/components/PageHero";
 import { CatalogAuditPanel } from "@/components/CatalogAuditPanel";
 import { StripeProductNamePanel } from "@/components/StripeProductNamePanel";
+import { AdminSectionNav } from "@/components/admin-toc";
+
+const CATALOG_NAV = [
+  ["arak-es-letoltesek", "Árak, lookup key-ek és letöltések"],
+  ["stripe-termeknevek", "Stripe terméknevek"],
+] as const;
 
 export const Route = createFileRoute("/admin/katalogus-ellenorzes")({
   head: () => ({
@@ -33,8 +39,11 @@ function AdminCatalogAuditPage() {
           Katalógus ellenőrzés
         </h1>
       </PageHero>
-      <div className="mx-auto max-w-6xl space-y-14 px-4 py-14">
+      <div className="mx-auto max-w-6xl px-4 py-14">
+        <AdminSectionNav links={CATALOG_NAV} />
+        <div className="mt-10 space-y-14">
         <AdminBlock
+          anchorId="arak-es-letoltesek"
           icon={PackageSearch}
           title="Árak, lookup key-ek és letöltések"
           description="Egy kattintással végigfut minden terméken és minden licencverzión: megvan-e a Stripe lookup key a választott környezetben, aktív-e az ár, egyezik-e a forint összeg a katalógussal, és a tárolóban ott van-e a letölthető fájl. Ellenőrzi a már kiadott letöltési tokeneket is, hogy átnevezés után se törjön el egyetlen link sem. Az ellenőrzés csak olvas, semmit nem módosít."
@@ -42,7 +51,8 @@ function AdminCatalogAuditPage() {
           <CatalogAuditPanel />
         </AdminBlock>
 
-        <StripeProductNamePanel />
+        <div id="stripe-termeknevek" className="scroll-mt-36"><StripeProductNamePanel /></div>
+        </div>
       </div>
     </>
   );

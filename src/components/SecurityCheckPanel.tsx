@@ -221,7 +221,7 @@ export function SecurityCheckPanel() {
         </button>
         {snapshot ? (
           <span className="text-sm text-muted-foreground">
-            Ellenőrizve: {snapshot.ranAt} · {findings.length} kijavítatlan találat
+            Ellenőrizve: {formatDate(snapshot.ranAt)} · {findings.length} kijavítatlan találat
           </span>
         ) : null}
       </div>

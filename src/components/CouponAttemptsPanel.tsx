@@ -86,8 +86,8 @@ export function CouponAttemptsPanel() {
     : null;
 
   return (
-    <section>
-      <h2 id="sikertelen-kuponkiserletek" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
+    <section id="sikertelen-kuponkiserletek" className="scroll-mt-36">
+      <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
         <AlertTriangle className="h-5 w-5 text-destructive" aria-hidden="true" />
         Sikertelen kuponkísérletek
       </h2>

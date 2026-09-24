@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 
 import { BackToTop } from "@/components/admin-toc";
+import { AdminFilePicker } from "@/components/AdminFilePicker";
 import { EmbeddedCalculator } from "@/components/EmbeddedCalculator";
 import {
   MAX_CALCULATOR_HTML_BYTES,
@@ -325,13 +326,7 @@ export function CalculatorUploadPanel() {
       <div className="mt-4 max-w-md">
         <label className="block text-xs font-semibold text-foreground">
           Kalkulátor fájlja (.html, max. 5 MB)
-          <input
-            key={inputKey}
-            type="file"
-            accept=".html"
-            className={`${inputClass} mt-1`}
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          />
+          <AdminFilePicker inputKey={inputKey} accept=".html" file={file} onChange={setFile} />
         </label>
       </div>
 

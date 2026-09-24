@@ -1,7 +1,9 @@
 import { useServerFn } from "@tanstack/react-start";
+import { Link } from "@tanstack/react-router";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Eye, EyeOff, KeyRound } from "lucide-react";
 import { BackToTop } from "@/components/admin-toc";
+import { AdminFilePicker } from "@/components/AdminFilePicker";
 
 import {
   adminApproveTransfer,
@@ -1475,6 +1477,15 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
                 </p>
               </div>
               <div className="flex items-center gap-2">
+                {user.id === currentUserId ? (
+                  <Link
+                    to="/admin/jelszo"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
+                  >
+                    <KeyRound className="h-3.5 w-3.5" />
+                    Jelszóváltoztatás
+                  </Link>
+                ) : null}
                 <button
                   type="button"
                   disabled={resetBusy === user.id}
@@ -2047,14 +2058,7 @@ export function ProductVersionPanel() {
 
         <label className="text-sm font-medium text-foreground">
           Új verzió fájlja (.xlsm, .exe, .zip, .pdf, legfeljebb 300 MB)
-          <input
-            key={inputKey}
-            type="file"
-            accept=".xlsm,.exe,.zip,.pdf"
-            disabled={busy}
-            className={`${fileInputClass} mt-1.5 disabled:opacity-50`}
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          />
+          <AdminFilePicker inputKey={inputKey} accept=".xlsm,.exe,.zip,.pdf" disabled={busy} file={file} onChange={setFile} />
         </label>
 
         <div>
@@ -2261,14 +2265,7 @@ export function CalculatorVersionPanel() {
 
         <label className="text-sm font-medium text-foreground">
           Új verzió (.html, legfeljebb 5 MB)
-          <input
-            key={inputKey}
-            type="file"
-            accept=".html,text/html"
-            disabled={busy}
-            className={`${fileInputClass} mt-1.5 disabled:opacity-50`}
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          />
+          <AdminFilePicker inputKey={inputKey} accept=".html,text/html" disabled={busy} file={file} onChange={setFile} />
         </label>
 
         <div className="flex flex-wrap items-center gap-3">

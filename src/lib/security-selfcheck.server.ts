@@ -13,6 +13,7 @@
 import { sendEmails } from "./notify.server";
 
 const OWNER_EMAIL = "xllentac@gmail.com";
+const SECURITY_CHECK_STATE_KEY = "security_selfcheck_state";
 
 export type SecurityFinding = {
   finding_key: string;
@@ -67,6 +68,8 @@ export async function runSecuritySelfCheck(): Promise<SelfCheckResult> {
   const fresh = findings.filter((row) => !silent.has(row.finding_key));
 
   const now = new Date().toISOString();
+  const { setSetting } = await import("./app-settings.server");
+  await setSetting(SECURITY_CHECK_STATE_KEY, { ranAt: now });
 
   if (findings.length > 0) {
     const { error: upsertError } = await (supabaseAdmin as any)
@@ -180,7 +183,13 @@ export async function listOpenFindings(): Promise<{
   const findings = ((data ?? []) as SecurityFinding[]).filter(
     (row) => row && typeof row.finding_key === "string" && !decided.has(row.finding_key),
   );
-  return { findings, decisions: await listDecisions(), ranAt: huTime() };
+  const { getSetting } = await import("./app-settings.server");
+  const state = await getSetting(SECURITY_CHECK_STATE_KEY);
+  return {
+    findings,
+    decisions: await listDecisions(),
+    ranAt: typeof state["ranAt"] === "string" ? state["ranAt"] : "",
+  };
 }
 
 export async function clearDecision(findingKey: string): Promise<void> {
