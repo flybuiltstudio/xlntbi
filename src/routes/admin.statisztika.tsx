@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   Banknote,
   ChevronDown,
@@ -176,8 +176,25 @@ function PeriodFilters({
   payFilter?: PayFilter;
   onPayFilterChange?: (value: PayFilter) => void;
 }) {
+  // Keep this filter panel at the same screen position when shared filters
+  // resize other blocks above it (otherwise the page jumps away).
+  const rootRef = useRef<HTMLDivElement>(null);
+  const anchorTop = useRef<number | null>(null);
+  const keep = <T,>(fn: (v: T) => void) => (v: T) => {
+    anchorTop.current = rootRef.current?.getBoundingClientRect().top ?? null;
+    fn(v);
+  };
+  useLayoutEffect(() => {
+    if (anchorTop.current === null || !rootRef.current) return;
+    const delta = rootRef.current.getBoundingClientRect().top - anchorTop.current;
+    anchorTop.current = null;
+    if (Math.abs(delta) > 1) window.scrollBy({ top: delta, behavior: "instant" as ScrollBehavior });
+  });
+  onYearChange = keep(onYearChange);
+  onMonthChange = keep(onMonthChange);
+  if (onPayFilterChange) onPayFilterChange = keep(onPayFilterChange);
   return (
-    <div className="mt-4 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
+    <div ref={rootRef} className="mt-4 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
       <p className="text-sm text-muted-foreground">{CONNECTED_FILTER_NOTE}</p>
       {payFilter && onPayFilterChange ? (
         <div className="flex flex-wrap items-center gap-2">
