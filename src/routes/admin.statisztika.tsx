@@ -26,11 +26,11 @@ import { TableExportButtons } from "@/components/TableExportButtons";
 const STATS_NAV = [
   ["megrendelt-termekek", "Megrendelt termékek"],
   ["termek-konverzio", "Termékenkénti konverziós arány"],
-  ["havi-bontas", "Havi bontás grafikonon"],
   ["megrendelesek-orankent", "Megrendelések óránként"],
   ["megrendeloi-lista", "Megrendelői és terméklista"],
   ["demo-letoltesek", "DEMO letöltések"],
   ["oldalletoltesek", "Oldalletöltési statisztika"],
+  ["havi-bontas", "Havi bontás grafikonon"],
 ] as const;
 import {
   MONTHS,
