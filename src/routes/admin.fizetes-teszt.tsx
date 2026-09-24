@@ -71,7 +71,7 @@ function PaymentTestPage() {
           letöltési linket a megadott e-mail címre.
         </p>
         <AdminSectionNav links={PAYMENT_TEST_NAV} />
-        <div id="teljes-vasarlasi-teszt" className="scroll-mt-36"><FullPurchaseTestPanel /></div>
+        <div id="teljes-vasarlasi-teszt" className="mt-8 scroll-mt-36"><FullPurchaseTestPanel /></div>
         <BackToTop />
         <TestPanel />
       </div>
