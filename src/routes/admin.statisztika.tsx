@@ -164,6 +164,11 @@ function filterChip(active: boolean) {
 const CONNECTED_FILTER_NOTE =
   "Ez az év- és hónapszűrő a Megrendelt termékek, Havi bontás, Termékenkénti konverziós arány, Megrendelések óránként, DEMO letöltések és mindkét oldalletöltési blokk adatait együtt frissíti.";
 
+const DISTINCT_CHART_COLORS = [
+  "var(--chart-1)", "var(--chart-4)", "var(--chart-3)", "var(--chart-6)", "var(--chart-7)",
+  "var(--chart-2)", "var(--chart-8)", "var(--chart-9)", "var(--chart-10)", "var(--chart-5)",
+];
+
 function PeriodFilters({
   years,
   year,
@@ -250,8 +255,8 @@ function StatsPanel() {
   const [payFilter, setPayFilter] = useState<PayFilter>("all");
   const [yearSel, setYearSel] = useState<YearSel>("all");
   const [monthSel, setMonthSel] = useState<MonthSel>("all");
-  const [chartYearSel, setChartYearSel] = useState<YearSel>("all");
-  const [chartMonthSel, setChartMonthSel] = useState<MonthSel>("all");
+  const [productTopMetric, setProductTopMetric] = useState<TopMetric>("revenue");
+  const [monthlyTopMetric, setMonthlyTopMetric] = useState<TopMetric>("revenue");
   const [exporting, setExporting] = useState<string | null>(null);
 
   useEffect(() => {
@@ -329,7 +334,7 @@ function StatsPanel() {
     return [...map.values()].sort((a, b) => b.qty - a.qty || b.revenue - a.revenue);
   }, [periodRows]);
 
-  /** Monthly buckets for the chart's selected year (payment-filtered, all months shown). */
+  /** Monthly buckets for the shared period (all years can be merged month by month). */
   const monthly = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, month) => ({
       month,
@@ -338,10 +343,10 @@ function StatsPanel() {
       revenue: 0,
       perProduct: new Map<string, number>(),
     }));
-    if (chartYearSel === "all") return { months, labels: [] as string[], yearTotals: { orders: 0, qty: 0, revenue: 0 } };
     for (const row of payFiltered) {
       const date = new Date(row.createdAt);
-      if (date.getFullYear() !== chartYearSel) continue;
+      if (yearSel !== "all" && date.getFullYear() !== yearSel) continue;
+      if (monthSel !== "all" && date.getMonth() !== monthSel) continue;
       const bucket = months[date.getMonth()];
       if (!bucket) continue;
       bucket.orders += 1;
@@ -362,7 +367,7 @@ function StatsPanel() {
       { orders: 0, qty: 0, revenue: 0 },
     );
     return { months, labels, yearTotals };
-  }, [payFiltered, chartYearSel]);
+  }, [payFiltered, yearSel, monthSel]);
 
   const maxMonthQty = Math.max(1, ...monthly.months.map((m) => m.qty));
 
@@ -380,11 +385,12 @@ function StatsPanel() {
     }
   };
 
-  const exportBtn =
-    "inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3.5 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50";
-
-  const selectYear = (y: YearSel) => {
-    setYearSel(y);
+  const monthlyTable: ListTable = {
+    title: `Havi bontás – ${periodLabel}`,
+    head: ["Hónap", "Megrendelés (db)", "Mennyiség (db)", "Árbevétel (Ft)"],
+    body: monthly.months.filter((item) => monthSel === "all" || item.month === monthSel).map((item) => [MONTHS[item.month] ?? "", item.orders, item.qty, item.revenue]),
+    foot: ["Összesen", monthly.yearTotals.orders, monthly.yearTotals.qty, monthly.yearTotals.revenue],
+    rightCols: [1, 2, 3],
   };
 
   return (
@@ -404,7 +410,7 @@ function StatsPanel() {
             onChange={(e) => setIncludeTests(e.target.checked)}
             className="h-4 w-4 accent-primary"
           />
-          Teszt megrendelések (TESZT- előtag) mutatása a statisztikában és az exportokban
+          TESZT-rendelések mutatása a Megrendelt termékek, Havi bontás, konverzió, óránkénti és megrendelői riportokban
         </label>
       ) : null}
 
@@ -445,24 +451,9 @@ function StatsPanel() {
               </div>
             </div>
 
-            <div className="mt-6 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Fizetés</span>
-                {PAY_OPTIONS.map((opt) => (
-                  <button key={opt.id} type="button" className={filterChip(payFilter === opt.id)} onClick={() => setPayFilter(opt.id)}>{opt.label}</button>
-                ))}
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Év</span>
-                <button type="button" className={filterChip(yearSel === "all")} onClick={() => selectYear("all")}>Összes év</button>
-                {years.map((y) => <button key={y} type="button" className={filterChip(yearSel === y)} onClick={() => selectYear(y)}>{y}</button>)}
-              </div>
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="mr-1 w-32 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hónap</span>
-                <button type="button" className={filterChip(activeMonth === "all")} onClick={() => setMonthSel("all")}>Összes</button>
-                {MONTHS_SHORT.map((label, i) => <button key={label} type="button" className={filterChip(activeMonth === i)} onClick={() => setMonthSel(i)} title={MONTHS[i]}>{label}</button>)}
-              </div>
-            </div>
+            <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={setYearSel} onMonthChange={setMonthSel} payFilter={payFilter} onPayFilterChange={setPayFilter} />
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3"><h3 className="text-base font-bold text-foreground">Top 5 beállítása</h3><TopMetricSelector value={productTopMetric} onChange={setProductTopMetric} /></div>
+            <ProductTopFive items={products} metric={productTopMetric} />
 
             {periodRows.length === 0 ? (
               <p className="mt-6 rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">A kiválasztott szűréshez ({periodLabel}) nem tartozik megrendelés.</p>
@@ -470,10 +461,10 @@ function StatsPanel() {
               <>
                 <div className="mt-6 mb-6 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-4 py-3">
                   <span className="mr-1 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground"><Download className="h-4 w-4 text-primary" /> Exportálás:</span>
-                  <button type="button" className={exportBtn} disabled={exporting !== null} onClick={() => runExport("xlsx", () => exportStatsXlsx(periodRows))}>{exporting === "xlsx" ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSpreadsheet className="h-4 w-4" />} Excel (.xlsx)</button>
-                  <button type="button" className={exportBtn} disabled={exporting !== null} onClick={() => runExport("csv", () => exportStatsCsv(periodRows))}><FileText className="h-4 w-4" /> CSV</button>
-                  <button type="button" className={exportBtn} disabled={exporting !== null} onClick={() => runExport("xml", () => exportStatsXml(periodRows))}><FileCode2 className="h-4 w-4" /> XML</button>
-                  <button type="button" className={exportBtn} disabled={exporting !== null || activeYear === null} title={activeYear === null ? "A PDF exportálásához válassz ki egy évet." : undefined} onClick={() => activeYear !== null && runExport("pdf", () => exportYearPdf(payFiltered, activeYear))}>{exporting === "pdf" ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />} PDF{activeYear !== null ? ` – ${activeYear}` : ""}</button>
+                  <Button type="button" variant="outline" size="sm" disabled={exporting !== null} onClick={() => runExport("xlsx", () => exportStatsXlsx(periodRows))}>{exporting === "xlsx" ? <Loader2 className="animate-spin" /> : <FileSpreadsheet />} Excel</Button>
+                  <Button type="button" variant="outline" size="sm" disabled={exporting !== null} onClick={() => runExport("csv", () => exportStatsCsv(periodRows))}><FileText /> CSV</Button>
+                  <Button type="button" variant="outline" size="sm" disabled={exporting !== null} onClick={() => runExport("xml", () => exportStatsXml(periodRows))}><FileCode2 /> XML</Button>
+                  <Button type="button" variant="outline" size="sm" disabled={exporting !== null || activeYear === null} title={activeYear === null ? "A PDF exportálásához válassz ki egy évet." : undefined} onClick={() => activeYear !== null && runExport("pdf", () => exportYearPdf(payFiltered, activeYear))}>{exporting === "pdf" ? <Loader2 className="animate-spin" /> : <FileDown />} PDF</Button>
                   <span className="w-full text-xs text-muted-foreground">Az Excel / CSV / XML a szűrt időszak ({periodLabel}) adatait tartalmazza. A PDF-hez válassz konkrét évet.</span>
                 </div>
                 <div className="overflow-x-auto rounded-xl border border-border bg-card">
@@ -490,40 +481,26 @@ function StatsPanel() {
 
           <section id="havi-bontas" className="mt-14 scroll-mt-36">
             <h2 className="text-xl font-bold text-foreground">Havi bontás</h2>
-            <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Év</span>
-                <button type="button" className={filterChip(chartYearSel === "all")} onClick={() => setChartYearSel("all")}>Összes év</button>
-                {years.map((y) => <button key={y} type="button" className={filterChip(chartYearSel === y)} onClick={() => setChartYearSel(y)}>{y}</button>)}
-              </div>
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hónap</span>
-                <button type="button" className={filterChip(chartMonthSel === "all")} onClick={() => setChartMonthSel("all")}>Összes</button>
-                {MONTHS_SHORT.map((label, i) => <button key={label} type="button" className={filterChip(chartMonthSel === i)} onClick={() => setChartMonthSel(i)} title={MONTHS[i]}>{label}</button>)}
-              </div>
-            </div>
-            {chartYearSel === "all" ? (
-              <p className="mt-4 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">A havi grafikonhoz válassz ki egy konkrét évet.</p>
-            ) : (
-              <>
+            <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={setYearSel} onMonthChange={setMonthSel} payFilter={payFilter} onPayFilterChange={setPayFilter} />
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-3"><h3 className="text-base font-bold text-foreground">Top 5 beállítása</h3><TopMetricSelector value={monthlyTopMetric} onChange={setMonthlyTopMetric} /></div>
+            <ProductTopFive items={products} metric={monthlyTopMetric} />
                 <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
-                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">{chartYearSel}</strong> – megrendelt mennyiség havonta (db)</p>
+                  <p className="text-sm text-muted-foreground"><strong className="text-foreground">{periodLabel}</strong> – megrendelt mennyiség havonta (db)</p>
                   <div className="mt-6 flex h-60 items-end gap-1 sm:gap-2">
-                    {monthly.months.map((m) => <div key={m.month} className={`flex min-w-0 flex-1 flex-col items-center gap-2 ${chartMonthSel !== "all" && m.month !== chartMonthSel ? "opacity-40" : ""}`}><span className="text-xs font-semibold text-foreground">{m.qty > 0 ? m.qty : ""}</span><div className={`flex h-44 w-full max-w-12 flex-col justify-end overflow-hidden rounded-t-md ${m.qty > 0 ? "bg-muted/50" : "border-b-2 border-border/60"}`} title={`${MONTHS[m.month]}: ${m.qty} db, ${formatPrice(m.revenue)}`}>{monthly.labels.map((label, li) => { const q = m.perProduct.get(label) ?? 0; return q === 0 ? null : <div key={label} style={{ height: `${(q / maxMonthQty) * 100}%`, backgroundColor: PALETTE[li % PALETTE.length] }} title={`${label}: ${q} db`} />; })}</div><span className="text-[11px] text-muted-foreground">{MONTHS_SHORT[m.month]}</span></div>)}
+                    {monthly.months.map((m) => <div key={m.month} className={`flex min-w-0 flex-1 flex-col items-center gap-2 ${monthSel !== "all" && m.month !== monthSel ? "opacity-25" : ""}`}><span className="text-xs font-semibold text-foreground">{m.qty > 0 ? m.qty : ""}</span><div className={`flex h-44 w-full max-w-12 flex-col justify-end overflow-hidden rounded-t-md ${m.qty > 0 ? "bg-muted/50" : "border-b-2 border-border/60"}`} title={`${MONTHS[m.month]}: ${m.qty} db, ${formatPrice(m.revenue)}`}>{monthly.labels.map((label, li) => { const q = m.perProduct.get(label) ?? 0; return q === 0 ? null : <div key={label} style={{ height: `${(q / maxMonthQty) * 100}%`, backgroundColor: DISTINCT_CHART_COLORS[li % DISTINCT_CHART_COLORS.length] }} title={`${label}: ${q} db`} />; })}</div><span className="text-xs text-muted-foreground">{MONTHS_SHORT[m.month]}</span></div>)}
                   </div>
-                  {monthly.labels.length > 0 ? <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2">{monthly.labels.map((label, li) => <li key={label} className="inline-flex items-center gap-2 text-xs text-muted-foreground"><span className="h-3 w-3 shrink-0 rounded-sm" style={{ backgroundColor: PALETTE[li % PALETTE.length] }} />{label}</li>)}</ul> : <p className="mt-5 text-sm text-muted-foreground">Ebben az évben még nincs megrendelés.</p>}
+                  {monthly.labels.length > 0 ? <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2">{monthly.labels.map((label, li) => <li key={label} className="inline-flex items-center gap-2 text-sm text-muted-foreground"><span className="h-3 w-3 shrink-0 rounded-sm" style={{ backgroundColor: DISTINCT_CHART_COLORS[li % DISTINCT_CHART_COLORS.length] }} />{label}</li>)}</ul> : <p className="mt-5 text-sm text-muted-foreground">Ebben az időszakban még nincs megrendelés.</p>}
                 </div>
-                <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card"><table className="w-full min-w-[520px] text-sm"><thead><tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground"><th className="px-4 py-3 font-semibold">{chartYearSel}</th><th className="px-4 py-3 text-right font-semibold">Megrendelés</th><th className="px-4 py-3 text-right font-semibold">Mennyiség</th><th className="px-4 py-3 text-right font-semibold">Árbevétel</th></tr></thead><tbody>{monthly.months.filter((m) => chartMonthSel === "all" || m.month === chartMonthSel).map((m) => <tr key={m.month} className={`border-b border-border/60 last:border-0 ${m.qty === 0 ? "text-muted-foreground/60" : ""}`}><td className="px-4 py-2.5 font-medium text-foreground">{MONTHS[m.month]}</td><td className="px-4 py-2.5 text-right">{m.orders} db</td><td className="px-4 py-2.5 text-right">{m.qty} db</td><td className="px-4 py-2.5 text-right">{formatPrice(m.revenue)}</td></tr>)}</tbody></table></div>
-              </>
-            )}
+                <div className="mt-6"><TableExportButtons baseName={`xlntbi-havi-bontas-${slugify(periodLabel)}`} sheetName="Havi bontás" table={monthlyTable} /></div>
+                <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card"><table className="w-full min-w-[520px] text-sm"><thead><tr className="border-b border-border text-left text-xs uppercase text-muted-foreground"><th className="px-4 py-3 font-semibold">Hónap</th><th className="px-4 py-3 text-right font-semibold">Megrendelés</th><th className="px-4 py-3 text-right font-semibold">Mennyiség</th><th className="px-4 py-3 text-right font-semibold">Árbevétel</th></tr></thead><tbody>{monthly.months.filter((m) => monthSel === "all" || m.month === monthSel).map((m) => <tr key={m.month} className={`border-b border-border/60 last:border-0 ${m.qty === 0 ? "text-muted-foreground/60" : ""}`}><td className="px-4 py-2.5 font-medium text-foreground">{MONTHS[m.month]}</td><td className="px-4 py-2.5 text-right">{m.orders} db</td><td className="px-4 py-2.5 text-right">{m.qty} db</td><td className="px-4 py-2.5 text-right">{formatPrice(m.revenue)}</td></tr>)}</tbody></table></div>
             <BackToTop />
           </section>
 
-          <ProductConversion rows={rows} />
-          <HourlyOrdersChart rows={rows} />
+          <ProductConversion rows={rows} yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
+          <HourlyOrdersChart rows={rows} yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
           <CustomerProductLists rows={rows} />
-          <DemoDownloads />
-          <PageViewStats />
+          <DemoDownloads yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
+          <PageViewStats yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
         </>
       )}
     </div>
