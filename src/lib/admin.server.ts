@@ -600,6 +600,7 @@ export async function createTestOrder(data: TestOrderInput): Promise<
       priceId: string;
       quantity: number;
       customerEmail: string;
+      checkoutToken: string;
     }
   | { ok: false; error: string }
 > {
@@ -613,8 +614,12 @@ export async function createTestOrder(data: TestOrderInput): Promise<
   const total = tier.price * data.quantity;
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const checkoutToken = Array.from(crypto.getRandomValues(new Uint8Array(24)), (b) =>
+    b.toString(16).padStart(2, "0"),
+  ).join("");
   const { error } = await supabaseAdmin.from("orders").insert({
     order_number: number,
+    checkout_token: checkoutToken,
     product_slug: product.slug,
     product_name: product.name,
     quantity: data.quantity,
@@ -650,6 +655,7 @@ export async function createTestOrder(data: TestOrderInput): Promise<
     priceId: tier.priceId,
     quantity: data.quantity,
     customerEmail: data.email,
+    checkoutToken,
   };
 }
 
