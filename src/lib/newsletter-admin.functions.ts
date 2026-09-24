@@ -121,12 +121,32 @@ export const sendNewsletterCampaign = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { gate, claimsEmail } = await import("./admin-gate.server");
     await gate(context);
+    const callerEmail = (claimsEmail(context) ?? "").trim().toLowerCase();
+    let testEmail = (data.testEmail ?? "").trim().toLowerCase();
+    if (data.testOnly && testEmail && testEmail !== callerEmail) {
+      // Test sends are bound server-side: only the caller's own address or an
+      // active newsletter subscriber may receive a test message.
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: sub } = await (supabaseAdmin as any)
+        .from("newsletter_subscribers")
+        .select("email")
+        .ilike("email", testEmail)
+        .eq("status", "active")
+        .maybeSingle();
+      if (!sub) {
+        return {
+          ok: false as const,
+          error: "Tesztlevél csak a saját címedre vagy aktív feliratkozónak küldhető.",
+        };
+      }
+    }
+    if (!testEmail) testEmail = "";
     const { sendCampaign } = await import("./newsletter-admin.server");
     return sendCampaign({
       subject: data.subject,
       html: data.html,
       editorMode: data.editorMode,
-      testEmail: data.testEmail ?? "",
+      testEmail,
       testOnly: data.testOnly,
       userId: context.userId,
       userEmail: claimsEmail(context) ?? "",

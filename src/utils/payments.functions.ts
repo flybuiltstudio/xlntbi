@@ -126,7 +126,8 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
 
       return { clientSecret: session.client_secret ?? "" };
     } catch (error) {
-      return { error: getStripeErrorMessage(error) };
+      console.error("Checkout session failed:", getStripeErrorMessage(error));
+      return { error: "A fizetés indítása nem sikerült. Kérjük, próbáld újra később." };
     }
   });
 

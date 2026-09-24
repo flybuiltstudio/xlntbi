@@ -107,7 +107,9 @@ export async function handleSubmission(data: Submission) {
       template: isConsult ? "konzultacio-visszaigazolas" : "kapcsolat-visszaigazolas",
       to: data.email,
       key: `visszaigazolas-${submissionId}`,
-      data: { name: fullName, message: data.message, rows: userRows },
+      // Generic confirmation only: never echo caller-supplied text to the
+      // (unverified) recipient address, so the form cannot be abused as a relay.
+      data: {},
       replyTo: OWNER_EMAIL,
     },
   ]);
