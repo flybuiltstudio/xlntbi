@@ -496,7 +496,7 @@ function StatsPanel() {
 
               {/* Termék-összesítő táblázat, csökkenő sorrendben */}
               <section>
-                <h2 id="megrendelt-termekek" className="scroll-mt-24 text-xl font-bold text-foreground">
+                <h2 id="megrendelt-termekek" className="scroll-mt-36 text-xl font-bold text-foreground">
                   Megrendelt termékek – {periodLabel}
                 </h2>
                 <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
@@ -557,7 +557,7 @@ function StatsPanel() {
               {/* Grafikon – csak konkrét évre */}
               {activeYear !== null ? (
                 <section className="mt-14">
-                  <h2 id="havi-bontas" className="scroll-mt-24 text-xl font-bold text-foreground">Havi bontás grafikonon</h2>
+                  <h2 id="havi-bontas" className="scroll-mt-36 text-xl font-bold text-foreground">Havi bontás grafikonon</h2>
 
                   <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
                     <p className="text-sm text-muted-foreground">
@@ -1004,7 +1004,7 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
 
   return (
     <section className="mt-14">
-      <h2 id="megrendeloi-lista" className="scroll-mt-24 text-xl font-bold text-foreground">Megrendelői és terméklista</h2>
+      <h2 id="megrendeloi-lista" className="scroll-mt-36 text-xl font-bold text-foreground">Megrendelői és terméklista</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Ezek a listák mindig a kezdetektől számított, teljes megrendelési előzményt mutatják – a
         fenti szűrők ezekre nem vonatkoznak. Több megrendelőt vagy terméket is ki lehet választani,
@@ -1310,7 +1310,7 @@ function PageViewBlock({
 
   return (
     <div>
-      <h2 id={anchorId} className="scroll-mt-24 text-xl font-bold text-foreground">{title}</h2>
+      <h2 id={anchorId} className="scroll-mt-36 text-xl font-bold text-foreground">{title}</h2>
       <p className="mt-2 text-sm text-muted-foreground">{note}</p>
 
       <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
@@ -1704,6 +1704,8 @@ function ProductConversion({
           row.paid,
           row.rate === null ? "—" : `${row.rate.toFixed(2).replace(".", ",")} %`,
         ]),
+        xlsxBody: table.map((row) => [row.label, row.views, row.paid, row.rate === null ? "—" : row.rate / 100]),
+        xlsxPercentCols: [3],
         rightCols: [1, 2, 3],
       }
     : null;
@@ -1829,7 +1831,7 @@ function HourlyOrdersChart({ rows }: { rows: StatRow[] }) {
 
   return (
     <section className="mt-14">
-      <h2 id="megrendelesek-orankent" className="scroll-mt-24 text-xl font-bold text-foreground">Megrendelések óránként</h2>
+      <h2 id="megrendelesek-orankent" className="scroll-mt-36 text-xl font-bold text-foreground">Megrendelések óránként</h2>
       <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
         A megrendelés leadásának időpontja szerint, magyar idő (Europe/Budapest) alapján, a nyári és
         téli időszámítást is helyesen kezelve. Minden leadott megrendelés beleszámít, fizetési
@@ -1942,7 +1944,7 @@ function DemoDownloads() {
   if (rows === null) {
     return (
       <section className="mt-14">
-        <h2 id="demo-letoltesek" className="scroll-mt-24 text-xl font-bold text-foreground">DEMO letöltések</h2>
+        <h2 id="demo-letoltesek" className="scroll-mt-36 text-xl font-bold text-foreground">DEMO letöltések</h2>
         <p className="mt-4 text-sm text-muted-foreground">Betöltés…</p>
       </section>
     );
@@ -1991,7 +1993,7 @@ function DemoDownloads() {
 
   return (
     <section className="mt-14">
-      <h2 id="demo-letoltesek" className="scroll-mt-24 text-xl font-bold text-foreground">DEMO letöltések</h2>
+      <h2 id="demo-letoltesek" className="scroll-mt-36 text-xl font-bold text-foreground">DEMO letöltések</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Fizetés nélküli DEMO licenc igénylések. Ezek nem jelennek meg a vásárlási statisztikában
         és nem kerülnek számlázásra.

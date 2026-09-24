@@ -507,6 +507,9 @@ export interface ListTable {
   foot?: (string | number)[];
   /** Indexek, amelyeket jobbra igazítunk (PDF-ben) */
   rightCols?: number[];
+  /** Optional Excel-only rows and percentage columns (zero-based). */
+  xlsxBody?: (string | number)[][];
+  xlsxPercentCols?: number[];
 }
 
 export function exportTableCsv(filename: string, table: ListTable) {
@@ -562,11 +565,18 @@ export async function exportTableXlsx(filename: string, sheetName: string, table
     table.subtitle ? [table.subtitle] : [],
     [],
     table.head,
-    ...table.body,
+    ...(table.xlsxBody ?? table.body),
     ...(table.foot ? [table.foot] : []),
   ] as (string | number)[][];
   const safeRows: (string | number)[][] = allRows.map((row) => safeRow(row));
   const sheet = XLSX.utils.aoa_to_sheet(safeRows);
+  for (const col of table.xlsxPercentCols ?? []) {
+    for (let row = 4; row < 4 + (table.xlsxBody ?? table.body).length; row += 1) {
+      const address = XLSX.utils.encode_cell({ r: row, c: col });
+      const cell = sheet[address];
+      if (cell && typeof cell.v === "number") cell.z = "0.00%";
+    }
+  }
   sheet["!cols"] = table.head.map((h, i) => {
     let w = h.length;
     for (const row of [...table.body, ...(table.foot ? [table.foot] : [])]) {

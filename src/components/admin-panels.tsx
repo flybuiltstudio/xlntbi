@@ -1,4 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
+import { Link } from "@tanstack/react-router";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Eye, EyeOff, KeyRound } from "lucide-react";
 import { BackToTop } from "@/components/admin-toc";
@@ -1477,13 +1478,13 @@ export function UsersPanel({ currentUserId }: { currentUserId: string }) {
               </div>
               <div className="flex items-center gap-2">
                 {user.id === currentUserId ? (
-                  <a
-                    href="/admin/jelszo"
+                  <Link
+                    to="/admin/jelszo"
                     className="inline-flex items-center gap-1.5 rounded-md border border-input px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
                   >
                     <KeyRound className="h-3.5 w-3.5" />
                     Jelszóváltoztatás
-                  </a>
+                  </Link>
                 ) : null}
                 <button
                   type="button"
