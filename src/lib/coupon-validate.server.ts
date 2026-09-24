@@ -102,9 +102,10 @@ export type CouponCheckInput = {
  */
 export async function checkPromotionCode(
   input: CouponCheckInput,
+  options: { log?: boolean } = {},
 ): Promise<CouponCheckResult> {
   const result = await evaluatePromotionCode(input);
-  if (!result.ok) {
+  if (!result.ok && options.log !== false) {
     const { logCouponAttempt } = await import("./coupon-attempts.server");
     await logCouponAttempt({
       code: input.code.trim().toUpperCase(),

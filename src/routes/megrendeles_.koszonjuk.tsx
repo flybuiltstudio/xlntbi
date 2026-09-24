@@ -43,9 +43,9 @@ function ThankYouPage() {
   const fetchSummary = useServerFn(getCheckoutSummary);
 
   useEffect(() => {
-    if (!sessionId) return;
+    if (!sessionId || !rendeles) return;
     let cancelled = false;
-    fetchSummary({ data: { sessionId, environment: getStripeEnvironment() } })
+    fetchSummary({ data: { sessionId, orderNumber: String(rendeles), environment: getStripeEnvironment() } })
       .then((result) => {
         if (!cancelled) setSummary(result);
       })

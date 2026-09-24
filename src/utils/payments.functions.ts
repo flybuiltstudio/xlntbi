@@ -9,6 +9,28 @@ import {
   getStripeErrorMessage,
 } from "@/lib/stripe.server";
 
+const ALLOWED_RETURN_ORIGINS = [
+  "https://xlntbi.hu",
+  "https://www.xlntbi.hu",
+  "https://xlntbi.lovable.app",
+];
+
+/** Return URL is always built server-side on a trusted origin and fixed path. */
+function buildReturnUrl(requested: string, orderNumber: string): string {
+  let origin = ALLOWED_RETURN_ORIGINS[0]!;
+  try {
+    const url = new URL(requested);
+    const allowed =
+      ALLOWED_RETURN_ORIGINS.includes(url.origin) ||
+      /^https:\/\/[a-z0-9-]+\.lovable\.app$/.test(url.origin) ||
+      /^http:\/\/localhost(:\d+)?$/.test(url.origin);
+    if (allowed) origin = url.origin;
+  } catch {
+    // fall back to the production origin
+  }
+  return `${origin}/megrendeles/koszonjuk?rendeles=${encodeURIComponent(orderNumber)}&session_id={CHECKOUT_SESSION_ID}`;
+}
+
 type CheckoutSessionResult = { clientSecret: string } | { error: string };
 
 /** Detailed, Hungarian coupon validation for the checkout coupon helper. */
@@ -30,7 +52,26 @@ export const validatePromotionCode = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const { checkPromotionCode } = await import("@/lib/coupon-validate.server");
-    return checkPromotionCode(data);
+    // Failed attempts are only logged when bound to a real, unpaid order with
+    // the same email, so anonymous callers cannot pollute the admin log.
+    let bound = false;
+    if (
+      typeof data.orderNumber === "string" &&
+      /^[A-Za-z0-9-]{1,40}$/.test(data.orderNumber) &&
+      typeof data.email === "string"
+    ) {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: order } = await supabaseAdmin
+        .from("orders")
+        .select("email, payment_status")
+        .eq("order_number", data.orderNumber)
+        .maybeSingle();
+      bound =
+        !!order &&
+        order.payment_status !== "paid" &&
+        order.email.trim().toLowerCase() === data.email.trim().toLowerCase();
+    }
+    return checkPromotionCode(data, { log: bound });
   });
 
 export const createOrderCheckoutSession = createServerFn({ method: "POST" })
@@ -102,7 +143,7 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
         line_items: [{ price: stripePrice.id, quantity: order.quantity }],
         mode: "payment",
         ui_mode: "embedded_page",
-        return_url: data.returnUrl,
+        return_url: buildReturnUrl(data.returnUrl, data.orderNumber),
         customer_email: data.customerEmail,
         // Sandbox: test coupons allowed. Live: only when an allowlisted
         // promotion code exists (see src/lib/coupons.ts).
@@ -137,7 +178,10 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
  * checkout session id, so no order data is exposed by guessing order numbers.
  */
 export const getCheckoutSummary = createServerFn({ method: "POST" })
-  .inputValidator((data: { sessionId: string; environment: StripeEnv }) => {
+  .inputValidator((data: { sessionId: string; orderNumber: string; environment: StripeEnv }) => {
+    if (typeof data.orderNumber !== "string" || !/^[A-Za-z0-9-]{1,40}$/.test(data.orderNumber)) {
+      throw new Error("Invalid orderNumber");
+    }
     if (!/^cs_[A-Za-z0-9_-]{10,200}$/.test(data.sessionId)) {
       throw new Error("Invalid sessionId");
     }
@@ -163,6 +207,8 @@ export const getCheckoutSummary = createServerFn({ method: "POST" })
         const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
           expand: ["total_details.breakdown"],
         });
+        // Only reveal the summary when the session belongs to the given order.
+        if (session.metadata?.["orderNumber"] !== data.orderNumber) return { ok: false };
         // Stripe returns HUF in minor units (fillér) — show forints.
         const toMajor = (v: number) => Math.round(v / 100);
         const discountAmount = toMajor(session.total_details?.amount_discount ?? 0);
