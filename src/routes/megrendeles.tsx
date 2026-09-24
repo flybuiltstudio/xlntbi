@@ -80,6 +80,7 @@ function OrderPage() {
   const [customerEmail, setCustomerEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
+  const [checkoutToken, setCheckoutToken] = useState("");
   const [taxError, setTaxError] = useState("");
   const [taxValue, setTaxValue] = useState("");
   const [viesState, setViesState] = useState<
@@ -152,6 +153,7 @@ function OrderPage() {
 
       if (result.ok) {
         setOrderNumber(result.orderNumber);
+        setCheckoutToken(result.checkoutToken ?? "");
         if (paymentMethod === "card") {
           setCustomerEmail(String(fd.get("email") ?? ""));
           setStatus("paying");
@@ -192,6 +194,7 @@ function OrderPage() {
           priceId={tier.priceId}
           quantity={quantity}
           orderNumber={orderNumber}
+          checkoutToken={checkoutToken}
           customerEmail={customerEmail}
           productLabel={`${product.name} – ${tier.label}`}
         />

@@ -9,6 +9,7 @@ type Props = {
   priceId: string;
   quantity: number;
   orderNumber: string;
+  checkoutToken: string;
   customerEmail: string;
   /** Terméknév a saját katalógusból (mindig „XLNT ” előtaggal jelenik meg). */
   productLabel?: string;
@@ -18,6 +19,7 @@ export function StripeOrderCheckout({
   priceId,
   quantity,
   orderNumber,
+  checkoutToken,
   customerEmail,
   productLabel,
 }: Props) {
@@ -29,8 +31,9 @@ export function StripeOrderCheckout({
             priceId,
             quantity,
             orderNumber,
+            checkoutToken,
             customerEmail,
-            returnUrl: `${window.location.origin}/megrendeles/koszonjuk?rendeles=${orderNumber}&session_id={CHECKOUT_SESSION_ID}`,
+            returnUrl: window.location.origin,
             environment: getStripeEnvironment(),
           },
         });
@@ -39,7 +42,7 @@ export function StripeOrderCheckout({
         return result.clientSecret;
       },
     }),
-    [priceId, quantity, orderNumber, customerEmail],
+    [priceId, quantity, orderNumber, checkoutToken, customerEmail],
   );
 
   return (

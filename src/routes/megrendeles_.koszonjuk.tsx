@@ -21,6 +21,7 @@ export const Route = createFileRoute("/megrendeles_/koszonjuk")({
   validateSearch: z.object({
     rendeles: z.string().max(40).optional(),
     session_id: z.string().max(200).optional(),
+    t: z.string().max(100).optional(),
   }),
   head: () => ({
     meta: [
@@ -38,14 +39,14 @@ export const Route = createFileRoute("/megrendeles_/koszonjuk")({
 });
 
 function ThankYouPage() {
-  const { rendeles, session_id: sessionId } = Route.useSearch();
+  const { rendeles, session_id: sessionId, t: token } = Route.useSearch();
   const [summary, setSummary] = useState<Summary | null>(null);
   const fetchSummary = useServerFn(getCheckoutSummary);
 
   useEffect(() => {
-    if (!sessionId || !rendeles) return;
+    if (!sessionId || !rendeles || !token) return;
     let cancelled = false;
-    fetchSummary({ data: { sessionId, orderNumber: String(rendeles), environment: getStripeEnvironment() } })
+    fetchSummary({ data: { sessionId, orderNumber: String(rendeles), token: String(token), environment: getStripeEnvironment() } })
       .then((result) => {
         if (!cancelled) setSummary(result);
       })

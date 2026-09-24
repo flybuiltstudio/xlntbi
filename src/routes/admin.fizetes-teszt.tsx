@@ -38,6 +38,7 @@ type TestOrderRow = Awaited<ReturnType<typeof adminListTestOrders>>["orders"][nu
 
 type CreatedOrder = {
   orderNumber: string;
+  checkoutToken: string;
   total: number;
   priceId: string;
   quantity: number;
@@ -141,6 +142,7 @@ function TestPanel() {
       if (result.ok) {
         setCreated({
           orderNumber: result.orderNumber,
+          checkoutToken: result.checkoutToken ?? "",
           total: result.total,
           priceId: result.priceId,
           quantity: result.quantity,
@@ -339,6 +341,7 @@ function TestPanel() {
                   priceId={created.priceId}
                   quantity={created.quantity}
                   orderNumber={created.orderNumber}
+                  checkoutToken={created.checkoutToken}
                   customerEmail={created.customerEmail}
                   productLabel={`${product.name} – ${tier.label}`}
                 />
