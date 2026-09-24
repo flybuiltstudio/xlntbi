@@ -538,14 +538,15 @@ function MultiSelect({
 
   return (
     <div ref={ref} className="relative mt-3">
-      <button
+      <Button
         type="button"
+        variant="outline"
         className={listSelectBtn}
         onClick={() => setOpen((v) => !v)}
       >
         <span className="truncate">{buttonLabel}</span>
         <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
-      </button>
+      </Button>
       {open ? (
         <div className="absolute z-30 mt-1 max-h-80 w-full overflow-auto rounded-md border border-input bg-background shadow-lg">
           <label className="flex cursor-pointer items-center gap-2 border-b border-border px-3 py-2 text-sm font-semibold text-foreground">
@@ -1587,7 +1588,7 @@ function HourlyOrdersChart({ rows, yearSel, monthSel, years, onYearChange, onMon
         <div className="mt-6 flex h-60 items-end gap-0.5 sm:gap-1">
           {hours.map((count, hour) => (
             <div key={hour} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-              <span className="text-[11px] font-semibold text-foreground">
+              <span className="text-xs font-semibold text-foreground">
                 {count > 0 ? count : ""}
               </span>
               <div
@@ -1603,7 +1604,7 @@ function HourlyOrdersChart({ rows, yearSel, monthSel, years, onYearChange, onMon
                   <div className="w-full border-b-2 border-border/60" />
                 )}
               </div>
-              <span className="text-[10px] text-muted-foreground sm:text-[11px]">
+              <span className="text-xs text-muted-foreground">
                 {String(hour).padStart(2, "0")}
               </span>
             </div>
@@ -1720,60 +1721,7 @@ function DemoDownloads({ yearSel, monthSel, years, onYearChange, onMonthChange }
 
       {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground">
-          <Download className="h-3.5 w-3.5 text-primary" />
-          Exportálás:
-        </span>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={!demoTable || exporting !== null}
-          onClick={() => runExport("xlsx")}
-        >
-          {exporting === "xlsx" ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            <FileSpreadsheet className="h-3.5 w-3.5" />
-          )}
-          Excel
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={!demoTable || exporting !== null}
-          onClick={() => runExport("csv")}
-        >
-          <FileText className="h-3.5 w-3.5" />
-          CSV
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={!demoTable || exporting !== null}
-          onClick={() => runExport("xml")}
-        >
-          <FileCode2 className="h-3.5 w-3.5" />
-          XML
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={!demoTable || exporting !== null}
-          onClick={() => runExport("pdf")}
-        >
-          {exporting === "pdf" ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : (
-            <FileDown className="h-3.5 w-3.5" />
-          )}
-          PDF
-        </Button>
-      </div>
+      <div className="mt-6"><TableExportButtons baseName={base} sheetName="DEMO letöltések" table={demoTable} /></div>
 
       {filteredRows.length > 0 ? (
         <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-card">
