@@ -1003,7 +1003,15 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
 
 // ---------------- Oldalletöltési statisztikák ----------------
 
-function PageViewStats() {
+type SharedPeriodProps = {
+  yearSel: YearSel;
+  monthSel: MonthSel;
+  years: number[];
+  onYearChange: (value: YearSel) => void;
+  onMonthChange: (value: MonthSel) => void;
+};
+
+function PageViewStats({ yearSel, monthSel, years: orderYears, onYearChange, onMonthChange }: SharedPeriodProps) {
   const fetchPageViews = useServerFn(adminPageViewStats);
   const [counts, setCounts] = useState<{ product: PageViewCount[]; service: PageViewCount[] }>({
     product: [],
@@ -1034,9 +1042,10 @@ function PageViewStats() {
 
   const years = useMemo(() => {
     const set = new Set<number>([new Date().getFullYear()]);
+    for (const year of orderYears) set.add(year);
     for (const row of [...counts.product, ...counts.service]) set.add(row.year);
     return [...set].sort((a, b) => b - a);
-  }, [counts]);
+  }, [counts, orderYears]);
 
   const productEntries = useMemo(
     () => products.map((p) => ({ key: p.slug, label: p.name })),
@@ -1068,6 +1077,10 @@ function PageViewStats() {
         entries={productEntries}
         counts={counts.product}
         years={years}
+        yearSel={yearSel}
+        monthSel={monthSel}
+        onYearChange={onYearChange}
+        onMonthChange={onMonthChange}
         fileBase="termek-oldalletoltesek"
         topN={5}
       />
@@ -1080,6 +1093,10 @@ function PageViewStats() {
         entries={serviceEntries}
         counts={counts.service}
         years={years}
+        yearSel={yearSel}
+        monthSel={monthSel}
+        onYearChange={onYearChange}
+        onMonthChange={onMonthChange}
         fileBase="szolgaltatas-oldalletoltesek"
         topN={3}
       />
@@ -1096,6 +1113,10 @@ function PageViewBlock({
   entries,
   counts,
   years,
+  yearSel,
+  monthSel,
+  onYearChange,
+  onMonthChange,
   fileBase,
   topN,
 }: {
@@ -1106,21 +1127,38 @@ function PageViewBlock({
   entries: { key: string; label: string }[];
   counts: PageViewCount[];
   years: number[];
+  yearSel: YearSel;
+  monthSel: MonthSel;
+  onYearChange: (value: YearSel) => void;
+  onMonthChange: (value: MonthSel) => void;
   fileBase: string;
   topN: number;
 }) {
   const [exporting, setExporting] = useState<string | null>(null);
-  const [yearSel, setYearSel] = useState<number>(new Date().getFullYear());
-  const year = years.includes(yearSel) ? yearSel : (years[0] ?? new Date().getFullYear());
-  const month = "all" as const;
-
-  const rows = useMemo(() => pivotPageViews(entries, counts, year), [entries, counts, year]);
-  const periodLabel = month === "all" ? String(year) : `${year}. ${MONTHS[month] ?? ""}`;
+  const rows = useMemo(() => {
+    const selectedYears = yearSel === "all" ? years : [yearSel];
+    const merged = new Map(entries.map((entry) => [entry.key, { key: entry.key, label: entry.label, months: Array.from({ length: 12 }, () => 0), total: 0 }]));
+    for (const year of selectedYears) {
+      for (const row of pivotPageViews(entries, counts, year)) {
+        const target = merged.get(row.key);
+        if (!target) continue;
+        row.months.forEach((value, index) => { target.months[index] = (target.months[index] ?? 0) + value; });
+      }
+    }
+    for (const row of merged.values()) row.total = monthSel === "all" ? row.months.reduce((sum, value) => sum + value, 0) : (row.months[monthSel] ?? 0);
+    return [...merged.values()];
+  }, [entries, counts, years, yearSel, monthSel]);
+  const periodLabel = yearSel === "all" ? (monthSel === "all" ? "Összes év" : `Összes év – ${MONTHS[monthSel]}`) : (monthSel === "all" ? String(yearSel) : `${yearSel}. ${MONTHS[monthSel]}`);
   const title = titleBase;
-  const table = pageViewTable(title, firstColumn, rows, year, month);
-  const filename = `xlntbi-${fileBase}-${year}${month === "all" ? "" : `-${month + 1}`}`;
-  const btn =
-    "inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted disabled:opacity-60";
+  const table: ListTable = {
+    title,
+    subtitle: periodLabel,
+    head: [firstColumn, "Oldalletöltés (db)"],
+    body: rows.map((row) => [row.label, row.total]),
+    foot: ["Összesen", rows.reduce((sum, row) => sum + row.total, 0)],
+    rightCols: [1],
+  };
+  const filename = `xlntbi-${fileBase}-${slugify(periodLabel)}`;
 
 
   const run = async (id: string, fn: () => void | Promise<void>) => {
@@ -1132,40 +1170,20 @@ function PageViewBlock({
     }
   };
 
-  const monthIndexes = month === "all" ? MONTHS_SHORT.map((_, i) => i) : [month];
-  const showTotal = month === "all";
-
   return (
     <div>
       <h2 id={anchorId} className="scroll-mt-36 text-xl font-bold text-foreground">{title}</h2>
       <p className="mt-2 text-sm text-muted-foreground">{note}</p>
 
-      <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Év
-          </span>
-          {years.map((y) => (
-            <button
-              key={y}
-              type="button"
-              className={filterChip(y === year)}
-              onClick={() => setYearSel(y)}
-            >
-              {y}
-            </button>
-          ))}
-        </div>
-      </div>
-
-
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        <button
+      <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={onYearChange} onMonthChange={onMonthChange} />
+      <PageViewTopN rows={rows} month="all" year={yearSel === "all" ? "Összes év" : yearSel} firstColumn={firstColumn} topN={topN} />
+      <PageViewChart rows={rows} year={yearSel === "all" ? "Összes év" : yearSel} month={monthSel} firstColumn={firstColumn} />
+      <div className="mt-6 flex flex-wrap gap-2">
+        <Button
           type="button"
-          className={btn}
+          variant="outline" size="sm"
           disabled={exporting !== null}
-          onClick={() => run("xlsx", () => exportTableXlsx(`${filename}.xlsx`, String(year), table))}
+          onClick={() => run("xlsx", () => exportTableXlsx(`${filename}.xlsx`, title.slice(0, 31), table))}
         >
           {exporting === "xlsx" ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -1173,28 +1191,28 @@ function PageViewBlock({
             <FileSpreadsheet className="h-4 w-4" />
           )}
           Excel
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className={btn}
+          variant="outline" size="sm"
           disabled={exporting !== null}
           onClick={() => run("csv", () => exportTableCsv(`${filename}.csv`, table))}
         >
           <FileText className="h-4 w-4" />
           CSV
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className={btn}
+          variant="outline" size="sm"
           disabled={exporting !== null}
           onClick={() => run("xml", () => exportTableXml(`${filename}.xml`, table))}
         >
           <FileCode2 className="h-4 w-4" />
           XML
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className={btn}
+          variant="outline" size="sm"
           disabled={exporting !== null}
           onClick={() => run("pdf", () => exportTablePdf(`${filename}.pdf`, table))}
         >
@@ -1204,38 +1222,22 @@ function PageViewBlock({
             <FileDown className="h-4 w-4" />
           )}
           PDF
-        </button>
+        </Button>
       </div>
 
       <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
-        <table className={`w-full text-sm ${showTotal ? "min-w-[880px]" : "min-w-[420px]"}`}>
+        <table className="w-full min-w-[420px] text-sm">
           <thead>
             <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
               <th className="px-4 py-3 font-semibold">{firstColumn}</th>
-              {monthIndexes.map((i) => (
-                <th key={i} className="px-2 py-3 text-right font-semibold">
-                  {MONTHS_SHORT[i]}
-                </th>
-              ))}
-              {showTotal ? (
-                <th className="px-4 py-3 text-right font-semibold">Összesen</th>
-              ) : null}
+              <th className="px-4 py-3 text-right font-semibold">Oldalletöltés</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
               <tr key={row.key} className="border-b border-border/60 last:border-0">
                 <td className="px-4 py-3 font-medium text-foreground">{row.label}</td>
-                {monthIndexes.map((i) => (
-                  <td key={i} className="px-2 py-3 text-right text-muted-foreground">
-                    {row.months[i] ?? 0}
-                  </td>
-                ))}
-                {showTotal ? (
-                  <td className="px-4 py-3 text-right font-semibold text-foreground">
-                    {row.total}
-                  </td>
-                ) : null}
+                <td className="px-4 py-3 text-right font-semibold text-foreground">{row.total}</td>
               </tr>
             ))}
           </tbody>
@@ -1251,9 +1253,6 @@ function PageViewBlock({
         </table>
       </div>
 
-      <PageViewChart rows={rows} year={year} month={month} firstColumn={firstColumn} />
-
-      <PageViewTopN rows={rows} month={month} year={year} firstColumn={firstColumn} topN={topN} />
     </div>
   );
 }
@@ -1268,7 +1267,7 @@ function PageViewTopN({
 }: {
   rows: PageViewPivotRow[];
   month: number | "all";
-  year: number;
+  year: number | string;
   firstColumn: string;
   topN: number;
 }) {
@@ -1336,7 +1335,7 @@ function PageViewChart({
   firstColumn,
 }: {
   rows: ReturnType<typeof pivotPageViews>;
-  year: number;
+  year: number | string;
   month: number | "all";
   firstColumn: string;
 }) {
