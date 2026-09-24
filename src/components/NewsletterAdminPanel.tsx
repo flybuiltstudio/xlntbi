@@ -289,8 +289,8 @@ export function NewsletterAdminPanel() {
       ) : null}
 
       {/* ---------------- Mode ---------------- */}
-      <section>
-        <h2 id="hirlevel-kezelese" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
+      <section id="hirlevel-kezelese" className="scroll-mt-36">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <PlugZap className="h-5 w-5 text-primary" /> Hírlevél kezelése
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -434,8 +434,8 @@ export function NewsletterAdminPanel() {
       </section>
 
       {/* ---------------- Campaign (Levélküldő) ---------------- */}
-      <section>
-        <h2 id="levelkuldo" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
+      <section id="levelkuldo" className="scroll-mt-36">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <Mail className="h-5 w-5 text-primary" /> Levélküldő
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -614,8 +614,8 @@ export function NewsletterAdminPanel() {
       </section>
 
       {/* ---------------- Subscribers (Feliratkozók) ---------------- */}
-      <section>
-        <h2 id="feliratkozok" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
+      <section id="feliratkozok" className="scroll-mt-36">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <Users className="h-5 w-5 text-primary" /> Feliratkozók
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -761,8 +761,8 @@ export function NewsletterAdminPanel() {
       </section>
 
       {/* ---------------- Blocklist (Feketelista) ---------------- */}
-      <section>
-        <h2 id="feketelista" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
+      <section id="feketelista" className="scroll-mt-36">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <ShieldBan className="h-5 w-5 text-primary" /> Feketelista
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -861,8 +861,8 @@ export function NewsletterAdminPanel() {
 
 
       {/* ---------------- Sent campaigns (Elküldött hírlevelek) ---------------- */}
-      <section>
-        <h2 id="elkuldott-hirlevelek" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
+      <section id="elkuldott-hirlevelek" className="scroll-mt-36">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
           <Send className="h-5 w-5 text-primary" /> Elküldött hírlevelek
         </h2>
         <div className="mt-5 overflow-x-auto rounded-lg border border-border">

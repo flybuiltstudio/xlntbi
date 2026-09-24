@@ -55,8 +55,8 @@ export function LiveCouponGuardPanel() {
   const expiredCodes = ALLOWED_LIVE_PROMOTION_CODES.filter((g) => Date.parse(g.expiresAt) <= now);
 
   return (
-    <section className="rounded-xl border border-border bg-card p-5 sm:p-6">
-      <h2 id="kuponvedelem" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
+    <section id="kuponvedelem" className="scroll-mt-36 rounded-xl border border-border bg-card p-5 sm:p-6">
+      <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
         <ShieldCheck className="h-5 w-5 text-primary" aria-hidden="true" />
         Kuponvédelem éles környezetben
       </h2>

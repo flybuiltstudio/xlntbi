@@ -170,10 +170,10 @@ export function CouponAdminPanel() {
   }
 
   return (
-    <section>
+    <section id="kuponok-listaja" className="scroll-mt-36">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 id="kuponok-listaja" className="flex scroll-mt-24 items-center gap-2 text-xl font-bold text-foreground">
+          <h2 className="flex items-center gap-2 text-xl font-bold text-foreground">
             <TicketPercent className="h-5 w-5 text-primary" aria-hidden="true" />
             Kuponok
           </h2>

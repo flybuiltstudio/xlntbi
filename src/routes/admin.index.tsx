@@ -33,7 +33,7 @@ function AdminIndexPage() {
       <div className="mx-auto max-w-6xl px-4 py-14">
         <p className="text-sm text-muted-foreground">
           Belső felület: megrendelések szűrése fizetési állapot, év és hónap szerint, átutalások
-          jóváhagyása és a letöltési linkek kiküldése.
+          jóváhagyása, letöltési linkek és licencek kiküldése.
         </p>
         <OrdersPanel email={email} />
       </div>
