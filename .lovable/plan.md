@@ -34,7 +34,9 @@ Az érintett adminoldalak navigációjának, adatbevitelének, exportjainak és 
 
 ### 6. Tároló-takarítás
 - A jelentésben szereplő két fájl régi útvonalon van: `banki-utalasi-csomag-keszito/...` helyett a katalógus jelenleg `utalasi-csomag-keszito/...`, illetve `rlb-bank-konvertalo/...` helyett `rlb-bank-konverter/...` útvonalra hivatkozik.
-- A heti folyamat szándékosan csak jelentést készít, ezért a két régi fájlt nem törölte automatikusan. A kézi törlés előtt friss ellenőrzést futtatok; csak akkor törlöm őket, ha továbbra is hivatkozás nélküliek és a jelenlegi katalógusfájlok megléte igazolt. Ha az admin belépés hiánya ezt megakadályozza, a két fájl törlését nem végzem el és egyértelműen jelzem.
+- A tároló közvetlen ellenőrzése igazolta, hogy mindkét új útvonalon megvan a fájl, és a régi–új példányok mérete és fájl-azonosítója páronként pontosan egyezik.
+- Emiatt áthelyezésre nincs szükség: a két régi, hivatkozás nélküli példányt törlöm. Utána friss tárolóvizsgálattal ellenőrzöm, hogy csak az új, katalógusban hivatkozott példányok maradtak meg.
+- A heti folyamat továbbra is csak jelentést készít; automatikus fájltörlést nem vezetek be.
 
 ### 7. Biztonsági ellenőrzés időpontja
 - Az „Ellenőrizve” mező többé nem az oldal megnyitásának idejét mutatja.
@@ -51,4 +53,4 @@ Az érintett adminoldalak navigációjának, adatbevitelének, exportjainak és 
 - Kódellenőrzés az összes érintett fájlra.
 - Adminoldalanként ellenőrzöm a menügombok célhelyét, a magyar dátum- és fájlmezőket, a jelszógomb láthatóságát, az összes-kijelölés váltását és az exportfeliratokat.
 - Ellenőrzöm a konverziós CSV/XML/PDF/Excel kimenetek tizedesvesszőjét és Excel-százalékformátumát.
-- Friss tárolóvizsgálattal ellenőrzöm a két régi fájl státuszát; automatikus törlést nem vezetek be.
+- A két régi fájl törlése után friss tárolóvizsgálattal ellenőrzöm az új példányok meglétét és a régi utak eltűnését; automatikus törlést nem vezetek be.
