@@ -12,7 +12,7 @@ import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { FullPurchaseTestPanel } from "@/components/FullPurchaseTestPanel";
 import { StripeOrderCheckout } from "@/components/StripeOrderCheckout";
 import { PageHero } from "@/components/PageHero";
-import { AdminSectionNav } from "@/components/admin-toc";
+import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
 import { formatPrice, getProduct, getTier, products } from "@/lib/products";
 import { isCardPaymentAvailable } from "@/lib/stripe";
 
@@ -72,6 +72,7 @@ function PaymentTestPage() {
         </p>
         <AdminSectionNav links={PAYMENT_TEST_NAV} />
         <div id="teljes-vasarlasi-teszt" className="scroll-mt-36"><FullPurchaseTestPanel /></div>
+        <BackToTop />
         <TestPanel />
       </div>
     </>
@@ -445,6 +446,7 @@ function TestPanel() {
           </div>
         )}
       </section>
+      <BackToTop />
     </div>
   );
 }

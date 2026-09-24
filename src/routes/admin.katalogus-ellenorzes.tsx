@@ -5,7 +5,7 @@ import { AdminBlock } from "@/components/AdminBlock";
 import { PageHero } from "@/components/PageHero";
 import { CatalogAuditPanel } from "@/components/CatalogAuditPanel";
 import { StripeProductNamePanel } from "@/components/StripeProductNamePanel";
-import { AdminSectionNav } from "@/components/admin-toc";
+import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
 
 const CATALOG_NAV = [
   ["arak-es-letoltesek", "Árak, lookup key-ek és letöltések"],
@@ -50,8 +50,10 @@ function AdminCatalogAuditPage() {
         >
           <CatalogAuditPanel />
         </AdminBlock>
+        <BackToTop />
 
         <div id="stripe-termeknevek" className="scroll-mt-36"><StripeProductNamePanel /></div>
+        <BackToTop />
         </div>
       </div>
     </>

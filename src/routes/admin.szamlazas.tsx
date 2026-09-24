@@ -7,7 +7,7 @@ import { InvoiceLogsPanel } from "@/components/admin-panels";
 import { BillingoAuditPanel } from "@/components/BillingoAuditPanel";
 import { OrderAuditPanel } from "@/components/OrderAuditPanel";
 import { NavStatusPanel } from "@/components/NavStatusPanel";
-import { AdminSectionNav } from "@/components/admin-toc";
+import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
 
 const INVOICE_NAV = [
   ["szamlazasi-naplo", "Számlázási napló"],
@@ -54,8 +54,10 @@ function AdminInvoicesPage() {
         >
           <InvoiceLogsPanel />
         </AdminBlock>
+        <BackToTop />
 
         <div id="billingo-ellenorzes" className="scroll-mt-36"><BillingoAuditPanel /></div>
+        <BackToTop />
 
         <AdminBlock
           anchorId="rendelesi-audit"
@@ -65,6 +67,7 @@ function AdminInvoicesPage() {
         >
           <OrderAuditPanel />
         </AdminBlock>
+        <BackToTop />
 
         <AdminBlock
           anchorId="nav-online-szamla"
@@ -74,6 +77,7 @@ function AdminInvoicesPage() {
         >
           <NavStatusPanel />
         </AdminBlock>
+        <BackToTop />
 
         <p className="text-xs text-muted-foreground">
           <ClipboardList className="mr-1 inline h-3.5 w-3.5" aria-hidden="true" />
