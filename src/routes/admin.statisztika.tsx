@@ -1396,20 +1396,12 @@ function PageViewLegend({ items }: { items: { label: string; color: string }[] }
  * for the same period. Views only exist with month granularity, so the period
  * filter of the page (year + month) is applied to both sides identically.
  */
-function ProductConversion({
-  rows,
-  activeYear,
-  activeMonth,
-  periodLabel,
-}: {
-  rows: StatRow[];
-  activeYear: number | null;
-  activeMonth: MonthSel;
-  periodLabel: string;
-}) {
+function ProductConversion({ rows }: { rows: StatRow[] }) {
   const fetchPageViews = useServerFn(adminPageViewStats);
   const [counts, setCounts] = useState<PageViewCount[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [yearSel, setYearSel] = useState<YearSel>("all");
+  const [monthSel, setMonthSel] = useState<MonthSel>("all");
 
   useEffect(() => {
     let cancelled = false;
@@ -1423,115 +1415,65 @@ function ProductConversion({
         setError(err instanceof Error ? err.message : "Nem sikerült betölteni a megtekintéseket.");
         setCounts([]);
       });
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [fetchPageViews]);
+
+  const years = useMemo(() => {
+    const values = new Set<number>();
+    for (const row of rows) values.add(new Date(row.createdAt).getFullYear());
+    for (const row of counts ?? []) values.add(row.year);
+    return [...values].sort((a, b) => b - a);
+  }, [rows, counts]);
+
+  const periodLabel = yearSel === "all"
+    ? monthSel === "all" ? "Összes év" : `Összes év – ${MONTHS[monthSel]}`
+    : monthSel === "all" ? `${yearSel} egész éve` : `${yearSel}. ${MONTHS[monthSel]}`;
 
   const table = useMemo(() => {
     const names = new Map(products.map((p) => [p.slug, p.name]));
     const views = new Map<string, number>();
     for (const row of counts ?? []) {
-      if (activeYear !== null && row.year !== activeYear) continue;
-      if (activeMonth !== "all" && row.month !== activeMonth + 1) continue;
+      if (yearSel !== "all" && row.year !== yearSel) continue;
+      if (monthSel !== "all" && row.month !== monthSel + 1) continue;
       views.set(row.pageKey, (views.get(row.pageKey) ?? 0) + row.views);
     }
     const paid = new Map<string, number>();
     for (const row of rows) {
       if (row.paymentStatus !== "paid") continue;
       const date = new Date(row.createdAt);
-      if (activeYear !== null && date.getFullYear() !== activeYear) continue;
-      if (activeMonth !== "all" && date.getMonth() !== activeMonth) continue;
+      if (yearSel !== "all" && date.getFullYear() !== yearSel) continue;
+      if (monthSel !== "all" && date.getMonth() !== monthSel) continue;
       paid.set(row.productSlug, (paid.get(row.productSlug) ?? 0) + 1);
     }
     const keys = new Set<string>([...views.keys(), ...paid.keys()]);
-    return [...keys]
-      .map((key) => {
-        const v = views.get(key) ?? 0;
-        const p = paid.get(key) ?? 0;
-        return {
-          key,
-          label: names.get(key) ?? key,
-          views: v,
-          paid: p,
-          rate: v > 0 ? (p / v) * 100 : null,
-        };
-      })
-      .sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1) || b.views - a.views);
-  }, [counts, rows, activeYear, activeMonth]);
+    return [...keys].map((key) => {
+      const v = views.get(key) ?? 0;
+      const p = paid.get(key) ?? 0;
+      return { key, label: names.get(key) ?? key, views: v, paid: p, rate: v > 0 ? (p / v) * 100 : null };
+    }).sort((a, b) => (b.rate ?? -1) - (a.rate ?? -1) || b.views - a.views);
+  }, [counts, rows, yearSel, monthSel]);
 
-  const exportTable: ListTable | null = table.length
-    ? {
-        title: `Termékenkénti konverziós arány – ${periodLabel}`,
-        subtitle: "Konverzió = kifizetett vásárlások / termékmegtekintések × 100",
-        head: ["Termék", "Megtekintés (db)", "Kifizetett vásárlás (db)", "Konverzió"],
-        body: table.map((row) => [
-          row.label,
-          row.views,
-          row.paid,
-          row.rate === null ? "—" : `${row.rate.toFixed(2).replace(".", ",")} %`,
-        ]),
-        xlsxBody: table.map((row) => [row.label, row.views, row.paid, row.rate === null ? "—" : row.rate / 100]),
-        xlsxPercentCols: [3],
-        rightCols: [1, 2, 3],
-      }
-    : null;
-  const exportBase = `xlntbi-termek-konverzio-${slugify(periodLabel)}`;
+  const exportTable: ListTable | null = table.length ? {
+    title: `Termékenkénti konverziós arány – ${periodLabel}`,
+    subtitle: "Konverzió = kifizetett vásárlások / termékmegtekintések × 100",
+    head: ["Termék", "Megtekintés (db)", "Kifizetett vásárlás (db)", "Konverzió"],
+    body: table.map((row) => [row.label, row.views, row.paid, row.rate === null ? "—" : `${row.rate.toFixed(2).replace(".", ",")} %`]),
+    xlsxBody: table.map((row) => [row.label, row.views, row.paid, row.rate === null ? "—" : row.rate / 100]),
+    xlsxPercentCols: [3],
+    rightCols: [1, 2, 3],
+  } : null;
 
   return (
-    <section id="termek-konverzio" className="mt-10 scroll-mt-36">
-      <h2 className="text-xl font-bold text-foreground">
-        Termékenkénti konverziós arány – {periodLabel}
-      </h2>
-      <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
-        Konverzió = kifizetett megrendelések száma ÷ a termék Részletek oldalának megtekintései ×
-        100. A megtekintések a publikált oldalon mért, havi bontású adatok, tehát ugyanarra az
-        időszakra vonatkoznak, mint a megrendelések. Megtekintés nélkül a konverzió helyén „—” áll.
-      </p>
-      <div className="mt-4">
-        <TableExportButtons
-          baseName={exportBase}
-          sheetName="Termék konverzió"
-          table={exportTable}
-        />
+    <section id="termek-konverzio" className="mt-14 scroll-mt-36">
+      <h2 className="text-xl font-bold text-foreground">Termékenkénti konverziós arány</h2>
+      <p className="mt-2 max-w-3xl text-sm text-muted-foreground">Konverzió = kifizetett megrendelések száma ÷ a termék Részletek oldalának megtekintései × 100. Megtekintés nélkül a konverzió helyén „—” áll.</p>
+      <div className="mt-4 space-y-3 rounded-xl border border-border bg-card px-4 py-4">
+        <div className="flex flex-wrap items-center gap-2"><span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Év</span><button type="button" className={filterChip(yearSel === "all")} onClick={() => setYearSel("all")}>Összes év</button>{years.map((y) => <button key={y} type="button" className={filterChip(yearSel === y)} onClick={() => setYearSel(y)}>{y}</button>)}</div>
+        <div className="flex flex-wrap items-center gap-1.5"><span className="mr-1 w-20 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Hónap</span><button type="button" className={filterChip(monthSel === "all")} onClick={() => setMonthSel("all")}>Összes</button>{MONTHS_SHORT.map((label, i) => <button key={label} type="button" className={filterChip(monthSel === i)} onClick={() => setMonthSel(i)} title={MONTHS[i]}>{label}</button>)}</div>
       </div>
-
-      {error ? (
-        <p className="mt-4 text-sm text-destructive">{error}</p>
-      ) : counts === null ? (
-        <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" /> Megtekintések betöltése…
-        </p>
-      ) : table.length === 0 ? (
-        <p className="mt-4 rounded-xl border border-border bg-card px-4 py-5 text-sm text-muted-foreground">
-          Ehhez az időszakhoz nincs sem megtekintés, sem kifizetett megrendelés.
-        </p>
-      ) : (
-        <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
-          <table className="w-full min-w-[560px] text-sm">
-            <thead>
-              <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
-                <th className="px-4 py-3 font-semibold">Termék</th>
-                <th className="px-4 py-3 text-right font-semibold">Megtekintés</th>
-                <th className="px-4 py-3 text-right font-semibold">Kifizetett vásárlás</th>
-                <th className="px-4 py-3 text-right font-semibold">Konverzió</th>
-              </tr>
-            </thead>
-            <tbody>
-              {table.map((r) => (
-                <tr key={r.key} className="border-b border-border/60 last:border-0">
-                  <td className="px-4 py-3 font-medium text-foreground">{r.label}</td>
-                  <td className="px-4 py-3 text-right text-muted-foreground">{r.views} db</td>
-                  <td className="px-4 py-3 text-right text-muted-foreground">{r.paid} db</td>
-                  <td className="px-4 py-3 text-right font-semibold text-foreground">
-                    {r.rate === null ? "—" : `${r.rate.toFixed(2).replace(".", ",")} %`}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <div className="mt-4"><TableExportButtons baseName={`xlntbi-termek-konverzio-${slugify(periodLabel)}`} sheetName="Termék konverzió" table={exportTable} /></div>
+      {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : counts === null ? <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Megtekintések betöltése…</p> : table.length === 0 ? <p className="mt-4 rounded-xl border border-border bg-card px-4 py-5 text-sm text-muted-foreground">Ehhez az időszakhoz nincs sem megtekintés, sem kifizetett megrendelés.</p> : <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card"><table className="w-full min-w-[560px] text-sm"><thead><tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground"><th className="px-4 py-3 font-semibold">Termék</th><th className="px-4 py-3 text-right font-semibold">Megtekintés</th><th className="px-4 py-3 text-right font-semibold">Kifizetett vásárlás</th><th className="px-4 py-3 text-right font-semibold">Konverzió</th></tr></thead><tbody>{table.map((r) => <tr key={r.key} className="border-b border-border/60 last:border-0"><td className="px-4 py-3 font-medium text-foreground">{r.label}</td><td className="px-4 py-3 text-right text-muted-foreground">{r.views} db</td><td className="px-4 py-3 text-right text-muted-foreground">{r.paid} db</td><td className="px-4 py-3 text-right font-semibold text-foreground">{r.rate === null ? "—" : `${r.rate.toFixed(2).replace(".", ",")} %`}</td></tr>)}</tbody></table></div>}
+      <BackToTop />
     </section>
   );
 }
