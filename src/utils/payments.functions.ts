@@ -16,7 +16,7 @@ const ALLOWED_RETURN_ORIGINS = [
 ];
 
 /** Return URL is always built server-side on a trusted origin and fixed path. */
-function buildReturnUrl(requested: string, orderNumber: string): string {
+function buildReturnUrl(requested: string, orderNumber: string, token: string): string {
   let origin = ALLOWED_RETURN_ORIGINS[0]!;
   try {
     const url = new URL(requested);
@@ -28,7 +28,7 @@ function buildReturnUrl(requested: string, orderNumber: string): string {
   } catch {
     // fall back to the production origin
   }
-  return `${origin}/megrendeles/koszonjuk?rendeles=${encodeURIComponent(orderNumber)}&session_id={CHECKOUT_SESSION_ID}`;
+  return `${origin}/megrendeles/koszonjuk?rendeles=${encodeURIComponent(orderNumber)}&t=${encodeURIComponent(token)}&session_id={CHECKOUT_SESSION_ID}`;
 }
 
 type CheckoutSessionResult = { clientSecret: string } | { error: string };
@@ -80,12 +80,16 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
       priceId: string;
       quantity: number;
       orderNumber: string;
+      checkoutToken: string;
       customerEmail: string;
       returnUrl: string;
       environment: StripeEnv;
     }) => {
       if (!/^[a-zA-Z0-9_-]+$/.test(data.priceId)) throw new Error("Invalid priceId");
       if (!/^[A-Za-z0-9-]+$/.test(data.orderNumber)) throw new Error("Invalid orderNumber");
+      if (typeof data.checkoutToken !== "string" || !/^[a-f0-9]{48}$/.test(data.checkoutToken)) {
+        throw new Error("Invalid checkoutToken");
+      }
       if (!Number.isInteger(data.quantity) || data.quantity < 1 || data.quantity > 20) {
         throw new Error("Invalid quantity");
       }
@@ -110,6 +114,7 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
         .from("orders")
         .select("email, quantity, unit_price, total_price, currency, payment_status")
         .eq("order_number", data.orderNumber)
+        .eq("checkout_token", data.checkoutToken)
         .maybeSingle();
       if (orderError || !order) return { error: "A megrendelés nem található." };
       if (order.payment_status === "paid") return { error: "Ez a megrendelés már ki van fizetve." };
@@ -143,7 +148,7 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
         line_items: [{ price: stripePrice.id, quantity: order.quantity }],
         mode: "payment",
         ui_mode: "embedded_page",
-        return_url: buildReturnUrl(data.returnUrl, data.orderNumber),
+        return_url: buildReturnUrl(data.returnUrl, data.orderNumber, data.checkoutToken),
         customer_email: data.customerEmail,
         // Sandbox: test coupons allowed. Live: only when an allowlisted
         // promotion code exists (see src/lib/coupons.ts).
@@ -178,7 +183,10 @@ export const createOrderCheckoutSession = createServerFn({ method: "POST" })
  * checkout session id, so no order data is exposed by guessing order numbers.
  */
 export const getCheckoutSummary = createServerFn({ method: "POST" })
-  .inputValidator((data: { sessionId: string; orderNumber: string; environment: StripeEnv }) => {
+  .inputValidator((data: { sessionId: string; orderNumber: string; token: string; environment: StripeEnv }) => {
+    if (typeof data.token !== "string" || !/^[a-f0-9]{48}$/.test(data.token)) {
+      throw new Error("Invalid token");
+    }
     if (typeof data.orderNumber !== "string" || !/^[A-Za-z0-9-]{1,40}$/.test(data.orderNumber)) {
       throw new Error("Invalid orderNumber");
     }
@@ -203,6 +211,17 @@ export const getCheckoutSummary = createServerFn({ method: "POST" })
       paymentStatus?: string;
     }> => {
       try {
+        // Only call Stripe for a real card order whose private token the
+        // caller holds (it is only in the buyer's own return URL).
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { data: order } = await supabaseAdmin
+          .from("orders")
+          .select("id")
+          .eq("order_number", data.orderNumber)
+          .eq("checkout_token", data.token)
+          .eq("payment_provider", "stripe")
+          .maybeSingle();
+        if (!order) return { ok: false };
         const stripe = createStripeClient(data.environment);
         const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
           expand: ["total_details.breakdown"],

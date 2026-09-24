@@ -123,9 +123,14 @@ export async function handleOrder(data: Order) {
   const tier = getTier(product, data.tierId);
   const number = orderNumber();
   const total = tier.price * data.quantity;
+  // Random per-order token, only returned to the browser that placed the order.
+  const checkoutToken = Array.from(crypto.getRandomValues(new Uint8Array(24)), (b) =>
+    b.toString(16).padStart(2, "0"),
+  ).join("");
 
   const { error } = await supabaseAdmin.from("orders").insert({
     order_number: number,
+    checkout_token: checkoutToken,
     product_slug: product.slug,
     product_name: product.name,
     quantity: data.quantity,
@@ -223,6 +228,7 @@ export async function handleOrder(data: Order) {
   return {
     ok: true as const,
     orderNumber: number,
+    checkoutToken: data.paymentMethod === "card" ? checkoutToken : undefined,
     total,
     emailsSent,
   };
