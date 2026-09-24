@@ -234,14 +234,14 @@ function TopMetricSelector({ value, onChange }: { value: TopMetric; onChange: (v
   );
 }
 
-function ProductTopFive({ items, metric }: { items: Array<{ label: string; qty: number; revenue: number }>; metric: TopMetric }) {
+function ProductTopFive({ items, metric, onMetricChange }: { items: Array<{ label: string; qty: number; revenue: number }>; metric: TopMetric; onMetricChange: (value: TopMetric) => void }) {
   const ranked = [...items].sort((a, b) => metric === "revenue" ? b.revenue - a.revenue : b.qty - a.qty).slice(0, 5);
   const max = Math.max(1, ...ranked.map((item) => metric === "revenue" ? item.revenue : item.qty));
   return (
     <div className="mt-6 rounded-xl border border-border bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-base font-bold text-foreground">Top 5 termék</h3>
-        <span className="text-sm text-muted-foreground">{metric === "revenue" ? "Árbevétel alapján" : "Mennyiség alapján"}</span>
+        <TopMetricSelector value={metric} onChange={onMetricChange} />
       </div>
       {ranked.length === 0 ? <p className="mt-4 text-sm text-muted-foreground">A kiválasztott időszakhoz nincs rangsorolható adat.</p> : (
         <ol className="mt-4 space-y-3">{ranked.map((item, index) => {
