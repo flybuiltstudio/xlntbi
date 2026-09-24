@@ -2,8 +2,8 @@
 
 ## Statisztika – megrendelt termékek és havi bontás
 - A „Megrendelt termékek” és a „Havi bontás grafikonon” két külön blokk marad.
-- A „Megrendelt termékek” cím alá kerül a rá vonatkozó fizetésiállapot-, év- és hónapszűrő.
-- Közvetlenül a szűrők után következik a három fő mutató, majd az exportgombok és a termékösszesítő táblázat.
+- A „Megrendelt termékek” cím alatt elsőként a három fő mutató jelenik meg.
+- A fő mutatók alatt következik a rájuk és a termékösszesítésre vonatkozó fizetésiállapot-, év- és hónapszűrő, majd az exportgombok és a termékösszesítő táblázat.
 - A „Havi bontás grafikonon” közvetlenül a „Megrendelt termékek” blokk után következik, és saját évválasztót kap, ezért nem kell visszagörgetni. A hónapválasztó is helyben elérhető marad.
 - A felső menüben a „Megrendelt termékek” után külön „Havi bontás grafikonon” ugrógomb marad.
 - A fizetési állapot és a tesztrendelések meglévő szabályai változatlanok maradnak.
