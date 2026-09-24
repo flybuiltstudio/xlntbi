@@ -234,14 +234,14 @@ function TopMetricSelector({ value, onChange }: { value: TopMetric; onChange: (v
   );
 }
 
-function ProductTopFive({ items, metric }: { items: Array<{ label: string; qty: number; revenue: number }>; metric: TopMetric }) {
+function ProductTopFive({ items, metric, onMetricChange }: { items: Array<{ label: string; qty: number; revenue: number }>; metric: TopMetric; onMetricChange: (value: TopMetric) => void }) {
   const ranked = [...items].sort((a, b) => metric === "revenue" ? b.revenue - a.revenue : b.qty - a.qty).slice(0, 5);
   const max = Math.max(1, ...ranked.map((item) => metric === "revenue" ? item.revenue : item.qty));
   return (
     <div className="mt-6 rounded-xl border border-border bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-base font-bold text-foreground">Top 5 termék</h3>
-        <span className="text-sm text-muted-foreground">{metric === "revenue" ? "Árbevétel alapján" : "Mennyiség alapján"}</span>
+        <TopMetricSelector value={metric} onChange={onMetricChange} />
       </div>
       {ranked.length === 0 ? <p className="mt-4 text-sm text-muted-foreground">A kiválasztott időszakhoz nincs rangsorolható adat.</p> : (
         <ol className="mt-4 space-y-3">{ranked.map((item, index) => {
@@ -467,8 +467,7 @@ function StatsPanel() {
             </div>
 
             <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={setYearSel} onMonthChange={setMonthSel} payFilter={payFilter} onPayFilterChange={setPayFilter} />
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-3"><h3 className="text-base font-bold text-foreground">Top 5 beállítása</h3><TopMetricSelector value={productTopMetric} onChange={setProductTopMetric} /></div>
-            <ProductTopFive items={products} metric={productTopMetric} />
+            <ProductTopFive items={products} metric={productTopMetric} onMetricChange={setProductTopMetric} />
 
             {periodRows.length === 0 ? (
               <p className="mt-6 rounded-xl border border-border bg-card px-4 py-6 text-sm text-muted-foreground">A kiválasztott szűréshez ({periodLabel}) nem tartozik megrendelés.</p>
@@ -497,8 +496,7 @@ function StatsPanel() {
           <section id="havi-bontas" className="mt-14 scroll-mt-36">
             <h2 className="text-xl font-bold text-foreground">Havi bontás</h2>
             <PeriodFilters years={years} year={yearSel} month={monthSel} onYearChange={setYearSel} onMonthChange={setMonthSel} payFilter={payFilter} onPayFilterChange={setPayFilter} />
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-3"><h3 className="text-base font-bold text-foreground">Top 5 beállítása</h3><TopMetricSelector value={monthlyTopMetric} onChange={setMonthlyTopMetric} /></div>
-            <ProductTopFive items={products} metric={monthlyTopMetric} />
+            <ProductTopFive items={products} metric={monthlyTopMetric} onMetricChange={setMonthlyTopMetric} />
                 <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
                   <p className="text-sm text-muted-foreground"><strong className="text-foreground">{periodLabel}</strong> – megrendelt mennyiség havonta (db)</p>
                   <div className="mt-6 flex h-60 items-end gap-1 sm:gap-2">
