@@ -42,15 +42,27 @@ export async function readProductOverrides(): Promise<ProductOverrideData> {
     // projects only the public columns.
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const supabase = supabaseAdmin;
+    // Transient auth rejections (e.g. "JWT issued at future" from clock skew)
+    // clear up within a second or two, so retry before falling back.
+    const withRetry = async <T extends { error: unknown }>(run: () => PromiseLike<T>) => {
+      let result = await run();
+      for (let attempt = 1; attempt <= 3 && result.error; attempt++) {
+        await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
+        result = await run();
+      }
+      return result;
+    };
     const [content, prices, custom, categories] = await Promise.all([
-      supabase
-        .from("product_content_overrides")
-        .select(
-          "slug, intro, features, why, summary, meta_title, meta_description, intro_en, features_en, why_en, summary_en, meta_title_en, meta_description_en, source_file_name, updated_at",
-        ),
-      supabaseAdmin.from("product_price_overrides").select("slug, tier_id, price"),
-      supabase.from("custom_products").select("*"),
-      supabase.from("custom_categories").select("*").order("sort_order"),
+      withRetry(() =>
+        supabase
+          .from("product_content_overrides")
+          .select(
+            "slug, intro, features, why, summary, meta_title, meta_description, intro_en, features_en, why_en, summary_en, meta_title_en, meta_description_en, source_file_name, updated_at",
+          ),
+      ),
+      withRetry(() => supabaseAdmin.from("product_price_overrides").select("slug, tier_id, price")),
+      withRetry(() => supabase.from("custom_products").select("*")),
+      withRetry(() => supabase.from("custom_categories").select("*").order("sort_order")),
     ]);
     // A failed query silently falls back to the bundled catalog (stale prices,
     // missing admin products), so make every failure visible in the logs.

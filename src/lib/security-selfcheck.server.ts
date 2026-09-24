@@ -244,9 +244,16 @@ export async function runSecurityAutofix(
     else fixed.push(`Tároló priváttá téve: ${bucket}`);
   }
 
-  // Remember every decision the admin made, so we never ask again.
+  // Only an explicit "keep" is remembered. A "fix" is never stored: if it
+  // failed or was a no-op, the finding must stay visible and keep alerting.
+  const failedKeys = new Set(
+    (payload.errors ?? []).map((row) => row.finding_key ?? "").filter(Boolean),
+  );
   const rows = before.findings
-    .filter((finding) => decisions[finding.finding_key] !== undefined)
+    .filter(
+      (finding) =>
+        decisions[finding.finding_key] === "keep" && !failedKeys.has(finding.finding_key),
+    )
     .map((finding) => ({
       finding_key: finding.finding_key,
       finding_type: finding.finding_type,
