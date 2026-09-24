@@ -261,7 +261,7 @@ function StatsPanel() {
   }, [includeTests]);
 
   const years = useMemo(() => {
-    const set = new Set<number>();
+    const set = new Set<number>([new Date().getFullYear()]);
     for (const row of rows ?? []) set.add(new Date(row.createdAt).getFullYear());
     return [...set].sort((a, b) => b - a);
   }, [rows]);
@@ -1142,13 +1142,14 @@ function PageViewBlock({
   }, [entries, counts, years, yearSel, monthSel]);
   const periodLabel = yearSel === "all" ? (monthSel === "all" ? "Összes év" : `Összes év – ${MONTHS[monthSel]}`) : (monthSel === "all" ? String(yearSel) : `${yearSel}. ${MONTHS[monthSel]}`);
   const title = titleBase;
+  const monthIndexes = monthSel === "all" ? MONTHS_SHORT.map((_, index) => index) : [monthSel];
   const table: ListTable = {
     title,
     subtitle: periodLabel,
-    head: [firstColumn, "Oldalletöltés (db)"],
-    body: rows.map((row) => [row.label, row.total]),
-    foot: ["Összesen", rows.reduce((sum, row) => sum + row.total, 0)],
-    rightCols: [1],
+    head: [firstColumn, ...monthIndexes.map((index) => MONTHS_SHORT[index] ?? ""), ...(monthSel === "all" ? ["Összesen"] : [])],
+    body: rows.map((row) => [row.label, ...monthIndexes.map((index) => row.months[index] ?? 0), ...(monthSel === "all" ? [row.total] : [])]),
+    foot: ["Összesen", ...monthIndexes.map((index) => rows.reduce((sum, row) => sum + (row.months[index] ?? 0), 0)), ...(monthSel === "all" ? [rows.reduce((sum, row) => sum + row.total, 0)] : [])],
+    rightCols: Array.from({ length: monthIndexes.length + (monthSel === "all" ? 1 : 0) }, (_, index) => index + 1),
   };
   const filename = `xlntbi-${fileBase}-${slugify(periodLabel)}`;
 
@@ -1218,18 +1219,20 @@ function PageViewBlock({
       </div>
 
       <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
-        <table className="w-full min-w-[420px] text-sm">
+        <table className={`w-full text-sm ${monthSel === "all" ? "min-w-[880px]" : "min-w-[420px]"}`}>
           <thead>
             <tr className="border-b border-border text-left text-xs uppercase tracking-wider text-muted-foreground">
               <th className="px-4 py-3 font-semibold">{firstColumn}</th>
-              <th className="px-4 py-3 text-right font-semibold">Oldalletöltés</th>
+              {monthIndexes.map((index) => <th key={index} className="px-2 py-3 text-right font-semibold">{MONTHS_SHORT[index]}</th>)}
+              {monthSel === "all" ? <th className="px-4 py-3 text-right font-semibold">Összesen</th> : null}
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
               <tr key={row.key} className="border-b border-border/60 last:border-0">
                 <td className="px-4 py-3 font-medium text-foreground">{row.label}</td>
-                <td className="px-4 py-3 text-right font-semibold text-foreground">{row.total}</td>
+                {monthIndexes.map((index) => <td key={index} className="px-2 py-3 text-right text-muted-foreground">{row.months[index] ?? 0}</td>)}
+                {monthSel === "all" ? <td className="px-4 py-3 text-right font-semibold text-foreground">{row.total}</td> : null}
               </tr>
             ))}
           </tbody>
