@@ -354,6 +354,24 @@ export type Database = {
         }
         Relationships: []
       }
+      cron_call_nonces: {
+        Row: {
+          created_at: string
+          job: string
+          nonce: string
+        }
+        Insert: {
+          created_at?: string
+          job: string
+          nonce: string
+        }
+        Update: {
+          created_at?: string
+          job?: string
+          nonce?: string
+        }
+        Relationships: []
+      }
       custom_calculators: {
         Row: {
           created_at: string
@@ -986,6 +1004,7 @@ export type Database = {
           billing_name: string
           billingo_invoice_id: number | null
           billingo_invoice_number: string | null
+          checkout_token: string
           city: string
           company_name: string | null
           country: string
@@ -1025,6 +1044,7 @@ export type Database = {
           billing_name: string
           billingo_invoice_id?: number | null
           billingo_invoice_number?: string | null
+          checkout_token?: string
           city: string
           company_name?: string | null
           country: string
@@ -1064,6 +1084,7 @@ export type Database = {
           billing_name?: string
           billingo_invoice_id?: number | null
           billingo_invoice_number?: string | null
+          checkout_token?: string
           city?: string
           company_name?: string | null
           country?: string
