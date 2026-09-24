@@ -120,9 +120,9 @@ export function NewsletterEditor({
           <ImageIcon className="h-4 w-4" />
         </button>
 
-        <span className="mx-1 h-6 w-px bg-border" aria-hidden />
-
-        <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <div className="flex w-full flex-col gap-1.5">
+        <div className="flex flex-wrap items-center gap-1">
+        <label className="flex w-28 items-center gap-1.5 text-xs text-muted-foreground">
           Betűszín
           <input
             type="color"
@@ -142,10 +142,10 @@ export function NewsletterEditor({
           />
         ))}
 
-        <span className="mx-1 h-6 w-px bg-border" aria-hidden />
-
-        <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          Háttér
+        </div>
+        <div className="flex flex-wrap items-center gap-1">
+        <label className="flex w-28 items-center gap-1.5 text-xs text-muted-foreground">
+          Háttérszín
           <input
             type="color"
             className="h-8 w-9 cursor-pointer rounded border border-input bg-background"
@@ -163,6 +163,8 @@ export function NewsletterEditor({
             onClick={() => exec("hiliteColor", color.value)}
           />
         ))}
+        </div>
+        </div>
       </div>
 
       <div

@@ -562,13 +562,31 @@ function CouponCreateForm({
           <AdminDatePicker label="Érvényesség vége" value={expiresAt} onChange={setExpiresAt} />
           <label className="mt-2 block text-xs font-medium text-muted-foreground">
             Időpont
-            <input
-              type="time"
-              value={expiresTime}
-              onChange={(e) => setExpiresTime(e.target.value)}
-              disabled={!expiresAt}
-              className="mt-1 block rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground disabled:opacity-50"
-            />
+            <span className="mt-1 flex items-center gap-1">
+              <select
+                aria-label="Óra"
+                value={(expiresTime || "23:59").slice(0, 2)}
+                onChange={(e) => setExpiresTime(`${e.target.value}:${(expiresTime || "23:59").slice(3, 5)}`)}
+                disabled={!expiresAt}
+                className="rounded-md border border-input bg-background px-2 py-2 text-sm text-foreground disabled:opacity-50"
+              >
+                {Array.from({ length: 24 }, (_, i) => String(i).padStart(2, "0")).map((h) => (
+                  <option key={h} value={h}>{h}</option>
+                ))}
+              </select>
+              <span className="text-foreground">:</span>
+              <select
+                aria-label="Perc"
+                value={(expiresTime || "23:59").slice(3, 5)}
+                onChange={(e) => setExpiresTime(`${(expiresTime || "23:59").slice(0, 2)}:${e.target.value}`)}
+                disabled={!expiresAt}
+                className="rounded-md border border-input bg-background px-2 py-2 text-sm text-foreground disabled:opacity-50"
+              >
+                {Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0")).map((m) => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </select>
+            </span>
           </label>
           <span className="mt-0.5 block text-xs text-muted-foreground">
             Üres = korlátlan (csak lejáratkor kapcsol ki).
