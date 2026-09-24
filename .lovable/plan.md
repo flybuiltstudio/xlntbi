@@ -1,10 +1,11 @@
 # Admin Statisztika és Fizetés teszt pontosítása
 
 ## Statisztika – megrendelt termékek és havi bontás
-- A „Megrendelt termékek” táblázatot és a külön „Havi bontás grafikonon” részt egyetlen, közös blokkba rendezem.
-- A közös blokk sorrendje: cím, év- és hónapválasztó, termékösszesítő táblázat, havi grafikon és havi táblázat, exportok, majd „Tetejére”.
-- Az évválasztó helyben elérhető lesz, ezért a havi grafikon használatához nem kell visszagörgetni. Konkrét év nélkül a grafikon továbbra sem mutat kitalált adatot.
-- A két jelenlegi menüpont helyett egy „Megrendelt termékek” ugrógomb marad, amely a közös blokk címére visz.
+- A „Megrendelt termékek” és a „Havi bontás grafikonon” két külön blokk marad.
+- A „Megrendelt termékek” cím alá kerül a rá vonatkozó fizetésiállapot-, év- és hónapszűrő.
+- Közvetlenül a szűrők után következik a három fő mutató, majd az exportgombok és a termékösszesítő táblázat.
+- A „Havi bontás grafikonon” közvetlenül a „Megrendelt termékek” blokk után következik, és saját évválasztót kap, ezért nem kell visszagörgetni. A hónapválasztó is helyben elérhető marad.
+- A felső menüben a „Megrendelt termékek” után külön „Havi bontás grafikonon” ugrógomb marad.
 - A fizetési állapot és a tesztrendelések meglévő szabályai változatlanok maradnak.
 
 ## Statisztika – termékenkénti konverzió
@@ -17,9 +18,9 @@
 - A „Termék Részletek oldalak letöltései” és a „Szolgáltatás aloldalak letöltései” látható címéből kiveszem az évszámot; az év továbbra is a közvetlenül alattuk lévő választóban látszik.
 - Mindkét rész külön horgonyt és külön menügombot kap.
 - A felső menüt két kézzel meghatározott hasábra rendezem, a lap tényleges blokksorrendjében:
-  - bal oldal: Megrendelt termékek; Termékenkénti konverziós arány; Megrendelések óránként; Megrendelői és terméklista; DEMO letöltések;
+  - bal oldal: Megrendelt termékek; Havi bontás grafikonon; Termékenkénti konverziós arány; Megrendelések óránként; Megrendelői és terméklista; DEMO letöltések;
   - jobb oldal: Termék Részletek oldalak letöltései; Szolgáltatás aloldalak letöltései.
-- A régi „Oldalletöltési statisztika” és a külön „Havi bontás grafikonon” gomb megszűnik.
+- A „Havi bontás grafikonon” gomb a „Megrendelt termékek” után jelenik meg; a régi gyűjtő „Oldalletöltési statisztika” gomb megszűnik.
 
 ## Fizetés teszt
 - A felső két ugrógomb és a „Teljes vásárlási teszt” blokk közé jól látható, de visszafogott függőleges térközt teszek.
