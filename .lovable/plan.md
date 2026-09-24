@@ -18,7 +18,7 @@
 - A „Termék Részletek oldalak letöltései” és a „Szolgáltatás aloldalak letöltései” látható címéből kiveszem az évszámot; az év továbbra is a közvetlenül alattuk lévő választóban látszik.
 - Mindkét rész külön horgonyt és külön menügombot kap.
 - A felső menüt két kézzel meghatározott hasábra rendezem, a lap tényleges blokksorrendjében:
-  - bal oldal: Megrendelt termékek; Termékenkénti konverziós arány; Megrendelések óránként; Megrendelői és terméklista; DEMO letöltések;
+  - bal oldal: Megrendelt termékek; Havi bontás grafikonon; Termékenkénti konverziós arány; Megrendelések óránként; Megrendelői és terméklista; DEMO letöltések;
   - jobb oldal: Termék Részletek oldalak letöltései; Szolgáltatás aloldalak letöltései.
 - A „Havi bontás grafikonon” gomb a „Megrendelt termékek” után jelenik meg; a régi gyűjtő „Oldalletöltési statisztika” gomb megszűnik.
 
