@@ -15,6 +15,7 @@ import type { CategoryAdminRow } from "@/lib/custom-categories.server";
 import type { CustomProductInfo } from "@/lib/custom-products.server";
 import { formatPrice } from "@/lib/products";
 import { BackToTop } from "@/components/admin-toc";
+import { AdminFilePicker } from "@/components/AdminFilePicker";
 
 type Draft = {
   intro: string[];
@@ -437,35 +438,17 @@ export function NewProductPanel() {
       <div className="mt-5 grid gap-4 md:grid-cols-3">
         <label className="flex flex-col text-xs font-semibold text-foreground">
           <span className="flex-1">Termékfájl (xlsm / exe / zip / pdf, max. 300 MB)</span>
-          <input
-            key={`file-${inputKey}`}
-            type="file"
-            accept=".xlsm,.exe,.zip,.pdf"
-            className={`${inputClass} mt-1`}
-            onChange={(e) => setProductFile(e.target.files?.[0] ?? null)}
-          />
+          <AdminFilePicker inputKey={`file-${inputKey}`} accept=".xlsm,.exe,.zip,.pdf" file={productFile} onChange={setProductFile} />
         </label>
         <label className="flex flex-col text-xs font-semibold text-foreground">
           <span className="flex-1">Leírás (Word .docx)</span>
-          <input
-            key={`docx-${inputKey}`}
-            type="file"
-            accept=".docx"
-            className={`${inputClass} mt-1`}
-            onChange={(e) => setDocx(e.target.files?.[0] ?? null)}
-          />
+          <AdminFilePicker inputKey={`docx-${inputKey}`} accept=".docx" file={docx} onChange={setDocx} />
         </label>
         <label className="flex flex-col text-xs font-semibold text-foreground">
           <span className="flex-1">
             Termékkép (nem kötelező: jpg / png / webp – ha üresen hagyod, AI generál egyet)
           </span>
-          <input
-            key={`img-${inputKey}`}
-            type="file"
-            accept=".jpg,.jpeg,.png,.webp"
-            className={`${inputClass} mt-1`}
-            onChange={(e) => setImage(e.target.files?.[0] ?? null)}
-          />
+          <AdminFilePicker inputKey={`img-${inputKey}`} accept=".jpg,.jpeg,.png,.webp" file={image} onChange={setImage} />
         </label>
       </div>
 

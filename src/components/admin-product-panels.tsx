@@ -1,6 +1,7 @@
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import { BackToTop } from "@/components/admin-toc";
+import { AdminFilePicker } from "@/components/AdminFilePicker";
 
 import {
   adminDeleteProductDescription,
@@ -333,13 +334,7 @@ export function ProductDescriptionPanel() {
         </label>
         <label className="block text-sm font-semibold text-foreground">
           Word dokumentum (.docx, max. 10 MB)
-          <input
-            key={inputKey}
-            className={`${inputClass} mt-1`}
-            type="file"
-            accept=".docx"
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          />
+          <AdminFilePicker inputKey={inputKey} accept=".docx" file={file} onChange={setFile} />
         </label>
       </div>
 
