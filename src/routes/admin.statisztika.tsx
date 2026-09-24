@@ -40,7 +40,6 @@ const STATS_NAV_RIGHT = [
 import {
   MONTHS,
   MONTHS_SHORT,
-  PALETTE,
   exportStatsCsv,
   exportStatsXlsx,
   exportStatsXml,
@@ -53,7 +52,6 @@ import {
   paymentLabel,
   productLabel,
   slugify,
-  pageViewTable,
   pivotPageViews,
   type ListTable,
   type PageViewCount,
@@ -151,14 +149,6 @@ function MeasurementLegend() {
       </ul>
     </div>
   );
-}
-
-function filterChip(active: boolean) {
-  return `rounded-md px-3.5 py-1.5 text-sm font-semibold transition-colors ${
-    active
-      ? "bg-primary text-primary-foreground"
-      : "border border-input text-muted-foreground hover:bg-accent hover:text-foreground"
-  }`;
 }
 
 const CONNECTED_FILTER_NOTE =
@@ -1283,7 +1273,7 @@ function PageViewTopN({
 
   const periodLabel = month === "all" ? String(year) : `${year}. ${MONTHS[month] ?? ""}`;
   const max = ranked.length > 0 ? (ranked[0]?.value ?? 1) : 1;
-  const colorOf = (index: number) => PALETTE[index % PALETTE.length] ?? "#14532d";
+  const colorOf = (index: number) => DISTINCT_CHART_COLORS[index % DISTINCT_CHART_COLORS.length] ?? "var(--chart-1)";
 
   return (
     <div className="mt-6 rounded-xl border border-border bg-card p-5">
@@ -1353,7 +1343,7 @@ function PageViewChart({
     );
   }
 
-  const colorOf = (index: number) => PALETTE[index % PALETTE.length] ?? "#14532d";
+  const colorOf = (index: number) => DISTINCT_CHART_COLORS[index % DISTINCT_CHART_COLORS.length] ?? "var(--chart-1)";
 
   if (month === "all") {
     const monthTotals = MONTHS_SHORT.map((_, i) =>
@@ -1552,8 +1542,7 @@ function budapestBuckets(iso: string) {
 }
 
 /**
- * Orders per hour of day (Europe/Budapest), all payment statuses, with its own
- * year and month filter that does not affect the rest of the page.
+ * Orders per hour of day (Europe/Budapest), all payment statuses, using the shared period filter.
  */
 function HourlyOrdersChart({ rows, yearSel, monthSel, years, onYearChange, onMonthChange }: { rows: StatRow[] } & SharedPeriodProps) {
 
@@ -1698,7 +1687,7 @@ function DemoDownloads({ yearSel, monthSel, years, onYearChange, onMonthChange }
     if (!demoTable || exporting) return;
     setError("");
     setExporting(kind);
-    const base = "xlntbi-demo-letoltesek";
+    const base = `xlntbi-demo-letoltesek-${slugify(yearSel === "all" ? (monthSel === "all" ? "osszes-ev" : `osszes-ev-${MONTHS[monthSel]}`) : (monthSel === "all" ? String(yearSel) : `${yearSel}-${MONTHS[monthSel]}`))}`;
     try {
       if (kind === "csv") exportTableCsv(`${base}.csv`, demoTable);
       else if (kind === "xml") exportTableXml(`${base}.xml`, demoTable);
