@@ -288,6 +288,14 @@ function StatsPanel() {
       }),
     [payFiltered, activeYear, activeMonth],
   );
+  const sharedPeriodRows = useMemo(
+    () =>
+      (rows ?? []).filter((row) => {
+        const date = new Date(row.createdAt);
+        return (yearSel === "all" || date.getFullYear() === yearSel) && (monthSel === "all" || date.getMonth() === monthSel);
+      }),
+    [rows, yearSel, monthSel],
+  );
 
   const kpi = useMemo(
     () =>
@@ -488,7 +496,7 @@ function StatsPanel() {
 
           <ProductConversion rows={rows} yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
           <HourlyOrdersChart rows={rows} yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
-          <CustomerProductLists rows={rows} />
+          <CustomerProductLists rows={sharedPeriodRows} />
           <DemoDownloads yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
           <PageViewStats yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
         </>

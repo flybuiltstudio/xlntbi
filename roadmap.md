@@ -25,4 +25,4 @@
 - [x] Admin navigációk, magyar mezők, statisztikai formátumok és biztonsági időpont pontosítása
 - [x] Két régi, duplikált termékfájl törlése és tároló-ellenőrzése
 - [x] Statisztika blokksorrendje, helyi időszakszűrői és felső menüje; Fizetés teszt térköze
-- [ ] Statisztika közös időszakszűrés, Top 5 rangsorok, egységes exportgombok és tipográfia
+- [x] Statisztika közös időszakszűrés, Top 5 rangsorok, egységes exportgombok és tipográfia
