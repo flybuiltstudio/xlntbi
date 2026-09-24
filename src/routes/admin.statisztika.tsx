@@ -1624,7 +1624,6 @@ function DemoDownloads({ yearSel, monthSel, years, onYearChange, onMonthChange }
   const load = useServerFn(adminDemoStats);
   const [rows, setRows] = useState<any[] | null>(null);
   const [error, setError] = useState("");
-  const [exporting, setExporting] = useState<string | null>(null);
   const [topMetric, setTopMetric] = useState<DemoTopMetric>("downloads");
 
   useEffect(() => {
@@ -1683,23 +1682,7 @@ function DemoDownloads({ yearSel, monthSel, years, onYearChange, onMonthChange }
         rightCols: [7],
       }
     : null;
-
-  const runExport = async (kind: string) => {
-    if (!demoTable || exporting) return;
-    setError("");
-    setExporting(kind);
-    const base = `xlntbi-demo-letoltesek-${slugify(yearSel === "all" ? (monthSel === "all" ? "osszes-ev" : `osszes-ev-${MONTHS[monthSel]}`) : (monthSel === "all" ? String(yearSel) : `${yearSel}-${MONTHS[monthSel]}`))}`;
-    try {
-      if (kind === "csv") exportTableCsv(`${base}.csv`, demoTable);
-      else if (kind === "xml") exportTableXml(`${base}.xml`, demoTable);
-      else if (kind === "xlsx") await exportTableXlsx(`${base}.xlsx`, demoTable.title, demoTable);
-      else await exportTablePdf(`${base}.pdf`, demoTable);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Az exportálás nem sikerült.");
-    } finally {
-      setExporting(null);
-    }
-  };
+  const base = `xlntbi-demo-letoltesek-${slugify(yearSel === "all" ? (monthSel === "all" ? "osszes-ev" : `osszes-ev-${MONTHS[monthSel]}`) : (monthSel === "all" ? String(yearSel) : `${yearSel}-${MONTHS[monthSel]}`))}`;
 
   return (
     <section className="mt-14">
