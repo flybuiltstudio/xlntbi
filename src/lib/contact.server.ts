@@ -94,7 +94,6 @@ export async function handleSubmission(data: Submission) {
   if (data.contactTime.length) rows.push(["Mikor kereshetem", data.contactTime.join(", ")]);
   rows.push(["Üzenet", data.message]);
 
-  const userRows = rows.filter(([key]) => key !== "Üzenet");
   const emailsSent = await sendEmails([
     {
       template: "belso-urlap-ertesito",
@@ -107,7 +106,9 @@ export async function handleSubmission(data: Submission) {
       template: isConsult ? "konzultacio-visszaigazolas" : "kapcsolat-visszaigazolas",
       to: data.email,
       key: `visszaigazolas-${submissionId}`,
-      data: { name: fullName, message: data.message, rows: userRows },
+      // Generic confirmation only: never echo caller-supplied text to the
+      // (unverified) recipient address, so the form cannot be abused as a relay.
+      data: {},
       replyTo: OWNER_EMAIL,
     },
   ]);
