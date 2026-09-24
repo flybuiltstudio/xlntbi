@@ -94,7 +94,6 @@ export async function handleSubmission(data: Submission) {
   if (data.contactTime.length) rows.push(["Mikor kereshetem", data.contactTime.join(", ")]);
   rows.push(["Üzenet", data.message]);
 
-  const userRows = rows.filter(([key]) => key !== "Üzenet");
   const emailsSent = await sendEmails([
     {
       template: "belso-urlap-ertesito",

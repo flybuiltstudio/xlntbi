@@ -131,7 +131,7 @@ export const sendNewsletterCampaign = createServerFn({ method: "POST" })
         .from("newsletter_subscribers")
         .select("email")
         .ilike("email", testEmail)
-        .eq("status", "active")
+        .eq("status", "confirmed")
         .maybeSingle();
       if (!sub) {
         return {
@@ -140,7 +140,7 @@ export const sendNewsletterCampaign = createServerFn({ method: "POST" })
         };
       }
     }
-    if (!testEmail) testEmail = "";
+    
     const { sendCampaign } = await import("./newsletter-admin.server");
     return sendCampaign({
       subject: data.subject,
