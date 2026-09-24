@@ -555,9 +555,14 @@ function StatsPanel() {
               <PageViewStats />
 
               {/* Grafikon – csak konkrét évre */}
-              {activeYear !== null ? (
-                <section className="mt-14">
-                  <h2 id="havi-bontas" className="scroll-mt-36 text-xl font-bold text-foreground">Havi bontás grafikonon</h2>
+              <section id="havi-bontas" className="mt-14 scroll-mt-36">
+                <h2 className="text-xl font-bold text-foreground">Havi bontás grafikonon</h2>
+              {activeYear === null ? (
+                <p className="mt-4 rounded-xl border border-border bg-card p-5 text-sm text-muted-foreground">
+                  A havi grafikonhoz válassz ki egy konkrét évet.
+                </p>
+              ) : (
+                <>
 
                   <div className="mt-6 rounded-xl border border-border bg-card p-5 sm:p-6">
                     <p className="text-sm text-muted-foreground">
