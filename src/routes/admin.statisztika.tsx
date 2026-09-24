@@ -16,12 +16,13 @@ import {
 } from "lucide-react";
 
 import { adminOrderStats, adminPageViewStats, adminDemoStats } from "@/lib/admin.functions";
-import { formatPrice, products } from "@/lib/products";
+import { formatPrice, products, resolveProductSlug } from "@/lib/products";
 import { serviceItems } from "@/lib/services";
 import { PageHero } from "@/components/PageHero";
 import { useAdminSession } from "@/components/admin-panels";
 import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
 import { TableExportButtons } from "@/components/TableExportButtons";
+import { Button } from "@/components/ui/button";
 
 const STATS_NAV_LEFT = [
   ["megrendelt-termekek", "Megrendelt termékek"],
@@ -81,6 +82,8 @@ type StatRow = Awaited<ReturnType<typeof adminOrderStats>>["rows"][number];
 type PayFilter = "all" | "paid" | "unpaid";
 type YearSel = number | "all";
 type MonthSel = number | "all";
+type TopMetric = "revenue" | "quantity";
+type DemoTopMetric = "downloads" | "requests";
 
 const PAY_OPTIONS: Array<{ id: PayFilter; label: string }> = [
   { id: "all", label: "Összes" },
@@ -156,6 +159,86 @@ function filterChip(active: boolean) {
       ? "bg-primary text-primary-foreground"
       : "border border-input text-muted-foreground hover:bg-accent hover:text-foreground"
   }`;
+}
+
+const CONNECTED_FILTER_NOTE =
+  "Ez az év- és hónapszűrő a Megrendelt termékek, Havi bontás, Termékenkénti konverziós arány, Megrendelések óránként, DEMO letöltések és mindkét oldalletöltési blokk adatait együtt frissíti.";
+
+function PeriodFilters({
+  years,
+  year,
+  month,
+  onYearChange,
+  onMonthChange,
+  payFilter,
+  onPayFilterChange,
+}: {
+  years: number[];
+  year: YearSel;
+  month: MonthSel;
+  onYearChange: (value: YearSel) => void;
+  onMonthChange: (value: MonthSel) => void;
+  payFilter?: PayFilter;
+  onPayFilterChange?: (value: PayFilter) => void;
+}) {
+  return (
+    <div className="mt-4 space-y-4 rounded-xl border border-border bg-card px-4 py-4">
+      <p className="text-sm text-muted-foreground">{CONNECTED_FILTER_NOTE}</p>
+      {payFilter && onPayFilterChange ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="mr-1 w-32 text-xs font-semibold uppercase text-muted-foreground">Fizetés</span>
+          {PAY_OPTIONS.map((option) => (
+            <Button key={option.id} type="button" size="sm" variant={payFilter === option.id ? "default" : "outline"} onClick={() => onPayFilterChange(option.id)}>
+              {option.label}
+            </Button>
+          ))}
+          <span className="w-full text-xs text-muted-foreground">Csak a Megrendelt termékek és a Havi bontás blokkra hat.</span>
+        </div>
+      ) : null}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="mr-1 w-32 text-xs font-semibold uppercase text-muted-foreground">Év</span>
+        <Button type="button" size="sm" variant={year === "all" ? "default" : "outline"} onClick={() => onYearChange("all")}>Összes év</Button>
+        {years.map((value) => (
+          <Button key={value} type="button" size="sm" variant={year === value ? "default" : "outline"} onClick={() => onYearChange(value)}>{value}</Button>
+        ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="mr-1 w-32 text-xs font-semibold uppercase text-muted-foreground">Hónap</span>
+        <Button type="button" size="sm" variant={month === "all" ? "default" : "outline"} onClick={() => onMonthChange("all")}>Összes</Button>
+        {MONTHS_SHORT.map((label, index) => (
+          <Button key={label} type="button" size="sm" variant={month === index ? "default" : "outline"} onClick={() => onMonthChange(index)} title={MONTHS[index]}>{label}</Button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TopMetricSelector({ value, onChange }: { value: TopMetric; onChange: (value: TopMetric) => void }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Button type="button" size="sm" variant={value === "revenue" ? "default" : "outline"} onClick={() => onChange("revenue")}>Árbevétel</Button>
+      <Button type="button" size="sm" variant={value === "quantity" ? "default" : "outline"} onClick={() => onChange("quantity")}>Mennyiség</Button>
+    </div>
+  );
+}
+
+function ProductTopFive({ items, metric }: { items: Array<{ label: string; qty: number; revenue: number }>; metric: TopMetric }) {
+  const ranked = [...items].sort((a, b) => metric === "revenue" ? b.revenue - a.revenue : b.qty - a.qty).slice(0, 5);
+  const max = Math.max(1, ...ranked.map((item) => metric === "revenue" ? item.revenue : item.qty));
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-card p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h3 className="text-base font-bold text-foreground">Top 5 termék</h3>
+        <span className="text-sm text-muted-foreground">{metric === "revenue" ? "Árbevétel alapján" : "Mennyiség alapján"}</span>
+      </div>
+      {ranked.length === 0 ? <p className="mt-4 text-sm text-muted-foreground">A kiválasztott időszakhoz nincs rangsorolható adat.</p> : (
+        <ol className="mt-4 space-y-3">{ranked.map((item, index) => {
+          const value = metric === "revenue" ? item.revenue : item.qty;
+          return <li key={item.label} className="grid grid-cols-[2rem_minmax(0,14rem)_1fr_auto] items-center gap-3 text-sm"><span className="font-bold">{index + 1}.</span><span className="truncate font-medium" title={item.label}>{item.label}</span><div className="h-3 overflow-hidden rounded bg-muted"><div className="h-full rounded bg-primary" style={{ width: `${(value / max) * 100}%` }} /></div><span className="font-semibold">{metric === "revenue" ? formatPrice(value) : `${value} db`}</span></li>;
+        })}</ol>
+      )}
+    </div>
+  );
 }
 
 function StatsPanel() {
