@@ -507,9 +507,6 @@ function StatsPanel() {
   );
 }
 
-const listExportBtn =
-  "inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50";
-
 const listSelectBtn =
   "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 text-sm text-foreground transition-colors hover:bg-accent hover:text-foreground";
 
@@ -769,9 +766,10 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
         <Download className="h-3.5 w-3.5 text-primary" />
         Exportálás:
       </span>
-      <button
+      <Button
         type="button"
-        className={listExportBtn}
+        variant="outline"
+        size="sm"
         disabled={!table || exporting !== null}
         onClick={() => runListExport(`${prefix}-xlsx`, base, table)}
       >
@@ -781,28 +779,31 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
           <FileSpreadsheet className="h-3.5 w-3.5" />
         )}
         Excel
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
-        className={listExportBtn}
+        variant="outline"
+        size="sm"
         disabled={!table || exporting !== null}
         onClick={() => runListExport(`${prefix}-csv`, base, table)}
       >
         <FileText className="h-3.5 w-3.5" />
         CSV
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
-        className={listExportBtn}
+        variant="outline"
+        size="sm"
         disabled={!table || exporting !== null}
         onClick={() => runListExport(`${prefix}-xml`, base, table)}
       >
         <FileCode2 className="h-3.5 w-3.5" />
         XML
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
-        className={listExportBtn}
+        variant="outline"
+        size="sm"
         disabled={!table || exporting !== null}
         onClick={() => runListExport(`${prefix}-pdf`, base, table)}
       >
@@ -812,7 +813,7 @@ function CustomerProductLists({ rows }: { rows: StatRow[] }) {
           <FileDown className="h-3.5 w-3.5" />
         )}
         PDF
-      </button>
+      </Button>
     </div>
   );
 
@@ -1735,9 +1736,10 @@ function DemoDownloads({ yearSel, monthSel, years, onYearChange, onMonthChange }
           <Download className="h-3.5 w-3.5 text-primary" />
           Exportálás:
         </span>
-        <button
+        <Button
           type="button"
-          className={listExportBtn}
+          variant="outline"
+          size="sm"
           disabled={!demoTable || exporting !== null}
           onClick={() => runExport("xlsx")}
         >
@@ -1747,28 +1749,31 @@ function DemoDownloads({ yearSel, monthSel, years, onYearChange, onMonthChange }
             <FileSpreadsheet className="h-3.5 w-3.5" />
           )}
           Excel
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className={listExportBtn}
+          variant="outline"
+          size="sm"
           disabled={!demoTable || exporting !== null}
           onClick={() => runExport("csv")}
         >
           <FileText className="h-3.5 w-3.5" />
           CSV
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className={listExportBtn}
+          variant="outline"
+          size="sm"
           disabled={!demoTable || exporting !== null}
           onClick={() => runExport("xml")}
         >
           <FileCode2 className="h-3.5 w-3.5" />
           XML
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className={listExportBtn}
+          variant="outline"
+          size="sm"
           disabled={!demoTable || exporting !== null}
           onClick={() => runExport("pdf")}
         >
@@ -1778,7 +1783,7 @@ function DemoDownloads({ yearSel, monthSel, years, onYearChange, onMonthChange }
             <FileDown className="h-3.5 w-3.5" />
           )}
           PDF
-        </button>
+        </Button>
       </div>
 
       {filteredRows.length > 0 ? (
