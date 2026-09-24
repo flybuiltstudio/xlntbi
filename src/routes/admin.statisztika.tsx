@@ -23,14 +23,18 @@ import { useAdminSession } from "@/components/admin-panels";
 import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
 import { TableExportButtons } from "@/components/TableExportButtons";
 
-const STATS_NAV = [
+const STATS_NAV_LEFT = [
   ["megrendelt-termekek", "Megrendelt termékek"],
+  ["havi-bontas", "Havi bontás"],
   ["termek-konverzio", "Termékenkénti konverziós arány"],
   ["megrendelesek-orankent", "Megrendelések óránként"],
   ["megrendeloi-lista", "Megrendelői és terméklista"],
   ["demo-letoltesek", "DEMO letöltések"],
-  ["oldalletoltesek", "Oldalletöltési statisztika"],
-  ["havi-bontas", "Havi bontás grafikonon"],
+] as const;
+
+const STATS_NAV_RIGHT = [
+  ["termek-oldalletoltesek", "Termék Részletek oldalak letöltései"],
+  ["szolgaltatas-oldalletoltesek", "Szolgáltatás aloldalak letöltései"],
 ] as const;
 import {
   MONTHS,
@@ -100,7 +104,7 @@ function AdminStatsPage() {
           exportokban
           {role === "admin" ? " – a lenti kapcsolóval jeleníthetők meg." : "."}
         </p>
-        <AdminSectionNav links={STATS_NAV} />
+        <AdminSectionNav columns={[STATS_NAV_LEFT, STATS_NAV_RIGHT]} />
         <MeasurementLegend />
         <StatsPanel />
       </div>
@@ -163,6 +167,8 @@ function StatsPanel() {
   const [payFilter, setPayFilter] = useState<PayFilter>("all");
   const [yearSel, setYearSel] = useState<YearSel>("all");
   const [monthSel, setMonthSel] = useState<MonthSel>("all");
+  const [chartYearSel, setChartYearSel] = useState<YearSel>("all");
+  const [chartMonthSel, setChartMonthSel] = useState<MonthSel>("all");
   const [exporting, setExporting] = useState<string | null>(null);
 
   useEffect(() => {
@@ -240,7 +246,7 @@ function StatsPanel() {
     return [...map.values()].sort((a, b) => b.qty - a.qty || b.revenue - a.revenue);
   }, [periodRows]);
 
-  /** Monthly buckets for the selected year (payment-filtered, all months shown). */
+  /** Monthly buckets for the chart's selected year (payment-filtered, all months shown). */
   const monthly = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, month) => ({
       month,
@@ -249,10 +255,10 @@ function StatsPanel() {
       revenue: 0,
       perProduct: new Map<string, number>(),
     }));
-    if (activeYear === null) return { months, labels: [] as string[], yearTotals: { orders: 0, qty: 0, revenue: 0 } };
+    if (chartYearSel === "all") return { months, labels: [] as string[], yearTotals: { orders: 0, qty: 0, revenue: 0 } };
     for (const row of payFiltered) {
       const date = new Date(row.createdAt);
-      if (date.getFullYear() !== activeYear) continue;
+      if (date.getFullYear() !== chartYearSel) continue;
       const bucket = months[date.getMonth()];
       if (!bucket) continue;
       bucket.orders += 1;
@@ -273,7 +279,7 @@ function StatsPanel() {
       { orders: 0, qty: 0, revenue: 0 },
     );
     return { months, labels, yearTotals };
-  }, [payFiltered, activeYear]);
+  }, [payFiltered, chartYearSel]);
 
   const maxMonthQty = Math.max(1, ...monthly.months.map((m) => m.qty));
 
@@ -1241,7 +1247,7 @@ function PageViewStats() {
   return (
     <section className="mt-14 space-y-14">
       <PageViewBlock
-        anchorId="oldalletoltesek"
+        anchorId="termek-oldalletoltesek"
         titleBase="Termék Részletek oldalak letöltései"
         note="Csak a publikált (éles) oldalon mért megnyitások. Minden termék szerepel, akkor is, ha nulla."
         firstColumn="Termék"
@@ -1253,6 +1259,7 @@ function PageViewStats() {
       />
 
       <PageViewBlock
+        anchorId="szolgaltatas-oldalletoltesek"
         titleBase="Szolgáltatás aloldalak letöltései"
         note="Csak a publikált (éles) oldalon mért megnyitások. Minden szolgáltatás szerepel, akkor is, ha nulla."
         firstColumn="Szolgáltatás"
@@ -1295,7 +1302,7 @@ function PageViewBlock({
 
   const rows = useMemo(() => pivotPageViews(entries, counts, year), [entries, counts, year]);
   const periodLabel = month === "all" ? String(year) : `${year}. ${MONTHS[month] ?? ""}`;
-  const title = `${titleBase} – ${periodLabel}`;
+  const title = titleBase;
   const table = pageViewTable(title, firstColumn, rows, year, month);
   const filename = `xlntbi-${fileBase}-${year}${month === "all" ? "" : `-${month + 1}`}`;
   const btn =
