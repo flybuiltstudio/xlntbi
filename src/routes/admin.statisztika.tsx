@@ -511,7 +511,7 @@ function StatsPanel() {
 
           <ProductConversion rows={rows} yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
           <HourlyOrdersChart rows={rows} yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
-          <CustomerProductLists rows={sharedPeriodRows} />
+          <CustomerProductLists rows={rows} />
           <DemoDownloads yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
           <PageViewStats yearSel={yearSel} monthSel={monthSel} years={years} onYearChange={setYearSel} onMonthChange={setMonthSel} />
         </>

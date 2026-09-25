@@ -13,6 +13,14 @@ import type { CustomProductRow, CustomTier } from "./custom-products";
 
 const EMPTY: ProductOverrideData = { content: [], prices: [], custom: [], categories: [] };
 
+/**
+ * Last successfully read override data. When a read fails (e.g. a transient
+ * "JWT issued at future" clock-skew rejection), we serve this instead of the
+ * bundled catalog, so the site never silently shows outdated prices or drops
+ * admin-created products.
+ */
+let lastGood: ProductOverrideData | null = null;
+
 /** Parses the stored licence tiers, dropping anything malformed. */
 export function parseTiers(value: unknown): CustomTier[] {
   if (!Array.isArray(value)) return [];
@@ -66,6 +74,7 @@ export async function readProductOverrides(): Promise<ProductOverrideData> {
     ]);
     // A failed query silently falls back to the bundled catalog (stale prices,
     // missing admin products), so make every failure visible in the logs.
+    let failed = false;
     for (const [table, result] of [
       ["product_content_overrides", content],
       ["product_price_overrides", prices],
@@ -73,12 +82,23 @@ export async function readProductOverrides(): Promise<ProductOverrideData> {
       ["custom_categories", categories],
     ] as const) {
       if (result.error) {
+        failed = true;
         console.error(
           `[product-overrides] read failed for ${table}: ${result.error.message}`,
         );
       }
     }
-    return {
+    // On any failed table read, serve the last fully successful result
+    // instead of partially empty data that would fall back to bundled prices.
+    if (failed) {
+      if (lastGood) {
+        console.warn("[product-overrides] serving last good override data after read failure");
+        return lastGood;
+      }
+      console.error("[product-overrides] no cached override data yet, falling back to bundled catalog");
+      return EMPTY;
+    }
+    const data: ProductOverrideData = {
       content: (content.data ?? []).map((row) => ({
         slug: row.slug,
         intro: row.intro ?? [],
@@ -136,8 +156,11 @@ export async function readProductOverrides(): Promise<ProductOverrideData> {
         sortOrder: row.sort_order,
       })),
     };
+    lastGood = data;
+    return data;
   } catch (error) {
     console.error("[product-overrides] read failed, falling back to catalog", error);
+    if (lastGood) return lastGood;
     return EMPTY;
   }
 }
