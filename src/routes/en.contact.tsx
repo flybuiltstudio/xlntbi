@@ -5,6 +5,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { PageHero } from "@/components/PageHero";
 import { buildHead } from "@/lib/i18n/head";
+import pcloudLogo from "@/assets/pcloud-logo.jpg.asset.json";
 
 const TITLE = "Contact: bookkeeping and BI consulting | EXCELlent Business Intelligence";
 const DESCRIPTION =
