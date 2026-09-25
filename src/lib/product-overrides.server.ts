@@ -13,6 +13,14 @@ import type { CustomProductRow, CustomTier } from "./custom-products";
 
 const EMPTY: ProductOverrideData = { content: [], prices: [], custom: [], categories: [] };
 
+/**
+ * Last successfully read override data. When a read fails (e.g. a transient
+ * "JWT issued at future" clock-skew rejection), we serve this instead of the
+ * bundled catalog, so the site never silently shows outdated prices or drops
+ * admin-created products.
+ */
+let lastGood: ProductOverrideData | null = null;
+
 /** Parses the stored licence tiers, dropping anything malformed. */
 export function parseTiers(value: unknown): CustomTier[] {
   if (!Array.isArray(value)) return [];
