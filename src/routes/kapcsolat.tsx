@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/ContactForm";
 import kapcsolatBusiness from "@/assets/kapcsolat-business.jpg";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { PageHero } from "@/components/PageHero";
+import pcloudLogo from "@/assets/pcloud-logo.jpg.asset.json";
 
 
 const TITLE = "Kapcsolat | EXCELlent Business Intelligence";
