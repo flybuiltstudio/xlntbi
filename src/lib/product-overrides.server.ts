@@ -156,8 +156,11 @@ export async function readProductOverrides(): Promise<ProductOverrideData> {
         sortOrder: row.sort_order,
       })),
     };
+    lastGood = data;
+    return data;
   } catch (error) {
     console.error("[product-overrides] read failed, falling back to catalog", error);
+    if (lastGood) return lastGood;
     return EMPTY;
   }
 }
