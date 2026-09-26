@@ -26,3 +26,4 @@
 - [x] Két régi, duplikált termékfájl törlése és tároló-ellenőrzése
 - [x] Statisztika blokksorrendje, helyi időszakszűrői és felső menüje; Fizetés teszt térköze
 - [x] Statisztika közös időszakszűrés, Top 5 rangsorok, egységes exportgombok és tipográfia
+- [x] pCloud-ajánlók, Oktatás/Training tartalom és Rólam/About tanúsítványsorrend frissítése

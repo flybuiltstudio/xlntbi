@@ -92,8 +92,8 @@ const values = [
 ];
 
 const certificates = [
-  { href: "/dokumentumok/Power-BI.pdf", label: "Power BI" },
   { href: "/dokumentumok/SD-MINKE-tanusitvany.pdf", label: "MINKE" },
+  { href: "/dokumentumok/Power-BI.pdf", label: "Power BI" },
 ];
 
 function RolamPage() {
