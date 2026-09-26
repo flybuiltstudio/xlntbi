@@ -106,7 +106,7 @@ function KonzultacioPage() {
             </div>
             <div className="rounded-2xl border border-border/60 bg-muted/40 p-5">
               <p className="text-sm leading-relaxed text-muted-foreground">
-                🔐 Felejtsd el a havi előfizetéseket! A pCloud életre szóló tárhelye már 2-3 év alatt megtérül – fényévekkel jobban megéri, mint a Google Drive, az iCloud vagy a OneDrive. Svájci adatvédelem, 100% GDPR-megfelelőség és maximális biztonság. Én már csak ezt használom, szívből ajánlom:
+                🔐 Felejtsd el a havi előfizetéseket! A pCloud életre szóló tárhelye már 2-3 év alatt megtérül – fényévekkel jobban megéri, mint a Google Drive, az iCloud vagy a OneDrive. Svájci adatvédelem, 100% GDPR-megfelelőség és maximális biztonság. Én már csak ezt használom, szívből ajánlom. Kattints az alábbi képre és regisztrálj INGYEN!
               </p>
               <a
                 href="https://partner.pcloud.com/r/157443"

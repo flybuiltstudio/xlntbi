@@ -189,7 +189,7 @@ function EnglishProducts() {
             </div>
             <div className="mt-8 rounded-2xl border border-border/60 bg-muted/40 p-5">
               <p className="text-sm leading-relaxed text-muted-foreground">
-                💰 The best cloud storage investment: a one-time fee for lifetime storage! pCloud pays for itself in a few years compared to Google Drive, iCloud and OneDrive. Swiss security, strict GDPR compliance. I use it exclusively — highly recommended:
+                💰 The best cloud storage investment: a one-time fee for lifetime storage! pCloud pays for itself in a few years compared to Google Drive, iCloud and OneDrive. Swiss security, strict GDPR compliance. I use it exclusively and wholeheartedly recommend it. Click the image below and register for FREE!
               </p>
               <a
                 href="https://partner.pcloud.com/r/157444"

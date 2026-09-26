@@ -83,14 +83,32 @@ function OktatasPage() {
   return (
     <ServicePage
       title={"Oktatás"}
-      intro={["Az oktatásban nem csak elméletet adok át, hanem használható, napi munkában is alkalmazható tudást. A cél az, hogy a résztvevő ne csak értse a témát, hanem tudja is használni.", "Az oktatási témák a könyvelés, az adózás, a digitális folyamatok, a Power BI és az automatizáció köré épülnek. A hangsúly mindig a gyakorlati alkalmazáson van."]}
+      intro={["Az oktatásban nem csak elméletet adok át, hanem használható, napi munkában is alkalmazható tudást. A cél az, hogy a résztvevő ne csak értse a témát, hanem tudja is használni.", "Az oktatási témák a könyvelés, az adózás, a digitális folyamatok, az Excel (akár profi szinten, makrók is), a Power BI és az automatizáció köré épülnek. A hangsúly mindig a gyakorlati alkalmazáson van."]}
       ctaLabel={"Oktatást kérek"}
       ctaTo={"/konzultacio"}
       image={heroImage}
       imageAlt={"Oktatás – szakmai képzés"}
       listTitle={"Témák"}
       listItems={["Könyvelési alapok és haladó gyakorlat", "Adózási logika és döntéstámogatás", "Excel használat szakmai szinten", "Power BI alapok", "Automatizálás pénzügyi szemlélettel", "AI használat a mindennapi munkában", "Vizsgára és gyakorlati munkára felkészítés"]}
-      closing={{"heading": "Kinek szól?", "items": ["Főiskolai és egyetemi hallgatóknak", "Mérlegképes könyvelő hallgatóknak", "Adótanácsadó jelölteknek", "Pályakezdőknek", "Haladó szakembereknek"], "ctaLabel": "Konzultációt kérek", "ctaTo": "/konzultacio"}}
-    />
+      closing={{"heading": "Kinek szól?", "items": ["Főiskolai és egyetemi hallgatóknak", "Mérlegképes könyvelő hallgatóknak", "Adótanácsadó jelölteknek", "Könyvvizsgáló jelölteknek", "Pályakezdőknek", "Haladó szakembereknek"], "ctaLabel": "Konzultációt kérek", "ctaTo": "/konzultacio"}}
+    >
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <h2 className="text-2xl font-bold text-foreground">Vizsgára készülőknek</h2>
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          Ha vizsgára készülsz mérlegképes könyvelő (Vállalkozási vagy IFRS szakterületen),
+          adótanácsadó vagy könyvvizsgálói képzésen, és érdekelnek a tökéletesen kidolgozott
+          vizsgasorok és/vagy tételek, akkor ajánlom figyelmedbe a{" "}
+          <a
+            href="https://vizsgasorok.lovable.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-primary underline underline-offset-4 hover:text-brand-dark"
+          >
+            vizsgasorok.lovable.app
+          </a>{" "}
+          oldalt.
+        </p>
+      </section>
+    </ServicePage>
   );
 }

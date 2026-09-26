@@ -62,7 +62,7 @@ function EnglishConsultation() {
             </div>
             <div className="rounded-2xl border border-border/60 bg-muted/40 p-5">
               <p className="text-sm leading-relaxed text-muted-foreground">
-                🔐 Forget about monthly subscriptions! pCloud's lifetime storage pays for itself in just 2–3 years — far better value than Google Drive, iCloud or OneDrive. Swiss data protection, 100% GDPR compliance and maximum security. I use it exclusively — highly recommended:
+                🔐 Forget about monthly subscriptions! pCloud's lifetime storage pays for itself in just 2–3 years — far better value than Google Drive, iCloud or OneDrive. Swiss data protection, 100% GDPR compliance and maximum security. I use it exclusively and wholeheartedly recommend it. Click the image below and register for FREE!
               </p>
               <a
                 href="https://partner.pcloud.com/r/157443"
