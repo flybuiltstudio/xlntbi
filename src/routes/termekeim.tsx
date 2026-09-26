@@ -239,7 +239,7 @@ function TermekeimPage() {
             </div>
             <div className="mt-8 rounded-2xl border border-border/60 bg-muted/40 p-5">
               <p className="text-sm leading-relaxed text-muted-foreground">
-                💰 A legjobb felhőalapú tárhely befektetés: Egyszeri díj, élethosszig tartó tárhely! A pCloud pár év alatt behozza az árát a GDrive-val, az iCloud-dal és a OneDrive-val szemben. Svájci biztonság, szigorú GDPR-védelem. Én már csak ezt használom, szívből ajánlom. Kattints az alábbi képre és regisztrálj INGYEN!
+                💰 A legjobb felhőalapú tárhely befektetés: Egyszeri díj, élethosszig tartó tárhely! A pCloud pár év alatt behozza az árát a Google Drive-val, az iCloud-dal és a OneDrive-val szemben. Svájci biztonság, szigorú GDPR-védelem. Én már csak ezt használom, szívből ajánlom. Kattints az alábbi képre és regisztrálj INGYEN!
               </p>
               <a
                 href="https://partner.pcloud.com/r/157444"

@@ -83,7 +83,7 @@ function OktatasPage() {
   return (
     <ServicePage
       title={"Oktatás"}
-      intro={["Az oktatásban nem csak elméletet adok át, hanem használható, napi munkában is alkalmazható tudást. A cél az, hogy a résztvevő ne csak értse a témát, hanem tudja is használni.", "Az oktatási témák a könyvelés, az adózás, a digitális folyamatok, az Excel (akár profi szinten, makrók is), a Power BI és az automatizáció köré épülnek. A hangsúly mindig a gyakorlati alkalmazáson van."]}
+      intro={["Az oktatásban nem csak elméletet adok át, hanem használható, napi munkában is alkalmazható tudást. A cél az, hogy a résztvevő ne csak értse a témát, hanem tudja is használni.", "Az oktatási témák a pénzügy, a könyvelés, az adózás, a digitális folyamatok, az Excel (akár profi szinten, makrók is), a Power BI és az automatizáció köré épülnek. A hangsúly mindig a gyakorlati alkalmazáson van."]}
       ctaLabel={"Oktatást kérek"}
       ctaTo={"/konzultacio"}
       image={heroImage}
