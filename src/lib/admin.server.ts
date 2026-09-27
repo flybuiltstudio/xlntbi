@@ -2005,6 +2005,7 @@ export async function sendDemoLicense(
     productName: withXlntPrefix(row.product_name as string),
     tierLabel: "DEMO",
     licenseKey,
+    isDemo: true,
   };
 
   const { sendEmails } = await import("./notify.server");

@@ -11,6 +11,7 @@ interface Props {
   productName?: string
   tierLabel?: string
   licenseKey?: string
+  isDemo?: boolean
 }
 
 const box = {
@@ -35,7 +36,7 @@ const code = {
   margin: '0',
 }
 
-const Email = ({ name, orderNumber, productName, tierLabel, licenseKey }: Props) => (
+const Email = ({ name, orderNumber, productName, tierLabel, licenseKey, isDemo }: Props) => (
   <Html lang="hu" dir="ltr">
     <Head />
     <Preview>{`Licenckód – ${productName || 'xlntbi.hu'}`}</Preview>
@@ -45,8 +46,9 @@ const Email = ({ name, orderNumber, productName, tierLabel, licenseKey }: Props)
         <Text style={h1}>Itt van a licenckódod</Text>
         <Text style={paragraph}>Kedves {name || 'Vásárló'}!</Text>
         <Text style={paragraph}>
-          Köszönöm a vásárlást! Az alábbiakban megtalálod a megvásárolt termékhez tartozó
-          licenckódot.
+          {isDemo
+            ? 'Köszönöm az érdeklődést! Az alábbiakban megtalálod a kipróbálni szánt termékhez tartozó licenckódot.'
+            : 'Köszönöm a vásárlást! Az alábbiakban megtalálod a megvásárolt termékhez tartozó licenckódot.'}
         </Text>
         <Section style={box}>
           <Text style={{ ...paragraph, margin: '0 0 4px', fontWeight: 700 }}>
