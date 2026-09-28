@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { HeroPlanks } from "@/components/HeroPlanks";
 import { buildHead } from "@/lib/i18n/head";
-import aboutImgAsset from "@/assets/En-modern-konyveloirodaban.jpg.asset.json";
+import aboutImgAsset from "@/assets/David_weboldal_kep_2.jpg.asset.json";
+import animacio2 from "@/assets/animacio-2.mp4.asset.json";
+import { IntroVideo } from "@/components/IntroVideo";
 import icHatekonysag from "@/assets/icons/hatekonysag.png.asset.json";
 import icInnovacio from "@/assets/icons/innovacio.png.asset.json";
 import icKomplexitas from "@/assets/icons/komplexitas.png.asset.json";
@@ -140,20 +142,29 @@ function EnglishHome() {
               Order in your processes,
               <br className="hidden sm:block" /> growth in your business
             </h2>
+          <div className="flex items-center mt-7 justify-end gap-4">
+            <IntroVideo
+              src={animacio2.url}
+              label="Dávid Sarinay – Animation"
+              className="h-auto w-56 min-w-0 rounded-lg"
+            />
             <Link
               to="/en/about"
-              className="mt-7 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              className="inline-flex shrink-0 items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
             >
               About me
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
-          <img
-            src={aboutImg}
-            alt="Dávid Sarinay in a modern accounting office"
-            loading="lazy"
-            className="w-full rounded-xl border border-border object-cover shadow-sm"
-          />
+          </div>
+          <div className="space-y-4">
+            <img
+              src={aboutImg}
+              alt="Dávid Sarinay"
+              loading="lazy"
+              className="w-full rounded-xl border border-border object-cover shadow-sm"
+            />
+          </div>
         </div>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2">

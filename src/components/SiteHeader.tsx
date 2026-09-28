@@ -41,6 +41,11 @@ const mainLinks: ReadonlyArray<{ hu: string; key: TranslationKey }> = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [suppressedMenu, setSuppressedMenu] = useState<string | null>(null);
+  const closeDesktopMenu = (key: string) => {
+    (document.activeElement as HTMLElement | null)?.blur();
+    setSuppressedMenu(key);
+  };
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
   const t = useT();
   const lang = useLang();
@@ -84,7 +89,7 @@ export function SiteHeader() {
             {t("nav.home")}
           </Link>
 
-          <div className="group relative">
+          <div className="group relative" onClick={() => closeDesktopMenu("services")} onMouseLeave={() => setSuppressedMenu(null)}>
             <Link
               to={asPath(lp("/szolgaltatasaim"))}
               className="flex items-center gap-1 rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
@@ -92,7 +97,7 @@ export function SiteHeader() {
               {t("nav.services")}
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <div className="invisible absolute left-0 top-full w-72 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+            <div className={`${suppressedMenu === "services" ? "hidden" : ""} invisible absolute left-0 top-full w-72 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100`}>
               {services.map((s) => (
                 <Link
                   key={s.hu}
@@ -105,7 +110,7 @@ export function SiteHeader() {
             </div>
           </div>
 
-          <div className="group relative">
+          <div className="group relative" onClick={() => closeDesktopMenu("calculators")} onMouseLeave={() => setSuppressedMenu(null)}>
             <Link
               to={asPath(lp("/kalkulatorok"))}
               className="flex items-center gap-1 rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
@@ -113,7 +118,7 @@ export function SiteHeader() {
               {t("nav.calculators")}
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <div className="invisible absolute left-0 top-full w-56 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+            <div className={`${suppressedMenu === "calculators" ? "hidden" : ""} invisible absolute left-0 top-full w-56 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100`}>
               {calculators.map((s) => (
                 <Link
                   key={s.hu}
@@ -126,7 +131,7 @@ export function SiteHeader() {
             </div>
           </div>
 
-          <div className="group relative">
+          <div className="group relative" onClick={() => closeDesktopMenu("products")} onMouseLeave={() => setSuppressedMenu(null)}>
             <Link
               to={asPath(lp("/termekeim"))}
               className="flex items-center gap-1 rounded-md px-1.5 py-2 text-xs font-medium text-foreground transition-colors hover:bg-accent lg:px-3 lg:text-sm"
@@ -135,7 +140,7 @@ export function SiteHeader() {
               {t("nav.products")}
               <ChevronDown className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <div className="invisible absolute left-0 top-full w-72 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+            <div className={`${suppressedMenu === "products" ? "hidden" : ""} invisible absolute left-0 top-full w-72 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100`}>
               <Link
                 to={asPath(lp("/termekeim"))}
                 className="block rounded-md px-3 py-2 text-sm font-semibold text-popover-foreground transition-colors hover:bg-accent"

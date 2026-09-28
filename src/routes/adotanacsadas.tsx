@@ -86,12 +86,12 @@ function AdotanacsadasPage() {
       lead={"Adótanácsadás és ügyviteli tanácsadás"}
       intro={["Az adózásban egy jó döntés sokszor évekig meghatározza a működésedet. Ezért nem sablonválaszokat adok, hanem a konkrét helyzetedre szabott szakmai megoldást keresek.", "Adótanácsadási és ügyviteli tanácsadási szolgáltatásaim célja, hogy a vállalkozásod adózási és működési kérdései tiszták, tervezhetők és kontrollálhatók legyenek."]}
       ctaLabel={"Konzultációt kérek"}
-      ctaTo={"/kapcsolat"}
+      ctaTo={"/konzultacio"}
       image={heroImage}
       imageAlt={"Adótanácsadás – pénzügyi dokumentumok elemzése"}
       listTitle={"Tipikus témák"}
       listItems={["Adózási forma kiválasztása", "Kifizetések és juttatások kezelése", "NAV- és adózási kockázatok csökkentése", "Céges működési kérdések", "Ügyviteli folyamatok egyszerűsítése", "Döntéselőkészítés"]}
-      closing={{"heading": "Miben segít?", "text": "Átláthatóbbá teszi a működésedet, és segít elkerülni a felesleges hibákat, plusz terheket és bizonytalanságot.", "ctaLabel": "Konzultációt kérek", "ctaTo": "/kapcsolat"}}
+      closing={{"heading": "Miben segít?", "text": "Átláthatóbbá teszi a működésedet, és segít elkerülni a felesleges hibákat, plusz terheket és bizonytalanságot.", "ctaLabel": "Konzultációt kérek", "ctaTo": "/konzultacio"}}
     />
   );
 }

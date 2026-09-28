@@ -91,7 +91,7 @@ function KontrollingPage() {
       imageAlt={"Kontrolling riportok és elemzések"}
       listTitle={"Tipikus megoldások"}
       listItems={["Vezetői riportok", "Profitabilitási elemzések", "Projektkontrolling", "Havi zárási támogatás", "Automatizált modellek", "Power BI dashboardok"]}
-      closing={{"heading": "Kinek való?", "items": ["KKV-knak", "Nagyobb cégeknek", "Pénzügyi vezetőknek", "Ügyvezetőknek", "Olyan csapatoknak, ahol gyors döntések kellenek"], "ctaLabel": "Konzultációt kérek", "ctaTo": "/kapcsolat"}}
+      closing={{"heading": "Kinek való?", "items": ["KKV-knak", "Nagyobb cégeknek", "Pénzügyi vezetőknek", "Ügyvezetőknek", "Olyan csapatoknak, ahol gyors döntések kellenek"], "ctaLabel": "Konzultációt kérek", "ctaTo": "/konzultacio"}}
     />
   );
 }

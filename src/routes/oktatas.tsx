@@ -82,6 +82,7 @@ export const Route = createFileRoute("/oktatas")({
 function OktatasPage() {
   return (
     <ServicePage
+      compact
       title={"Oktatás"}
       intro={["Az oktatásban nem csak elméletet adok át, hanem használható, napi munkában is alkalmazható tudást. A cél az, hogy a résztvevő ne csak értse a témát, hanem tudja is használni.", "Az oktatási témák a pénzügy, a könyvelés, az adózás, a digitális folyamatok, az Excel (akár profi szinten, makrók is), a Power BI és az automatizáció köré épülnek. A hangsúly mindig a gyakorlati alkalmazáson van."]}
       ctaLabel={"Oktatást kérek"}
@@ -92,7 +93,7 @@ function OktatasPage() {
       listItems={["Könyvelési alapok és haladó gyakorlat", "Adózási logika és döntéstámogatás", "Excel használat szakmai szinten", "Power BI alapok", "Automatizálás pénzügyi szemlélettel", "AI használat a mindennapi munkában", "Vizsgára és gyakorlati munkára felkészítés"]}
       closing={{"heading": "Kinek szól?", "items": ["Főiskolai és egyetemi hallgatóknak", "Mérlegképes könyvelő hallgatóknak", "Adótanácsadó jelölteknek", "Könyvvizsgáló jelölteknek", "Pályakezdőknek", "Haladó szakembereknek"], "ctaLabel": "Konzultációt kérek", "ctaTo": "/konzultacio"}}
     >
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section className="mx-auto max-w-6xl px-4 pt-6 pb-16">
         <h2 className="text-2xl font-bold text-foreground">Vizsgára készülőknek</h2>
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
           Ha vizsgára készülsz mérlegképes könyvelő (Vállalkozási vagy IFRS szakterületen),

@@ -16,6 +16,7 @@ export const Route = createFileRoute("/en/training")({
 function EnglishTraining() {
   return (
     <ServicePage
+      compact
       title="Training"
       intro={[
         "In my training sessions I do not only pass on theory, but knowledge that can be applied in daily work. The goal is that participants not only understand the topic, but can actually use it.",
@@ -49,7 +50,7 @@ function EnglishTraining() {
         ctaTo: "/en/consultation",
       }}
     >
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section className="mx-auto max-w-6xl px-4 pt-6 pb-16">
         <h2 className="text-2xl font-bold text-foreground">For those preparing for exams</h2>
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
           If you are preparing for an exam in a certified accountant course (Business or IFRS

@@ -86,7 +86,7 @@ function KonyvelesPage() {
       lead={"Könyvelés cégeknek, egyéni vállalkozóknak, magánszemélyeknek"}
       intro={["A könyvelés nálam nem puszta adminisztráció, hanem a stabil és tervezhető működés egyik alapja. Arra törekszem, hogy az adataidból ne csak kötelező jelentések, hanem valódi üzleti információk is szülessenek.", "Teljes körű könyvelési szolgáltatást nyújtok cégeknek, egyéni vállalkozóknak és magánszemélyeknek. A munkát mindig az ügyfél tevékenységéhez, igényeihez és működési sajátosságaihoz igazítom."]}
       ctaLabel={"Konzultációt kérek"}
-      ctaTo={"/kapcsolat"}
+      ctaTo={"/konzultacio"}
       image={heroImage}
       imageAlt={"Könyvelés – irodai munka közben"}
       listTitle={"Szolgáltatások"}

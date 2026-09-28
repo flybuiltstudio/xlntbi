@@ -51,12 +51,12 @@ function Page() {
       lead={"Fintech and BI consulting for accounting firms, companies and private individuals"}
       intro={["Financial data in itself is not yet valuable. It becomes useful when it is properly connected, transparent and supports decisions. That is what fintech and BI consulting is for.", "I connect classic accounting with modern automation, reporting, data modelling, complex macros and AI-supported workflows. The goal is faster, cleaner and better controlled financial operations."]}
       ctaLabel={"Request a BI consultation"}
-      ctaTo={"/en/contact"}
+      ctaTo={"/en/consultation"}
       image={heroImage}
       imageAlt={"Fintech and BI – data-driven financial operations"}
       listTitle={"Digital and financial operations, simpler and more transparent"}
       listItems={["Power BI dashboards", "Report automation", "Data integration", "Automated control logic", "Digital solutions for accounting firms", "Simplifying financial processes", "AI-supported workflows"]}
-      closing={{"heading": "Who is it for?", "items": ["Accounting firms", "Companies", "Private individuals", "Professionals who want to be more efficient with technology"], "ctaLabel": "Request a BI consultation", "ctaTo": "/en/contact"}}
+      closing={{"heading": "Who is it for?", "items": ["Accounting firms", "Companies", "Private individuals", "Professionals who want to be more efficient with technology"], "ctaLabel": "Request a BI consultation", "ctaTo": "/en/consultation"}}
     />
   );
 }
