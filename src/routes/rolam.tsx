@@ -3,6 +3,8 @@ import { Check, FileText } from "lucide-react";
 import portraitImgAsset from "@/assets/En-modern-konyveloirodaban.jpg.asset.json";
 const portraitImg = portraitImgAsset.url;
 import { PageHero } from "@/components/PageHero";
+import { IntroVideo } from "@/components/IntroVideo";
+import animacio1 from "@/assets/animacio-1.mp4.asset.json";
 
 
 const TITLE = "Rólam: pénzügyi és BI szakértő | EXCELlent Business Intelligence";
@@ -105,8 +107,8 @@ function RolamPage() {
         </h1>
       </PageHero>
 
-      <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
-        <div className="grid items-center gap-10 md:grid-cols-2">
+      <section className="mx-auto max-w-6xl px-4 pt-14 pb-6 md:pt-16">
+        <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             <p className="text-base leading-relaxed text-muted-foreground">
               Sarinay Dávid vagyok, pénzügyi, számviteli, adó- és kontroller szakember. A munkám középpontjában a szakmai
@@ -124,32 +126,37 @@ function RolamPage() {
               makrók, a Power BI, az adatmodellezés, a riportautomatizálás, az AI-alapú
               munkafolyamatok és a döntéstámogató rendszerek fejlesztése.
             </p>
+            <h2 className="mt-4 text-2xl font-bold text-foreground">Mi a célom?</h2>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              Az, hogy a pénzügyi folyamatok ne bonyolultabbak legyenek, hanem okosabbak. Hiszek abban,
+              hogy ha az adat jó, a döntés is jobb lesz.
+            </p>
+            <Link
+              to="/szolgaltatasaim"
+              className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+            >
+              Szolgáltatásaim
+            </Link>
           </div>
-          <img
-            src={portraitImg}
-            alt="Sarinay Dávid modern könyvelőirodában"
-            loading="lazy"
-            className="w-full rounded-xl border border-border object-cover shadow-sm"
-          />
+          <div className="space-y-4">
+            <img
+              src={portraitImg}
+              alt="Sarinay Dávid modern könyvelőirodában"
+              loading="lazy"
+              className="w-full rounded-xl border border-border object-cover shadow-sm"
+            />
+            <IntroVideo
+              src={animacio1.url}
+              label="Sarinay Dávid – animáció"
+              className="w-full rounded-xl border border-border shadow-sm"
+            />
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-2xl font-bold text-foreground">Mi a célom?</h2>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          Az, hogy a pénzügyi folyamatok ne bonyolultabbak legyenek, hanem okosabbak. Hiszek abban,
-          hogy ha az adat jó, a döntés is jobb lesz.
-        </p>
-        <Link
-          to="/szolgaltatasaim"
-          className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-        >
-          Szolgáltatásaim
-        </Link>
-      </section>
 
       <section className="border-t border-border bg-secondary/60">
-        <div className="mx-auto max-w-6xl px-4 py-16">
+        <div className="mx-auto max-w-6xl px-4 pt-6 pb-10">
           <h2 className="text-2xl font-bold text-foreground">Amit képviselek</h2>
           <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {values.map((v) => (
@@ -171,7 +178,7 @@ function RolamPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section className="mx-auto max-w-6xl px-4 pt-6 pb-16">
         <h2 className="text-2xl font-bold text-foreground">Tanúsítványaim</h2>
         <ul className="mt-8 flex flex-wrap gap-4">
           {certificates.map((c) => (

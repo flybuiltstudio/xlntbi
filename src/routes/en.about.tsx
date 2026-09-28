@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, FileText } from "lucide-react";
 import portraitImgAsset from "@/assets/En-modern-konyveloirodaban.jpg.asset.json";
 import { PageHero } from "@/components/PageHero";
+import { IntroVideo } from "@/components/IntroVideo";
+import animacio1 from "@/assets/animacio-1.mp4.asset.json";
 import { buildHead } from "@/lib/i18n/head";
 
 const portraitImg = portraitImgAsset.url;
@@ -46,8 +48,8 @@ function EnglishAbout() {
         </h1>
       </PageHero>
 
-      <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
-        <div className="grid items-center gap-10 md:grid-cols-2">
+      <section className="mx-auto max-w-6xl px-4 pt-14 pb-6 md:pt-16">
+        <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             <p className="text-base leading-relaxed text-muted-foreground">
               My name is Dávid Sarinay, a finance, accounting, tax and controlling professional. My
@@ -65,32 +67,37 @@ function EnglishAbout() {
               BI, data modelling, report automation, AI-based workflows and the development of
               decision-support systems.
             </p>
+            <h2 className="mt-4 text-2xl font-bold text-foreground">What is my goal?</h2>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+              To make financial processes smarter rather than more complicated. I believe that when the
+              data is good, the decision will be better too.
+            </p>
+            <Link
+              to="/en/services"
+              className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+            >
+              Services
+            </Link>
           </div>
-          <img
-            src={portraitImg}
-            alt="Dávid Sarinay in a modern accounting office"
-            loading="lazy"
-            className="w-full rounded-xl border border-border object-cover shadow-sm"
-          />
+          <div className="space-y-4">
+            <img
+              src={portraitImg}
+              alt="Dávid Sarinay in a modern accounting office"
+              loading="lazy"
+              className="w-full rounded-xl border border-border object-cover shadow-sm"
+            />
+            <IntroVideo
+              src={animacio1.url}
+              label="Dávid Sarinay – animation"
+              className="w-full rounded-xl border border-border shadow-sm"
+            />
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-2xl font-bold text-foreground">What is my goal?</h2>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          To make financial processes smarter rather than more complicated. I believe that when the
-          data is good, the decision will be better too.
-        </p>
-        <Link
-          to="/en/services"
-          className="mt-8 inline-flex items-center rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-        >
-          Services
-        </Link>
-      </section>
 
       <section className="border-t border-border bg-secondary/60">
-        <div className="mx-auto max-w-6xl px-4 py-16">
+        <div className="mx-auto max-w-6xl px-4 pt-6 pb-10">
           <h2 className="text-2xl font-bold text-foreground">What I stand for</h2>
           <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {values.map((v) => (
@@ -112,7 +119,7 @@ function EnglishAbout() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section className="mx-auto max-w-6xl px-4 pt-6 pb-16">
         <h2 className="text-2xl font-bold text-foreground">My certificates</h2>
         <ul className="mt-8 flex flex-wrap gap-4">
           {certificates.map((c) => (
