@@ -142,6 +142,20 @@ function EnglishHome() {
               Order in your processes,
               <br className="hidden sm:block" /> growth in your business
             </h2>
+          <div className="flex items-center mt-7 justify-end gap-4">
+            <IntroVideo
+              src={animacio2.url}
+              label="Dávid Sarinay – Animation"
+              className="w-full max-w-xs rounded-lg"
+            />
+            <Link
+              to="/en/about"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+            >
+              About me
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
           </div>
           <div className="space-y-4">
             <img
@@ -150,20 +164,6 @@ function EnglishHome() {
               loading="lazy"
               className="w-full rounded-xl border border-border object-cover shadow-sm"
             />
-            <div className="flex items-center justify-end gap-4">
-              <IntroVideo
-                src={animacio2.url}
-                label="Dávid Sarinay – Animation"
-                className="h-24 w-auto rounded-lg md:h-28"
-              />
-              <Link
-                to="/en/about"
-                className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-              >
-                About me
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </div>
           </div>
         </div>
 
