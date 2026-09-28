@@ -211,7 +211,7 @@ function Index() {
                 height={512}
                 className="h-14 w-14 brightness-0 invert"
               />
-              <h2 className="mt-5 text-2xl font-bold text-primary-foreground md:text-3xl">
+              <h2 className="mt-4 text-2xl font-bold text-primary-foreground md:text-3xl">
                 AI-jal gyorsított fejlesztés, könyvelői kontrollal
               </h2>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-primary-foreground/85">
