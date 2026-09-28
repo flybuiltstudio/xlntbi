@@ -86,12 +86,12 @@ function FintechBiPage() {
       lead={"Fintech és BI tanácsadás könyvelőirodáknak, cégeknek és magánszemélyeknek"}
       intro={["A pénzügyi adat önmagában még nem érték. Akkor válik hasznossá, ha jól össze van kötve, átlátható és döntést támogat. Ebben segít a Fintech és BI tanácsadás.", "A klasszikus számvitelt modern automatizációval, riportokkal, adatmodellezéssel, komplex makrókkal és AI-támogatott munkafolyamatokkal kapcsolom össze. A cél, hogy a pénzügyi működés gyorsabb, tisztább és jobban irányítható legyen."]}
       ctaLabel={"BI konzultációt kérek"}
-      ctaTo={"/kapcsolat"}
+      ctaTo={"/konzultacio"}
       image={heroImage}
       imageAlt={"Fintech és BI – adatvezérelt pénzügyi működés"}
       listTitle={"Digitális és pénzügyi működés egyszerűbben, átláthatóbban"}
       listItems={["Power BI dashboardok", "Riportautomatizálás", "Adatösszekapcsolások", "Automatizált ellenőrzési logikák", "Digitális könyvelőirodai megoldások", "Pénzügyi folyamatok egyszerűsítése", "AI-val támogatott munkafolyamatok"]}
-      closing={{"heading": "Kinek szól?", "items": ["Könyvelőirodáknak", "Cégeknek", "Magánszemélyeknek", "Olyan szakembereknek, akik technológiával akarnak hatékonyabbak lenni"], "ctaLabel": "BI konzultációt kérek", "ctaTo": "/kapcsolat"}}
+      closing={{"heading": "Kinek szól?", "items": ["Könyvelőirodáknak", "Cégeknek", "Magánszemélyeknek", "Olyan szakembereknek, akik technológiával akarnak hatékonyabbak lenni"], "ctaLabel": "BI konzultációt kérek", "ctaTo": "/konzultacio"}}
     />
   );
 }

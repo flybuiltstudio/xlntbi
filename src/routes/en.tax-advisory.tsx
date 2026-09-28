@@ -51,12 +51,12 @@ function Page() {
       lead={"Tax advisory and business administration consulting"}
       intro={["In taxation a single good decision often shapes your operations for years. That is why I do not give template answers but look for a professional solution built on your specific situation.", "The purpose of my tax advisory and administration consulting is to make the taxation and operating questions of your business clear, predictable and controllable."]}
       ctaLabel={"Book a consultation"}
-      ctaTo={"/en/contact"}
+      ctaTo={"/en/consultation"}
       image={heroImage}
       imageAlt={"Tax advisory – analysing financial documents"}
       listTitle={"Services"}
       listItems={["Tax advisory", "Tax optimisation", "Support with NAV (Hungarian tax authority) matters", "Choosing the right form of taxation", "Reviewing contracts from a tax perspective", "Business administration consulting"]}
-      closing={{"heading": "Who is it for?", "items": ["Companies", "Sole traders", "Private individuals", "Anyone facing a taxation decision"], "ctaLabel": "Book a consultation", "ctaTo": "/en/contact"}}
+      closing={{"heading": "Who is it for?", "items": ["Companies", "Sole traders", "Private individuals", "Anyone facing a taxation decision"], "ctaLabel": "Book a consultation", "ctaTo": "/en/consultation"}}
     />
   );
 }

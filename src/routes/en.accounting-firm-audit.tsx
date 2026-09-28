@@ -51,12 +51,12 @@ function Page() {
       
       intro={["The accounting firm audit is for those who want their own firm's operations reviewed with a professional eye. The aim is to see how organised, efficient and scalable the processes are.", "In an accounting firm quality, deadline management and a consistent working method are crucial. During the audit I review these and give practical development proposals."]}
       ctaLabel={"Request an audit"}
-      ctaTo={"/en/contact"}
+      ctaTo={"/en/consultation"}
       image={heroImage}
       imageAlt={"Accounting firm audit – office processes"}
       listTitle={"What do I examine?"}
       listItems={["How organised the processes are", "Teamwork and task allocation", "Quality assurance", "Deadline management", "Automation", "Client communication"]}
-      closing={{"eyebrow": "Result", "heading": "An operating map for your firm", "text": "It shows where the operations of your accounting firm can be sped up, simplified and stabilised.", "ctaLabel": "Request an audit", "ctaTo": "/en/contact"}}
+      closing={{"eyebrow": "Result", "heading": "An operating map for your firm", "text": "It shows where the operations of your accounting firm can be sped up, simplified and stabilised.", "ctaLabel": "Request an audit", "ctaTo": "/en/consultation"}}
     />
   );
 }

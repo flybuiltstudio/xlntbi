@@ -51,7 +51,7 @@ function Page() {
       lead={"Bookkeeping for companies, sole traders and private individuals"}
       intro={["For me, bookkeeping is not mere administration but one of the foundations of stable, predictable operations. My aim is that your data should produce not only mandatory returns but genuine business information.", "I provide full-scope bookkeeping for companies, sole traders and private individuals. The work is always tailored to the client's activity, needs and operating characteristics."]}
       ctaLabel={"Book a consultation"}
-      ctaTo={"/en/contact"}
+      ctaTo={"/en/consultation"}
       image={heroImage}
       imageAlt={"Bookkeeping – office work in progress"}
       listTitle={"Services"}

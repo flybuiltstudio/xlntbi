@@ -56,7 +56,7 @@ function Page() {
       imageAlt={"Controlling reports and analyses"}
       listTitle={"Typical solutions"}
       listItems={["Management reports", "Profitability analysis", "Project controlling", "Support with monthly closing", "Automated models", "Power BI dashboards"]}
-      closing={{"heading": "Who is it for?", "items": ["SMEs", "Larger companies", "Finance managers", "Managing directors", "Teams that need fast decisions"], "ctaLabel": "Book a consultation", "ctaTo": "/en/contact"}}
+      closing={{"heading": "Who is it for?", "items": ["SMEs", "Larger companies", "Finance managers", "Managing directors", "Teams that need fast decisions"], "ctaLabel": "Book a consultation", "ctaTo": "/en/consultation"}}
     />
   );
 }
