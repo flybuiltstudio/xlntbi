@@ -11,7 +11,7 @@ export function IntroVideo({ src, label, className }: { src: string; label: stri
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    v.volume = 0.05;
+    v.volume = 0.1;
     v.muted = false;
     v.play().catch(() => {
       v.muted = true;
