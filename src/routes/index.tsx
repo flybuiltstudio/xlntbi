@@ -199,7 +199,7 @@ function Index() {
       </section>
 
       <section className="border-t border-border bg-brand-dark">
-        <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
+        <div className="mx-auto max-w-6xl px-4 pt-8 pb-16 md:pt-10 md:pb-20">
           <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr]">
             <div>
               <img
