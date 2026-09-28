@@ -158,11 +158,11 @@ function Index() {
             <IntroVideo
               src={animacio2.url}
               label="Sarinay Dávid – Animáció"
-              className="w-full max-w-xs rounded-lg"
+              className="w-full max-w-xs min-w-0 rounded-lg"
             />
             <Link
               to="/rolam"
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              className="inline-flex shrink-0 items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
             >
               Rólam
               <ArrowRight className="h-4 w-4" aria-hidden="true" />

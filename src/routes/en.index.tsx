@@ -146,11 +146,11 @@ function EnglishHome() {
             <IntroVideo
               src={animacio2.url}
               label="Dávid Sarinay – Animation"
-              className="w-full max-w-xs rounded-lg"
+              className="w-full max-w-xs min-w-0 rounded-lg"
             />
             <Link
               to="/en/about"
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              className="inline-flex shrink-0 items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
             >
               About me
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
