@@ -146,7 +146,7 @@ function EnglishHome() {
             <IntroVideo
               src={animacio2.url}
               label="Dávid Sarinay – Animation"
-              className="w-full max-w-xs min-w-0 rounded-lg"
+              className="h-auto w-56 min-w-0 rounded-lg"
             />
             <Link
               to="/en/about"
