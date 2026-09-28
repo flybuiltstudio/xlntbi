@@ -136,17 +136,17 @@ function EnglishHome() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-8 md:py-10">
-        <div className="grid items-start gap-10 md:grid-cols-2">
-          <div>
+        <div className="grid items-start gap-10 md:grid-cols-2 md:items-stretch">
+          <div className="flex flex-col">
             <h2 className="text-2xl font-bold leading-snug text-foreground md:text-3xl">
               Order in your processes,
               <br className="hidden sm:block" /> growth in your business
             </h2>
-          <div className="flex items-center mt-7 justify-end gap-4">
+          <div className="mt-7 flex min-h-0 flex-1 items-end justify-start gap-4">
             <IntroVideo
               src={animacio2.url}
               label="Dávid Sarinay – Animation"
-              className="h-auto w-56 min-w-0 rounded-lg"
+              className="h-auto w-full max-w-md min-w-0 rounded-lg md:h-full md:w-auto md:max-w-full md:object-contain md:object-left"
             />
             <Link
               to="/en/about"
