@@ -121,6 +121,8 @@ export type ServicePageProps = {
     ctaTo?: string;
   };
   children?: ReactNode;
+  /** Tighter vertical spacing above section headings. */
+  compact?: boolean;
 };
 
 export function ServicePage({
@@ -135,6 +137,7 @@ export function ServicePage({
   listItems,
   closing,
   children,
+  compact = false,
 }: ServicePageProps) {
   const pathname = useLocation({ select: (l) => l.pathname });
   const t = useT();
@@ -153,7 +156,7 @@ export function ServicePage({
         ) : null}
       </PageHero>
 
-      <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+      <section className={`mx-auto max-w-6xl px-4 ${compact ? "pt-14 pb-6 md:pt-16" : "py-14 md:py-16"}`}>
         <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             {intro.map((p) => (
@@ -177,7 +180,7 @@ export function ServicePage({
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-16">
+      <section className={`mx-auto max-w-6xl px-4 ${compact ? "pb-6" : "pb-16"}`}>
         <h2 className="text-2xl font-bold text-foreground">{listTitle}</h2>
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {listItems.map((item) => {
@@ -203,7 +206,7 @@ export function ServicePage({
 
       {closing ? (
         <section className="border-t border-border bg-secondary/60">
-          <div className="mx-auto max-w-6xl px-4 py-16">
+          <div className={`mx-auto max-w-6xl px-4 ${compact ? "pt-6 pb-6" : "py-16"}`}>
             {closing.eyebrow ? (
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
                 {closing.eyebrow}
