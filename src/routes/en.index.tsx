@@ -146,7 +146,7 @@ function EnglishHome() {
           <div className="space-y-4">
             <img
               src={aboutImg}
-              alt="Dávid Sarinay in a modern accounting office"
+              alt="Dávid Sarinay"
               loading="lazy"
               className="w-full rounded-xl border border-border object-cover shadow-sm"
             />

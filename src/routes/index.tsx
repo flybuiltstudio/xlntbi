@@ -158,7 +158,7 @@ function Index() {
           <div className="space-y-4">
             <img
               src={aboutImg}
-              alt="Sarinay Dávid modern könyvelőirodában"
+              alt="Sarinay Dávid"
               loading="lazy"
               className="w-full rounded-xl border border-border object-cover shadow-sm"
             />
