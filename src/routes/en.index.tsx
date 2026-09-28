@@ -187,8 +187,8 @@ function EnglishHome() {
       </section>
 
       <section className="border-t border-border bg-brand-dark">
-        <div className="mx-auto max-w-6xl px-4 pt-8 pb-16 md:pt-10 md:pb-20">
-          <div className="grid items-center gap-10 lg:grid-cols-[1fr_1fr]">
+        <div className="mx-auto max-w-6xl px-4 pt-4 pb-16 md:pt-5 md:pb-20">
+          <div className="grid items-start gap-10 lg:grid-cols-[1fr_1fr]">
             <div>
               <img
                 src={icAi.url}
@@ -199,7 +199,7 @@ function EnglishHome() {
                 height={512}
                 className="h-14 w-14 brightness-0 invert"
               />
-              <h2 className="mt-5 text-2xl font-bold text-primary-foreground md:text-3xl">
+              <h2 className="mt-4 text-2xl font-bold text-primary-foreground md:text-3xl">
                 AI-accelerated development, with an accountant's control
               </h2>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-primary-foreground/85">
