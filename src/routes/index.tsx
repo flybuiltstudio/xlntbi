@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { HeroPlanks } from "@/components/HeroPlanks";
-import aboutImgAsset from "@/assets/En-modern-konyveloirodaban.jpg.asset.json";
+import aboutImgAsset from "@/assets/David_weboldal_kep_2.jpg.asset.json";
+import animacio2 from "@/assets/animacio-2.mp4.asset.json";
+import { IntroVideo } from "@/components/IntroVideo";
 const aboutImg = aboutImgAsset.url;
 import icHatekonysag from "@/assets/icons/hatekonysag.png.asset.json";
 import icInnovacio from "@/assets/icons/innovacio.png.asset.json";
@@ -152,20 +154,29 @@ function Index() {
               Rend a folyamataidban,
               <br className="hidden sm:block" /> növekedés a vállalkozásodban
             </h2>
-            <Link
-              to="/rolam"
-              className="mt-7 inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-            >
-              Rólam
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
           </div>
-          <img
-            src={aboutImg}
-            alt="Sarinay Dávid modern könyvelőirodában"
-            loading="lazy"
-            className="w-full rounded-xl border border-border object-cover shadow-sm"
-          />
+          <div className="space-y-4">
+            <img
+              src={aboutImg}
+              alt="Sarinay Dávid modern könyvelőirodában"
+              loading="lazy"
+              className="w-full rounded-xl border border-border object-cover shadow-sm"
+            />
+            <div className="flex items-center justify-end gap-4">
+              <IntroVideo
+                src={animacio2.url}
+                label="Sarinay Dávid – Animáció"
+                className="h-24 w-auto rounded-lg md:h-28"
+              />
+              <Link
+                to="/rolam"
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+              >
+                Rólam
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
         </div>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2">
@@ -201,7 +212,7 @@ function Index() {
                 className="h-14 w-14 brightness-0 invert"
               />
               <h2 className="mt-5 text-2xl font-bold text-primary-foreground md:text-3xl">
-                AI-val gyorsított fejlesztés, könyvelői kontrollal
+                AI-jal gyorsított fejlesztés, könyvelői kontrollal
               </h2>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-primary-foreground/85">
                 A szoftvereim és folyamataim fejlesztéséhez AI-eszközöket is használok. Ez azt
