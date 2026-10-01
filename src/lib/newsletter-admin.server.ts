@@ -412,8 +412,26 @@ export async function sendNewsletterTestEmail(input: {
   to: string;
   userEmail: string;
 }) {
-  const to = input.to.trim() || input.userEmail;
+  const to = (input.to.trim() || input.userEmail).toLowerCase();
   if (!to) return { ok: false as const, error: "Adj meg egy e-mail címet." };
+
+  // Test mail may only go to the admin's own address or a confirmed subscriber.
+  const own = input.userEmail.trim().toLowerCase();
+  if (to !== own) {
+    const { data: sub } = await (supabaseAdmin as any)
+      .from("newsletter_subscribers")
+      .select("id")
+      .ilike("email", to)
+      .eq("status", "confirmed")
+      .maybeSingle();
+    if (!sub) {
+      return {
+        ok: false as const,
+        error:
+          "Teszt levél csak a saját címedre vagy megerősített feliratkozónak küldhető.",
+      };
+    }
+  }
 
   const { siteOrigin } = await import("./newsletter.server");
   const origin = siteOrigin();
