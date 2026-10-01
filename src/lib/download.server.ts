@@ -7,6 +7,9 @@ const OWNER_EMAIL = "xllentac@gmail.com";
 const BUCKET = "termekfajlok";
 const EXPIRY_DAYS = 14;
 const MAX_DOWNLOADS = 10;
+// Nagy exe fájloknál a böngésző/vírusírtó Range-kérésekkel folytathatja a
+// letöltést; ha közben lejár a signed URL, a fájl csonkán érkezik meg.
+const SIGNED_URL_SECONDS = 24 * 60 * 60;
 
 export const DOWNLOAD_BUCKET = BUCKET;
 
@@ -208,7 +211,7 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
       const demoFileName = await downloadFileName(demoRow.product_slug, demoProduct.download.fileName);
       const { data: demoSigned, error: demoSignError } = await supabaseAdmin.storage
         .from(BUCKET)
-        .createSignedUrl(demoProduct.download.storagePath, 300, { download: demoFileName });
+        .createSignedUrl(demoProduct.download.storagePath, SIGNED_URL_SECONDS, { download: demoFileName });
       if (demoSignError || !demoSigned?.signedUrl) return { ok: false, reason: "error" };
       await supabaseAdmin.from("demo_requests").update({
         download_count: demoRow.download_count + 1,
@@ -220,7 +223,7 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
     if (freeRow.download_count >= freeRow.max_downloads) return { ok: false, reason: "limit" };
     const { data: freeSigned, error: freeSignError } = await supabaseAdmin.storage
       .from(BUCKET)
-      .createSignedUrl(freeRow.storage_path, 300, { download: freeRow.file_name });
+      .createSignedUrl(freeRow.storage_path, SIGNED_URL_SECONDS, { download: freeRow.file_name });
     if (freeSignError || !freeSigned?.signedUrl) return { ok: false, reason: "error" };
     await supabaseAdmin.from("free_download_requests").update({
       download_count: freeRow.download_count + 1,
@@ -243,7 +246,7 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
 
   const { data: signed, error: signError } = await supabaseAdmin.storage
     .from(BUCKET)
-    .createSignedUrl(row.storage_path as string, 300, {
+    .createSignedUrl(row.storage_path as string, SIGNED_URL_SECONDS, {
       download: serveName,
     });
 
