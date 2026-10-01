@@ -418,6 +418,7 @@ export async function sendNewsletterTestEmail(input: {
   // Test mail may only go to the admin's own address or a confirmed subscriber.
   const own = input.userEmail.trim().toLowerCase();
   if (to !== own) {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: sub } = await (supabaseAdmin as any)
       .from("newsletter_subscribers")
       .select("id")
