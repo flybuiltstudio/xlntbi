@@ -173,9 +173,8 @@ export async function checkProductFile(path: string, size: number): Promise<File
 /** Checks one stored path by looking up its size first. */
 export async function checkStoredPath(path: string): Promise<FileCheckRow> {
   const folder = path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "";
-  const all = await listObjects(folder, 6 - 0);
-  const found = (await listObjects(folder)).find((o) => o.path === path) ?? all[0];
-  if (!found || found.path !== path) return { path, size: 0, ok: false, detail: "A fájl nincs a tárolóban." };
+  const found = (await listObjects(folder, 6)).find((o) => o.path === path);
+  if (!found) return { path, size: 0, ok: false, detail: "A fájl nincs a tárolóban." };
   return checkProductFile(found.path, found.size);
 }
 
