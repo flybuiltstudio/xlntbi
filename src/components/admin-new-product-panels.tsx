@@ -11,6 +11,7 @@ import {
   adminPublishCustomProduct,
   adminRenameCategory,
 } from "@/lib/custom-products.functions";
+import { adminCheckUploadedFile } from "@/lib/product-file-integrity.functions";
 import type { CategoryAdminRow } from "@/lib/custom-categories.server";
 import type { CustomProductInfo } from "@/lib/custom-products.server";
 import { formatPrice } from "@/lib/products";
@@ -170,6 +171,7 @@ export function NewProductPanel() {
   const listCategories = useServerFn(adminListCategories);
   const prepare = useServerFn(adminPrepareCustomProduct);
   const publish = useServerFn(adminPublishCustomProduct);
+  const checkUploaded = useServerFn(adminCheckUploadedFile);
   const remove = useServerFn(adminDeleteCustomProduct);
 
   const [rows, setRows] = useState<CustomProductInfo[]>([]);
@@ -284,9 +286,19 @@ export function NewProductPanel() {
       if (result.imageUpload && image) {
         await uploadSigned(result.imageUpload.path, result.imageUpload.token, image, () => {});
       }
+      const check = await checkUploaded({ data: { path: result.fileUpload.path } });
+      if (!check.ok) {
+        setError(
+          `A termék létrejött, de a feltöltött fájl hibásan érkezett meg (${check.detail}). ` +
+            "Töltsd fel újra a Termék új verziója részen, különben a vásárlók nem tudják megnyitni.",
+        );
+        await refresh();
+        return;
+      }
       setMessage(
         `Kész: a termék elérhető a /termek/${result.slug} és a /en/product/${result.slug} oldalon, ` +
-          "a Stripe termék és minden licencár létrejött a teszt és az éles környezetben is.",
+          "a Stripe termék és minden licencár létrejött a teszt és az éles környezetben is. " +
+          "A feltöltött fájl épségét ellenőriztem: rendben.",
       );
       reset();
       await refresh();
