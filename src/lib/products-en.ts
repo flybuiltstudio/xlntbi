@@ -15,7 +15,7 @@ export const PRODUCT_SUMMARY_EN: Record<string, string> = {
   "a60-osszesito-nyilatkozat-xml":
     "Besides the VAT return, EU transactions also require a summary statement (A60), which even the eÁFA system does not replace; filling it in via ÁNYK is slow and partner EU VAT numbers must be checked separately. The A60 XML tool speeds this up: items are entered into a clear Excel table, from which the program generates the ÁNYK-importable form.",
   "adofolyoszamla-egyezteto":
-    "One of the recurring, time-consuming closing tasks is reconciling the tax current account with the general ledger. This tool reads in the NAV statement, collects the ledger balances, and shows by tax type where the two differ – all in a single Excel workbook, with no installation and no cloud.",
+    "Reconcile NAV and municipal tax-account statements with the general ledger in one Excel workbook. Import XML or XLSX statements and flexible Excel/CSV ledger exports, highlight differences by tax type, and keep every accounting record on your own computer without installation or cloud processing.",
   "nav-torzsszam-partnerellenorzo":
     "If you check business partners daily as an accountant or entrepreneur, you normally do this by clicking through three different websites. This workbook brings all three into one Excel table: the official tax-number check from the NAV (Hungarian Tax Authority) Online Invoice system, the European Commission's VIES service, and, optionally, a company-name search.",
   berszamfejto:
