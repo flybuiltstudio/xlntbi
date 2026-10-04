@@ -11,7 +11,7 @@
  *   - pdf: "%PDF-" header and "%%EOF" trailer.
  */
 
-import { DOWNLOAD_BUCKET } from "./download.server";
+const DOWNLOAD_BUCKET = "termekfajlok";
 
 export const PRODUCT_FILE_INTEGRITY_KEY = "product_file_integrity";
 const CHECKED_EXTS = ["exe", "zip", "xlsm", "pdf"];
