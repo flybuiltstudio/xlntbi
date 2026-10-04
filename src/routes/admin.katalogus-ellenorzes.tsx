@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PackageSearch } from "lucide-react";
+import { FileCheck, PackageSearch } from "lucide-react";
 
 import { AdminBlock } from "@/components/AdminBlock";
 import { PageHero } from "@/components/PageHero";
 import { CatalogAuditPanel } from "@/components/CatalogAuditPanel";
+import { FileIntegrityPanel } from "@/components/FileIntegrityPanel";
 import { StripeProductNamePanel } from "@/components/StripeProductNamePanel";
 import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
 
 const CATALOG_NAV = [
   ["arak-es-letoltesek", "Árak, lookup key-ek és letöltések"],
+  ["termekfajlok-epsege", "Termékfájlok épsége"],
   ["stripe-termeknevek", "Stripe terméknevek"],
 ] as const;
 
@@ -49,6 +51,16 @@ function AdminCatalogAuditPage() {
           description="Egy kattintással végigfut minden terméken és minden licencverzión: megvan-e a Stripe lookup key a választott környezetben, aktív-e az ár, egyezik-e a forint összeg a katalógussal, és a tárolóban ott van-e a letölthető fájl. Ellenőrzi a már kiadott letöltési tokeneket is, hogy átnevezés után se törjön el egyetlen link sem. Az ellenőrzés csak olvas, semmit nem módosít."
         >
           <CatalogAuditPanel />
+        </AdminBlock>
+        <BackToTop />
+
+        <AdminBlock
+          anchorId="termekfajlok-epsege"
+          icon={FileCheck}
+          title="Termékfájlok épsége"
+          description="Megnézi minden exe, zip, xlsm és pdf termékfájlnál, hogy teljes-e: megvan-e a fájl vége, és nem csonka-e a feltöltés. Minden vasárnap hajnalban a heti karbantartással automatikusan lefut, és hiba esetén e-mailt küld. Csak olvas, semmit nem módosít."
+        >
+          <FileIntegrityPanel />
         </AdminBlock>
         <BackToTop />
 
