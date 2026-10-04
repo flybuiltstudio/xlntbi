@@ -38,3 +38,14 @@ export const adminCheckProductFile = createServerFn({ method: "POST" })
     const { checkStoredPath } = await import("./product-file-integrity.server");
     return checkStoredPath(path);
   });
+
+/** Checks a freshly uploaded storage object (e.g. right after a new product upload). */
+export const adminCheckUploadedFile = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ path: z.string().min(1).max(500) }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { checkStoredPath } = await import("./product-file-integrity.server");
+    return checkStoredPath(data.path);
+  });
