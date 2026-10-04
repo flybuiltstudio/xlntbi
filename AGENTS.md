@@ -8,3 +8,4 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+- Product file integrity (truncation) checks read only head/tail via Range requests in src/lib/product-file-integrity.server.ts — large exe files do not fit worker memory; it runs in the weekly cleanup and after each product file upload.
