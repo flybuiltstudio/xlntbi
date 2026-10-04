@@ -7,7 +7,7 @@ import {
 } from "@/lib/product-overrides";
 
 const TITLE_BASE = "XLNT Adófolyószámla egyeztető program | EXCELlent Business Intelligence";
-const DESCRIPTION_BASE = "Egyeztesd automatikusan a NAV adófolyószámla adatait a könyveléseddel, és szűrd ki gyorsan az eltéréseket.";
+const DESCRIPTION_BASE = "NAV- és önkormányzati adófolyószámla egyeztetése a főkönyvvel Excelben, XML- és XLSX-importtal, felhő és telepítés nélkül.";
 const H1 = "XLNT Adófolyószámla egyeztető";
 const CANONICAL = "https://xlntbi.hu/termek/adofolyoszamla-egyezteto";
 const SLUG = "adofolyoszamla-egyezteto";
@@ -42,7 +42,7 @@ export const Route = createFileRoute("/termek/adofolyoszamla-egyezteto")({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
                   "name": "XLNT Adófolyószámla egyeztető",
-                  "description": "Egyeztesd automatikusan a NAV adófolyószámla adatait a könyveléseddel, és szűrd ki gyorsan az eltéréseket.",
+                  "description": "NAV- és önkormányzati adófolyószámla egyeztetése a főkönyvvel Excelben, XML- és XLSX-importtal, felhő és telepítés nélkül.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/adofolyoszamla-egyezteto",

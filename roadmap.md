@@ -27,3 +27,4 @@
 - [x] Statisztika blokksorrendje, helyi időszakszűrői és felső menüje; Fizetés teszt térköze
 - [x] Statisztika közös időszakszűrés, Top 5 rangsorok, egységes exportgombok és tipográfia
 - [x] pCloud-ajánlók, Oktatás/Training tartalom és Rólam/About tanúsítványsorrend frissítése
+- [x] Adófolyószámla-egyeztető: új XLSM, HU/EN leírás és letöltési ellenőrzés
