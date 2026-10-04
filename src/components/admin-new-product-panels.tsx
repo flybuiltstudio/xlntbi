@@ -9,9 +9,9 @@ import {
   adminListCustomProducts,
   adminPrepareCustomProduct,
   adminPublishCustomProduct,
-  adminCheckUploadedFile,
   adminRenameCategory,
 } from "@/lib/custom-products.functions";
+import { adminCheckUploadedFile } from "@/lib/product-file-integrity.functions";
 import type { CategoryAdminRow } from "@/lib/custom-categories.server";
 import type { CustomProductInfo } from "@/lib/custom-products.server";
 import { formatPrice } from "@/lib/products";
@@ -171,6 +171,7 @@ export function NewProductPanel() {
   const listCategories = useServerFn(adminListCategories);
   const prepare = useServerFn(adminPrepareCustomProduct);
   const publish = useServerFn(adminPublishCustomProduct);
+  const checkUploaded = useServerFn(adminCheckUploadedFile);
   const remove = useServerFn(adminDeleteCustomProduct);
 
   const [rows, setRows] = useState<CustomProductInfo[]>([]);
