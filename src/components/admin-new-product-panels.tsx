@@ -9,6 +9,7 @@ import {
   adminListCustomProducts,
   adminPrepareCustomProduct,
   adminPublishCustomProduct,
+  adminCheckUploadedFile,
   adminRenameCategory,
 } from "@/lib/custom-products.functions";
 import type { CategoryAdminRow } from "@/lib/custom-categories.server";
