@@ -7,7 +7,7 @@ import {
 } from "@/lib/product-overrides";
 
 const TITLE_BASE = "XLNT Monthly Financial Report Template | EXCELlent Business Intelligence";
-const DESCRIPTION_BASE = "Automated monthly financial report template that gives a clear overview of your company's performance and key metrics.";
+const DESCRIPTION_BASE = "Monthly reporting in Excel: 24 report sheets, financial dashboard and MKVK AuditXML2 export from a trial balance or ledger.";
 const H1 = "XLNT Monthly Report";
 const CANONICAL = "https://xlntbi.hu/termek/havi-riport-en";
 const SLUG = "havi-riport-en";
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/termek/havi-riport-en")({
       { property: "og:description", content: DESCRIPTION() },
       { property: "og:type", content: "product" },
       { property: "og:url", content: CANONICAL },
-      { property: "og:locale", content: "hu_HU" },
+      { property: "og:locale", content: "en_US" },
       { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE() },
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/termek/havi-riport-en")({
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
                   "name": "XLNT Monthly Report",
-                  "description": "Automated monthly financial report template that gives a clear overview of your company's performance and key metrics.",
+                  "description": "Monthly reporting in Excel: 24 report sheets, financial dashboard and MKVK AuditXML2 export from a trial balance or ledger.",
                   "applicationCategory": "BusinessApplication",
                   "operatingSystem": "Windows",
                   "url": "https://xlntbi.hu/termek/havi-riport-en",

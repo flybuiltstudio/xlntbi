@@ -29,7 +29,7 @@ export const PRODUCT_SUMMARY_EN: Record<string, string> = {
   "havi-riport":
     "One import, more than 25 finished report sheets. Load the trial balance or the ledger export from your accounting software, press one button, and the workbook fills the balance sheet, the income statement (annual, simplified and monthly), the cash flow, the receivables and payables ageing, the VAT summary, the dashboard and the notes-to-the-accounts detail sheets – all in Excel on your own computer, with no data connection and no monthly fee.",
   "havi-riport-en":
-    "One import, more than 25 finished report sheets. Load the trial balance or the ledger export of your accounting software, press one button, and the workbook fills the balance sheet, the income statement (annual, simplified and monthly), the cash flow, the receivables and payables ageing, the VAT summary, the dashboard and the notes-to-the-accounts detail sheets – all in the Excel on your own machine, with no data connection and no monthly fee.",
+    "One import, 24 finished report sheets and an MKVK AuditXML2 export. Turn a trial balance or itemised general ledger into statements, cash flow, aging, payment behaviour, VAT, liquidity analysis and a dashboard in Excel on your own machine, with no data connection or monthly fee.",
   "kamatlekerdezo-potlekszamito":
     "If you work as an accountant or tax advisor, you likely know the situation: calculating a late-payment or self-revision penalty first requires looking up the central bank base rate valid for the given period, then working through the statutory formula day by day. This workbook takes that step off your hands.",
   "utnyilvantartas-kikuldetesi-rendelveny":
