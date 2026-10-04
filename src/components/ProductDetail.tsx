@@ -7,6 +7,7 @@ import { AAM_PRICE_NOTE, aamText } from "@/lib/aam";
 import { getProductFileName } from "@/lib/product-file.functions";
 import { priceFrom, formatPrice, getProduct, products } from "@/lib/products";
 import { isKnowledgeProduct } from "@/lib/product-categories";
+import { hungarianProductContent } from "@/lib/product-overrides";
 import icKulfoldi from "@/assets/icons/kulfoldi.png.asset.json";
 import icIroda from "@/assets/icons/iroda.png.asset.json";
 import icEgyeni from "@/assets/icons/egyeni.png.asset.json";
@@ -91,6 +92,10 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
   if (!product) return null;
 
   const fileName = liveFile?.fileName ?? product.download?.fileName ?? null;
+  const content = hungarianProductContent(slug);
+  const intro = content?.intro.length ? content.intro : product.intro;
+  const features = content?.features.length ? content.features : product.features;
+  const why = content?.why ?? product.why;
 
 
   const faqJsonLd = {
@@ -121,7 +126,7 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
       <section className="mx-auto max-w-6xl px-4 py-14">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
           <div>
-            {product.intro.map((paragraph) => (
+            {intro.map((paragraph) => (
               <p key={paragraph} className="mb-4 text-base leading-relaxed text-muted-foreground">
                 {aamText(paragraph)}
               </p>
@@ -129,7 +134,7 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
 
             <h2 className="mt-10 text-2xl font-bold text-foreground">Fő funkciók</h2>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-              {product.features.map((feature) => (
+              {features.map((feature) => (
                 <li
                   key={feature}
                   className="flex items-start gap-3 rounded-md border-l-4 border-primary bg-secondary/60 p-4 text-sm leading-relaxed text-foreground"
@@ -140,11 +145,11 @@ export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
               ))}
             </ul>
 
-            {product.why ? (
+            {why ? (
               <div className="mt-10 rounded-xl bg-brand-dark p-6 md:p-8">
                 <h2 className="text-xl font-semibold text-primary-foreground">Miért jó</h2>
                 <p className="mt-3 text-sm leading-relaxed text-primary-foreground/90">
-                  {aamText(product.why)}
+                  {aamText(why)}
                 </p>
               </div>
             ) : null}
