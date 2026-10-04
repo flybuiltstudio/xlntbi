@@ -194,6 +194,22 @@ export async function runWeeklyCleanup(): Promise<CleanupCounts & { issues: stri
     );
   }
 
+  let brokenFiles = 0;
+  let checkedFiles = 0;
+  try {
+    const { runProductFileIntegrity } = await import("./product-file-integrity.server");
+    const integrity = await runProductFileIntegrity();
+    checkedFiles = integrity.checked;
+    brokenFiles = integrity.broken.length;
+    for (const row of integrity.broken) {
+      issues.push(`Hibás termékfájl: ${row.path} – ${row.detail}`);
+    }
+  } catch (error) {
+    issues.push(
+      `Termékfájl-ellenőrzés hiba: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+
   const counts: CleanupCounts = {
     demoClosed: demo.closed,
     orderLinksClosed: orderLinks.closed,
@@ -207,7 +223,7 @@ export async function runWeeklyCleanup(): Promise<CleanupCounts & { issues: stri
   if (touched > 0 || orphanFiles > 0 || issues.length > 0) {
     await report({
       title: "Heti karbantartás",
-      summary: `${touched} tétel lezárva/letiltva, ${orphanFiles} hivatkozás nélküli fájl.`,
+      summary: `${touched} tétel lezárva/letiltva, ${orphanFiles} hivatkozás nélküli fájl, ${brokenFiles} hibás termékfájl.`,
       rows: [
         ["Lezárt DEMO linkek", String(counts.demoClosed)],
         ["Lezárt éles letöltési linkek", String(counts.orderLinksClosed)],
@@ -215,6 +231,8 @@ export async function runWeeklyCleanup(): Promise<CleanupCounts & { issues: stri
         ["Letiltott lejárt kuponok", String(counts.couponsDisabled)],
         ["Éles kuponvédelem – kikapcsolt kódok", String(guardDeactivated)],
         ["Hivatkozás nélküli fájlok", String(orphanFiles)],
+        ["Ellenőrzött termékfájlok", String(checkedFiles)],
+        ["Hibás termékfájlok", String(brokenFiles)],
       ],
       issues,
       key: `weekly-${dayKey()}`,
