@@ -150,7 +150,11 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { productOverrides } = Route.useLoaderData();
   const router = useRouter();
+  // The server and browser have separate module instances. Apply the loader's
+  // serialized snapshot in the browser before child routes render as well.
+  applyProductOverrides(productOverrides);
   useLanguagePersistence();
 
   useEffect(() => {
