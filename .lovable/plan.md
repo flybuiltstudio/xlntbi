@@ -7,6 +7,7 @@ Minden termékfájlt teljes egészében letöltök a tárolóból, és megvizsg�
 1. **Minden exe:** megvan-e a fájl vége. A PyInstallerrel készült programoknál ezt a záró jelölő mutatja meg, a többinél az, hogy a program minden része belefér-e a fájlba. Közben azt is megnézem, hogy a letöltött méret egyezik-e a tárolt mérettel.
 2. **Minden zip:** kicsomagolható-e, és egyik benne lévő fájl sem sérült-e.
 3. **Minden pdf:** megnyitható-e, és kiolvasható-e belőle az első oldal.
+4. **Minden xlsm:** megnyitható-e Excel-munkafüzetként (ép-e a belső csomag, és beolvashatók-e a munkalapok), és megvannak-e benne a makrók.
 
 A lista: fájlnév, a hozzá tartozó termék, méret, és hogy OK vagy HIBÁS, a hiba okával. A cégkivonat exe már most biztosan hibás: csonka, a vége hiányzik.
 
