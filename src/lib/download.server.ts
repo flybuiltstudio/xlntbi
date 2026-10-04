@@ -9,7 +9,7 @@ const EXPIRY_DAYS = 14;
 const MAX_DOWNLOADS = 10;
 // Nagy exe fájloknál a böngésző/vírusírtó Range-kérésekkel folytathatja a
 // letöltést; ha közben lejár a signed URL, a fájl csonkán érkezik meg.
-const SIGNED_URL_SECONDS = 24 * 60 * 60;
+const SIGNED_URL_SECONDS = 2 * 60 * 60;
 
 export const DOWNLOAD_BUCKET = BUCKET;
 
