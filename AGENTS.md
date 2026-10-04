@@ -9,3 +9,4 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 - Product file integrity (truncation) checks read only head/tail via Range requests in src/lib/product-file-integrity.server.ts — large exe files do not fit worker memory; it runs in the weekly cleanup and after each product file upload.
+- Product detail pages read admin-managed copy directly from the override map — this avoids stale bundled text after runtime catalog mutation.

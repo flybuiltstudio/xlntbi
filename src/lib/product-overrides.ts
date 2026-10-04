@@ -268,6 +268,20 @@ export function productSummaryHu(product: Product): string {
   );
 }
 
+/** Hungarian detail content, read directly from the current override map. */
+export function hungarianProductContent(
+  slug: string,
+): { intro: string[]; features: string[]; why: string | null } | null {
+  const custom = customBySlug.get(slug);
+  if (custom && (custom.intro.length || custom.features.length || custom.why)) {
+    return { intro: custom.intro, features: custom.features, why: custom.why };
+  }
+  const row = contentBySlug.get(slug);
+  if (!row) return null;
+  if (!row.intro.length && !row.features.length && !row.why) return null;
+  return { intro: row.intro, features: row.features, why: row.why };
+}
+
 /** English detail content for a product, when a translation exists. */
 export function englishProductContent(
   slug: string,
