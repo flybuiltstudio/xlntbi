@@ -1,3 +1,4 @@
+import { adminCheckProductFile } from "@/lib/product-file-integrity.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
@@ -1917,6 +1918,7 @@ export function ProductVersionPanel() {
   const loadFiles = useServerFn(adminListProductFiles);
   const createUploadUrl = useServerFn(adminCreateProductUploadUrl);
   const recordVersion = useServerFn(adminRecordProductFileVersion);
+  const checkFile = useServerFn(adminCheckProductFile);
 
   const downloadable = useMemo(
     () =>
@@ -1988,8 +1990,15 @@ export function ProductVersionPanel() {
       await recordVersion({
         data: { slug: selected.slug, fileName: file.name, fileSize: file.size },
       });
+      const check = await checkFile({ data: { slug: selected.slug } });
+      if (!check.ok) {
+        setError(
+          `${selected.name}: a feltöltött fájl HIBÁS – ${check.detail} Töltsd fel újra!`,
+        );
+      }
       setMessage(
         `${selected.name}: új verzió feltöltve (${file.name}, ${formatFileSize(file.size)}). ` +
+          (check.ok ? "Épségellenőrzés: rendben. " : "") +
           "A korábbi vásárlók letöltő linkjei mostantól az új verziót szolgálják ki.",
       );
       setFile(null);
