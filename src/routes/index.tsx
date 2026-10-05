@@ -11,6 +11,7 @@ import icKomplexitas from "@/assets/icons/komplexitas.png.asset.json";
 import icPontossag from "@/assets/icons/pontossag.png.asset.json";
 import icAi from "@/assets/icons/ai.png.asset.json";
 import aiDevImg from "@/assets/ai-fejlesztes.jpg";
+import aiDevVideo from "@/assets/ai-fejlesztes.mp4.asset.json";
 
 
 const TITLE = "Könyvelés, kontrolling és pénzügyi BI tanácsadás | EXCELlent Business Intelligence";
@@ -228,13 +229,18 @@ function Index() {
               </Link>
             </div>
             <div className="overflow-hidden rounded-xl border border-primary-foreground/15">
-              <img
-                src={aiDevImg}
-                alt="Könyvelő AI-támogatással ellenőrzi a pénzügyi kimutatásokat"
-                loading="lazy"
+              <video
+                src={aiDevVideo.url}
+                poster={aiDevImg}
+                aria-label="Könyvelő AI-támogatással ellenőrzi a pénzügyi kimutatásokat"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
                 width={1536}
                 height={1024}
-                className="ken-burns block w-full object-cover"
+                className="block w-full object-cover"
               />
             </div>
           </div>
