@@ -11,6 +11,7 @@ import icKomplexitas from "@/assets/icons/komplexitas.png.asset.json";
 import icPontossag from "@/assets/icons/pontossag.png.asset.json";
 import icAi from "@/assets/icons/ai.png.asset.json";
 import aiDevImg from "@/assets/ai-fejlesztes.jpg";
+import aiDevVideo from "@/assets/ai-fejlesztes.mp4.asset.json";
 
 const aboutImg = aboutImgAsset.url;
 
