@@ -216,13 +216,18 @@ function EnglishHome() {
               </Link>
             </div>
             <div className="overflow-hidden rounded-xl border border-primary-foreground/15">
-              <img
-                src={aiDevImg}
-                alt="Accountant reviewing financial reports with AI support"
-                loading="lazy"
+              <video
+                src={aiDevVideo.url}
+                poster={aiDevImg}
+                aria-label="Accountant reviewing financial reports with AI support"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
                 width={1536}
                 height={1024}
-                className="ken-burns block w-full object-cover"
+                className="block w-full object-cover"
               />
             </div>
           </div>

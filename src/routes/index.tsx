@@ -228,13 +228,18 @@ function Index() {
               </Link>
             </div>
             <div className="overflow-hidden rounded-xl border border-primary-foreground/15">
-              <img
-                src={aiDevImg}
-                alt="Könyvelő AI-támogatással ellenőrzi a pénzügyi kimutatásokat"
-                loading="lazy"
+              <video
+                src={aiDevVideo.url}
+                poster={aiDevImg}
+                aria-label="Könyvelő AI-támogatással ellenőrzi a pénzügyi kimutatásokat"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
                 width={1536}
                 height={1024}
-                className="ken-burns block w-full object-cover"
+                className="block w-full object-cover"
               />
             </div>
           </div>
