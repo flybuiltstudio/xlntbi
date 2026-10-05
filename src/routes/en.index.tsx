@@ -10,7 +10,7 @@ import icInnovacio from "@/assets/icons/innovacio.png.asset.json";
 import icKomplexitas from "@/assets/icons/komplexitas.png.asset.json";
 import icPontossag from "@/assets/icons/pontossag.png.asset.json";
 import icAi from "@/assets/icons/ai.png.asset.json";
-import aiIllustration from "@/assets/icons/ai-illustration.jpg.asset.json";
+import aiDevImg from "@/assets/ai-fejlesztes.jpg";
 
 const aboutImg = aboutImgAsset.url;
 
@@ -215,14 +215,16 @@ function EnglishHome() {
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
-            <img
-              src={aiIllustration.url}
-              alt="Abstract illustration of the AI-based development process"
-              loading="lazy"
-              width={1536}
-              height={1024}
-              className="w-full rounded-xl border border-primary-foreground/15 object-cover"
-            />
+            <div className="overflow-hidden rounded-xl border border-primary-foreground/15">
+              <img
+                src={aiDevImg}
+                alt="Accountant reviewing financial reports with AI support"
+                loading="lazy"
+                width={1536}
+                height={1024}
+                className="ken-burns block w-full object-cover"
+              />
+            </div>
           </div>
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
