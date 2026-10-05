@@ -198,7 +198,7 @@ function EnglishHome() {
                 loading="lazy"
                 width={512}
                 height={512}
-                className="h-14 w-14 brightness-0 invert"
+                className="-mt-2.5 h-14 w-14 brightness-0 invert"
               />
               <h2 className="mt-4 text-2xl font-bold text-primary-foreground md:text-3xl">
                 AI-accelerated development, with an accountant's control
