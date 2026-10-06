@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import heroVideo from "@/assets/szolgaltatasok-hero.mp4.asset.json";
 import im_konyveles from "@/assets/szolgaltatasok/konyveles.jpg";
 import im_ev from "@/assets/szolgaltatasok/ev-konyveles.jpg";
 import im_ado from "@/assets/szolgaltatasok/adotanacsadas.jpg";
@@ -10,6 +9,7 @@ import im_cegaudit from "@/assets/szolgaltatasok/cegaudit.jpg";
 import im_vizsg from "@/assets/szolgaltatasok/konyvvizsgalat.jpg";
 import im_iroda from "@/assets/szolgaltatasok/konyveloiroda-audit.jpg";
 import im_ido from "@/assets/szolgaltatasok/idomegtakaritas.jpg";
+import heroVideo from "@/assets/szolgaltatasok-hero.mp4.asset.json";
 import posterImg from "@/assets/szolgaltatasok-hero.jpg";
 
 /** Service path -> small illustrative icon (HU and EN paths). */
@@ -49,7 +49,7 @@ export function ServicesGrid({ items, more, videoLabel }: { items: readonly Item
             >
               {/* Icon is absolutely placed so it never grows the card; title keeps clear of it. */}
               <h2 className="pr-16 text-base font-semibold text-card-foreground">{item.label}</h2>
-              <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+              <span className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary">
                 {more}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </span>
@@ -60,16 +60,7 @@ export function ServicesGrid({ items, more, videoLabel }: { items: readonly Item
           ))}
         </div>
         <div className="lg:sticky lg:top-24">
-          <video
-            src={heroVideo.url}
-            poster={posterImg}
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-label={videoLabel}
-            className="w-full rounded-xl border border-border object-cover shadow-sm"
-          />
+          <video src={heroVideo.url} poster={posterImg} autoPlay muted loop playsInline aria-label={videoLabel} className="w-full rounded-xl border border-border object-cover shadow-sm" />
         </div>
       </div>
     </div>
