@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import heroVideo from "@/assets/szolgaltatasok-hero.mp4.asset.json";
 import im_konyveles from "@/assets/szolgaltatasok/konyveles.jpg";
 import im_ev from "@/assets/szolgaltatasok/ev-konyveles.jpg";
 import im_ado from "@/assets/szolgaltatasok/adotanacsadas.jpg";
@@ -60,16 +59,7 @@ export function ServicesGrid({ items, more, videoLabel }: { items: readonly Item
           ))}
         </div>
         <div className="lg:sticky lg:top-24">
-          <video
-            src={heroVideo.url}
-            poster={posterImg}
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-label={videoLabel}
-            className="w-full rounded-xl border border-border object-cover shadow-sm"
-          />
+          <img src={posterImg} alt={videoLabel} className="w-full rounded-xl border border-border object-cover shadow-sm" />
         </div>
       </div>
     </div>
