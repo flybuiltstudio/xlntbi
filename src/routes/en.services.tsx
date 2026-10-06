@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
+import { ServicesGrid } from "@/components/ServicesGrid";
 import { buildHead } from "@/lib/i18n/head";
 
 const TITLE = "Services: bookkeeping, tax advisory, controlling | EXCELlent Business Intelligence";

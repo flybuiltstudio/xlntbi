@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
+import { ServicesGrid } from "@/components/ServicesGrid";
 import { serviceItems } from "@/lib/services";
 
 const items = serviceItems.filter((item) => !item.to.startsWith("/en/"));
