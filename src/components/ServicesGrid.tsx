@@ -48,7 +48,7 @@ export function ServicesGrid({ items, more, videoLabel }: { items: readonly Item
             >
               {/* Icon is absolutely placed so it never grows the card; title keeps clear of it. */}
               <h2 className="pr-16 text-base font-semibold text-card-foreground">{item.label}</h2>
-              <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+              <span className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary">
                 {more}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </span>
