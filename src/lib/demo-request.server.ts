@@ -169,7 +169,8 @@ export async function requestDemo(input: {
     "Sarinay Dávid",
     "XLNT BI",
   ].join("\n");
-  const licenseMailto = `mailto:${encodeURIComponent(input.email)}?subject=${encodeURIComponent(licenseSubject)}&body=${encodeURIComponent(licenseBody)}`;
+  // Keep the address unencoded: Gmail ignores "%40" in the mailto recipient.
+  const licenseMailto = `mailto:${input.email.trim()}?subject=${encodeURIComponent(licenseSubject)}&body=${encodeURIComponent(licenseBody)}`;
 
   const ownerHtml = `<!DOCTYPE html>
 <html lang="hu"><head><meta charset="utf-8"></head>

@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/PageHero";
+import { ServicesGrid } from "@/components/ServicesGrid";
 import { serviceItems } from "@/lib/services";
 
 const items = serviceItems.filter((item) => !item.to.startsWith("/en/"));
@@ -70,23 +70,7 @@ function SzolgaltatasaimPage() {
         </h1>
       </PageHero>
 
-      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
-        <div className="mt-2 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => (
-          <Link
-            key={item.to}
-            to={item.to}
-            className="group flex flex-col justify-between rounded-xl border border-border bg-card p-6 transition-colors hover:border-primary"
-          >
-            <h2 className="text-lg font-semibold text-card-foreground">{item.label}</h2>
-            <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-              Tovább
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </span>
-          </Link>
-        ))}
-        </div>
-      </div>
+      <ServicesGrid items={items} more="Tovább" videoLabel="Szolgáltatások – hangulatvideó" />
     </>
   );
 }
