@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import heroVideo from "@/assets/szolgaltatasok-hero.mp4.asset.json";
-import kalkulatorImg from "@/assets/online-kalkulator.jpg";
+import posterImg from "@/assets/szolgaltatasok-hero.jpg";
 import icKonyveles from "@/assets/icons/konyveles.png.asset.json";
 import icEgyeni from "@/assets/icons/egyeni.png.asset.json";
 import icKulfoldi from "@/assets/icons/kulfoldi.png.asset.json";
@@ -48,23 +48,23 @@ export function ServicesGrid({ items, more, videoLabel }: { items: readonly Item
               to={item.to}
               className="group flex flex-col justify-between rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary"
             >
-              <div className="flex items-start gap-4">
+              <h2 className="text-base font-semibold text-card-foreground">{item.label}</h2>
+              <div className="mt-4 flex items-end justify-between gap-4">
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
+                  {more}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </span>
                 {ICONS[item.to] && (
-                  <img src={ICONS[item.to]} alt="" aria-hidden="true" loading="lazy" className="h-12 w-12 shrink-0 object-contain" />
+                  <img src={ICONS[item.to]} alt="" aria-hidden="true" loading="lazy" className="-mr-1 -mb-1 h-14 w-14 shrink-0 object-contain" />
                 )}
-                <h2 className="text-base font-semibold text-card-foreground">{item.label}</h2>
               </div>
-              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                {more}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
             </Link>
           ))}
         </div>
         <div className="lg:sticky lg:top-24">
           <video
             src={heroVideo.url}
-            poster={kalkulatorImg}
+            poster={posterImg}
             autoPlay
             muted
             loop
