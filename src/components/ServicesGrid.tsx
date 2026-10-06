@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import heroVideo from "@/assets/szolgaltatasok-hero.mp4.asset.json";
-import kalkulatorImg from "@/assets/online-kalkulator.jpg";
+import posterImg from "@/assets/szolgaltatasok-hero.jpg";
 import icKonyveles from "@/assets/icons/konyveles.png.asset.json";
 import icEgyeni from "@/assets/icons/egyeni.png.asset.json";
 import icKulfoldi from "@/assets/icons/kulfoldi.png.asset.json";
@@ -64,7 +64,7 @@ export function ServicesGrid({ items, more, videoLabel }: { items: readonly Item
         <div className="lg:sticky lg:top-24">
           <video
             src={heroVideo.url}
-            poster={kalkulatorImg}
+            poster={posterImg}
             autoPlay
             muted
             loop
