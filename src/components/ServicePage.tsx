@@ -156,7 +156,7 @@ export function ServicePage({
         ) : null}
       </PageHero>
 
-      <section className={`mx-auto max-w-6xl px-4 ${compact ? "pt-14 pb-6 md:pt-16" : "py-14 md:py-16"}`}>
+      <section className={`mx-auto max-w-6xl px-4 ${compact ? "pt-7 pb-6 md:pt-8" : "pt-7 pb-14 md:pt-8 md:pb-16"}`}>
         <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             {intro.map((p) => (

@@ -35,7 +35,7 @@ function EnglishCalculators() {
         <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Calculators</h1>
       </PageHero>
 
-      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+      <div className="mx-auto max-w-6xl px-4 pt-7 pb-14 md:pt-8 md:pb-16">
         <div className="mt-2 grid gap-6 sm:grid-cols-2">
           {cards.map((card) => (
             <Link
