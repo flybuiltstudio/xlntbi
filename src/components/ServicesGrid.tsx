@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import heroVideo from "@/assets/termekek-hero.mp4.asset.json";
+import heroVideo from "@/assets/szolgaltatasok-hero.mp4.asset.json";
 import kalkulatorImg from "@/assets/online-kalkulator.jpg";
 import icKonyveles from "@/assets/icons/konyveles.png.asset.json";
 import icEgyeni from "@/assets/icons/egyeni.png.asset.json";
