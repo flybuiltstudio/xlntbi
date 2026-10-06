@@ -102,7 +102,7 @@ function KapcsolatPage() {
         <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Kapcsolat</h1>
       </PageHero>
 
-      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+      <div className="mx-auto max-w-6xl px-4 pt-7 pb-14 md:pt-8 md:pb-16">
 
       <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr]">
         <div className="space-y-6">

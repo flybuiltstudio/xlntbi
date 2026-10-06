@@ -95,7 +95,7 @@ function EnglishProducts() {
         </h1>
       </PageHero>
 
-      <section className="mx-auto max-w-6xl px-4 py-10 md:py-12">
+      <section className="mx-auto max-w-6xl px-4 pt-7 pb-10 md:pt-8 md:pb-12">
         <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             <p className="text-base leading-relaxed text-muted-foreground">

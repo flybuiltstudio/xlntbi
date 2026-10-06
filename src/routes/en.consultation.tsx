@@ -48,7 +48,7 @@ function EnglishConsultation() {
         <h1 className="text-3xl font-bold text-primary-foreground md:text-4xl">Consultation</h1>
       </PageHero>
 
-      <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+      <div className="mx-auto max-w-6xl px-4 pt-7 pb-14 md:pt-8 md:pb-16">
         <div className="grid gap-10 md:grid-cols-[1fr_1.4fr]">
           <div className="space-y-6">
             <div className="rounded-2xl border border-border/60 bg-muted/40 p-5">

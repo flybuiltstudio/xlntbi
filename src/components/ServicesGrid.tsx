@@ -38,7 +38,7 @@ type Item = { to: string; label: string };
 
 export function ServicesGrid({ items, more, videoLabel }: { items: readonly Item[]; more: string; videoLabel: string }) {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14 md:py-16">
+    <div className="mx-auto max-w-6xl px-4 pt-7 pb-14 md:pt-8 md:pb-16">
       <div className="grid items-start gap-10 lg:grid-cols-[3fr_2fr]">
         <div className="grid gap-5 sm:grid-cols-2">
           {items.map((item) => (
