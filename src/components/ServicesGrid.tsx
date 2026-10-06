@@ -9,6 +9,7 @@ import im_cegaudit from "@/assets/szolgaltatasok/cegaudit.jpg";
 import im_vizsg from "@/assets/szolgaltatasok/konyvvizsgalat.jpg";
 import im_iroda from "@/assets/szolgaltatasok/konyveloiroda-audit.jpg";
 import im_ido from "@/assets/szolgaltatasok/idomegtakaritas.jpg";
+import heroVideo from "@/assets/szolgaltatasok-hero.mp4.asset.json";
 import posterImg from "@/assets/szolgaltatasok-hero.jpg";
 
 /** Service path -> small illustrative icon (HU and EN paths). */
@@ -59,7 +60,7 @@ export function ServicesGrid({ items, more, videoLabel }: { items: readonly Item
           ))}
         </div>
         <div className="lg:sticky lg:top-24">
-          <img src={posterImg} alt={videoLabel} className="w-full rounded-xl border border-border object-cover shadow-sm" />
+          <video src={heroVideo.url} poster={posterImg} autoPlay muted loop playsInline aria-label={videoLabel} className="w-full rounded-xl border border-border object-cover shadow-sm" />
         </div>
       </div>
     </div>
