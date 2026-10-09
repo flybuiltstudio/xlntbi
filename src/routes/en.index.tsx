@@ -15,9 +15,9 @@ import aiDevVideo from "@/assets/ai-fejlesztes.mp4.asset.json";
 
 const aboutImg = aboutImgAsset.url;
 
-const TITLE = "Bookkeeping, controlling and financial BI consulting | EXCELlent Business Intelligence";
+const TITLE = "Bookkeeping, tax advisory and BI | EXCELlent Business Intelligence";
 const DESCRIPTION =
-  "Bookkeeping, tax advisory, controlling and fintech BI solutions in one place. Digital tools and expert consulting for businesses.";
+  "Bookkeeping, tax advisory, controlling and audits, plus Excel-based digital tools, fintech and financial BI consulting. Book a consultation.";
 const OG_IMAGE = "https://xlntbi.hu/og/En-modern-konyveloirodaban.jpg";
 
 export const Route = createFileRoute("/en/")({

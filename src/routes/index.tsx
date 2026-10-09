@@ -14,8 +14,9 @@ import aiDevImg from "@/assets/ai-fejlesztes.jpg";
 import aiDevVideo from "@/assets/ai-fejlesztes.mp4.asset.json";
 
 
-const TITLE = "Könyvelés, kontrolling és pénzügyi BI tanácsadás | EXCELlent Business Intelligence";
-const DESCRIPTION = "Könyvelés, adótanácsadás, kontrolling és fintech BI megoldások egy helyen. Digitális eszközök és szakértői tanácsadás vállalkozásoknak.";
+const TITLE = "Könyvelés, adótanácsadás, BI | EXCELlent Business Intelligence";
+const DESCRIPTION =
+  "Könyvelés, adótanácsadás, kontrolling és audit egy helyen, Excel-alapú digitális eszközökkel, fintech és BI tanácsadással. Kérj konzultációt!";
 const CANONICAL = "https://xlntbi.hu/";
 const OG_IMAGE = "https://xlntbi.hu/og/En-modern-konyveloirodaban.jpg";
 
