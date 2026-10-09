@@ -30,3 +30,4 @@
 - [x] Adófolyószámla-egyeztető: új XLSM, HU/EN leírás és letöltési ellenőrzés
 - [x] Oktatás vizsgafelkészítő bekezdés teljes szélességű, sorkizárt HU/EN megjelenése
 - [x] KATA és Átalányadó összehasonlító kalkulátor közzététele utolsóként, külön HU/EN kártyaképpel
+- [ ] KATA és Átalányadó összehasonlító kártyaképek újragenerálása a zöld arculatú HU/EN kalkulátorból
