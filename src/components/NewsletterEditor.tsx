@@ -1,4 +1,8 @@
 import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
   Bold,
   Heading2,
   Image as ImageIcon,
@@ -11,6 +15,18 @@ import {
 import { useEffect, useRef } from "react";
 
 import { sanitizeEmbeddedHtml } from "@/lib/sanitize-html";
+
+const FONTS = [
+  "Arial",
+  "Calibri",
+  "Georgia",
+  "Inter",
+  "Tahoma",
+  "Times New Roman",
+  "Trebuchet MS",
+  "Verdana",
+];
+const SIZES = [12, 14, 16, 18, 20, 24, 28, 32];
 
 const EXCEL_BASIC_COLORS = [
   { label: "Fekete", value: "#000000" },
@@ -77,9 +93,70 @@ export function NewsletterEditor({
     exec("insertImage", url);
   }
 
+  function setFontSize(px: string) {
+    const el = ref.current;
+    if (!el || !px) return;
+    el.focus();
+    document.execCommand("styleWithCSS", false, "false");
+    document.execCommand("fontSize", false, "7");
+    el.querySelectorAll('font[size="7"]').forEach((font) => {
+      const span = document.createElement("span");
+      span.style.fontSize = px;
+      span.innerHTML = font.innerHTML;
+      font.replaceWith(span);
+    });
+    onChange(el.innerHTML);
+  }
+
+  const select =
+    "h-9 rounded-md border border-input bg-background px-2 text-xs font-medium text-foreground";
+
   return (
     <div className="mt-1.5 overflow-hidden rounded-md border border-input">
       <div className="flex flex-wrap items-center gap-1.5 border-b border-input bg-muted/50 p-2">
+        <select
+          className={select}
+          title="Betűtípus"
+          aria-label="Betűtípus"
+          defaultValue=""
+          onChange={(event) => {
+            if (event.target.value) exec("fontName", event.target.value);
+            event.target.value = "";
+          }}
+        >
+          <option value="">Betűtípus</option>
+          {FONTS.map((font) => (
+            <option key={font} value={font} style={{ fontFamily: font }}>
+              {font}
+            </option>
+          ))}
+        </select>
+        <select
+          className={select}
+          title="Betűméret"
+          aria-label="Betűméret"
+          defaultValue=""
+          onChange={(event) => {
+            setFontSize(event.target.value);
+            event.target.value = "";
+          }}
+        >
+          <option value="">Méret</option>
+          {SIZES.map((size) => (
+            <option key={size} value={`${size}px`}>
+              {size} px
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          className={btn}
+          onClick={() => exec("formatBlock", "<h2>")}
+          title="Címsor"
+        >
+          <Heading2 className="h-4 w-4" />
+        </button>
+        <span className="mx-0.5 h-6 w-px bg-border" />
         <button type="button" className={btn} onClick={() => exec("bold")} title="Félkövér">
           <Bold className="h-4 w-4" />
         </button>
@@ -89,14 +166,20 @@ export function NewsletterEditor({
         <button type="button" className={btn} onClick={() => exec("underline")} title="Aláhúzott">
           <Underline className="h-4 w-4" />
         </button>
-        <button
-          type="button"
-          className={btn}
-          onClick={() => exec("formatBlock", "<h2>")}
-          title="Címsor"
-        >
-          <Heading2 className="h-4 w-4" />
+        <span className="mx-0.5 h-6 w-px bg-border" />
+        <button type="button" className={btn} onClick={() => exec("justifyLeft")} title="Balra igazítás">
+          <AlignLeft className="h-4 w-4" />
         </button>
+        <button type="button" className={btn} onClick={() => exec("justifyCenter")} title="Középre igazítás">
+          <AlignCenter className="h-4 w-4" />
+        </button>
+        <button type="button" className={btn} onClick={() => exec("justifyRight")} title="Jobbra igazítás">
+          <AlignRight className="h-4 w-4" />
+        </button>
+        <button type="button" className={btn} onClick={() => exec("justifyFull")} title="Sorkizárt">
+          <AlignJustify className="h-4 w-4" />
+        </button>
+        <span className="mx-0.5 h-6 w-px bg-border" />
         <button
           type="button"
           className={btn}
@@ -113,6 +196,7 @@ export function NewsletterEditor({
         >
           <ListOrdered className="h-4 w-4" />
         </button>
+        <span className="mx-0.5 h-6 w-px bg-border" />
         <button type="button" className={btn} onClick={insertLink} title="Link beszúrása">
           <LinkIcon className="h-4 w-4" />
         </button>
