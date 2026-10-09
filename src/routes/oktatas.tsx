@@ -95,7 +95,7 @@ function OktatasPage() {
     >
       <section className="mx-auto max-w-6xl px-4 pt-6 pb-16">
         <h2 className="text-2xl font-bold text-foreground">Vizsgára készülőknek</h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+        <p className="mt-4 text-justify text-base leading-relaxed text-muted-foreground">
           Ha vizsgára készülsz mérlegképes könyvelő (Vállalkozási vagy IFRS szakterületen),
           adótanácsadó vagy könyvvizsgálói képzésen, és érdekelnek a tökéletesen kidolgozott
           vizsgasorok és/vagy tételek, akkor ajánlom figyelmedbe a{" "}

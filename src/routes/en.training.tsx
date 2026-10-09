@@ -52,7 +52,7 @@ function EnglishTraining() {
     >
       <section className="mx-auto max-w-6xl px-4 pt-6 pb-16">
         <h2 className="text-2xl font-bold text-foreground">For those preparing for exams</h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+        <p className="mt-4 text-justify text-base leading-relaxed text-muted-foreground">
           If you are preparing for an exam in a certified accountant course (Business or IFRS
           specialisation), tax advisor course or statutory auditor training, and are interested in
           fully worked exam papers and/or oral exam topics, I recommend the{" "}
