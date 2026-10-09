@@ -12,9 +12,9 @@ Az Oktatás oldali vizsgafelkészítő bekezdés használja ki a teljes tartalmi
    - Ugyanezt alkalmazom az angol Oktatás oldali megfelelő bekezdésre is.
 
 2. **Új kalkulátor**
-   - A következő üzenetben újra csatolt működő kalkulátorfájlt tartalmilag és működésében ellenőrzöm.
+   - A megérkezett `kata2027.html` önálló, külső függőség nélküli kalkulátor; a meglévő számítási szabályait változtatás nélkül építem be.
    - A magyar változat neve: „KATA és Átalányadó összehasonlító”.
-   - Elkészítem az angol feliratokat és az angol nevet a működés megváltoztatása nélkül.
+   - Az angol változat neve: „KATA and Flat-Rate Tax Comparison”; minden látható feliratot, mezőt, súgót, eredményt, tájékoztatót és a konzultációs hivatkozást angolosítom, a számítási működés megváltoztatása nélkül.
    - Létrehozom a magyar és angol kalkulátoroldalt, saját keresőadatokkal és nyelvváltással.
    - A kalkulátort mindkét nyelvű listán az utolsó helyre teszem.
 
@@ -29,6 +29,6 @@ Az Oktatás oldali vizsgafelkészítő bekezdés használja ki a teljes tartalmi
 - Mindkét listaoldal: az új kalkulátor az utolsó, és a megfelelő nyelvű kép jelenik meg.
 - Közvetlen URL-ek, nyelvváltás, keresőadatok és szerveroldalon látható szöveg ellenőrzése.
 
-## Szükséges bemenet
+## Forrásfájl
 
-A megvalósításhoz még szükséges a működő kalkulátorfájl újbóli csatolása, lehetőleg HTML-formátumban.
+A `kata2027.html` megérkezett és feldolgozható: 2027-es KATA–átalányadó összehasonlítást, beviteli mezőket, automatikus eredményszámítást és részletes magyar tájékoztatót tartalmaz.
