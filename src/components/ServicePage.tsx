@@ -160,7 +160,7 @@ export function ServicePage({
         <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
             {intro.map((p) => (
-              <p key={p} className="mt-5 text-base leading-relaxed text-muted-foreground first:mt-0">
+              <p key={p} className="mt-5 text-justify text-base leading-relaxed text-muted-foreground first:mt-0">
                 {p}
               </p>
             ))}
@@ -214,7 +214,7 @@ export function ServicePage({
             ) : null}
             <h2 className="mt-2 text-2xl font-bold text-foreground">{closing.heading}</h2>
             {closing.text ? (
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
+              <p className="mt-4 max-w-2xl text-justify text-base leading-relaxed text-muted-foreground">
                 {closing.text}
               </p>
             ) : null}
