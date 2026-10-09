@@ -28,5 +28,5 @@
 - [x] Statisztika közös időszakszűrés, Top 5 rangsorok, egységes exportgombok és tipográfia
 - [x] pCloud-ajánlók, Oktatás/Training tartalom és Rólam/About tanúsítványsorrend frissítése
 - [x] Adófolyószámla-egyeztető: új XLSM, HU/EN leírás és letöltési ellenőrzés
-- [ ] Oktatás vizsgafelkészítő bekezdés teljes szélességű, sorkizárt HU/EN megjelenése
-- [ ] KATA és Átalányadó összehasonlító kalkulátor közzététele utolsóként, külön HU/EN kártyaképpel
+- [x] Oktatás vizsgafelkészítő bekezdés teljes szélességű, sorkizárt HU/EN megjelenése
+- [x] KATA és Átalányadó összehasonlító kalkulátor közzététele utolsóként, külön HU/EN kártyaképpel
