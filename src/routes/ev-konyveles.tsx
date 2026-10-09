@@ -128,11 +128,11 @@ function EvKonyvelesPage() {
       <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
         <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
-            <p className="text-base leading-relaxed text-muted-foreground">
+            <p className="text-justify text-base leading-relaxed text-muted-foreground">
               20 év szakmai tapasztalat, korszerű automatizálás és személyes szakértelem. Egyszerűbb és
               összetettebb egyéni vállalkozói helyzetekhez is.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            <p className="mt-4 text-justify text-base leading-relaxed text-muted-foreground">
               Az egyéni vállalkozó könyvelése valójában nem könyvelés, hanem bérszámfejtés. Ezért sok, csak
               cégeket könyvelő szakember nem is ért hozzá.
             </p>
@@ -148,13 +148,13 @@ function EvKonyvelesPage() {
           <h2 className="text-2xl font-bold text-foreground">
             Könyvelés, ami alkalmazkodik a vállalkozásodhoz
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             Egy egyéni vállalkozás könyvelése lehet egyszerű, de egy külföldi partner, egy külföldi
             szolgáltatótól – például a Google-től vagy a Facebooktól – igénybe vett hirdetés, az
             áfakörösség vagy más speciális ügylet gyorsan több szakértelmet igényelhet. A célom, hogy
             akkor is biztos szakmai hátteret kapj, ha a vállalkozásod túlmutat a legegyszerűbb eseteken.
           </p>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             Több mint 20 év könyvelési tapasztalatomat ötvözöm olyan automatizált megoldásokkal, amelyek
             jelentősen csökkentik a rutinszerű adminisztrációt. Így több szakmai figyelmet fordíthatok
             arra, ahol valóban szükség van rá, miközben a szolgáltatás díja kedvező marad.
@@ -172,7 +172,7 @@ function EvKonyvelesPage() {
       <section className="border-t border-border bg-secondary/60">
         <div className="mx-auto max-w-6xl px-4 py-16">
           <h2 className="text-2xl font-bold text-foreground">Kedvező ár – az automatizálás előnyével</h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             Az alacsonyabb könyvelési díj mögött nem kevesebb szakmai munka áll. A rutinfeladatok jelentős
             részét automatizált folyamatok támogatják, ezért a könyvelés gyorsabban és hatékonyabban
             végezhető. A szakmai döntések, az ellenőrzés és az összetettebb kérdések kezelése továbbra is
@@ -212,14 +212,14 @@ function EvKonyvelesPage() {
       {/* Nem csak a legegyszerűbb esetekre */}
       <section className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-2xl font-bold text-foreground">Nem csak a legegyszerűbb esetekre</h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+        <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
           A kedvező díjazás nem jelenti azt, hogy csak egyszerű vállalkozásokat tudok kezelni. A rutin
           KATA- és átalányadós könyvelés mellett összetettebb helyzetekben is tudok segítséget nyújtani,
           például áfakörös egyéni vállalkozásoknál, külföldi kapcsolatok vagy külföldi szolgáltatások
           igénybevétele esetén. Ilyen hétköznapi példa lehet akár egy Google- vagy Facebook-hirdetés is,
           amelynek könyvelése és adózási kezelése külön figyelmet igényelhet.
         </p>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+        <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
           Ha nem vagy biztos abban, hogy a vállalkozásod belefér-e az alap könyvelési szolgáltatásba, egy
           rövid egyeztetés során áttekintem a helyzetedet.
         </p>
@@ -231,7 +231,7 @@ function EvKonyvelesPage() {
           <div className="grid gap-10 md:grid-cols-3">
             <div>
               <h2 className="text-xl font-bold text-foreground">Év közben is válthatsz</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-justify text-sm leading-relaxed text-muted-foreground">
                 Nem szükséges megvárnod az év végét ahhoz, hogy könyvelőt válts. Már működő egyéni
                 vállalkozással is csatlakozhatsz bármikor év közben, a szükséges átállási lépéseket pedig
                 előzetesen egyeztetem veled. Korábbi könyvelődtől semmire nincs szükség, így nem kell
@@ -241,7 +241,7 @@ function EvKonyvelesPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-foreground">Most indítanád az egyéni vállalkozásodat?</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-justify text-sm leading-relaxed text-muted-foreground">
                 Ha még nincs vállalkozásod, az indulásban is tudok segíteni. Átbeszéljük a kiinduló
                 helyzetedet, az adózási lehetőségeket és az induláshoz szükséges főbb lépéseket, hogy már
                 az elején megfelelő alapokra építhess.
@@ -249,7 +249,7 @@ function EvKonyvelesPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-foreground">Évzárás</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-justify text-sm leading-relaxed text-muted-foreground">
                 Természetesen az évzárásodat is elkészítem. Ez egyéni vállalkozóként a HIPA (iparűzési
                 adó) és az SZJA bevallásod elkészítését jelenti. Ennek díja a nálad érvényes +1 havi
                 könyvelési díj.
@@ -281,12 +281,12 @@ function EvKonyvelesPage() {
           <h2 className="text-2xl font-bold text-foreground">
             20 év tapasztalat. Kevesebb rutinmunka. Több szakmai figyelem.
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             Az automatizálás nálam nem a könyvelő helyettesítését jelenti. Arra használom, amire való: a
             repetitív feladatok gyorsítására és az adminisztráció csökkentésére. A tapasztalatot, az
             ellenőrzést és a szakmai döntést továbbra is ember adja hozzá.
           </p>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             Ha KATA-s vagy átalányadózó egyéni vállalkozóként megbízható, korszerű és kedvező árú
             könyvelést keresel, vedd fel velem a kapcsolatot, és megnézzük, milyen megoldás illik a
             vállalkozásodhoz.
@@ -316,7 +316,7 @@ function EvKonyvelesPage() {
                   aria-hidden="true"
                 />
               </summary>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+              <p className="mt-3 text-justify text-sm leading-relaxed text-muted-foreground">{f.a}</p>
             </details>
           ))}
         </div>
