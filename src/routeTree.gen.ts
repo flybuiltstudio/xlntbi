@@ -88,6 +88,7 @@ import { Route as KalkulatorokAtalanyadoRouteImport } from './routes/kalkulatoro
 import { Route as KalkulatorokBertesztRouteImport } from './routes/kalkulatorok.berteszt'
 import { Route as KalkulatorokInvoiceDatesRouteImport } from './routes/kalkulatorok.invoice-dates'
 import { Route as KalkulatorokJovedelemadoRouteImport } from './routes/kalkulatorok.jovedelemado'
+import { Route as KalkulatorokKataAtalanyadoOsszehasonlitoRouteImport } from './routes/kalkulatorok.kata-atalanyado-osszehasonlito'
 import { Route as KalkulatorokSzamlaDatumokRouteImport } from './routes/kalkulatorok.szamla-datumok'
 import { Route as MegrendelesKoszonjukRouteImport } from './routes/megrendeles_.koszonjuk'
 import { Route as TermekSlugRouteImport } from './routes/termek.$slug'
@@ -133,6 +134,7 @@ import { Route as EnCalculatorsSlugRouteImport } from './routes/en.calculators.$
 import { Route as EnCalculatorsFlatRateTaxRouteImport } from './routes/en.calculators.flat-rate-tax'
 import { Route as EnCalculatorsIncomeTaxRouteImport } from './routes/en.calculators.income-tax'
 import { Route as EnCalculatorsInvoiceDatesRouteImport } from './routes/en.calculators.invoice-dates'
+import { Route as EnCalculatorsKataFlatRateTaxComparisonRouteImport } from './routes/en.calculators.kata-flat-rate-tax-comparison'
 import { Route as EnCalculatorsSalaryTestRouteImport } from './routes/en.calculators.salary-test'
 import { Route as EnProductSlugRouteImport } from './routes/en.product.$slug'
 import { Route as ApiPublicBillingoWebhookRouteImport } from './routes/api/public/billingo/webhook'
@@ -552,6 +554,12 @@ const KalkulatorokJovedelemadoRoute =
     path: '/kalkulatorok/jovedelemado',
     getParentRoute: () => rootRouteImport,
   } as any)
+const KalkulatorokKataAtalanyadoOsszehasonlitoRoute =
+  KalkulatorokKataAtalanyadoOsszehasonlitoRouteImport.update({
+    id: '/kalkulatorok/kata-atalanyado-osszehasonlito',
+    path: '/kalkulatorok/kata-atalanyado-osszehasonlito',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const KalkulatorokSzamlaDatumokRoute =
   KalkulatorokSzamlaDatumokRouteImport.update({
     id: '/kalkulatorok/szamla-datumok',
@@ -807,6 +815,12 @@ const EnCalculatorsInvoiceDatesRoute =
     path: '/calculators/invoice-dates',
     getParentRoute: () => EnRoute,
   } as any)
+const EnCalculatorsKataFlatRateTaxComparisonRoute =
+  EnCalculatorsKataFlatRateTaxComparisonRouteImport.update({
+    id: '/calculators/kata-flat-rate-tax-comparison',
+    path: '/calculators/kata-flat-rate-tax-comparison',
+    getParentRoute: () => EnRoute,
+  } as any)
 const EnCalculatorsSalaryTestRoute = EnCalculatorsSalaryTestRouteImport.update({
   id: '/calculators/salary-test',
   path: '/calculators/salary-test',
@@ -981,6 +995,7 @@ export interface FileRoutesByFullPath {
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/kalkulatorok/kata-atalanyado-osszehasonlito': typeof KalkulatorokKataAtalanyadoOsszehasonlitoRoute
   '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
@@ -1028,6 +1043,7 @@ export interface FileRoutesByFullPath {
   '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
+  '/en/calculators/kata-flat-rate-tax-comparison': typeof EnCalculatorsKataFlatRateTaxComparisonRoute
   '/en/calculators/salary-test': typeof EnCalculatorsSalaryTestRoute
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
@@ -1122,6 +1138,7 @@ export interface FileRoutesByTo {
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/kalkulatorok/kata-atalanyado-osszehasonlito': typeof KalkulatorokKataAtalanyadoOsszehasonlitoRoute
   '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
@@ -1169,6 +1186,7 @@ export interface FileRoutesByTo {
   '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
+  '/en/calculators/kata-flat-rate-tax-comparison': typeof EnCalculatorsKataFlatRateTaxComparisonRoute
   '/en/calculators/salary-test': typeof EnCalculatorsSalaryTestRoute
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators': typeof EnCalculatorsIndexRoute
@@ -1266,6 +1284,7 @@ export interface FileRoutesById {
   '/kalkulatorok/berteszt': typeof KalkulatorokBertesztRoute
   '/kalkulatorok/invoice-dates': typeof KalkulatorokInvoiceDatesRoute
   '/kalkulatorok/jovedelemado': typeof KalkulatorokJovedelemadoRoute
+  '/kalkulatorok/kata-atalanyado-osszehasonlito': typeof KalkulatorokKataAtalanyadoOsszehasonlitoRoute
   '/kalkulatorok/szamla-datumok': typeof KalkulatorokSzamlaDatumokRoute
   '/megrendeles_/koszonjuk': typeof MegrendelesKoszonjukRoute
   '/termek/$slug': typeof TermekSlugRoute
@@ -1313,6 +1332,7 @@ export interface FileRoutesById {
   '/en/calculators/flat-rate-tax': typeof EnCalculatorsFlatRateTaxRoute
   '/en/calculators/income-tax': typeof EnCalculatorsIncomeTaxRoute
   '/en/calculators/invoice-dates': typeof EnCalculatorsInvoiceDatesRoute
+  '/en/calculators/kata-flat-rate-tax-comparison': typeof EnCalculatorsKataFlatRateTaxComparisonRoute
   '/en/calculators/salary-test': typeof EnCalculatorsSalaryTestRoute
   '/en/product/$slug': typeof EnProductSlugRoute
   '/en/calculators/': typeof EnCalculatorsIndexRoute
@@ -1411,6 +1431,7 @@ export interface FileRouteTypes {
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
     | '/kalkulatorok/jovedelemado'
+    | '/kalkulatorok/kata-atalanyado-osszehasonlito'
     | '/kalkulatorok/szamla-datumok'
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
@@ -1458,6 +1479,7 @@ export interface FileRouteTypes {
     | '/en/calculators/flat-rate-tax'
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
+    | '/en/calculators/kata-flat-rate-tax-comparison'
     | '/en/calculators/salary-test'
     | '/en/product/$slug'
     | '/en/calculators/'
@@ -1552,6 +1574,7 @@ export interface FileRouteTypes {
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
     | '/kalkulatorok/jovedelemado'
+    | '/kalkulatorok/kata-atalanyado-osszehasonlito'
     | '/kalkulatorok/szamla-datumok'
     | '/megrendeles/koszonjuk'
     | '/termek/$slug'
@@ -1599,6 +1622,7 @@ export interface FileRouteTypes {
     | '/en/calculators/flat-rate-tax'
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
+    | '/en/calculators/kata-flat-rate-tax-comparison'
     | '/en/calculators/salary-test'
     | '/en/product/$slug'
     | '/en/calculators'
@@ -1695,6 +1719,7 @@ export interface FileRouteTypes {
     | '/kalkulatorok/berteszt'
     | '/kalkulatorok/invoice-dates'
     | '/kalkulatorok/jovedelemado'
+    | '/kalkulatorok/kata-atalanyado-osszehasonlito'
     | '/kalkulatorok/szamla-datumok'
     | '/megrendeles_/koszonjuk'
     | '/termek/$slug'
@@ -1742,6 +1767,7 @@ export interface FileRouteTypes {
     | '/en/calculators/flat-rate-tax'
     | '/en/calculators/income-tax'
     | '/en/calculators/invoice-dates'
+    | '/en/calculators/kata-flat-rate-tax-comparison'
     | '/en/calculators/salary-test'
     | '/en/product/$slug'
     | '/en/calculators/'
@@ -1803,6 +1829,7 @@ export interface RootRouteChildren {
   KalkulatorokBertesztRoute: typeof KalkulatorokBertesztRoute
   KalkulatorokInvoiceDatesRoute: typeof KalkulatorokInvoiceDatesRoute
   KalkulatorokJovedelemadoRoute: typeof KalkulatorokJovedelemadoRoute
+  KalkulatorokKataAtalanyadoOsszehasonlitoRoute: typeof KalkulatorokKataAtalanyadoOsszehasonlitoRoute
   KalkulatorokSzamlaDatumokRoute: typeof KalkulatorokSzamlaDatumokRoute
   MegrendelesKoszonjukRoute: typeof MegrendelesKoszonjukRoute
   TermekSlugRoute: typeof TermekSlugRoute
@@ -2416,6 +2443,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KalkulatorokJovedelemadoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kalkulatorok/kata-atalanyado-osszehasonlito': {
+      id: '/kalkulatorok/kata-atalanyado-osszehasonlito'
+      path: '/kalkulatorok/kata-atalanyado-osszehasonlito'
+      fullPath: '/kalkulatorok/kata-atalanyado-osszehasonlito'
+      preLoaderRoute: typeof KalkulatorokKataAtalanyadoOsszehasonlitoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kalkulatorok/szamla-datumok': {
       id: '/kalkulatorok/szamla-datumok'
       path: '/kalkulatorok/szamla-datumok'
@@ -2731,6 +2765,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnCalculatorsInvoiceDatesRouteImport
       parentRoute: typeof EnRoute
     }
+    '/en/calculators/kata-flat-rate-tax-comparison': {
+      id: '/en/calculators/kata-flat-rate-tax-comparison'
+      path: '/calculators/kata-flat-rate-tax-comparison'
+      fullPath: '/en/calculators/kata-flat-rate-tax-comparison'
+      preLoaderRoute: typeof EnCalculatorsKataFlatRateTaxComparisonRouteImport
+      parentRoute: typeof EnRoute
+    }
     '/en/calculators/salary-test': {
       id: '/en/calculators/salary-test'
       path: '/calculators/salary-test'
@@ -2919,6 +2960,7 @@ interface EnRouteChildren {
   EnCalculatorsFlatRateTaxRoute: typeof EnCalculatorsFlatRateTaxRoute
   EnCalculatorsIncomeTaxRoute: typeof EnCalculatorsIncomeTaxRoute
   EnCalculatorsInvoiceDatesRoute: typeof EnCalculatorsInvoiceDatesRoute
+  EnCalculatorsKataFlatRateTaxComparisonRoute: typeof EnCalculatorsKataFlatRateTaxComparisonRoute
   EnCalculatorsSalaryTestRoute: typeof EnCalculatorsSalaryTestRoute
   EnProductSlugRoute: typeof EnProductSlugRoute
   EnCalculatorsIndexRoute: typeof EnCalculatorsIndexRoute
@@ -2952,6 +2994,8 @@ const EnRouteChildren: EnRouteChildren = {
   EnCalculatorsFlatRateTaxRoute: EnCalculatorsFlatRateTaxRoute,
   EnCalculatorsIncomeTaxRoute: EnCalculatorsIncomeTaxRoute,
   EnCalculatorsInvoiceDatesRoute: EnCalculatorsInvoiceDatesRoute,
+  EnCalculatorsKataFlatRateTaxComparisonRoute:
+    EnCalculatorsKataFlatRateTaxComparisonRoute,
   EnCalculatorsSalaryTestRoute: EnCalculatorsSalaryTestRoute,
   EnProductSlugRoute: EnProductSlugRoute,
   EnCalculatorsIndexRoute: EnCalculatorsIndexRoute,
@@ -3000,6 +3044,8 @@ const rootRouteChildren: RootRouteChildren = {
   KalkulatorokBertesztRoute: KalkulatorokBertesztRoute,
   KalkulatorokInvoiceDatesRoute: KalkulatorokInvoiceDatesRoute,
   KalkulatorokJovedelemadoRoute: KalkulatorokJovedelemadoRoute,
+  KalkulatorokKataAtalanyadoOsszehasonlitoRoute:
+    KalkulatorokKataAtalanyadoOsszehasonlitoRoute,
   KalkulatorokSzamlaDatumokRoute: KalkulatorokSzamlaDatumokRoute,
   MegrendelesKoszonjukRoute: MegrendelesKoszonjukRoute,
   TermekSlugRoute: TermekSlugRoute,
