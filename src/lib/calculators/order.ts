@@ -43,6 +43,13 @@ export const STATIC_CALCULATORS: readonly StaticCalculator[] = [
     huPath: "/kalkulatorok/jovedelemado",
     enPath: "/en/calculators/income-tax",
   },
+  {
+    key: "kata-atalanyado-osszehasonlito",
+    nameHu: "KATA és Átalányadó összehasonlító",
+    nameEn: "KATA and Flat-Rate Tax Comparison",
+    huPath: "/kalkulatorok/kata-atalanyado-osszehasonlito",
+    enPath: "/en/calculators/kata-flat-rate-tax-comparison",
+  },
 ] as const;
 
 export const CALCULATOR_ORDER_KEY = "calculator_order";

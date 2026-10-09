@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 - Product file integrity (truncation) checks read only head/tail via Range requests in src/lib/product-file-integrity.server.ts — large exe files do not fit worker memory; it runs in the weekly cleanup and after each product file upload.
 - Product detail pages read admin-managed copy directly from the override map — this avoids stale bundled text after runtime catalog mutation.
+- Owner-supplied calculators ship as scoped, bundled static entries when their formulas must remain version-controlled — this prevents runtime translation or database state from changing tax logic.
