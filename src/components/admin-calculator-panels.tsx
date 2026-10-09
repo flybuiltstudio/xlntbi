@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useRouter } from "@tanstack/react-router";
 
 import { BackToTop } from "@/components/admin-toc";
 import { AdminFilePicker } from "@/components/AdminFilePicker";
@@ -180,6 +181,7 @@ function CalcDraftFields({
  * from the rendered calculators, and publishes both language versions.
  */
 export function CalculatorUploadPanel() {
+  const router = useRouter();
   const list = useServerFn(adminListCustomCalculators);
   const prepare = useServerFn(adminPrepareCustomCalculator);
   const publish = useServerFn(adminPublishCustomCalculator);
@@ -271,6 +273,7 @@ export function CalculatorUploadPanel() {
       );
       reset();
       await refresh();
+      await router.invalidate();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Hiba történt.");
     }
@@ -285,6 +288,7 @@ export function CalculatorUploadPanel() {
     if (!result.ok) setError(result.error ?? "A törlés nem sikerült.");
     else setMessage(`${row.nameHu} törölve.`);
     await refresh();
+    await router.invalidate();
     setBusy(false);
   };
 
@@ -452,6 +456,7 @@ export function CalculatorUploadPanel() {
 type OrderRow = Awaited<ReturnType<typeof adminListCalculatorOrder>>["rows"][number];
 
 export function CalculatorOrderPanel() {
+  const router = useRouter();
   const list = useServerFn(adminListCalculatorOrder);
   const saveOrder = useServerFn(adminSaveCalculatorOrder);
 
@@ -487,6 +492,7 @@ export function CalculatorOrderPanel() {
       if (!result.ok) throw new Error(result.error);
       setMessage("A kalkulátorok sorrendje mentve (magyar és angol oldalon egyaránt).");
       await refresh();
+      await router.invalidate();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Hiba történt.");
     }

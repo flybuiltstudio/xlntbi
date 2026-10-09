@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
 import { productCategories, categoryProducts } from "@/lib/product-categories";
+import type { CalculatorCard } from "@/lib/calculators/order";
 import {
   LanguageSwitcher,
   asPath,
@@ -25,21 +26,13 @@ const services: ReadonlyArray<{ hu: string; key: TranslationKey }> = [
   { hu: "/digitalis-idomegtakaritasi-audit", key: "service.timeAudit" },
 ];
 
-const calculators: ReadonlyArray<{ hu: string; key: TranslationKey }> = [
-  { hu: "/kalkulatorok", key: "nav.allCalculators" },
-  { hu: "/kalkulatorok/szamla-datumok", key: "calc.invoiceDates" },
-  { hu: "/kalkulatorok/berteszt", key: "calc.salaryTest" },
-  { hu: "/kalkulatorok/jovedelemado", key: "calc.incomeTax" },
-  { hu: "/kalkulatorok/atalanyado", key: "calc.flatRateTax" },
-];
-
 const mainLinks: ReadonlyArray<{ hu: string; key: TranslationKey }> = [
   { hu: "/oktatas", key: "nav.training" },
   { hu: "/rolam", key: "nav.about" },
   { hu: "/kapcsolat", key: "nav.contact" },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ calculatorCards }: { calculatorCards: Record<"hu" | "en", CalculatorCard[]> }) {
   const [open, setOpen] = useState(false);
   const [suppressedMenu, setSuppressedMenu] = useState<string | null>(null);
   const closeDesktopMenu = (key: string) => {
@@ -50,6 +43,10 @@ export function SiteHeader() {
   const t = useT();
   const lang = useLang();
   const lp = useLocalPath();
+  const calculators = [
+    { path: lp("/kalkulatorok"), name: t("nav.allCalculators") },
+    ...calculatorCards[lang],
+  ];
 
   const toggleSection = (key: string) =>
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -121,11 +118,11 @@ export function SiteHeader() {
             <div className={`${suppressedMenu === "calculators" ? "hidden" : ""} invisible absolute left-0 top-full w-56 rounded-md border border-border bg-popover p-2 opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100`}>
               {calculators.map((s) => (
                 <Link
-                  key={s.hu}
-                  to={asPath(lp(s.hu))}
+                  key={s.path}
+                  to={asPath(s.path)}
                   className="block rounded-md px-3 py-2 text-sm text-popover-foreground transition-colors hover:bg-accent"
                 >
-                  {t(s.key)}
+                  {s.name}
                 </Link>
               ))}
             </div>
@@ -294,13 +291,13 @@ export function SiteHeader() {
                 {openSections["kalkulatorok"] ? (
                   <ul className="space-y-1 pl-3">
                     {calculators.map((c) => (
-                      <li key={c.hu}>
+                      <li key={c.path}>
                         <Link
-                          to={asPath(lp(c.hu))}
+                          to={asPath(c.path)}
                           onClick={closeMenu}
                           className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-accent"
                         >
-                          {t(c.key)}
+                          {c.name}
                         </Link>
                       </li>
                     ))}

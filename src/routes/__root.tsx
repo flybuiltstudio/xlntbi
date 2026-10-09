@@ -21,6 +21,7 @@ import { langFromPath, useLanguagePersistence } from "@/lib/i18n";
 import { translate } from "@/lib/i18n/dictionary";
 import { getProductOverrides } from "@/lib/product-overrides.functions";
 import { applyProductOverrides } from "@/lib/product-overrides";
+import { getCalculatorCards } from "@/lib/custom-calculators.functions";
 
 
 
@@ -99,9 +100,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   // Layers the admin-managed product descriptions and license prices onto the
   // catalog before anything renders, so SSR output already carries them.
   loader: async () => {
-    const data = await getProductOverrides();
+    const [data, huCalculators, enCalculators] = await Promise.all([
+      getProductOverrides(),
+      getCalculatorCards({ data: { lang: "hu" } }),
+      getCalculatorCards({ data: { lang: "en" } }),
+    ]);
     applyProductOverrides(data);
-    return { productOverrides: data };
+    return { productOverrides: data, calculatorCards: { hu: huCalculators.cards, en: enCalculators.cards } };
   },
   staleTime: 60_000,
   head: () => ({
@@ -150,7 +155,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const { productOverrides } = Route.useLoaderData();
+  const { productOverrides, calculatorCards } = Route.useLoaderData();
   const router = useRouter();
   // The server and browser have separate module instances. Apply the loader's
   // serialized snapshot in the browser before child routes render as well.
@@ -177,7 +182,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
-        <SiteHeader />
+        <SiteHeader calculatorCards={calculatorCards} />
         <main className="flex-1">
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
