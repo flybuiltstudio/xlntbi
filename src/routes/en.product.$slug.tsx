@@ -74,6 +74,30 @@ export const Route = createFileRoute("/en/product/$slug")({
         { rel: "alternate", hrefLang: "en", href: enUrl },
         { rel: "alternate", hrefLang: "x-default", href: huUrl },
       ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: loaderData.name,
+            description: loaderData.metaDescription,
+            image: loaderData.image.startsWith("http")
+              ? loaderData.image
+              : `${SITE_ORIGIN}${loaderData.image}`,
+            offers: {
+              "@type": "Offer",
+              url: enUrl,
+              priceCurrency: "HUF",
+              price: loaderData.priceFrom,
+              availability:
+                loaderData.status === "available"
+                  ? "https://schema.org/InStock"
+                  : "https://schema.org/PreOrder",
+            },
+          }),
+        },
+      ],
     };
   },
   component: EnglishProductPage,

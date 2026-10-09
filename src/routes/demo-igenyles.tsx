@@ -146,7 +146,11 @@ function DemoRequestPage() {
             <TooltipProvider delayDuration={200}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button type="button" className="text-muted-foreground hover:text-foreground">
+                  <button
+                    type="button"
+                    aria-label="Információ a gépazonosítóról"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
                     <Info className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
