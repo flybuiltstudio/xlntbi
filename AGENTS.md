@@ -13,3 +13,4 @@
 - Owner-supplied calculators ship as scoped, bundled static entries when their formulas must remain version-controlled — this prevents runtime translation or database state from changing tax logic.
 - Built-in calculator language pairs derive from STATIC_CALCULATORS; uploaded calculators share their slug across HU/EN, with round-trip tests for both — this prevents new calculators from missing language navigation.
 - Header calculator menus consume the same SSR-loaded ordered catalog as the listing pages, refreshed after admin publish/delete/reorder — this keeps new uploads visible in both language menus without manual entries.
+- Service subpages justify long body paragraphs (text-justify) — standalone pages like ev-konyveles / en.sole-trader-bookkeeping don't use ServicePage, so style changes must be applied to them too.

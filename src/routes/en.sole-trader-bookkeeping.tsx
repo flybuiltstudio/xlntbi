@@ -126,11 +126,11 @@ function SeBookkeepingPage() {
       <section className="mx-auto max-w-6xl px-4 py-14 md:py-16">
         <div className="grid items-start gap-10 md:grid-cols-2">
           <div>
-            <p className="text-base leading-relaxed text-muted-foreground">
+            <p className="text-justify text-base leading-relaxed text-muted-foreground">
               20 years of professional experience, modern automation and personal expertise. For both
               simple and more complex self-employed situations.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            <p className="mt-4 text-justify text-base leading-relaxed text-muted-foreground">
               The bookkeeping of a self-employed entrepreneur is not really bookkeeping but payroll
               calculation. That is why many accountants who only handle companies do not even know how to
               do it.
@@ -147,13 +147,13 @@ function SeBookkeepingPage() {
           <h2 className="text-2xl font-bold text-foreground">
             Bookkeeping that adapts to your business
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             The bookkeeping of a self-employed business can be simple, but a foreign partner, an
             advertisement placed with a foreign provider – such as Google or Facebook –, VAT scope or
             another special transaction can quickly require more expertise. My goal is for you to have
             solid professional backing even when your business goes beyond the simplest cases.
           </p>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             I combine more than 20 years of bookkeeping experience with automated solutions that
             significantly reduce routine administration. This way I can devote more professional attention
             to where it is truly needed, while the service fee stays favourable.
@@ -173,7 +173,7 @@ function SeBookkeepingPage() {
           <h2 className="text-2xl font-bold text-foreground">
             Favourable price – with the advantage of automation
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             The lower bookkeeping fee does not mean less professional work. A significant part of the
             routine tasks is supported by automated processes, so bookkeeping can be done faster and more
             efficiently. Professional decisions, review and the handling of more complex questions remain
@@ -215,14 +215,14 @@ function SeBookkeepingPage() {
       {/* Not only the simplest cases */}
       <section className="mx-auto max-w-6xl px-4 py-16">
         <h2 className="text-2xl font-bold text-foreground">Not only for the simplest cases</h2>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+        <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
           The favourable fee does not mean that I can only handle simple businesses. Alongside the routine
           KATA and flat-rate bookkeeping, I can also help in more complex situations, for example with
           VAT-liable self-employed businesses, foreign relationships or the use of foreign services. An
           everyday example of this can be a Google or Facebook advertisement, whose bookkeeping and tax
           handling may require extra attention.
         </p>
-        <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+        <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
           If you are not sure whether your business fits within the basic bookkeeping service, I will
           review your situation in a short consultation.
         </p>
@@ -234,7 +234,7 @@ function SeBookkeepingPage() {
           <div className="grid gap-10 md:grid-cols-3">
             <div>
               <h2 className="text-xl font-bold text-foreground">You can switch mid-year</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-justify text-sm leading-relaxed text-muted-foreground">
                 There is no need to wait until the end of the year to change accountants. You can join at
                 any time during the year with an already operating self-employed business, and I will
                 agree the necessary transition steps with you in advance. Nothing is needed from your
@@ -244,7 +244,7 @@ function SeBookkeepingPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-foreground">Starting your self-employed business?</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-justify text-sm leading-relaxed text-muted-foreground">
                 If you do not have a business yet, I can also help with starting. We go over your starting
                 situation, the taxation options and the main steps needed to launch, so you can build on
                 the right foundations from the very beginning.
@@ -252,7 +252,7 @@ function SeBookkeepingPage() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-foreground">Year-end closing</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-justify text-sm leading-relaxed text-muted-foreground">
                 Naturally, I also prepare your year-end closing. As a self-employed entrepreneur this means
                 preparing your HIPA (local business tax) and personal income tax return. Its fee is the
                 bookkeeping fee applicable to you plus one extra month.
@@ -284,12 +284,12 @@ function SeBookkeepingPage() {
           <h2 className="text-2xl font-bold text-foreground">
             20 years of experience. Less routine work. More professional attention.
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             For me, automation does not mean replacing the accountant. I use it for what it is good for:
             speeding up repetitive tasks and reducing administration. Experience, review and professional
             decisions are still added by a person.
           </p>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground">
+          <p className="mt-4 max-w-3xl text-justify text-base leading-relaxed text-muted-foreground">
             If, as a KATA or flat-rate self-employed entrepreneur, you are looking for reliable, modern
             and favourably priced bookkeeping, get in touch and we will see which solution fits your
             business.
@@ -319,7 +319,7 @@ function SeBookkeepingPage() {
                   aria-hidden="true"
                 />
               </summary>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+              <p className="mt-3 text-justify text-sm leading-relaxed text-muted-foreground">{f.a}</p>
             </details>
           ))}
         </div>

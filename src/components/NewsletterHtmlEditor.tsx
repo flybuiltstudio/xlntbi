@@ -74,9 +74,12 @@ export function NewsletterHtmlEditor({
 
       <p className="flex items-start gap-2 text-xs text-muted-foreground">
         <Code2 className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-        A formázás, színek, táblázatok, képek és linkek változatlanul kimennek. A leiratkozó link
-        helyére írhatod a <code className="font-mono">{"{{unsubscribe}}"}</code> jelölést – ha nincs
-        benne, a levél végére automatikusan bekerül egy leiratkozó sor.
+        <span>
+          A formázás, a színek, a táblázatok, a képek és a linkek változatlanul megmaradnak a
+          kiküldött levélben. A leiratkozási link helyére írd be a{" "}
+          <code className="font-mono">{"{{unsubscribe}}"}</code> jelölést. Ha kihagyod, a levél
+          végére automatikusan bekerül egy leiratkozási sor.
+        </span>
       </p>
 
       {preview ? (
