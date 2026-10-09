@@ -4,6 +4,7 @@ import bertesztImg from "@/assets/berteszt.jpg";
 import jovedelemadoImg from "@/assets/kalkulator-jovedelemado.jpg";
 import szamlaDatumokImg from "@/assets/kalkulator-szamla-datumok.jpg";
 import atalanyadoImg from "@/assets/kalkulator-atalanyado.jpg";
+import kataComparisonImg from "@/assets/kata-atalanyado-osszehasonlito-hu.jpg.asset.json";
 import { customCalculatorImageUrl } from "@/lib/custom-calculators";
 import { getCalculatorCards } from "@/lib/custom-calculators.functions";
 
@@ -68,6 +69,7 @@ const staticImages: Record<string, string> = {
   berteszt: bertesztImg,
   atalanyado: atalanyadoImg,
   jovedelemado: jovedelemadoImg,
+  "kata-atalanyado-osszehasonlito": kataComparisonImg.url,
 };
 
 function KalkulatorokPage() {

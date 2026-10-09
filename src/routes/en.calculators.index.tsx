@@ -3,6 +3,7 @@ import invoiceDatesImg from "@/assets/kalkulator-invoice-dates.jpg";
 import salaryTestImg from "@/assets/kalkulator-salary-test.jpg";
 import incomeTaxImg from "@/assets/kalkulator-income-tax.jpg";
 import flatRateTaxImg from "@/assets/kalkulator-flat-rate-tax.jpg";
+import kataComparisonImg from "@/assets/kata-flat-rate-tax-comparison-en.jpg.asset.json";
 import fallbackImg from "@/assets/kalkulator-invoice-dates.jpg";
 import { PageHero } from "@/components/PageHero";
 import { buildHead } from "@/lib/i18n/head";
@@ -25,6 +26,7 @@ const staticImages: Record<string, string> = {
   berteszt: salaryTestImg,
   atalanyado: flatRateTaxImg,
   jovedelemado: incomeTaxImg,
+  "kata-atalanyado-osszehasonlito": kataComparisonImg.url,
 };
 
 function EnglishCalculators() {

@@ -22,10 +22,12 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
   { key: "berteszt", label: "Bérteszt", lang: "hu", enKey: "berteszt-en" },
   { key: "atalanyado", label: "Átalányadó", lang: "hu", enKey: "atalanyado-en" },
   { key: "jovedelemado", label: "Jövedelemadó", lang: "hu", enKey: "jovedelemado-en" },
+  { key: "kata-atalanyado-osszehasonlito", label: "KATA és Átalányadó összehasonlító", lang: "hu", enKey: "kata-flat-rate-tax-comparison" },
   { key: "invoice-dates-en", label: "Invoice dates", lang: "en" },
   { key: "berteszt-en", label: "Salary test", lang: "en" },
   { key: "atalanyado-en", label: "Flat-rate tax", lang: "en" },
   { key: "jovedelemado-en", label: "Personal income tax", lang: "en" },
+  { key: "kata-flat-rate-tax-comparison", label: "KATA and Flat-Rate Tax Comparison", lang: "en" },
   // Legacy key kept for backwards compatibility with earlier uploads; it is
   // intentionally not offered in the admin UI.
   { key: "invoice-dates", label: "Invoice Dates (régi kulcs)", lang: "en" },
