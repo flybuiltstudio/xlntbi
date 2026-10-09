@@ -122,8 +122,8 @@ export function NewsletterEditor({
 
         <div className="flex w-full flex-col gap-1.5">
         <div className="flex flex-wrap items-center gap-1">
-        <label className="flex w-28 items-center gap-1.5 text-xs text-muted-foreground">
-          Betűszín
+        <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span className="w-[72px] shrink-0">Betűszín</span>
           <input
             type="color"
             className="h-8 w-9 cursor-pointer rounded border border-input bg-background"
@@ -144,8 +144,8 @@ export function NewsletterEditor({
 
         </div>
         <div className="flex flex-wrap items-center gap-1">
-        <label className="flex w-28 items-center gap-1.5 text-xs text-muted-foreground">
-          Háttérszín
+        <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span className="w-[72px] shrink-0">Háttérszín</span>
           <input
             type="color"
             className="h-8 w-9 cursor-pointer rounded border border-input bg-background"
