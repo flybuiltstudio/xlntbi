@@ -42,13 +42,7 @@ function KataComparisonPage() {
         </h1>
       </PageHero>
       <div className="mx-auto max-w-6xl px-4 pt-7 pb-14 md:pt-8 md:pb-16">
-        <p className="max-w-3xl text-base text-muted-foreground">
-          Hasonlítsd össze a 2027-es KATA és átalányadó várható adóterheit a vállalkozásod
-          bevételei és jogállása alapján. A számítás tájékoztató jellegű.
-        </p>
-        <div className="mt-8">
-          <EmbeddedCalculator html={htmlHu} script={scriptHu} />
-        </div>
+        <EmbeddedCalculator html={htmlHu} script={scriptHu} />
       </div>
     </>
   );

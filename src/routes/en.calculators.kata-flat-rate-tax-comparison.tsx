@@ -42,13 +42,7 @@ function KataComparisonPage() {
         </h1>
       </PageHero>
       <div className="mx-auto max-w-6xl px-4 pt-7 pb-14 md:pt-8 md:pb-16">
-        <p className="max-w-3xl text-base text-muted-foreground">
-          Compare the expected 2027 tax burden under KATA and Hungarian flat-rate taxation
-          based on your business revenue and status. The calculation is for information only.
-        </p>
-        <div className="mt-8">
-          <EmbeddedCalculator html={htmlEn} script={scriptEn} />
-        </div>
+        <EmbeddedCalculator html={htmlEn} script={scriptEn} />
       </div>
     </>
   );

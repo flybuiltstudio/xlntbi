@@ -1,5 +1,7 @@
 # Teendők
 
+- [ ] KATA-kalkulátor bevezető bekezdésének törlése HU/EN, nyelvváltás javítása és regressziós ellenőrzése minden kalkulátorra
+
 - [x] Admin menüpont és oldalfejléc átnevezése „Termékek és Kalkulátorok”-ra
 - [x] Blokkok sorrendje az admin oldalon + tartalomjegyzék + „Tetejére” gombok
 - [x] XLNT-előtag duplikáció javítása új terméknél
