@@ -4,6 +4,8 @@
  * English pages live under the /en prefix with descriptive English slugs.
  */
 
+import { STATIC_CALCULATORS } from "../calculators/order";
+
 export const LANGS = ["hu", "en"] as const;
 export type Lang = (typeof LANGS)[number];
 
@@ -24,10 +26,7 @@ export const ROUTE_PAIRS: RoutePair[] = [
   { hu: "/konyveloiroda-audit", en: "/en/accounting-firm-audit" },
   { hu: "/digitalis-idomegtakaritasi-audit", en: "/en/digital-time-saving-audit" },
   { hu: "/kalkulatorok", en: "/en/calculators" },
-  { hu: "/kalkulatorok/berteszt", en: "/en/calculators/salary-test" },
-  { hu: "/kalkulatorok/jovedelemado", en: "/en/calculators/income-tax" },
-  { hu: "/kalkulatorok/atalanyado", en: "/en/calculators/flat-rate-tax" },
-  { hu: "/kalkulatorok/szamla-datumok", en: "/en/calculators/invoice-dates" },
+  ...STATIC_CALCULATORS.map(({ huPath, enPath }) => ({ hu: huPath, en: enPath })),
   { hu: "/termekeim", en: "/en/products" },
   { hu: "/oktatas", en: "/en/training" },
   { hu: "/rolam", en: "/en/about" },
