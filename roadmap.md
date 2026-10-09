@@ -34,3 +34,4 @@
 - [x] Oktatás vizsgafelkészítő bekezdés teljes szélességű, sorkizárt HU/EN megjelenése
 - [x] KATA és Átalányadó összehasonlító kalkulátor közzététele utolsóként, külön HU/EN kártyaképpel
 - [x] KATA és Átalányadó összehasonlító kártyaképek újragenerálása a zöld arculatú HU/EN kalkulátorból
+- [x] Hírlevél szerkesztő: Betűszín és Háttérszín sorokban a színválasztó mezők és paletták egymás fölé igazítása
