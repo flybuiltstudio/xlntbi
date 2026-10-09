@@ -67,6 +67,21 @@ export async function assertAdmin(userId: string, email: string | undefined): Pr
   const normalized = (email ?? "").trim().toLowerCase();
   if (!ADMIN_EMAILS.includes(normalized)) return false;
 
+  // Only grant the role to a verified address: the auth user must exist,
+  // its e-mail must match the token claim, and the address must be confirmed.
+  const { data: userData, error: userError } =
+    await supabaseAdmin.auth.admin.getUserById(userId);
+  const authUser = userData?.user;
+  const authEmail = (authUser?.email ?? "").trim().toLowerCase();
+  if (
+    userError ||
+    !authUser ||
+    authEmail !== normalized ||
+    !authUser.email_confirmed_at
+  ) {
+    return false;
+  }
+
   const { error } = await supabaseAdmin
     .from("user_roles")
     .insert({ user_id: userId, role: "admin" });
