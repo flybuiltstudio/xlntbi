@@ -1,6 +1,6 @@
 import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { ProductDetail } from "@/components/ProductDetail";
-import { getProduct, resolveProductSlug } from "@/lib/products";
+import { getProduct, priceFrom, resolveProductSlug } from "@/lib/products";
 
 export const Route = createFileRoute("/termek/$slug")({
   loader: ({ params }) => {
@@ -39,6 +39,30 @@ export const Route = createFileRoute("/termek/$slug")({
           href: `https://xlntbi.hu/en/product/${product.slug}`,
         },
         { rel: "alternate", hrefLang: "x-default", href: pageUrl },
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.name,
+            description: product.metaDescription,
+            image: product.image.startsWith("http")
+              ? product.image
+              : `https://xlntbi.hu${product.image}`,
+            offers: {
+              "@type": "Offer",
+              url: pageUrl,
+              priceCurrency: "HUF",
+              price: priceFrom(product),
+              availability:
+                product.status === "available"
+                  ? "https://schema.org/InStock"
+                  : "https://schema.org/PreOrder",
+            },
+          }),
+        },
       ],
     };
   },
