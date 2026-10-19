@@ -2106,17 +2106,17 @@ export async function sendDemoFeedbackRequest(id: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: row } = await (supabaseAdmin as any)
     .from("demo_requests")
-    .select("id, email, product_name")
+    .select("id, email, product_name, name")
     .eq("id", id)
     .maybeSingle();
   if (!row) return { ok: false, error: "A DEMO igénylés nem található." };
   const { withXlntPrefix } = await import("./product-name");
-  const { DEMO_FEEDBACK_PARAGRAPHS, demoFeedbackSubject } = await import("./admin-mail-templates");
+  const { demoFeedbackParagraphs, demoFeedbackSubject } = await import("./admin-mail-templates");
   return sendFollowup(
     `demo-feedback-${id}`,
     row.email as string,
     demoFeedbackSubject(withXlntPrefix(row.product_name as string)),
-    DEMO_FEEDBACK_PARAGRAPHS,
+    demoFeedbackParagraphs({ recipientName: (row.name as string | null) ?? null }),
   );
 }
 
@@ -2124,7 +2124,9 @@ export async function sendPaymentReminder(orderId: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data: order } = await supabaseAdmin
     .from("orders")
-    .select("id, email, order_number, product_name, tier_label, total_price, payment_status")
+    .select(
+      "id, email, order_number, product_name, tier_label, total_price, payment_status, billing_name",
+    )
     .eq("id", orderId)
     .maybeSingle();
   if (!order) return { ok: false, error: "A megrendelés nem található." };
