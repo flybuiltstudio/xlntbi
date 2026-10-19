@@ -2145,6 +2145,7 @@ export async function sendPaymentReminder(orderId: string) {
       productName: withXlntPrefix(order.product_name as string),
       tierLabel: (order.tier_label as string | null) ?? null,
       totalPrice: Number(order.total_price),
+      recipientName: (order.billing_name as string | null) ?? null,
     }),
   );
 }
