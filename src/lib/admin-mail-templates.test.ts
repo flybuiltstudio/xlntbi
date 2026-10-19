@@ -88,14 +88,20 @@ describe("corrected wording", () => {
     recipientName: "Kiss Anna",
   });
 
+  it("puts the referral line right before the signature in both mails", () => {
+    const ref = "Ha hasznosnak találod az oldalamat, kérlek, ajánld a kollégáidnak is: https://xlntbi.hu";
+    expect(demo[demo.length - 2]).toBe(ref);
+    expect(payment[payment.length - 2]).toBe(ref);
+  });
+
   it("uses the owner's exact demo thanks sentence", () => {
-    expect(demo[demo.length - 2]).toBe(
+    expect(demo[demo.length - 3]).toBe(
       "Megköszönöm, ha egy válaszlevélben leírod ezeket, cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
     );
   });
 
   it("uses the owner's exact payment reminder sentence", () => {
-    expect(payment[payment.length - 2]).toBe(
+    expect(payment[payment.length - 3]).toBe(
       "Megköszönöm, ha mielőbb rendezed, vagy egy válaszlevélben leírod, ha szerinted más a reális ár, netán, ha meggondoltad magad, akkor miért. Cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
     );
   });

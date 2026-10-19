@@ -10,6 +10,7 @@ function greeting(recipientName: string | null | undefined): string {
 }
 
 /** Signature lines stay in one block so no blank line sits between them. */
+const REFERRAL = "Ha hasznosnak találod az oldalamat, kérlek, ajánld a kollégáidnak is: https://xlntbi.hu";
 const SIGNATURE = "Üdvözlettel:\nSarinay Dávid";
 
 export function demoFeedbackParagraphs(input: {
@@ -26,6 +27,7 @@ export function demoFeedbackParagraphs(input: {
     "Bármilyen hibát találtál benne, esetleg tudsz javasolni új funkció(ka)t bele?",
     "Ha az ár nem reális szerinted, akkor mi lenne az?",
     "Megköszönöm, ha egy válaszlevélben leírod ezeket, cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
+    REFERRAL,
     SIGNATURE,
   ];
 }
@@ -51,6 +53,7 @@ export function paymentReminderParagraphs(input: {
     ].join("\n"),
     "Ha az ár nem reális szerinted, akkor mi lenne az?",
     "Megköszönöm, ha mielőbb rendezed, vagy egy válaszlevélben leírod, ha szerinted más a reális ár, netán, ha meggondoltad magad, akkor miért. Cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
+    REFERRAL,
     SIGNATURE,
   ];
 }
