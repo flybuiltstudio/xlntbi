@@ -89,7 +89,7 @@ describe("corrected wording", () => {
   });
 
   it("puts the referral line right before the signature in both mails", () => {
-    const ref = "Ha hasznosnak találod az oldalamat, kérlek, ajánld a kollégáidnak is: https://xlntbi.hu";
+    const ref = "Ha hasznosnak találod az oldalamat, kérlek, ajánld a kollégáidnak is: https://xlntbi.hu/termekeim";
     expect(demo[demo.length - 2]).toBe(ref);
     expect(payment[payment.length - 2]).toBe(ref);
   });

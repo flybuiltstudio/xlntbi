@@ -10,7 +10,7 @@ function greeting(recipientName: string | null | undefined): string {
 }
 
 /** Signature lines stay in one block so no blank line sits between them. */
-const REFERRAL = "Ha hasznosnak találod az oldalamat, kérlek, ajánld a kollégáidnak is: https://xlntbi.hu";
+const REFERRAL = "Ha hasznosnak találod az oldalamat, kérlek, ajánld a kollégáidnak is: https://xlntbi.hu/termekeim";
 const SIGNATURE = "Üdvözlettel:\nSarinay Dávid";
 
 export function demoFeedbackParagraphs(input: {
