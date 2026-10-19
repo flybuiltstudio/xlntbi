@@ -64,7 +64,9 @@ describe("demo feedback greeting", () => {
   it("greets the demo requester by name", () => {
     const p = demoFeedbackParagraphs({ recipientName: "Kiss Anna" });
     expect(p[0]).toBe("Kedves Kiss Anna!");
-    expect(p[1]).toBe("Igényeltél demo terméket tőlem, de ha jól látom, eddig nem vásároltad meg.");
+    expect(p[1]).toBe(
+      "Igényeltél demó terméket tőlem, de ha jól látom, eddig nem vásároltad meg.",
+    );
   });
   it("falls back to a generic greeting without a name", () => {
     const p = demoFeedbackParagraphs({ recipientName: "  " });
