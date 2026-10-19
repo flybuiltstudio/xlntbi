@@ -27,7 +27,8 @@ export function catalogNameTargets(): CatalogEntry[] {
   for (const product of products) {
     const desiredName = withXlntPrefix(product.name);
     for (const tier of product.tiers) {
-      if (seen.has(tier.priceId)) continue;
+      // Free (0 Ft) tiers intentionally have no Stripe price.
+      if (tier.price <= 0 || seen.has(tier.priceId)) continue;
       seen.add(tier.priceId);
       entries.push({ priceId: tier.priceId, slug: product.slug, desiredName });
     }
