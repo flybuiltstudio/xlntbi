@@ -7,7 +7,7 @@ import { BackToTop } from "@/components/admin-toc";
 import { AdminFilePicker } from "@/components/AdminFilePicker";
 import { FollowupEmailButton, useFollowupSentAt } from "@/components/FollowupEmailButton";
 import {
-  DEMO_FEEDBACK_PARAGRAPHS,
+  demoFeedbackParagraphs,
   demoFeedbackSubject,
   paymentReminderParagraphs,
   paymentReminderSubject,
@@ -1156,6 +1156,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
                       productName: withXlntPrefix(order.productName),
                       tierLabel: order.tierLabel ?? null,
                       totalPrice: order.totalPrice,
+                      recipientName: order.billingName ?? null,
                     })}
                     sentAt={followups.sentAt[`payment-reminder-${order.id}`]}
                     onSent={followups.mark}
@@ -3140,7 +3141,7 @@ export function DemoRequestsBlock({
                     label="Visszajelzés kérés"
                     recipient={demo.email}
                     subject={demoFeedbackSubject(withXlntPrefix(demo.productName))}
-                    paragraphs={DEMO_FEEDBACK_PARAGRAPHS}
+                    paragraphs={demoFeedbackParagraphs({ recipientName: demo.name ?? null })}
                     sentAt={followups.sentAt[`demo-feedback-${demo.id}`]}
                     onSent={followups.mark}
                     onResult={(text, isError) => (isError ? setError(text) : setMessage(text))}
