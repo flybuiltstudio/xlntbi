@@ -12,17 +12,20 @@ A letöltési fájl ellenőrzése ingyenes terméknél is megmarad (az kell).
 
 ## 2. „Visszajelzés kérés” gomb — csak DEMO igénylőknél
 
-Admin → Megrendelések, DEMO kártyák: az „E-mail a vevőnek” gomb elé kerül. Kattintásra megnyílik a leveleződ előre kitöltve: címzett az igénylő, tárgy „Visszajelzés kérés – {termék neve}”, a törzs pontosan a megadott szöveg (változtatás nélkül). Éles rendeléseknél nem jelenik meg.
+Admin → Megrendelések, DEMO kártyák: az „E-mail a vevőnek” gomb elé kerül. Éles rendeléseknél nem jelenik meg.
+
+Kattintásra felugró ablak nyílik: címzett (az igénylő e-mail címe), tárgy („Visszajelzés kérés – {termék neve}”) és a teljes levélszöveg pontosan úgy, ahogy megadtad. Két gomb: „Igen, küldés” és „Mégsem”. Igen után a rendszer kiküldi a levelet, ugyanúgy, mint a licenclevelet (XLNT BI feladónévvel, a megszokott levélarculatban), és zöld visszajelzést kapsz.
 
 ## 3. „Fizetési emlékeztető” gomb — csak fizetésre váró rendeléseknél
 
-Ugyanott, az éles rendelés-kártyákon, csak ha a rendelés fizetésre vár. Előre kitöltött levél: címzett a vevő, tárgy „Fizetési emlékeztető – {rendelésszám}”, törzs a megadott szöveg, ahol az „IDE A TERMÉK NEVE, LICENC TÍPUSA ÉS ÁRA ÍRD BE.” sor helyére automatikusan bekerül pl.:
-„XLNT … – Teljes csomag – 74 900 Ft”. A szöveg többi része szó szerint marad (a dupla szóköz „Igényeltél  terméket” javítása egyszeres szóközre — szólj, ha maradjon).
+Ugyanott, az éles rendelés-kártyákon, csak ha a rendelés fizetésre vár. Ugyanilyen megerősítő ablak: címzett (a vevő), tárgy („Fizetési emlékeztető – {rendelésszám}”) és a levél szövege. Az „IDE A TERMÉK NEVE, LICENC TÍPUSA ÉS ÁRA ÍRD BE.” sor helyére automatikusan bekerül a rendelés adata, pl. „XLNT … – Teljes csomag – 74 900 Ft”. A szöveg többi része szó szerint marad (a „Igényeltél  terméket” dupla szóközét egyre javítom).
 
-Mivel előre kitöltött levél nyílik, küldés előtt még átírhatod, és a saját fiókodból megy ki, így a válasz közvetlenül hozzád érkezik.
+Mindkét levélnél a válasz-cím a te címed, így ha a vevő a „Válasz” gombra kattint, hozzád érkezik. A levelekből belső másolat is megy a megszokott belső címre, és a kártyán látszik, mikor küldted utoljára (hogy ne menjen ki véletlenül kétszer).
 
 ## Technikai részletek
 
 - `src/lib/catalog-audit.server.ts` (+ `catalog-fix.server.ts`, `stripe-product-names.server.ts`): `price === 0` csomagok / termékek kiszűrése a lookup key-ellenőrzésből és a névszinkronból; heti cron ugyanezt a függvényt hívja.
-- `src/components/admin-panels.tsx`: két `mailto:` gomb (`encodeURIComponent` csak subject/body-n, a cím nyersen — a korábbi Gmail-hibát elkerülve); szövegek egy kis konstans modulban (`src/lib/admin-mail-templates.ts`) + teszt a placeholder-cserére.
-- Nincs új tábla, nincs szerveroldali levélküldés.
+- Két új React Email sablon (`demo-visszajelzes-keres.tsx`, `fizetesi-emlekezteto.tsx`) a registryben; küldés a meglévő `sendTemplateEmail` helperrel, `replyTo` a tulajdonos címe, idempotencia-kulcs id + dátum.
+- `src/lib/admin.server.ts` + `admin.functions.ts`: `sendDemoFeedbackRequest(id)`, `sendPaymentReminder(orderId)` admin-gate mögött; a címzett és adatok szerveroldalon a rekordból jönnek (böngészőből nem adható meg cím). A fizetési emlékeztető elutasít, ha a rendelés már nem fizetésre váró.
+- `src/components/admin-panels.tsx`: két gomb + közös megerősítő dialógus előnézettel; utolsó küldés időpontja `app_settings`-ben vagy meglévő mezőben tárolva (új tábla nincs).
+- Szövegépítő tiszta függvény + teszt a placeholder-cserére.
