@@ -98,7 +98,7 @@ export async function handleOrder(data: Order) {
       };
     }
     if (vies.status === "unknown") {
-      console.log(`VIES ellenőrzés nem volt elvégezhető (${data.taxNumber}): ${vies.reason ?? "-"}`);
+      console.log(`VIES ellenőrzés nem volt elvégezhető: ${vies.reason ?? "-"}`);
     }
   } else if (data.taxNumber) {
     // Live NAV (Online Számla) taxpayer check for Hungarian tax numbers.
