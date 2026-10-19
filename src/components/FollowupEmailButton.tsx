@@ -38,7 +38,7 @@ type Props = {
   recipient: string;
   subject: string;
   paragraphs: string[];
-  sentAt?: string;
+  sentAt?: string | undefined;
   onSent: (key: string, at: string) => void;
   onResult: (message: string, isError: boolean) => void;
 };
