@@ -3,18 +3,28 @@
  * the confirm dialog preview and the email templates so both show the same text.
  */
 
-export const DEMO_FEEDBACK_PARAGRAPHS: string[] = [
-  "Kedves Könyvelő!",
-  "Igényeltél demo terméket tőlem, de ha jól látom, eddig nem vásároltad meg.",
-  "Érdeklődni szeretnék, hogy sikerült-e kipróbálni?",
-  "Mi tetszett benne, és mi nem?",
-  "Mi a nehézség, mi kellene még bele, mitől lenne jobb, miért nem vetted meg még, és mikor vennéd meg?",
-  "Bármilyen hibát találtál benne, esetleg tudsz javasolni új funkció(ka)t bele?",
-  "Ha az ár nem reális szerinted, akkor mi lenne az?",
-  "Megköszönöm, ha egy válasz levélben leírod ezeket, cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
-  "Üdvözlettel:",
-  "Sarinay Dávid",
-];
+/** Greeting uses the recipient's own name; falls back when the name is missing. */
+function greeting(recipientName: string | null | undefined): string {
+  const name = recipientName?.trim();
+  return name ? `Kedves ${name}!` : "Kedves Könyvelő!";
+}
+
+/** Signature lines stay in one block so no blank line sits between them. */
+const SIGNATURE = "Üdvözlettel:\nSarinay Dávid";
+
+export function demoFeedbackParagraphs(input: { recipientName: string | null }): string[] {
+  return [
+    greeting(input.recipientName),
+    "Igényeltél demo terméket tőlem, de ha jól látom, eddig nem vásároltad meg.",
+    "Érdeklődni szeretnék, hogy sikerült-e kipróbálni?",
+    "Mi tetszett benne, és mi nem?",
+    "Mi a nehézség, mi kellene még bele, mitől lenne jobb, miért nem vetted meg még, és mikor vennéd meg?",
+    "Bármilyen hibát találtál benne, esetleg tudsz javasolni új funkció(ka)t bele?",
+    "Ha az ár nem reális szerinted, akkor mi lenne az?",
+    "Megköszönöm, ha egy válasz levélben leírod ezeket, cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
+    SIGNATURE,
+  ];
+}
 
 export function formatHuf(value: number): string {
   return `${Math.round(value).toLocaleString("hu-HU").replace(/\u00a0/g, " ")} Ft`;
@@ -24,9 +34,10 @@ export function paymentReminderParagraphs(input: {
   productName: string;
   tierLabel: string | null;
   totalPrice: number;
+  recipientName: string | null;
 }): string[] {
   return [
-    "Kedves Könyvelő!",
+    greeting(input.recipientName),
     "Igényeltél terméket tőlem, de ha jól látom, eddig nem történt meg a kiegyenlítése.",
     "Érdeklődni szeretnék, hogy mikor tervezed rendezni az összeget?",
     [
@@ -36,8 +47,7 @@ export function paymentReminderParagraphs(input: {
     ].join("\n"),
     "Ha az ár nem reális szerinted, akkor mi lenne az?",
     "Megköszönöm, ha mielőbb rendezed vagy egy válasz levélben leírod, ha szerinted más a reális ár, netán ha meggondoltad magad, akkor miért. Cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
-    "Üdvözlettel:",
-    "Sarinay Dávid",
+    SIGNATURE,
   ];
 }
 
