@@ -68,6 +68,11 @@ describe("demo feedback greeting", () => {
       "Igényeltél demó terméket tőlem, de ha jól látom, eddig nem vásároltad meg.",
     );
   });
+  it("names the demo product under the interest question", () => {
+    const p = demoFeedbackParagraphs({ recipientName: "Kiss Anna", productName: "XLNT Havi riport" });
+    expect(p[2]).toBe("Érdeklődni szeretnék, hogy sikerült-e kipróbálni?");
+    expect(p[3]).toBe("Termék: XLNT Havi riport");
+  });
   it("falls back to a generic greeting without a name", () => {
     const p = demoFeedbackParagraphs({ recipientName: "  ", productName: "XLNT Havi riport" });
     expect(p[0]).toBe("Kedves Könyvelő!");
