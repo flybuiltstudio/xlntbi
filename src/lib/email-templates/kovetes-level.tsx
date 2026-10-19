@@ -8,17 +8,18 @@ import { container, main, paragraph } from './theme'
 interface Props {
   subject?: string
   paragraphs?: string[]
+  headerSubtitle?: string
 }
 
 // Owner follow-up (DEMO feedback request / payment reminder). Text is built
 // server-side from fixed owner-written copy in src/lib/admin-mail-templates.ts.
-const Email = ({ subject, paragraphs }: Props) => (
+const Email = ({ subject, paragraphs, headerSubtitle }: Props) => (
   <Html lang="hu" dir="ltr">
     <Head />
     <Preview>{subject || 'XLNT BI'}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Header />
+        <Header subtitle={headerSubtitle || 'Üzenet'} />
         {(paragraphs ?? []).map((text, i) => (
           <Text key={i} style={paragraph}>
             {text.split('\n').map((line, j) => (

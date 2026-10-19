@@ -2084,10 +2084,11 @@ async function sendFollowup(
   to: string,
   subject: string,
   paragraphs: string[],
+  headerSubtitle: string,
 ): Promise<{ ok: boolean; error?: string; sentAt?: string }> {
   const { sendEmails } = await import("./notify.server");
   const stamp = Date.now();
-  const data = { subject, paragraphs };
+  const data = { subject, paragraphs, headerSubtitle };
   const ok = await sendEmails([
     { template: "kovetes-level", to, key: `${id}-${stamp}`, data, replyTo: "info@xlntbi.hu" },
     {
@@ -2120,6 +2121,7 @@ export async function sendDemoFeedbackRequest(id: string) {
       recipientName: (row.name as string | null) ?? null,
       productName: withXlntPrefix(row.product_name as string),
     }),
+    "Visszajelzés kérés",
   );
 }
 
@@ -2150,5 +2152,6 @@ export async function sendPaymentReminder(orderId: string) {
       totalPrice: Number(order.total_price),
       recipientName: (order.billing_name as string | null) ?? null,
     }),
+    "Fizetési emlékeztető",
   );
 }
