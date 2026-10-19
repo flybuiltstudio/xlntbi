@@ -10,6 +10,7 @@ import { template as hirlevel } from './hirlevel'
 import { template as hirlevelMegerosites } from './hirlevel-megerosites'
 import { template as letoltesElerheto } from './letoltes-elerheto'
 import { template as licenszKod } from './licensz-kod'
+import { template as kovetesLevel } from './kovetes-level'
 import { template as kapcsolatVisszaigazolas } from './kapcsolat-visszaigazolas'
 import { template as konzultacioVisszaigazolas } from './konzultacio-visszaigazolas'
 import { template as megrendelesVisszaigazolas } from './megrendeles-visszaigazolas'
@@ -39,6 +40,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'belso-nav-hiba': belsoNavHiba,
   'letoltes-elerheto': letoltesElerheto,
   'licensz-kod': licenszKod,
+  'kovetes-level': kovetesLevel,
   'hirlevel-megerosites': hirlevelMegerosites,
   'hirlevel': hirlevel,
 }

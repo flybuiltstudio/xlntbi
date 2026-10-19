@@ -5,6 +5,14 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { Eye, EyeOff, KeyRound } from "lucide-react";
 import { BackToTop } from "@/components/admin-toc";
 import { AdminFilePicker } from "@/components/AdminFilePicker";
+import { FollowupEmailButton, useFollowupSentAt } from "@/components/FollowupEmailButton";
+import {
+  DEMO_FEEDBACK_PARAGRAPHS,
+  demoFeedbackSubject,
+  paymentReminderParagraphs,
+  paymentReminderSubject,
+} from "@/lib/admin-mail-templates";
+import { withXlntPrefix } from "@/lib/product-name";
 
 import {
   adminApproveTransfer,
@@ -340,6 +348,7 @@ export function OrdersPanel({ email }: { email: string | null }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const followups = useFollowupSentAt();
   const [payFilter, setPayFilter] = useState<"all" | "paid" | "unpaid" | "stale" | "demo">("all");
   const [methodFilter, setMethodFilter] = useState<"all" | "stripe" | "transfer">("all");
   const [snapshots, setSnapshots] = useState<Record<string, InvoiceSnapshotState>>({});
@@ -1135,6 +1144,23 @@ export function OrdersPanel({ email }: { email: string | null }) {
                   >
                     {licenseFor?.id === order.id ? "Licenc küldése – mégsem" : "Licenc küldése"}
                   </button>
+                ) : null}
+                {order.paymentStatus !== "paid" ? (
+                  <FollowupEmailButton
+                    kind="payment-reminder"
+                    id={order.id}
+                    label="Fizetési emlékeztető"
+                    recipient={order.email}
+                    subject={paymentReminderSubject(order.orderNumber)}
+                    paragraphs={paymentReminderParagraphs({
+                      productName: withXlntPrefix(order.productName),
+                      tierLabel: order.tierLabel ?? null,
+                      totalPrice: order.totalPrice,
+                    })}
+                    sentAt={followups.sentAt[`payment-reminder-${order.id}`]}
+                    onSent={followups.mark}
+                    onResult={(text, isError) => (isError ? setError(text) : setMessage(text))}
+                  />
                 ) : null}
                 <a
                   href={`mailto:${order.email}?subject=${encodeURIComponent(`${order.productName} – ${order.orderNumber}`)}`}
@@ -2891,6 +2917,7 @@ export function DemoRequestsBlock({
   const [error, setError] = useState("");
   const [licenseFor, setLicenseFor] = useState<string | null>(null);
   const [licenseKey, setLicenseKey] = useState("");
+  const followups = useFollowupSentAt();
 
   const refresh = useCallback(async () => {
     try {
@@ -3107,6 +3134,17 @@ export function DemoRequestsBlock({
                   >
                     {licenseFor === demo.id ? "Licenc küldése – mégsem" : "Licenc küldése"}
                   </button>
+                  <FollowupEmailButton
+                    kind="demo-feedback"
+                    id={demo.id}
+                    label="Visszajelzés kérés"
+                    recipient={demo.email}
+                    subject={demoFeedbackSubject(withXlntPrefix(demo.productName))}
+                    paragraphs={DEMO_FEEDBACK_PARAGRAPHS}
+                    sentAt={followups.sentAt[`demo-feedback-${demo.id}`]}
+                    onSent={followups.mark}
+                    onResult={(text, isError) => (isError ? setError(text) : setMessage(text))}
+                  />
                   <a
                     href={`mailto:${demo.email}?subject=${encodeURIComponent(
                       `DEMO – ${demo.productName}`,
