@@ -12,6 +12,8 @@ function greeting(recipientName: string | null | undefined): string {
 /** Signature lines stay in one block so no blank line sits between them. */
 const REFERRAL = "Ha hasznosnak találod az oldalamat, kérlek, ajánld a kollégáidnak is: https://xlntbi.hu/termekeim";
 const SIGNATURE = "Üdvözlettel:\nSarinay Dávid";
+export const DEMO_OFFER =
+  "Esetleg egy negyedórás online bemutató, amiben megmutatom, milyen pofonegyszerű használni, és mennyi rengeteg órát megspórolsz vele, segítene a döntésben?";
 
 export function demoFeedbackParagraphs(input: {
   recipientName: string | null;
@@ -26,6 +28,7 @@ export function demoFeedbackParagraphs(input: {
     "Mi a nehézség, mi kellene még bele, mitől lenne jobb, miért nem vetted meg még, és mikor vennéd meg?",
     "Bármilyen hibát találtál benne, esetleg tudsz javasolni új funkció(ka)t bele?",
     "Ha az ár nem reális szerinted, akkor mi lenne az?",
+    DEMO_OFFER,
     "Megköszönöm, ha egy válaszlevélben leírod ezeket, cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
     REFERRAL,
     SIGNATURE,
@@ -52,6 +55,7 @@ export function paymentReminderParagraphs(input: {
       `Ár: ${formatHuf(input.totalPrice)}`,
     ].join("\n"),
     "Ha az ár nem reális szerinted, akkor mi lenne az?",
+    DEMO_OFFER,
     "Megköszönöm, ha mielőbb rendezed, vagy egy válaszlevélben leírod, ha szerinted más a reális ár, netán, ha meggondoltad magad, akkor miért. Cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
     REFERRAL,
     SIGNATURE,

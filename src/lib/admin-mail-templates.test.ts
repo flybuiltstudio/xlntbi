@@ -113,3 +113,14 @@ describe("corrected wording", () => {
     expect(demo.join("\n")).toContain("demó terméket");
   });
 });
+
+describe("online demo offer", () => {
+  it("follows the price question in both mails", () => {
+    const offer =
+      "Esetleg egy negyedórás online bemutató, amiben megmutatom, milyen pofonegyszerű használni, és mennyi rengeteg órát megspórolsz vele, segítene a döntésben?";
+    const q = "Ha az ár nem reális szerinted, akkor mi lenne az?";
+    const demo = demoFeedbackParagraphs({ recipientName: "A", productName: "X" });
+    const pay = paymentReminderParagraphs({ productName: "X", tierLabel: null, totalPrice: 0, recipientName: "A" });
+    for (const p of [demo, pay]) expect(p[p.indexOf(q) + 1]).toBe(offer);
+  });
+});
