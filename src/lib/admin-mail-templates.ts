@@ -15,13 +15,13 @@ const SIGNATURE = "Üdvözlettel:\nSarinay Dávid";
 export function demoFeedbackParagraphs(input: { recipientName: string | null }): string[] {
   return [
     greeting(input.recipientName),
-    "Igényeltél demo terméket tőlem, de ha jól látom, eddig nem vásároltad meg.",
+    "Igényeltél demó terméket tőlem, de ha jól látom, eddig nem vásároltad meg.",
     "Érdeklődni szeretnék, hogy sikerült-e kipróbálni?",
     "Mi tetszett benne, és mi nem?",
     "Mi a nehézség, mi kellene még bele, mitől lenne jobb, miért nem vetted meg még, és mikor vennéd meg?",
     "Bármilyen hibát találtál benne, esetleg tudsz javasolni új funkció(ka)t bele?",
     "Ha az ár nem reális szerinted, akkor mi lenne az?",
-    "Megköszönöm, ha egy válasz levélben leírod ezeket, cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
+    "Megköszönöm, ha egy válaszlevélben leírod ezeket, cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
     SIGNATURE,
   ];
 }
@@ -46,7 +46,7 @@ export function paymentReminderParagraphs(input: {
       `Ár: ${formatHuf(input.totalPrice)}`,
     ].join("\n"),
     "Ha az ár nem reális szerinted, akkor mi lenne az?",
-    "Megköszönöm, ha mielőbb rendezed vagy egy válasz levélben leírod, ha szerinted más a reális ár, netán ha meggondoltad magad, akkor miért. Cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
+    "Megköszönöm, ha mielőbb rendezed, vagy egy válaszlevélben leírod, ha szerinted más a reális ár, netán, ha meggondoltad magad, akkor miért. Cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
     SIGNATURE,
   ];
 }

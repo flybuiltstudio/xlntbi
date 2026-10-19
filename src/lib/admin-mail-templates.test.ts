@@ -64,10 +64,41 @@ describe("demo feedback greeting", () => {
   it("greets the demo requester by name", () => {
     const p = demoFeedbackParagraphs({ recipientName: "Kiss Anna" });
     expect(p[0]).toBe("Kedves Kiss Anna!");
-    expect(p[1]).toBe("Igényeltél demo terméket tőlem, de ha jól látom, eddig nem vásároltad meg.");
+    expect(p[1]).toBe(
+      "Igényeltél demó terméket tőlem, de ha jól látom, eddig nem vásároltad meg.",
+    );
   });
   it("falls back to a generic greeting without a name", () => {
     const p = demoFeedbackParagraphs({ recipientName: "  " });
     expect(p[0]).toBe("Kedves Könyvelő!");
+  });
+});
+
+describe("corrected wording", () => {
+  const demo = demoFeedbackParagraphs({ recipientName: "Kiss Anna" });
+  const payment = paymentReminderParagraphs({
+    productName: "X",
+    tierLabel: null,
+    totalPrice: 0,
+    recipientName: "Kiss Anna",
+  });
+
+  it("uses the owner's exact demo thanks sentence", () => {
+    expect(demo[demo.length - 2]).toBe(
+      "Megköszönöm, ha egy válaszlevélben leírod ezeket, cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
+    );
+  });
+
+  it("uses the owner's exact payment reminder sentence", () => {
+    expect(payment[payment.length - 2]).toBe(
+      "Megköszönöm, ha mielőbb rendezed, vagy egy válaszlevélben leírod, ha szerinted más a reális ár, netán, ha meggondoltad magad, akkor miért. Cserébe valamilyen kedvezményt a termékre, vagy esetleg egy hasznos kis ajándék terméket kaphatsz.",
+    );
+  });
+
+  it("writes válaszlevél as one word and demó with a long ó", () => {
+    const both = [...demo, ...payment].join("\n");
+    expect(both).not.toContain("válasz levél");
+    expect(both).not.toMatch(/\bdemo\b/);
+    expect(demo.join("\n")).toContain("demó terméket");
   });
 });
