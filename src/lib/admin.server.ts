@@ -2061,3 +2061,88 @@ export async function closeDemoRequest(id: string): Promise<{ ok: boolean; error
 }
 
 
+
+// ---- Owner follow-up emails (DEMO feedback request / payment reminder) ----
+
+const FOLLOWUP_KEY = "followup_emails";
+
+export async function listFollowupSentAt(): Promise<Record<string, string>> {
+  const { getSetting } = await import("./app-settings.server");
+  return (await getSetting(FOLLOWUP_KEY)) as Record<string, string>;
+}
+
+async function recordFollowup(id: string): Promise<string> {
+  const { getSetting, setSetting } = await import("./app-settings.server");
+  const current = await getSetting(FOLLOWUP_KEY);
+  const sentAt = new Date().toISOString();
+  await setSetting(FOLLOWUP_KEY, { ...current, [id]: sentAt });
+  return sentAt;
+}
+
+async function sendFollowup(
+  id: string,
+  to: string,
+  subject: string,
+  paragraphs: string[],
+): Promise<{ ok: boolean; error?: string; sentAt?: string }> {
+  const { sendEmails } = await import("./notify.server");
+  const stamp = Date.now();
+  const data = { subject, paragraphs };
+  const ok = await sendEmails([
+    { template: "kovetes-level", to, key: `${id}-${stamp}`, data, replyTo: "info@xlntbi.hu" },
+    {
+      template: "kovetes-level",
+      to: LICENSE_BCC,
+      key: `${id}-${stamp}-copy`,
+      data: { ...data, subject: `[Másolat: ${to}] ${subject}` },
+      replyTo: "info@xlntbi.hu",
+    },
+  ]);
+  if (!ok) return { ok: false, error: "A levél kiküldése nem sikerült." };
+  return { ok: true, sentAt: await recordFollowup(id) };
+}
+
+export async function sendDemoFeedbackRequest(id: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: row } = await (supabaseAdmin as any)
+    .from("demo_requests")
+    .select("id, email, product_name")
+    .eq("id", id)
+    .maybeSingle();
+  if (!row) return { ok: false, error: "A DEMO igénylés nem található." };
+  const { withXlntPrefix } = await import("./product-name");
+  const { DEMO_FEEDBACK_PARAGRAPHS, demoFeedbackSubject } = await import("./admin-mail-templates");
+  return sendFollowup(
+    `demo-feedback-${id}`,
+    row.email as string,
+    demoFeedbackSubject(withXlntPrefix(row.product_name as string)),
+    DEMO_FEEDBACK_PARAGRAPHS,
+  );
+}
+
+export async function sendPaymentReminder(orderId: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data: order } = await supabaseAdmin
+    .from("orders")
+    .select("id, email, order_number, product_name, tier_label, total_price, payment_status")
+    .eq("id", orderId)
+    .maybeSingle();
+  if (!order) return { ok: false, error: "A megrendelés nem található." };
+  if (order.payment_status === "paid") {
+    return { ok: false, error: "Ez a megrendelés már rendezett, emlékeztető nem küldhető." };
+  }
+  const { withXlntPrefix } = await import("./product-name");
+  const { paymentReminderParagraphs, paymentReminderSubject } = await import(
+    "./admin-mail-templates"
+  );
+  return sendFollowup(
+    `payment-reminder-${orderId}`,
+    order.email as string,
+    paymentReminderSubject(order.order_number as string),
+    paymentReminderParagraphs({
+      productName: withXlntPrefix(order.product_name as string),
+      tierLabel: (order.tier_label as string | null) ?? null,
+      totalPrice: Number(order.total_price),
+    }),
+  );
+}

@@ -687,3 +687,32 @@ export const adminCloseDemoRequest = createServerFn({ method: "POST" })
     const { closeDemoRequest } = await import("./admin.server");
     return closeDemoRequest(data.demoId);
   });
+
+export const adminListFollowups = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { listFollowupSentAt } = await import("./admin.server");
+    return { sentAt: await listFollowupSentAt() };
+  });
+
+export const adminSendDemoFeedback = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ demoId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { sendDemoFeedbackRequest } = await import("./admin.server");
+    return sendDemoFeedbackRequest(data.demoId);
+  });
+
+export const adminSendPaymentReminder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => z.object({ orderId: z.string().uuid() }).parse(data))
+  .handler(async ({ context, data }) => {
+    const { gate } = await import("./admin-gate.server");
+    await gate(context as any);
+    const { sendPaymentReminder } = await import("./admin.server");
+    return sendPaymentReminder(data.orderId);
+  });
