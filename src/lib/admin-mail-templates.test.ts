@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { DEMO_FEEDBACK_PARAGRAPHS, paymentReminderParagraphs } from "./admin-mail-templates";
+import { demoFeedbackParagraphs, paymentReminderParagraphs } from "./admin-mail-templates";
 
 describe("payment reminder", () => {
   it("puts product, licence type and price on separate lines", () => {
@@ -8,15 +8,66 @@ describe("payment reminder", () => {
       productName: "XLNT Havi riport",
       tierLabel: "Teljes csomag",
       totalPrice: 74900,
+      recipientName: "Teszt Elek",
     });
     expect(p[3]).toBe("Termék: XLNT Havi riport\nLicenc típusa: Teljes csomag\nÁr: 74 900 Ft");
     expect(p.join(" ")).not.toContain("IDE A TERMÉK");
   });
   it("has no double space", () => {
-    const p = paymentReminderParagraphs({ productName: "X", tierLabel: null, totalPrice: 0 });
+    const p = paymentReminderParagraphs({
+      productName: "X",
+      tierLabel: null,
+      totalPrice: 0,
+      recipientName: "Teszt Elek",
+    });
     expect(p[1]).toBe(
       "Igényeltél terméket tőlem, de ha jól látom, eddig nem történt meg a kiegyenlítése.",
     );
-    expect(DEMO_FEEDBACK_PARAGRAPHS.join("\n")).not.toContain("  ");
+    expect(p.join("\n")).not.toContain("  ");
+  });
+  it("greets the buyer by name", () => {
+    const p = paymentReminderParagraphs({
+      productName: "X",
+      tierLabel: null,
+      totalPrice: 0,
+      recipientName: "Teszt Elek",
+    });
+    expect(p[0]).toBe("Kedves Teszt Elek!");
+  });
+  it("falls back to a generic greeting without a name", () => {
+    const p = paymentReminderParagraphs({
+      productName: "X",
+      tierLabel: null,
+      totalPrice: 0,
+      recipientName: null,
+    });
+    expect(p[0]).toBe("Kedves Könyvelő!");
+  });
+});
+
+describe("signature block", () => {
+  it("keeps Üdvözlettel and the name adjacent in both letters", () => {
+    const demo = demoFeedbackParagraphs({ recipientName: "Teszt Elek" });
+    const payment = paymentReminderParagraphs({
+      productName: "X",
+      tierLabel: null,
+      totalPrice: 0,
+      recipientName: "Teszt Elek",
+    });
+    const last = (list: string[]) => list[list.length - 1];
+    expect(last(demo)).toBe("Üdvözlettel:\nSarinay Dávid");
+    expect(last(payment)).toBe("Üdvözlettel:\nSarinay Dávid");
+  });
+});
+
+describe("demo feedback greeting", () => {
+  it("greets the demo requester by name", () => {
+    const p = demoFeedbackParagraphs({ recipientName: "Kiss Anna" });
+    expect(p[0]).toBe("Kedves Kiss Anna!");
+    expect(p[1]).toBe("Igényeltél demo terméket tőlem, de ha jól látom, eddig nem vásároltad meg.");
+  });
+  it("falls back to a generic greeting without a name", () => {
+    const p = demoFeedbackParagraphs({ recipientName: "  " });
+    expect(p[0]).toBe("Kedves Könyvelő!");
   });
 });
