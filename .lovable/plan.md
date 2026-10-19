@@ -18,7 +18,15 @@ Kattintásra felugró ablak nyílik: címzett (az igénylő e-mail címe), tárg
 
 ## 3. „Fizetési emlékeztető” gomb — csak fizetésre váró rendeléseknél
 
-Ugyanott, az éles rendelés-kártyákon, csak ha a rendelés fizetésre vár. Ugyanilyen megerősítő ablak: címzett (a vevő), tárgy („Fizetési emlékeztető – {rendelésszám}”) és a levél szövege. Az „IDE A TERMÉK NEVE, LICENC TÍPUSA ÉS ÁRA ÍRD BE.” sor helyére automatikusan bekerül a rendelés adata, pl. „XLNT … – Teljes csomag – 74 900 Ft”. A szöveg többi része szó szerint marad (a „Igényeltél  terméket” dupla szóközét egyre javítom).
+Ugyanott, az éles rendelés-kártyákon, csak ha a rendelés fizetésre vár. Ugyanilyen megerősítő ablak: címzett (a vevő), tárgy („Fizetési emlékeztető – {rendelésszám}”) és a levél szövege. Az „IDE A TERMÉK NEVE, LICENC TÍPUSA ÉS ÁRA ÍRD BE.” sor helyére automatikusan a rendelés adatai kerülnek, három külön sorban:
+
+```text
+Termék: XLNT …
+Licenc típusa: Teljes csomag
+Ár: 74 900 Ft
+```
+
+A szöveg többi része szó szerint marad (a „Igényeltél  terméket” dupla szóközét egyre javítom).
 
 Mindkét levélnél a válasz-cím a te címed, így ha a vevő a „Válasz” gombra kattint, hozzád érkezik. A levelekből belső másolat is megy a megszokott belső címre, és a kártyán látszik, mikor küldted utoljára (hogy ne menjen ki véletlenül kétszer).
 
