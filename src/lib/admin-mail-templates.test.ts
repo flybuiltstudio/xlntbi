@@ -47,7 +47,7 @@ describe("payment reminder", () => {
 
 describe("signature block", () => {
   it("keeps Üdvözlettel and the name adjacent in both letters", () => {
-    const demo = demoFeedbackParagraphs({ recipientName: "Teszt Elek" });
+    const demo = demoFeedbackParagraphs({ recipientName: "Teszt Elek", productName: "XLNT Havi riport" });
     const payment = paymentReminderParagraphs({
       productName: "X",
       tierLabel: null,
@@ -62,20 +62,25 @@ describe("signature block", () => {
 
 describe("demo feedback greeting", () => {
   it("greets the demo requester by name", () => {
-    const p = demoFeedbackParagraphs({ recipientName: "Kiss Anna" });
+    const p = demoFeedbackParagraphs({ recipientName: "Kiss Anna", productName: "XLNT Havi riport" });
     expect(p[0]).toBe("Kedves Kiss Anna!");
     expect(p[1]).toBe(
       "Igényeltél demó terméket tőlem, de ha jól látom, eddig nem vásároltad meg.",
     );
   });
+  it("names the demo product under the interest question", () => {
+    const p = demoFeedbackParagraphs({ recipientName: "Kiss Anna", productName: "XLNT Havi riport" });
+    expect(p[2]).toBe("Érdeklődni szeretnék, hogy sikerült-e kipróbálni?");
+    expect(p[3]).toBe("Termék: XLNT Havi riport");
+  });
   it("falls back to a generic greeting without a name", () => {
-    const p = demoFeedbackParagraphs({ recipientName: "  " });
+    const p = demoFeedbackParagraphs({ recipientName: "  ", productName: "XLNT Havi riport" });
     expect(p[0]).toBe("Kedves Könyvelő!");
   });
 });
 
 describe("corrected wording", () => {
-  const demo = demoFeedbackParagraphs({ recipientName: "Kiss Anna" });
+  const demo = demoFeedbackParagraphs({ recipientName: "Kiss Anna", productName: "XLNT Havi riport" });
   const payment = paymentReminderParagraphs({
     productName: "X",
     tierLabel: null,

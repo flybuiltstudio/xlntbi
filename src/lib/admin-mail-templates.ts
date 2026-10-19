@@ -12,11 +12,15 @@ function greeting(recipientName: string | null | undefined): string {
 /** Signature lines stay in one block so no blank line sits between them. */
 const SIGNATURE = "Üdvözlettel:\nSarinay Dávid";
 
-export function demoFeedbackParagraphs(input: { recipientName: string | null }): string[] {
+export function demoFeedbackParagraphs(input: {
+  recipientName: string | null;
+  productName: string;
+}): string[] {
   return [
     greeting(input.recipientName),
     "Igényeltél demó terméket tőlem, de ha jól látom, eddig nem vásároltad meg.",
     "Érdeklődni szeretnék, hogy sikerült-e kipróbálni?",
+    `Termék: ${input.productName}`,
     "Mi tetszett benne, és mi nem?",
     "Mi a nehézség, mi kellene még bele, mitől lenne jobb, miért nem vetted meg még, és mikor vennéd meg?",
     "Bármilyen hibát találtál benne, esetleg tudsz javasolni új funkció(ka)t bele?",

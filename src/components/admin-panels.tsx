@@ -3141,7 +3141,10 @@ export function DemoRequestsBlock({
                     label="Visszajelzés kérés"
                     recipient={demo.email}
                     subject={demoFeedbackSubject(withXlntPrefix(demo.productName))}
-                    paragraphs={demoFeedbackParagraphs({ recipientName: demo.name ?? null })}
+                    paragraphs={demoFeedbackParagraphs({
+                      recipientName: demo.name ?? null,
+                      productName: withXlntPrefix(demo.productName),
+                    })}
                     sentAt={followups.sentAt[`demo-feedback-${demo.id}`]}
                     onSent={followups.mark}
                     onResult={(text, isError) => (isError ? setError(text) : setMessage(text))}

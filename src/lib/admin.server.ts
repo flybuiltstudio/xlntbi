@@ -2116,7 +2116,10 @@ export async function sendDemoFeedbackRequest(id: string) {
     `demo-feedback-${id}`,
     row.email as string,
     demoFeedbackSubject(withXlntPrefix(row.product_name as string)),
-    demoFeedbackParagraphs({ recipientName: (row.name as string | null) ?? null }),
+    demoFeedbackParagraphs({
+      recipientName: (row.name as string | null) ?? null,
+      productName: withXlntPrefix(row.product_name as string),
+    }),
   );
 }
 
