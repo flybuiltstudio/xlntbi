@@ -98,6 +98,9 @@ async function collectReferencedPaths(): Promise<Set<string>> {
   const categories = await supabaseAdmin.from("custom_categories").select("image_path");
   for (const row of categories.data ?? []) add(row.image_path);
 
+  // The HWID generator is served by the public /api/public/hwid-download route.
+  add("hwid/HWIDGenerator.exe");
+
   return refs;
 }
 
