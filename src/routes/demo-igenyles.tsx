@@ -1,3 +1,4 @@
+import { trackEvent } from "@/lib/analytics";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
@@ -107,7 +108,10 @@ function DemoRequestPage() {
                 acceptPrivacy: true,
               },
             });
-            if (result.ok) setState("done");
+            if (result.ok) {
+              setState("done");
+              trackEvent("generate_lead", { form: "demo_request", product: product.slug });
+            }
             else {
               setError(result.error);
               setState("error");
