@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
+import { trackEvent } from "@/lib/analytics";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { getCheckoutSummary } from "@/utils/payments.functions";
 
@@ -48,7 +49,19 @@ function ThankYouPage() {
     let cancelled = false;
     fetchSummary({ data: { sessionId, orderNumber: String(rendeles), token: String(token), environment: getStripeEnvironment() } })
       .then((result) => {
-        if (!cancelled) setSummary(result);
+        if (cancelled) return;
+        setSummary(result);
+        if (result?.ok && typeof result.totalAmount === "number") {
+          const key = `xlntbi:ga-purchase:${rendeles}`;
+          if (!sessionStorage.getItem(key)) {
+            sessionStorage.setItem(key, "1");
+            trackEvent("purchase", {
+              transaction_id: String(rendeles),
+              value: result.totalAmount,
+              currency: (result as { currency?: string }).currency ?? "HUF",
+            });
+          }
+        }
       })
       .catch(() => {
         if (!cancelled) setSummary(null);

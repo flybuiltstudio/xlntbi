@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
+import logoAsset from "@/assets/xlntbi-logo.webp.asset.json";
 import { productCategories, categoryProducts } from "@/lib/product-categories";
 import type { CalculatorCard } from "@/lib/calculators/order";
 import {
@@ -199,6 +199,12 @@ export function SiteHeader({ calculatorCards }: { calculatorCards: Record<"hu" |
         </nav>
 
         <div className="ml-auto flex items-center gap-1 md:hidden">
+          <Link
+            to={asPath(lp("/konzultacio"))}
+            className="inline-flex min-h-10 items-center whitespace-nowrap rounded-md bg-primary px-2.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+          >
+            {t("nav.consultation")}
+          </Link>
           <LanguageSwitcher />
           <button
             type="button"

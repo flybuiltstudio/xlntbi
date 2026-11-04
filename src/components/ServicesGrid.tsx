@@ -1,3 +1,4 @@
+import { DesktopVideo } from "@/components/DesktopVideo";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import im_konyveles from "@/assets/szolgaltatasok/konyveles.jpg";
@@ -60,7 +61,7 @@ export function ServicesGrid({ items, more, videoLabel }: { items: readonly Item
           ))}
         </div>
         <div className="lg:sticky lg:top-24">
-          <video src={heroVideo.url} poster={posterImg} autoPlay muted loop playsInline aria-label={videoLabel} className="w-full rounded-xl border border-border object-cover shadow-sm" />
+          <DesktopVideo src={heroVideo.url} poster={posterImg} autoPlay muted loop playsInline aria-label={videoLabel} className="w-full rounded-xl border border-border object-cover shadow-sm" />
         </div>
       </div>
     </div>

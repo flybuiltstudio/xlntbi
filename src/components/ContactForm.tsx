@@ -1,3 +1,4 @@
+import { trackEvent } from "@/lib/analytics";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { submitContactForm } from "@/lib/contact.functions";
@@ -102,6 +103,7 @@ export function ContactForm({
 
       if (result.ok) {
         setStatus("done");
+        trackEvent("generate_lead", { form: formType === "konzultacio" ? "consultation" : "contact" });
         form.reset();
       } else {
         setStatus("error");

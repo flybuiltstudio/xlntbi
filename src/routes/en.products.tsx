@@ -1,3 +1,4 @@
+import { DesktopVideo } from "@/components/DesktopVideo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
@@ -171,7 +172,7 @@ function EnglishProducts() {
             </Link>
           </div>
           <div>
-            <video
+            <DesktopVideo
               src={heroVideo.url}
               poster={kalkulatorImg}
               autoPlay

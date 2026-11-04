@@ -34,9 +34,9 @@ function injectGtag() {
   document.head.appendChild(script);
 
   window.dataLayer = window.dataLayer || [];
-  function gtag(...args: GtagArgs) {
-    window.dataLayer!.push(args);
-  }
+  // gtag.js only processes the Arguments object, not plain arrays.
+  // eslint-disable-next-line prefer-rest-params
+  const gtag = function gtag() { window.dataLayer!.push(arguments); } as (...args: GtagArgs) => void;
   window.gtag = gtag;
 
   gtag("js", new Date());
@@ -99,6 +99,13 @@ export function initAnalytics() {
 
   // Fallback: also listen to popstate for non-router navigations.
   window.addEventListener("popstate", () => trackPageView(location.pathname));
+}
+
+/** Send a GA4 event only when statistics consent is active. */
+export function trackEvent(name: string, params: Record<string, unknown> = {}) {
+  if (typeof window === "undefined" || !loaded || !window.gtag) return;
+  if (!readConsent()?.statistics) return;
+  window.gtag("event", name, params);
 }
 
 export const GA_MEASUREMENT_ID_EXPORT = GA_MEASUREMENT_ID;

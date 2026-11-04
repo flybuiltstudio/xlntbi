@@ -160,14 +160,14 @@ export function CookieConsent() {
               <button
                 type="button"
                 onClick={() => decide(true, true)}
-                className="inline-flex items-center justify-center rounded-md bg-primary px-3.5 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                className="inline-flex items-center justify-center rounded-md bg-primary min-h-11 px-3.5 py-1.5 text-xs font-medium sm:min-h-0 text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 {t("cookie.acceptAll")}
               </button>
               <button
                 type="button"
                 onClick={() => decide(false, false)}
-                className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
+                className="inline-flex items-center justify-center rounded-md border border-input bg-background min-h-11 px-3.5 py-1.5 text-xs font-medium sm:min-h-0 text-foreground transition-colors hover:bg-accent"
               >
                 {t("cookie.necessaryOnly")}
               </button>
@@ -175,7 +175,7 @@ export function CookieConsent() {
                 <button
                   type="button"
                   onClick={() => decide(statistics, marketing)}
-                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
+                  className="inline-flex items-center justify-center rounded-md border border-input bg-background min-h-11 px-3.5 py-1.5 text-xs font-medium sm:min-h-0 text-foreground transition-colors hover:bg-accent"
                 >
                   {t("cookie.saveSelected")}
                 </button>
@@ -183,7 +183,7 @@ export function CookieConsent() {
                 <button
                   type="button"
                   onClick={() => setDetails(true)}
-                  className="inline-flex items-center justify-center rounded-md px-3.5 py-1.5 text-xs font-medium text-foreground underline underline-offset-4 transition-colors hover:text-primary"
+                  className="inline-flex items-center justify-center rounded-md min-h-11 px-3.5 py-1.5 text-xs font-medium sm:min-h-0 text-foreground underline underline-offset-4 transition-colors hover:text-primary"
                 >
                   {t("cookie.settings")}
                 </button>
