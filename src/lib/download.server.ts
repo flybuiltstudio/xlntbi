@@ -11,7 +11,7 @@ const MAX_DOWNLOADS = 10;
 // letöltést; ha közben lejár a signed URL, a fájl csonkán érkezik meg.
 const SIGNED_URL_SECONDS = 2 * 60 * 60;
 // DEMO access can be revoked by admins; signed URL only needs to be valid when the download starts.
-const DEMO_SIGNED_URL_SECONDS = 120;
+const DEMO_SIGNED_URL_SECONDS = 30 * 60;
 
 export const DOWNLOAD_BUCKET = BUCKET;
 
