@@ -29,7 +29,7 @@ Mobilon mindhárom gomb legalább 44 px magas lesz, azonos súllyal. A kártya k
 
 ## Nem módosítom, csak javaslatot adok (5. és 7.)
 
-**5. Konzultációs űrlap**: első körben név, e-mail, telefon és rövid kérdés legyen. A 13 jelölőnégyzet egy lenyitható „Mely szolgáltatások érdekelnek? (nem kötelező)” részbe kerülhetne, az üzenet pedig ne legyen kötelező.
+**5. Konzultációs űrlap**: egyelőre marad minden, ahogy van.
 
 **7. Bizalomépítés a főoldalon**: a középső AI-rész fölé kerülhet egy rövid blokk: „20 év tapasztalat”, a végzettségeid és a kamarai tagságod, néhány valódi ügyfélvélemény (csak tőled kapott, engedélyezett szöveggel), és egy „Kinek dolgozom” sor. Az AI-rész lejjebb kerülne.
 
