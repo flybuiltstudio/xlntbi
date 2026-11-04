@@ -199,6 +199,12 @@ export function SiteHeader({ calculatorCards }: { calculatorCards: Record<"hu" |
         </nav>
 
         <div className="ml-auto flex items-center gap-1 md:hidden">
+          <Link
+            to={asPath(lp("/konzultacio"))}
+            className="inline-flex min-h-10 items-center whitespace-nowrap rounded-md bg-primary px-2.5 text-xs font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+          >
+            {t("nav.consultation")}
+          </Link>
           <LanguageSwitcher />
           <button
             type="button"
