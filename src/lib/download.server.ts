@@ -10,6 +10,8 @@ const MAX_DOWNLOADS = 10;
 // Nagy exe fájloknál a böngésző/vírusírtó Range-kérésekkel folytathatja a
 // letöltést; ha közben lejár a signed URL, a fájl csonkán érkezik meg.
 const SIGNED_URL_SECONDS = 2 * 60 * 60;
+// DEMO access can be revoked by admins; signed URL only needs to be valid when the download starts.
+const DEMO_SIGNED_URL_SECONDS = 120;
 
 export const DOWNLOAD_BUCKET = BUCKET;
 
@@ -211,7 +213,7 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
       const demoFileName = await downloadFileName(demoRow.product_slug, demoProduct.download.fileName);
       const { data: demoSigned, error: demoSignError } = await supabaseAdmin.storage
         .from(BUCKET)
-        .createSignedUrl(demoProduct.download.storagePath, SIGNED_URL_SECONDS, { download: demoFileName });
+        .createSignedUrl(demoProduct.download.storagePath, DEMO_SIGNED_URL_SECONDS, { download: demoFileName });
       if (demoSignError || !demoSigned?.signedUrl) return { ok: false, reason: "error" };
       await supabaseAdmin.from("demo_requests").update({
         download_count: demoRow.download_count + 1,
