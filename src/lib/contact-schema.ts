@@ -18,7 +18,7 @@ export const submissionSchema = z.object({
   contactMethod: z.string().trim().max(80).optional().default(""),
   contactTime: z.array(z.string().trim().max(80)).max(12).default([]),
   privacyConsent: z.literal(true, {
-    errorMap: () => ({ message: "Az adatkezelési hozzájárulás elfogadása kötelező." }),
+    error: "Az adatkezelési hozzájárulás elfogadása kötelező.",
   }),
   // Honeypot – must stay empty for humans.
   website: z.string().max(0).optional().default(""),

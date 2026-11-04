@@ -79,7 +79,7 @@ export const subscribeSchema = z.object({
     .default(""),
   company: z.string().trim().max(160).optional().default(""),
   privacyConsent: z.literal(true, {
-    errorMap: () => ({ message: "Az adatkezelési hozzájárulás elfogadása kötelező." }),
+    error: "Az adatkezelési hozzájárulás elfogadása kötelező.",
   }),
   // Honeypot – must stay empty for humans.
   website: z.string().max(0).optional().default(""),
