@@ -7,6 +7,7 @@ A mérőkód most tömböt tesz a dataLayerbe, ezért a Google nem dolgozza fel.
 
 **2. Konverziós események (GA4)**
 Ezt javaslom: négy szabványos esemény menjen ki, csak sikeres beküldés után és csak hozzájárulással.
+
 - konzultációs űrlap → `generate_lead` (form: consultation)
 - kapcsolat-űrlap → `generate_lead` (form: contact)
 - DEMO-igénylés → `sign_up` / `demo_request`
@@ -20,6 +21,7 @@ Négy kalkulátornál (számla-dátumok, bérteszt, átalányadó, jövedelemad�
 Mobilon a fejlécben, a menügomb mellett megjelenik egy kompakt „Konzultációt kérek” gomb (angolul a meglévő angol felirattal). A főoldal első képernyőjén lévő gombokat nem írom át.
 
 **9. Mobil gyorsítás**
+
 - Minden kép kap kis WebP-változatot (mobilon 250 KB alatt), és a böngésző a képernyőhöz illőt tölti le. A logó is kicsinyített WebP lesz.
 - A főoldal 2 videója és a Rólam oldal videója mobilon állóképpé válik, így ott a videó le sem töltődik. Asztali gépen minden marad a régiben.
 - Utána mobil méréssel ellenőrzöm a letöltött méreteket.
@@ -31,16 +33,18 @@ Mobilon mindhárom gomb legalább 44 px magas lesz, azonos súllyal. A kártya k
 
 **5. Konzultációs űrlap**: egyelőre marad minden, ahogy van.
 
-**7. Bizalomépítés a főoldalon**: a középső AI-rész fölé kerülhet egy rövid blokk: „20 év tapasztalat”, a végzettségeid és a kamarai tagságod, néhány valódi ügyfélvélemény (csak tőled kapott, engedélyezett szöveggel), és egy „Kinek dolgozom” sor. Az AI-rész lejjebb kerülne.
+**7. Bizalomépítés a főoldalon**: a középső AI-rész fölé kerülhet egy rövid blokk: „ Több mint 20 év tapasztalat”, a végzettségeid és a kamarai tagságod, néhány valódi ügyfélvélemény (csak tőled kapott, engedélyezett szöveggel), és egy „Kinek dolgozom” sor. Az AI-rész lejjebb kerülne. De egyelőre maradjon, majd későbbre javasold.
 
 ## Ehhez kell tőled valami (3.)
 
 **Meta pixel és Google Ads címke**: be tudom építeni őket úgy, hogy csak a marketing-sütik elfogadása után töltődjenek be, és a konzultáció, a DEMO-igénylés és a vásárlás külön eseményként menjen ki (Meta: Lead, CompleteRegistration, Purchase). A pixelt viszont én nem tudom létrehozni, ahhoz kell:
+
 - a Meta-hirdetési fiókod csatlakoztatása, vagy a pixelazonosító,
 - a Google Ads fiókod csatlakoztatása, vagy az AW-azonosító és a konverziós címkék.
 Amíg ezek nincsenek meg, ezt a részt nem építem be. Az adatvédelmi és a süti-tájékoztatót akkor egészítem ki, amikor a pixel bekerül.
 
 ## Technical details
+
 - `src/lib/analytics.ts`: use `arguments` in gtag; add `trackEvent()` that sends only when consent is given. Calls go in the success handlers of the consultation, contact and demo forms and on the thank-you page (dedupe with a sessionStorage key per order id).
 - Calculators: replace the cloudHQ URL in `src/lib/calculators/*.ts` (HU+EN) with `/konzultacio` / its EN route.
 - Header: mobile-only CTA next to the hamburger button.
