@@ -1,8 +1,10 @@
+import { DesktopVideo } from "@/components/DesktopVideo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { HeroPlanks } from "@/components/HeroPlanks";
 import aboutImgAsset from "@/assets/David_weboldal_kep_2.webp.asset.json";
 import animacio2 from "@/assets/animacio-2.mp4.asset.json";
+import animacio2Poster from "@/assets/animacio-2-poster.webp.asset.json";
 import { IntroVideo } from "@/components/IntroVideo";
 const aboutImg = aboutImgAsset.url;
 import icHatekonysag from "@/assets/icons/hatekonysag.png.asset.json";
@@ -159,6 +161,7 @@ function Index() {
           <div className="mt-7 flex min-h-0 flex-1 items-end justify-start gap-4">
             <IntroVideo
               src={animacio2.url}
+              poster={animacio2Poster.url}
               label="Sarinay Dávid – Animáció"
               className="h-auto w-full max-w-md min-w-0 rounded-lg md:h-full md:w-auto md:max-w-full md:object-contain md:object-left"
             />
@@ -230,7 +233,7 @@ function Index() {
               </Link>
             </div>
             <div className="overflow-hidden rounded-xl border border-primary-foreground/15">
-              <video
+              <DesktopVideo
                 src={aiDevVideo.url}
                 poster={aiDevImg}
                 aria-label="Könyvelő AI-támogatással ellenőrzi a pénzügyi kimutatásokat"

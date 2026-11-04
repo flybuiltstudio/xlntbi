@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, FileText } from "lucide-react";
 import portraitImgAsset from "@/assets/En-modern-konyveloirodaban.webp.asset.json";
 import { PageHero } from "@/components/PageHero";
+import animacio1Poster from "@/assets/animacio-1-poster.webp.asset.json";
 import { IntroVideo } from "@/components/IntroVideo";
 import animacio1 from "@/assets/animacio-1.mp4.asset.json";
 import { buildHead } from "@/lib/i18n/head";
@@ -88,6 +89,7 @@ function EnglishAbout() {
             />
             <IntroVideo
               src={animacio1.url}
+              poster={animacio1Poster.url}
               label="Dávid Sarinay – animation"
               className="w-full rounded-xl border border-border shadow-sm"
             />

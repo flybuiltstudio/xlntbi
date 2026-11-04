@@ -3,6 +3,7 @@ import { Check, FileText } from "lucide-react";
 import portraitImgAsset from "@/assets/En-modern-konyveloirodaban.webp.asset.json";
 const portraitImg = portraitImgAsset.url;
 import { PageHero } from "@/components/PageHero";
+import animacio1Poster from "@/assets/animacio-1-poster.webp.asset.json";
 import { IntroVideo } from "@/components/IntroVideo";
 import animacio1 from "@/assets/animacio-1.mp4.asset.json";
 
@@ -147,6 +148,7 @@ function RolamPage() {
             />
             <IntroVideo
               src={animacio1.url}
+              poster={animacio1Poster.url}
               label="Sarinay Dávid – animáció"
               className="w-full rounded-xl border border-border shadow-sm"
             />
