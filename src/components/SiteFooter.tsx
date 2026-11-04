@@ -3,7 +3,7 @@ import { Facebook, Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import { openCookieSettings } from "@/components/CookieConsent";
 import { asPath, useLocalPath, useT, type TranslationKey } from "@/lib/i18n";
 
-import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
+import logoAsset from "@/assets/xlntbi-logo.webp.asset.json";
 import heroImg from "@/assets/bcg-savok.jpg";
 import dspLogo from "@/assets/dsp-logo-feher.png.asset.json";
 import neumannLogo from "@/assets/neumann-logo-feher.png.asset.json";

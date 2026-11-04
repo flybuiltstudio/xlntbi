@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { HeroPlanks } from "@/components/HeroPlanks";
 import { buildHead } from "@/lib/i18n/head";
-import aboutImgAsset from "@/assets/David_weboldal_kep_2.jpg.asset.json";
+import aboutImgAsset from "@/assets/David_weboldal_kep_2.webp.asset.json";
 import animacio2 from "@/assets/animacio-2.mp4.asset.json";
 import { IntroVideo } from "@/components/IntroVideo";
 import icHatekonysag from "@/assets/icons/hatekonysag.png.asset.json";

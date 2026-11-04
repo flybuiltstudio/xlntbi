@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, FileText } from "lucide-react";
-import portraitImgAsset from "@/assets/En-modern-konyveloirodaban.jpg.asset.json";
+import portraitImgAsset from "@/assets/En-modern-konyveloirodaban.webp.asset.json";
 import { PageHero } from "@/components/PageHero";
 import { IntroVideo } from "@/components/IntroVideo";
 import animacio1 from "@/assets/animacio-1.mp4.asset.json";

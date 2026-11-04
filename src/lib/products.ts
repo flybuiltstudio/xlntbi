@@ -6,7 +6,7 @@ import controllingImg from "@/assets/controlling.jpg";
 import auditImg from "@/assets/cegaudit.jpg";
 import biImg from "@/assets/bi.jpg";
 import officeImg from "@/assets/konyveloiroda-audit.jpg";
-import modernImgAsset from "@/assets/En-modern-konyveloirodaban.jpg.asset.json";
+import modernImgAsset from "@/assets/En-modern-konyveloirodaban.webp.asset.json";
 const modernImg = modernImgAsset.url;
 import closeupImg from "@/assets/close-up-busy-businesswoman.jpg";
 import termekekImg from "@/assets/termekek.jpg";

@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import logoAsset from "@/assets/xlntbi-logo.png.asset.json";
+import logoAsset from "@/assets/xlntbi-logo.webp.asset.json";
 import { productCategories, categoryProducts } from "@/lib/product-categories";
 import type { CalculatorCard } from "@/lib/calculators/order";
 import {
