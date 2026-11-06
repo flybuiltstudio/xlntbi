@@ -143,6 +143,7 @@ export async function markOrderPaid(options: {
         tierLabel: (order.tier_label as string | null) ?? undefined,
         total: formatPrice((order.total_price as number) - discountAmount),
         customerEmail: order.email,
+        customerName: (order.billing_name as string | null) ?? undefined,
         paymentStatus: "paid",
         rows: rows.filter(([key]) => key !== "Rendelésszám"),
       },

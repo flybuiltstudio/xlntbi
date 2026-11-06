@@ -11,17 +11,18 @@ interface Props {
   tierLabel?: string
   total?: string
   customerEmail?: string
+  customerName?: string
   paymentStatus?: 'paid' | 'unpaid'
   rows?: Row[]
 }
 
 const LICENSE_PLACEHOLDER = '________________'
 
-function licenseMailto(productName?: string, tierLabel?: string, customerEmail?: string): string {
+function licenseMailto(productName?: string, tierLabel?: string, customerEmail?: string, customerName?: string): string {
   const name = productName || 'Termék'
   const subject = `${name} – beírandó licenc`
   const body = [
-    'Tisztelt Vásárló!',
+    customerName?.trim() ? `Tisztelt ${customerName.trim()}!` : 'Tisztelt Vásárló!',
     '',
     'Küldöm a licencet az alábbi termékhez:',
     '',
@@ -34,6 +35,7 @@ function licenseMailto(productName?: string, tierLabel?: string, customerEmail?:
     'Üdvözlettel:',
     'Sarinay Dávid',
     'XLNT BI',
+    'xlntbi.hu',
   ].join('\n')
   return `mailto:${customerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 }
@@ -49,7 +51,7 @@ const button = {
   textDecoration: 'none',
 }
 
-const Email = ({ orderNumber, productName, tierLabel, total, customerEmail, paymentStatus, rows }: Props) => (
+const Email = ({ orderNumber, productName, tierLabel, total, customerEmail, customerName, paymentStatus, rows }: Props) => (
   <Html lang="hu" dir="ltr">
     <Head />
     <Preview>{`Új megrendelés: ${productName || ''} – ${total || ''}`}</Preview>
@@ -68,7 +70,7 @@ const Email = ({ orderNumber, productName, tierLabel, total, customerEmail, paym
               <Link href={`mailto:${customerEmail}`}>Válasz a vevőnek: {customerEmail}</Link>
             </Text>
             <Section style={{ margin: '8px 0 16px' }}>
-              <Link href={licenseMailto(productName, tierLabel, customerEmail)} style={button}>
+              <Link href={licenseMailto(productName, tierLabel, customerEmail, customerName)} style={button}>
                 Licenc küldése a vevőnek
               </Link>
             </Section>

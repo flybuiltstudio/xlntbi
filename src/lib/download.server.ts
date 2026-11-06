@@ -81,6 +81,7 @@ export async function issueDownload(order: OrderRow): Promise<void> {
           productName,
           total: "—",
           customerEmail: order.email,
+          customerName: order.billing_name,
           paymentStatus: "paid",
           rows: [
             ["Figyelem", "Ehhez a termékhez nincs feltöltött fájl, a letöltést kézzel küldd el."],
