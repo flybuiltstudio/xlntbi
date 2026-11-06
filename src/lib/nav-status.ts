@@ -1,3 +1,4 @@
+import { safeCell } from "./spreadsheet-safe";
 /**
  * NAV (Online Számla) delivery status of Billingo invoices — shared types and
  * labels used by both the server check and the admin panel.
@@ -70,7 +71,8 @@ export function navReportToCsv(report: NavStatusReport): string {
     "Összeg",
     "Létrehozva",
   ];
-  const escape = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const escape = (v: unknown) =>
+    `"${String(safeCell(v == null ? null : typeof v === "number" ? v : String(v))).replace(/"/g, '""')}"`;
   const lines = report.rows.map((r) =>
     [
       r.orderNumber,
