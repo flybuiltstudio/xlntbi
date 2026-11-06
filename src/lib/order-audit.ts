@@ -1,3 +1,4 @@
+import { safeCell } from "./spreadsheet-safe";
 /**
  * Shared types for the order-level Billingo audit (invoice ↔ storno pairing).
  *
@@ -87,7 +88,8 @@ export const PAIR_STATE_LABEL: Record<InvoicePair["state"], string> = {
 
 /** CSV export of the audit table (one row per order). */
 export function orderAuditToCsv(report: OrderAuditReport): string {
-  const esc = (value: unknown) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+  const esc = (v: unknown) =>
+    `"${String(safeCell(v == null ? null : typeof v === "number" ? v : String(v))).replace(/"/g, '""')}"`;
   const lines: string[] = [
     [
       "rendelesszam",

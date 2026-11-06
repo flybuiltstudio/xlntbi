@@ -1,3 +1,4 @@
+import { safeCell } from "@/lib/spreadsheet-safe";
 import { ScanSearch, Webhook } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
@@ -158,7 +159,7 @@ export function BillingoAuditPanel() {
   }
 
   function csvCell(value: string | number | null): string {
-    const s = value === null || value === undefined ? "" : String(value);
+    const s = String(safeCell(value));
     return `"${s.replace(/"/g, '""')}"`;
   }
 
