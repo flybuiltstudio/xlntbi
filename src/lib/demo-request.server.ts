@@ -155,7 +155,7 @@ export async function requestDemo(input: {
 
   const licenseSubject = `${productName} – DEMO – beírandó licenc`;
   const licenseBody = [
-    "Tisztelt DEMO-igénylő!",
+    input.name?.trim() ? `Tisztelt ${input.name.trim()}!` : "Tisztelt DEMO-igénylő!",
     "",
     "Küldöm a licencet az alábbi termékhez:",
     "",
@@ -168,6 +168,7 @@ export async function requestDemo(input: {
     "Üdvözlettel:",
     "Sarinay Dávid",
     "XLNT BI",
+    "xlntbi.hu",
   ].join("\n");
   // Keep the address unencoded: Gmail ignores "%40" in the mailto recipient.
   const licenseMailto = `mailto:${input.email.trim()}?subject=${encodeURIComponent(licenseSubject)}&body=${encodeURIComponent(licenseBody)}`;
