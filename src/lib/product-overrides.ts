@@ -179,6 +179,12 @@ function applyCategories(
 
 let fingerprint = "";
 
+/** Serialized page data belongs only in the browser's catalog, never the worker's. */
+export function applyPublicProductOverrides(data: ProductOverrideData): void {
+  if (typeof window === "undefined") return;
+  applyProductOverrides(data);
+}
+
 /** Layers the given overrides onto the catalog (idempotent). */
 export function applyProductOverrides(data: ProductOverrideData): void {
   const next = JSON.stringify(data);
