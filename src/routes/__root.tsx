@@ -20,7 +20,7 @@ import { initAnalytics } from "@/lib/analytics";
 import { langFromPath, useLanguagePersistence } from "@/lib/i18n";
 import { translate } from "@/lib/i18n/dictionary";
 import { getProductOverrides } from "@/lib/product-overrides.functions";
-import { applyProductOverrides } from "@/lib/product-overrides";
+import { applyPublicProductOverrides } from "@/lib/product-overrides";
 import { getCalculatorCards } from "@/lib/custom-calculators.functions";
 
 
@@ -105,7 +105,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       getCalculatorCards({ data: { lang: "hu" } }),
       getCalculatorCards({ data: { lang: "en" } }),
     ]);
-    applyProductOverrides(data);
+    applyPublicProductOverrides(data);
     return { productOverrides: data, calculatorCards: { hu: huCalculators.cards, en: enCalculators.cards } };
   },
   staleTime: 60_000,
@@ -159,7 +159,7 @@ function RootComponent() {
   const router = useRouter();
   // The server and browser have separate module instances. Apply the loader's
   // serialized snapshot in the browser before child routes render as well.
-  applyProductOverrides(productOverrides);
+  applyPublicProductOverrides(productOverrides);
   useLanguagePersistence();
 
   useEffect(() => {

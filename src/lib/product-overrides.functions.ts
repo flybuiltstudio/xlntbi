@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 
-import type { ProductOverrideData } from "./product-overrides";
+import { applyProductOverrides, type ProductOverrideData } from "./product-overrides";
 
 /**
  * Public, read-only fetch of the product description and price overrides.
@@ -12,6 +12,8 @@ export const getProductOverrides = createServerFn({ method: "GET" }).handler(
   async (): Promise<ProductOverrideData> => {
     const { readProductOverrides } = await import("./product-overrides.server");
     const data = await readProductOverrides();
+    // The server catalog must retain real paths; only the returned DTO is redacted.
+    applyProductOverrides(data);
     return {
       ...data,
       custom: data.custom.map((row) => ({

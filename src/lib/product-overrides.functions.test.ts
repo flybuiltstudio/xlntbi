@@ -7,7 +7,7 @@ vi.mock("@tanstack/react-start", () => ({
 vi.mock("./product-overrides.server", () => ({ readProductOverrides: vi.fn() }));
 
 import { readProductOverrides } from "./product-overrides.server";
-import { applyProductOverrides } from "./product-overrides";
+import { applyProductOverrides, applyPublicProductOverrides } from "./product-overrides";
 import { getProductOverrides } from "./product-overrides.functions";
 import { getProduct } from "./products";
 
@@ -33,9 +33,10 @@ beforeEach(() => {
 
 describe("public product override reads", () => {
   it("keeps the real download path in the server catalog on cold and repeated page loads", async () => {
-    await getProductOverrides();
+    const publicData = await getProductOverrides();
+    applyPublicProductOverrides(publicData);
     expect(getProduct("regression-download")?.download?.storagePath).toBe(privatePath);
-    await getProductOverrides();
+    applyPublicProductOverrides(await getProductOverrides());
     expect(getProduct("regression-download")?.download?.storagePath).toBe(privatePath);
   });
 

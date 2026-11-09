@@ -2,6 +2,7 @@ import { sendEmails } from "./notify.server";
 import { getProduct } from "./products";
 import { withXlntPrefix } from "./product-name";
 import { isKnowledgeProduct } from "./product-categories";
+import { ensureProductOverrides } from "./product-overrides.server";
 
 const OWNER_EMAIL = "xllentac@gmail.com";
 const BUCKET = "termekfajlok";
@@ -67,6 +68,7 @@ async function downloadFileName(slug: string, fallback: string): Promise<string>
  * link to the buyer. Idempotent: an existing, still-valid token is reused.
  */
 export async function issueDownload(order: OrderRow): Promise<void> {
+  await ensureProductOverrides();
   const productName = withXlntPrefix(order.product_name);
   const product = getProduct(order.product_slug);
   if (!product?.download) {
@@ -209,6 +211,7 @@ export async function resolveDownload(token: string): Promise<ResolvedDownload> 
       if (!demoRow) return { ok: false, reason: "not_found" };
       if (new Date(demoRow.expires_at).getTime() < Date.now()) return { ok: false, reason: "expired" };
       if (demoRow.download_count >= demoRow.max_downloads) return { ok: false, reason: "limit" };
+      await ensureProductOverrides();
       const demoProduct = getProduct(demoRow.product_slug);
       if (!demoProduct?.download) return { ok: false, reason: "error" };
       const demoFileName = await downloadFileName(demoRow.product_slug, demoProduct.download.fileName);
