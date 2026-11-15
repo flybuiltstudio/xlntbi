@@ -30,7 +30,7 @@ export function servedPageTarget(pathname: string): { pageType: PageViewType; pa
   const path = pathname.replace(/\/+$/, "") || "/";
   if (SERVICE_PATHS.has(path)) return { pageType: "service", pageKey: path };
   const productMatch = /^\/(?:termek|en\/product)\/([a-z0-9-]+)$/.exec(path);
-  if (!productMatch) return null;
+  if (!productMatch?.[1]) return null;
   const product = getProduct(productMatch[1]);
   return product ? { pageType: "product", pageKey: product.slug } : null;
 }
