@@ -5,6 +5,10 @@
  * through a `security definer` SQL function so the table stays server-only.
  */
 
+import { getProduct } from "./products";
+import { serviceItems } from "./services";
+import { ROUTE_PAIRS } from "./i18n/routes";
+
 export type PageViewType = "product" | "service";
 
 export type PageViewRow = {
@@ -15,8 +19,41 @@ export type PageViewRow = {
   views: number;
 };
 
-/** Increment the counter of one page for the current month. */
-export async function recordView(pageType: PageViewType, pageKey: string): Promise<void> {
+const COUNTED_HOSTS = new Set(["xlntbi.hu", "www.xlntbi.hu", "xlntbi.lovable.app"]);
+const SERVICE_PATHS = new Set<string>(serviceItems.map((item) => item.to));
+for (const pair of ROUTE_PAIRS) {
+  if (SERVICE_PATHS.has(pair.hu)) SERVICE_PATHS.add(pair.en);
+}
+
+/** Resolve only real catalog pages, never arbitrary counter keys. */
+export function servedPageTarget(pathname: string): { pageType: PageViewType; pageKey: string } | null {
+  const path = pathname.replace(/\/+$/, "") || "/";
+  if (SERVICE_PATHS.has(path)) return { pageType: "service", pageKey: path };
+  const productMatch = /^\/(?:termek|en\/product)\/([a-z0-9-]+)$/.exec(path);
+  if (!productMatch) return null;
+  const product = getProduct(productMatch[1]);
+  return product ? { pageType: "product", pageKey: product.slug } : null;
+}
+
+/** Count only successful, published HTML document delivery. No public write RPC. */
+export async function recordServedPageView(request: Request, response: Response): Promise<void> {
+  const url = new URL(request.url);
+  if (!COUNTED_HOSTS.has(url.hostname) || request.method !== "GET") return;
+  if (response.status !== 200 || !response.headers.get("content-type")?.toLowerCase().startsWith("text/html")) return;
+  if (!request.headers.get("accept")?.includes("text/html")) return;
+  const destination = request.headers.get("sec-fetch-dest");
+  if (destination && destination !== "document") return;
+  if (request.headers.has("purpose") || request.headers.has("sec-purpose")) return;
+  if (/bot|crawler|spider|crawling|preview/i.test(request.headers.get("user-agent") ?? "")) return;
+
+  // SSR has already loaded the full catalog, including admin-created products.
+  const target = servedPageTarget(url.pathname);
+  if (!target) return;
+  await incrementServedPage(target.pageType, target.pageKey);
+}
+
+/** Private write helper: reachable only after successful page delivery checks. */
+async function incrementServedPage(pageType: PageViewType, pageKey: string): Promise<void> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const now = new Date();
   const { error } = await supabaseAdmin.rpc("increment_page_view", {

@@ -15,3 +15,4 @@
 - Header calculator menus consume the same SSR-loaded ordered catalog as the listing pages, refreshed after admin publish/delete/reorder — this keeps new uploads visible in both language menus without manual entries.
 - Service subpages justify long body paragraphs (text-justify) — standalone pages like ev-konyveles / en.sole-trader-bookkeeping don't use ServicePage, so style changes must be applied to them too.
 - Apply redacted product override DTOs only to the browser catalog; public override reads initialize the server catalog with full rows and download entry points ensure overrides — this prevents SSR from replacing private storage paths with public markers.
+- Page-view writes run only after successful published HTML document delivery and resolve keys from the server catalog; never expose a client-callable counter RPC, because arbitrary caller-selected keys corrupt statistics.

@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { usePageView } from "@/lib/use-page-view";
 import { Check } from "lucide-react";
 import { AAM_PRICE_NOTE, aamText } from "@/lib/aam";
 import { getProductFileName } from "@/lib/product-file.functions";
@@ -82,7 +81,6 @@ const faq = [
 
 export function ProductDetail({ slug, h1 }: { slug: string; h1: string }) {
   const product = getProduct(slug);
-  usePageView("product", slug);
   const fetchFileName = useServerFn(getProductFileName);
   const { data: liveFile } = useQuery({
     queryKey: ["product-file-name", slug],

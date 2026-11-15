@@ -30,7 +30,21 @@ const csrfMiddleware = createCsrfMiddleware({
   filter: (ctx) => ctx.handlerType === "serverFn",
 });
 
+// Counters follow successfully served documents, never caller-selected RPC data.
+const pageViewMiddleware = createMiddleware().server(async ({ next, request }) => {
+  const result = await next();
+  const response = result instanceof Response ? result : result.response;
+  try {
+    const { recordServedPageView } = await import("./lib/page-views.server");
+    await recordServedPageView(request, response);
+  } catch {
+    // Statistics must not interfere with page delivery.
+    console.error("[page-views] recording failed");
+  }
+  return result;
+});
+
 export const startInstance = createStart(() => ({
   functionMiddleware: [attachSupabaseAuth],
-  requestMiddleware: [errorMiddleware, csrfMiddleware],
+  requestMiddleware: [errorMiddleware, csrfMiddleware, pageViewMiddleware],
 }));

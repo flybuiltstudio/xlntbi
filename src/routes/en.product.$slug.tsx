@@ -7,7 +7,6 @@ import { productSummaryEn } from "@/lib/products-en";
 import { englishProductContent, englishProductMeta } from "@/lib/product-overrides";
 import { isKnowledgeProduct } from "@/lib/product-categories";
 import { SITE_ORIGIN } from "@/lib/i18n/routes";
-import { usePageView } from "@/lib/use-page-view";
 
 export const Route = createFileRoute("/en/product/$slug")({
   loader: ({ params }) => {
@@ -105,7 +104,6 @@ export const Route = createFileRoute("/en/product/$slug")({
 
 function EnglishProductPage() {
   const data = Route.useLoaderData();
-  usePageView("product", data.slug);
 
   return (
     <div>

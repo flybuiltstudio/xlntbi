@@ -1,8 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useLocation } from "@tanstack/react-router";
 import { Check, ChevronDown } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
-import { usePageView } from "@/lib/use-page-view";
 import heroImage from "@/assets/ev-konyveles-poster.jpg";
 
 const TITLE = "EV Könyvelés – KATA és átalányadózó vállalkozóknak | EXCELlent Business Intelligence";
@@ -114,8 +112,6 @@ export const Route = createFileRoute("/ev-konyveles")({
 });
 
 function EvKonyvelesPage() {
-  const pathname = useLocation({ select: (l) => l.pathname });
-  usePageView("service", pathname);
   return (
     <div>
       <PageHero>

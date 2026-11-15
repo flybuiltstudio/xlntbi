@@ -1,8 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useLocation } from "@tanstack/react-router";
 import { Check, ChevronDown } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
-import { usePageView } from "@/lib/use-page-view";
 import heroImage from "@/assets/ev-konyveles-poster.jpg";
 
 const TITLE = "Self-employed bookkeeping – KATA & flat-rate | EXCELlent Business Intelligence";
@@ -112,8 +110,6 @@ export const Route = createFileRoute("/en/sole-trader-bookkeeping")({
 });
 
 function SeBookkeepingPage() {
-  const pathname = useLocation({ select: (l) => l.pathname });
-  usePageView("service", pathname);
   return (
     <div lang="en">
       <PageHero>
