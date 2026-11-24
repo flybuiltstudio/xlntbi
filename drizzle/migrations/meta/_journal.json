@@ -92,6 +92,13 @@
       "when": 1790252243672,
       "tag": "0012_catalog_cron_nonce_and_checkout_token",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1795479970399,
+      "tag": "0013_restrict_security_autofix_execution",
+      "breakpoints": true
     }
   ]
 }
