@@ -16,3 +16,4 @@
 - Service subpages justify long body paragraphs (text-justify) — standalone pages like ev-konyveles / en.sole-trader-bookkeeping don't use ServicePage, so style changes must be applied to them too.
 - Apply redacted product override DTOs only to the browser catalog; public override reads initialize the server catalog with full rows and download entry points ensure overrides — this prevents SSR from replacing private storage paths with public markers.
 - Page-view writes run only after successful published HTML document delivery and resolve keys from the server catalog; never expose a client-callable counter RPC, because arbitrary caller-selected keys corrupt statistics.
+- Route navigation into product and service detail pages uses document delivery via the shared router navigation boundary, while same-page and uncounted navigation stays client-side — this includes internal clicks in secure server-owned view counts without restoring a public counter RPC.
