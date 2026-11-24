@@ -1,4 +1,6 @@
-/** Service subpages, shared by the Szolgáltatásaim page and the admin statistics. */
+import { ROUTE_PAIRS } from "./i18n/routes";
+
+/** Service subpages used by the Hungarian service listing. */
 export const serviceItems = [
   { to: "/konyveles", label: "Könyvelési szolgáltatások" },
   { to: "/ev-konyveles", label: "EV Könyvelés – KATA és átalányadó" },
@@ -12,6 +14,17 @@ export const serviceItems = [
   { to: "/digitalis-idomegtakaritasi-audit", label: "Digitális időmegtakarítási audit" },
 ] as const;
 
+/** Both language variants, with existing counter keys and labels preserved. */
+export const servicePageItems: { to: string; label: string }[] = [
+  ...serviceItems,
+  ...ROUTE_PAIRS.flatMap((pair) => {
+    const item = serviceItems.find((service) => service.to === pair.hu);
+    return item && !serviceItems.some((service) => service.to === pair.en)
+      ? [{ to: pair.en, label: `${item.label} (EN)` }]
+      : [];
+  }),
+];
+
 export function serviceLabel(path: string): string {
-  return serviceItems.find((item) => item.to === path)?.label ?? path;
+  return servicePageItems.find((item) => item.to === path)?.label ?? path;
 }

@@ -17,8 +17,16 @@ export const getRouter = () => {
   // reach the existing server document counter; all other routes stay SPA.
   const navigate = router.navigate;
   router.navigate = (options) => {
-    if (typeof window === "undefined" || options.reloadDocument || options.href) {
+    if (typeof window === "undefined" || options.reloadDocument) {
       return navigate(options);
+    }
+    if (options.href) {
+      const destination = new URL(options.href, window.location.href);
+      return navigate({
+        ...options,
+        reloadDocument: destination.origin === window.location.origin
+          && requiresCountedDocument(destination.pathname, window.location.pathname),
+      });
     }
     // Both APIs accept navigation options at runtime, but their generic
     // signatures differ in this Router version. Keep the public NavigateFn

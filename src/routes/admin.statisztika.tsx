@@ -17,7 +17,7 @@ import {
 
 import { adminOrderStats, adminPageViewStats, adminDemoStats } from "@/lib/admin.functions";
 import { formatPrice, products, resolveProductSlug } from "@/lib/products";
-import { serviceItems } from "@/lib/services";
+import { servicePageItems } from "@/lib/services";
 import { PageHero } from "@/components/PageHero";
 import { useAdminSession } from "@/components/admin-panels";
 import { AdminSectionNav, BackToTop } from "@/components/admin-toc";
@@ -1067,7 +1067,7 @@ function PageViewStats({ yearSel, monthSel, years: orderYears, onYearChange, onM
     [],
   );
   const serviceEntries = useMemo(
-    () => serviceItems.map((item) => ({ key: item.to, label: item.label })),
+    () => servicePageItems.map((item) => ({ key: item.to, label: item.label })),
     [],
   );
 

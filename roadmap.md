@@ -35,3 +35,4 @@
 - [x] KATA és Átalányadó összehasonlító kalkulátor közzététele utolsóként, külön HU/EN kártyaképpel
 - [x] KATA és Átalányadó összehasonlító kártyaképek újragenerálása a zöld arculatú HU/EN kalkulátorból
 - [x] Hírlevél szerkesztő: Betűszín és Háttérszín sorokban a színválasztó mezők és paletták egymás fölé igazítása
+- [x] Termék- és szolgáltatásmegnyitások számlálása: teljes útvonal- és előzményellenőrzés, új hibák javítása lezárt adatok módosítása nélkül

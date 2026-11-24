@@ -6,8 +6,7 @@
  */
 
 import { getProduct } from "./products";
-import { serviceItems } from "./services";
-import { ROUTE_PAIRS } from "./i18n/routes";
+import { servicePageItems } from "./services";
 
 export type PageViewType = "product" | "service";
 
@@ -20,10 +19,7 @@ export type PageViewRow = {
 };
 
 const COUNTED_HOSTS = new Set(["xlntbi.hu", "www.xlntbi.hu", "xlntbi.lovable.app"]);
-const SERVICE_PATHS = new Set<string>(serviceItems.map((item) => item.to));
-for (const pair of ROUTE_PAIRS) {
-  if (SERVICE_PATHS.has(pair.hu)) SERVICE_PATHS.add(pair.en);
-}
+const SERVICE_PATHS = new Set(servicePageItems.map((item) => item.to));
 
 /** Resolve only real catalog pages, never arbitrary counter keys. */
 export function servedPageTarget(pathname: string): { pageType: PageViewType; pageKey: string } | null {

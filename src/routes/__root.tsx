@@ -17,6 +17,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CookieConsent } from "@/components/CookieConsent";
 import { initAnalytics } from "@/lib/analytics";
+import { installCountedHistoryNavigation } from "@/lib/page-view-navigation";
 import { langFromPath, useLanguagePersistence } from "@/lib/i18n";
 import { translate } from "@/lib/i18n/dictionary";
 import { getProductOverrides } from "@/lib/product-overrides.functions";
@@ -165,7 +166,13 @@ function RootComponent() {
   useEffect(() => {
     // Initialise Google Analytics (only loads after statistics consent).
     initAnalytics();
-  }, []);
+    return installCountedHistoryNavigation((listener) =>
+      router.history.subscribe(({ location, action }) => listener({
+        pathname: location.pathname,
+        isHistoryReturn: action.type === "BACK" || action.type === "FORWARD" || action.type === "GO",
+      })),
+    );
+  }, [router]);
 
   useEffect(() => {
     // Notify analytics of client-side route changes so GA4 records page_views.
